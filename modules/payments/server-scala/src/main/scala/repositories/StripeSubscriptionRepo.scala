@@ -1,8 +1,8 @@
-package modules.payments.repositories
+package repositories
 
 import com.google.inject.Inject
 import common.errors.NotFound
-import modules.payments.models.StripeSubscription
+import models.StripeSubscription
 import slick.jdbc.SQLiteProfile.api._
 
 import scala.concurrent.{ExecutionContext, Future}

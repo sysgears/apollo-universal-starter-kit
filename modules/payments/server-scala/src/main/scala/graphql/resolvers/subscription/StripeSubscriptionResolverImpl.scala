@@ -1,5 +1,5 @@
-package modules.payments.graphql.resolvers.subscription
-import modules.payments._
+package graphql.resolvers.subscription
+
 import graphql.resolvers.subscription.contexts.StripeSubscriptionInputContext
 import graphql.schema.types
 import repositories.StripeSubscriptionRepo

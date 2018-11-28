@@ -1,4 +1,4 @@
-package modules.payments.graphql.schema.types
+package graphql.schema.types
 
 import common.InputUnmarshallerGenerator
 import sangria.marshalling.FromInput

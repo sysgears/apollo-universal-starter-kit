@@ -1,9 +1,9 @@
-package modules.payments.graphql.resolvers.subscription
+package graphql.resolvers.subscription
 
 import scala.concurrent.Future
 
-import modules.payments.graphql.schema.types._
-import modules.payments.graphql.resolvers.subscription.contexts._
+import graphql.schema.types._
+import graphql.resolvers.subscription.contexts._
 
 trait StripeSubscriptionResolver {
   def stripeSubscription(inputCtx: StripeSubscriptionInputContext): Future[StripeSubscription]

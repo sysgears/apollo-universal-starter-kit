@@ -1,8 +1,6 @@
-package modules.payments.graphql.schema.types
+package graphql.schema.types
 
 import scala.language.implicitConversions
-
-import modules.payments._
 
 object mappings {
   implicit def stripeSubscriptionMapping(model: models.StripeSubscription): graphql.schema.types.StripeSubscription = {

@@ -1,4 +1,4 @@
-package modules.payments.graphql.schema
+package graphql.schema
 import modules.common.FieldError
 
 package object types {

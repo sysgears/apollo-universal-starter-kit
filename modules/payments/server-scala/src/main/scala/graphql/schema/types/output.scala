@@ -1,4 +1,4 @@
-package modules.payments.graphql.schema.types
+package graphql.schema.types
 
 import core.graphql.UserContext
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}

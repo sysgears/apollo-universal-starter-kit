@@ -1,7 +1,7 @@
-package modules.payments.guice.modules
+package guice.modules
 
-import modules.payments.graphql.resolvers.subscription.{StripeSubscriptionResolver, StripeSubscriptionResolverImpl}
-import modules.payments.repositories.{StripeSubscriptionRepo, StripeSubscriptionRepoImpl}
+import graphql.resolvers.subscription.{StripeSubscriptionResolver, StripeSubscriptionResolverImpl}
+import repositories.{StripeSubscriptionRepo, StripeSubscriptionRepoImpl}
 import net.codingwell.scalaguice.ScalaModule
 
 class PaymentsModule extends ScalaModule {

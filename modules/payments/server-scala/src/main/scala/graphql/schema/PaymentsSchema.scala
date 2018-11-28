@@ -1,18 +1,18 @@
-package modules.payments.graphql.schema
+package graphql.schema
 
 import com.google.inject.Inject
 import core.graphql.{GraphQLSchema, UserContext}
-import modules.payments.graphql.resolvers.subscription.StripeSubscriptionResolver
-import modules.payments.graphql.resolvers.subscription.contexts.StripeSubscriptionInputContext
+import graphql.resolvers.subscription.StripeSubscriptionResolver
+import graphql.resolvers.subscription.contexts.StripeSubscriptionInputContext
 import sangria.schema.{Argument, Field, OptionType}
 
 import scala.concurrent.{ExecutionContext, Future}
 
 class PaymentsSchema @Inject()(stripeSubscriptionResolver: StripeSubscriptionResolver)
                               (implicit ec: ExecutionContext) extends GraphQLSchema {
-  import modules.payments.graphql.schema.types.input._
-  import modules.payments.graphql.schema.types.output._
-  import modules.payments.graphql.schema.types.unmarshallers._
+  import graphql.schema.types.input._
+  import graphql.schema.types.output._
+  import graphql.schema.types.unmarshallers._
   import stripeSubscriptionResolver._
 
   override def queries: List[Field[UserContext, Unit]] = List(

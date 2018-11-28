@@ -1,9 +1,8 @@
-package modules.payments.repositories
+package repositories
 
 import com.google.inject.Inject
 import core.slick.{SchemaInitializer, SchemaUtil}
-import modules.counter.models.Counter
-import modules.payments.models.StripeSubscription
+import models.StripeSubscription
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
@@ -17,7 +16,7 @@ class StripeSubscriptionSchemaInitializer @Inject()(database: Database)
     stripeSubscriptions.schema.create
   }
 
-  override def drop(): Future[Unit] = withTable(database, stripeSubscriptions, Counter.name, _.nonEmpty) {
+  override def drop(): Future[Unit] = withTable(database, stripeSubscriptions, StripeSubscription.name, _.nonEmpty) {
     stripeSubscriptions.schema.drop
   }
 }

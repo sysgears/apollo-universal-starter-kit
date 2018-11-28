@@ -1,4 +1,4 @@
-package modules.payments.models
+package models
 
 import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
 import scala.language.postfixOps

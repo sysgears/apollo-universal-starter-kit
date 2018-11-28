@@ -1,7 +1,7 @@
 {
   "navLink": {
     "users": "Users",
-    "sign": "Sign In",
+    "signIn": "Sign In",
     "logout": "Logout",
     "profile": "Profile",
     "editProfile": "Edit profile",

@@ -22,7 +22,7 @@ import ClientModule from '../ClientModule';
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.sign" style="subTitle" />,
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.signIn" style="subTitle" />,
     headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
   });
 
@@ -176,7 +176,7 @@ export default new ClientModule(access, {
           showOnLogin: false
         },
         navigationOptions: {
-          drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.sign" />
+          drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.signIn" />
         }
       },
       Users: {

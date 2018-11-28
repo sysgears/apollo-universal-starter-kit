@@ -7,7 +7,7 @@ case class EditPostInput(id: Int,
 object EditPostInput {
 
   implicit def inputToPost(input: EditPostInput): Post = {
-    Post(id = input.id,
+    Post(id = Some(input.id),
          title = input.title,
          content = input.content
     )

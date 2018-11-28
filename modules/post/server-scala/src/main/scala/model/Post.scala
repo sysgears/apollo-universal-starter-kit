@@ -1,25 +1,11 @@
 package model
 
-import slick.jdbc.SQLiteProfile.api.{Table => SlickTable, _}
-import slick.lifted.Tag
+import akka.japi.Option.Some
+import com.byteslounge.slickrepo.meta.Entity
 
-case class Post(id: Int = 0,
+case class Post(id: Option[Int] = None,
                 title: String,
-                content: String,
-                comments: Seq[Comment] = Seq.empty)
-
-object Post extends ((Int, String, String, Seq[Comment]) => Post) {
-
-  val name = "POSTS"
-
-  class Table(tag: Tag) extends SlickTable[Post](tag, name) {
-    def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
-
-    def title = column[String]("TITLE")
-
-    def content = column[String]("CONTENT")
-
-    def * = (id, title, content).mapTo[Post]
-  }
-
+                content: String) extends Entity[Post, Int] {
+  override def withId(id: Int): Post = this.copy(id = Some(id))
 }
+

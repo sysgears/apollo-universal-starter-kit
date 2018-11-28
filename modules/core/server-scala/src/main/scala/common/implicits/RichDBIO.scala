@@ -1,10 +1,11 @@
-package common
+package common.implicits
 
 import javax.inject.Inject
 import slick.dbio.DBIO
 import slick.jdbc.JdbcBackend.Database
 
 import scala.concurrent.Future
+import scala.language.implicitConversions
 
 object RichDBIO {
 

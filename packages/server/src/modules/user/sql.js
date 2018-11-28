@@ -83,6 +83,7 @@ class User {
           'u.role',
           'u.is_active',
           'u.email',
+          'u.auth_salt',
           'up.first_name',
           'up.last_name',
           'ca.serial',
@@ -401,23 +402,6 @@ class User {
 
   async writeUserSession(userId, sessionToken) {
     return camelizeKeys(await returnId(knex('user_sessions')).insert({ user_id: userId, session_token: sessionToken }));
-  }
-
-  async checkUserSession(userId, sessionToken) {
-    return camelizeKeys(
-      await knex
-        .select('u_s.user_id', 'u_s.session_token')
-        .from('user_sessions AS u_s')
-        .where('u_s.user_id', '=', userId)
-        .andWhere('u_s.session_token', '=', sessionToken)
-        .first()
-    );
-  }
-
-  async deleteUserSessions(id) {
-    return knex('user_sessions')
-      .where('user_id', '=', id)
-      .del();
   }
 
   async increaseAuthSalt(userId) {

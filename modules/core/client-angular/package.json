@@ -1,0 +1,8 @@
+{
+  "name": "@module/core-client-angular",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@module/core-common": "^1.0.0"
+  }
+}

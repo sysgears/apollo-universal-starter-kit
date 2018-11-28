@@ -160,6 +160,10 @@ export default pubsub => ({
           await User.editUser(userInfo);
           await User.editUserProfile(input);
 
+          if (settings.user.auth.access.session.enabled) {
+            await User.deleteUserSessions(userInfo.id);
+          }
+
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);
           }

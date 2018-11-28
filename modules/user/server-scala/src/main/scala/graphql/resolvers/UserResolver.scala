@@ -6,7 +6,7 @@ import com.github.jurajburian.mailer.Message
 import com.google.inject.Inject
 import common.ActorNamed
 import common.config.AppConfig
-import common.errors.NotFound
+import common.errors.{AlreadyDone, NotFound}
 import config.AuthConfig
 import model._
 import modules.jwt.model.JwtContent
@@ -20,7 +20,6 @@ import services.MessageTemplateService
 import common.implicits.RichFuture._
 import common.implicits.RichTry._
 import errors.Unauthenticated
-import modules.jwt.errors.InvalidToken
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -65,18 +64,19 @@ class UserResolver @Inject()(userRepo: UserRepo,
 
     case input: ConfirmRegistrationInput => {
       for {
-        tokenContent <- jwtAuthService.decodeContent(input.token) asFuture (e => InvalidToken(e.getMessage))
+        tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
         user <- userRepo.find(tokenContent.id) failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        activeUser <- userRepo.update(user.copy(isActive = true))
+        activeUser <- if (!user.isActive) userRepo.update(user.copy(isActive = true)) else Future.failed(AlreadyDone(s"User with id: [${user.id}] is active"))
         userId <- Future.successful(activeUser.id) failOnNone NotFound(s"Id for user: [${activeUser.username}] is none.")
         accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
-      } yield AuthPayload(Some(user), Some(Tokens(accessToken, refreshToken)))
+      } yield AuthPayload(Some(activeUser), Some(Tokens(accessToken, refreshToken)))
     }.pipeTo(sender)
 
     case input: ResendConfirmationMessageInput => {
       for {
         user <- userRepo.find(input.usernameOrEmail) failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
+        _ <- if (!user.isActive) Future.successful() else Future.failed(AlreadyDone(s"User with id: [${user.id}] is active"))
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
         userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${user.username}] is none.")
         accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
@@ -117,10 +117,12 @@ class UserResolver @Inject()(userRepo: UserRepo,
 
     case input: ResetPasswordInput => {
       for {
-        tokenContent <- jwtAuthService.decodeContent(input.token) asFuture (e => InvalidToken(e.getMessage))
+        tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
         user <- userRepo.find(tokenContent.id) failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
         _ <- userRepo.update(user.copy(password = BCrypt.hashpw(input.password, BCrypt.gensalt)))
       } yield ResetPayload()
     }.pipeTo(sender)
+
+    case unknownMessage@_ => log.warning(s"Received unknown message: $unknownMessage")
   }
 }

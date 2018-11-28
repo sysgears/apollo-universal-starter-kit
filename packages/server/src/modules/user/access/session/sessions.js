@@ -1,6 +1,5 @@
 import crypto from 'crypto';
 import log from '../../../../../../common/log';
-import User from '../../sql';
 
 import { encryptSession, decryptSession } from './crypto';
 
@@ -37,10 +36,6 @@ export const writeSession = (req, session) => {
       maxAge: 7 * 24 * 3600,
       path: '/'
     };
-
-    if (session && session.userId) {
-      User.writeUserSession(session.userId, session.csrfToken);
-    }
 
     req.universalCookies.set('session', encryptSession(session), cookieParams);
     req.universalCookies.set('x-token', session.csrfToken, cookieParams);

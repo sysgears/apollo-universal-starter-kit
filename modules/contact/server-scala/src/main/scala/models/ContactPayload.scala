@@ -1,4 +1,4 @@
-package modules.contact.models
+package models
 
 import modules.common.FieldError
 

@@ -1,7 +1,7 @@
-package modules.contact.guice.modules
+package guice.modules
 
 import com.github.jurajburian.mailer.Message
-import modules.contact.graphql.resolvers.{ContactResolver, ContactResolverImpl}
+import graphql.resolvers.{ContactResolver, ContactResolverImpl}
 import modules.mail.models.MailPayload
 import modules.mail.service.MailService
 import modules.mail.service.ethereal.EtherealMailService

@@ -1,13 +1,13 @@
-package modules.contact.graphql.schema
+package graphql.schema
 
+import com.google.inject.Inject
+import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
-import javax.inject.Inject
-import modules.contact.graphql.resolvers.ContactResolver
-import modules.contact.models.{Contact, ContactPayload}
+import graphql.resolvers.ContactResolver
+import models.{Contact, ContactPayload}
 import sangria.macros.derive.{InputObjectTypeName, ObjectTypeName, deriveInputObjectType, deriveObjectType}
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
-import common.{InputUnmarshallerGenerator, Logger}
 
 class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLSchema
   with InputUnmarshallerGenerator

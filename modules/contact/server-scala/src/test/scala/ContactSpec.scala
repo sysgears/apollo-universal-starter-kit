@@ -1,5 +1,3 @@
-package core.controllers.graphql.contact
-
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
@@ -8,15 +6,15 @@ import akka.testkit.TestDuration
 import akka.util.ByteString
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import models.ContactPayload
 import modules.common.FieldError
-import modules.contact.models.ContactPayload
 import spray.json._
 
 import scala.concurrent.duration._
 
-class QuerySpec extends TestHelper {
+class ContactSpec extends ContactSpecHelper {
 
-  "GraphQLController" must {
+  "Contact" must {
 
     implicit val contactPayloadJsonReader: ContactPayloadJsonReader.type = ContactPayloadJsonReader
     implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)

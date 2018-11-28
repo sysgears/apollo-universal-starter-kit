@@ -1,5 +1,3 @@
-package core.controllers.graphql.contact
-
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import core.controllers.graphql.GraphQLController
@@ -9,7 +7,7 @@ import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-trait TestHelper extends WordSpec
+trait ContactSpecHelper extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
   with BeforeAndAfterAll

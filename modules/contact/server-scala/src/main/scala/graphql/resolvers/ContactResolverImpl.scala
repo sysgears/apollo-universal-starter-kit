@@ -1,10 +1,10 @@
-package modules.contact.graphql.resolvers
+package graphql.resolvers
 
 import com.github.jurajburian.mailer.{Content, Message}
+import com.google.inject.Inject
 import com.typesafe.config.Config
-import javax.inject.Inject
 import javax.mail.internet.InternetAddress
-import modules.contact.models.{Contact, ContactPayload}
+import models.{Contact, ContactPayload}
 import modules.mail.models.MailPayload
 import modules.mail.service.MailService
 

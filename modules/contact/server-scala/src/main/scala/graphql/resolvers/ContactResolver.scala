@@ -1,6 +1,6 @@
-package modules.contact.graphql.resolvers
+package graphql.resolvers
 
-import modules.contact.models.{Contact, ContactPayload}
+import models.{Contact, ContactPayload}
 
 import scala.concurrent.Future
 

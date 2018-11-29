@@ -174,7 +174,7 @@ consult [SQLite installation guide].
 yarn watch
 ```
 
-The server applications will be running on [http://localhost:3000], while the client application will be running on 
+The server application will be running on [http://localhost:3000], while the client application will be running on 
 [http://localhost:8080]. The terminal will tell your the exact ports.
 
 For more information about running this starter kit for mobile development or Docker, consult the [Getting Started] 
@@ -193,6 +193,7 @@ apollo-universal-starter-kit
 ├── config                      # Various application configurations
 ├── docs                        # Documentation
 ├── node_modules                # Global Node.js modules
+├── modules                     # Common project modules
 ├── packages                    # Application source code
 │   ├── client                  # Front-end package
 │   │   └── src

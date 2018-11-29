@@ -22,7 +22,7 @@ abstract class TableInitializer[E <: RelationalProfile#Table[_]](name: String, t
     }
   }
 
-  def seedDatabase[E <: RelationalProfile#Table[_]](tableQuery: TableQuery[E]): DBIO[Unit] = {
+  def seedDatabase(tableQuery: TableQuery[E]): DBIOAction[_, NoStream, Effect.Write] = {
     DBIO.successful()
   }
 }

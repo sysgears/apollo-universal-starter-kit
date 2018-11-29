@@ -16,9 +16,8 @@ class ItemSchemaInitializer @Inject()(database: Database)
   extends TableInitializer[ItemTable](ItemTable.name, TableQuery[ItemTable], database)
     with SchemaLoader {
 
-  //  TODO: fix implementation
-//  override def seedDatabase(tableQuery: TableQuery[ItemTable]): DBIOAction[Unit, NoStream, Effect] = {
-//    val items = List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
-//    DBIO.successful()
-//  }
+  override def seedDatabase(tableQuery: TableQuery[ItemTable]): DBIOAction[_, NoStream, Effect.Write] = {
+    val items = List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
+    tableQuery ++= items
+  }
 }

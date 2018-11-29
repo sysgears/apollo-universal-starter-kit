@@ -10,21 +10,31 @@ import scala.concurrent.Future
 
 /**
   * Contains methods for initializing, seed and drop a database.
-  * Inheriting this class, you will get the implemented functionality
+  * Extending this trait, you will get the implemented functionality
   * that initializes the tables for the received entity.
   *
-  * @param name name of the database table
-  * @param table represents a database table
-  * @param database base in which operations will be performed
   */
-abstract class TableInitializer[E <: RelationalProfile#Table[_]](name: String, table: TableQuery[E], database: Database) {
+trait TableInitializer[E <: RelationalProfile#Table[_]] {
+
+  /**
+    * Name of the database table
+    */
+  val name: String
+  /**
+    * Represents a database table
+    */
+  val table: TableQuery[E]
+  /**
+    * Database in which operations will be performed
+    */
+  val db: Database
 
   /**
     * Сreates the table
     */
   def create(): Future[Unit] = {
-    database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
+    db.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.isEmpty) db.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
     }
   }
 
@@ -32,8 +42,8 @@ abstract class TableInitializer[E <: RelationalProfile#Table[_]](name: String, t
     * Drops the table
     */
   def drop(): Future[Unit] = {
-    database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
+    db.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.nonEmpty) db.run(DBIO.seq(table.schema.drop)) else Future.successful()
     }
   }
 

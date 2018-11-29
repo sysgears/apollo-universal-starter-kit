@@ -12,4 +12,6 @@ trait JwtAuthService[T] {
   def decodeAccessToken(token: String): Try[T]
 
   def decodeRefreshToken(token: String, secret: String): Try[T]
+
+  def validate(token: String, secret: String): Try[Boolean]
 }

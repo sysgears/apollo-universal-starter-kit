@@ -4,14 +4,18 @@ import com.google.inject.Inject
 import modules.jwt.config.JwtConfig
 import modules.jwt.decoder.JwtDecoder
 import modules.jwt.encoder.JwtEncoder
+import modules.jwt.errors.InvalidToken
 import modules.jwt.model.JwtContent
+import modules.jwt.validator.JwtValidator
+import pdi.jwt.exceptions.JwtExpirationException
 import spray.json._
 
 import scala.util.Try
 
 class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
                                    jwtDecoder: JwtDecoder,
-                                   jwtConfig: JwtConfig) extends JwtAuthService[JwtContent] {
+                                   jwtConfig: JwtConfig,
+                                   jwtValidator: JwtValidator) extends JwtAuthService[JwtContent] {
 
   override def createAccessToken(content: JwtContent): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration)
@@ -19,12 +23,24 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
   override def createRefreshToken(content: JwtContent, secret: String): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
 
-  override def decodeContent(token: String): Try[JwtContent] =
+  override def decodeContent(token: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token).map(_.parseJson.convertTo[JwtContent])
+  }
 
-  override def decodeAccessToken(token: String): Try[JwtContent] =
+  override def decodeAccessToken(token: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token, jwtConfig.secret).map(_.parseJson.convertTo[JwtContent])
+  }
 
-  override def decodeRefreshToken(token: String, secret: String): Try[JwtContent] =
+  override def decodeRefreshToken(token: String, secret: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token, jwtConfig.secret + secret).map(_.parseJson.convertTo[JwtContent])
+  }
+
+  override def validate(token: String, secret: String): Try[Boolean] = withExceptionTransform {
+    jwtValidator.validate(token, jwtConfig.secret + secret)
+  }
+
+  private def withExceptionTransform[T](maybeResult: Try[T]): Try[T] = maybeResult.recover {
+    case _: JwtExpirationException => throw InvalidToken("Token is expired")
+    case _ => throw InvalidToken()
+  }
 }

@@ -6,7 +6,7 @@ import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/co
 import Contact from './containers/Contact';
 import resources from './locales';
 
-import ClientModule from '@module/module-client-react/index.native';
+import ClientModule from '@module/module-client-react-native';
 
 const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 

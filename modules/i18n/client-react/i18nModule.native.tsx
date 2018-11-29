@@ -1,14 +1,12 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import ClientModule from '@module/module-client-react/index.native';
+import ClientModule from '@module/module-client-react-native';
 import commonI18n from '@module/i18n-common-react';
 
 import { LanguagePicker, Root } from '../../../packages/client/src/modules/common/components/native';
 import resources from './locales';
 import settings from '../../../settings';
-
-export * from './translate';
 
 const I18nProvider = ({ i18n, children }: any) => {
   return (

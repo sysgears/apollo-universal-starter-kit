@@ -40,6 +40,12 @@ const JWTLink = new ApolloLink((operation, forward) => {
   return new Observable(observer => {
     let sub, retrySub;
     const queue = [];
+
+    const returnError = async (error, shouldTokensRemove) => {
+      if (shouldTokensRemove) await removeTokens();
+      observer.error(error);
+    };
+
     (async () => {
       // Optimisation: imitate server response with empty user if no JWT token present in local storage
       if (
@@ -82,40 +88,34 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (
-                networkError.response &&
-                networkError.response.status === 401 &&
-                operation &&
-                operation.operationName !== 'refreshTokens'
-              ) {
-                try {
-                  const {
-                    data: {
-                      refreshTokens: { accessToken, refreshToken }
-                    }
-                  } = await apolloClient.mutate({
-                    mutation: REFRESH_TOKENS_MUTATION,
-                    variables: { refreshToken: await getItem('refreshToken') }
-                  });
-                  await saveTokens({ accessToken, refreshToken });
-                  // Retry current operation
-                  await setJWTContext(operation);
-                  retrySub = forward(operation).subscribe(observer);
-                } catch (e) {
-                  // We have received error during refresh - drop tokens and return original request result
-                  await removeTokens();
-                  observer.error(networkError);
+              const isUnauthorized = networkError.response && networkError.response.status === 401;
+              const isRefreshRequest = operation.operationName === 'refreshTokens';
+
+              if (isUnauthorized) {
+                // We assume that refresh token is not valid anymore, so return original request result.
+                if (isRefreshRequest) {
+                  await returnError(networkError, true);
+                } else {
+                  try {
+                    const {
+                      data: {
+                        refreshTokens: { accessToken, refreshToken }
+                      }
+                    } = await apolloClient.mutate({
+                      mutation: REFRESH_TOKENS_MUTATION,
+                      variables: { refreshToken: await getItem('refreshToken') }
+                    });
+                    await saveTokens({ accessToken, refreshToken });
+                    // Retry current operation
+                    await setJWTContext(operation);
+                    retrySub = forward(operation).subscribe(observer);
+                  } catch (e) {
+                    // We have received error during refresh - drop tokens and return original request result
+                    await returnError(networkError, true);
+                  }
                 }
-              } else if (
-                networkError.response &&
-                networkError.response.status === 401 &&
-                operation &&
-                operation.operationName === 'refreshTokens'
-              ) {
-                await removeTokens();
-                observer.error(networkError);
               } else {
-                observer.error(networkError);
+                await returnError(networkError);
               }
             })();
           },
@@ -127,7 +127,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
           }
         });
       } catch (e) {
-        observer.error(e);
+        await returnError(e);
       }
     })();
 

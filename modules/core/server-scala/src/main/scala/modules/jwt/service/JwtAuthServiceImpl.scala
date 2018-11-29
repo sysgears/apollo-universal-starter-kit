@@ -12,10 +12,18 @@ import spray.json._
 
 import scala.util.Try
 
+/**
+  * Default implementation of JwtAuthService, using default injected JwtEncoder, JwtDecoder, JwtValidator.
+  *
+  * @param jwtEncoder   JWT encoder
+  * @param jwtDecoder   JWT decoder
+  * @param jwtValidator JWT validator
+  * @param jwtConfig    JWT configs provider
+  */
 class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
                                    jwtDecoder: JwtDecoder,
-                                   jwtConfig: JwtConfig,
-                                   jwtValidator: JwtValidator) extends JwtAuthService[JwtContent] {
+                                   jwtValidator: JwtValidator,
+                                   jwtConfig: JwtConfig) extends JwtAuthService[JwtContent] {
 
   override def createAccessToken(content: JwtContent): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration)

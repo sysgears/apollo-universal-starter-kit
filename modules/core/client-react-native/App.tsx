@@ -25,9 +25,11 @@ export default class Main extends React.Component<MainProps> {
         ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
     const store = createStore(
-      combineReducers({
-        ...modules.reducers
-      }),
+      Object.keys(modules.reducers).length > 0
+        ? combineReducers({
+            ...modules.reducers
+          })
+        : state => state,
       {} // initial state
     );
     const client = createApolloClient({
@@ -37,12 +39,15 @@ export default class Main extends React.Component<MainProps> {
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });
+    const MainScreenNavigator = modules.router;
 
     log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
     return modules.getWrappedRoot(
       <Provider store={store}>
-        <ApolloProvider client={client}>{modules.router}</ApolloProvider>
+        <ApolloProvider client={client}>
+          <MainScreenNavigator />
+        </ApolloProvider>
       </Provider>
     );
   }

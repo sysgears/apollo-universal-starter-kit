@@ -1,12 +1,13 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 
-import modules from '..';
-
 import ClientModule from '../ClientModule';
 
-const routerFactory = () => <Switch>{modules.routes}</Switch>;
+const ref = { modules: null };
+
+const routerFactory = () => <Switch>{ref.modules.routes}</Switch>;
 
 export default new ClientModule({
-  routerFactory
+  routerFactory,
+  onCreate: [modules => (ref.modules = modules)]
 });

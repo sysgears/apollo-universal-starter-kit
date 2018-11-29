@@ -17,7 +17,6 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
-import modules from '..';
 import ClientModule from '../ClientModule';
 
 class LoginScreen extends React.Component {
@@ -141,6 +140,8 @@ const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
 
+const ref = { modules: null };
+
 export default new ClientModule(access, {
   drawerItem: [
     {
@@ -238,6 +239,8 @@ export default new ClientModule(access, {
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   routerFactory: () => {
-    return UserScreenNavigator(modules.drawerItems);
-  }
+    console.log('ref mods items', ref.modules.drawerItems);
+    return UserScreenNavigator(ref.modules.drawerItems);
+  },
+  onCreate: [modules => (ref.modules = modules)]
 });

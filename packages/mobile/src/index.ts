@@ -10,14 +10,11 @@ import post from '../../client/src/modules/post';
 import upload from '../../client/src/modules/upload';
 import user from '../../client/src/modules/user';
 import payments from '../../client/src/modules/payments';
-import pageNotFound from '../../client/src/modules/pageNotFound';
 import pagination from '../../client/src/modules/pagination';
-import '../../client/src/modules/favicon';
 
 import ClientModule from '@module/module-client-react-native';
 
 const modules: ClientModule = new ClientModule(
-  core,
   validation,
   defaultRouter,
   counter,
@@ -29,8 +26,7 @@ const modules: ClientModule = new ClientModule(
   payments,
   user,
   i18n,
-  pageNotFound
+  core
 );
-modules.triggerOnCreate();
 
-export default modules;
+modules.triggerOnCreate();

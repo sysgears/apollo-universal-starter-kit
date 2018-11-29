@@ -3,17 +3,17 @@ const url = require('url');
 const config = {
   builders: {
     android: {
-      entry: './src/index.ts',
+      entry: './src/entry.ts',
       buildDir: 'build/android',
       dllBuildDir: 'build/android/dll',
       stack: ['react-native', 'android'],
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     ios: {
-      entry: './src/index.ts',
+      entry: './src/entry.ts',
       buildDir: 'build/ios',
       dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],

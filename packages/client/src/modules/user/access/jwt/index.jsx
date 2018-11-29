@@ -82,7 +82,12 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (networkError.response && networkError.response.status === 401) {
+              if (
+                networkError.response &&
+                networkError.response.status === 401 &&
+                operation &&
+                operation.operationName !== 'refreshTokens'
+              ) {
                 try {
                   const {
                     data: {
@@ -101,6 +106,14 @@ const JWTLink = new ApolloLink((operation, forward) => {
                   await removeTokens();
                   observer.error(networkError);
                 }
+              } else if (
+                networkError.response &&
+                networkError.response.status === 401 &&
+                operation &&
+                operation.operationName === 'refreshTokens'
+              ) {
+                await removeTokens();
+                observer.error(networkError);
               } else {
                 observer.error(networkError);
               }
@@ -140,7 +153,7 @@ class DataRootComponent extends React.Component {
       const { client } = this.props;
       let result;
       try {
-        result = client.readQuery({ query: CURRENT_USER_QUERY });
+        result = await client.readQuery({ query: CURRENT_USER_QUERY });
       } catch (e) {
         // We have no current user in the cache, we need to load it to properly draw UI
       }
@@ -150,17 +163,22 @@ class DataRootComponent extends React.Component {
         // as generated during server-sider rendering. Server had no idea about our client-side
         // access token and refresh token. In this case we need to trigger our JWT link
         // by sending network request
-        const {
-          data: { currentUser }
-        } = await client.query({
-          query: CURRENT_USER_QUERY,
-          fetchPolicy: 'network-only'
-        });
-        if (currentUser) {
-          // If we have received current user, then we had invalid Apollo Cache previously
-          // and we should discard it
-          await client.clearStore();
-          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
+        try {
+          const {
+            data: { currentUser }
+          } = await client.query({
+            query: CURRENT_USER_QUERY,
+            fetchPolicy: 'network-only'
+          });
+
+          if (currentUser) {
+            // If we have received current user, then we had invalid Apollo Cache previously
+            // and we should discard it
+            await client.clearStore();
+            await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
+          }
+        } catch {
+          this.setState({ ready: true });
         }
       }
     }

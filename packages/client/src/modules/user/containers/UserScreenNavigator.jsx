@@ -54,7 +54,8 @@ class UserScreenNavigator extends React.Component {
     const MainScreenNavigatorComponent = createDrawerNavigator(
       { ...this.navItemsFilter() },
       {
-        contentComponent: DrawerComponent,
+        // eslint-disable-next-line
+        contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
         initialRouteName: this.getInitialRoute()
       }
     );

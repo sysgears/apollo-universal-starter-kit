@@ -6,7 +6,7 @@ import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/co
 import Counter from './containers/Counter';
 import counters from './counters';
 import resources from './locales';
-import ClientModule from '@module/module-client-react/index.native';
+import ClientModule from '@module/module-client-react-native';
 
 const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 

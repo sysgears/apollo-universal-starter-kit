@@ -7,8 +7,6 @@ import commonI18n from '@module/i18n-common-react';
 import { MenuItem, LanguagePicker } from '../../../packages/client/src/modules/common/components/web';
 import settings from '../../../settings';
 
-export * from './translate';
-
 const I18nProvider = ({ i18n, children }: any) => {
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };

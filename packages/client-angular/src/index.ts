@@ -4,5 +4,3 @@ import ClientModule from '@module/module-client-angular';
 
 const modules = new ClientModule(core, counter);
 modules.triggerOnCreate();
-
-export default modules;

@@ -168,8 +168,8 @@ export default () => ({
         if (user) {
           await User.updatePassword(user.id, reset.password);
 
-          if (settings.user.auth.access.session.enabled) {
-            await User.deleteUserSessions(user.id);
+          if (settings.user.auth.access.session) {
+            await User.increaseAuthSalt(user.id);
           }
         }
         return { errors: null };

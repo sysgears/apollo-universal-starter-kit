@@ -6,7 +6,7 @@ import com.github.jurajburian.mailer.Message
 import com.google.inject.Inject
 import common.ActorNamed
 import common.config.AppConfig
-import common.errors.{AlreadyDone, NotFound}
+import common.errors.{AlreadyExists, NotFound}
 import config.AuthConfig
 import model._
 import modules.jwt.model.JwtContent
@@ -67,7 +67,7 @@ class UserResolver @Inject()(userRepository: UserRepository,
       for {
         tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        activeUser <- if (!user.isActive) userRepository.update(user.copy(isActive = true)).run else Future.failed(AlreadyDone(s"User with id: [${user.id}] is active"))
+        activeUser <- if (!user.isActive) userRepository.update(user.copy(isActive = true)).run else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
         userId <- Future.successful(activeUser.id) failOnNone NotFound(s"Id for user: [${activeUser.username}] is none.")
         accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
@@ -77,7 +77,7 @@ class UserResolver @Inject()(userRepository: UserRepository,
     case input: ResendConfirmationMessageInput => {
       for {
         user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
-        _ <- if (!user.isActive) Future.successful() else Future.failed(AlreadyDone(s"User with id: [${user.id}] is active"))
+        _ <- if (!user.isActive) Future.successful() else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
         userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${user.username}] is none.")
         accessToken = jwtAuthService.createAccessToken(JwtContent(userId))

@@ -16,7 +16,7 @@ object DispatcherResolver extends ActorMessageDelivering
   def resolveWithDispatcher[T](input: Any,
                                userContext: UserContext,
                                namedResolverActor: ActorNamed,
-                               onError: Throwable => Any,
+                               onException: Exception => Any,
                                before: List[ActorRef] = Nil,
                                after: List[ActorRef] = Nil)
                               (implicit actorSystem: ActorSystem,
@@ -29,7 +29,7 @@ object DispatcherResolver extends ActorMessageDelivering
           userContext,
           replyTo,
           provideActorRef(namedResolverActor),
-          onError,
+          onException,
           before,
           after
         )

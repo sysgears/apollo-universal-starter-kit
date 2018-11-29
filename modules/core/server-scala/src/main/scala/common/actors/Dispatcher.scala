@@ -1,6 +1,6 @@
 package common.actors
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.implicits.RichList._
@@ -20,7 +20,7 @@ object Dispatcher extends ActorNamed {
                                      context: UserContext,
                                      replyTo: ActorRef,
                                      resolverActor: ActorRef,
-                                     onError: Throwable => Any,
+                                     onException: Exception => Any,
                                      before: List[ActorRef] = Nil,
                                      after: List[ActorRef] = Nil)
 
@@ -37,7 +37,7 @@ object Dispatcher extends ActorNamed {
 
   sealed trait InterceptorResultStatus
 
-  final case class Failure(e: Throwable) extends InterceptorResultStatus
+  final case class Failure(e: Exception) extends InterceptorResultStatus
 
   final object Success extends InterceptorResultStatus
 
@@ -63,7 +63,8 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
       } else {
         sendMessageToActor[Any](msg.resolverActor, msg.input).andThen {
           case scala.util.Success(r) => msg.replyTo ! r
-          case scala.util.Failure(f) => msg.replyTo ! msg.onError(f)
+          case scala.util.Failure(f: Exception) => msg.replyTo ! msg.onException(f)
+          case scala.util.Failure(f) ⇒ msg.replyTo ! Status.Failure(f)
         }
       }
   }
@@ -76,6 +77,6 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
 
     case Failure(e) =>
       log.info(s"Interceptor has finished with failure. Reason: '$e'")
-      msg.replyTo ! msg.onError(e)
+      msg.replyTo ! msg.onException(e)
   }
 }

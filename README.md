@@ -27,7 +27,7 @@ platforms &ndash; mobile, web, and server.
 Apollo Universal Starter Kit is built with [Apollo], [GraphQL], [React], [Angular], [React Native], [Expo], [Knex.js], 
 and [Express] with support for relational databases such as PostgreSQL, MySQL, and SQLite. 
 
-[TypeScript] is our language of choicem and we use it across the entire project. However, you can freely mix vanilla 
+[TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla 
 JavaScript (the ES6 and ES7 syntax) and TypeScript when creating your modules.
 
 The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design Mobile], and [NativeBase] to provide 

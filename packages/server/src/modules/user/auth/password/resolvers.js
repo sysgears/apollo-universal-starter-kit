@@ -168,7 +168,7 @@ export default () => ({
         if (user) {
           await User.updatePassword(user.id, reset.password);
 
-          if (settings.user.auth.access.session) {
+          if (settings.user.auth.access.session.enabled) {
             await User.increaseAuthSalt(user.id);
           }
         }

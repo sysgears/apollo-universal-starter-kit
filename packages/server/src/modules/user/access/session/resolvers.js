@@ -14,7 +14,7 @@ export default () => ({
     async logoutFromAllDevices(obj, args, { req }) {
       const session = { ...req.session };
 
-      if (!settings.user.auth.access.jwt) {
+      if (!settings.user.auth.access.jwt.enabled) {
         await User.increaseAuthSalt(session.userId);
       }
 

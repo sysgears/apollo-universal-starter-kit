@@ -160,7 +160,7 @@ export default pubsub => ({
           await User.editUser(userInfo);
           await User.editUserProfile(input);
 
-          if (settings.user.auth.access.session) {
+          if (settings.user.auth.access.session.enabled) {
             await User.increaseAuthSalt(userInfo.id);
           }
 

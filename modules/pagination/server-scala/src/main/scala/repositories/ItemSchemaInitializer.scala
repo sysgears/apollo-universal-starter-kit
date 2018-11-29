@@ -7,15 +7,12 @@ import model.{Item, ItemTable}
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
-/**
-  * Contains methods for initializing and drop a database.
-  *
-  * @param database base in which operations will be performed
-  */
+/** @inheritdoc */
 class ItemSchemaInitializer @Inject()(database: Database)
   extends TableInitializer[ItemTable](ItemTable.name, TableQuery[ItemTable], database)
     with SchemaLoader {
 
+  /** @inheritdoc */
   override def seedDatabase(tableQuery: TableQuery[ItemTable]): DBIOAction[_, NoStream, Effect.Write] = {
     val items = List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
     tableQuery ++= items

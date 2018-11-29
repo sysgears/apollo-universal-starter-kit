@@ -1,13 +1,14 @@
 package repositories
 
-import core.slick.{SchemaLoader, TableInitializer}
+import core.slick.TableInitializer
 import javax.inject.Inject
 import model.UserTable
 import model.UserTable.UserTable
 import slick.jdbc.SQLiteProfile.api._
-import slick.lifted.TableQuery
 
-class UserSchemaInitializer @Inject()(database: Database)
-  extends TableInitializer[UserTable](UserTable.name, TableQuery[UserTable], database)
-    with SchemaLoader {
+class UserSchemaInitializer @Inject()(database: Database) extends TableInitializer[UserTable] {
+
+  override val name: String = UserTable.name
+  override val table = TableQuery[UserTable]
+  override val db = database
 }

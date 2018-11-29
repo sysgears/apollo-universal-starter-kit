@@ -96,26 +96,33 @@ const JWTLink = new ApolloLink((operation, forward) => {
                 if (isRefreshRequest) {
                   await returnError(networkError, true);
                 } else {
-                  try {
-                    const {
-                      data: {
-                        refreshTokens: { accessToken, refreshToken }
-                      }
-                    } = await apolloClient.mutate({
-                      mutation: REFRESH_TOKENS_MUTATION,
-                      variables: { refreshToken: await getItem('refreshToken') }
-                    });
-                    await saveTokens({ accessToken, refreshToken });
-                    // Retry current operation
-                    await setJWTContext(operation);
-                    retrySub = forward(operation).subscribe(observer);
-                  } catch (e) {
-                    // We have received error during refresh - drop tokens and return original request result
-                    await returnError(networkError, true);
-                  }
+                  await refreshAccessToken();
                 }
               } else {
                 await returnError(networkError);
+              }
+
+              /*
+                Refreshes the access token if it's expired
+               */
+              async function refreshAccessToken() {
+                try {
+                  const {
+                    data: {
+                      refreshTokens: { accessToken, refreshToken }
+                    }
+                  } = await apolloClient.mutate({
+                    mutation: REFRESH_TOKENS_MUTATION,
+                    variables: { refreshToken: await getItem('refreshToken') }
+                  });
+                  await saveTokens({ accessToken, refreshToken });
+                  // Retry current operation
+                  await setJWTContext(operation);
+                  retrySub = forward(operation).subscribe(observer);
+                } catch (e) {
+                  // We have received error during refresh - drop tokens and return original request result
+                  await returnError(networkError, true);
+                }
               }
             })();
           },

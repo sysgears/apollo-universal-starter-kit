@@ -5,7 +5,7 @@ import common.classes.{ClassFilter, ClassFinder, ClassInstantiator}
 import core.controllers.AkkaRoute
 import core.graphql.GraphQLSchema
 import core.guice.injection.Injecting.injector
-import core.slick.SchemaLoader
+import core.slick.TableInitializer
 import net.codingwell.scalaguice.ScalaModule
 import org.clapper.classutil.ClassInfo
 
@@ -21,7 +21,7 @@ object ModuleLoader extends Logger
 
   lazy val akkaRouteModules: List[AkkaRoute] = getInjectedInstances[AkkaRoute](classOf[AkkaRoute].getName)
   lazy val graphQLSchemaModules: List[GraphQLSchema] = getInjectedInstances[GraphQLSchema](classOf[GraphQLSchema].getName)
-  lazy val slickSchemaModules: List[SchemaLoader] = getInjectedInstances[SchemaLoader](classOf[SchemaLoader].getName)
+  lazy val slickSchemaModules: List[TableInitializer[_]] = getInjectedInstances[TableInitializer[_]](classOf[TableInitializer[_]].getName)
 
   private def filter(className: String)(clazz: ClassInfo) = {
     clazz.implements(className) && !clazz.annotations.exists(_.descriptor.endsWith(s"$ignoreModuleName;"))

@@ -126,7 +126,8 @@
       "node_modules",
       ".history"
     ],
-    "testRegex": "src.*/__tests__/.*\\.(js|jsx|ts|tsx)$",
+    "testRegex": ".*/__tests__/.*\\.jest\\.(js|jsx|ts|tsx)$",
+    "rootDir": "../../modules",
     "moduleFileExtensions": [
       "ts",
       "tsx",

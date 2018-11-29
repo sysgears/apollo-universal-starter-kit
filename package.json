@@ -68,6 +68,7 @@
   "workspaces": [
     "packages/*",
     "modules/**/client-react",
+    "modules/**/client-react-native",
     "modules/**/client-angular",
     "modules/**/common",
     "modules/**/common-react",
@@ -159,7 +160,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.175"
+    "spinjs": "^0.4.176"
   },
   "resolutions": {
     "react": "16.5.0",

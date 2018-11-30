@@ -7,7 +7,7 @@ import pdi.jwt.algorithms.JwtHmacAlgorithm
 import scala.util.Try
 
 /**
-  * Default implementation of JwtDecoder, using the HMAC algorithm to encode secret.
+  * Default implementation of JwtDecoder, using the HMAC algorithm to decode secret.
   *
   * @param algorithm injected implementation of HMAC algorithm
   */

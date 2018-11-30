@@ -50,7 +50,7 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
 
   /** @inheritdoc */
   override def validate(token: String, secret: String): Try[Boolean] = withExceptionTransform {
-    jwtValidator.validate(token, jwtConfig.secret + secret)
+    jwtValidator.validate(token, secret)
   }
 
   private def withExceptionTransform[T](maybeResult: Try[T]): Try[T] = maybeResult.recover {

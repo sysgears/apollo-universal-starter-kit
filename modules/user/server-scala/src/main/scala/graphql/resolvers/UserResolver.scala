@@ -10,16 +10,15 @@ import common.errors.{AlreadyExists, NotFound}
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import common.implicits.RichTry._
-import config.AuthConfig
+import config.{AuthConfig, MailConfig}
 import errors.Unauthenticated
 import model._
 import models.MailPayload
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
-import modules.mail.config.MailConfig
 import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
-import service.MailService
+import services.MailService
 import services.MessageTemplateService
 
 import scala.concurrent.{ExecutionContext, Future}

@@ -1,4 +1,4 @@
-package service.ethereal
+package services.ethereal
 
 import actor.MailActor
 import actor.MailActor.SendMail
@@ -8,7 +8,7 @@ import com.github.jurajburian.mailer.{Mailer, Message}
 import common.ActorMessageDelivering
 import javax.inject.{Inject, Named}
 import models.MailPayload
-import service.MailService
+import services.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 

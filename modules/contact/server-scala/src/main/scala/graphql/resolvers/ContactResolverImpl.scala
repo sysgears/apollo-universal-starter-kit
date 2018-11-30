@@ -5,7 +5,7 @@ import com.google.inject.Inject
 import com.typesafe.config.Config
 import javax.mail.internet.InternetAddress
 import models.{Contact, ContactPayload, MailPayload}
-import service.MailService
+import services.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 

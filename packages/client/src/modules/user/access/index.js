@@ -8,18 +8,25 @@ import AccessModule from './AccessModule';
 
 const ref = React.createRef();
 
+const clearClientStore = async (client, isReload) => {
+  if (ref.current) {
+    await client.clearStore();
+    return isReload ? ref.current.reloadPage() : null;
+  } else {
+    await client.cache.reset();
+  }
+};
+
 const login = client => {
-  return client.clearStore();
+  return clearClientStore(client);
 };
 
 const logout = async client => {
-  await client.clearStore();
-  ref.current.reloadPage();
+  return clearClientStore(client, true);
 };
 
 const logoutFromAllDevices = async client => {
-  await client.clearStore();
-  ref.current.reloadPage();
+  return clearClientStore(client, true);
 };
 
 class PageReloader extends React.Component {

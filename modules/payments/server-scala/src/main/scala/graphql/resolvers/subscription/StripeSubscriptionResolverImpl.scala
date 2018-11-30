@@ -101,9 +101,11 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
     currentUser <- Future.successful(inputCtx.subscriptionOwner) failOnNone Unauthenticated()
     userId = currentUser.id.get.toLong
     stripeSubscription <- stripeSubscriptionRepo.getSubscriptionByUserId(userId) failOnNone NotFound(s"StripeSubscription(userId: $userId)")
+    //TODO: Get rid of option.get
     _ <- Future { Subscription retrieve stripeSubscription.stripeSubscriptionId.get } map { _ cancel null }
+    //TODO: Get rid of option.get
     _ <- Future { Source retrieve stripeSubscription.stripeSourceId.get } map { _ detach }
-    cancelledSubscription <- stripeSubscriptionRepo.editSubscription(stripeSubscription.copy(active = false, stripeSourceId = null, stripeSubscriptionId = null, expiryMonth = null, expiryYear = null, last4 = null, brand = null))
+    cancelledSubscription <- stripeSubscriptionRepo.editSubscription(stripeSubscription.copy(active = false, stripeSourceId = None, stripeSubscriptionId = None, expiryMonth = None, expiryYear = None, last4 = None, brand = None))
   } yield cancelledSubscription
 
 

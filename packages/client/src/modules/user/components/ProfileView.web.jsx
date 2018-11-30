@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { compose } from 'react-apollo';
 
 import translate from '../../../i18n';
 import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
@@ -96,4 +97,7 @@ ProfileView.propTypes = {
   t: PropTypes.func
 };
 
-export default withLogoutFromAllDevices(translate('user')(ProfileView));
+export default compose(
+  withLogoutFromAllDevices,
+  translate('user')
+)(ProfileView);

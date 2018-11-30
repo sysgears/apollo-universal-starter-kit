@@ -2,6 +2,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
+import { compose } from 'react-apollo';
 
 import PropTypes from 'prop-types';
 import translate from '../../../i18n';
@@ -11,6 +12,8 @@ import { linkText } from '../../common/components/native/styles';
 import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
 import settings from '../../../../../../settings';
 
+import { withLogoutFromAllDevices } from '../containers/Auth';
+
 const renderProfileItem = (title, value, idx) => (
   <CardItem key={idx}>
     <CardLabel>{`${title}: `}</CardLabel>
@@ -18,7 +21,7 @@ const renderProfileItem = (title, value, idx) => (
   </CardItem>
 );
 
-const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
+const ProfileView = ({ currentUserLoading, currentUser, navigation, t, logoutFromAllDevices }) => {
   const profileItems = currentUser
     ? [
         {
@@ -64,6 +67,9 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
           >
             <Text style={styles.linkText}>{t('profile.editProfileText')}</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.linkWrapper} onPress={logoutFromAllDevices}>
+            <Text style={styles.linkText}>{t('profile.logoutFAD')}</Text>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </View>
@@ -83,7 +89,8 @@ const styles = StyleSheet.create({
   },
   linkWrapper: {
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
+    marginBottom: 15
   },
   linkText
 });
@@ -92,7 +99,11 @@ ProfileView.propTypes = {
   currentUserLoading: PropTypes.bool,
   currentUser: PropTypes.object,
   navigation: PropTypes.object,
+  logoutFromAllDevices: PropTypes.func,
   t: PropTypes.func
 };
 
-export default translate('user')(ProfileView);
+export default compose(
+  withLogoutFromAllDevices,
+  translate('user')
+)(ProfileView);

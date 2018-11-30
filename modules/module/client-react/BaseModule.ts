@@ -52,7 +52,7 @@ class BaseModule extends CommonModule {
 
   public getWrappedRoot(root: React.ReactElement<any>, req?: Request) {
     let nestedRoot = root;
-    for (const componentFactory of this.rootComponentFactory) {
+    for (const componentFactory of this.rootComponentFactory || []) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
     }
     return nestedRoot;

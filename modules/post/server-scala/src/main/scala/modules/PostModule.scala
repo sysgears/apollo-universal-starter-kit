@@ -16,5 +16,6 @@ class PostModule extends ScalaModule {
 
   @Provides
   def postRepository(driver: JdbcProfile): Repository[Post, Int] = new PostRepository(driver)
+  @Provides
   def commentRepository(driver: JdbcProfile): Repository[Comment, Int] = new CommentRepository(driver)
 }

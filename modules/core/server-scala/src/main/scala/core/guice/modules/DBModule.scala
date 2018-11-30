@@ -1,7 +1,7 @@
 package core.guice.modules
 
 import com.google.inject.Provides
-import common.RichDBIO
+import common.implicits.RichDBIO
 import net.codingwell.scalaguice.ScalaModule
 import slick.basic.DatabaseConfig
 import slick.jdbc.{JdbcBackend, JdbcProfile}

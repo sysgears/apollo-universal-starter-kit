@@ -5,7 +5,7 @@ import akka.pattern._
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.ActorNamed
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import common.errors.InternalServerError
 import common.implicits.RichFuture._
 import models.Counter

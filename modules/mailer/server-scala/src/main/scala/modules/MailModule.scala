@@ -25,13 +25,13 @@ class MailModule extends ScalaModule with GuiceActorRefProvider {
   def provideMailer(config: Config): Mailer = {
     val session = (
       SmtpAddress(
-        config.getString(s"email.ethereal.host"),
-        config.getInt(s"email.ethereal.port")
+        config.getString("email.ethereal.host"),
+        config.getInt("email.ethereal.port")
       )
         :: SmtpStartTls()
         :: SessionFactory()).session(
       Some(
-        config.getString(s"email.ethereal.user") -> config.getString(s"email.ethereal.password")
+        config.getString("email.ethereal.user") -> config.getString("email.ethereal.password")
       )
     )
     Mailer(session)

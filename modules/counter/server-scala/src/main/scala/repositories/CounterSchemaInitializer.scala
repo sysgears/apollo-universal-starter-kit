@@ -1,33 +1,19 @@
 package repositories
 
-import core.slick.{SchemaInitializer, SchemaUtil}
+import core.slick.SchemaInitializer
 import javax.inject.Inject
 import models.{Counter, CounterTable}
 import models.CounterTable.CounterTable
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
-import scala.concurrent.{ExecutionContext, Future}
+class CounterSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[CounterTable] {
 
-class CounterSchemaInitializer @Inject()(database: Database)
-                                        (implicit executionContext: ExecutionContext) extends SchemaInitializer
-  with SchemaUtil {
+  override val name: String = CounterTable.name
+  override val table = TableQuery[CounterTable]
+  override val db = database
 
-  val counters: TableQuery[CounterTable] = TableQuery[CounterTable]
-
-  override def create(): Future[Unit] = {
-
-    withTable(database, counters, CounterTable.name, _.isEmpty) {
-      DBIO.seq(
-        counters.schema.create,
-        counters += Counter(Some(1), 0)
-      )
-    }
-  }
-
-  override def drop(): Future[Unit] = {
-    withTable(database, counters, CounterTable.name, _.nonEmpty) {
-      DBIO.seq(counters.schema.drop)
-    }
+  override def seedDatabase(tableQuery: TableQuery[CounterTable]): DBIOAction[_, NoStream, Effect.Write] = {
+    tableQuery += Counter(Some(1), 0)
   }
 }

@@ -13,7 +13,7 @@ import common.implicits.RichFuture._
 import common.implicits.RichTry._
 import common.implicits.RichDBIO._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object TokenResolver extends ActorNamed {
   final val name = "TokensResolver"
@@ -29,10 +29,9 @@ class TokenResolver @Inject()(userRepository: UserRepository,
       for {
         tokenContent <- jwtAuthService.decodeContent(refreshToken).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${user.username}] is none.")
         _ <- jwtAuthService.validate(refreshToken, user.password).asFuture
-        accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
-        refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
+        accessToken = jwtAuthService.createAccessToken(JwtContent(tokenContent.id))
+        refreshToken = jwtAuthService.createRefreshToken(JwtContent(tokenContent.id), user.password)
       } yield Tokens(accessToken, refreshToken)
     }.pipeTo(sender)
 

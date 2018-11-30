@@ -90,7 +90,7 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
     }
   } yield stripeSubscription
 
-  override def cancelStripeSubscription: Future[types.StripeSubscription] = ???
+  override def cancelStripeSubscription(inputCtx: StripeSubscriptionInputContext): Future[types.StripeSubscription] = ???
 
-  override def updateStripeSubscriptionCard(input: types.StripeSubscriptionInput): Future[Boolean] = ???
+  override def updateStripeSubscriptionCard(inputCtx: StripeSubscriptionInputContext)(input: types.StripeSubscriptionInput): Future[Boolean] = ???
 }

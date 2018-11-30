@@ -14,7 +14,7 @@ import scala.concurrent.Future
   * that initializes the tables for the received entity.
   *
   */
-trait TableInitializer[E <: RelationalProfile#Table[_]] {
+trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
 
   /**
     * Name of the database table

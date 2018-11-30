@@ -1,13 +1,13 @@
 package modules.counter.repositories
 
-import core.slick.TableInitializer
+import core.slick.SchemaInitializer
 import javax.inject.Inject
 import modules.counter.models.CounterTable.CounterTable
 import modules.counter.models.{Counter, CounterTable}
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
-class CounterSchemaInitializer @Inject()(database: Database) extends TableInitializer[CounterTable] {
+class CounterSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[CounterTable] {
 
   override val name: String = CounterTable.name
   override val table = TableQuery[CounterTable]

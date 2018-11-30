@@ -1,6 +1,6 @@
 package repositories
 
-import core.slick.TableInitializer
+import core.slick.SchemaInitializer
 import javax.inject.Inject
 import model.ItemTable.ItemTable
 import model.{Item, ItemTable}
@@ -8,7 +8,7 @@ import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
 /** @inheritdoc */
-class ItemSchemaInitializer @Inject()(database: Database) extends TableInitializer[ItemTable] {
+class ItemSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[ItemTable] {
 
   /** @inheritdoc */
   override val name: String = ItemTable.name

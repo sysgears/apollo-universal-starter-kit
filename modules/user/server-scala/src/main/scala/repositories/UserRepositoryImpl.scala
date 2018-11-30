@@ -6,7 +6,7 @@ import model.User
 import model.UserTable.UserTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
-import slick.jdbc.SQLiteProfile.api._
+import slick.jdbc.JdbcBackend.Database
 
 import scala.concurrent.ExecutionContext
 

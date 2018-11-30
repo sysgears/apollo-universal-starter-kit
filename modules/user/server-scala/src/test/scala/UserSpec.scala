@@ -119,6 +119,8 @@ class UserSpec extends UserHelper {
         response should include("\"id\":1")
         response should include("\"username\":\"testName\"")
         response should include("\"email\":\"scala-test@gmail.com\"")
+        response should include("\"accessToken\"")
+        response should include("\"refreshToken\"")
         response shouldNot include("password")
       }
     }
@@ -171,6 +173,8 @@ class UserSpec extends UserHelper {
         response should include("\"email\":\"scala-test@gmail.com\"")
         response should include("\"role\":\"user\"")
         response should include("\"isActive\":true")
+        response should include("\"accessToken\"")
+        response should include("\"refreshToken\"")
         response shouldNot include("password")
       }
     }

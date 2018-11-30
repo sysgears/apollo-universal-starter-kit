@@ -4,7 +4,7 @@ import graphql.resolvers.subscription.contexts.StripeSubscriptionInputContext
 import graphql.schema.types
 import repositories.StripeSubscriptionRepo
 import com.google.inject.Inject
-import com.stripe.model.{Customer, Subscription}
+import com.stripe.model.{Customer, Source, Subscription}
 import common.errors.{NotFound, Unauthenticated}
 import services.config.subscription.StripeSubscriptionConfigService
 import models.StripeSubscription
@@ -90,7 +90,15 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
     }
   } yield stripeSubscription
 
-  override def cancelStripeSubscription(inputCtx: StripeSubscriptionInputContext): Future[types.StripeSubscription] = ???
+  override def cancelStripeSubscription(inputCtx: StripeSubscriptionInputContext): Future[types.StripeSubscription] = for {
+    currentUser <- Future.successful(inputCtx.subscriptionOwner) failOnNone Unauthenticated()
+    userId = currentUser.id.get.toLong
+    stripeSubscription <- stripeSubscriptionRepo.getSubscriptionByUserId(userId) failOnNone NotFound(s"StripeSubscription(userId: $userId)")
+    _ <- Future { Subscription retrieve stripeSubscription.stripeSubscriptionId } map { _ cancel null }
+    _ <- Future { Source retrieve stripeSubscription.stripeSourceId } map { _ detach }
+    cancelledSubscription <- stripeSubscriptionRepo.editSubscription(stripeSubscription.copy(active = false, stripeSourceId = null, stripeSubscriptionId = null, expiryMonth = null, expiryYear = null, last4 = null, brand = null))
+  } yield cancelledSubscription
+
 
   override def updateStripeSubscriptionCard(inputCtx: StripeSubscriptionInputContext)(input: types.StripeSubscriptionInput): Future[Boolean] = ???
 }

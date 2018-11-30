@@ -14,7 +14,7 @@ import spray.json._
 
 import scala.concurrent.duration._
 
-class UserSpec extends UserHelper {
+class UserSpec extends TestHelper {
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 

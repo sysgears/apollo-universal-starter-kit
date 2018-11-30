@@ -1,4 +1,4 @@
-package common
+package common.implicits
 
 object RichList {
   implicit class ListSplit[A](list: List[A]) {

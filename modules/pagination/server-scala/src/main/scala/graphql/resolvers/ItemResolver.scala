@@ -3,7 +3,7 @@ package graphql.resolvers
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.google.inject.Inject
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import common.ActorNamed
 import model.PaginationParams
 import model.ItemsPayload

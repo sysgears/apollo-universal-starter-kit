@@ -6,7 +6,7 @@ import javax.inject.Inject
 import javax.mail.internet.InternetAddress
 import modules.contact.models.{Contact, ContactPayload}
 import modules.mail.models.MailPayload
-import modules.mail.service.MailService
+import modules.mail.services.MailService
 
 import scala.concurrent.{ExecutionContext, Future}
 

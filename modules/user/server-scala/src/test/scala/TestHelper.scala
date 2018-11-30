@@ -8,7 +8,7 @@ import repositories.UserSchemaInitializer
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
-trait UserHelper extends WordSpec
+trait TestHelper extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
   with BeforeAndAfterAll

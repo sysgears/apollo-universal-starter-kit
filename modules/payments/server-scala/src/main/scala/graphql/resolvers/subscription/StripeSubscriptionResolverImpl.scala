@@ -48,8 +48,8 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
         deactivatedSubscriptionWithNewCC <- stripeSubscriptionRepo.editSubscription {
           import input._
           subscription.copy(
-            expiryMonth = expiryMonth, expiryYear = expiryYear, last4 = last4.toInt, brand = brand,
-            stripeSourceId = stripeSourceId, stripeCustomerId = stripeCustomerId, active = false, userId = userId
+            expiryMonth = Some(expiryMonth), expiryYear = Some(expiryYear), last4 = Some(last4.toInt), brand = Some(brand),
+            stripeSourceId = Some(stripeSourceId), stripeCustomerId = stripeCustomerId, active = false, userId = userId
           )
         }
         stripeSubscriptionId <- Future {
@@ -62,7 +62,7 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
             )
           }
         } map { _.getId }
-        updatedSubscription <- stripeSubscriptionRepo.editSubscription(deactivatedSubscriptionWithNewCC.copy(stripeSubscriptionId = stripeSubscriptionId, active = true))
+        updatedSubscription <- stripeSubscriptionRepo.editSubscription(deactivatedSubscriptionWithNewCC.copy(stripeSubscriptionId = Some(stripeSubscriptionId), active = true))
       } yield updatedSubscription
       case _ => for {
         customer: Customer <- Future { Customer create obj("email" -> currentUser.email, "source" -> input.token) }
@@ -70,8 +70,15 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
         subscription <- stripeSubscriptionRepo.createSubscription {
           import input._
           StripeSubscription(
-            id = None, userId, active = false, stripeSourceId, stripeCustomerId, stripeSubscriptionId = null,
-            expiryMonth, expiryYear, last4.toInt, brand
+            id = None,
+            userId = userId,
+            active = false,
+            stripeSourceId = Some(stripeSourceId),
+            stripeCustomerId = stripeCustomerId,
+            expiryMonth = Some(expiryMonth),
+            expiryYear = Some(expiryYear),
+            last4 = Some(last4.toInt),
+            brand = Some(brand)
           )
         }
         stripeSubscriptionId <- Future {
@@ -84,7 +91,7 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
             )
           }
         } map { _.getId }
-        updatedSubscription = subscription.copy(stripeSubscriptionId = stripeSubscriptionId, active = true)
+        updatedSubscription = subscription.copy(stripeSubscriptionId = Some(stripeSubscriptionId), active = true)
         _ = stripeSubscriptionRepo.editSubscription(updatedSubscription)
       } yield updatedSubscription
     }
@@ -94,8 +101,8 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
     currentUser <- Future.successful(inputCtx.subscriptionOwner) failOnNone Unauthenticated()
     userId = currentUser.id.get.toLong
     stripeSubscription <- stripeSubscriptionRepo.getSubscriptionByUserId(userId) failOnNone NotFound(s"StripeSubscription(userId: $userId)")
-    _ <- Future { Subscription retrieve stripeSubscription.stripeSubscriptionId } map { _ cancel null }
-    _ <- Future { Source retrieve stripeSubscription.stripeSourceId } map { _ detach }
+    _ <- Future { Subscription retrieve stripeSubscription.stripeSubscriptionId.get } map { _ cancel null }
+    _ <- Future { Source retrieve stripeSubscription.stripeSourceId.get } map { _ detach }
     cancelledSubscription <- stripeSubscriptionRepo.editSubscription(stripeSubscription.copy(active = false, stripeSourceId = null, stripeSubscriptionId = null, expiryMonth = null, expiryYear = null, last4 = null, brand = null))
   } yield cancelledSubscription
 

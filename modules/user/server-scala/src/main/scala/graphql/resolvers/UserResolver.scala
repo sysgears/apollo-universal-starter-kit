@@ -118,7 +118,7 @@ class UserResolver @Inject()(userRepository: UserRepository,
 
     case input: ResetPasswordInput => {
       for {
-        tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
+        tokenContent <- jwtAuthService.decodeAccessToken(input.token).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
         _ <- userRepository.update(user.copy(password = BCrypt.hashpw(input.password, BCrypt.gensalt))).run
       } yield ResetPayload()

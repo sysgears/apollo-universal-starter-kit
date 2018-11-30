@@ -29,7 +29,7 @@ class TokenResolver @Inject()(userRepository: UserRepository,
       for {
         tokenContent <- jwtAuthService.decodeContent(refreshToken).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        _ <- jwtAuthService.validate(refreshToken, user.password).asFuture
+        _ <- jwtAuthService.decodeRefreshToken(refreshToken, user.password).asFuture
         accessToken = jwtAuthService.createAccessToken(JwtContent(tokenContent.id))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(tokenContent.id), user.password)
       } yield Tokens(accessToken, refreshToken)

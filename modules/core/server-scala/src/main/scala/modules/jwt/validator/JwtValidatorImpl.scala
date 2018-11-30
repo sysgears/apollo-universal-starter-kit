@@ -13,6 +13,7 @@ import scala.util.Try
   */
 class JwtValidatorImpl @Inject()(algorithm: JwtHmacAlgorithm) extends JwtValidator {
 
+  /** @inheritdoc */
   override def validate(token: String, secret: String): Try[Boolean] =
     Try(Jwt.validate(token, secret, Seq(algorithm))).map(_ => true)
 }

@@ -25,24 +25,30 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
                                    jwtValidator: JwtValidator,
                                    jwtConfig: JwtConfig) extends JwtAuthService[JwtContent] {
 
+  /** @inheritdoc */
   override def createAccessToken(content: JwtContent): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration)
 
+  /** @inheritdoc */
   override def createRefreshToken(content: JwtContent, secret: String): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
 
+  /** @inheritdoc */
   override def decodeContent(token: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token).map(_.parseJson.convertTo[JwtContent])
   }
 
+  /** @inheritdoc */
   override def decodeAccessToken(token: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token, jwtConfig.secret).map(_.parseJson.convertTo[JwtContent])
   }
 
+  /** @inheritdoc */
   override def decodeRefreshToken(token: String, secret: String): Try[JwtContent] = withExceptionTransform {
     jwtDecoder.decode(token, jwtConfig.secret + secret).map(_.parseJson.convertTo[JwtContent])
   }
 
+  /** @inheritdoc */
   override def validate(token: String, secret: String): Try[Boolean] = withExceptionTransform {
     jwtValidator.validate(token, jwtConfig.secret + secret)
   }

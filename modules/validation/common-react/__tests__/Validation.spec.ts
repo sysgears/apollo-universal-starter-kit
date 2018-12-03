@@ -21,7 +21,7 @@ import {
   Schema
 } from '../validation';
 
-new CommonModule(i18n, validation).triggerOnCreate();
+new CommonModule(i18n, validation).triggerOnAppCreate();
 
 describe('Check if validation works', () => {
   step('Validator "required"  works correctly', () => {

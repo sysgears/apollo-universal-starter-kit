@@ -3,4 +3,7 @@ import counter from '@module/counter-client-angular';
 import ClientModule from '@module/module-client-angular';
 
 const modules = new ClientModule(core, counter);
-modules.triggerOnCreate();
+
+modules.triggerOnAppCreate();
+
+export default modules;

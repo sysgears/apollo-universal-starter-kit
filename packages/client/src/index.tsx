@@ -1,40 +1,38 @@
-import * as React from 'react';
-import { hydrate, render } from 'react-dom';
+import core from '@module/core-client-react';
+import look from '@module/look-client-react';
+import i18n from '@module/i18n-client-react';
+import counter from '@module/counter-client-react';
+import chat from '@module/chat-client-react';
+import contact from '@module/contact-client-react';
+import validation from '@module/validation-common-react';
+import ClientModule from '@module/module-client-react';
 
-// Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
-// tslint:disable-next-line
-import 'backend_reload';
+import defaultRouter from './modules/defaultRouter';
+import post from './modules/post';
+import upload from './modules/upload';
+import user from './modules/user';
+import payments from './modules/payments';
+import pageNotFound from './modules/pageNotFound';
+import pagination from './modules/pagination';
+import './modules/favicon';
 
-import log from '../../common/log';
-import Main from './app/Main';
+const modules = new ClientModule(
+  look,
+  validation,
+  defaultRouter,
+  counter,
+  post,
+  upload,
+  contact,
+  pagination,
+  chat,
+  payments,
+  user,
+  i18n,
+  pageNotFound,
+  core
+);
 
-const renderFunc = __SSR__ ? hydrate : render;
-const root = document.getElementById('root');
+modules.triggerOnAppCreate();
 
-let frontendReloadCount = 0;
-
-const renderApp = ({ key }: { key: number }) => renderFunc(<Main rootTag={root} key={key} />, root);
-
-renderApp({ key: frontendReloadCount });
-
-if (__DEV__) {
-  if (module.hot) {
-    module.hot.accept();
-
-    module.hot.accept('backend_reload', () => {
-      log.debug('Reloading front-end');
-      window.location.reload();
-    });
-
-    module.hot.accept('./app/Main', () => {
-      try {
-        log.debug('Updating front-end');
-        frontendReloadCount = (frontendReloadCount || 0) + 1;
-
-        renderApp({ key: frontendReloadCount });
-      } catch (err) {
-        log(err.stack);
-      }
-    });
-  }
-}
+export default modules;

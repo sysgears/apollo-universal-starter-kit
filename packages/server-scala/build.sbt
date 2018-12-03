@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.12.7"
 
-lazy val global = project in file(".") dependsOn(upload, user, counter, mailer, contact, pagination) aggregate(user, upload, counter, mailer, contact, pagination)
+lazy val global = project in file(".") dependsOn(upload, user, counter, mailer, contact, pagination, payments) aggregate(user, upload, counter, mailer, contact, pagination, payments)
 
 lazy val upload = ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload")
 

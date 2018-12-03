@@ -4,9 +4,9 @@ import com.google.inject.Inject
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.subscription.StripeSubscriptionResolver
 import graphql.resolvers.subscription.contexts.StripeSubscriptionInputContext
-import sangria.schema.{Argument, Field, OptionType}
+import sangria.schema._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class PaymentsSchema @Inject()(stripeSubscriptionResolver: StripeSubscriptionResolver)
                               (implicit ec: ExecutionContext) extends GraphQLSchema {
@@ -38,17 +38,27 @@ class PaymentsSchema @Inject()(stripeSubscriptionResolver: StripeSubscriptionRes
       name = "addStripeSubscription",
       fieldType = StripeSubscription,
       arguments = List(Argument("input", StripeSubscriptionInput)),
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = {
+        ctx => addStripeSubscription(StripeSubscriptionInputContext(null /*TODO: Stub. Resolve when userContext in User module will be implemented*/)) {
+          ctx.arg[types.StripeSubscriptionInput]("input")
+        }
+      }
     ),
     Field(
-      name = "stripeSubscriptionProtectedNumber",
-      fieldType = StripeSubscriberProtectedNumber,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      name = "updateStripeSubscriptionCard",
+      fieldType = BooleanType,
+      arguments = List(Argument("input", StripeSubscriptionInput)),
+      resolve = {
+        ctx => updateStripeSubscriptionCard(StripeSubscriptionInputContext(null /*TODO: Stub. Resolve when userContext in User module will be implemented*/)) {
+          ctx.arg[types.StripeSubscriptionInput]("input")
+        }
+      }
     ),
     Field(
-      name = "stripeSubscriptionCard",
-      fieldType = StripeSubscriptionCard,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      name = "cancelStripeSubscription",
+      fieldType = StripeSubscription,
+      arguments = List(Argument("input", StripeSubscriptionInput)),
+      resolve = { ctx => cancelStripeSubscription(StripeSubscriptionInputContext(null /*TODO: Stub. Resolve when userContext in User module will be implemented*/)) }
     )
   )
 }

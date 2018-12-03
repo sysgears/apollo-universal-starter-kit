@@ -29,6 +29,7 @@ const modules: ServerModule = new ServerModule(
   chat,
   graphqlTypes
 );
-modules.triggerOnCreate();
+
+modules.triggerOnAppCreate();
 
 export default modules;

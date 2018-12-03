@@ -104,5 +104,5 @@ if (__DEV__) {
 }
 
 export default new ClientModule({
-  onCreate: [createApp]
+  onAppCreate: [createApp]
 });

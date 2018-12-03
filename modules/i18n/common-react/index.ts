@@ -23,6 +23,6 @@ const addResourcesI18n = (i18n: I18N, resources: Array<{ ns: string; resources: 
 
 export default (settings.i18n.enabled &&
   new CommonModule({
-    onCreate: [(modules: CommonModule) => addResourcesI18n(i18next, modules.localizations)]
+    onAppCreate: [(modules: CommonModule) => addResourcesI18n(i18next, modules.localizations)]
   })) ||
   undefined;

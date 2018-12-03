@@ -1,19 +1,18 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.RouteTestTimeout
-import common.implicits.RichDBIO._
+import akka.testkit.TestDuration
 import akka.util.ByteString
-import core.controllers.graphql.TestHelper
+import common.implicits.RichDBIO._
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-
-import scala.concurrent.duration._
-import akka.testkit.TestDuration
 import model.Item
 import repositories.ItemRepository
 import spray.json._
 
-class PaginationSpec extends TestHelper {
+import scala.concurrent.duration._
+
+class PaginationSpec extends PaginationHelper {
 
   lazy val itemRepo: ItemRepository = inject[ItemRepository]
   val offset = 0

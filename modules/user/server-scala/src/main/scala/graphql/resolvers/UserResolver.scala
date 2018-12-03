@@ -7,20 +7,19 @@ import com.google.inject.Inject
 import common.ActorNamed
 import common.config.AppConfig
 import common.errors.{AlreadyExists, NotFound}
-import config.AuthConfig
-import model._
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
-import modules.mail.config.MailConfig
-import modules.mail.models.MailPayload
-import modules.mail.services.MailService
-import org.mindrot.jbcrypt.BCrypt
-import repositories.UserRepository
-import services.MessageTemplateService
+import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import common.implicits.RichTry._
-import common.implicits.RichDBIO._
+import config.{AuthConfig, MailConfig}
 import errors.Unauthenticated
+import model._
+import models.MailPayload
+import modules.jwt.model.JwtContent
+import modules.jwt.service.JwtAuthService
+import org.mindrot.jbcrypt.BCrypt
+import repositories.UserRepository
+import services.MailService
+import services.MessageTemplateService
 
 import scala.concurrent.{ExecutionContext, Future}
 

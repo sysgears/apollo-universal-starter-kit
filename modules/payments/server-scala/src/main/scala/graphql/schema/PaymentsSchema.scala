@@ -57,7 +57,6 @@ class PaymentsSchema @Inject()(stripeSubscriptionResolver: StripeSubscriptionRes
     Field(
       name = "cancelStripeSubscription",
       fieldType = StripeSubscription,
-      arguments = List(Argument("input", StripeSubscriptionInput)),
       resolve = { ctx => cancelStripeSubscription(StripeSubscriptionInputContext(null /*TODO: Stub. Resolve when userContext in User module will be implemented*/)) }
     )
   )

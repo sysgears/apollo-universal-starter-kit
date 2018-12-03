@@ -14,4 +14,8 @@ class CommentRepository @Inject()(override val driver: JdbcProfile) extends Repo
   val pkType = implicitly[BaseTypedType[Int]]
   val tableQuery = TableQuery[CommentTable]
   type TableType = CommentTable
+
+  def getAllByPostId(postId: Int): DBIO[Seq[Comment]] =
+    tableQuery.filter(_.postId === postId).result
+
 }

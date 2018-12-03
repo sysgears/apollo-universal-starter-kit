@@ -1,6 +1,5 @@
 package graphql.resolvers
 
-import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.Logger
 import model._

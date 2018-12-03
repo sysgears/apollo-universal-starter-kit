@@ -1,10 +1,11 @@
 package common.actors
 
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import akka.pattern._
 import akka.stream.ActorMaterializer
-import common.RichList._
+import common.implicits.RichList._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
+import common.errors.Error
 import common.{ActorMessageDelivering, ActorNamed}
 import core.graphql.UserContext
 import javax.inject.Inject
@@ -61,8 +62,11 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
           before = tail
         )
       } else {
-        sendMessageToActor(msg.resolverActor, msg.input)
-          .pipeTo(msg.replyTo)
+        sendMessageToActor[Any](msg.resolverActor, msg.input).andThen {
+          case scala.util.Success(r) => msg.replyTo ! r
+          case scala.util.Failure(f: Error) => msg.replyTo ! msg.onException(f)
+          case scala.util.Failure(f) ⇒ msg.replyTo ! Status.Failure(f)
+        }
       }
   }
 

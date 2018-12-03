@@ -1,19 +1,24 @@
+import React from 'react';
 import { createDrawerNavigator } from 'react-navigation';
 
-import modules from '..';
 import { DrawerComponent } from '../common/components/native';
 import ClientModule from '../ClientModule';
 
-const routerFactory = () =>
-  createDrawerNavigator(
+const ref = { modules: null };
+
+const routerFactory = () => {
+  return createDrawerNavigator(
     {
-      ...modules.drawerItems
+      ...ref.modules.drawerItems
     },
     {
-      contentComponent: DrawerComponent
+      // eslint-disable-next-line
+      contentComponent: props => <DrawerComponent {...props} drawerItems={ref.modules.drawerItems} />
     }
   );
+};
 
 export default new ClientModule({
-  routerFactory
+  routerFactory,
+  onCreate: [modules => (ref.modules = modules)]
 });

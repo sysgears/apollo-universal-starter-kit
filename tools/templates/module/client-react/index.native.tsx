@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from 'react-navigation';
 
 import { translate } from '@module/i18n-client-react';
-import ClientModule from '@module/module-client-react/index.native';
+import ClientModule from '@module/module-client-react-native';
 
 import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
 import $Module$ from './containers/$Module$';

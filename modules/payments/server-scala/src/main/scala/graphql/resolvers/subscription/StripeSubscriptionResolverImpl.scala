@@ -109,5 +109,14 @@ class StripeSubscriptionResolverImpl @Inject()(stripeSubscriptionRepo: StripeSub
   } yield cancelledSubscription
 
 
-  override def updateStripeSubscriptionCard(inputCtx: StripeSubscriptionInputContext)(input: types.StripeSubscriptionInput): Future[Boolean] = ???
+  override def updateStripeSubscriptionCard(inputCtx: StripeSubscriptionInputContext)
+                                           (input: types.StripeSubscriptionInput): Future[Boolean] = for {
+    currentUser <- Future.successful(inputCtx.subscriptionOwner) failOnNone Unauthenticated()
+    userId = currentUser.id.get.toLong
+    stripeSubscription <- stripeSubscriptionRepo.getSubscriptionByUserId(userId) failOnNone NotFound(s"StripeSubscription(userId: $userId)")
+    _ <- Future { Source retrieve stripeSubscription.stripeSourceId.get } map { _ detach }
+    customer <- Future { Customer retrieve stripeSubscription.stripeCustomerId }
+    stripeSourceId <- Future { customer.getSources create obj("source" -> input.token) } map { _.getId }
+    _ <- stripeSubscriptionRepo.editSubscription(stripeSubscription.copy(stripeSourceId = Some(stripeSourceId), expiryMonth = Some(input.expiryMonth), expiryYear = Some(input.expiryYear), last4 = Some(input.last4.toInt), brand = Some(input.brand)))
+  } yield true
 }

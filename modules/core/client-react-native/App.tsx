@@ -45,9 +45,7 @@ export default class Main extends React.Component<MainProps> {
 
     return modules.getWrappedRoot(
       <Provider store={store}>
-        <ApolloProvider client={client}>
-          <MainScreenNavigator />
-        </ApolloProvider>
+        <ApolloProvider client={client}>{modules.getDataRoot(<MainScreenNavigator />)}</ApolloProvider>
       </Provider>
     );
   }

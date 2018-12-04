@@ -1,6 +1,6 @@
 import ClientModule from '@module/module-client-react-native';
-import onCreate from './AwakeInDevApp';
+import onAppCreate from './AwakeInDevApp';
 
 export default new ClientModule({
-  onCreate: [onCreate]
+  onAppCreate: [onAppCreate]
 });

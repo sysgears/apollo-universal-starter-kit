@@ -6,7 +6,7 @@ import akka.pattern._
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.ActorNamed
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import models.FileMetadata
 
 import scala.concurrent.ExecutionContext

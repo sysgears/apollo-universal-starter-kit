@@ -14,7 +14,7 @@ import pagination from '../../client/src/modules/pagination';
 
 import ClientModule from '@module/module-client-react-native';
 
-const modules: ClientModule = new ClientModule(
+const modules = new ClientModule(
   validation,
   defaultRouter,
   counter,
@@ -29,4 +29,6 @@ const modules: ClientModule = new ClientModule(
   core
 );
 
-modules.triggerOnCreate();
+modules.triggerOnAppCreate();
+
+export default modules;

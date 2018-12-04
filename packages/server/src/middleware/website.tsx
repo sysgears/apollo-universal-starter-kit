@@ -20,7 +20,7 @@ let createApolloClient: any;
 let createReduxStore: any;
 let styles: any;
 if (__SSR__) {
-  clientModules = require('../../../client/src/modules').default;
+  clientModules = require('../../../client/src').default;
   createApolloClient = require('../../../common/createApolloClient').default;
   createReduxStore = require('../../../common/createReduxStore').default;
   styles = require('../../../client/src/modules/common/components/web').styles;

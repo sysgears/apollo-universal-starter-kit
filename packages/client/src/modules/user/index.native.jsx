@@ -238,9 +238,6 @@ export default new ClientModule(access, {
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
-  routerFactory: () => {
-    console.log('ref mods items', ref.modules.drawerItems);
-    return UserScreenNavigator(ref.modules.drawerItems);
-  },
-  onCreate: [modules => (ref.modules = modules)]
+  routerFactory: () => UserScreenNavigator(ref.modules.drawerItems),
+  onAppCreate: [modules => (ref.modules = modules)]
 });

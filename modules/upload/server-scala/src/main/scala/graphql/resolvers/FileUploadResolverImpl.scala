@@ -10,7 +10,7 @@ import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.name.Named
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import common.errors._
 import common.{ActorMessageDelivering, Logger}
 import graphql.resolvers.FileUploadResolverImpl._

@@ -1,19 +1,17 @@
 package modules
 
-import com.byteslounge.slickrepo.repository.Repository
-import com.google.inject.Provides
-import graphql.resolvers.{UserResolver, UserResolverImpl}
-import model.User
+import akka.actor.Actor
+import com.google.inject.name.Names
+import core.guice.injection.GuiceActorRefProvider
+import graphql.resolvers._
 import net.codingwell.scalaguice.ScalaModule
-import repositories.UserRepository
-import slick.jdbc.JdbcProfile
+import repositories.{UserRepository, UserRepositoryImpl}
 
-class UserModule extends ScalaModule {
+class UserModule extends ScalaModule with GuiceActorRefProvider {
 
-  override def configure() {
-    bind[UserResolver].to[UserResolverImpl]
+  override def configure() = {
+    bind[UserRepository].to[UserRepositoryImpl]
+    bind[Actor].annotatedWith(Names.named(TokenResolver.name)).to[TokenResolver]
+    bind[Actor].annotatedWith(Names.named(UserResolver.name)).to[UserResolver]
   }
-
-  @Provides
-  def userRepository(driver: JdbcProfile): Repository[User, Int] = new UserRepository(driver)
 }

@@ -68,7 +68,7 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
       name = "editPost",
       fieldType = Types.post,
       arguments = Argument(name = "input", argumentType = Types.editPostInput) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.editPost(input = ctx.args.arg[EditPostInput]("input")) }
     ),
     Field(
       name = "addComment",

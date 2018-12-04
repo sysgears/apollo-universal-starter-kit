@@ -24,7 +24,7 @@ class TokenSpec extends TestHelper {
   val testPassword = "12345678q"
   val testUsername = "testName"
 
-  "UserSpec" must {
+  "TokenSpec" must {
 
     def registrationStep: RouteTestResult = {
       val registerMutation =
@@ -126,8 +126,8 @@ class TokenSpec extends TestHelper {
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
-        response should include("\"data\":null")
-        response should include("\"errors\"")
+        response should include("\"accessToken\":\"\"")
+        response should include("\"refreshToken\":\"\"")
       }
     }
 

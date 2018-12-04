@@ -14,6 +14,10 @@ import scala.concurrent.Future
 class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
   with InputUnmarshallerGenerator {
 
+  import types.input._
+  import types.output._
+  import types.unmarshallers._
+
   object Types {
 
     implicit val comment: ObjectType[Unit, Comment] = deriveObjectType(ObjectTypeName("Comment"), ExcludeFields("postId"))
@@ -24,57 +28,6 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
             resolve = { ctx => postResolver.getComments(ctx.value.id.get) /*TODO: Unsafe*/  }
       )
     ))
-
-    implicit val updatePostPayloadOutput: ObjectType[Unit, UpdatePostPayload] = deriveObjectType(ObjectTypeName("UpdatePostPayload"))
-    implicit val updateCommentPayloadOutput: ObjectType[Unit, UpdateCommentPayload] = deriveObjectType(ObjectTypeName("UpdateCommentPayload"))
-
-    implicit val addPostInput: InputObjectType[AddPostInput] = deriveInputObjectType(InputObjectTypeName("AddPostInput"))
-    implicit val editPostInput: InputObjectType[EditPostInput] = deriveInputObjectType(InputObjectTypeName("EditPostInput"))
-    implicit val addCommentInput: InputObjectType[AddCommentInput] = deriveInputObjectType(InputObjectTypeName("AddCommentInput"))
-    implicit val editCommentInput: InputObjectType[EditCommentInput] = deriveInputObjectType(InputObjectTypeName("EditCommentInput"))
-    implicit val deleteCommentInput: InputObjectType[DeleteCommentInput] = deriveInputObjectType(InputObjectTypeName("DeleteCommentInput"))
-  }
-
-  implicit val addPostInputUnmarshaller: FromInput[EditPostInput] = inputUnmarshaller {
-    input =>
-      EditPostInput(
-        id = input("id").asInstanceOf[Int],
-        title = input("title").asInstanceOf[String],
-        content = input("content").asInstanceOf[String]
-      )
-  }
-
-  implicit val editPostInputUnmarshaller: FromInput[AddPostInput] = inputUnmarshaller {
-    input =>
-      AddPostInput(
-        title = input("title").asInstanceOf[String],
-        content = input("content").asInstanceOf[String]
-      )
-  }
-
-  implicit val addCommentInputUnmarshaller: FromInput[AddCommentInput] = inputUnmarshaller {
-    input =>
-      AddCommentInput(
-        postId = input("postId").asInstanceOf[Int],
-        content = input("content").asInstanceOf[String]
-      )
-  }
-
-  implicit val editCommentInputUnmarshaller: FromInput[EditCommentInput] = inputUnmarshaller {
-    input =>
-      EditCommentInput(
-        id = input("id").asInstanceOf[Int],
-        postId = input("postId").asInstanceOf[Int],
-        content = input("content").asInstanceOf[String]
-      )
-  }
-
-  implicit val deleteCommentInputUnmarshaller: FromInput[DeleteCommentInput] = inputUnmarshaller {
-    input =>
-      DeleteCommentInput(
-        id = input("id").asInstanceOf[Int],
-        postId = input("postId").asInstanceOf[Int]
-      )
   }
 
   override def queries: List[Field[UserContext, Unit]] = List(
@@ -97,7 +50,7 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
     Field(
       name = "addPost",
       fieldType = Types.post,
-      arguments = Argument(name = "input", argumentType = Types.addPostInput) :: Nil,
+      arguments = Argument(name = "input", argumentType = addPostInput) :: Nil,
       resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
     ),
     Field(
@@ -109,25 +62,25 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
     Field(
       name = "editPost",
       fieldType = Types.post,
-      arguments = Argument(name = "input", argumentType = Types.editPostInput) :: Nil,
+      arguments = Argument(name = "input", argumentType = editPostInput) :: Nil,
       resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
     ),
     Field(
       name = "addComment",
       fieldType = Types.comment,
-      arguments = Argument(name = "input", argumentType = Types.addCommentInput) :: Nil,
+      arguments = Argument(name = "input", argumentType = addCommentInput) :: Nil,
       resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
     ),
     Field(
       name = "editComment",
       fieldType = Types.comment,
-      arguments = Argument(name = "input", argumentType = Types.editCommentInput) :: Nil,
+      arguments = Argument(name = "input", argumentType = editCommentInput) :: Nil,
       resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
     ),
     Field(
       name = "deleteComment",
       fieldType = Types.comment,
-      arguments = Argument(name = "input", argumentType = Types.deleteCommentInput) :: Nil,
+      arguments = Argument(name = "input", argumentType = deleteCommentInput) :: Nil,
       resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
     )
   )

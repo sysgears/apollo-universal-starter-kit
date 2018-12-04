@@ -6,7 +6,7 @@ import scala.concurrent.Future
 
 trait PostResolver {
 
-  def post(id: Int): Future[PostOutput]
+  def post(id: Int): Future[Post]
 
   def posts(limit: Int, after: Int): Future[Posts]
 
@@ -22,11 +22,12 @@ trait PostResolver {
 
   def editComment(input: EditCommentInput): Future[Comment]
 
-  //TODO Not Implemented!!!
-  def postUpdated(id: Int): Future[UpdatePostPayload]
+  def getComments(postId: Int): Future[Seq[Comment]]
 
-  def postsUpdated(endCursor: Int): Future[UpdatePostPayload]
+  def postUpdated(id: Int): Future[UpdatePostPayload] /*TODO Not Implemented*/
 
-  def commentUpdated(postId: Int): Future[UpdateCommentPayload]
+  def postsUpdated(endCursor: Int): Future[UpdatePostPayload] /*TODO Not Implemented*/
+
+  def commentUpdated(postId: Int): Future[UpdateCommentPayload] /*TODO Not Implemented*/
 
 }

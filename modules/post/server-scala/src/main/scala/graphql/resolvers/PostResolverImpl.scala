@@ -13,12 +13,11 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
                                 (implicit executionContext: ExecutionContext) extends PostResolver with Logger {
 
   //TODO Implement error handler
-  override def post(id: Int): Future[PostOutput] =
+  override def post(id: Int): Future[Post] =
     for {
       maybePost <- postRepository.findOne(id).run
       post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get) else Future.successful(null)
-      comments  <- commentRepository.getAllByPostId(post.id.get).run
-    } yield PostOutput.postToOutput(post).copy(comments = comments)
+    } yield post
 
   //TODO Not Implemented
   override def posts(limit: Int, after: Int): Future[Posts] = ???
@@ -49,6 +48,9 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
 
   override def editComment(input: EditCommentInput): Future[Comment] =
     commentRepository.update(input).run
+
+  override def getComments(postId: Int): Future[Seq[Comment]] =
+    commentRepository.getAllByPostId(postId).run
 
   //TODO NOT Implemented Subscription method!!!
   override def postUpdated(id: Int): Future[UpdatePostPayload] = ???

@@ -57,5 +57,3 @@ libraryDependencies ++= Seq(
 )
 
 parallelExecution in test := false
-fork in Test := true
-envVars in Test := Map("env" -> "test")

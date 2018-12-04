@@ -1,2 +1,2 @@
 // Reexport for backward-compatibility purposes
-export { styles as default } from '@module/look-client-react-native';
+export * from '@module/look-client-react-native/styles';

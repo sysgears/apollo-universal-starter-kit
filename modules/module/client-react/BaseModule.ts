@@ -1,6 +1,7 @@
 import React from 'react';
 import { merge } from 'lodash';
 import { ApolloLink } from 'apollo-link';
+import { ApolloClient } from 'apollo-client';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { Reducer } from 'redux';
 import { IResolvers } from 'graphql-tools';
@@ -8,8 +9,8 @@ import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@module/module-common';
 
 export interface BaseModuleShape extends CommonModuleShape {
-  link?: ApolloLink[];
-  createNetLink?: () => ApolloLink;
+  createLink?: Array<(getApolloClient: () => ApolloClient<any>) => ApolloLink>;
+  createNetLink?: (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
   connectionParam?: ConnectionParamsOptions[];
   reducer?: Array<{ [key: string]: Reducer }>;
   resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;

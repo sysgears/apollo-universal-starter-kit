@@ -220,7 +220,7 @@ const logoutFromAllDevices = async client => {
 export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
-      link: __CLIENT__ ? [JWTLink] : [],
+      createLink: __CLIENT__ ? [() => JWTLink] : [],
       logout: [removeTokens],
       logoutFromAllDevices: [logoutFromAllDevices]
     })

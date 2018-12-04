@@ -28,7 +28,7 @@ export const onAppCreate = (modules: ClientModule) => {
   ref.client = createApolloClient({
     apiUrl,
     createNetLink: ref.modules.createNetLink,
-    links: ref.modules.link,
+    createLink: ref.modules.createLink,
     connectionParams: ref.modules.connectionParams,
     clientResolvers: ref.modules.resolvers
   });

@@ -23,7 +23,7 @@ const createApp = (modules: ClientModule) => {
   const client = createApolloClient({
     apiUrl,
     createNetLink: modules.createNetLink,
-    links: modules.link,
+    createLink: modules.createLink,
     connectionParams: modules.connectionParams,
     clientResolvers: modules.resolvers
   });

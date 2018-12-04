@@ -28,7 +28,7 @@ class TokenSchema @Inject()(implicit val materializer: ActorMaterializer,
       resolve = sc => resolveWithDispatcher[Tokens](
         input = sc.args.arg[String]("refreshToken"),
         userContext = sc.ctx,
-        onException = e => Future.failed(e),
+        onException = _ => Tokens("", ""),
         namedResolverActor = TokenResolver
       )
     )

@@ -62,7 +62,7 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
       name = "deletePost",
       fieldType = Types.post,
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.deletePost(ctx.args.arg("id")) }
     ),
     Field(
       name = "editPost",

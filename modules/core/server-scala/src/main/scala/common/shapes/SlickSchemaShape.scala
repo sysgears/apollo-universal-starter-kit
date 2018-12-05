@@ -2,6 +2,8 @@ package common.shapes
 
 import core.slick.SchemaInitializer
 
+import scala.collection.mutable
+
 trait SlickSchemaShape {
-  val slickSchemaModules: List[SchemaInitializer[_]] = List.empty
+  val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet.empty
 }

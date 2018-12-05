@@ -1,9 +1,9 @@
-package guice.modules
+package guice
 
 import graphql.resolvers.{ContactResolver, ContactResolverImpl}
 import net.codingwell.scalaguice.ScalaModule
 
-class ContactModule extends ScalaModule {
+class ContactBinding extends ScalaModule {
   override def configure(): Unit = {
     bind[ContactResolver].to[ContactResolverImpl]
   }

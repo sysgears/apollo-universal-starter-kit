@@ -1,5 +1,3 @@
-package app
-
 import com.google.inject.Inject
 import common.shapes.ServerModule
 import graphql.schema.ContactSchema

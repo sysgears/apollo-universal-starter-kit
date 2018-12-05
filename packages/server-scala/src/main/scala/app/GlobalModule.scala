@@ -7,4 +7,13 @@ import common.shapes.ServerModule
 class GlobalModule @Inject()()(counter: CounterModule,
                                contact: ContactModule,
                                upload: UploadModule,
-                               user: UserModule) extends ServerModule(Seq(counter, contact, upload, user))
+                               user: UserModule,
+                               pagination: PaginationModule) extends ServerModule(
+  Seq(
+    counter,
+    contact,
+    upload,
+    user,
+    pagination
+  )
+)

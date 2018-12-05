@@ -3,11 +3,13 @@ package common.shapes
 import core.graphql.UserContext
 import sangria.schema.Field
 
+import scala.collection.mutable
+
 trait GraphQLShape {
 
-  val queries: List[Field[UserContext, Unit]] = List.empty
+  val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 
-  val mutations: List[Field[UserContext, Unit]] = List.empty
+  val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 
-  val subscriptions: List[Field[UserContext, Unit]] = List.empty
+  val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 }

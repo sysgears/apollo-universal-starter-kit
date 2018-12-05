@@ -24,8 +24,6 @@ const setJWTContext = async operation => {
   }));
 };
 
-let apolloClient;
-
 const saveTokens = async ({ accessToken, refreshToken }) => {
   await setItem('accessToken', accessToken);
   await setItem('refreshToken', refreshToken);
@@ -36,114 +34,118 @@ const removeTokens = async () => {
   await removeItem('refreshToken');
 };
 
-const JWTLink = new ApolloLink((operation, forward) => {
-  return new Observable(observer => {
-    let sub, retrySub;
-    const queue = [];
+const JWTLink = getApolloClient =>
+  new ApolloLink((operation, forward) => {
+    return new Observable(observer => {
+      const client = getApolloClient();
+      let sub, retrySub;
+      const queue = [];
 
-    const returnError = async (error, shouldTokensRemove) => {
-      if (shouldTokensRemove) await removeTokens();
-      observer.error(error);
-    };
+      const returnError = async (error, shouldTokensRemove) => {
+        if (shouldTokensRemove) await removeTokens();
+        observer.error(error);
+      };
 
-    (async () => {
-      // Optimisation: imitate server response with empty user if no JWT token present in local storage
-      if (
-        !settings.user.auth.access.session.enabled &&
-        operation.operationName === 'currentUser' &&
-        !(await getItem('refreshToken'))
-      ) {
-        observer.next({ data: { currentUser: null } });
-        observer.complete();
-        return;
-      }
+      (async () => {
+        // Optimisation: imitate server response with empty user if no JWT token present in local storage
+        if (
+          !settings.user.auth.access.session.enabled &&
+          operation.operationName === 'currentUser' &&
+          !(await getItem('refreshToken'))
+        ) {
+          observer.next({ data: { currentUser: null } });
+          observer.complete();
+          return;
+        }
 
-      await setJWTContext(operation);
-      try {
-        sub = forward(operation).subscribe({
-          next: result => {
-            const promise = (async () => {
-              if (operation.operationName === 'login') {
-                if (result.data.login.tokens && !result.data.login.errors) {
-                  const {
-                    data: {
-                      login: {
-                        tokens: { accessToken, refreshToken }
+        await setJWTContext(operation);
+        try {
+          sub = forward(operation).subscribe({
+            next: result => {
+              const promise = (async () => {
+                if (operation.operationName === 'login') {
+                  if (result.data.login.tokens && !result.data.login.errors) {
+                    const {
+                      data: {
+                        login: {
+                          tokens: { accessToken, refreshToken }
+                        }
                       }
-                    }
-                  } = result;
-                  await saveTokens({ accessToken, refreshToken });
-                } else {
-                  await removeTokens();
+                    } = result;
+                    await saveTokens({ accessToken, refreshToken });
+                  } else {
+                    await removeTokens();
+                  }
                 }
+                observer.next(result);
+              })();
+              queue.push(promise);
+              if (queue.length > 100) {
+                Promise.all(queue).then(() => {
+                  queue.length = 0;
+                });
               }
-              observer.next(result);
-            })();
-            queue.push(promise);
-            if (queue.length > 100) {
-              Promise.all(queue).then(() => {
-                queue.length = 0;
-              });
-            }
-          },
-          error: networkError => {
-            (async () => {
-              const isUnauthorized = networkError.response && networkError.response.status === 401;
-              const isRefreshRequest = operation.operationName === 'refreshTokens';
+            },
+            error: networkError => {
+              (async () => {
+                const isUnauthorized = networkError.response && networkError.response.status === 401;
+                const isRefreshRequest = operation.operationName === 'refreshTokens';
 
-              if (isUnauthorized) {
-                // We assume that refresh token is not valid anymore, so return original request result.
-                if (isRefreshRequest) {
-                  await returnError(networkError, true);
+                if (isUnauthorized) {
+                  // We assume that refresh token is not valid anymore, so return original request result.
+                  if (isRefreshRequest) {
+                    await returnError(networkError, true);
+                  } else {
+                    await refreshAccessToken();
+                  }
                 } else {
-                  await refreshAccessToken();
+                  await returnError(networkError);
                 }
-              } else {
-                await returnError(networkError);
-              }
 
-              /*
+                /*
                 Refreshes the access token if it's expired
                */
-              async function refreshAccessToken() {
-                try {
-                  const {
-                    data: {
-                      refreshTokens: { accessToken, refreshToken }
-                    }
-                  } = await apolloClient.mutate({
-                    mutation: REFRESH_TOKENS_MUTATION,
-                    variables: { refreshToken: await getItem('refreshToken') }
-                  });
-                  await saveTokens({ accessToken, refreshToken });
-                  // Retry current operation
-                  await setJWTContext(operation);
-                  retrySub = forward(operation).subscribe(observer);
-                } catch (e) {
-                  // We have received error during refresh - drop tokens and return original request result
-                  await returnError(networkError, true);
+                async function refreshAccessToken() {
+                  try {
+                    const {
+                      data: {
+                        refreshTokens: { accessToken, refreshToken }
+                      }
+                    } = await client.mutate({
+                      mutation: REFRESH_TOKENS_MUTATION,
+                      variables: { refreshToken: await getItem('refreshToken') }
+                    });
+                    await saveTokens({ accessToken, refreshToken });
+                    // Retry current operation
+                    await setJWTContext(operation);
+                    retrySub = forward(operation).subscribe(observer);
+                  } catch (e) {
+                    // We have received error during refresh - drop tokens and return original request result
+                    await removeTokens();
+                    await setJWTContext(operation);
+                    retrySub = forward(operation).subscribe(observer);
+                  }
                 }
-              }
-            })();
-          },
-          complete: () => {
-            Promise.all(queue).then(() => {
-              queue.length = 0;
-              observer.complete();
-            });
-          }
-        });
-      } catch (e) {
-        await returnError(e);
-      }
-    })();
+              })();
+            },
+            complete: () => {
+              Promise.all(queue).then(() => {
+                queue.length = 0;
+                observer.complete();
+              });
+            }
+          });
+        } catch (e) {
+          await returnError(e);
+        }
+      })();
 
-    return () => {
-      if (sub) sub.unsubscribe();
-      if (retrySub) retrySub.unsubscribe();
-    };
+      return () => {
+        if (sub) sub.unsubscribe();
+        if (retrySub) retrySub.unsubscribe();
+      };
+    });
   });
-});
 
 // TODO: shouldn't be needed at all when React Apollo will allow rendering
 // all queries as loading: true during SSR
@@ -151,7 +153,6 @@ class DataRootComponent extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    apolloClient = this.props.client;
     this.state = { ready: settings.user.auth.access.session.enabled };
   }
 
@@ -220,7 +221,7 @@ const logoutFromAllDevices = async client => {
 export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
-      createLink: __CLIENT__ ? [() => JWTLink] : [],
+      createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens],
       logoutFromAllDevices: [logoutFromAllDevices]
     })

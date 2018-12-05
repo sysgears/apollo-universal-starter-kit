@@ -1,43 +1,27 @@
 package repositories
 
-import core.slick.{SchemaInitializer, SchemaUtil}
+import core.slick.SchemaInitializer
 import javax.inject.Inject
 import model.{Comment, CommentTable}
 import model.CommentTable.CommentTable
 import slick.jdbc.SQLiteProfile.api._
 import slick.lifted.TableQuery
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 class CommentSchemaInitializer @Inject()(database: Database)
-                                        (implicit executionContext: ExecutionContext) extends SchemaInitializer
-  with SchemaUtil {
+                                        (implicit executionContext: ExecutionContext) extends SchemaInitializer[CommentTable] {
 
-  val comments: TableQuery[CommentTable] = TableQuery[CommentTable]
+  override val name: String = CommentTable.name
+  override val table = TableQuery[CommentTable]
+  override val db = database
 
-  override def create(): Future[Unit] = {
-    withTable(database, comments, CommentTable.name, _.isEmpty) {
-      DBIO.seq(comments.schema.create,
-      comments ++= fillDatabase)
-    }
-  }
-
-  override def drop(): Future[Unit] = {
-    withTable(database, comments, CommentTable.name, _.nonEmpty) {
-      DBIO.seq(comments.schema.drop)
-    }
-  }
-
-  /**
-    * Helper method for generating 'Comment' entities
-    *
-    * @return list of 'Comment' entities
-    */
-  def fillDatabase: List[Comment] = {
-    List.range(1, 10).map(num =>
+  override def seedDatabase(tableQuery: TableQuery[CommentTable]): DBIOAction[_, NoStream, Effect.Write] = {
+    val comments = List.range(1, 10).map(num =>
       Comment(id = Some(num),
         content = s" Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim " +
           s"id [$num] est laborum.",
         postId = 1))
+    tableQuery ++= comments
   }
 }

@@ -3,7 +3,7 @@ package graphql.resolvers
 import com.google.inject.Inject
 import common.Logger
 import model._
-import common.RichDBIO._
+import common.implicits.RichDBIO._
 import repositories.{CommentRepository, PostRepository}
 
 import scala.concurrent.{ExecutionContext, Future}

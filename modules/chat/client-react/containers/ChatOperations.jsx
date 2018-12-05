@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import { translate } from '@module/i18n-client-react';
 import chatConfig from '../../../../config/chat';
-import { withUser } from '../../../../packages/client/src/modules/user/';
+import { withUser } from '../../../../packages/client/src/modules/user';
 import withUuid from './withUuid';
 import Chat from './Chat';
 import withImage from './withImage';

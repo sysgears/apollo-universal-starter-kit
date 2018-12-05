@@ -239,5 +239,5 @@ export default new ClientModule(access, {
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   routerFactory: () => UserScreenNavigator(ref.modules.drawerItems),
-  onCreate: [modules => (ref.modules = modules)]
+  onAppCreate: [modules => (ref.modules = modules)]
 });

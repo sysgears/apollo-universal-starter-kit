@@ -21,7 +21,7 @@ object ModuleLoader extends Logger
 
   lazy val akkaRouteModules: List[AkkaRoute] = getInjectedInstances[AkkaRoute](classOf[AkkaRoute].getName)
   lazy val graphQLSchemaModules: List[GraphQLSchema] = getInjectedInstances[GraphQLSchema](classOf[GraphQLSchema].getName)
-  lazy val slickSchemaModules: List[SchemaInitializer] = getInjectedInstances[SchemaInitializer](classOf[SchemaInitializer].getName)
+  lazy val slickSchemaModules: List[SchemaInitializer[_]] = getInjectedInstances[SchemaInitializer[_]](classOf[SchemaInitializer[_]].getName)
 
   private def filter(className: String)(clazz: ClassInfo) = {
     clazz.implements(className) && !clazz.annotations.exists(_.descriptor.endsWith(s"$ignoreModuleName;"))

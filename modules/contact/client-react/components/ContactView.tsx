@@ -2,8 +2,7 @@ import React from 'react';
 import Helmet from 'react-helmet';
 
 import { TranslateFunction } from '@module/i18n-client-react';
-import { LayoutCenter } from '../../../../packages/client/src/modules/common/components/index.web';
-import { PageLayout } from '../../../../packages/client/src/modules/common/components/web';
+import { LayoutCenter, PageLayout } from '../../../../packages/client/src/modules/common/components/web';
 import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';
 import settings from '../../../../settings';

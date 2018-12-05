@@ -4,7 +4,7 @@ import { I18nextProvider } from 'react-i18next';
 import ClientModule from '@module/module-client-react-native';
 import commonI18n from '@module/i18n-common-react';
 
-import { LanguagePicker, Root } from '../../../packages/client/src/modules/common/components/native';
+import { LanguagePicker, Root } from '@module/look-client-react-native';
 import resources from './locales';
 import settings from '../../../settings';
 

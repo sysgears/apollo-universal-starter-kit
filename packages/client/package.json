@@ -10,8 +10,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"../../modules/**/client-react/**/*.spec.*\" \"src/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"../../modules/**/client-react/**/*.spec.*\" \"src/**/*.spec.*\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
@@ -42,9 +42,10 @@
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
     "@fortawesome/react-fontawesome": "0.0.18",
-    "@module/contact-client-react": "^1.0.0",
-    "@module/counter-client-react": "^1.0.0",
     "@module/chat-client-react": "^1.0.0",
+    "@module/contact-client-react": "^1.0.0",
+    "@module/core-client-react": "^1.0.0",
+    "@module/counter-client-react": "^1.0.0",
     "@module/i18n-client-react": "^1.0.0",
     "@module/i18n-common-react": "^1.0.0",
     "@module/module-client-react": "^1.0.0",
@@ -103,6 +104,7 @@
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.16",
     "@types/chai": "^4.1.4",
+    "@types/jsdom": "^12.2.0",
     "@types/lodash": "^4.14.112",
     "@types/mocha": "^5.2.5",
     "@types/react": "^16.4.6",
@@ -120,7 +122,7 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
-    "dom-testing-library": "^2.3.0",
+    "dom-testing-library": "^3.13.0",
     "eslint": "^4.13.1",
     "graphql-tools": "^2.13.0",
     "jsdom": "^11.5.1",
@@ -141,14 +143,14 @@
     "native-base": "^2.3.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
-    "uuid": "^3.3.2",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.4.3",
     "react-native-keyboard-spacer": "^0.4.1",
+    "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
     "react-navigation": "^2.13.0",
-    "react-native-mime-types": "^2.2.1"
+    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "spinjs": "^0.4.0"

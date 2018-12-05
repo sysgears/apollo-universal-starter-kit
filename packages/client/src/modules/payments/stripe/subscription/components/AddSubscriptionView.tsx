@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
 
 import { TranslateFunction } from '../../../../../i18n';
-import { LayoutCenter, clientOnly, Table, Row, Col } from '../../../../common/components/index.web';
+import { LayoutCenter, clientOnly, Table, Row, Col } from '../../../../common/components/web';
 import { PageLayout } from '../../../../common/components/web';
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../../../settings';

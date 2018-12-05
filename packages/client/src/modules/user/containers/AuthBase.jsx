@@ -79,7 +79,6 @@ const withLogoutFromAllDevices = Component =>
       ...props,
       logoutFromAllDevices: async () => {
         await access.doLogoutFromAllDevices(client);
-        await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: null } });
       }
     };
     return <Component {...newProps} />;

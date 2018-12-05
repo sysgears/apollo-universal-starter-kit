@@ -17,14 +17,14 @@ object Main extends App with Injecting with AppInitialization {
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]
 
-  val appServerModule = inject[GlobalModule]
-  appServerModule.fold()
+  val globalModule = inject[GlobalModule]
+  globalModule.fold()
 
   val routes = List(inject[GraphQLController], inject[FrontendController])
   val corsSettings = CorsSettings.apply(system)
 
   withActionsBefore {
-    appServerModule.slickSchemas.map(_.create()).toSeq
+    globalModule.slickSchemas.map(_.create()).toSeq
   }(
     Http().bindAndHandle(
       cors(corsSettings)(routes.map(_.routes).reduce(_ ~ _)),

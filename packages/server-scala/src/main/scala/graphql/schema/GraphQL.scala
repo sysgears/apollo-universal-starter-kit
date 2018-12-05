@@ -6,15 +6,15 @@ import core.graphql.UserContext
 import sangria.schema.{Field, IntType, ObjectType, Schema}
 
 @Singleton
-class GraphQL @Inject()(appServerModule: GlobalModule) {
+class GraphQL @Inject()(globalModule: GlobalModule) {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 
   private val dummy = ObjectType("Query", List[Field[UserContext, Unit]](Field("dummy", IntType, resolve = _ => 0)))
 
   val schema: Schema[UserContext, Unit] = sangria.schema.Schema(
-    query = if (appServerModule.queries.nonEmpty) ObjectType("Query", appServerModule.queries.toList) else dummy,
-    mutation = if (appServerModule.mutations.nonEmpty) Some(ObjectType("Mutation", appServerModule.mutations.toList)) else None,
-    subscription = if (appServerModule.subscriptions.nonEmpty) Some(ObjectType("Subscription", appServerModule.subscriptions.toList)) else None
+    query = if (globalModule.queries.nonEmpty) ObjectType("Query", globalModule.queries.toList) else dummy,
+    mutation = if (globalModule.mutations.nonEmpty) Some(ObjectType("Mutation", globalModule.mutations.toList)) else None,
+    subscription = if (globalModule.subscriptions.nonEmpty) Some(ObjectType("Subscription", globalModule.subscriptions.toList)) else None
   )
 }

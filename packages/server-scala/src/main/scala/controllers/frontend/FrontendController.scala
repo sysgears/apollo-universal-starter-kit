@@ -1,9 +1,9 @@
-package core.controllers.frontend
+package controllers.frontend
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import core.controllers.AkkaRoute
+import core.routes.AkkaRoute
 
 class FrontendController extends AkkaRoute {
 

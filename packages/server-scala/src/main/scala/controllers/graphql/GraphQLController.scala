@@ -1,33 +1,31 @@
-package core.controllers.graphql
+package controllers.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
+import akka.http.scaladsl.model.Multipart
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.http.scaladsl.model.headers.`Set-Cookie`
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import core.controllers.AkkaRoute
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import controllers.graphql.jsonProtocols.GraphQLMessage
+import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.routes.AkkaRoute
 import core.graphql.UserContext
+import graphql.schema.GraphQL
 import spray.json.JsValue
-
-import akka.http.scaladsl.model.Multipart
-import core.graphql.GraphQL
 import javax.inject.Inject
 import modules.session.JWTSessionImpl
-import sangria.execution.Executor
 import sangria.renderer.SchemaRenderer
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 
-class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
-                                  httpHandler: HttpHandler,
+class GraphQLController @Inject()(httpHandler: HttpHandler,
                                   session: JWTSessionImpl,
-                                  webSocketHandler: WebSocketHandler)
+                                  webSocketHandler: WebSocketHandler,
+                                  graphQL: GraphQL)
                                  (implicit val executionContext: ExecutionContext,
                                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
 
@@ -81,8 +79,8 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
             }
       }
     } ~
-      (path("schema") & get) {
-        complete(SchemaRenderer.renderSchema(GraphQL.schema))
+      (path("graphql/schema") & get) {
+        complete(SchemaRenderer.renderSchema(graphQL.schema))
       } ~
       (path("graphiql") & get) {
         getFromResource("web/graphiql.html")

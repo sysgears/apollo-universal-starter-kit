@@ -1,19 +1,20 @@
-package core.controllers.graphql
+package controllers.graphql
 
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageType._
-import core.controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
+import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import controllers.graphql.jsonProtocols.OperationMessageType._
+import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import core.graphql.UserContext
+import graphql.schema.GraphQL
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
-import sangria.execution.Executor
+import sangria.execution.{Executor, QueryReducer}
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
@@ -21,7 +22,7 @@ import spray.json._
 import scala.util.{Failure, Success}
 
 @Singleton
-class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
+class WebSocketHandler @Inject()(graphQL: GraphQL)
                                 (implicit val actorMaterializer: ActorMaterializer,
                                  implicit val scheduler: Scheduler) extends ControllerUtil {
 
@@ -56,6 +57,13 @@ class WebSocketHandler @Inject()(graphQlExecutor: Executor[UserContext, Unit])
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message]): Unit = {
     import sangria.streaming.akkaStreams._
+    val graphQlExecutor = Executor(
+      schema = graphQL.schema,
+      queryReducers = List(
+        QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
+        QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+      )
+    )
     operationMessage.payload.foreach {
       payload =>
         val graphQlMessage = payload.convertTo[GraphQLMessage]

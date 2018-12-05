@@ -5,4 +5,5 @@ import common.shapes.ServerModule
 
 @Singleton
 class GlobalModule @Inject()()(counter: CounterModule,
-                               contact: ContactModule) extends ServerModule(Seq(counter, contact))
+                               contact: ContactModule,
+                               upload: UploadModule) extends ServerModule(Seq(counter, contact, upload))

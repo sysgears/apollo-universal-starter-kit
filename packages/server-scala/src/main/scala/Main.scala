@@ -1,9 +1,8 @@
-package app
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
+import akka.http.scaladsl.server.Directives._
+import app.GlobalModule
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 import controllers.frontend.FrontendController
@@ -18,7 +17,7 @@ object Main extends App with Injecting with AppInitialization {
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]
 
-  val appServerModule = inject[AppServerModule]
+  val appServerModule = inject[GlobalModule]
   appServerModule.fold()
 
   val routes = List(inject[GraphQLController], inject[FrontendController])

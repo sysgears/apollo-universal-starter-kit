@@ -1,12 +1,12 @@
 package graphql.schema
 
+import app.GlobalModule
 import com.google.inject.{Inject, Singleton}
 import core.graphql.UserContext
-import app.AppServerModule
 import sangria.schema.{Field, IntType, ObjectType, Schema}
 
 @Singleton
-class GraphQL @Inject()(appServerModule: AppServerModule) {
+class GraphQL @Inject()(appServerModule: GlobalModule) {
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000
 

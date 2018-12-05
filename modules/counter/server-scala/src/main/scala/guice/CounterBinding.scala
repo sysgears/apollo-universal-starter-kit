@@ -1,10 +1,11 @@
-package guice.modules
+package guice
 
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
 import core.guice.injection.GuiceActorRefProvider
+import core.services.publisher.{PubSubService, PubSubServiceImpl}
 import graphql.resolvers.CounterResolver
 import javax.inject.Named
 import models.Counter
@@ -13,11 +14,12 @@ import repositories.CounterRepository
 import services.count.CounterActor
 import slick.jdbc.JdbcProfile
 
-class CounterModule extends ScalaModule with GuiceActorRefProvider {
+class CounterBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
     bind[Actor].annotatedWith(Names.named(CounterActor.name)).to[CounterActor]
     bind[Actor].annotatedWith(Names.named(CounterResolver.name)).to[CounterResolver]
+    bind[PubSubService[Counter]].to[PubSubServiceImpl[Counter]]
   }
 
   @Provides

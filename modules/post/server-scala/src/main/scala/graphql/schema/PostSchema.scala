@@ -74,19 +74,19 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
       name = "addComment",
       fieldType = Types.comment,
       arguments = Argument(name = "input", argumentType = Types.addCommentInput) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.addComment(input = ctx.args.arg[AddCommentInput]("input")) }
     ),
     Field(
       name = "editComment",
       fieldType = Types.comment,
       arguments = Argument(name = "input", argumentType = Types.editCommentInput) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.editComment(input = ctx.args.arg[EditCommentInput]("input")) }
     ),
     Field(
       name = "deleteComment",
       fieldType = Types.comment,
       arguments = Argument(name = "input", argumentType = Types.deleteCommentInput) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.deleteComment(input = ctx.args.arg[DeleteCommentInput]("input")) }
     )
   )
 

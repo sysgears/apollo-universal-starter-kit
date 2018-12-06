@@ -1,14 +1,17 @@
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
+import akka.stream.ActorMaterializer
 import app.GlobalModule
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
-import controllers.frontend.FrontendController
-import controllers.graphql.GraphQLController
 import core.AppInitialization
+import core.graphql.schema.GraphQL
 import core.guice.injection.Injecting
+import core.routes.frontend.FrontendRoute
+import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
+import modules.session.JWTSessionImpl
+import monix.execution.Scheduler
 
 import scala.concurrent.ExecutionContext
 
@@ -16,11 +19,20 @@ object Main extends App with Injecting with AppInitialization {
   implicit val system: ActorSystem = inject[ActorSystem]
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]
+  implicit val scheduler: Scheduler = inject[Scheduler]
 
   val globalModule = inject[GlobalModule]
   globalModule.fold()
+  val graphQL = new GraphQL(globalModule)
 
-  val routes = List(inject[GraphQLController], inject[FrontendController])
+  val graphQLRoute = new GraphQLRoute(
+    httpHandler = new HttpHandler(graphQL),
+    inject[JWTSessionImpl],
+    webSocketHandler = new WebSocketHandler(graphQL),
+    graphQL
+  )
+
+  val routes = List(graphQLRoute, inject[FrontendRoute])
   val corsSettings = CorsSettings.apply(system)
 
   withActionsBefore {

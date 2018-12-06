@@ -7,6 +7,7 @@ import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
 import defaultRouter from '@module/router-client-react';
+import '@module/favicon-common';
 
 import post from './modules/post';
 import upload from './modules/upload';
@@ -14,7 +15,6 @@ import user from './modules/user';
 import payments from './modules/payments';
 import pageNotFound from './modules/pageNotFound';
 import pagination from './modules/pagination';
-import './modules/favicon';
 
 const modules = new ClientModule(
   look,

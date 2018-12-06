@@ -1,12 +1,11 @@
 package core.slick
 
-import slick.jdbc.SQLiteProfile.api._
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 import slick.jdbc.meta.MTable
-import slick.lifted.TableQuery
 import slick.relational.RelationalProfile
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Contains methods for initializing, seed and drop a database.
@@ -14,7 +13,13 @@ import scala.concurrent.Future
   * that initializes the tables for the received entity.
   *
   */
-trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
+abstract class SchemaInitializer[E <: RelationalProfile#Table[_]](driver: JdbcProfile,
+                                                                  database: Database,
+                                                                  implicit val executionContext: ExecutionContext) {
+
+  import driver.api._
+  import slick.dbio.{DBIOAction, Effect, NoStream}
+  import slick.lifted.TableQuery
 
   /**
     * Name of the database table
@@ -24,17 +29,13 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Represents a database table
     */
   val table: TableQuery[E]
-  /**
-    * Database in which operations will be performed
-    */
-  val db: Database
 
   /**
     * Сreates the table
     */
   def create(): Future[Unit] = {
-    db.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.isEmpty) db.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
+    database.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
     }
   }
 
@@ -42,8 +43,8 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Drops the table
     */
   def drop(): Future[Unit] = {
-    db.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.nonEmpty) db.run(DBIO.seq(table.schema.drop)) else Future.successful()
+    database.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
     }
   }
 

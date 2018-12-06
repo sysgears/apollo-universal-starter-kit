@@ -4,14 +4,20 @@ import core.slick.SchemaInitializer
 import javax.inject.Inject
 import models.{Counter, CounterTable}
 import models.CounterTable.CounterTable
-import slick.jdbc.SQLiteProfile.api._
-import slick.lifted.TableQuery
+import slick.jdbc.JdbcBackend.Database
+import slick.jdbc.JdbcProfile
 
-class CounterSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[CounterTable] {
+import scala.concurrent.ExecutionContext
+
+class CounterSchemaInitializer @Inject()(driver: JdbcProfile,
+                                         database: Database,
+                                         executionContext: ExecutionContext) extends SchemaInitializer[CounterTable](driver, database, executionContext) {
+
+  import slick.dbio.{DBIOAction, Effect, NoStream}
+  import driver.api._
 
   override val name: String = CounterTable.name
   override val table = TableQuery[CounterTable]
-  override val db = database
 
   override def seedDatabase(tableQuery: TableQuery[CounterTable]): DBIOAction[_, NoStream, Effect.Write] = {
     tableQuery += Counter(Some(1), 0)

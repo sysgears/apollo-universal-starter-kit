@@ -1,16 +1,15 @@
-package controllers.graphql
+package core.routes.graphql
 
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
-import controllers.graphql.jsonProtocols.OperationMessageType._
-import controllers.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import core.graphql.UserContext
-import graphql.schema.GraphQL
-import javax.inject.{Inject, Singleton}
+import core.graphql.schema.GraphQL
+import core.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import core.routes.graphql.jsonProtocols.OperationMessageType._
+import core.routes.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
@@ -21,10 +20,9 @@ import spray.json._
 
 import scala.util.{Failure, Success}
 
-@Singleton
-class WebSocketHandler @Inject()(graphQL: GraphQL)
-                                (implicit val actorMaterializer: ActorMaterializer,
-                                 implicit val scheduler: Scheduler) extends ControllerUtil {
+class WebSocketHandler(graphQL: GraphQL)
+                      (implicit val actorMaterializer: ActorMaterializer,
+                       implicit val scheduler: Scheduler) extends ControllerUtil {
 
   import spray.json.DefaultJsonProtocol._
 
@@ -90,11 +88,11 @@ class WebSocketHandler @Inject()(graphQL: GraphQL)
                 ))
             }
           case Failure(e: SyntaxError) =>
-              reply(OperationMessage(
-                GQL_ERROR,
-                operationMessage.id,
-                Some(syntaxError(e))
-              ))
+            reply(OperationMessage(
+              GQL_ERROR,
+              operationMessage.id,
+              Some(syntaxError(e))
+            ))
           case Failure(_) =>
             reply(OperationMessage(
               GQL_ERROR,

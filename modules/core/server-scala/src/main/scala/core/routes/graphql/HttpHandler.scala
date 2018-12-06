@@ -1,4 +1,4 @@
-package controllers.graphql
+package core.routes.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
@@ -6,10 +6,9 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.stream.ActorMaterializer
-import controllers.graphql.jsonProtocols.GraphQLMessage
 import core.graphql.UserContext
-import graphql.schema.GraphQL
-import javax.inject.{Inject, Singleton}
+import core.graphql.schema.GraphQL
+import core.routes.graphql.jsonProtocols.GraphQLMessage
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
@@ -25,10 +24,9 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-@Singleton
-class HttpHandler @Inject()(graphQL: GraphQL)
-                           (implicit val scheduler: Scheduler,
-                            implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
+class HttpHandler(graphQL: GraphQL)
+                 (implicit val scheduler: Scheduler,
+                  implicit val actorMaterializer: ActorMaterializer) extends ControllerUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {

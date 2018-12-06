@@ -1,11 +1,11 @@
-package controllers.frontend
+package core.routes.frontend
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import core.routes.AkkaRoute
 
-class FrontendController extends AkkaRoute {
+class FrontendRoute extends AkkaRoute {
 
   override val routes: Route =
     (get & pathEndOrSingleSlash & redirectToTrailingSlashIfMissing(StatusCodes.TemporaryRedirect)) {

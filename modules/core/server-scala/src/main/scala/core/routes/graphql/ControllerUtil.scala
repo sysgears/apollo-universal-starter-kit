@@ -1,4 +1,4 @@
-package controllers.graphql
+package core.routes.graphql
 
 import sangria.parser.SyntaxError
 import spray.json.{JsArray, JsNumber, JsObject, JsString}

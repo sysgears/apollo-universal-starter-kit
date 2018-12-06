@@ -1,4 +1,4 @@
-package controllers.graphql.jsonProtocols
+package core.routes.graphql.jsonProtocols
 
 import spray.json.{DefaultJsonProtocol, JsObject, RootJsonFormat}
 

@@ -1,4 +1,4 @@
-package controllers.graphql
+package core.routes.graphql
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport._
 import akka.http.scaladsl.marshalling.ToResponseMarshallable
@@ -9,25 +9,24 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
-import controllers.graphql.jsonProtocols.GraphQLMessage
-import controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.routes.AkkaRoute
 import core.graphql.UserContext
-import graphql.schema.GraphQL
-import spray.json.JsValue
-import javax.inject.Inject
+import core.graphql.schema.GraphQL
+import core.routes.AkkaRoute
+import core.routes.graphql.jsonProtocols.GraphQLMessage
+import core.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.session.JWTSessionImpl
 import sangria.renderer.SchemaRenderer
+import spray.json.JsValue
 
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 
-class GraphQLController @Inject()(httpHandler: HttpHandler,
-                                  session: JWTSessionImpl,
-                                  webSocketHandler: WebSocketHandler,
-                                  graphQL: GraphQL)
-                                 (implicit val executionContext: ExecutionContext,
-                                  implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
+class GraphQLRoute(httpHandler: HttpHandler,
+                   session: JWTSessionImpl,
+                   webSocketHandler: WebSocketHandler,
+                   graphQL: GraphQL)
+                  (implicit val executionContext: ExecutionContext,
+                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
 
   override val routes: Route =
     path("graphql") {

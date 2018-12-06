@@ -1,4 +1,6 @@
-import classes.ClassesMetaInfo
+package core.loader.entities
+
+import core.loader.classes.ClassesMetaInfo
 import org.clapper.classutil.ClassInfo
 
 case class FilteredClasses(classesMetaInfo: ClassesMetaInfo, filter: ClassInfo => Boolean) extends ClassesMetaInfo {

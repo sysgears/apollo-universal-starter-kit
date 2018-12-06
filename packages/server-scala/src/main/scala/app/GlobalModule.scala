@@ -4,16 +4,4 @@ import com.google.inject.{Inject, Singleton}
 import common.shapes.ServerModule
 
 @Singleton
-class GlobalModule @Inject()()(counter: CounterModule,
-                               contact: ContactModule,
-                               upload: UploadModule,
-                               user: UserModule,
-                               pagination: PaginationModule) extends ServerModule(
-  Seq(
-    counter,
-    contact,
-    upload,
-    user,
-    pagination
-  )
-)
+class GlobalModule @Inject()(modules: Seq[ServerModule]) extends ServerModule(modules)

@@ -7,22 +7,21 @@ import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 import core.AppInitialization
 import core.graphql.schema.GraphQL
-import core.guice.injection.Injecting
 import core.routes.frontend.FrontendRoute
 import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
+import guice.Injector._
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 
 import scala.concurrent.ExecutionContext
 
-object Main extends App with Injecting with AppInitialization {
+object Main extends App with AppInitialization {
   implicit val system: ActorSystem = inject[ActorSystem]
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]
   implicit val scheduler: Scheduler = inject[Scheduler]
 
-  val globalModule = inject[GlobalModule]
-  globalModule.fold()
+  val globalModule = inject[GlobalModule].fold
   val graphQL = new GraphQL(globalModule)
 
   val graphQLRoute = new GraphQLRoute(

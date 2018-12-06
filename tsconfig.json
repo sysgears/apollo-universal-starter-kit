@@ -20,7 +20,8 @@
   },
   "include": [
     "**/*.ts",
-    "**/*.d.ts",
+    "typings/*.d.ts",
+    "modules/**.d.ts",
     "**/*.tsx"
   ]
 }

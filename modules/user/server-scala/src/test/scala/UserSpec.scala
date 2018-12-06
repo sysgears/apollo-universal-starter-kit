@@ -16,7 +16,7 @@ import scala.concurrent.duration._
 
 class UserSpec extends UserHelper {
 
-  implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
+  implicit val timeout: RouteTestTimeout = RouteTestTimeout(20.seconds.dilated)
 
   val userRepo: UserRepository = inject[UserRepository]
   val authService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]

@@ -126,8 +126,8 @@ class TokenSpec extends UserHelper {
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
-        response should include("\"data\":null")
-        response should include("\"errors\"")
+        response should include("\"accessToken\":\"\"")
+        response should include("\"refreshToken\":\"\"")
       }
     }
 

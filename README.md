@@ -56,7 +56,7 @@ great possibilities for styling for your web and mobile applications.
 
 ### Why Use Apollo Universal Starter Kit
 
-#### I Am a Developer
+#### I am a Developer
 
 * Better productivity thanks to live reload and (partial) hot code reload
 * A fractal modular application architecture that's easy to support and extend
@@ -64,7 +64,7 @@ great possibilities for styling for your web and mobile applications.
 * No need to develop [typical features](#architecture-and-implemented-modules) for your applications
 * Zero project configuration thanks to [SpinJS]
 
-#### I Am a Client
+#### I am a Project Manager
 
 * Your application will work faster thanks to GraphQL
 * Your team will be able to reuse the code for all the platforms

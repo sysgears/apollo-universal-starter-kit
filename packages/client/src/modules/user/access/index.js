@@ -8,13 +8,17 @@ import AccessModule from './AccessModule';
 
 const ref = React.createRef();
 
+const clearApolloStoreAndReloadComponent = async client => {
+  await client.clearStore();
+  ref.current.reloadPage();
+};
+
 const login = client => {
-  return client.clearStore();
+  clearApolloStoreAndReloadComponent(client);
 };
 
 const logout = async client => {
-  await client.clearStore();
-  ref.current.reloadPage();
+  clearApolloStoreAndReloadComponent(client);
 };
 
 class PageReloader extends React.Component {

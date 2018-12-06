@@ -7,7 +7,7 @@ import { HeaderTitle } from '../../common/components/native';
 import translate from '../../../i18n';
 import { withLogout } from './Auth';
 
-const LogoutView = ({ logout, t, navigation }) => {
+const LogoutView = ({ logout, t }) => {
   return (
     <View
       style={{
@@ -17,7 +17,6 @@ const LogoutView = ({ logout, t, navigation }) => {
       <HeaderTitle
         onPress={async () => {
           await logout();
-          navigation.navigate('Counter');
         }}
       >
         {t('mobile.logout')}

@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { TranslateFunction } from '../../../../../i18n';
 
-import { LayoutCenter } from '../../../../common/components/index.web';
+import { LayoutCenter } from '../../../../common/components/web';
 import Helmet from 'react-helmet';
 import settings from '../../../../../../../../settings';
 

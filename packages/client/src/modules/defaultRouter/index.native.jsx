@@ -20,5 +20,5 @@ const routerFactory = () => {
 
 export default new ClientModule({
   routerFactory,
-  onCreate: [modules => (ref.modules = modules)]
+  onAppCreate: [modules => (ref.modules = modules)]
 });

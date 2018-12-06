@@ -7,4 +7,12 @@ import com.typesafe.config.Config
 class AuthConfig @Inject()(config: Config) {
   val confirmRegistrationRoute: String = config.getString("user.auth.confirmRegistrationRoute")
   val skipConfirmation: Boolean = config.getBoolean("user.auth.skipConfirmation")
+
+  object google {
+    val clientId: String = config.getString("user.auth.google.clientId")
+    val clientSecret: String = config.getString("user.auth.google.clientSecret")
+    val stateSeed: Long = config.getLong("user.auth.google.stateSeed")
+    val scope: String = config.getString("user.auth.google.scope")
+    val callback: String = config.getString("user.auth.google.callback")
+  }
 }

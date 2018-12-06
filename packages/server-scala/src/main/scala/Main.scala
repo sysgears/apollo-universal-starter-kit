@@ -8,17 +8,16 @@ import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
 import controllers.frontend.FrontendController
 import controllers.graphql.GraphQLController
 import core.AppInitialization
-import core.guice.injection.Injecting
+import guice.Injector._
 
 import scala.concurrent.ExecutionContext
 
-object Main extends App with Injecting with AppInitialization {
+object Main extends App with AppInitialization {
   implicit val system: ActorSystem = inject[ActorSystem]
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]
 
-  val globalModule = inject[GlobalModule]
-  globalModule.fold()
+  val globalModule = inject[GlobalModule].fold
 
   val routes = List(inject[GraphQLController], inject[FrontendController])
   val corsSettings = CorsSettings.apply(system)

@@ -4,8 +4,8 @@ import counter from '@module/counter-client-react';
 import chat from '@module/chat-client-react';
 import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
+import defaultRouter from '@module/router-client-react-native';
 
-import defaultRouter from '../../client/src/modules/defaultRouter';
 import post from '../../client/src/modules/post';
 import upload from '../../client/src/modules/upload';
 import user from '../../client/src/modules/user';

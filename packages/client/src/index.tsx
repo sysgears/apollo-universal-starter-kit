@@ -6,8 +6,8 @@ import chat from '@module/chat-client-react';
 import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
+import defaultRouter from '@module/router-client-react';
 
-import defaultRouter from './modules/defaultRouter';
 import post from './modules/post';
 import upload from './modules/upload';
 import user from './modules/user';

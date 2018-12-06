@@ -140,7 +140,12 @@ const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
 
-const ref = { modules: null };
+const ref = { navigator: null };
+
+const MainScreenNavigator = () => {
+  const Navigator = ref.navigator;
+  return <Navigator />;
+};
 
 export default new ClientModule(access, {
   drawerItem: [
@@ -238,6 +243,6 @@ export default new ClientModule(access, {
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
-  routerFactory: () => UserScreenNavigator(ref.modules.drawerItems),
-  onAppCreate: [modules => (ref.modules = modules)]
+  router: <MainScreenNavigator />,
+  onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

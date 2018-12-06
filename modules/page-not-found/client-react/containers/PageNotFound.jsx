@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import translate from '../../../i18n';
-import { PageLayout, Button } from '../../common/components/web';
-import settings from '../../../../../../settings';
+import { translate } from '@module/i18n-client-react';
+import { PageLayout, Button } from '@module/look-client-react';
+import settings from '../../../../settings';
 
 const Section = styled.section`
   text-align: center;

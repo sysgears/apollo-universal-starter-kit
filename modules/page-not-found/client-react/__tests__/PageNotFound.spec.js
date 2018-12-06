@@ -1,8 +1,6 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-
-import Renderer from '../../../testHelpers/Renderer';
-import { updateContent } from '../../../testHelpers/testUtils';
+import { Renderer, updateContent } from '@module/testing-client-react';
 
 describe('Page not found example UI works', () => {
   const renderer = new Renderer({});

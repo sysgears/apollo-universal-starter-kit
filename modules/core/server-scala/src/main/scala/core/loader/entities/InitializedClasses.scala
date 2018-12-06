@@ -1,4 +1,6 @@
-import classes.{ClassInstances, ClassesMetaInfo}
+package core.loader.entities
+
+import core.loader.classes.{ClassInstances, ClassesMetaInfo}
 
 case class InitializedClasses[T](classesMetaInfo: ClassesMetaInfo, initializer: Option[Class[_] => T] = None) extends ClassInstances[T] {
   override def retrieve: List[T] = {

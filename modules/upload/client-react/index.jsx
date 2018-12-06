@@ -8,7 +8,7 @@ import createNetLink from './netLink';
 import Upload from './containers/Upload';
 import resources from './locales';
 
-const NavLinkWithI18n = translate('upload')(({ t }: any) => (
+const NavLinkWithI18n = translate('upload')(({ t }) => (
   <NavLink to="/upload" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>

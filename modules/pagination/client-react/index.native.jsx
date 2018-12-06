@@ -1,12 +1,11 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
+import { translate } from '@module/i18n-client-react';
+import { HeaderTitle, IconButton } from '@module/look-client-react-native';
+import ClientModule from '@module/module-client-react-native';
 
-import translate from '../../i18n';
-import { HeaderTitle, IconButton } from '../common/components/native';
-import PaginationDemo from './containers/PaginationDemo.native';
+import PaginationDemo from './containers/PaginationDemo';
 import resources from './locales';
-
-import ClientModule from '../ClientModule';
 
 const HeaderTitleWithI18n = translate('pagination')(HeaderTitle);
 

@@ -7,14 +7,15 @@ import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
 import defaultRouter from '@module/router-client-react';
-import pageNotFound from '@module/page-not-found-client-react';
-import upload from '@module/upload-client-react';
 import '@module/favicon-common';
 
 import post from './modules/post';
 import user from './modules/user';
 import payments from './modules/payments';
-import pagination from './modules/pagination';
+
+const pageNotFound = require('@module/page-not-found-client-react');
+const upload = require('@module/upload-client-react').default;
+const pagination = require('@module/pagination-client-react').default;
 
 const modules = new ClientModule(
   look,

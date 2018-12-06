@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import translate from '../../../i18n';
+import { translate } from '@module/i18n-client-react';
+import { itemAction, itemTitle } from '@module/look-client-react-native/styles';
+import { Select } from '@module/look-client-react-native';
 import PaginationDemoView from '../components/PaginationDemoView.native';
 import withDataProvider from '../containers/DataProvider';
-import { itemAction, itemTitle } from '../../common/components/native/styles';
-import { Select } from '../../common/components/native';
 
 @translate('pagination')
 class PaginationDemo extends React.Component {

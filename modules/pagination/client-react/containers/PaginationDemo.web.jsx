@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
+import { PageLayout, Select, Option } from '@module/look-client-react';
+import { translate } from '@module/i18n-client-react';
+import settings from '../../../../settings';
 
 import PaginationDemoView from '../components/PaginationDemoView.web';
 import withDataProvider from '../containers/DataProvider';
-import { PageLayout, Select, Option } from '../../common/components/web';
-import translate from '../../../i18n';
-import settings from '../../../../../../settings';
 
 @translate('pagination')
 class PaginationDemo extends React.Component {

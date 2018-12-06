@@ -1,5 +1,5 @@
 import React from 'react';
-import paginationConfig from '../../../../../../config/pagination';
+import paginationConfig from '../../../../config/pagination';
 
 const generateEdgesArray = quantity => {
   const arr = [];

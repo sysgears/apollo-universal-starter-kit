@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Table, Pagination } from '../../common/components/web';
-import translate from '../../../i18n';
+import { Table, Pagination } from '@module/look-client-react';
+import { translate } from '@module/i18n-client-react';
 
 const PaginationDemoView = ({ items, handlePageChange, pagination, t }) => {
   const renderFunc = text => <span>{text}</span>;

@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-
-import translate from '../../../i18n';
-import Field from '../../../utils/FieldAdapter';
-import { Form, RenderField, Row, Col, Label, Button } from '../../common/components/web';
-import { required, validate } from '../../../../../common/modules/validation';
+import { translate } from '@module/i18n-client-react';
+import { Form, RenderField, Row, Col, Label, Button } from '@module/look-client-react';
+import { FieldAdapter as Field } from '@module/core-client-react';
+import { required, validate } from '@module/validation-common-react';
 
 const commentFormSchema = {
   content: [required]

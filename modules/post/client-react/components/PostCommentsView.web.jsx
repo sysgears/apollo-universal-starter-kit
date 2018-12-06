@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { translate } from '@module/i18n-client-react';
+import { Table, Button } from '@module/look-client-react';
 
-import translate from '../../../i18n';
-import { Table, Button } from '../../common/components/web';
 import PostCommentForm from './PostCommentForm';
 
 class PostCommentsView extends React.PureComponent {

@@ -1,8 +1,6 @@
 import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
-
-import Renderer from '../../../testHelpers/Renderer';
 import {
   find,
   findAll,
@@ -11,8 +9,10 @@ import {
   change,
   submit,
   wait,
-  waitForElementRender
-} from '../../../testHelpers/testUtils';
+  waitForElementRender,
+  Renderer
+} from '@module/testing-client-react';
+
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';

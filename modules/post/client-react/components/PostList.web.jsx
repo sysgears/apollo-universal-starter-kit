@@ -2,12 +2,11 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { PageLayout, Table, Button, Pagination } from '../../common/components/web';
-import translate from '../../../i18n';
-import settings from '../../../../../../settings';
-import paginationConfig from '../../../../../../config/pagination';
+import { translate } from '@module/i18n-client-react';
+import { PageLayout, Table, Button, Pagination } from '@module/look-client-react';
+import settings from '../../../../settings';
 
-const { itemsNumber, type } = paginationConfig.web;
+const { itemsNumber, type } = settings.pagination.web;
 
 class PostList extends React.PureComponent {
   static propTypes = {

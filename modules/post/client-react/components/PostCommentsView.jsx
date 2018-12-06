@@ -11,9 +11,8 @@ import {
   TouchableWithoutFeedback
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-
-import translate from '../../../i18n';
-import { SwipeAction } from '../../common/components/native';
+import { translate } from '@module/i18n-client-react';
+import { SwipeAction } from '@module/look-client-react-native';
 
 import PostCommentForm from './PostCommentForm';
 

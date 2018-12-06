@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, Platform, TouchableOpacity, View, FlatList } from 'react-native';
-import translate from '../../../i18n';
-import { SwipeAction, Loading } from '../../common/components/native';
+import { translate } from '@module/i18n-client-react';
+import { SwipeAction, Loading } from '@module/look-client-react-native';
 
 class PostList extends React.PureComponent {
   static propTypes = {

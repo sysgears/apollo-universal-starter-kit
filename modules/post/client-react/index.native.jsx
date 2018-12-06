@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-
-import translate from '../../i18n';
-import { Button, HeaderTitle, IconButton, primary } from '../common/components/native';
+import { translate } from '@module/i18n-client-react';
+import { Button, HeaderTitle, IconButton, primary } from '@module/look-client-react-native';
+import ClientModule from '@module/module-client-react-native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';
@@ -12,8 +12,6 @@ import PostAdd from './containers/PostAdd';
 
 import resources from './locales';
 import resolvers from './resolvers';
-
-import ClientModule from '../ClientModule';
 
 const withI18N = (Component, props) => {
   const WithI18N = translate('post')(Component);

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { translate } from '@module/i18n-client-react';
 
-import translate from '../../../i18n';
 import PostForm from './PostForm';
 
 const onSubmit = addPost => values => {

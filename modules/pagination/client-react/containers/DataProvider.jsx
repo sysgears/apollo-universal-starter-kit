@@ -1,5 +1,5 @@
 import React from 'react';
-import paginationConfig from '../../../../config/pagination';
+import settings from '../../../../settings';
 
 const generateEdgesArray = quantity => {
   const arr = [];
@@ -9,7 +9,7 @@ const generateEdgesArray = quantity => {
   return arr;
 };
 
-const itemsNumber = paginationConfig.web.itemsNumber;
+const itemsNumber = settings.pagination.web.itemsNumber;
 const allEdges = generateEdgesArray(47);
 
 export default function withDataProvider(WrappedComponent) {

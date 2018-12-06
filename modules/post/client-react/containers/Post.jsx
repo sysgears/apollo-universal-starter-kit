@@ -2,18 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
+import { PLATFORM } from '@module/core-common';
 
 import PostList from '../components/PostList';
 
 import POSTS_QUERY from '../graphql/PostsQuery.graphql';
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import DELETE_POST from '../graphql/DeletePost.graphql';
-
-import paginationConfig from '../../../../../../config/pagination';
-import { PLATFORM } from '../../../../../common/utils';
+import settings from '../../../../settings';
 
 const limit =
-  PLATFORM === 'web' || PLATFORM === 'server' ? paginationConfig.web.itemsNumber : paginationConfig.mobile.itemsNumber;
+  PLATFORM === 'web' || PLATFORM === 'server'
+    ? settings.pagination.web.itemsNumber
+    : settings.pagination.mobile.itemsNumber;
 
 export function AddPost(prev, node) {
   // ignore if duplicate

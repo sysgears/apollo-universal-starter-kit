@@ -4,8 +4,8 @@ import Helmet from 'react-helmet';
 import Dropzone from 'react-dropzone';
 import filesize from 'filesize';
 
-import { PageLayout, Row, Col, Table, Button, Alert } from '../../common/components/web';
-import settings from '../../../../../../settings';
+import { PageLayout, Row, Col, Table, Button, Alert } from '@module/look-client-react';
+import settings from '../../../../settings';
 
 const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile, t }) => {
   const renderMetaData = () => {

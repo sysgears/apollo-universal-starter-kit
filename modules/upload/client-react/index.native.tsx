@@ -1,13 +1,12 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
+import ClientModule from '@module/module-client-react-native';
+import { translate } from '@module/i18n-client-react';
+import { HeaderTitle, IconButton } from '@module/look-client-react-native';
 
 import createNetLink from './netLink';
-import translate from '../../i18n';
-import { HeaderTitle, IconButton } from '../common/components/native';
 import Upload from './containers/Upload';
 import resources from './locales';
-
-import ClientModule from '../ClientModule';
 
 const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
 
@@ -19,7 +18,7 @@ export default new ClientModule({
         screen: createStackNavigator({
           Upload: {
             screen: Upload,
-            navigationOptions: ({ navigation }) => ({
+            navigationOptions: ({ navigation }: any) => ({
               headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />

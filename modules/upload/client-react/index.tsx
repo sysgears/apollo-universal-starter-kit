@@ -1,15 +1,14 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import ClientModule from '@module/module-client-react';
+import { translate } from '@module/i18n-client-react';
+import { MenuItem } from '@module/look-client-react';
 
 import createNetLink from './netLink';
-import translate from '../../i18n';
-import { MenuItem } from '../../modules/common/components/web';
 import Upload from './containers/Upload';
 import resources from './locales';
 
-import ClientModule from '../ClientModule';
-
-const NavLinkWithI18n = translate('upload')(({ t }) => (
+const NavLinkWithI18n = translate('upload')(({ t }: any) => (
   <NavLink to="/upload" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>

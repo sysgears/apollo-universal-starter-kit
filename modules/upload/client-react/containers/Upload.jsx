@@ -1,11 +1,11 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import { translate } from '@module/i18n-client-react';
 
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
-import translate from '../../../i18n';
 
 class Upload extends React.Component {
   constructor(props) {

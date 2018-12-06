@@ -1,10 +1,7 @@
 // General imports
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-
-// Components and helpers
-import Renderer from '../../../testHelpers/Renderer';
-import { updateContent } from '../../../testHelpers/testUtils';
+import { Renderer, updateContent } from '@module/testing-client-react';
 
 describe('Upload UI works', () => {
   const renderer = new Renderer({});

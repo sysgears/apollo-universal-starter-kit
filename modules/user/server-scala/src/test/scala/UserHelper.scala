@@ -1,24 +1,14 @@
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import core.controllers.graphql.GraphQLController
-import core.guice.injection.Injecting
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import app.UserModule
 import repositories.UserSchemaInitializer
 
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
-trait TestHelper extends WordSpec
-  with ScalatestRouteTest
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Injecting
-  with Matchers {
-
-  val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].routes
+trait UserHelper extends TestHelper {
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
+  val routes: Route = routesWithGraphQLSchemaFor[UserModule]
 
   before {
     clean()

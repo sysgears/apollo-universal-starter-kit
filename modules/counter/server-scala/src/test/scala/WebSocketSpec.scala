@@ -1,12 +1,12 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.WSProbe
-import core.controllers.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.GraphQLResponseJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageType._
-import core.controllers.graphql.jsonProtocols.{GraphQLMessage, GraphQLResponse, OperationMessage}
+import core.routes.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
+import core.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import core.routes.graphql.jsonProtocols.GraphQLResponseJsonProtocol._
+import core.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import core.routes.graphql.jsonProtocols.OperationMessageType._
+import core.routes.graphql.jsonProtocols.{GraphQLMessage, GraphQLResponse, OperationMessage}
 import spray.json._
 
 class WebSocketSpec extends CounterSpecHelper {

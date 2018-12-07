@@ -48,14 +48,13 @@ class UserResolver @Inject()(userRepository: UserRepository,
             isActive = skipConfirmation,
             password = BCrypt.hashpw(input.password, BCrypt.gensalt)
           )).run
-        accessToken = jwtAuthService.createAccessToken(JwtContent(createdUser.id.get))
         mailingResult <- if (!skipConfirmation) {
           mailService.send(
             messageTemplateService.createConfirmRegistrationMessage(
               createdUser,
               appConfig.name,
               mailConfig.address,
-              appConfig.url + authConfig.confirmRegistrationRoute + accessToken)
+              appConfig.url + authConfig.confirmRegistrationRoute + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get)))
           )
         } else Future.successful(MailPayload())
       } yield UserPayload(Some(createdUser), mailingResult.errors)

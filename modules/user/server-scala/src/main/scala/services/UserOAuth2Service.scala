@@ -1,0 +1,18 @@
+package services
+
+import com.github.scribejava.core.model.{OAuthRequest, Verb}
+import com.github.scribejava.core.oauth.OAuth20Service
+import spray.json._
+
+import scala.concurrent.{ExecutionContext, Future}
+
+class UserOAuth2Service {
+
+  def getUserInfo[T](code: String, userInfoUrl: String, service: OAuth20Service)
+                    (implicit formatter: RootJsonFormat[T], executionContext: ExecutionContext): Future[T] = for {
+    oauthAccessToken <- Future(service.getAccessTokenAsync(code).get)
+    request = new OAuthRequest(Verb.GET, userInfoUrl)
+    _ = service.signRequest(oauthAccessToken, request)
+    response <- Future(service.executeAsync(request).get)
+  } yield response.getBody.parseJson.convertTo[T]
+}

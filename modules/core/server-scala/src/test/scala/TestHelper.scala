@@ -2,18 +2,18 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import common.shapes.ServerModule
 import core.graphql.schema.GraphQL
-import core.guice.injection.Injecting
+import core.guice.Injecting
 import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 
 trait TestHelper extends WordSpec
-  with Injecting
   with ScalatestRouteTest
   with BeforeAndAfter
   with BeforeAndAfterAll
-  with Matchers {
+  with Matchers
+  with Injecting {
 
   val endpoint: String = "/graphql"
   implicit val scheduler: Scheduler = inject[Scheduler]

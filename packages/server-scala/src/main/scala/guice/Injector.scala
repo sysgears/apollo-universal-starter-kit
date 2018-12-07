@@ -14,11 +14,11 @@ import scala.collection.JavaConverters._
 
 object Injector {
 
-  val modulesPaths: List[String] = ModulesInfo.modules.toList
+  val modulesPaths: Set[String] = findModulesPaths(ModulesInfo.modules.toList)
 
   val guiceModules: Seq[ScalaModule] = InitializedClasses[ScalaModule](
     FilteredClasses(
-      FoundClasses(List(".", "../../modules/core/server-scala") ++ modulesPaths),
+      FoundClasses(List(".") ++ modulesPaths),
       scalaModuleFilter
     )
   ).retrieve
@@ -35,6 +35,29 @@ object Injector {
   def inject[T: Manifest](ann: Annotation): T = {
     injector.instance[T](ann)
   }
+
+  /**
+    * Recursively finds paths to connected modules and their submodules.
+    *
+    * @param paths paths to 'first-level' connected modules
+    * @return set of paths to all connected modules within the application
+    */
+  def findModulesPaths(paths: List[String]): Set[String] = {
+    if (paths.nonEmpty) {
+      paths ++
+        findModulesPaths(
+          InitializedClasses[Any](
+            FilteredClasses(
+              FoundClasses(paths),
+              filter = classInfo => classInfo.name.contains("ModulesInfo") && !classInfo.name.contains("$")
+            ),
+            initializer = Some(clazz => clazz.getMethod("modules").invoke(this))
+          ).retrieve
+            .asInstanceOf[List[List[String]]]
+            .flatten.map(_.replace("../../", "../../modules/"))
+        )
+    } else paths
+  }.toSet
 
   def scalaModuleFilter(classInfo: ClassInfo): Boolean = classInfo.implements(classOf[ScalaModule].getName)
 }

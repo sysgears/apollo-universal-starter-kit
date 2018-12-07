@@ -1,5 +1,6 @@
 package model.oauth
 
+import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable
 import slick.jdbc.JdbcProfile
 
@@ -9,9 +10,9 @@ object GoogleAuthTable extends JdbcProfile {
 
   val name = "GOOGLE_AUTH"
 
-  class GoogleAuthTable(tag: Tag) extends SlickTable[GoogleAuth](tag, name) {
+  class GoogleAuthTable(tag: Tag) extends SlickTable[GoogleAuth](tag, name) with Keyed[String] {
 
-    def googleId = column[String]("GOOGLE_ID", O.Unique)
+    def id = column[String]("GOOGLE_ID", O.Unique)
 
     def displayName = column[String]("DISPLAY_NAME")
 
@@ -19,6 +20,6 @@ object GoogleAuthTable extends JdbcProfile {
 
     def userFk = foreignKey("USER_ID_FK", userId, TableQuery[UserTable])(_.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Cascade)
 
-    def * = (googleId, displayName, userId).mapTo[GoogleAuth]
+    def * = (id.?, displayName, userId).mapTo[GoogleAuth]
   }
 }

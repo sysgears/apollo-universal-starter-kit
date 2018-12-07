@@ -11,7 +11,7 @@ import payments from '@module/payments-client-react';
 import '@module/favicon-common';
 
 const post = require('@module/post-client-react').default;
-const pageNotFound = require('@module/page-not-found-client-react');
+const pageNotFound = require('@module/page-not-found-client-react').default;
 const upload = require('@module/upload-client-react').default;
 const pagination = require('@module/pagination-client-react').default;
 const user = require('@module/user-client-react').default;

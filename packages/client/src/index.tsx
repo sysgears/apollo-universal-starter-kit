@@ -10,12 +10,11 @@ import defaultRouter from '@module/router-client-react';
 import payments from '@module/payments-client-react';
 import '@module/favicon-common';
 
-import user from './modules/user';
-
 const post = require('@module/post-client-react').default;
 const pageNotFound = require('@module/page-not-found-client-react');
 const upload = require('@module/upload-client-react').default;
 const pagination = require('@module/pagination-client-react').default;
+const user = require('@module/user-client-react').default;
 
 const modules = new ClientModule(
   look,

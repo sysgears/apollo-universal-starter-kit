@@ -59,6 +59,8 @@
           ".tsx",
           ".web.js",
           ".web.jsx",
+          ".native.js",
+          ".native.jsx",
           ".js",
           ".jsx"
         ]

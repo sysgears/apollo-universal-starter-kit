@@ -7,13 +7,12 @@ import validation from '@module/validation-common-react';
 import defaultRouter from '@module/router-client-react-native';
 import payments from '@module/payments-client-react';
 
-import user from '../../client/src/modules/user';
-
 import ClientModule from '@module/module-client-react-native';
 
 const post = require('@module/post-client-react').default;
 const upload = require('@module/upload-client-react').default;
 const pagination = require('@module/pagination-client-react').default;
+const user = require('@module/user-client-react').default;
 
 const modules = new ClientModule(
   validation,

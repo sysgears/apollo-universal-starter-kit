@@ -1,10 +1,8 @@
-package guice
+package core.guice
 
 import java.lang.annotation.Annotation
 
-import modulesinfo.ModulesInfo
 import com.google.inject.{Guice, Injector}
-import core.guice.CoreInjector
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
 import net.codingwell.scalaguice.InjectorExtensions._
 import net.codingwell.scalaguice.ScalaModule
@@ -14,7 +12,16 @@ import scala.collection.JavaConverters._
 
 object Injector {
 
-  val modulesPaths: Set[String] = findModulesPaths(ModulesInfo.modules.toList)
+  val modulesPaths: Set[String] = findModulesPaths(InitializedClasses[Any](
+    FilteredClasses(
+      FoundClasses(List(".")),
+      filter = classInfo => classInfo.name.contains("ModulesInfo") && !classInfo.name.contains("$")
+    ),
+    initializer = Some(clazz => clazz.getMethod("modules").invoke(this))
+  ).retrieve
+    .asInstanceOf[List[List[String]]]
+    .flatten
+  )
 
   val guiceModules: Seq[ScalaModule] = InitializedClasses[ScalaModule](
     FilteredClasses(

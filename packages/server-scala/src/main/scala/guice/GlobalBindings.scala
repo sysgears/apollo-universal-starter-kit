@@ -3,7 +3,7 @@ package guice
 import com.google.inject.Provides
 import common.shapes.ServerModule
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
-import guice.Injector.{injector, modulesPaths}
+import core.guice.Injector.{injector, modulesPaths}
 import net.codingwell.scalaguice.ScalaModule
 import org.clapper.classutil.ClassInfo
 

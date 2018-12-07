@@ -9,7 +9,7 @@ import core.AppInitialization
 import core.graphql.schema.GraphQL
 import core.routes.frontend.FrontendRoute
 import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
-import guice.Injector._
+import core.guice.Injector._
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 

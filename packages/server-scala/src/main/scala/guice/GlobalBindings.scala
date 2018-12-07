@@ -15,7 +15,7 @@ class GlobalBindings extends ScalaModule {
   def modules: Seq[ServerModule] = {
     InitializedClasses[ServerModule](
       FilteredClasses(
-        FoundClasses(modulesPaths),
+        FoundClasses(modulesPaths.toList),
         serverModuleFilter
       ),
       initializer = Some(injector.getInstance(_).asInstanceOf[ServerModule])

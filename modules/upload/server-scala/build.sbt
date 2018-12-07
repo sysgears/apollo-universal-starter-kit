@@ -3,7 +3,7 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.6"
 )
 
-lazy val upload = (project in file(".") dependsOn(modules.map(ClasspathDependency(_, None)): _*) aggregate (modules: _*))
+lazy val upload = (project in file(".") dependsOn(modules.map(ClasspathDependency(_, None)).map(elem => elem.project % "test->test; compile->compile"): _*) aggregate (modules: _*))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(projectRef => projectRef.build)),

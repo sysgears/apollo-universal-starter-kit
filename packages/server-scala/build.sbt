@@ -4,7 +4,7 @@ version := "0.1"
 
 scalaVersion := "2.12.7"
 
-lazy val global = (project in file(".") dependsOn (modules.map(ClasspathDependency(_, None)): _*) aggregate (modules: _*))
+lazy val global = (project in file(".") dependsOn(modules.map(ClasspathDependency(_, None)).map(elem => elem.project % "test->test; compile->compile"): _*) aggregate (modules: _*))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(projectRef => projectRef.build)),

@@ -6,7 +6,6 @@ import com.github.scribejava.core.oauth.OAuth20Service
 import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
-import akka.stream.ActorMaterializer
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import core.controllers.AkkaRoute
@@ -25,11 +24,10 @@ import scala.util.{Failure, Success}
 
 class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Service,
                                      userOAuth2Service: UserOAuth2Service,
-                                     userRepo: UserRepository,
+                                     userRepository: UserRepository,
                                      googleAuthRepository: GoogleAuthRepository,
                                      jwtAuthService: JwtAuthService[JwtContent])
-                                    (implicit val executionContext: ExecutionContext,
-                                     implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
+                                    (implicit val executionContext: ExecutionContext) extends AkkaRoute {
 
   override val routes: Route =
     (path("auth" / "google") & get) {
@@ -39,7 +37,7 @@ class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Serv
         onComplete {
           for {
             googleUserInfo <- userOAuth2Service.getUserInfo[GoogleOauth2Response](code, "https://content.googleapis.com/oauth2/v2/userinfo", oauth2Service)
-            user <- userRepo.save(User(
+            user <- userRepository.save(User(
               username = googleUserInfo.name,
               email = googleUserInfo.email,
               role = "user",

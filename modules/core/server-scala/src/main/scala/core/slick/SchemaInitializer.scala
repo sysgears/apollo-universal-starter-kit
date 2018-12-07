@@ -1,7 +1,6 @@
 package core.slick
 
-import slick.jdbc.JdbcBackend.Database
-import slick.jdbc.JdbcProfile
+import core.guice.injection.Injecting
 import slick.jdbc.meta.MTable
 import slick.relational.RelationalProfile
 
@@ -13,13 +12,14 @@ import scala.concurrent.{ExecutionContext, Future}
   * that initializes the tables for the received entity.
   *
   */
-abstract class SchemaInitializer[E <: RelationalProfile#Table[_]](driver: JdbcProfile,
-                                                                  database: Database,
-                                                                  implicit val executionContext: ExecutionContext) {
+trait SchemaInitializer[E <: RelationalProfile#Table[_]] extends Injecting {
+
+  val database = inject[slick.jdbc.JdbcBackend.Database]
+  val driver = inject[slick.jdbc.JdbcProfile]
 
   import driver.api._
-  import slick.dbio.{DBIOAction, Effect, NoStream}
-  import slick.lifted.TableQuery
+
+  val context: ExecutionContext
 
   /**
     * Name of the database table
@@ -36,7 +36,7 @@ abstract class SchemaInitializer[E <: RelationalProfile#Table[_]](driver: JdbcPr
   def create(): Future[Unit] = {
     database.run(MTable.getTables(name)).flatMap {
       tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
-    }
+    }(context)
   }
 
   /**
@@ -45,7 +45,7 @@ abstract class SchemaInitializer[E <: RelationalProfile#Table[_]](driver: JdbcPr
   def drop(): Future[Unit] = {
     database.run(MTable.getTables(name)).flatMap {
       tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
-    }
+    }(context)
   }
 
   /**

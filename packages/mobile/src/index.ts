@@ -4,15 +4,15 @@ import counter from '@module/counter-client-react';
 import chat from '@module/chat-client-react';
 import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
-
-import defaultRouter from '../../client/src/modules/defaultRouter';
-import post from '../../client/src/modules/post';
-import upload from '../../client/src/modules/upload';
-import user from '../../client/src/modules/user';
-import payments from '../../client/src/modules/payments';
-import pagination from '../../client/src/modules/pagination';
+import defaultRouter from '@module/router-client-react-native';
+import payments from '@module/payments-client-react';
 
 import ClientModule from '@module/module-client-react-native';
+
+const post = require('@module/post-client-react').default;
+const upload = require('@module/upload-client-react').default;
+const pagination = require('@module/pagination-client-react').default;
+const user = require('@module/user-client-react').default;
 
 const modules = new ClientModule(
   validation,

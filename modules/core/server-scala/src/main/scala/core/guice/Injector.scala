@@ -30,10 +30,7 @@ object Injector {
     )
   ).retrieve
 
-  val injector: Injector = {
-    CoreInjector.injector = Guice.createInjector(guiceModules.asJava)
-    CoreInjector.injector
-  }
+  val injector: Injector = Guice.createInjector(guiceModules.asJava)
 
   def inject[T: Manifest]: T = {
     injector.instance[T]
@@ -49,7 +46,7 @@ object Injector {
     * @param paths paths to 'first-level' connected modules
     * @return set of paths to all connected modules within the application
     */
-  def findModulesPaths(paths: List[String]): Set[String] = {
+  private def findModulesPaths(paths: List[String]): Set[String] = {
     if (paths.nonEmpty) {
       paths ++
         findModulesPaths(
@@ -66,5 +63,5 @@ object Injector {
     } else paths
   }.toSet
 
-  def scalaModuleFilter(classInfo: ClassInfo): Boolean = classInfo.implements(classOf[ScalaModule].getName)
+  private def scalaModuleFilter(classInfo: ClassInfo): Boolean = classInfo.implements(classOf[ScalaModule].getName)
 }

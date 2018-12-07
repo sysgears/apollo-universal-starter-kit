@@ -2,13 +2,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
-
+import { StripeSubscriptionProfile } from '@module/payments-client-react';
 import PropTypes from 'prop-types';
-import translate from '../../../i18n';
 
+import translate from '../../../i18n';
 import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '../../common/components/native';
 import { linkText } from '../../common/components/native/styles';
-import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
 import settings from '../../../../../../settings';
 
 const renderProfileItem = (title, value, idx) => (

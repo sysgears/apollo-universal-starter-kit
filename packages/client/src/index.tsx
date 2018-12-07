@@ -7,10 +7,10 @@ import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
 import defaultRouter from '@module/router-client-react';
+import payments from '@module/payments-client-react';
 import '@module/favicon-common';
 
 import user from './modules/user';
-import payments from './modules/payments';
 
 const post = require('@module/post-client-react').default;
 const pageNotFound = require('@module/page-not-found-client-react');

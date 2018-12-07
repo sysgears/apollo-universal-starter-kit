@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+import { StripeSubscriptionProfile } from '@module/payments-client-react';
 
 import translate from '../../../i18n';
-import StripeSubscriptionProfile from '../../payments/stripe/subscription/containers/SubscriptionProfile';
 import { LayoutCenter } from '../../common/components';
 import { Card, CardGroup, CardTitle, CardText, PageLayout } from '../../common/components/web';
 

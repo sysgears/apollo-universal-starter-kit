@@ -5,9 +5,9 @@ import chat from '@module/chat-client-react';
 import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import defaultRouter from '@module/router-client-react-native';
+import payments from '@module/payments-client-react';
 
 import user from '../../client/src/modules/user';
-import payments from '../../client/src/modules/payments';
 
 import ClientModule from '@module/module-client-react-native';
 

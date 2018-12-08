@@ -1,16 +1,25 @@
 package graphql.schema
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import common.InputUnmarshallerGenerator
 import core.graphql.{GraphQLSchema, UserContext}
+import core.services.publisher.PubSubService
+import core.services.publisher.RichPubSubService._
 import graphql.resolvers.PostResolver
 import javax.inject.Inject
 import model._
 import sangria.macros.derive._
 import sangria.schema.{Argument, Field, InputObjectType, IntType, ListType, ObjectType}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
+class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
+                           implicit val pubSubCommentService: PubSubService[Comment],
+                           implicit val materializer: ActorMaterializer,
+                           actorSystem: ActorSystem,
+                           postResolver: PostResolver,
+                           executionContext: ExecutionContext) extends GraphQLSchema
   with InputUnmarshallerGenerator {
 
   import types.unmarshallers._
@@ -68,7 +77,7 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
       name = "editPost",
       fieldType = Types.post,
       arguments = Argument(name = "input", argumentType = Types.editPostInput) :: Nil,
-      resolve = { ctx => postResolver.editPost(input = ctx.args.arg[EditPostInput]("input")) }
+      resolve = { ctx => postResolver.editPost(input = ctx.args.arg[EditPostInput]("input")).pub }
     ),
     Field(
       name = "addComment",
@@ -80,7 +89,7 @@ class PostSchema @Inject()(postResolver: PostResolver) extends GraphQLSchema
       name = "editComment",
       fieldType = Types.comment,
       arguments = Argument(name = "input", argumentType = Types.editCommentInput) :: Nil,
-      resolve = { ctx => postResolver.editComment(input = ctx.args.arg[EditCommentInput]("input")) }
+      resolve = { ctx => postResolver.editComment(input = ctx.args.arg[EditCommentInput]("input")).pub }
     ),
     Field(
       name = "deleteComment",

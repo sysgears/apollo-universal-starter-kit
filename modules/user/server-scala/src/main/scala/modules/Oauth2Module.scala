@@ -8,17 +8,15 @@ import config.AuthConfig
 import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
 
-import scala.util.Random
-
 class Oauth2Module extends ScalaModule {
 
   @Provides
   @Named("google")
-  def counterActor(authConfig: AuthConfig): OAuth20Service =
+  def oauth2Service(authConfig: AuthConfig): OAuth20Service =
     new ServiceBuilder(authConfig.google.clientId)
       .apiSecret(authConfig.google.clientSecret)
       .scope(authConfig.google.scope)
-      .state(new Random(authConfig.google.stateSeed).nextString(8))
+      .state(authConfig.google.state)
       .callback(authConfig.google.callback)
       .build(GoogleApi20.instance())
 }

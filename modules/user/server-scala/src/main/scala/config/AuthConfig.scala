@@ -11,7 +11,7 @@ class AuthConfig @Inject()(config: Config) {
   object google {
     val clientId: String = config.getString("user.auth.google.clientId")
     val clientSecret: String = config.getString("user.auth.google.clientSecret")
-    val stateSeed: Long = config.getLong("user.auth.google.stateSeed")
+    val state: String = config.getString("user.auth.google.state")
     val scope: String = config.getString("user.auth.google.scope")
     val callback: String = config.getString("user.auth.google.callback")
   }

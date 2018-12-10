@@ -1,7 +1,6 @@
 package routes.auth
 
 import akka.http.scaladsl.model.StatusCodes
-import akka.http.scaladsl.model.StatusCodes.InternalServerError
 import com.github.scribejava.core.oauth.OAuth20Service
 import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
@@ -9,15 +8,17 @@ import akka.http.scaladsl.server.Route
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import core.controllers.AkkaRoute
-import model.{Tokens, User}
+import model.User
 import model.oauth.{GoogleAuth, GoogleOauth2Response}
 import modules.jwt.model.JwtContent
+import modules.jwt.model.Tokens._
 import modules.jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
 import repositories.auth.GoogleAuthRepository
 import services.UserOAuth2Service
 import common.implicits.RichDBIO._
+import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
@@ -33,28 +34,22 @@ class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Serv
     (path("auth" / "google") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "google" / "callback") & get) {
-      parameters('code) { code =>
+      parameters('state.?, 'code) { (state, code) =>
         onComplete {
           for {
-            googleUserInfo <- userOAuth2Service.getUserInfo[GoogleOauth2Response](code, "https://content.googleapis.com/oauth2/v2/userinfo", oauth2Service)
-            user <- userRepository.save(User(
-              username = googleUserInfo.name,
-              email = googleUserInfo.email,
-              role = "user",
-              isActive = true,
-              password = BCrypt.hashpw(googleUserInfo.id, BCrypt.gensalt)
-            )).run
-            googleUser <- googleAuthRepository.save(GoogleAuth(Some(googleUserInfo.id), googleUserInfo.name, user.id.get)).run
-            accessToken = jwtAuthService.createAccessToken(JwtContent(googleUser.userId))
-            refreshToken = jwtAuthService.createRefreshToken(JwtContent(googleUser.userId), user.password)
-          } yield Tokens(accessToken, refreshToken)
+            googleAuthInfo <- userOAuth2Service.getUserInfo[GoogleOauth2Response](code, "https://content.googleapis.com/oauth2/v2/userinfo", oauth2Service)
+            user <- userRepository.save(User(None, googleAuthInfo.name, googleAuthInfo.email, BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt), "user", true)).run
+            googleAuthUser <- googleAuthRepository.save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get)).run
+          } yield jwtAuthService.createTokens(JwtContent(googleAuthUser.userId), user.password)
         } {
           case Success(tokens) =>
-            setCookie(HttpCookie("access-token", value = tokens.accessToken),
-              HttpCookie("refresh-token", value = tokens.refreshToken)) {
-              redirect("profile", StatusCodes.Found)
+            setCookie(HttpCookie("access-token", value = tokens.accessToken), HttpCookie("refresh-token", value = tokens.refreshToken)) {
+              state match {
+                case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
+                case None => redirect("profile", StatusCodes.Found)
+              }
             }
-          case Failure(exception) => complete(InternalServerError -> exception)
+          case Failure(_) => redirect("profile", StatusCodes.Found)
         }
       }
     }

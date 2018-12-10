@@ -14,7 +14,9 @@
     "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"../../modules/**/server-ts/**/*.spec.*\" \"src/**/*.spec.*\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"../../modules/**/server-ts/**/*.spec.*\" \"src/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
-    "lint": "eslint --fix --ext js --ext jsx --ext json src config",
+    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
+    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
+    "lint": "yarn eslint && yarn tslint",
     "seed": "yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
@@ -127,6 +129,7 @@
   },
   "devDependencies": {
     "@alienfast/i18next-loader": "^1.0.15",
+    "@module/user-client-react": "^1.0.0",
     "@types/chai": "^4.1.4",
     "@types/chai-http": "^3.0.5",
     "@types/graphql-iso-date": "^3.3.0",

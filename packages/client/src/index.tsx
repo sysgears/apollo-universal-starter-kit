@@ -6,15 +6,15 @@ import chat from '@module/chat-client-react';
 import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
+import defaultRouter from '@module/router-client-react';
+import payments from '@module/payments-client-react';
+import '@module/favicon-common';
 
-import defaultRouter from './modules/defaultRouter';
-import post from './modules/post';
-import upload from './modules/upload';
-import user from './modules/user';
-import payments from './modules/payments';
-import pageNotFound from './modules/pageNotFound';
-import pagination from './modules/pagination';
-import './modules/favicon';
+const post = require('@module/post-client-react').default;
+const pageNotFound = require('@module/page-not-found-client-react').default;
+const upload = require('@module/upload-client-react').default;
+const pagination = require('@module/pagination-client-react').default;
+const user = require('@module/user-client-react').default;
 
 const modules = new ClientModule(
   look,

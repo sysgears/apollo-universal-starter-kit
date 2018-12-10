@@ -1,12 +1,11 @@
 /*eslint-disable no-unused-vars*/
 import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
+import CURRENT_USER_QUERY from '@module/user-client-react/graphql/CurrentUserQuery.graphql';
+import USER_QUERY from '@module/user-client-react/graphql/UserQuery.graphql';
 
 import { getApollo } from '../../../testHelpers/integrationSetup';
 import { login, logout } from '../testHelpers';
-
-import CURRENT_USER_QUERY from '../../../../../client/src/modules/user/graphql/CurrentUserQuery.graphql';
-import USER_QUERY from '../../../../../client/src/modules/user/graphql/UserQuery.graphql';
 
 describe('User API works', () => {
   let apollo;

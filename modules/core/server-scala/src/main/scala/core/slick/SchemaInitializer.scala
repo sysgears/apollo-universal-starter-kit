@@ -14,11 +14,21 @@ import scala.concurrent.{ExecutionContext, Future}
   */
 trait SchemaInitializer[E <: RelationalProfile#Table[_]] extends Injecting {
 
+  /**
+    * Specific database
+    */
   val database = inject[slick.jdbc.JdbcBackend.Database]
+
+  /**
+    * Specific database profile
+    */
   val driver = inject[slick.jdbc.JdbcProfile]
 
   import driver.api._
 
+  /**
+    * Thread pool for operations
+    */
   val context: ExecutionContext
 
   /**

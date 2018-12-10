@@ -53,7 +53,9 @@ libraryDependencies ++= Seq(
 
   "org.mindrot" % "jbcrypt" % "0.3m",
 
-  "com.byteslounge" %% "slick-repo" % "1.5.2"
+  "com.byteslounge" %% "slick-repo" % "1.5.2",
+  "com.h2database" % "h2" % "1.3.148" % Test
+
 )
 
 parallelExecution in test := false

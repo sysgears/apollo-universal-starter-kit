@@ -10,9 +10,9 @@ class UserOAuth2Service {
 
   def getUserInfo[T](code: String, userInfoUrl: String, service: OAuth20Service)
                     (implicit formatter: RootJsonFormat[T], executionContext: ExecutionContext): Future[T] = for {
-    oauthAccessToken <- Future(service.getAccessTokenAsync(code).get)
+    oauthAccessToken <- Future(service.getAccessToken(code))
     request = new OAuthRequest(Verb.GET, userInfoUrl)
     _ = service.signRequest(oauthAccessToken, request)
-    response <- Future(service.executeAsync(request).get)
+    response <- Future(service.execute(request))
   } yield response.getBody.parseJson.convertTo[T]
 }

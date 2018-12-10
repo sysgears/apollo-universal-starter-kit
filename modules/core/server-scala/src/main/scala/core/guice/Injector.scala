@@ -12,20 +12,11 @@ import scala.collection.JavaConverters._
 
 object Injector {
 
-  val modulesPaths: Set[String] = findModulesPaths(InitializedClasses[Any](
-    FilteredClasses(
-      FoundClasses(List(".")),
-      filter = classInfo => classInfo.name.contains("ModulesInfo") && !classInfo.name.contains("$")
-    ),
-    initializer = Some(clazz => clazz.getMethod("modules").invoke(this))
-  ).retrieve
-    .asInstanceOf[List[List[String]]]
-    .flatten
-  )
+  val modulesPaths: Set[String] = findModulesPaths(List("."))
 
   val guiceModules: Seq[ScalaModule] = InitializedClasses[ScalaModule](
     FilteredClasses(
-      FoundClasses(List(".") ++ modulesPaths),
+      FoundClasses(List(".") ++ modulesPaths.toList),
       scalaModuleFilter
     )
   ).retrieve
@@ -43,23 +34,24 @@ object Injector {
   /**
     * Recursively finds paths to connected modules and their submodules.
     *
-    * @param paths paths to 'first-level' connected modules
+    * @param paths the 'start points' from which to find the paths to connected modules
     * @return set of paths to all connected modules within the application
     */
   private def findModulesPaths(paths: List[String]): Set[String] = {
     if (paths.nonEmpty) {
-      paths ++
-        findModulesPaths(
-          InitializedClasses[Any](
-            FilteredClasses(
-              FoundClasses(paths),
-              filter = classInfo => classInfo.name.contains("ModulesInfo") && !classInfo.name.contains("$")
-            ),
-            initializer = Some(clazz => clazz.getMethod("modules").invoke(this))
-          ).retrieve
-            .asInstanceOf[List[List[String]]]
-            .flatten.map(_.replace("../../", "../../modules/"))
-        )
+      val foundPaths =
+        InitializedClasses[Any](
+          FilteredClasses(
+            FoundClasses(paths),
+            filter = classInfo => classInfo.name.contains("ModulesInfo") && !classInfo.name.contains("$")
+          ),
+          initializer = Some(clazz => clazz.getMethod("modules").invoke(this))
+        ).retrieve
+          .asInstanceOf[List[List[String]]]
+          .flatten.map {
+          path => if (!path.startsWith("../../modules")) path.replace("../../", "../../modules/") else path
+        }
+      foundPaths ++ findModulesPaths(foundPaths)
     } else paths
   }.toSet
 

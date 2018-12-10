@@ -14,7 +14,7 @@ import config.{AuthConfig, MailConfig}
 import errors.Unauthenticated
 import model._
 import models.MailPayload
-import modules.jwt.model.JwtContent
+import modules.jwt.model.{JwtContent, Tokens}
 import modules.jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository

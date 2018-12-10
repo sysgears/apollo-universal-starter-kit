@@ -5,7 +5,7 @@ import modules.jwt.config.JwtConfig
 import modules.jwt.decoder.JwtDecoder
 import modules.jwt.encoder.JwtEncoder
 import modules.jwt.errors.InvalidToken
-import modules.jwt.model.JwtContent
+import modules.jwt.model.{JwtContent, Tokens}
 import modules.jwt.validator.JwtValidator
 import pdi.jwt.exceptions.JwtExpirationException
 import spray.json._
@@ -32,6 +32,12 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
   /** @inheritdoc */
   override def createRefreshToken(content: JwtContent, secret: String): String =
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
+
+  /** @inheritdoc */
+  def createTokens(content: JwtContent, secret: String): Tokens = Tokens(
+    accessToken = jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration),
+    refreshToken = jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
+  )
 
   /** @inheritdoc */
   override def decodeContent(token: String): Try[JwtContent] = withExceptionTransform {

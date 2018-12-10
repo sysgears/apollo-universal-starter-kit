@@ -10,6 +10,7 @@ import javax.inject.Inject
 import graphql.resolvers.UserResolver
 import model.{UserPayload, _}
 import modules.common.FieldError
+import modules.jwt.model.Tokens
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput

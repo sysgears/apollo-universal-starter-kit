@@ -2,14 +2,14 @@ package graphql.schema
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import common.{InputUnmarshallerGenerator, Logger}
+import common.{FieldError, InputUnmarshallerGenerator, Logger}
 import common.graphql.DispatcherResolver._
+import common.graphql.UserContext
+import common.graphql.schema.GraphQLSchema
 import config.AuthConfig
-import core.graphql.{GraphQLSchema, UserContext}
 import javax.inject.Inject
 import graphql.resolvers.UserResolver
 import model.{UserPayload, _}
-import modules.common.FieldError
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput

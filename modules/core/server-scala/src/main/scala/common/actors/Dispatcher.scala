@@ -6,8 +6,8 @@ import akka.stream.ActorMaterializer
 import common.implicits.RichList._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
 import common.errors.Error
-import common.{ActorMessageDelivering, ActorNamed}
-import core.graphql.UserContext
+import common.graphql.UserContext
+import common.ActorNamed
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext

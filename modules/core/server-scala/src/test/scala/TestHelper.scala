@@ -1,9 +1,9 @@
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import common.shapes.ServerModule
-import core.graphql.schema.GraphQL
+import common.graphql.schema.GraphQL
 import core.guice.Injecting
-import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
+import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}

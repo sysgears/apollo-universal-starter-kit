@@ -1,8 +1,9 @@
 package graphql.schema
 
 import com.google.inject.Inject
+import common.graphql.UserContext
+import common.graphql.schema.GraphQLSchema
 import common.{InputUnmarshallerGenerator, Logger}
-import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.ContactResolver
 import models.{Contact, ContactPayload}
 import sangria.macros.derive.{InputObjectTypeName, ObjectTypeName, deriveInputObjectType, deriveObjectType}

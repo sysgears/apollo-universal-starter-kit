@@ -5,7 +5,7 @@ import actor.MailActor.SendMail
 import akka.actor.ActorRef
 import akka.stream.ActorMaterializer
 import com.github.jurajburian.mailer.{Mailer, Message}
-import common.ActorMessageDelivering
+import common.actors.ActorMessageDelivering
 import javax.inject.{Inject, Named}
 import models.MailPayload
 import services.MailService

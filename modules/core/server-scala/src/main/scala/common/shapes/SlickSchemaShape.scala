@@ -1,6 +1,6 @@
 package common.shapes
 
-import core.slick.SchemaInitializer
+import common.slick.SchemaInitializer
 
 import scala.collection.mutable
 

@@ -1,8 +1,9 @@
 package graphql.schema
 
 import akka.stream.ActorMaterializer
+import common.graphql.UserContext
+import common.graphql.schema.GraphQLSchema
 import common.{InputUnmarshallerGenerator, Logger}
-import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.FileUploadResolver
 import javax.inject.Inject
 import models.FileMetadata

@@ -7,8 +7,8 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
 import common.implicits.RichDBIO._
-import core.routes.graphql.jsonProtocols.GraphQLMessage
-import core.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.FileMetadata
 import org.apache.commons.io.FileUtils
 import repositories.FileMetadataRepository

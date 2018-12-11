@@ -4,8 +4,8 @@ import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
+import common.publisher.{PubSubService, PubSubServiceImpl}
 import core.guice.injection.GuiceActorRefProvider
-import core.services.publisher.{PubSubService, PubSubServiceImpl}
 import graphql.resolvers.CounterResolver
 import javax.inject.Named
 import models.Counter

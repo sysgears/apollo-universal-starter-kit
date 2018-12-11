@@ -1,6 +1,6 @@
 package common.shapes
 
-import core.graphql.UserContext
+import common.graphql.UserContext
 import sangria.schema.Field
 
 import scala.collection.mutable

@@ -5,10 +5,10 @@ import akka.stream.ActorMaterializer
 import app.GlobalModule
 import ch.megard.akka.http.cors.scaladsl.CorsDirectives.cors
 import ch.megard.akka.http.cors.scaladsl.settings.CorsSettings
-import core.AppInitialization
-import core.graphql.schema.GraphQL
-import core.routes.frontend.FrontendRoute
-import core.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
+import common.AppInitialization
+import common.graphql.schema.GraphQL
+import common.routes.frontend.FrontendRoute
+import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import core.guice.Injector._
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler

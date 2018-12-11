@@ -1,6 +1,6 @@
 package repositories
 
-import core.slick.SchemaInitializer
+import common.slick.SchemaInitializer
 import javax.inject.Inject
 import models.FileMetadataTable
 import models.FileMetadataTable.FileMetadataTable

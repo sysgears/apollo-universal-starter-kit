@@ -1,6 +1,6 @@
 package common.shapes
 
-import core.routes.AkkaRoute
+import common.routes.AkkaRoute
 
 import scala.collection.mutable
 

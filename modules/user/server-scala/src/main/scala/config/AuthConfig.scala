@@ -15,4 +15,12 @@ class AuthConfig @Inject()(config: Config) {
     val scope: String = config.getString("user.auth.google.scope")
     val callback: String = config.getString("user.auth.google.callback")
   }
+
+  object facebook {
+    val clientId: String = config.getString("user.auth.facebook.clientId")
+    val clientSecret: String = config.getString("user.auth.facebook.clientSecret")
+    val state: String = config.getString("user.auth.facebook.state")
+    val scope: String = config.getString("user.auth.facebook.scope")
+    val callback: String = config.getString("user.auth.facebook.callback")
+  }
 }

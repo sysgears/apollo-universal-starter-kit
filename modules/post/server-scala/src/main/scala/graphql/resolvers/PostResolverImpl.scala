@@ -19,8 +19,25 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
       post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get) else Future.successful(null)
     } yield post
 
-  //TODO Not Implemented
-  override def posts(limit: Int, after: Int): Future[Posts] = ???
+  override def posts(limit: Int, after: Int): Future[Posts] = {
+
+    def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
+
+    def getEdges(entities: List[Post]) = Map((1 to entities.size).zip(entities): _*).map(value => {
+        val (index, post) = value
+        PostEdges(node = post, cursor = after + index)
+      }).toSeq
+
+    for {
+      paginatedResult <- postRepository.getPaginatedObjectsList(PaginationParams(offset = after, limit = limit)).run
+    } yield Posts(
+      totalCount = paginatedResult.totalCount,
+      edges = getEdges(paginatedResult.entities),
+      pageInfo = PostPageInfo(
+        endCursor = endCursorValue(paginatedResult.entities.size),
+        hasNextPage = paginatedResult.hasNextPage)
+    )
+  }
 
   override def addPost(input: AddPostInput): Future[Post] =
     postRepository.save(input).run

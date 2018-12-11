@@ -34,6 +34,10 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
       )
     ))
 
+    implicit val posts: ObjectType[Unit, Posts] = deriveObjectType(ObjectTypeName("Posts"))
+    implicit val postEdges: ObjectType[Unit, PostEdges] = deriveObjectType(ObjectTypeName("PostEdges"))
+    implicit val postPageInfo: ObjectType[Unit, PostPageInfo] = deriveObjectType(ObjectTypeName("PostPageInfo"))
+
     implicit val addPostInput: InputObjectType[AddPostInput] = deriveInputObjectType(InputObjectTypeName("AddPostInput"))
     implicit val editPostInput: InputObjectType[EditPostInput] = deriveInputObjectType(InputObjectTypeName("EditPostInput"))
     implicit val addCommentInput: InputObjectType[AddCommentInput] = deriveInputObjectType(InputObjectTypeName("AddCommentInput"))
@@ -53,10 +57,10 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
     ),
     Field(
       name = "posts",
-      fieldType = Types.post,
+      fieldType = Types.posts,
       arguments = Argument(name = "limit", argumentType = IntType) ::
                   Argument(name = "after", argumentType = IntType) :: Nil,
-      resolve = { ctx => Future.successful(null) /*TODO: Stub*/ }
+      resolve = { ctx => postResolver.posts(limit = ctx.args.arg("limit"), after = ctx.args.arg("after")) }
     )
   )
 

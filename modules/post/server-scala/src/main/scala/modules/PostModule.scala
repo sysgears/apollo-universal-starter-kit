@@ -8,6 +8,8 @@ import net.codingwell.scalaguice.ScalaModule
 import repositories._
 import slick.jdbc.JdbcProfile
 
+import scala.concurrent.ExecutionContext
+
 class PostModule extends ScalaModule {
 
   override def configure() {
@@ -15,7 +17,7 @@ class PostModule extends ScalaModule {
   }
 
   @Provides
-  def postRepository(driver: JdbcProfile): Repository[Post, Int] = new PostRepository(driver)
+  def postRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[Post, Int] = new PostRepository(driver)
   @Provides
   def commentRepository(driver: JdbcProfile): Repository[Comment, Int] = new CommentRepository(driver)
 }

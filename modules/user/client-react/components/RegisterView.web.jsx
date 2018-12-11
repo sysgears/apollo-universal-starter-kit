@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { translate } from '@module/i18n-client-react';
 import { LayoutCenter, PageLayout } from '@module/look-client-react';
+import { FieldError } from '@module/validation-common-react';
 
 import RegisterForm from '../components/RegisterForm';
 
@@ -16,17 +17,9 @@ class RegisterView extends React.PureComponent {
 
   onSubmit = async values => {
     const { register, t } = this.props;
-    const { errors } = await register(values);
+    const errors = new FieldError((await register(values)).errors);
 
-    if (errors && errors.length) {
-      throw errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('reg.errorMsg') }
-      );
-    }
+    throw { ...errors.errors, validErr: t('reg.errorMsg') };
   };
 
   renderMetaData = t => (

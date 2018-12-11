@@ -15,45 +15,43 @@ const registerFormSchema = {
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
 
-const RegisterForm = ({ values, handleSubmit, submitting, error, t }) => {
-  return (
-    <Form name="register" onSubmit={handleSubmit}>
-      <Field
-        name="username"
-        component={RenderField}
-        type="text"
-        label={t('reg.form.field.name')}
-        value={values.username}
-      />
-      <Field name="email" component={RenderField} type="text" label={t('reg.form.field.email')} value={values.email} />
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label={t('reg.form.field.pass')}
-        value={values.password}
-      />
-      <Field
-        name="passwordConfirmation"
-        component={RenderField}
-        type="password"
-        label={t('reg.form.field.passConf')}
-        value={values.passwordConfirmation}
-      />
-      <div className="text-center">
-        {error && <Alert color="error">{error}</Alert>}
-        <Button color="primary" type="submit" disabled={submitting}>
-          {t('reg.form.btnSubmit')}
-        </Button>
-      </div>
-    </Form>
-  );
-};
+const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => (
+  <Form name="register" onSubmit={handleSubmit}>
+    <Field
+      name="username"
+      component={RenderField}
+      type="text"
+      label={t('reg.form.field.name')}
+      value={values.username}
+    />
+    <Field name="email" component={RenderField} type="text" label={t('reg.form.field.email')} value={values.email} />
+    <Field
+      name="password"
+      component={RenderField}
+      type="password"
+      label={t('reg.form.field.pass')}
+      value={values.password}
+    />
+    <Field
+      name="passwordConfirmation"
+      component={RenderField}
+      type="password"
+      label={t('reg.form.field.passConf')}
+      value={values.passwordConfirmation}
+    />
+    <div className="text-center">
+      {errors && errors.validErr && <Alert color="error">{errors.validErr}</Alert>}
+      <Button color="primary" type="submit" disabled={submitting}>
+        {t('reg.form.btnSubmit')}
+      </Button>
+    </div>
+  </Form>
+);
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string,
+  errors: PropTypes.string,
   values: PropTypes.object,
   t: PropTypes.func
 };

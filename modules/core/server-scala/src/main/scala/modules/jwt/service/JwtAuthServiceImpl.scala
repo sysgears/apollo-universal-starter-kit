@@ -34,10 +34,8 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
     jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
 
   /** @inheritdoc */
-  def createTokens(content: JwtContent, secret: String): Tokens = Tokens(
-    accessToken = jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration),
-    refreshToken = jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
-  )
+  def createTokens(content: JwtContent, secret: String): Tokens =
+    Tokens(createAccessToken(content), createRefreshToken(content, secret))
 
   /** @inheritdoc */
   override def decodeContent(token: String): Try[JwtContent] = withExceptionTransform {

@@ -60,10 +60,10 @@ class FacebookAuthController @Inject()(@Named("facebook") oauth2Service: OAuth20
             setCookie(HttpCookie("access-token", value = tokens.accessToken), HttpCookie("refresh-token", value = tokens.refreshToken)) {
               state match {
                 case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
-                case None => redirect("profile", StatusCodes.Found)
+                case None => redirect("/profile", StatusCodes.Found)
               }
             }
-          case Failure(_) => redirect("profile", StatusCodes.Found)
+          case Failure(_) => redirect("/login", StatusCodes.Found)
         }
       }
     }

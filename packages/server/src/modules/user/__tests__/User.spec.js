@@ -3,8 +3,8 @@ import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
 import CURRENT_USER_QUERY from '@module/user-client-react/graphql/CurrentUserQuery.graphql';
 import USER_QUERY from '@module/user-client-react/graphql/UserQuery.graphql';
+import { getApollo } from '@module/testing-server-ts';
 
-import { getApollo } from '../../../testHelpers/integrationSetup';
 import { login, logout } from '../testHelpers';
 
 describe('User API works', () => {

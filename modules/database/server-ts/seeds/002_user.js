@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { returnId, truncateTables } from '../../sql/helpers';
+import { returnId, truncateTables } from '../sql/helpers';
 
 export async function seed(knex, Promise) {
   await truncateTables(knex, Promise, [

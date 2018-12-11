@@ -1,13 +1,13 @@
-import settings from '../../settings';
+import settings from '../../../settings';
 
 const envSettings = {
   [process.env.NODE_ENV || 'development']: {
     ...settings.db,
     seeds: {
-      directory: './src/database/seeds'
+      directory: __dirname + '/seeds'
     },
     migrations: {
-      directory: './src/database/migrations'
+      directory: __dirname + '/migrations'
     },
     useNullAsDefault: true
   }

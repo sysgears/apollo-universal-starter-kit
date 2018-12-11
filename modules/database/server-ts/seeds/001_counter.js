@@ -1,4 +1,4 @@
-import { returnId, truncateTables } from '../../sql/helpers';
+import { returnId, truncateTables } from '../sql/helpers';
 
 const initialAmount = 5;
 

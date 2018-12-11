@@ -1,5 +1,6 @@
+import { log } from '@module/core-common';
+
 import knex from './connector';
-import log from '../../../common/log';
 
 import paging from './paging';
 import ordering from './ordering';

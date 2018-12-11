@@ -10,7 +10,6 @@ import com.google.inject.name.Named
 import common.errors.AmbigousResult
 import core.controllers.AkkaRoute
 import model.User
-import model.oauth.{GoogleAuth, GoogleOauth2Response}
 import modules.jwt.model.JwtContent
 import modules.jwt.model.Tokens._
 import modules.jwt.service.JwtAuthService
@@ -20,6 +19,7 @@ import repositories.auth.GoogleAuthRepository
 import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
+import model.oauth.google.{GoogleAuth, GoogleOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext

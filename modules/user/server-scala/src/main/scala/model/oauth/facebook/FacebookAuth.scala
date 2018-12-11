@@ -1,4 +1,4 @@
-package model.oauth
+package model.oauth.facebook
 
 import com.byteslounge.slickrepo.meta.Entity
 

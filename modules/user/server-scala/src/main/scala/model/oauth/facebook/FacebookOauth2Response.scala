@@ -1,4 +1,4 @@
-package model.oauth
+package model.oauth.facebook
 
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 

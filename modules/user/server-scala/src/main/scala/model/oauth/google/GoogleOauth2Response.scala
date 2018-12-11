@@ -1,4 +1,4 @@
-package model.oauth
+package model.oauth.google
 
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 

@@ -1,4 +1,4 @@
-package model.oauth
+package model.oauth.google
 
 import akka.japi.Option.Some
 import com.byteslounge.slickrepo.meta.Entity

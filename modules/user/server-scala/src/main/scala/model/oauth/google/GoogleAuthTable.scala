@@ -18,8 +18,9 @@ object GoogleAuthTable extends JdbcProfile {
 
     def userId = column[Int]("USER_ID", O.Unique)
 
-    def userFk = foreignKey("USER_ID_FK", userId, TableQuery[UserTable])(_.id, onUpdate=ForeignKeyAction.Restrict, onDelete=ForeignKeyAction.Cascade)
+    def userFk = foreignKey("USER_ID_FK", userId, TableQuery[UserTable])(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
 
     def * = (id.?, displayName, userId).mapTo[GoogleAuth]
   }
+
 }

@@ -1,17 +1,20 @@
 package model.oauth.google
 
-import spray.json.{DefaultJsonProtocol, RootJsonFormat}
+import spray.json._
 
 case class GoogleOauth2Response(id: String,
                                 email: String,
-                                verified_email: Boolean,
-                                name: String,
-                                given_name: String,
-                                family_name: String,
-                                link: String,
-                                picture: String,
-                                locale: String)
+                                name: String)
 
 object GoogleOauth2Response extends DefaultJsonProtocol {
-  implicit val googleOauthResponseFormat: RootJsonFormat[GoogleOauth2Response] = jsonFormat9(GoogleOauth2Response.apply)
+
+  implicit object GoogleOauth2ResponseFormat extends RootJsonFormat[GoogleOauth2Response] {
+    def write(response: GoogleOauth2Response) = JsArray(JsString(response.id), JsString(response.email), JsString(response.name))
+
+    def read(value: JsValue): GoogleOauth2Response = value.asJsObject.getFields("id", "email", "name") match {
+      case Seq(JsString(id), JsString(email), JsString(name)) => GoogleOauth2Response(id, email, name)
+      case _ => throw DeserializationException("GithubOauth2Response expected")
+    }
+  }
+
 }

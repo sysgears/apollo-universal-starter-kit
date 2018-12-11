@@ -17,7 +17,7 @@ import modules.jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
 import repositories.auth.GoogleAuthRepository
-import services.UserOAuth2Service
+import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import spray.json._
@@ -26,7 +26,7 @@ import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
 class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Service,
-                                     userOAuth2Service: UserOAuth2Service,
+                                     externalApiService: ExternalApiService,
                                      userRepository: UserRepository,
                                      googleAuthRepository: GoogleAuthRepository,
                                      jwtAuthService: JwtAuthService[JwtContent])
@@ -39,12 +39,19 @@ class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Serv
       parameters('state.?, 'code) { (state, code) =>
         onComplete {
           for {
-            googleAuthInfo <- userOAuth2Service.getUserInfo[GoogleOauth2Response](code, "https://content.googleapis.com/oauth2/v2/userinfo", oauth2Service)
+            googleAuthInfo <- externalApiService.getUserInfo[GoogleOauth2Response](code, "https://content.googleapis.com/oauth2/v2/userinfo", oauth2Service)
             user <- googleAuthRepository.findOne(googleAuthInfo.id).run.flatMap {
               case Some(gUser) => userRepository.findOne(gUser.userId).run failOnNone AmbigousResult(s"User with id: ${gUser.userId} stored in google auth table, but not in the user table")
               case None => for {
-               user <- userRepository.save(User(None, googleAuthInfo.name, googleAuthInfo.email, BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt), "user", true)).run
-                 _ <- googleAuthRepository.save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get)).run
+                user <- userRepository.save(
+                  User(
+                    username = googleAuthInfo.name,
+                    email = googleAuthInfo.email,
+                    password = BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt),
+                    role = "user",
+                    isActive = true)
+                ).run
+                _ <- googleAuthRepository.save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get)).run
               } yield user
             }
           } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)

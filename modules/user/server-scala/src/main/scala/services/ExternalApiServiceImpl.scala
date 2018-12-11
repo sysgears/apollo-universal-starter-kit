@@ -6,7 +6,7 @@ import spray.json._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class UserOAuth2Service {
+class ExternalApiServiceImpl extends ExternalApiService {
 
   def getUserInfo[T](code: String, userInfoUrl: String, service: OAuth20Service)
                     (implicit formatter: RootJsonFormat[T], executionContext: ExecutionContext): Future[T] = for {

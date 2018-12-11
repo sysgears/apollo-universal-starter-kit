@@ -23,4 +23,13 @@ class AuthConfig @Inject()(config: Config) {
     val scope: String = config.getString("user.auth.facebook.scope")
     val callback: String = config.getString("user.auth.facebook.callback")
   }
+
+  object github {
+    val clientId: String = config.getString("user.auth.github.clientId")
+    val clientSecret: String = config.getString("user.auth.github.clientSecret")
+    val state: String = config.getString("user.auth.github.state")
+    val scope: String = config.getString("user.auth.github.scope")
+    val callback: String = config.getString("user.auth.github.callback")
+  }
+
 }

@@ -10,6 +10,9 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
+/**
+  * Provides dependency injection functionality.
+  */
 class PostModule extends ScalaModule {
 
   override def configure() {

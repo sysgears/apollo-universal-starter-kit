@@ -9,6 +9,9 @@ object PostTable extends JdbcProfile {
 
   val name = "POSTS"
 
+  /**
+    * Defines entity fields for slick.
+    */
   class PostTable(tag: Tag) extends SlickTable[Post](tag, name) with Keyed[Int] {
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 

@@ -9,6 +9,9 @@ object CommentTable extends JdbcProfile {
 
   val name = "COMMENTS"
 
+  /**
+    * Defines entity fields for slick.
+    */
   class CommentTable(tag: Tag) extends SlickTable[Comment](tag, name) with Keyed[Int] {
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 

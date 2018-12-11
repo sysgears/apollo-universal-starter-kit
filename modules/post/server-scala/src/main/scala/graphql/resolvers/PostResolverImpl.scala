@@ -21,18 +21,19 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
 
   override def posts(limit: Int, after: Int): Future[Posts] = {
 
-    def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
-
-    def getEdges(entities: List[Post]) = Map((1 to entities.size).zip(entities): _*).map(value => {
+    implicit def toEdges(entities: List[Post]): Seq[PostEdges] =
+      Map((1 to entities.size).zip(entities): _*).map(value => {
         val (index, post) = value
         PostEdges(node = post, cursor = after + index)
       }).toSeq
+
+    def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
 
     for {
       paginatedResult <- postRepository.getPaginatedObjectsList(PaginationParams(offset = after, limit = limit)).run
     } yield Posts(
       totalCount = paginatedResult.totalCount,
-      edges = getEdges(paginatedResult.entities),
+      edges = paginatedResult.entities,
       pageInfo = PostPageInfo(
         endCursor = endCursorValue(paginatedResult.entities.size),
         hasNextPage = paginatedResult.hasNextPage)
@@ -42,12 +43,11 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
   override def addPost(input: AddPostInput): Future[Post] =
     postRepository.save(input).run
 
-  //TODO Unsafe
   override def deletePost(id: Int): Future[Post] = {
     for {
-      maybePost <- postRepository.findOne(id).run
-      _         <- postRepository.delete(maybePost.get).run
-    } yield maybePost.get
+      maybePost     <- postRepository.findOne(id).run
+      deletedPost   <- postRepository.delete(maybePost.get).run
+    } yield deletedPost
   }
 
   override def editPost(input: EditPostInput): Future[Post] =
@@ -56,12 +56,11 @@ class PostResolverImpl @Inject()(postRepository: PostRepository,
   override def addComment(input: AddCommentInput): Future[Comment] =
     commentRepository.save(input).run
 
-  //TODO Unsafe
   override def deleteComment(input: DeleteCommentInput): Future[Comment] =
     for {
-      maybeComment <- commentRepository.findOne(input.id).run
-      _            <- commentRepository.delete(maybeComment.get).run
-    } yield maybeComment.get
+      maybeComment      <- commentRepository.findOne(input.id).run
+      deletedComment    <- commentRepository.delete(maybeComment.get).run
+    } yield deletedComment
 
   override def editComment(input: EditCommentInput): Future[Comment] =
     commentRepository.update(input).run

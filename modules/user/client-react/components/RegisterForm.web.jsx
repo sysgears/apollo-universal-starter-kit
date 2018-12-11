@@ -51,7 +51,7 @@ const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => (
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  errors: PropTypes.string,
+  errors: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func
 };

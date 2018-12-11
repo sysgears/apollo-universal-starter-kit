@@ -32,4 +32,12 @@ class AuthConfig @Inject()(config: Config) {
     val callback: String = config.getString("user.auth.github.callback")
   }
 
+  object linkedin {
+    val clientId: String = config.getString("user.auth.linkedin.clientId")
+    val clientSecret: String = config.getString("user.auth.linkedin.clientSecret")
+    val state: String = config.getString("user.auth.linkedin.state")
+    val scope: String = config.getString("user.auth.linkedin.scope")
+    val callback: String = config.getString("user.auth.linkedin.callback")
+  }
+
 }

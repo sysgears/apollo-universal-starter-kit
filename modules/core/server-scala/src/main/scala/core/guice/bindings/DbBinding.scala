@@ -1,4 +1,4 @@
-package core.guice.modules
+package core.guice.bindings
 
 import com.google.inject.Provides
 import common.implicits.RichDBIO
@@ -6,7 +6,7 @@ import net.codingwell.scalaguice.ScalaModule
 import slick.basic.DatabaseConfig
 import slick.jdbc.{JdbcBackend, JdbcProfile}
 
-class DBModule extends ScalaModule {
+class DbBinding extends ScalaModule {
 
   override def configure(): Unit = {
     bind[RichDBIO.type].toInstance(RichDBIO)

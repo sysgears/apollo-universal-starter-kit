@@ -1,4 +1,4 @@
-package core.guice.modules
+package core.guice.bindings
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
@@ -6,7 +6,7 @@ import net.codingwell.scalaguice.ScalaModule
 
 import scala.concurrent.ExecutionContext
 
-class AkkaModule extends ScalaModule {
+class AkkaBinding extends ScalaModule {
 
   override def configure() {
     implicit val system: ActorSystem = ActorSystem("scala-starter-kit")

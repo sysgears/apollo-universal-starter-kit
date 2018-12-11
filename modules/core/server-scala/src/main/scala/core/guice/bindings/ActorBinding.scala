@@ -1,4 +1,4 @@
-package core.guice.modules
+package core.guice.bindings
 
 import akka.actor.{Actor, ActorSystem}
 import com.google.inject.Provides
@@ -8,7 +8,7 @@ import core.guice.injection.GuiceActorRefProvider
 import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
 
-class ActorModule extends ScalaModule with GuiceActorRefProvider {
+class ActorBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure(): Unit = {
     bind[Actor].annotatedWith(Names.named(Dispatcher.name)).to[Dispatcher]

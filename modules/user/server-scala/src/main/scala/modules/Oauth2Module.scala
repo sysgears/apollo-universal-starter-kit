@@ -1,6 +1,6 @@
 package modules
 
-import com.github.scribejava.apis.{FacebookApi, GitHubApi, GoogleApi20}
+import com.github.scribejava.apis.{FacebookApi, GitHubApi, GoogleApi20, LinkedInApi20}
 import com.github.scribejava.core.builder.ServiceBuilder
 import com.github.scribejava.core.oauth.OAuth20Service
 import com.google.inject.Provides
@@ -44,4 +44,14 @@ class Oauth2Module extends ScalaModule {
       .state(authConfig.github.state)
       .callback(authConfig.github.callback)
       .build(GitHubApi.instance())
+
+  @Provides
+  @Named("linkedin")
+  def linkedinOAuth2Service(authConfig: AuthConfig): OAuth20Service =
+    new ServiceBuilder(authConfig.linkedin.clientId)
+      .apiSecret(authConfig.linkedin.clientSecret)
+      .scope(authConfig.linkedin.scope)
+      .state(authConfig.linkedin.state)
+      .callback(authConfig.linkedin.callback)
+      .build(LinkedInApi20.instance())
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '../../../../../packages/client/src/modules/common/components/web';
+import { Button } from '@module/look-client-react';
 import { TranslateFunction } from '@module/i18n-client-react';
 
 const Section = styled.section`

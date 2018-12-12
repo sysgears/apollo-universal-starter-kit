@@ -22,7 +22,7 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, options, locati
   // pascalize
   const Module = pascalize(moduleName);
 
-  if (location === 'server') {
+  if (location === 'server-ts') {
     // add migration and seed for new module
     addMigration(logger, templatesPath, moduleName);
 

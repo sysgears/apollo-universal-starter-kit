@@ -27,7 +27,7 @@ function deleteModule(logger, moduleName, options, location) {
   // pascalize
   const Module = pascalize(moduleName);
   const modulePath = computeModulesPath(location, options, moduleName);
-  const modulesPath = computeModulesPath(location);
+  const modulesPath = computeModulesPath(location, options);
   const moduleCommonPath = `${modulesPath}/common`;
   const generatedContainerFile = 'generatedContainers.js';
   const generatedContainerPath = `${moduleCommonPath}/${generatedContainerFile}`;
@@ -102,7 +102,7 @@ function deleteModule(logger, moduleName, options, location) {
       removeSymlink(location, moduleName);
 
       // delete migrations and seeds if server location and option -m specified
-      if (location === 'server' && options.m) {
+      if (location === 'server-ts' && options.m) {
         deleteMigrations(logger, moduleName);
       }
 

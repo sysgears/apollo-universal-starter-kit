@@ -10,7 +10,8 @@ const forgotPasswordFormSchema = {
   email: [required, email]
 };
 
-const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
+const ForgotPasswordForm = ({ handleSubmit, errors, sent, values, t }) => {
+  console.log('sent', sent);
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
       {sent && <Alert color="success">{t('forgotPass.form.submitMsg')}</Alert>}
@@ -22,7 +23,7 @@ const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
         value={values.email}
       />
       <div className="text-center">
-        {error && <Alert color="error">{error}</Alert>}
+        {errors && errors.handleErr && <Alert color="error">{errors.handleErr}</Alert>}
         <Button color="primary" type="submit">
           {t('forgotPass.form.btnSubmit')}
         </Button>
@@ -34,7 +35,7 @@ const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
 ForgotPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  error: PropTypes.string,
+  errors: PropTypes.object,
   sent: PropTypes.bool,
   values: PropTypes.object,
   t: PropTypes.func
@@ -51,7 +52,7 @@ const ForgotPasswordFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    await onSubmit(values)
+    onSubmit(values)
       .then(() => resetForm())
       .catch(e => setErrors(e));
   },

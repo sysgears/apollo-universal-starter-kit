@@ -1,41 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
-import { translate } from '@module/i18n-client-react';
 
 import ForgotPasswordForm from './ForgotPasswordForm';
 
-class ForgotPasswordView extends React.Component {
+class ForgotPasswordView extends React.PureComponent {
   static propTypes = {
-    forgotPassword: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
-
-  state = {
-    sent: false
-  };
-
-  onSubmit = ({ forgotPassword }) => async values => {
-    const result = await forgotPassword(values);
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: this.props.t('forgotPass.errorMsg') }
-      );
-    }
-
-    this.setState({ sent: true });
+    onSubmit: PropTypes.func,
+    forgotPassword: PropTypes.func,
+    sent: PropTypes.bool
   };
 
   render() {
-    const { forgotPassword } = this.props;
-
+    const { onSubmit, sent, forgotPassword } = this.props;
     return (
       <View style={styles.forgotPassContainer}>
-        <ForgotPasswordForm onSubmit={this.onSubmit({ forgotPassword })} sent={this.state.sent} />
+        <ForgotPasswordForm onSubmit={onSubmit({ forgotPassword })} sent={sent} />
       </View>
     );
   }
@@ -49,4 +29,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(ForgotPasswordView);
+export default ForgotPasswordView;

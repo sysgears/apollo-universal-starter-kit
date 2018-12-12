@@ -70,7 +70,7 @@ const renderSocialButtons = (buttonsLength, t) => {
   );
 };
 
-const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
+const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
   const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
     .length;
   return (
@@ -89,7 +89,7 @@ const LoginForm = ({ handleSubmit, submitting, error, values, t }) => {
         label={t('login.form.field.pass')}
         value={values.password}
       />
-      <div className="text-center">{error && <Alert color="error">{error}</Alert>}</div>
+      <div className="text-center">{errors && errors.handleErr && <Alert color="error">{errors.handleErr}</Alert>}</div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">
           <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
@@ -116,7 +116,7 @@ LoginForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string,
+  errors: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func
 };

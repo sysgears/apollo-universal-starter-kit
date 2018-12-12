@@ -1,5 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
+import { translate } from '@module/i18n-client-react';
+import { FieldError } from '@module/validation-common-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
@@ -8,8 +10,15 @@ import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
+  onSubmit = async values => {
+    const { t, login } = this.props;
+    const errors = new FieldError((await login(values)).errors);
+
+    throw { ...errors.errors, handleErr: t('reg.errorMsg') };
+  };
+
   render() {
-    return <LoginView {...this.props} />;
+    return <LoginView {...this.props} onSubmit={this.onSubmit} />;
   }
 }
 
@@ -36,4 +45,4 @@ const LoginWithApollo = compose(
   })
 )(Login);
 
-export default LoginWithApollo;
+export default translate('user')(LoginWithApollo);

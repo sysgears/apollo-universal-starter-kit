@@ -15,7 +15,7 @@ class Register extends React.Component {
     const { register, t } = this.props;
     const errors = new FieldError((await register(values)).errors);
 
-    throw { ...errors.errors, validErr: t('reg.errorMsg') };
+    throw { ...errors.errors, registrationErr: t('reg.errorMsg') };
   };
 
   render() {

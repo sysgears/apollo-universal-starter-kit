@@ -1,7 +1,7 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import { PageLayout } from '../../../../packages/client/src/modules/common/components/web';
+import { PageLayout } from '@module/look-client-react';
 import settings from '../../../../settings';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import counters from '../counters';

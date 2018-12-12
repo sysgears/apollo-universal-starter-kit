@@ -1,4 +1,4 @@
-import { returnId, truncateTables } from '../sql/helpers';
+import { returnId, truncateTables } from '@module/database-server-ts';
 
 const initialAmount = 5;
 

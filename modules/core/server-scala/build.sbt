@@ -54,8 +54,9 @@ libraryDependencies ++= Seq(
   "org.mindrot" % "jbcrypt" % "0.3m",
 
   "com.byteslounge" %% "slick-repo" % "1.5.2",
-  "com.h2database" % "h2" % "1.3.148" % Test
+  "com.h2database" % "h2" % "1.3.148" % Test,
 
+  "io.github.cdimascio" % "java-dotenv" % "3.1.7"
 )
 
 parallelExecution in test := false

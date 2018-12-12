@@ -28,6 +28,7 @@ libraryDependencies ++= Seq(
 
   "com.typesafe.akka" %% "akka-http-testkit" % "10.1.5",
   "org.scalatest" % "scalatest_2.12" % "3.0.5" % "test",
+  "org.scalamock" %% "scalamock" % "4.1.0" % "test",
 
   "com.google.inject" % "guice" % "4.1.0",
   "net.codingwell" %% "scala-guice" % "4.2.1",

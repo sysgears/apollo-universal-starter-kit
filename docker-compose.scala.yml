@@ -1,27 +1,41 @@
 version: '3'
 services:
-  apollo_universal_starter_scala:
-    image: hseeberger/scala-sbt
-    container_name: apollo_universal_starter_scala
-      working_dir: ${APP_DIR}/packages
-      command: ${BACKEND_RUN_COMMAND:-sbt -jvm-debug 9999 run}
-      volumes:
-      - scala-backend-app-folder:${APP_DIR}
-      - ./app:${APP_DIR}/app
-      - ./conf:${APP_DIR}/conf
-      - ./project/build.properties:${APP_DIR}/project/build.properties
-      - ./project/plugins.sbt:${APP_DIR}/project/plugins.sbt
-      - ./test:${APP_DIR}/test
-      - ./public:${APP_DIR}/public
-      - ./build.sbt:${APP_DIR}/build.sbt
+ scala-server:
+  build:
+   context: .
+   dockerfile: Dockerfile-scala
+  environment:
+   - SCALA_ENV=development
+  container_name: apollo_scala_server
+  working_dir: ${APP_DIR}/packages/server-scala
+  volumes:
+        - ./packages/server-scala:${APP_DIR}/packages/server-scala
+  command: >
+    sh -c 'sbt ~reStart'
+  ports:
+   - 8080:8080
+  stdin_open: true
+  tty: true
 
-      - scala-backend-sbt-cache:/root/.ivy2
-      ports:
-      - 9000:9000
-      - 9999:9999
-      stdin_open: true
-      tty: true
+ client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APP_DIR: ${APP_DIR}
+    environment:
+    - NODE_ENV=development
+    container_name: apollo_client
+    tty: true
+    stdin_open: true
+    volumes:
+    - ./:${APP_DIR}
+    - ${APP_DIR}/build
+    - ${APP_DIR}/node_modules
+    working_dir: ${APP_DIR}
+    user: node
+    command: >
+      sh -c 'yarn && yarn watch-client'
+    ports:
+    - 3000:3000
 
-volumes:
-  scala-backend-sbt-cache:
-  scala-backend-app-folder:

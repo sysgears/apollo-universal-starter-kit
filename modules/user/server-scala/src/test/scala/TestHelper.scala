@@ -2,6 +2,7 @@ import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
 import core.controllers.graphql.GraphQLController
 import core.guice.injection.Injecting
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 import repositories.UserSchemaInitializer
 
@@ -13,7 +14,8 @@ trait TestHelper extends WordSpec
   with BeforeAndAfter
   with BeforeAndAfterAll
   with Injecting
-  with Matchers {
+  with Matchers
+  with MockFactory {
 
   val endpoint: String = "/graphql"
   val routes: Route = inject[GraphQLController].routes

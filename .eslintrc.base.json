@@ -47,10 +47,24 @@
     "__FRONTEND_BUILD_DIR__": true,
     "__DLL_BUILD_DIR__": true
   },
-  "plugins": ["react", "json", "prettier"],
+  "plugins": ["react", "json", "import", "prettier"],
   "settings": {
     "react": {
       "version": "16.3"
+    },
+    "import/resolver": {
+      "node": {
+        "extensions": [
+          ".ts",
+          ".tsx",
+          ".web.js",
+          ".web.jsx",
+          ".native.js",
+          ".native.jsx",
+          ".js",
+          ".jsx"
+        ]
+      }
     }
   }
 }

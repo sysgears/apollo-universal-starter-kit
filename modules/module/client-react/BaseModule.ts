@@ -5,7 +5,7 @@ import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { Reducer } from 'redux';
 import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@module/module-common-react';
+import CommonModule, { CommonModuleShape } from '@module/module-common';
 
 export interface BaseModuleShape extends CommonModuleShape {
   link?: ApolloLink[];
@@ -13,7 +13,7 @@ export interface BaseModuleShape extends CommonModuleShape {
   connectionParam?: ConnectionParamsOptions[];
   reducer?: Array<{ [key: string]: Reducer }>;
   resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
-  routerFactory?: () => React.ComponentType;
+  router?: React.ReactElement<any>;
   rootComponentFactory?: Array<(req: Request) => React.ReactElement<any>>;
   dataRootComponent?: React.ComponentType[];
   data?: { [key: string]: any };
@@ -38,13 +38,9 @@ class BaseModule extends CommonModule {
     return this.connectionParam;
   }
 
-  get router() {
-    return this.routerFactory();
-  }
-
   public getDataRoot(root: React.ReactElement<any>) {
     let nestedRoot = root;
-    for (const component of this.dataRootComponent) {
+    for (const component of this.dataRootComponent || []) {
       nestedRoot = React.createElement(component, {}, nestedRoot);
     }
     return nestedRoot;
@@ -52,7 +48,7 @@ class BaseModule extends CommonModule {
 
   public getWrappedRoot(root: React.ReactElement<any>, req?: Request) {
     let nestedRoot = root;
-    for (const componentFactory of this.rootComponentFactory) {
+    for (const componentFactory of this.rootComponentFactory || []) {
       nestedRoot = React.cloneElement(componentFactory(req), {}, nestedRoot);
     }
     return nestedRoot;

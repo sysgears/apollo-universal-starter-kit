@@ -1,0 +1,104 @@
+{
+  "name": "client-angular",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src",
+  "engines": {
+    "node": ">= 6.11.1 <= 10",
+    "yarn": ">= 1.0.0"
+  },
+  "scripts": {
+    "build": "cross-env NODE_ENV=production spin build",
+    "clean": "rimraf build .tmp",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"../../modules/**/client-angular/**/*.spec.*\" \"src/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"../../modules/**/client-angular/**/*.spec.*\" \"src/**/*.spec.*\"",
+    "test": "yarn tests && yarn lint",
+    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
+    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
+    "lint": "yarn eslint && yarn tslint",
+    "watch": "spin watch",
+    "heroku-postbuild": "yarn build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit"
+  },
+  "bugs": {
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
+  },
+  "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "angular",
+    "rxjs"
+  ],
+  "author": "SysGears INC",
+  "license": "MIT",
+  "dependencies": {
+    "@angular/common": "^7.0.3",
+    "@angular/compiler": "^7.0.3",
+    "@angular/core": "^7.0.3",
+    "@angular/platform-browser": "^7.0.3",
+    "@angular/platform-browser-dynamic": "^7.0.3",
+    "@angular/router": "^7.0.3",
+    "@angularclass/hmr": "^2.1.3",
+    "@module/core-client-angular": "^1.0.0",
+    "@module/counter-client-angular": "^1.0.0",
+    "@module/counter-common": "^1.0.0",
+    "@module/module-client-angular": "^1.0.0",
+    "@ngrx/store": "^6.1.2",
+    "angular2-template-loader": "^0.6.2",
+    "apollo-angular": "^1.5.0",
+    "apollo-angular-link-http": "^1.4.0",
+    "apollo-cache-inmemory": "1.2.9",
+    "apollo-cache-router": "^1.1.6",
+    "apollo-client": "^2.4.7",
+    "apollo-link": "^1.0.6",
+    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-context": "^1.0.7",
+    "apollo-link-state": "^0.4.1",
+    "apollo-link-ws": "^1.0.3",
+    "apollo-logger": "^0.3.0",
+    "apollo-upload-client": "^8.0.0",
+    "graphql": "^0.13.0",
+    "minilog": "^3.1.0",
+    "rxjs": "^6.3.3",
+    "subscriptions-transport-ws": "^0.9.4",
+    "zone.js": "^0.8.26"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/lodash": "^4.14.118",
+    "@types/mocha": "^5.2.5",
+    "@types/webpack-env": "^1.13.6",
+    "autoprefixer": "^8.3.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "cross-env": "^5.1.1",
+    "eslint": "^4.13.1",
+    "graphql-tools": "^2.13.0",
+    "mocha": "^5.1.1",
+    "mocha-steps": "^1.1.0",
+    "mocha-webpack": "^2.0.0-beta.0",
+    "rimraf": "^2.6.2"
+  },
+  "peerDependencies": {
+    "spinjs": "^0.4.0"
+  },
+  "browserslist": {
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
+  }
+}

@@ -67,7 +67,7 @@
     "no-unused-expression": true,
     "no-unused-variable": true,
     "no-var-keyword": true,
-    "no-var-requires": true,
+    "no-var-requires": false,
     "object-literal-sort-keys": false,
     "ordered-imports": false,
     "radix": true,

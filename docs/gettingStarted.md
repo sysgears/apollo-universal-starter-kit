@@ -53,19 +53,21 @@ yarn seed
 yarn watch
 ```
 
-After running `yarn watch`, your default browser will automatically open at [http://localhost:3000/]. You can start
-changing the application code, and the changes will be applied immediately thanks to the live reload. You can also open
-the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see that all opened
-tabs are updated simultaneously.
+After running `yarn watch`, your default browser will automatically open the web application at [http://localhost:3000/]. 
+You can start changing the application code, and the changes will be applied immediately thanks to the live reload. You 
+can also open the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see 
+that all opened tabs are updated simultaneously.
 
 **NOTE**: Apollo Universal Starter Kit provides two client-side applications. One application is built with React and
 runs by default; the other is built with Angular and is disabled by default.
 
-If you want to develop an Angular application instead of React app with the starter kit, you need to _enable_ the
-Angular build in the configurations and _disable_ the React build. Also note both Angular and React applications run on
-the same port; therefore, if you run both applications at the same time, only one application (most likely, React) will be actually running.
+If you want to develop your web application using Angular instead of React, you need to enable the Angular application 
+and disable the React application. 
 
-1. Open the `packages/client/.spinrc.js` file and set the `build.web.enabled` to `false`. The default value is `true`:
+To run the Angular application, do the following:
+
+1. Open the `packages/client/.spinrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
+`true`):
 
 ```javascript
 const url = require('url');
@@ -74,7 +76,7 @@ const config = {
   builders: {
     web: {
       //...
-      enabled: true // Set to false to disable building the React application
+      enabled: true // Set to false to disable the React application
     },
     test: {
       //...
@@ -87,9 +89,8 @@ const config = {
 //...
 ```
 
-2. Open the `packages/client-angular/.spinrc.js` file and set the `build.web.enabled` to true. The default value is
-`false`:
-
+2. Open the `packages/client-angular/.spinrc.js` file and set the `builders.web.enabled` to true (the default value is
+set to `false`):
 
 ```javascript
 const url = require('url');
@@ -98,7 +99,7 @@ const config = {
   builders: {
     web: {
       //...
-      enabled: false // Set to true to enable building the Angular application
+      enabled: false // Set to true to enable the Angular application
     },
     test: {
       //...
@@ -111,9 +112,8 @@ const config = {
 //...
 ```
 
-**NOTE**: If you want to run the project on an Android or iOS device, check out the [Running a React Native App with
-Expo](#running-the-mobile-app-with-expo) and [Running the Starter Kit in a Mobile Simulator](#running-the-starter-kit-in-a-mobile-simulator) 
-sections.
+**NOTE**: both Angular and React applications run on the same port; therefore, if you run them at the same time, 
+only one of them (most likely, the React application) will be actually running.
 
 ## Running the Mobile App with Expo
 
@@ -205,15 +205,52 @@ simulator when you run the Apollo Universal Starter Kit project for mobile.
 **NOTE**: use the username on you development computer instead of the `/username/` part in `PATH`, for example,
 `"/home/johndoe/Android/Sdk/platform-tools:$PATH"`.
 
-6. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
+6. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
+`packages/mobile/.spinrc.js` configuration file:
+
+    * Set `builders.android.enabled` to `true` to build the mobile app for an Android
+    * Set `builders.ios.enabled` to `true` to run the mobile app for iOS
+
+Example:
+```javascript
+const url = require('url');
+
+const config = {
+  builders: {
+    android: {
+      entry: './src/index.ts',
+      buildDir: 'build/android',
+      dllBuildDir: 'build/android/dll',
+      stack: ['react-native', 'android'],
+      defines: {
+        __CLIENT__: true
+      },
+      enabled: false // Set to true to run the app on Android
+    },
+    ios: {
+      entry: './src/index.ts',
+      buildDir: 'build/ios',
+      dllBuildDir: 'build/ios/dll',
+      stack: ['react-native', 'ios'],
+      defines: {
+        __CLIENT__: true
+      },
+      enabled: false // Set to true to run the app on iOS
+    },
+  },
+};
+  //...other configurations are omitted.
+```
+
+7. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
 available virtual devices, run the one you created.
 
-7. Launch the starter kit with `yarn watch`.
+8. Launch the starter kit with `yarn watch`.
 
 **NOTE**: If you're launching the starter kit for the first time, you may need to first run `yarn seed` to generate
 sample data. After that, you can start the app with `yarn watch`.
 
-8. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
+9. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
 smartphone.
 
 **NOTE**: It may take up to a minute or two to build and run the mobile app on Android for the first time. The next runs

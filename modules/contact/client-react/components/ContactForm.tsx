@@ -5,7 +5,7 @@ import { contactFormSchema } from '@module/contact-server-ts';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { validate, FieldError } from '@module/validation-common-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '../../../../packages/client/src/modules/common/components/web';
+import { Form, RenderField, Button, Alert } from '@module/look-client-react';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {

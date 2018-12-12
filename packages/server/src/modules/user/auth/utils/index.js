@@ -1,8 +1,9 @@
 import { SchemaLink } from 'apollo-link-schema';
+import CURRENT_USER_QUERY from '@module/user-client-react/graphql/CurrentUserQuery.graphql';
+
 import modules from '../../../../modules';
 import { isApiExternal, apiUrl } from '../../../../net';
 import createApolloClient from '../../../../../../common/createApolloClient';
-import CURRENT_USER_QUERY from '../../../../../../client/src/modules/user/graphql/CurrentUserQuery.graphql';
 
 export default async function getCurrentUser(req, res) {
   const schema = require('../../../../api/schema').default;

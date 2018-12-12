@@ -18,7 +18,7 @@ object SysEnvExtender {
     *
     * @param newEnv a map of new env variables, that should be added to the "sys.env"
     */
-  def extend(newEnv: Map[String, String]): Unit = {
+  def extend(newEnv: `.env`): Unit = {
     val newEnvAsJavaMap: java.util.Map[String, String] = newEnv.asJava
     Try {
       val processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment")
@@ -52,5 +52,14 @@ object SysEnvExtender {
       case Failure(NonFatal(e1)) => e1.printStackTrace()
       case Success(_) =>
     }
+  }
+}
+
+/**
+  * Contains syntactic sugar for extending the `sys.env`
+  */
+trait SysEnvExtenderImplicits {
+  implicit class SysEnvExtendable(`sys.env`: `.env`) {
+    def extend(newEnv: `.env`): Unit = SysEnvExtender extend newEnv
   }
 }

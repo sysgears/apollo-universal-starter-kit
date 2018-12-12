@@ -89,5 +89,13 @@ class GoogleAuthSpec extends TestHelper {
         cookies.last.value should include("refresh-token")
       }
     }
+
+    "redirect to login page if an error was capture" in {
+      Get("/auth/google/callback?code=test") ~> googleAuthRoutes ~> check {
+        status shouldBe StatusCodes.Found
+        status.isRedirection() shouldBe true
+        responseAs[String] should include("/login")
+      }
+    }
   }
 }

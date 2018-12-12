@@ -63,5 +63,31 @@ class GoogleAuthSpec extends TestHelper {
         cookies.last.value should include("refresh-token")
       }
     }
+
+    "redirect to profile page with tokens ih headers and in parameters" in {
+      ((code: String) => oAuth2ServiceMock.getAccessToken(code)).when(*).returns(new OAuth2AccessToken("testAccessToken"))
+      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request)).when(*, *).returns()
+      (() => responseMock.getBody).when.returns(
+        """
+          |{
+          |   "id":"testId",
+          |   "email":"test@test.com",
+          |   "name":"testName"
+          |}
+        """.stripMargin)
+      ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
+
+      Get("/auth/google/callback?state=test&code=test") ~> googleAuthRoutes ~> check {
+        status shouldBe StatusCodes.Found
+        status.isRedirection() shouldBe true
+        responseAs[String] should include("test?data=")
+        responseAs[String] should include("accessToken")
+        responseAs[String] should include("refreshToken")
+        val cookies = response.headers.filter(_.is("set-cookie"))
+        cookies should not be empty
+        cookies.head.value should include("access-token")
+        cookies.last.value should include("refresh-token")
+      }
+    }
   }
 }

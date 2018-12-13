@@ -1,33 +1,84 @@
 package graphql.resolvers
 
+import akka.actor.{Actor, ActorLogging}
+import akka.pattern._
+import com.google.inject.Inject
+import common.ActorNamed
+import common.implicits.RichDBIO._
 import model._
+import repositories.{CommentRepository, PostRepository}
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
-trait PostResolver {
+object PostResolver extends ActorNamed {
+  final val name = "PostResolver"
+}
 
-  def post(id: Int): Future[Post]
+case class QueryPost(id: Int)
+case class QueryPosts(limit: Int, after: Int)
+case class MutationAddPost(addPostInput: AddPostInput)
+case class MutationDeletePost(id: Int)
+case class MutationEditPost(editPostInput: EditPostInput)
+case class SubscriptionPostUpdated(id: Int)
+case class SubscriptionPostsUpdated(endCursor: Int)
 
-  def posts(limit: Int, after: Int): Future[Posts]
+class PostResolver @Inject()(postRepository: PostRepository,
+                             commentRepository: CommentRepository)
+                            (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 
-  def addPost(input: AddPostInput): Future[Post]
+  override def receive: Receive = {
 
-  def deletePost(id: Int): Future[Post]
+    case input: QueryPost => {
+      log.info(s"Query with param: [{}]", input)
 
-  def editPost(input: EditPostInput): Future[Post]
+      val post = for {
+        maybePost <- postRepository.findOne(input.id).run
+        post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get) else Future.successful(null)
+      } yield post
+        post.pipeTo(sender)
+    }
 
-  def addComment(input: AddCommentInput): Future[Comment]
+    case input: QueryPosts => {
+      log.info(s"Query with param: [{}]", input)
+      implicit def toEdges(entities: List[Post]): Seq[PostEdges] =
+        Map((1 to entities.size).zip(entities): _*).map(value => {
+          val (index, post) = value
+          PostEdges(node = post, cursor = input.after + index)
+        }).toSeq
 
-  def deleteComment(input: DeleteCommentInput): Future[Comment]
+      def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
 
-  def editComment(input: EditCommentInput): Future[Comment]
+      val posts = for {
+        paginatedResult <- postRepository.getPaginatedObjectsList(PaginationParams(offset = input.after, limit = input.limit)).run
+      } yield Posts(
+        totalCount = paginatedResult.totalCount,
+        edges = paginatedResult.entities,
+        pageInfo = PostPageInfo(
+          endCursor = endCursorValue(paginatedResult.entities.size),
+          hasNextPage = paginatedResult.hasNextPage)
+      )
+      posts.pipeTo(sender)
+    }
 
-  def getComments(postId: Int): Future[Seq[Comment]]
+    case input: MutationAddPost => {
+      log.info(s"Mutation with param: [{}]", input)
+      postRepository.save(input.addPostInput).run
+        .pipeTo(sender)
+    }
 
-  def postUpdated(id: Int): Future[UpdatePostPayload] /*TODO Not Implemented*/
+    case input: MutationDeletePost => {
+      log.info(s"Mutation with param: [{}]", input)
+      val post = for {
+            maybePost     <- postRepository.findOne(input.id).run
+            deletedPost   <- postRepository.delete(maybePost.get).run
+          } yield deletedPost
+      post.pipeTo(sender)
+    }
 
-  def postsUpdated(endCursor: Int): Future[UpdatePostPayload] /*TODO Not Implemented*/
-
-  def commentUpdated(postId: Int): Future[UpdateCommentPayload] /*TODO Not Implemented*/
-
+    case input: MutationEditPost => {
+      log.info(s"Mutation with param: [{}]", input)
+      postRepository.update(input.editPostInput).run
+        .pipeTo(sender)
+    }
+  }
 }

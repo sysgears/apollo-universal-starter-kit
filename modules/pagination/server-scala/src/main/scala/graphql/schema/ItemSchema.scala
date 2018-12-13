@@ -7,8 +7,7 @@ import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.ItemResolver
 import javax.inject.Inject
-import model.PaginationParams
-import model.{Item, ItemsPayload}
+import model.{Item, ItemsPayload, PaginationParams}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
@@ -55,7 +54,6 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
         resolveWithDispatcher[ItemsPayload](
           input = sc.args.arg[PaginationParams]("input"),
           userContext = sc.ctx,
-          onException = _ => PaginationParams(offset = 0, limit = 1),
           namedResolverActor = ItemResolver
         )
       }

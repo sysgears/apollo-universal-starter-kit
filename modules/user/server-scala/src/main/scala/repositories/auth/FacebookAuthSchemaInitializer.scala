@@ -4,11 +4,13 @@ import core.slick.SchemaInitializer
 import javax.inject.Inject
 import model.oauth.facebook.FacebookAuthTable
 import model.oauth.facebook.FacebookAuthTable.FacebookAuthTable
-import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.TableQuery
 
-class FacebookAuthSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[FacebookAuthTable] {
+import scala.concurrent.ExecutionContext
 
+class FacebookAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[FacebookAuthTable] {
+
+  override val context = executionContext
   override val name: String = FacebookAuthTable.name
   override val table = TableQuery[FacebookAuthTable]
-  override val db = database
 }

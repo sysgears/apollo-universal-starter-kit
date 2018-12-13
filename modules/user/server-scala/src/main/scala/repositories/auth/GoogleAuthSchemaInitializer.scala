@@ -4,11 +4,13 @@ import core.slick.SchemaInitializer
 import javax.inject.Inject
 import model.oauth.google.GoogleAuthTable
 import model.oauth.google.GoogleAuthTable.GoogleAuthTable
-import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.TableQuery
 
-class GoogleAuthSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[GoogleAuthTable] {
+import scala.concurrent.ExecutionContext
 
+class GoogleAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[GoogleAuthTable] {
+
+  override val context = executionContext
   override val name: String = GoogleAuthTable.name
   override val table = TableQuery[GoogleAuthTable]
-  override val db = database
 }

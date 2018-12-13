@@ -19,7 +19,12 @@ object SysEnvExtender {
     * @param newEnv a map of new env variables, that should be added to the "sys.env"
     */
   def extend(newEnv: `.env`): Unit = {
-    val newEnvAsJavaMap: java.util.Map[String, String] = newEnv.asJava
+    val newEnvAsJavaMap: java.util.Map[String, String] = {
+      //This method may **completely rewrite** the copy of process environment so it should be ensured that all initial
+      // machine env values will stay there and have a higher priority that those from the '.env' files if any clashes
+      // occur.
+      (newEnv ++ sys.env).asJava
+    }
     Try {
       val processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment")
 

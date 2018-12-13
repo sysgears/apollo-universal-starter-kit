@@ -17,9 +17,7 @@ class ForgotPassword extends React.Component {
     this.setState({ sent: true });
 
     const errors = new FieldError((await forgotPassword(values)).errors);
-    if (errors && errors.errors) {
-      throw { ...errors.errors, handleErr: t('forgotPass.errorMsg') };
-    }
+    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('forgotPass.errorMsg') };
   };
 
   render() {

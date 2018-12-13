@@ -18,7 +18,7 @@ class ResetPassword extends React.Component {
       })).errors
     );
 
-    throw { ...errors.errors, handleErr: t('resetPass.errorMsg') };
+    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('resetPass.errorMsg') };
   };
 
   render() {

@@ -42,7 +42,7 @@ class UserEditView extends React.PureComponent {
   );
 
   render() {
-    const { loading, user, t, currentUser } = this.props;
+    const { loading, user, t, currentUser, onSubmit } = this.props;
 
     if (loading && !user) {
       return (
@@ -63,7 +63,7 @@ class UserEditView extends React.PureComponent {
             {t('userEdit.form.titleEdit')} {t('userEdit.form.title')}
           </h2>
           <UserForm
-            onSubmit={this.props.onSubmit}
+            onSubmit={onSubmit}
             shouldDisplayRole={isNotSelf}
             shouldDisplayActive={isNotSelf}
             initialValues={user}

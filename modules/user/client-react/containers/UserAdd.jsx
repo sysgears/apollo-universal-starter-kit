@@ -27,8 +27,8 @@ class UserAdd extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const errors = new FieldError((await addUser(values)).errors);
-    throw { ...errors.errors, handleErr: t('userEdit.errorMsg') };
+    const errors = new FieldError((await addUser(userValues)).errors);
+    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('userEdit.errorMsg') };
   };
 
   render() {

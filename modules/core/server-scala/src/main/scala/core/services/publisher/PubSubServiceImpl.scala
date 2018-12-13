@@ -5,15 +5,14 @@ import akka.stream.scaladsl.Source
 import common.Logger
 import javax.inject.{Inject, Singleton}
 import monix.execution.Scheduler
-import monix.reactive.OverflowStrategy
-import monix.reactive.subjects.ConcurrentSubject
+import monix.reactive.subjects.PublishSubject
 import sangria.schema.Action
 
 @Singleton
 class PubSubServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PubSubService[T]
   with Logger {
 
-  lazy val source: ConcurrentSubject[T, T] = ConcurrentSubject.publish[T](OverflowStrategy.DropOld(16))
+  private lazy val source = PublishSubject[T]
 
   override def publish(event: T): Unit = source.onNext(event)
 

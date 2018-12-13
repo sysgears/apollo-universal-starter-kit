@@ -27,6 +27,7 @@ class ResetPassword extends React.Component {
 }
 
 const ResetPasswordWithApollo = compose(
+  translate('user'),
   graphql(RESET_PASSWORD, {
     props: ({ ownProps: { history }, mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
@@ -50,4 +51,4 @@ const ResetPasswordWithApollo = compose(
   })
 )(ResetPassword);
 
-export default translate('user')(ResetPasswordWithApollo);
+export default ResetPasswordWithApollo;

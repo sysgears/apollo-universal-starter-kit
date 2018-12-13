@@ -2,6 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
+import { FieldError } from '@module/validation-common-react';
 
 import UserEditView from '../components/UserEditView';
 
@@ -24,17 +25,8 @@ class UserEdit extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const result = editUser({ id: user.id, ...userValues });
-
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('userEdit.errorMsg') }
-      );
-    }
+    const errors = new FieldError((await editUser({ id: user.id, ...userValues })).errors);
+    throw { ...errors.errors, handleErr: t('userEdit.errorMsg') };
   };
 
   render() {

@@ -30,6 +30,7 @@ class ForgotPassword extends React.Component {
 }
 
 const ForgotPasswordWithApollo = compose(
+  translate('user'),
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {
@@ -52,4 +53,4 @@ const ForgotPasswordWithApollo = compose(
   })
 )(ForgotPassword);
 
-export default translate('user')(ForgotPasswordWithApollo);
+export default ForgotPasswordWithApollo;

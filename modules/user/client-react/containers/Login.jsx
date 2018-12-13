@@ -24,6 +24,7 @@ class Login extends React.Component {
 
 const LoginWithApollo = compose(
   withApollo,
+  translate('user'),
   graphql(LOGIN, {
     props: ({ ownProps: { client, onLogin }, mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
@@ -45,4 +46,4 @@ const LoginWithApollo = compose(
   })
 )(Login);
 
-export default translate('user')(LoginWithApollo);
+export default LoginWithApollo;

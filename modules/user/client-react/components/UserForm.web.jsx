@@ -26,7 +26,7 @@ const updateUserFormSchema = {
   passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
 };
 
-const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
+const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
 
   return (
@@ -100,7 +100,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplay
         label={t('userEdit.form.field.passConf')}
         value={passwordConfirmation}
       />
-      {error && <Alert color="error">{error}</Alert>}
+      {errors && errors.handleErr && <Alert color="error">{errors.handleErr}</Alert>}
       <Button color="primary" type="submit">
         {t('userEdit.form.btnSubmit')}
       </Button>
@@ -117,7 +117,6 @@ UserForm.propTypes = {
   isValid: PropTypes.bool,
   shouldDisplayRole: PropTypes.bool,
   shouldDisplayActive: PropTypes.bool,
-  error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,

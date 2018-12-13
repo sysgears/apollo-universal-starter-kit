@@ -24,6 +24,7 @@ class Register extends React.Component {
 }
 
 const RegisterWithApollo = compose(
+  translate('user'),
   graphql(REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       register: async ({ username, email, password }) => {
@@ -49,4 +50,4 @@ const RegisterWithApollo = compose(
   })
 )(Register);
 
-export default translate('user')(RegisterWithApollo);
+export default RegisterWithApollo;

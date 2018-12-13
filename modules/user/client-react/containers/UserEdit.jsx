@@ -1,36 +1,16 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
+import withSubmit from './withSubmit';
 
 import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
 import EDIT_USER from '../graphql/EditUser.graphql';
-import settings from '../../../../settings';
-import UserFormatter from '../helpers/UserFormatter';
 
 class UserEdit extends React.Component {
-  onSubmit = async values => {
-    const { user, editUser, t } = this.props;
-
-    let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
-
-    userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
-    userValues = UserFormatter.trimExtraSpaces(userValues);
-
-    if (settings.user.auth.certificate.enabled) {
-      userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
-
-    const errors = new FieldError((await editUser({ id: user.id, ...userValues })).errors);
-    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('userEdit.errorMsg') };
-  };
-
   render() {
-    return <UserEditView onSubmit={this.onSubmit} {...this.props} />;
+    return <UserEditView {...this.props} />;
   }
 }
 
@@ -59,7 +39,7 @@ export default compose(
   }),
   graphql(EDIT_USER, {
     props: ({ ownProps: { history, navigation, location }, mutate }) => ({
-      editUser: async input => {
+      handleRequest: async input => {
         try {
           const {
             data: { editUser }
@@ -85,4 +65,4 @@ export default compose(
       }
     })
   })
-)(UserEdit);
+)(withSubmit(UserEdit, 'userEdit'));

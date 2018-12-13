@@ -1,25 +1,17 @@
 // React
 import React from 'react';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
 // Apollo
 import { graphql, compose } from 'react-apollo';
-
+import withSubmit from './withSubmit';
 // Components
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
 class Register extends React.Component {
-  onSubmit = async values => {
-    const { register, t } = this.props;
-    const errors = new FieldError((await register(values)).errors);
-
-    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('reg.errorMsg') };
-  };
-
   render() {
-    return <RegisterView {...this.props} onSubmit={this.onSubmit} />;
+    return <RegisterView {...this.props} />;
   }
 }
 
@@ -27,7 +19,7 @@ const RegisterWithApollo = compose(
   translate('user'),
   graphql(REGISTER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      register: async ({ username, email, password }) => {
+      handleRequest: async ({ username, email, password }) => {
         try {
           const {
             data: { register }
@@ -48,6 +40,6 @@ const RegisterWithApollo = compose(
       }
     })
   })
-)(Register);
+)(withSubmit(Register, 'reg'));
 
 export default RegisterWithApollo;

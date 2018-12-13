@@ -1,38 +1,17 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
-import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
+import withSubmit from './withSubmit';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
-import settings from '../../../../settings';
-import UserFormatter from '../helpers/UserFormatter';
 
 class UserAdd extends React.Component {
   constructor(props) {
     super(props);
   }
-
-  onSubmit = async values => {
-    const { addUser, t } = this.props;
-
-    let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
-
-    userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
-    userValues = UserFormatter.trimExtraSpaces(userValues);
-
-    if (settings.user.auth.certificate.enabled) {
-      userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
-
-    const errors = new FieldError((await addUser(userValues)).errors);
-    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('userEdit.errorMsg') };
-  };
-
   render() {
-    return <UserAddView onSubmit={this.onSubmit} {...this.props} />;
+    return <UserAddView {...this.props} />;
   }
 }
 
@@ -40,14 +19,13 @@ export default compose(
   translate('user'),
   graphql(ADD_USER, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      addUser: async input => {
+      handleRequest: async input => {
         try {
           const {
             data: { addUser }
           } = await mutate({
             variables: { input }
           });
-
           if (addUser.errors) {
             return { errors: addUser.errors };
           }
@@ -64,4 +42,4 @@ export default compose(
       }
     })
   })
-)(UserAdd);
+)(withSubmit(UserAdd, 'userAdd'));

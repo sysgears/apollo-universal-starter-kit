@@ -10,7 +10,6 @@ import settings from '../../../../settings';
 
 class RegisterView extends React.PureComponent {
   static propTypes = {
-    register: PropTypes.func.isRequired,
     t: PropTypes.func,
     onSubmit: PropTypes.func
   };

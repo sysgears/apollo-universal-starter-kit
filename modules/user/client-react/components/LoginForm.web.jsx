@@ -89,7 +89,9 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
         label={t('login.form.field.pass')}
         value={values.password}
       />
-      <div className="text-center">{errors && errors.handleErr && <Alert color="error">{errors.handleErr}</Alert>}</div>
+      <div className="text-center">
+        {errors && errors.messageErr && <Alert color="error">{errors.messageErr}</Alert>}
+      </div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">
           <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
@@ -133,7 +135,6 @@ const LoginFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      console.log(e);
       setErrors(e);
     });
   },

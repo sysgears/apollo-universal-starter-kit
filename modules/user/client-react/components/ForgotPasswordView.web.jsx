@@ -6,7 +6,7 @@ import { LayoutCenter, PageLayout } from '@module/look-client-react';
 import ForgotPasswordForm from '../components/ForgotPasswordForm';
 import settings from '../../../../settings';
 
-const ForgotPasswordView = ({ onSubmit, t, sent, forgotPassword }) => {
+const ForgotPasswordView = ({ onSubmit, t, sent }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('forgotPass.title')}`}
@@ -24,7 +24,7 @@ const ForgotPasswordView = ({ onSubmit, t, sent, forgotPassword }) => {
       {renderMetaData()}
       <LayoutCenter>
         <h1 className="text-center">{t('forgotPass.form.title')}</h1>
-        <ForgotPasswordForm onSubmit={onSubmit({ forgotPassword, t })} sent={sent} />
+        <ForgotPasswordForm onSubmit={onSubmit} sent={sent} />
       </LayoutCenter>
     </PageLayout>
   );

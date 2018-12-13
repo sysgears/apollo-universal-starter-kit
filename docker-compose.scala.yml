@@ -9,7 +9,12 @@ services:
   container_name: apollo_scala_server
   working_dir: ${APP_DIR}/packages/server-scala
   volumes:
+        - ./modules:${APP_DIR}/modules
         - ./packages/server-scala:${APP_DIR}/packages/server-scala
+        - ./packages/server-scala/project/plugin.sbt:${APP_DIR}/packages/server-scala/project/plugin.sbt
+        - ./packages/server-scala/project/build.properties:${APP_DIR}/packages/server-scala/project/build.properties
+        - ./packages/server-scala/build.sbt:${APP_DIR}/packages/server-scala/build.sbt
+        - ./packages/server-scala/src:${APP_DIR}/packages/server-scala/src
   command: >
     sh -c 'sbt ~reStart'
   ports:

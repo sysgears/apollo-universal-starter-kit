@@ -50,11 +50,11 @@ trait TestHelper extends WordSpec
   }
 
   private def dropDb(): Unit = {
-    await(userInitializer.drop())
-    await(googleAuthInitializer.drop())
-    await(githubAuthInitializer.drop())
-    await(facebookAuthInitializer.drop())
     await(linkedinAuthInitializer.drop())
+    await(facebookAuthInitializer.drop())
+    await(githubAuthInitializer.drop())
+    await(googleAuthInitializer.drop())
+    await(userInitializer.drop())
   }
 
   def await[T](asyncFunc: => Future[T]): T = Await.result[T](asyncFunc, Duration.Inf)

@@ -7,7 +7,7 @@ import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.TokenResolver
 import javax.inject.Inject
-import model.Tokens
+import modules.jwt.model.Tokens
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, ObjectType, StringType}
 

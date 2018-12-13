@@ -13,37 +13,35 @@ const resetPasswordFormSchema = {
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
 
-const ResetPasswordForm = ({ values, handleSubmit, error, t }) => {
-  return (
-    <Form name="resetPassword" onSubmit={handleSubmit}>
-      <Field
-        name="password"
-        component={RenderField}
-        type="password"
-        label={t('resetPass.form.field.pass')}
-        value={values.password}
-      />
-      <Field
-        name="passwordConfirmation"
-        component={RenderField}
-        type="password"
-        label={t('resetPass.form.field.passConf')}
-        value={values.passwordConfirmation}
-      />
-      {error && <Alert color="error">{error}</Alert>}
-      <Button color="primary" type="submit">
-        {t('resetPass.form.btnSubmit')}
-      </Button>
-    </Form>
-  );
-};
+const ResetPasswordForm = ({ values, handleSubmit, errors, t }) => (
+  <Form name="resetPassword" onSubmit={handleSubmit}>
+    <Field
+      name="password"
+      component={RenderField}
+      type="password"
+      label={t('resetPass.form.field.pass')}
+      value={values.password}
+    />
+    <Field
+      name="passwordConfirmation"
+      component={RenderField}
+      type="password"
+      label={t('resetPass.form.field.passConf')}
+      value={values.passwordConfirmation}
+    />
+    {errors && errors.handleErr && <Alert color="error">{errors.handleErr}</Alert>}
+    <Button color="primary" type="submit">
+      {t('resetPass.form.btnSubmit')}
+    </Button>
+  </Form>
+);
 
 ResetPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
   values: PropTypes.object,
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string,
+  errors: PropTypes.object,
   t: PropTypes.func
 };
 

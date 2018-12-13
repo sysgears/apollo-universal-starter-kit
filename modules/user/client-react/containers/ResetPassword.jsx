@@ -1,13 +1,28 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import { FieldError } from '@module/validation-common-react';
+import { translate } from '@module/i18n-client-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
 
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 class ResetPassword extends React.Component {
+  onSubmit = async values => {
+    const { t, resetPassword } = this.props;
+
+    const errors = new FieldError(
+      (await resetPassword({
+        ...values,
+        token: this.props.match.params.token
+      })).errors
+    );
+
+    throw { ...errors.errors, handleErr: t('resetPass.errorMsg') };
+  };
+
   render() {
-    return <ResetPasswordView {...this.props} />;
+    return <ResetPasswordView {...this.props} onSubmit={this.onSubmit} />;
   }
 }
 
@@ -35,4 +50,4 @@ const ResetPasswordWithApollo = compose(
   })
 )(ResetPassword);
 
-export default ResetPasswordWithApollo;
+export default translate('user')(ResetPasswordWithApollo);

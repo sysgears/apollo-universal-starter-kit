@@ -14,7 +14,7 @@ class Login extends React.Component {
     const { t, login } = this.props;
     const errors = new FieldError((await login(values)).errors);
 
-    throw { ...errors.errors, handleErr: t('reg.errorMsg') };
+    throw { ...errors.errors, handleErr: t('login.errorMsg') };
   };
 
   render() {

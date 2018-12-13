@@ -9,13 +9,16 @@ import common.AppInitialization
 import common.graphql.schema.GraphQL
 import common.routes.frontend.FrontendRoute
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
-import core.guice.Injector._
+import core.guice.injection.Injecting
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 
 import scala.concurrent.ExecutionContext
 
-object Main extends App with AppInitialization {
+object Main extends App
+  with AppInitialization
+  with Injecting {
+
   implicit val system: ActorSystem = inject[ActorSystem]
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]

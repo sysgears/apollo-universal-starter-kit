@@ -3,13 +3,11 @@ package guice
 import com.google.inject.Provides
 import common.shapes.ServerModule
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
-import core.guice.Injector.{injector, modulesPaths}
+import core.guice.injection.Injecting.{injector, modulesPaths}
 import net.codingwell.scalaguice.ScalaModule
 import org.clapper.classutil.ClassInfo
 
 class GlobalBindings extends ScalaModule {
-
-  override def configure(): Unit = {}
 
   @Provides
   def modules: Seq[ServerModule] = {

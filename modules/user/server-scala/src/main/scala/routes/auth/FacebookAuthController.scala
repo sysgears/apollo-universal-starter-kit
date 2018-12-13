@@ -19,12 +19,14 @@ import repositories.auth.FacebookAuthRepository
 import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
+import core.loaders.IgnoreModule
 import model.oauth.facebook.{FacebookAuth, FacebookOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+@IgnoreModule
 class FacebookAuthController @Inject()(@Named("facebook") oauth2Service: OAuth20Service,
                                        externalApiService: ExternalApiService,
                                        userRepository: UserRepository,

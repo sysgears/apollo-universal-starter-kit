@@ -19,12 +19,14 @@ import repositories.auth.LinkedinAuthRepository
 import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
+import core.loaders.IgnoreModule
 import model.oauth.linkedin.{LinkedinAuth, LinkedinOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+@IgnoreModule
 class LinkedinAuthController @Inject()(@Named("linkedin") oauth2Service: OAuth20Service,
                                        externalApiService: ExternalApiService,
                                        userRepository: UserRepository,

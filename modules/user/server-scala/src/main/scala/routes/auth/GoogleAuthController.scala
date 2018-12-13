@@ -19,12 +19,14 @@ import repositories.auth.GoogleAuthRepository
 import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
+import core.loaders.IgnoreModule
 import model.oauth.google.{GoogleAuth, GoogleOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+@IgnoreModule
 class GoogleAuthController @Inject()(@Named("google") oauth2Service: OAuth20Service,
                                      externalApiService: ExternalApiService,
                                      userRepository: UserRepository,

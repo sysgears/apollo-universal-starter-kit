@@ -19,12 +19,14 @@ import repositories.auth.GithubAuthRepository
 import services.ExternalApiService
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
+import core.loaders.IgnoreModule
 import model.oauth.github.{GithubAuth, GithubOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
+@IgnoreModule
 class GithubAuthController @Inject()(@Named("github") oauth2Service: OAuth20Service,
                                      externalApiService: ExternalApiService,
                                      userRepository: UserRepository,

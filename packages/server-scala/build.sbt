@@ -2,7 +2,7 @@ name := "global"
 
 version := "0.1"
 
-scalaVersion := "2.12.7"
+scalaVersion := "2.12.6"
 
 lazy val global = project in file(".") dependsOn(upload, user, counter, mailer, contact, pagination) aggregate(user, upload, counter, mailer, contact, pagination)
 

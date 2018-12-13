@@ -1,13 +1,10 @@
-FROM openjdk:11.0.1-jdk
+FROM openjdk:10.0.2-jdk
 
 MAINTAINER Victor Vlasenko <victor.vlasenko@sysgears.com>
 
 # Env variables
 ENV SCALA_VERSION 2.12.6
-ENV SBT_VERSION 1.2.7
-
-# Scala expects this file
-RUN touch /usr/lib/jvm/java-11-openjdk-amd64/release
+ENV SBT_VERSION 1.2.1
 
 # Install Scala
 ## Piping curl directly in tar

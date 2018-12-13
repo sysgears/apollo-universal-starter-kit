@@ -4,6 +4,7 @@ import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.google.inject.Inject
 import common.ActorNamed
+import common.errors.NotFound
 import common.implicits.RichDBIO._
 import model._
 import repositories.{CommentRepository, PostRepository}
@@ -33,7 +34,8 @@ class PostResolver @Inject()(postRepository: PostRepository,
 
       val post = for {
         maybePost <- postRepository.findOne(input.id).run
-        post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get) else Future.successful(null)
+        post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get)
+                     else Future.failed(NotFound(s"Post with id ${input.id} not found.")) /*TODO: Check is sangria correct handle an error*/
       } yield post
         post.pipeTo(sender)
     }

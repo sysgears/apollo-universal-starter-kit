@@ -8,22 +8,71 @@ import config.AuthConfig
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.UserResolver
 import javax.inject.Inject
+import model.oauth.{CertificateAuth, UserAuth}
+import model.oauth.facebook.FacebookAuth
+import model.oauth.github.GithubAuth
+import model.oauth.google.GoogleAuth
+import model.oauth.linkedin.LinkedinAuth
 import model.{UserPayload, _}
 import modules.jwt.model.Tokens
+import repositories.auth.{FacebookAuthRepository, GithubAuthRepository, GoogleAuthRepository, LinkedinAuthRepository}
+import repositories.UserProfileRepository
+import sangria.schema.OptionType
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
 
-class UserSchema @Inject()(authConfig: AuthConfig)
+import scala.concurrent.ExecutionContext
+
+class UserSchema @Inject()(authConfig: AuthConfig,
+                           userProfileRepository: UserProfileRepository,
+                           facebookAuthRepo: FacebookAuthRepository,
+                           googleAuthRepository: GoogleAuthRepository,
+                           githubAuthRepository: GithubAuthRepository,
+                           linkedinAuthRepository: LinkedinAuthRepository)
                           (implicit val materializer: ActorMaterializer,
-                           actorSystem: ActorSystem) extends GraphQLSchema
+                           actorSystem: ActorSystem,
+                           executionContext: ExecutionContext) extends GraphQLSchema
   with InputUnmarshallerGenerator
   with Logger {
 
   implicit val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(InputObjectTypeName("RegisterUserInput"))
   implicit val confirmRegistrationInput: InputObjectType[ConfirmRegistrationInput] = deriveInputObjectType(InputObjectTypeName("ConfirmRegistrationInput"))
   implicit val resendConfirmationMessageInput: InputObjectType[ResendConfirmationMessageInput] = deriveInputObjectType(InputObjectTypeName("ResendConfirmationMessageInput"))
-  implicit val user: ObjectType[UserContext, User] = deriveObjectType(ObjectTypeName("User"), ExcludeFields("password"))
+
+  implicit val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(ObjectTypeName("UserProfile"))
+
+  implicit val certificateAuth: ObjectType[UserContext, CertificateAuth] = deriveObjectType(ObjectTypeName("CertificateAuth"))
+
+  implicit val facebookAuth: ObjectType[UserContext, FacebookAuth] = deriveObjectType(
+    ObjectTypeName("FacebookAuth"), ExcludeFields("userId"), RenameField("id", "fbId"))
+
+  implicit val googleAuth: ObjectType[UserContext, GoogleAuth] = deriveObjectType(
+    ObjectTypeName("GoogleAuth"), ExcludeFields("userId"), RenameField("id", "googleId"))
+
+  implicit val githubAuth: ObjectType[UserContext, GithubAuth] = deriveObjectType(
+    ObjectTypeName("GithubAuth"), ExcludeFields("userId"), RenameField("id", "ghId"))
+
+  implicit val linkedinAuth: ObjectType[UserContext, LinkedinAuth] = deriveObjectType(
+    ObjectTypeName("LinkedInAuth"), ExcludeFields("userId"), RenameField("id", "lnId"))
+
+  implicit val userAuth: ObjectType[UserContext, UserAuth] = deriveObjectType(ObjectTypeName("UserAuth"))
+
+  implicit val user: ObjectType[UserContext, User] = deriveObjectType(
+    ObjectTypeName("User"),
+    ExcludeFields("password"),
+    AddFields(
+      Field("profile", OptionType(userProfile), resolve = {
+        sangriaContext =>
+          sangriaContext.value.userProfile(userProfileRepository)
+      }),
+      Field("auth", OptionType(userAuth), resolve = {
+        sangriaContext =>
+          sangriaContext.value.userAuth(None, facebookAuthRepo, googleAuthRepository, githubAuthRepository, linkedinAuthRepository)
+      })
+    )
+  )
+
   implicit val userPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
   implicit val loginUserInput: InputObjectType[LoginUserInput] = deriveInputObjectType(InputObjectTypeName("LoginUserInput"))
   implicit val authPayload: ObjectType[UserContext, AuthPayload] = deriveObjectType(ObjectTypeName("AuthPayload"))

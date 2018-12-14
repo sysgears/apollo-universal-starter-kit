@@ -2,7 +2,7 @@ package core.loader
 
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
 
-object ServerModuleLoader {
+object ServerModuleFinder {
 
   /**
     * Recursively finds paths to connected modules and their submodules.

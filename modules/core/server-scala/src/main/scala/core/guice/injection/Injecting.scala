@@ -3,7 +3,7 @@ package core.guice.injection
 import java.lang.annotation.Annotation
 
 import com.google.inject.{Guice, Injector}
-import core.loader.ServerModuleLoader._
+import core.loader.ServerModuleFinder._
 import net.codingwell.scalaguice.InjectorExtensions._
 import core.guice.injection.Injecting._
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}

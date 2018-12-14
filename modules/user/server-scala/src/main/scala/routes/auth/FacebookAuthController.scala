@@ -10,7 +10,6 @@ import com.google.inject.name.Named
 import common.errors.AmbigousResult
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
-import common.routes.AkkaRoute
 import model.User
 import model.oauth.facebook.{FacebookAuth, FacebookOauth2Response}
 import modules.jwt.model.JwtContent
@@ -30,9 +29,9 @@ class FacebookAuthController @Inject()(@Named("facebook") oauth2Service: OAuth20
                                        userRepository: UserRepository,
                                        facebookAuthRepository: FacebookAuthRepository,
                                        jwtAuthService: JwtAuthService[JwtContent])
-                                      (implicit val executionContext: ExecutionContext) extends AkkaRoute {
+                                      (implicit val executionContext: ExecutionContext) {
 
-  override val routes: Route =
+  val routes: Route =
     (path("auth" / "facebook") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "facebook" / "callback") & get) {

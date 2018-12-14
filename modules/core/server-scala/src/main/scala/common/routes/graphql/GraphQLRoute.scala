@@ -12,7 +12,6 @@ import akka.stream.scaladsl.Source
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessage
-import common.routes.AkkaRoute
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.session.JWTSessionImpl
 import sangria.renderer.SchemaRenderer
@@ -26,9 +25,9 @@ class GraphQLRoute(httpHandler: HttpHandler,
                    webSocketHandler: WebSocketHandler,
                    graphQL: GraphQL)
                   (implicit val executionContext: ExecutionContext,
-                   implicit val actorMaterializer: ActorMaterializer) extends AkkaRoute {
+                   implicit val actorMaterializer: ActorMaterializer) {
 
-  override val routes: Route =
+  val routes: Route =
     path("graphql") {
       extractRequest {
         request =>

@@ -1,9 +1,9 @@
 package common.shapes
 
-import common.routes.AkkaRoute
+import akka.http.scaladsl.server.Route
 
 import scala.collection.mutable
 
 trait AkkaRouteShape {
-  val routes: mutable.HashSet[AkkaRoute] = mutable.HashSet.empty
+  val routes: mutable.HashSet[Route] = mutable.HashSet.empty
 }

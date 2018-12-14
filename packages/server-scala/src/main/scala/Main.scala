@@ -34,14 +34,14 @@ object Main extends App
     graphQL
   )
 
-  val routes = List(graphQLRoute, inject[FrontendRoute])
+  val routes = List(graphQLRoute.routes, inject[FrontendRoute].routes)
   val corsSettings = CorsSettings.apply(system)
 
   withActionsBefore {
     globalModule.slickSchemas.map(_.create()).toSeq
   }(
     Http().bindAndHandle(
-      cors(corsSettings)(routes.map(_.routes).reduce(_ ~ _)),
+      cors(corsSettings)(routes.reduce(_ ~ _)),
       interface = "0.0.0.0"
     )
   )

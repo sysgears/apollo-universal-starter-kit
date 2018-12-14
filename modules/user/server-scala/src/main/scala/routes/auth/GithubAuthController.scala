@@ -10,7 +10,6 @@ import com.google.inject.name.Named
 import common.errors.AmbigousResult
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
-import common.routes.AkkaRoute
 import model.User
 import model.oauth.github.{GithubAuth, GithubOauth2Response}
 import modules.jwt.model.JwtContent
@@ -30,9 +29,9 @@ class GithubAuthController @Inject()(@Named("github") oauth2Service: OAuth20Serv
                                      userRepository: UserRepository,
                                      githubAuthRepository: GithubAuthRepository,
                                      jwtAuthService: JwtAuthService[JwtContent])
-                                    (implicit val executionContext: ExecutionContext) extends AkkaRoute {
+                                    (implicit val executionContext: ExecutionContext) {
 
-  override val routes: Route =
+  val routes: Route =
     (path("auth" / "github") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "github" / "callback") & get) {

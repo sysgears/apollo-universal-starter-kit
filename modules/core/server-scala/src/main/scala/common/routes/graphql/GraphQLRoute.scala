@@ -25,7 +25,7 @@ class GraphQLRoute(httpHandler: HttpHandler,
                    webSocketHandler: WebSocketHandler,
                    graphQL: GraphQL)
                   (implicit val executionContext: ExecutionContext,
-                   implicit val actorMaterializer: ActorMaterializer) {
+                   actorMaterializer: ActorMaterializer) {
 
   val routes: Route =
     path("graphql") {

@@ -4,7 +4,6 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver._
 import common.graphql.UserContext
-import common.graphql.schema.GraphQLSchema
 import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
 import graphql.resolvers.UserResolver
@@ -17,8 +16,7 @@ import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
 
 class UserSchema @Inject()(authConfig: AuthConfig)
                           (implicit val materializer: ActorMaterializer,
-                           actorSystem: ActorSystem) extends GraphQLSchema
-  with InputUnmarshallerGenerator
+                           actorSystem: ActorSystem) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(InputObjectTypeName("RegisterUserInput"))
@@ -80,7 +78,7 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       )
   }
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "register",
       fieldType = userPayload,

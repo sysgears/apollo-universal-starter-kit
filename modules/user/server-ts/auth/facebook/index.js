@@ -77,8 +77,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens,
-                  user
+                  tokens
                 })
               : '')
         );

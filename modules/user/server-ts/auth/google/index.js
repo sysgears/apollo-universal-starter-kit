@@ -88,8 +88,7 @@ if (settings.user.auth.google.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens,
-                  user
+                  tokens
                 })
               : '')
         );

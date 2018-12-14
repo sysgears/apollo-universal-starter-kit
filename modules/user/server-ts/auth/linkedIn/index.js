@@ -79,8 +79,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
               (tokens
                 ? '?data=' +
                   JSON.stringify({
-                    tokens,
-                    user
+                    tokens
                   })
                 : '')
           );

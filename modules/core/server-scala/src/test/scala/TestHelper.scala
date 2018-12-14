@@ -27,7 +27,7 @@ trait TestHelper extends WordSpec
   val endpoint: String = "/graphql"
   implicit val scheduler: Scheduler = inject[Scheduler]
 
-  def routesWithGraphQLSchemaFor[T <: ServerModule : Manifest]: Route = {
+  def routesWithGraphQLSchema[T <: ServerModule : Manifest]: Route = {
     val graphQl = new GraphQL(inject[T])
     val httpHandler = new HttpHandler(graphQl)
     val webSocketHandler = new WebSocketHandler(graphQl)

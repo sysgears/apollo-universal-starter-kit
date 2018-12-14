@@ -7,7 +7,7 @@ import scala.concurrent.{Await, Future}
 
 trait UploadHelper extends TestHelper {
 
-  val routes: Route = routesWithGraphQLSchemaFor[UploadModule]
+  val routes: Route = routesWithGraphQLSchema[UploadModule]
 
   val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 

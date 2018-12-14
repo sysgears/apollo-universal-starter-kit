@@ -6,7 +6,7 @@ import scala.concurrent.{Await, Future}
 
 trait ContactSpecHelper extends TestHelper {
 
-  val routes: Route = routesWithGraphQLSchemaFor[ContactModule]
+  val routes: Route = routesWithGraphQLSchema[ContactModule]
 
   before {
     clean()

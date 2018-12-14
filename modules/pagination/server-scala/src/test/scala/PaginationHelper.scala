@@ -7,7 +7,7 @@ import scala.concurrent.{Await, Future}
 
 trait PaginationHelper extends TestHelper {
 
-  val routes: Route = routesWithGraphQLSchemaFor[PaginationModule]
+  val routes: Route = routesWithGraphQLSchema[PaginationModule]
   val paginationInitializer: ItemSchemaInitializer = inject[ItemSchemaInitializer]
 
   before {

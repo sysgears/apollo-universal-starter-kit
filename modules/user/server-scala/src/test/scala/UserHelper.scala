@@ -9,7 +9,7 @@ import scala.concurrent.duration.Duration
 trait UserHelper extends TestHelper {
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchemaFor[UserModule]
+  val routes: Route = routesWithGraphQLSchema[UserModule]
 
   val googleAuthInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
   val githubAuthInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]

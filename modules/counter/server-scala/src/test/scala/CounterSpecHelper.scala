@@ -8,7 +8,7 @@ import scala.concurrent.{Await, Future}
 trait CounterSpecHelper extends TestHelper {
 
   val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchemaFor[CounterModule]
+  val routes: Route = routesWithGraphQLSchema[CounterModule]
 
   before {
     clean()

@@ -6,12 +6,11 @@ class ServerModule(modules: Seq[ServerModule] = Seq.empty) extends GraphQLShape
 
   //TODO: implement generic fold function
   def fold: ServerModule = {
-    val m = modules
-    m.foldLeft(this.queries)((queries, module) => queries ++= module.queries)
-    m.foldLeft(this.mutations)((mutations, module) => mutations ++= module.mutations)
-    m.foldLeft(this.subscriptions)((subscriptions, module) => subscriptions ++= module.subscriptions)
-    m.foldLeft(this.slickSchemas)((slickSchemas, module) => slickSchemas ++= module.slickSchemas)
-    m.foldLeft(this.routes)((routes, module) => routes ++= module.routes)
+    modules.foldLeft(this.queries)((queries, module) => queries ++= module.queries)
+    modules.foldLeft(this.mutations)((mutations, module) => mutations ++= module.mutations)
+    modules.foldLeft(this.subscriptions)((subscriptions, module) => subscriptions ++= module.subscriptions)
+    modules.foldLeft(this.slickSchemas)((slickSchemas, module) => slickSchemas ++= module.slickSchemas)
+    modules.foldLeft(this.routes)((routes, module) => routes ++= module.routes)
     this
   }
 }

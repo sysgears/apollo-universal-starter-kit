@@ -1,6 +1,6 @@
 /*tslint:disable:variable-name*/
 import { knex, orderedFor, returnId } from '@module/database-server-ts';
-import { UploadedFile } from '../../../packages/server/src/modules/upload/FileSystemStorage';
+import { UploadedFile } from '@module/upload-server-ts';
 
 export interface Identifier {
   id: number;

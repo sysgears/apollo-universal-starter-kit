@@ -1,15 +1,18 @@
 package routes.auth
 
 import akka.http.scaladsl.model.StatusCodes
-import com.github.scribejava.core.oauth.OAuth20Service
 import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import com.github.scribejava.core.oauth.OAuth20Service
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import common.errors.AmbigousResult
-import core.controllers.AkkaRoute
+import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
+import common.routes.AkkaRoute
 import model.User
+import model.oauth.linkedin.{LinkedinAuth, LinkedinOauth2Response}
 import modules.jwt.model.JwtContent
 import modules.jwt.model.Tokens._
 import modules.jwt.service.JwtAuthService
@@ -17,16 +20,11 @@ import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
 import repositories.auth.LinkedinAuthRepository
 import services.ExternalApiService
-import common.implicits.RichDBIO._
-import common.implicits.RichFuture._
-import core.loaders.IgnoreModule
-import model.oauth.linkedin.{LinkedinAuth, LinkedinOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-@IgnoreModule
 class LinkedinAuthController @Inject()(@Named("linkedin") oauth2Service: OAuth20Service,
                                        externalApiService: ExternalApiService,
                                        userRepository: UserRepository,

@@ -1,6 +1,5 @@
 import akka.http.scaladsl.server.Route
 import app.UserModule
-import org.scalamock.scalatest.MockFactory
 import repositories.UserSchemaInitializer
 import repositories.auth.{FacebookAuthSchemaInitializer, GithubAuthSchemaInitializer, GoogleAuthSchemaInitializer, LinkedinAuthSchemaInitializer}
 

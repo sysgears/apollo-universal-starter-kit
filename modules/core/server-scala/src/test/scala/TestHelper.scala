@@ -7,6 +7,7 @@ import common.shapes.ServerModule
 import core.guice.injection.Injecting
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 
 import scala.collection.JavaConverters._
@@ -16,7 +17,8 @@ trait TestHelper extends WordSpec
   with BeforeAndAfter
   with BeforeAndAfterAll
   with Matchers
-  with Injecting {
+  with Injecting
+  with MockFactory {
 
   private val config = ConfigFactory.load
   private val loadPaths = config.getList("loadPaths").unwrapped.asScala.map(_.toString).toList

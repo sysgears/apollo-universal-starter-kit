@@ -90,7 +90,7 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
         value={values.password}
       />
       <div className="text-center">
-        {errors && errors.messageErr && <Alert color="error">{errors.messageErr}</Alert>}
+        {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">

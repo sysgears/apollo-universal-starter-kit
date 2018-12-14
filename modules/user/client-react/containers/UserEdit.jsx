@@ -26,7 +26,7 @@ class UserEdit extends React.Component {
     }
 
     const errors = new FieldError((await editUser({ id: user.id, ...userValues })).errors);
-    if (errors.hasAny()) throw { ...errors.errors, messageErr: t('userEdit.errorMsg') };
+    if (errors.hasAny()) throw { ...errors.errors, messageError: t('userEdit.errorMsg') };
   };
 
   render() {

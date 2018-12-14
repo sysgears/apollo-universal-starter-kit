@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { FieldAdapter as Field } from '@module/core-client-react';
 import { translate } from '@module/i18n-client-react';
+
 import { match, email, minLength, required, validate } from '@module/validation-common-react';
 import { Form, RenderField, Button, Alert } from '@module/look-client-react';
 
@@ -15,38 +16,41 @@ const registerFormSchema = {
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
 
-const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => (
-  <Form name="register" onSubmit={handleSubmit}>
-    <Field
-      name="username"
-      component={RenderField}
-      type="text"
-      label={t('reg.form.field.name')}
-      value={values.username}
-    />
-    <Field name="email" component={RenderField} type="text" label={t('reg.form.field.email')} value={values.email} />
-    <Field
-      name="password"
-      component={RenderField}
-      type="password"
-      label={t('reg.form.field.pass')}
-      value={values.password}
-    />
-    <Field
-      name="passwordConfirmation"
-      component={RenderField}
-      type="password"
-      label={t('reg.form.field.passConf')}
-      value={values.passwordConfirmation}
-    />
-    <div className="text-center">
-      {errors && errors.messageErr && <Alert color="error">{errors.messageErr}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting}>
-        {t('reg.form.btnSubmit')}
-      </Button>
-    </div>
-  </Form>
-);
+const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {
+  // console.log(errors);
+  return (
+    <Form name="register" onSubmit={handleSubmit}>
+      <Field
+        name="username"
+        component={RenderField}
+        type="text"
+        label={t('reg.form.field.name')}
+        value={values.username}
+      />
+      <Field name="email" component={RenderField} type="text" label={t('reg.form.field.email')} value={values.email} />
+      <Field
+        name="password"
+        component={RenderField}
+        type="password"
+        label={t('reg.form.field.pass')}
+        value={values.password}
+      />
+      <Field
+        name="passwordConfirmation"
+        component={RenderField}
+        type="password"
+        label={t('reg.form.field.passConf')}
+        value={values.passwordConfirmation}
+      />
+      <div className="text-center">
+        {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+        <Button color="primary" type="submit" disabled={submitting}>
+          {t('reg.form.btnSubmit')}
+        </Button>
+      </div>
+    </Form>
+  );
+};
 
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,

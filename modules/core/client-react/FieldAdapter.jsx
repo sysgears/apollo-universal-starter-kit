@@ -20,6 +20,7 @@ class FieldAdapter extends Component {
 
   constructor(props) {
     super(props);
+    FieldAdapter;
     this.props = props;
   }
 

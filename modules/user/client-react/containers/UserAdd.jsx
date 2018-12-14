@@ -28,7 +28,7 @@ class UserAdd extends React.Component {
     }
 
     const errors = new FieldError((await addUser(userValues)).errors);
-    if (errors.hasAny()) throw { ...errors.errors, messageErr: t('userEdit.errorMsg') };
+    if (errors.hasAny()) throw { ...errors.errors, messageError: t('userEdit.errorMsg') };
   };
 
   render() {

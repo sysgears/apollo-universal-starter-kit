@@ -1,8 +1,7 @@
 import * as url from 'url';
 import * as express from 'express';
 import * as GraphiQL from 'apollo-server-module-graphiql';
-
-import { isApiExternal, serverPort } from '../net';
+import { isApiExternal, serverPort } from '@module/core-common';
 
 type ExpressGraphQLOptionsFunction = (req?: express.Request, res?: express.Response) => any | Promise<any>;
 

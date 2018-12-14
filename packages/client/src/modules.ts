@@ -33,6 +33,4 @@ const modules = new ClientModule(
   core
 );
 
-modules.triggerOnAppCreate();
-
 export default modules;

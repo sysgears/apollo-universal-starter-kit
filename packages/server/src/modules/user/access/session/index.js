@@ -1,5 +1,6 @@
+import { isApiExternal } from '@module/core-common';
+
 import { writeSession, createSession, readSession } from './sessions';
-import { isApiExternal } from '../../../../net';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';

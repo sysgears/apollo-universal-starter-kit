@@ -7,7 +7,6 @@ import AuthModule from '../AuthModule';
 import User from '../../sql';
 import settings from '../../../../../../../settings';
 import access from '../../access';
-import getCurrentUser from '../utils';
 
 let middleware;
 
@@ -73,7 +72,6 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
         const user = await User.getUser(req.user.id);
         const redirectUrl = req.query.state;
         const tokens = await access.grantAccess(user, req);
-        const currentUser = await getCurrentUser(req, res);
 
         if (redirectUrl) {
           res.redirect(
@@ -82,7 +80,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
                 ? '?data=' +
                   JSON.stringify({
                     tokens,
-                    user: currentUser.data
+                    user
                   })
                 : '')
           );

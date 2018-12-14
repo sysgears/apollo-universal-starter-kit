@@ -11,8 +11,8 @@ export const getStoreReducer = (reducers: any) =>
 const createReduxStore = (
   reducers: Reducer,
   initialState: DeepPartial<any>,
-  client: any,
-  routerMiddleware: Middleware
+  client?: any,
+  routerMiddleware?: Middleware
 ): Store => {
   return createStore(
     getStoreReducer(reducers),

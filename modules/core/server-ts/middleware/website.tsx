@@ -9,22 +9,12 @@ import fs from 'fs';
 import path from 'path';
 import Helmet, { HelmetData } from 'react-helmet';
 import serialize from 'serialize-javascript';
-
-import { isApiExternal, apiUrl } from '../net';
-import modules from '../modules';
-import schema from '../api/schema';
-
-// tslint:disable no-var-requires
-let clientModules: any;
-let createApolloClient: any;
-let createReduxStore: any;
-let styles: any;
-if (__SSR__) {
-  clientModules = require('../../../client/src').default;
-  createApolloClient = require('../../../common/createApolloClient').default;
-  createReduxStore = require('../../../common/createReduxStore').default;
-  styles = require('../../../client/src/modules/common/components/web').styles;
-}
+import { GraphQLSchema } from 'graphql';
+import { isApiExternal, apiUrl } from '@module/core-common';
+import ServerModule from '@module/module-server-ts';
+import ClientModule from '@module/module-client-react';
+import { createApolloClient, createReduxStore } from '@module/core-common';
+import { styles } from '@module/look-client-react';
 
 let assetMap: { [key: string]: string };
 
@@ -33,6 +23,14 @@ interface HtmlProps {
   state: any;
   css: Array<ReactElement<{}>>;
   helmet: HelmetData;
+}
+
+let clientModules: ClientModule;
+if (__SSR__) {
+  clientModules = require('../../../../packages/client/src').default;
+  if (module.hot) {
+    module.hot.accept(['../../../../packages/client/src'], () => {});
+  }
 }
 
 const Html = ({ content, state, css, helmet }: HtmlProps) => (
@@ -82,8 +80,11 @@ const Html = ({ content, state, css, helmet }: HtmlProps) => (
   </html>
 );
 
-const renderServerSide = async (req: any, res: any) => {
-  const schemaLink = new SchemaLink({ schema, context: { ...(await modules.createContext(req, res)), req, res } });
+const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
+  const schemaLink = new SchemaLink({
+    schema,
+    context: { ...(await modules.createContext(req, res)), req, res }
+  });
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
@@ -131,10 +132,14 @@ const renderServerSide = async (req: any, res: any) => {
   }
 };
 
-export default async (req: any, res: any, next: (e?: Error) => void) => {
+export default (schema: GraphQLSchema, modules: ServerModule) => async (
+  req: any,
+  res: any,
+  next: (e?: Error) => void
+) => {
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res);
+      return await renderServerSide(req, res, schema, modules);
     } else if (!__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {

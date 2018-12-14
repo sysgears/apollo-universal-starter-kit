@@ -1,14 +1,12 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe } from 'graphql';
+import { execute, subscribe, GraphQLSchema } from 'graphql';
 import { Server } from 'http';
-
-import schema from './schema';
-import log from '../../../common/log';
-import modules from '../modules';
+import ServerModule from '@module/module-server-ts';
+import { log } from '@module/core-common';
 
 let subscriptionServer: SubscriptionServer;
 
-const addSubscriptions = (httpServer: Server) => {
+const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: ServerModule) => {
   subscriptionServer = SubscriptionServer.create(
     {
       schema,
@@ -28,28 +26,22 @@ const addSubscriptions = (httpServer: Server) => {
   );
 };
 
-const addGraphQLSubscriptions = (httpServer: Server) => {
+const addGraphQLSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: ServerModule) => {
   if (module.hot && module.hot.data) {
     const prevServer = module.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {
       log.debug('Reloading the subscription server.');
       prevServer.wsServer.close(() => {
-        addSubscriptions(httpServer);
+        addSubscriptions(httpServer, schema, modules);
       });
     }
   } else {
-    addSubscriptions(httpServer);
+    addSubscriptions(httpServer, schema, modules);
   }
 };
 
-if (module.hot) {
-  module.hot.dispose(data => {
-    try {
-      data.subscriptionServer = subscriptionServer;
-    } catch (error) {
-      log(error.stack);
-    }
-  });
-}
+export const onAppDispose = (_: ServerModule, data: any) => {
+  data.subscriptionServer = subscriptionServer;
+};
 
 export default addGraphQLSubscriptions;

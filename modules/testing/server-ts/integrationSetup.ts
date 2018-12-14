@@ -4,6 +4,7 @@ import chaiHttp from 'chai-http';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 
+import { serverPromise } from '@module/core-server-ts';
 import { createApolloClient } from '@module/core-common';
 import { populateTestDb } from '@module/database-server-ts';
 
@@ -19,7 +20,7 @@ before(async () => {
   require('@babel/polyfill');
   await populateTestDb();
 
-  server = await require('../../../packages/server/src/server').default;
+  server = await serverPromise;
 
   global.WebSocket = WebSocket;
   // TODO: remove any type after converting the createApolloClient.js file into Typescript

@@ -1,8 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-
-import { isApiExternal } from '../net';
-import log from '../../../common/log';
+import { isApiExternal, log } from '@module/core-common';
 
 let assetMap: { [key: string]: string };
 

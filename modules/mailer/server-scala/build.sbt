@@ -1,8 +1,8 @@
 
-lazy val mailer = (project in file(".") dependsOn(modules.map(ClasspathDependency(_, None)).map(elem => elem.project % "test->test; compile->compile"): _*) aggregate (modules: _*))
+lazy val mailer = (project in file(".") dependsOn(modules.map(moduleRef => moduleRef % "test->test; compile->compile"): _*))
   .enablePlugins(BuildInfoPlugin)
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(projectRef => projectRef.build)),
+    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(moduleRef => moduleRef.build)),
     buildInfoPackage := s"mailerSubModules",
     buildInfoObject := "ModulesInfo"
   )

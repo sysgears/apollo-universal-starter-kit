@@ -14,7 +14,7 @@ import config.{AuthConfig, MailConfig}
 import errors.Unauthenticated
 import model._
 import models.MailPayload
-import modules.jwt.model.JwtContent
+import modules.jwt.model.{JwtContent, Tokens}
 import modules.jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
@@ -48,15 +48,13 @@ class UserResolver @Inject()(userRepository: UserRepository,
             isActive = skipConfirmation,
             password = BCrypt.hashpw(input.password, BCrypt.gensalt)
           )).run
-        userId <- Future.successful(createdUser.id) failOnNone NotFound(s"Id for user: [${createdUser.username}] is none.")
-        accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
         mailingResult <- if (!skipConfirmation) {
           mailService.send(
             messageTemplateService.createConfirmRegistrationMessage(
               createdUser,
               appConfig.name,
               mailConfig.address,
-              appConfig.url + authConfig.confirmRegistrationRoute + accessToken)
+              appConfig.url + authConfig.confirmRegistrationRoute + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get)))
           )
         } else Future.successful(MailPayload())
       } yield UserPayload(Some(createdUser), mailingResult.errors)
@@ -67,9 +65,8 @@ class UserResolver @Inject()(userRepository: UserRepository,
         tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
         activeUser <- if (!user.isActive) userRepository.update(user.copy(isActive = true)).run else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
-        userId <- Future.successful(activeUser.id) failOnNone NotFound(s"Id for user: [${activeUser.username}] is none.")
-        accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
-        refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
+        accessToken = jwtAuthService.createAccessToken(JwtContent(activeUser.id.get))
+        refreshToken = jwtAuthService.createRefreshToken(JwtContent(activeUser.id.get), user.password)
       } yield AuthPayload(Some(activeUser), Some(Tokens(accessToken, refreshToken)))
     }.pipeTo(sender)
 
@@ -78,8 +75,7 @@ class UserResolver @Inject()(userRepository: UserRepository,
         user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
         _ <- if (!user.isActive) Future.successful() else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
-        userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${user.username}] is none.")
-        accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
+        accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         mailingResult <- mailService.send(
           messageTemplateService.createConfirmRegistrationMessage(
             user,
@@ -94,17 +90,15 @@ class UserResolver @Inject()(userRepository: UserRepository,
       for {
         user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
-        userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${input.usernameOrEmail}] is none.")
-        accessToken = jwtAuthService.createAccessToken(JwtContent(userId))
-        refreshToken = jwtAuthService.createRefreshToken(JwtContent(userId), user.password)
+        accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
+        refreshToken = jwtAuthService.createRefreshToken(JwtContent(user.id.get), user.password)
       } yield AuthPayload(Some(user), Some(Tokens(accessToken, refreshToken)))
     }.pipeTo(sender)
 
     case input: ForgotPasswordInput => {
       for {
         user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
-        userId <- Future.successful(user.id) failOnNone NotFound(s"Id for user: [${input.usernameOrEmail}] is none.")
-        token = jwtAuthService.createAccessToken(JwtContent(userId))
+        token = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         _ <- mailService.send(
           messageTemplateService.createRecoverPasswordMessage(
             user,

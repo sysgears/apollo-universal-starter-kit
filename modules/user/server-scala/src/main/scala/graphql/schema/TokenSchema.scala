@@ -7,11 +7,9 @@ import common.{InputUnmarshallerGenerator, Logger}
 import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.TokenResolver
 import javax.inject.Inject
-import model.Tokens
+import modules.jwt.model.Tokens
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, ObjectType, StringType}
-
-import scala.concurrent.Future
 
 class TokenSchema @Inject()(implicit val materializer: ActorMaterializer,
                             actorSystem: ActorSystem) extends GraphQLSchema
@@ -28,7 +26,6 @@ class TokenSchema @Inject()(implicit val materializer: ActorMaterializer,
       resolve = sc => resolveWithDispatcher[Tokens](
         input = sc.args.arg[String]("refreshToken"),
         userContext = sc.ctx,
-        onException = _ => Tokens("", ""),
         namedResolverActor = TokenResolver
       )
     )

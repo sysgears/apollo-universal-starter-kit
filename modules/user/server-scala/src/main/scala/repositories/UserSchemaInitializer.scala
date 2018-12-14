@@ -4,11 +4,13 @@ import common.slick.SchemaInitializer
 import javax.inject.Inject
 import model.UserTable
 import model.UserTable.UserTable
-import slick.jdbc.SQLiteProfile.api._
+import slick.lifted.TableQuery
 
-class UserSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[UserTable] {
+import scala.concurrent.ExecutionContext
 
+class UserSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[UserTable] {
+
+  override val context = executionContext
   override val name: String = UserTable.name
   override val table = TableQuery[UserTable]
-  override val db = database
 }

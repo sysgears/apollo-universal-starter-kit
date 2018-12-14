@@ -19,9 +19,11 @@
     "skipLibCheck": true
   },
   "include": [
+    "**/typings.d.ts",
     "**/*.ts",
-    "typings/*.d.ts",
-    "modules/**.d.ts",
     "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }

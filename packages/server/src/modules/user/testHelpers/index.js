@@ -1,7 +1,7 @@
-import { getApollo } from '../../../testHelpers/integrationSetup';
+import LOGIN from '@module/user-client-react/graphql/Login.graphql';
+import LOGOUT from '@module/user-client-react/access/session/graphql/Logout.graphql';
 
-import LOGIN from '../../../../../client/src/modules/user/graphql/Login.graphql';
-import LOGOUT from '../../../../../client/src/modules/user/access/session/graphql/Logout.graphql';
+import { getApollo } from '../../../testHelpers/integrationSetup';
 
 export const login = async (usernameOrEmail = 'admin', password = 'admin123') =>
   await getApollo().mutate({

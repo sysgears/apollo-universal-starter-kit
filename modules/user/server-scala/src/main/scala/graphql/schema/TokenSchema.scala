@@ -8,7 +8,7 @@ import common.graphql.schema.GraphQLSchema
 import common.{InputUnmarshallerGenerator, Logger}
 import graphql.resolvers.TokenResolver
 import javax.inject.Inject
-import model.Tokens
+import modules.jwt.model.Tokens
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, ObjectType, StringType}
 
@@ -27,7 +27,6 @@ class TokenSchema @Inject()(implicit val materializer: ActorMaterializer,
       resolve = sc => resolveWithDispatcher[Tokens](
         input = sc.args.arg[String]("refreshToken"),
         userContext = sc.ctx,
-        onException = _ => Tokens("", ""),
         namedResolverActor = TokenResolver
       )
     )

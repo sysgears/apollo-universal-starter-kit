@@ -35,7 +35,6 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
       resolve = sc => resolveWithDispatcher[Counter](
         input = GetAmount,
         userContext = sc.ctx,
-        onException = _ => Counter(amount = 0),
         namedResolverActor = CounterResolver
       )
     )
@@ -51,7 +50,6 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
         resolveWithDispatcher[Counter](
           input = amount,
           userContext = sc.ctx,
-          onException = _ => Counter(amount = 0),
           namedResolverActor = CounterResolver
         ).pub
       }

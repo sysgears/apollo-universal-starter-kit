@@ -1,12 +1,10 @@
 package common.slick
 
-import slick.jdbc.SQLiteProfile.api._
+import core.guice.injection.Injecting
 import slick.jdbc.meta.MTable
-import slick.lifted.TableQuery
 import slick.relational.RelationalProfile
 
-import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 /**
   * Contains methods for initializing, seed and drop a database.
@@ -14,7 +12,24 @@ import scala.concurrent.Future
   * that initializes the tables for the received entity.
   *
   */
-trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
+trait SchemaInitializer[E <: RelationalProfile#Table[_]] extends Injecting {
+
+  /**
+    * Specific database
+    */
+  val database = inject[slick.jdbc.JdbcBackend.Database]
+
+  /**
+    * Specific database profile
+    */
+  val driver = inject[slick.jdbc.JdbcProfile]
+
+  import driver.api._
+
+  /**
+    * Thread pool for operations
+    */
+  val context: ExecutionContext
 
   /**
     * Name of the database table
@@ -24,27 +39,23 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Represents a database table
     */
   val table: TableQuery[E]
-  /**
-    * Database in which operations will be performed
-    */
-  val db: Database
 
   /**
     * Сreates the table
     */
   def create(): Future[Unit] = {
-    db.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.isEmpty) db.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
-    }
+    database.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
+    }(context)
   }
 
   /**
     * Drops the table
     */
   def drop(): Future[Unit] = {
-    db.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.nonEmpty) db.run(DBIO.seq(table.schema.drop)) else Future.successful()
-    }
+    database.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
+    }(context)
   }
 
   /**

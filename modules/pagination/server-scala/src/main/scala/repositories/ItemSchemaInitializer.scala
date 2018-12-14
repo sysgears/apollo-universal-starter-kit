@@ -4,20 +4,22 @@ import common.slick.SchemaInitializer
 import javax.inject.Inject
 import model.ItemTable.ItemTable
 import model.{Item, ItemTable}
-import slick.jdbc.SQLiteProfile.api._
-import slick.lifted.TableQuery
 
-/** @inheritdoc */
-class ItemSchemaInitializer @Inject()(database: Database) extends SchemaInitializer[ItemTable] {
+import scala.concurrent.ExecutionContext
 
-  /** @inheritdoc */
+/** @inheritdoc*/
+class ItemSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[ItemTable] {
+
+  import driver.api._
+
+  /** @inheritdoc*/
+  override val context = executionContext
+  /** @inheritdoc*/
   override val name: String = ItemTable.name
-  /** @inheritdoc */
+  /** @inheritdoc*/
   override val table = TableQuery[ItemTable]
-  /** @inheritdoc */
-  override val db = database
 
-  /** @inheritdoc */
+  /** @inheritdoc*/
   override def seedDatabase(tableQuery: TableQuery[ItemTable]): DBIOAction[_, NoStream, Effect.Write] = {
     val items = List.range(1, 100).map(num => Item(Some(num), s"Item $num"))
     tableQuery ++= items

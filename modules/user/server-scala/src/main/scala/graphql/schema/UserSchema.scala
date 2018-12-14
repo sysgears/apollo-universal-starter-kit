@@ -2,19 +2,18 @@ package graphql.schema
 
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
-import common.{FieldError, InputUnmarshallerGenerator, Logger}
 import common.graphql.DispatcherResolver._
 import common.graphql.UserContext
 import common.graphql.schema.GraphQLSchema
+import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
-import javax.inject.Inject
 import graphql.resolvers.UserResolver
+import javax.inject.Inject
 import model.{UserPayload, _}
-import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
+import modules.jwt.model.Tokens
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
-
-import scala.concurrent.Future
+import sangria.schema.{Argument, Field, InputObjectType, ObjectType, StringType}
 
 class UserSchema @Inject()(authConfig: AuthConfig)
                           (implicit val materializer: ActorMaterializer,
@@ -89,7 +88,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = (sc.args.arg[RegisterUserInput]("input"), authConfig.skipConfirmation),
         userContext = sc.ctx,
-        onException = e => UserPayload(errors = Some(List(FieldError("register", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -100,7 +98,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[ConfirmRegistrationInput]("input"),
         userContext = sc.ctx,
-        onException = e => AuthPayload(errors = Some(List(FieldError("confirmRegistration", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -111,7 +108,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = sc.args.arg[ResendConfirmationMessageInput]("input"),
         userContext = sc.ctx,
-        onException = e => UserPayload(errors = Some(List(FieldError("resendConfirmationMessage", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -122,7 +118,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[LoginUserInput]("input"),
         userContext = sc.ctx,
-        onException = e => AuthPayload(errors = Some(List(FieldError("login", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     ),
@@ -133,7 +128,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[String](
         input = sc.args.arg[ForgotPasswordInput]("input"),
         userContext = sc.ctx,
-        onException = e => Future.failed(e),
         namedResolverActor = UserResolver
       )
     ),
@@ -144,7 +138,6 @@ class UserSchema @Inject()(authConfig: AuthConfig)
       resolve = sc => resolveWithDispatcher[ResetPayload](
         input = sc.args.arg[ResetPasswordInput]("input"),
         userContext = sc.ctx,
-        onException = e => ResetPayload(errors = Some(List(FieldError("resetPassword", e.getMessage)))),
         namedResolverActor = UserResolver
       )
     )

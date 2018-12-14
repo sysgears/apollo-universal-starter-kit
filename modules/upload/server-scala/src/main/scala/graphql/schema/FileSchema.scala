@@ -6,7 +6,7 @@ import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.FileUploadResolver
 import javax.inject.Inject
 import models.FileMetadata
-import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
+import sangria.macros.derive.{ObjectTypeName, RenameField, deriveObjectType}
 import sangria.schema.{Argument, Field, _}
 import spray.json.DefaultJsonProtocol
 
@@ -23,7 +23,7 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
     coerceInput = _ => Right(null)
   )
 
-  implicit val fileMetadata: ObjectType[Unit, FileMetadata] = deriveObjectType(ObjectTypeName("File"))
+  implicit val fileMetadata: ObjectType[Unit, FileMetadata] = deriveObjectType(ObjectTypeName("File"), RenameField("contentType", "type"))
 
   override def mutations: List[Field[UserContext, Unit]] = List(
     Field(

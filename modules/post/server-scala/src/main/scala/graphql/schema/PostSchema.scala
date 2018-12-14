@@ -36,7 +36,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
             resolveWithDispatcher[Seq[Comment]](
               input = QueryComments(id),
               userContext = sc.ctx,
-              onException = e => ???,
               namedResolverActor = CommentResolver
             )
           ).getOrElse(Future.successful(Seq.empty[Comment]))
@@ -67,7 +66,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Post](
           input = QueryPost(sc.args.arg[Int]("id")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = PostResolver
         )
       }
@@ -81,7 +79,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Posts](
           input = QueryPosts(sc.args.arg("limit"), sc.args.arg("after")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = PostResolver
         )
       }
@@ -97,7 +94,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Post](
           input = MutationAddPost(sc.args.arg[AddPostInput]("input")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = PostResolver
         )
       }
@@ -110,7 +106,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Post](
           input = resolvers.MutationDeletePost(sc.args.arg("id")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = PostResolver
         )
       }
@@ -123,7 +118,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Post](
           input = resolvers.MutationEditPost(sc.args.arg[EditPostInput]("input")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = PostResolver
         )
       }
@@ -136,7 +130,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Comment](
           input = resolvers.MutationAddComment(sc.args.arg[AddCommentInput]("input")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = CommentResolver
         )
       }
@@ -149,7 +142,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Comment](
           input = resolvers.MutationEditComment(sc.args.arg[EditCommentInput]("input")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = CommentResolver
         )
       }
@@ -162,7 +154,6 @@ class PostSchema @Inject()(implicit val pubSubPostService: PubSubService[Post],
         resolveWithDispatcher[Comment](
           input = resolvers.MutationDeleteComment(sc.args.arg[DeleteCommentInput]("input")),
           userContext = sc.ctx,
-          onException = e => ???,
           namedResolverActor = CommentResolver
         )
       }

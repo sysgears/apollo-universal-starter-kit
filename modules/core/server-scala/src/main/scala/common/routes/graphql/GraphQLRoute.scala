@@ -77,7 +77,7 @@ class GraphQLRoute(httpHandler: HttpHandler,
             }
       }
     } ~
-      (path("graphql/schema") & get) {
+      (path("graphql" / "schema") & get) {
         complete(SchemaRenderer.renderSchema(graphQL.schema))
       } ~
       (path("graphiql") & get) {

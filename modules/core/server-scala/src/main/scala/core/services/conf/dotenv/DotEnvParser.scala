@@ -14,7 +14,7 @@ trait DotEnvParser {
     * @param dotEnvFileName the actual name of the '.env' file. By default is ".env"
     * @return a Map of '.env' file content
     * */
-  def parse(directory: String, dotEnvFileName: String = ".env"): `.env` = `.env` (
+  def parse(directory: String = "", dotEnvFileName: String = ".env"): `.env` = `.env` (
     new DotenvParser(new DotenvReader(directory, dotEnvFileName), true, true).parse.asScala
       .map(pair => (pair.component1, pair.component2)): _*
   )

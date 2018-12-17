@@ -5,13 +5,13 @@ export type HandleError = (
   asyncCallback: () => Promise<{ errors: Array<{ field: string; message: string }> }>,
   messageError: string
 ) => Promise<{ errors: Array<{ field: string; message: string }> }>;
-export type FormikMessageHandler = (Component: ComponentType) => ComponentType;
+export type formikMessageHandler = (Component: ComponentType) => ComponentType;
 export type AsyncCallback = () => Promise<{
   errors: Array<{ field: string; message: string }>;
   user: { [key: string]: any };
 }>;
 
-export const FormikMessageHandler: FormikMessageHandler = (Component: ComponentType) => {
+export const formikMessageHandler: formikMessageHandler = (Component: ComponentType) => {
   const handleError: HandleError = async (asyncCallback: AsyncCallback, messageError: string) => {
     const result = await asyncCallback();
 

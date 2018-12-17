@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { FormikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/validation-common-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
@@ -25,7 +25,7 @@ class ResetPassword extends React.Component {
 
 const ResetPasswordWithApollo = compose(
   translate('user'),
-  FormikMessageHandler,
+  formikMessageHandler,
   graphql(RESET_PASSWORD, {
     props: ({ mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {

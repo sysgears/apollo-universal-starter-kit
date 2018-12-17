@@ -1,12 +1,12 @@
 import React from 'react';
 import { FetchResult, compose, graphql } from 'react-apollo';
 
-import { FormikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/validation-common-react';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
-import { HandleError } from '@module/validation-common-react/FormikMessageHandler';
+import { HandleError } from '@module/validation-common-react';
 
 interface ContactProps {
   t: TranslateFunction;
@@ -27,7 +27,7 @@ class Contact extends React.Component<ContactProps> {
 
 const ContactWithApollo = compose(
   translate('contact'),
-  FormikMessageHandler,
+  formikMessageHandler,
   graphql(CONTACT, {
     props: ({ mutate }) => ({
       contact: async (values: any) => {

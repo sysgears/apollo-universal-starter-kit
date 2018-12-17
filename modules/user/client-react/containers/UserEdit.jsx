@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FormikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/validation-common-react';
 
 import UserEditView from '../components/UserEditView';
 
@@ -46,7 +46,7 @@ class UserEdit extends React.Component {
 
 export default compose(
   translate('user'),
-  FormikMessageHandler,
+  formikMessageHandler,
   graphql(USER_QUERY, {
     options: props => {
       let id = 0;

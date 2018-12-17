@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { FormikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/validation-common-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
@@ -30,7 +30,7 @@ class Login extends React.Component {
 const LoginWithApollo = compose(
   withApollo,
   translate('user'),
-  FormikMessageHandler,
+  formikMessageHandler,
   graphql(LOGIN, {
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {

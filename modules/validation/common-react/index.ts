@@ -1,7 +1,8 @@
 import CommonModule from '@module/module-common';
+export * from './formikMessageHandler';
 import resources from './locales';
 
-export { FormikMessageHandler } from './FormikMessageHandler';
+// export { formikMessageHandler };
 export * from './validation';
 export * from './FieldError';
 

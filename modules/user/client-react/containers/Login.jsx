@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
 
 import LoginView from '../components/LoginView';
+import FormikMessageHandler from './FormikMessageHandler';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
@@ -11,10 +11,15 @@ import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
   onSubmit = async values => {
-    const { t, login } = this.props;
-    const errors = new FieldError((await login(values)).errors);
+    const { t, login, handleError, client, onLogin } = this.props;
 
-    if (errors.hasAny()) throw { ...errors.errors, messageError: t('login.errorMsg') };
+    await handleError(() => login(values), t('login.errorMsg'));
+
+    await access.doLogin(client);
+    await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
+    if (onLogin) {
+      onLogin();
+    }
   };
 
   render() {
@@ -25,21 +30,15 @@ class Login extends React.Component {
 const LoginWithApollo = compose(
   withApollo,
   translate('user'),
+  FormikMessageHandler,
   graphql(LOGIN, {
-    props: ({ ownProps: { client, onLogin }, mutate }) => ({
+    props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
         const {
           data: { login }
         } = await mutate({
           variables: { input: { usernameOrEmail, password } }
         });
-        if (!login.errors) {
-          await access.doLogin(client);
-          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
-          if (onLogin) {
-            onLogin();
-          }
-        }
         return login;
       }
     })

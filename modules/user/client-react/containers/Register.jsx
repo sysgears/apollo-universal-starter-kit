@@ -38,7 +38,6 @@ const RegisterWithApollo = compose(
           const {
             data: { register }
           } = await mutate({ variables: { input: { username, email, password } } });
-
           return register;
         } catch (e) {
           throw e;

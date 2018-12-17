@@ -1,32 +1,46 @@
 import React from 'react';
-import { Mutation, MutationFn, FetchResult } from 'react-apollo';
+import { FetchResult, compose, graphql } from 'react-apollo';
 
+import { FormikMessageHandler } from '@module/validation-common-react';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
+import { HandleError } from '@module/validation-common-react/FormikMessageHandler';
 
-class Contact extends React.Component<{ t: TranslateFunction }> {
-  public onSubmit = (contactMutate: MutationFn) => async (values: ContactForm) => {
-    const { t } = this.props;
+interface ContactProps {
+  t: TranslateFunction;
+  handleError: HandleError;
+  contact: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+}
 
-    try {
-      const {
-        data: { contact }
-      } = (await contactMutate({ variables: { input: values } })) as FetchResult;
-      return { errors: contact.errors ? contact.errors : undefined };
-    } catch (e) {
-      return { errors: { serverError: t('serverError') } };
-    }
+class Contact extends React.Component<ContactProps> {
+  public onSubmit = async (values: ContactForm) => {
+    const { t, handleError, contact } = this.props;
+    await handleError(() => contact(values), t('serverError'));
   };
 
   public render() {
-    return (
-      <Mutation mutation={CONTACT}>
-        {mutate => <ContactView {...this.props} onSubmit={this.onSubmit(mutate)} />}
-      </Mutation>
-    );
+    return <ContactView {...this.props} onSubmit={this.onSubmit} />;
   }
 }
 
-export default translate('contact')(Contact);
+const ContactWithApollo = compose(
+  translate('contact'),
+  FormikMessageHandler,
+  graphql(CONTACT, {
+    props: ({ mutate }) => ({
+      contact: async (values: any) => {
+        try {
+          const {
+            data: { contact }
+          } = (await mutate({ variables: { input: values } })) as FetchResult;
+          return contact;
+        } catch (e) {
+          throw e;
+        }
+      }
+    })
+  })
+)(Contact);
+export default ContactWithApollo;

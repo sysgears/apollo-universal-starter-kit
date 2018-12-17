@@ -1,11 +1,18 @@
 import React, { ComponentType } from 'react';
 import { FieldError } from './FieldError';
 
-export const FormikMessageHandler = (Component: ComponentType) => {
-  const handleError = async (
-    asyncCallback: () => Promise<{ errors: Array<{ field: string; message: string }>; user: { [key: string]: any } }>,
-    messageError: string
-  ) => {
+export type HandleError = (
+  asyncCallback: () => Promise<{ errors: Array<{ field: string; message: string }> }>,
+  messageError: string
+) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+export type FormikMessageHandler = (Component: ComponentType) => ComponentType;
+export type AsyncCallback = () => Promise<{
+  errors: Array<{ field: string; message: string }>;
+  user: { [key: string]: any };
+}>;
+
+export const FormikMessageHandler: FormikMessageHandler = (Component: ComponentType) => {
+  const handleError: HandleError = async (asyncCallback: AsyncCallback, messageError: string) => {
     const result = await asyncCallback();
 
     const errors = new FieldError(result.errors);

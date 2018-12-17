@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
+import FormikMessageHandler from './FormikMessageHandler';
 
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
@@ -14,25 +14,23 @@ class ForgotPassword extends React.Component {
   };
 
   onSubmit = async values => {
-    const { forgotPassword, t } = this.props;
+    const { forgotPassword, t, handleError } = this.props;
+
+    await handleError(() => forgotPassword(values), t('forgotPass.errorMsg'));
 
     this.setState({ sent: true });
-
-    const errors = new FieldError((await forgotPassword(values)).errors);
-    if (errors && errors.errors) {
-      throw { ...errors.errors, handleErr: t('forgotPass.errorMsg') };
-    }
   };
 
   render() {
     const { sent } = this.state;
-    console.log('sentsentsent', sent);
+
     return <ForgotPasswordView {...this.props} sent={sent} onSubmit={this.onSubmit} />;
   }
 }
 
 const ForgotPasswordWithApollo = compose(
   translate('user'),
+  FormikMessageHandler,
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {
@@ -43,9 +41,6 @@ const ForgotPasswordWithApollo = compose(
             variables: { input: { email } }
           });
 
-          if (forgotPassword.errors) {
-            return { errors: forgotPassword.errors };
-          }
           return forgotPassword;
         } catch (e) {
           console.log(e.graphQLErrors);

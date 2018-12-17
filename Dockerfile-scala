@@ -4,7 +4,7 @@ MAINTAINER Victor Vlasenko <victor.vlasenko@sysgears.com>
 
 # Env variables
 ENV SCALA_VERSION 2.12.6
-ENV SBT_VERSION 1.2.1
+ENV SBT_VERSION 1.2.7
 
 # Install Scala
 ## Piping curl directly in tar

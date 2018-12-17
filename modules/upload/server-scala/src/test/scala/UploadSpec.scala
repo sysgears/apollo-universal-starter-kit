@@ -41,7 +41,7 @@ class UploadSpec extends UploadHelper {
     )
   )
 
-  val filesQuery = "query { files { id, name, contentType, size, path } }"
+  val filesQuery = "query { files { id, name, type, size, path } }"
   val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
   val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage)
 

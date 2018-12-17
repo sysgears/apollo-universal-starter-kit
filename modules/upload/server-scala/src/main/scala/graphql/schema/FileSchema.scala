@@ -16,7 +16,7 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
   with Logger
   with DefaultJsonProtocol {
 
-  val fileUploadType: ScalarType[OptionType[Nothing]] = new ScalarType[OptionType[Nothing]](
+  implicit val fileUploadType: ScalarType[Unit] = new ScalarType[Unit](
     name = "FileUpload",
     coerceOutput = (_, _) => null,
     coerceUserInput = _ => Right(null),
@@ -29,7 +29,7 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
     Field(
       name = "uploadFiles",
       fieldType = sangria.schema.BooleanType,
-      arguments = Argument(name = "files", argumentType = ListInputType(fileUploadType)) :: Nil,
+      arguments = Argument(name = "files", argumentType = ListInputType(OptionInputType(fileUploadType))) :: Nil,
       resolve = sc => {
         fileUploadResolver.uploadFiles(sc.ctx.filesData)
       }

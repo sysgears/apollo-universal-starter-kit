@@ -11,7 +11,7 @@ const config = {
         __CLIENT__: true
       },
       // Wait for backend to start prior to letting webpack load frontend page
-      waitOn: ['tcp:localhost:8080'],
+      waitOn: !process.env.DISABLE_WAITING_BACKEND ? ['tcp:localhost:8080']: [],
       enabled: true
     },
     test: {

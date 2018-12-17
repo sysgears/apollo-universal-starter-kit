@@ -1,10 +1,9 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
+import { FormikMessageHandler } from '@module/validation-common-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
-import FormikMessageHandler from './FormikMessageHandler';
-
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 class ResetPassword extends React.Component {

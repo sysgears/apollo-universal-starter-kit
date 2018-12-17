@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import FormikMessageHandler from './FormikMessageHandler';
+import { FormikMessageHandler } from '@module/validation-common-react';
 
 import ForgotPasswordView from '../components/ForgotPasswordView';
 

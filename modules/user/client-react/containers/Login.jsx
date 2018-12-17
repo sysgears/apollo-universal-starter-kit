@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
+import { FormikMessageHandler } from '@module/validation-common-react';
 
 import LoginView from '../components/LoginView';
-import FormikMessageHandler from './FormikMessageHandler';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';

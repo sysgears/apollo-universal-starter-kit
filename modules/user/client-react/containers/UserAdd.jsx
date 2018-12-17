@@ -3,7 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
 
-import FormikMessageHandler from './FormikMessageHandler';
+import { FormikMessageHandler } from '@module/validation-common-react';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';

@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
+import FormikMessageHandler from './FormikMessageHandler';
 
 import UserEditView from '../components/UserEditView';
 
@@ -13,7 +13,7 @@ import UserFormatter from '../helpers/UserFormatter';
 
 class UserEdit extends React.Component {
   onSubmit = async values => {
-    const { user, editUser, t } = this.props;
+    const { user, editUser, t, handleError, history, navigation, location } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -25,8 +25,18 @@ class UserEdit extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const errors = new FieldError((await editUser({ id: user.id, ...userValues })).errors);
-    if (errors.hasAny()) throw { ...errors.errors, messageError: t('userEdit.errorMsg') };
+    await handleError(() => editUser({ id: user.id, ...userValues }), t('userEdit.errorMsg'));
+
+    if (history) {
+      if (location && location.state && location.state.from === 'profile') {
+        return history.push('/profile');
+      }
+      return history.push('/users');
+    }
+
+    if (navigation) {
+      return navigation.goBack();
+    }
   };
 
   render() {
@@ -36,6 +46,7 @@ class UserEdit extends React.Component {
 
 export default compose(
   translate('user'),
+  FormikMessageHandler,
   graphql(USER_QUERY, {
     options: props => {
       let id = 0;
@@ -58,7 +69,7 @@ export default compose(
     }
   }),
   graphql(EDIT_USER, {
-    props: ({ ownProps: { history, navigation, location }, mutate }) => ({
+    props: ({ mutate }) => ({
       editUser: async input => {
         try {
           const {
@@ -66,19 +77,8 @@ export default compose(
           } = await mutate({
             variables: { input }
           });
-          if (editUser.errors) {
-            return { errors: editUser.errors };
-          }
-          if (history) {
-            if (location && location.state && location.state.from === 'profile') {
-              return history.push('/profile');
-            }
-            return history.push('/users');
-          }
 
-          if (navigation) {
-            return navigation.goBack();
-          }
+          return editUser;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

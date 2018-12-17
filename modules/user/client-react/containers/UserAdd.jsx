@@ -2,7 +2,8 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FieldError } from '@module/validation-common-react';
+
+import FormikMessageHandler from './FormikMessageHandler';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
@@ -15,7 +16,7 @@ class UserAdd extends React.Component {
   }
 
   onSubmit = async values => {
-    const { addUser, t } = this.props;
+    const { addUser, t, history, navigation, handleError } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -27,8 +28,14 @@ class UserAdd extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const errors = new FieldError((await addUser(userValues)).errors);
-    if (errors.hasAny()) throw { ...errors.errors, messageError: t('userEdit.errorMsg') };
+    await handleError(() => addUser(userValues), t('userAdd.errorMsg'));
+
+    if (history) {
+      return history.push('/users/');
+    }
+    if (navigation) {
+      return navigation.goBack();
+    }
   };
 
   render() {
@@ -38,8 +45,9 @@ class UserAdd extends React.Component {
 
 export default compose(
   translate('user'),
+  FormikMessageHandler,
   graphql(ADD_USER, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ mutate }) => ({
       addUser: async input => {
         try {
           const {
@@ -48,16 +56,7 @@ export default compose(
             variables: { input }
           });
 
-          if (addUser.errors) {
-            return { errors: addUser.errors };
-          }
-
-          if (history) {
-            return history.push('/users/');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
+          return addUser;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

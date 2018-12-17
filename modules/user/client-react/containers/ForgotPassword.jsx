@@ -16,9 +16,9 @@ class ForgotPassword extends React.Component {
   onSubmit = async values => {
     const { forgotPassword, t, handleError } = this.props;
 
-    await handleError(() => forgotPassword(values), t('forgotPass.errorMsg'));
-
     this.setState({ sent: true });
+
+    await handleError(() => forgotPassword(values), t('forgotPass.errorMsg'));
   };
 
   render() {

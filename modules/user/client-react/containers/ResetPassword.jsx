@@ -1,24 +1,22 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { FieldError } from '@module/validation-common-react';
 import { translate } from '@module/i18n-client-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
+import FormikMessageHandler from './FormikMessageHandler';
 
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 class ResetPassword extends React.Component {
   onSubmit = async values => {
-    const { t, resetPassword } = this.props;
+    const { t, resetPassword, history, handleError } = this.props;
 
-    const errors = new FieldError(
-      (await resetPassword({
-        ...values,
-        token: this.props.match.params.token
-      })).errors
+    await handleError(
+      () => resetPassword({ ...values, token: this.props.match.params.token }),
+      t('resetPass.errorMsg')
     );
 
-    if (errors.hasAny()) throw { ...errors.errors, handleErr: t('resetPass.errorMsg') };
+    history.push('/login');
   };
 
   render() {
@@ -28,8 +26,9 @@ class ResetPassword extends React.Component {
 
 const ResetPasswordWithApollo = compose(
   translate('user'),
+  FormikMessageHandler,
   graphql(RESET_PASSWORD, {
-    props: ({ ownProps: { history }, mutate }) => ({
+    props: ({ mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
         try {
           const {
@@ -38,11 +37,7 @@ const ResetPasswordWithApollo = compose(
             variables: { input: { password, passwordConfirmation, token } }
           });
 
-          if (resetPassword.errors) {
-            return { errors: resetPassword.errors };
-          }
-
-          history.push('/login');
+          return resetPassword;
         } catch (e) {
           console.log(e.graphQLErrors);
         }

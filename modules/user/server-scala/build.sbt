@@ -1,8 +1,8 @@
 
-lazy val user = (project in file(".") dependsOn(modules.map(moduleRef => moduleRef % "test->test; compile->compile"): _*))
+lazy val user = (project in file(".") dependsOn(modules.map(_ % "test->test; compile->compile"): _*))
   .enablePlugins(BuildInfoPlugin)
   .settings(
-    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(moduleRef => moduleRef.build)),
+    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(_.build)),
     buildInfoPackage := "userSubModules",
     buildInfoObject := "ModulesInfo"
   )

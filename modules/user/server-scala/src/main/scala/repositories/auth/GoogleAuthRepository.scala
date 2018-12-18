@@ -16,4 +16,7 @@ class GoogleAuthRepository @Inject()(override val driver: JdbcProfile)
   val pkType = implicitly[BaseTypedType[String]]
   val tableQuery = TableQuery[GoogleAuthTable]
   type TableType = GoogleAuthTable
+
+  def findOne(userId: Int): DBIO[Option[GoogleAuth]] =
+    tableQuery.filter(gAuth => gAuth.userId === userId).result.headOption
 }

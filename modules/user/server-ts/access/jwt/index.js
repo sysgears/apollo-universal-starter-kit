@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { AuthenticationError } from 'apollo-server-errors';
 
 import createTokens from './createTokens';
 import resolvers from './resolvers';
@@ -26,12 +27,11 @@ const getCurrentUser = async ({ req }) => {
   }
 };
 
-const createContextFunc = async ({ req, res, connectionParams, webSocket, context }) => {
+const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
   try {
     context.user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
   } catch (e) {
-    res.status(401).end();
-    throw e;
+    throw new AuthenticationError(e);
   }
 };
 

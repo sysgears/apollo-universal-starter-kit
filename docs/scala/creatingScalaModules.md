@@ -130,8 +130,10 @@ Upload, User, and your custom module ModuleName.
 To make possible the described functionality, the module configuration uses aggregation with `aggregate (modules: _*))`. 
 You can read more about aggregation and multiple sub-projects in [sbt documentation]. 
 
-6. Create the `application.conf` file under the `modules/module-name/server-scala/src/test/resources` directory and add 
-the path to your module:
+## #6 Create `application.conf` 
+
+You need to add the path to your module into the `modules/module-name/server-scala/src/test/resources/application.conf`
+file:
 
 ```scala
 loadPaths = ["../../modules/module-name/server-scala"]

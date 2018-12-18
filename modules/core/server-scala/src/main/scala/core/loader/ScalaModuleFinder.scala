@@ -6,7 +6,7 @@ import org.clapper.classutil.ClassInfo
 
 case class ScalaModuleFinder(moduleFinder: ModuleFinder) {
 
-  val guiceModules: Seq[ScalaModule] = InitializedClasses[ScalaModule](
+  val scalaModules: Seq[ScalaModule] = InitializedClasses[ScalaModule](
     FilteredClasses(
       FoundClasses(moduleFinder.paths ++ moduleFinder.modulesPaths.toList),
       scalaModuleFilter

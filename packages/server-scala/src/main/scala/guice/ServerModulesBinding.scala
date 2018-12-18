@@ -8,7 +8,7 @@ import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
 import graphql.GraphQLSchema
 import org.clapper.classutil.ClassInfo
 
-class GlobalBinding(moduleFinder: ModuleFinder) extends AbstractModule {
+class ServerModulesBinding(moduleFinder: ModuleFinder) extends AbstractModule {
 
   override def configure(): Unit = {
     bind(classOf[GraphQL]).to(classOf[GraphQLSchema])

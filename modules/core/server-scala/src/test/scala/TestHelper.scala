@@ -27,7 +27,7 @@ trait TestHelper extends WordSpec
 
   val moduleFinder = ModuleFinder(loadPaths)
   val scalaModuleFinder = ScalaModuleFinder(moduleFinder)
-  Guice.createInjector(scalaModuleFinder.guiceModules.asJava)
+  Guice.createInjector(scalaModuleFinder.scalaModules.asJava)
 
   val endpoint: String = "/graphql"
   implicit val scheduler: Scheduler = inject[Scheduler]

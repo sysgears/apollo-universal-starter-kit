@@ -11,7 +11,7 @@ import common.routes.frontend.FrontendRoute
 import common.routes.graphql.GraphQLRoute
 import core.guice.injection.InjectorProvider._
 import core.loader.{ModuleFinder, ScalaModuleFinder}
-import guice.GlobalBinding
+import guice.ServerModulesBinding
 
 import scala.collection.JavaConverters._
 import scala.concurrent.ExecutionContext
@@ -21,7 +21,7 @@ object Main extends App
 
   val moduleFinder = ModuleFinder()
   val scalaModuleFinder = ScalaModuleFinder(moduleFinder)
-  Guice.createInjector((scalaModuleFinder.guiceModules ++ List(new GlobalBinding(moduleFinder))).asJava)
+  Guice.createInjector((scalaModuleFinder.scalaModules ++ List(new ServerModulesBinding(moduleFinder))).asJava)
   implicit val system: ActorSystem = inject[ActorSystem]
   implicit val materializer: ActorMaterializer = inject[ActorMaterializer]
   implicit val executionContext: ExecutionContext = inject[ExecutionContext]

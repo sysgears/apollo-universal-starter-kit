@@ -30,6 +30,6 @@ case class ModuleFinder(paths: List[String] = List(".")) {
       } else paths
     }.toSet
 
-    findModulesPaths(paths: List[String])
+    findModulesPaths(paths)
   }
 }

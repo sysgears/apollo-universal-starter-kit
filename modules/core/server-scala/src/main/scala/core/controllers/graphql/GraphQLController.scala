@@ -12,8 +12,7 @@ import core.controllers.AkkaRoute
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import core.graphql.UserContext
-import spray.json.JsValue
-
+import spray.json._
 import akka.http.scaladsl.model.Multipart
 import core.graphql.GraphQL
 import javax.inject.Inject
@@ -61,14 +60,14 @@ class GraphQLController @Inject()(graphQlExecutor: Executor[UserContext, Unit],
                                 }
                             }
                         } ~
-                        formFields('operations.as[GraphQLMessage], 'map.as[JsValue]) {
-                          (graphQLMessage, filesJsValue) =>
-                            entity(as[Multipart.FormData]) {
-                              formData =>
+                        entity(as[Multipart.FormData]) {
+                          formData =>
+                            formFields('operations, 'map) {
+                              (graphQLMessage, files) =>
                                 //for each file, the key is the file multipart form field name and the value is an array of operations paths
-                                val filesMap = filesJsValue.convertTo[Map[String, List[String]]]
+                                val filesMap = files.asJson.convertTo[Map[String, List[String]]]
                                 val formDataParts: Source[FormData.BodyPart, Any] = formData.parts.filter(part => filesMap.keySet.contains(part.name))
-                                onComplete(httpHandler.handleQuery(graphQLMessage, userCtx.copy(filesData = formDataParts))) {
+                                onComplete(httpHandler.handleQuery(graphQLMessage.asJson.convertTo[GraphQLMessage], userCtx.copy(filesData = formDataParts))) {
                                   response: Try[ToResponseMarshallable] =>
                                     session.withChanges(maybeSession, userCtx.session) {
                                       complete(response)

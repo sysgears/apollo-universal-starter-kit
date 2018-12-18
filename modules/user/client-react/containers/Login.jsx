@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { formikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/core-client-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';

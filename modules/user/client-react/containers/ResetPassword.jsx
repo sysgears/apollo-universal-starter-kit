@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { formikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/core-client-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';

@@ -1,12 +1,11 @@
 import React from 'react';
 import { FetchResult, compose, graphql } from 'react-apollo';
 
-import { formikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler, HandleError } from '@module/core-client-react';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
-import { HandleError } from '@module/validation-common-react';
 
 interface ContactProps {
   t: TranslateFunction;

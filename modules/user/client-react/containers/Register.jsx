@@ -5,7 +5,7 @@ import { translate } from '@module/i18n-client-react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import { formikMessageHandler } from '@module/validation-common-react';
+import { formikMessageHandler } from '@module/core-client-react';
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';

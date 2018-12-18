@@ -14,12 +14,13 @@ services:
       - ./:${APP_DIR}
       - ${APP_DIR}/build
       - ${APP_DIR}/node_modules
+      - /home/node/.cache/yarn
     working_dir: ${APP_DIR}
     user: node
     command: >
        sh -c '
-       yarn &&
-       (test -f dev-db.sqlite3 || yarn seed) &&
+       cmp -s yarn.lock node_modules/yarn.lock || yarn install --frozen-lockfile && cp -f yarn.lock node_modules/yarn.lock &&
+       (test -f packages/server/dev-db.sqlite3 || yarn seed) &&
        exec yarn watch
        '
     ports:

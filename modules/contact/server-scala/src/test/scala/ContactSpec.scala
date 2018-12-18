@@ -4,10 +4,10 @@ import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.FieldError
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.ContactPayload
-import modules.common.FieldError
 import spray.json._
 
 import scala.concurrent.duration._

@@ -1,22 +1,13 @@
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import core.controllers.graphql.GraphQLController
-import core.guice.injection.Injecting
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import app.UploadModule
 import repositories.FileSchemaInitializer
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-trait UploadHelper extends WordSpec
-  with ScalatestRouteTest
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Injecting
-  with Matchers {
+trait UploadHelper extends TestHelper {
 
-  val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].routes
+  val routes: Route = routesWithGraphQLSchema[UploadModule]
 
   val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 

@@ -2,19 +2,19 @@ import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
-import akka.testkit.TestDuration
 import akka.util.ByteString
-import common.implicits.RichDBIO._
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import akka.testkit.TestDuration
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
+import common.implicits.RichDBIO._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
 import spray.json._
 
 import scala.concurrent.duration._
 
-class TokenSpec extends TestHelper {
+class TokenSpec extends UserHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   val userRepo: UserRepository = inject[UserRepository]

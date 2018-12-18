@@ -3,9 +3,9 @@ package graphql.schema
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver._
+import common.graphql.UserContext
 import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
-import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.UserResolver
 import javax.inject.Inject
 import model.oauth.{CertificateAuth, UserAuth}
@@ -32,8 +32,7 @@ class UserSchema @Inject()(authConfig: AuthConfig,
                            linkedinAuthRepository: LinkedinAuthRepository)
                           (implicit val materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
-                           executionContext: ExecutionContext) extends GraphQLSchema
-  with InputUnmarshallerGenerator
+                           executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(InputObjectTypeName("RegisterUserInput"))
@@ -128,7 +127,7 @@ class UserSchema @Inject()(authConfig: AuthConfig,
       )
   }
 
-  override def queries: List[Field[UserContext, Unit]] = List(
+  def queries: List[Field[UserContext, Unit]] = List(
     //TODO implement stub's functionality
     Field(
       name = "currentUser",
@@ -138,7 +137,7 @@ class UserSchema @Inject()(authConfig: AuthConfig,
     )
   )
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "register",
       fieldType = userPayload,

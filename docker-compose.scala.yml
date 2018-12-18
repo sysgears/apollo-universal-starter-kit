@@ -16,8 +16,10 @@ services:
     - ./packages/server-scala/project/build.properties:${APP_DIR}/packages/server-scala/project/build.properties
     - ./packages/server-scala/build.sbt:${APP_DIR}/packages/server-scala/build.sbt
     - ./packages/server-scala/src:${APP_DIR}/packages/server-scala/src
+
+    - scala_server_sbt_cache:/root/.ivy2
     command: >
-      sh -c 'sbt ~reStart'
+      sh -c 'sbt run'
     ports:
     - 8080:8080
     stdin_open: true
@@ -33,16 +35,21 @@ services:
       - apollo_scala_server
       environment:
       - NODE_ENV=development
+      - SERVER_HOST=apollo_scala_server
       container_name: apollo_client
       tty: true
       stdin_open: true
       volumes:
       - ./:${APP_DIR}
       - ${APP_DIR}/build
-      - ${APP_DIR}/node_modules
+      - client_node_modules:${APP_DIR}/node_modules
       working_dir: ${APP_DIR}
       user: node
       command: >
         sh -c 'yarn && yarn watch-client'
       ports:
       - 3000:3000
+
+volumes:
+  scala_server_sbt_cache:
+  client_node_modules:

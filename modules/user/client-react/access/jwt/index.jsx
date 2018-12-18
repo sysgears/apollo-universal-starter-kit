@@ -81,21 +81,27 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (networkError.response && networkError.response.status === 401) {
+              if (networkError.response && networkError.response.status >= 400 && networkError.response.status < 500) {
                 try {
-                  const {
-                    data: {
-                      refreshTokens: { accessToken, refreshToken }
+                  if (operation.operationName !== 'refreshTokens') {
+                    try {
+                      const data = await apolloClient.mutate({
+                        mutation: REFRESH_TOKENS_MUTATION,
+                        variables: { refreshToken: await getItem('refreshToken') }
+                      });
+                      const { accessToken, refreshToken } = data.refreshTokens;
+                      await saveTokens({ accessToken, refreshToken });
+                    } catch (e) {
+                      await removeTokens();
                     }
-                  } = await apolloClient.mutate({
-                    mutation: REFRESH_TOKENS_MUTATION,
-                    variables: { refreshToken: await getItem('refreshToken') }
-                  });
-                  await saveTokens({ accessToken, refreshToken });
+                  } else {
+                    await removeTokens();
+                  }
                   // Retry current operation
                   await setJWTContext(operation);
                   retrySub = forward(operation).subscribe(observer);
                 } catch (e) {
+                  console.log(e);
                   // We have received error during refresh - drop tokens and return original request result
                   await removeTokens();
                   observer.error(networkError);

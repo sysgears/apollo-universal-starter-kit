@@ -1,27 +1,59 @@
 # Getting started with Scala Starter Kit
 
-In this section, you will install the Universal Starter Kit and run the Scala implementation of it.
+In this section, you'll install Apollo Universal Starter Kit and run the Scala implementation of the back-end 
+application.
 
 The following steps are needed:
 
-1. Install SBT 1.2.6 or higher.
-2. Clone the stable branch of Apollo Universal Starter Kit.
-   
-   ```bash
-   git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
-   cd apollo-universal-starter-kit
-   ```
-3. Set current directory to **packages/server-scala**: 
+1. Install [sbt]. You can use sbt 1.2.6 or higher.
 
-    ```bash
-    cd packages/server-scala
-    ```
+**NOTE**: If you decide to run the React or Angular application with Scala Starter Kit, you'll need to [install Node.js] 
+and [Yarn] (to install and handle the client-side packages).
+
+2. Clone the stable branch of Apollo Universal Starter Kit and go into the project root directory:
+   
+```bash
+git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
+cd apollo-universal-starter-kit
+```
+
+3. Go into the `packages/server-scala` directory: 
+
+```bash
+cd packages/server-scala
+```
+
 4. Run the starter kit:
 
-     ```bash
-     sbt run
-     ```
+```bash
+sbt run
+```
 
-After running, the GraphiQL (graphical interactive in-browser GraphQL IDE) should become available at [http://localhost:8080/graphiql].
+This command will build Scala Starter Kit project and seed the demo data to SQLite (a default database).
 
+You can also use the command `sbt ~reStart` to run the project if you need live code reload.
+
+Once the Scala application is built and running, you can try out GraphiQL, a graphical interactive in-browser GraphQL 
+IDE. Follow to [http://localhost:8080/graphiql] to test the Scala back end.
+
+5. Run the client-side application (optional):
+
+```bash
+yarn && yarn watch-client
+```
+
+Scala Starter Kit is built for the React client-side application in Apollo Universal Starter Kit. From the root of 
+Apollo Universal Starter Kit, you can run the React application with the following command (provided that you've run 
+`yarn` to install the React dependencies):
+
+```bash
+cd apollo-universal-starter-kit
+yarn watch-client
+```
+
+`yarn watch-client` will build and run the React application and automatically open it in your default browser.
+
+[sbt]: https://www.scala-sbt.org/download.html
 [http://localhost:8080/graphiql]: http://localhost:8080/graphiql
+[install node.js]: https://nodejs.org/en/ 
+[yarn]: https://yarnpkg.com/lang/en/docs/install/#debian-stable

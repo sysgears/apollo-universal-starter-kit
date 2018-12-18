@@ -28,13 +28,7 @@ class LoginView extends React.PureComponent {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
     }
-
-    if (decodedData.user) {
-      await client.writeQuery({
-        query: CURRENT_USER_QUERY,
-        data: decodedData.user
-      });
-    }
+    await client.query({ query: CURRENT_USER_QUERY });
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();

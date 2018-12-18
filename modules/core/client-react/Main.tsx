@@ -52,12 +52,10 @@ if (module.hot && module.hot.data && module.hot.data.store) {
   ref.store.replaceReducer(getStoreReducer(ref.modules.reducers));
 }
 
-if (module.hot) {
-  module.hot.dispose(data => {
-    data.store = ref.store;
-    delete window.__APOLLO_STATE__;
-  });
-}
+export const onAppDispose = (_: any, data: any) => {
+  data.store = ref.store;
+  delete window.__APOLLO_STATE__;
+};
 
 class ServerError extends Error {
   constructor(error: any) {

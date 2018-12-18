@@ -16,4 +16,7 @@ class LinkedinAuthRepository @Inject()(override val driver: JdbcProfile)
   val pkType = implicitly[BaseTypedType[String]]
   val tableQuery = TableQuery[LinkedinAuthTable]
   type TableType = LinkedinAuthTable
+
+  def findOne(userId: Int): DBIO[Option[LinkedinAuth]] =
+    tableQuery.filter(lnAuth => lnAuth.userId === userId).result.headOption
 }

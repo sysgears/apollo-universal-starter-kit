@@ -18,8 +18,9 @@ import scala.concurrent.duration._
 
 class UploadSpec extends UploadHelper {
   lazy val fileMetadataRepo: FileMetadataRepository = inject[FileMetadataRepository]
-  val uploadFileMutation = "mutation { uploadFiles(files: [\"null\",\"null\"])}"
-  val uploadFileGraphQLMessage = ByteString(GraphQLMessage(uploadFileMutation).toJson.compactPrint)
+  val uploadFileMutation = "mutation uploadFiles($files: [FileUpload]!) {uploadFiles(files: $files)}"
+  val uploadFileVariables = "{\"files\":[null,null]}".asJson.asJsObject
+  val uploadFileGraphQLMessage = ByteString(GraphQLMessage(uploadFileMutation, Some("uploadFiles"), Some(uploadFileVariables)).toJson.compactPrint)
   val addFilesEntity = Multipart.FormData(
     Multipart.FormData.BodyPart.Strict(
       "operations",
@@ -41,7 +42,7 @@ class UploadSpec extends UploadHelper {
     )
   )
 
-  val filesQuery = "query { files { id, name, contentType, size, path } }"
+  val filesQuery = "query { files { id, name, type, size, path } }"
   val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
   val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage)
 

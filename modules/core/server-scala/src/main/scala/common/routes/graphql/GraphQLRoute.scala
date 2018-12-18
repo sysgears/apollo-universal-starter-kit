@@ -9,6 +9,7 @@ import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import akka.stream.ActorMaterializer
 import akka.stream.scaladsl.Source
+import com.google.inject.Inject
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessage
@@ -20,12 +21,12 @@ import spray.json.JsValue
 import scala.concurrent.ExecutionContext
 import scala.util.Try
 
-class GraphQLRoute(httpHandler: HttpHandler,
-                   session: JWTSessionImpl,
-                   webSocketHandler: WebSocketHandler,
-                   graphQL: GraphQL)
-                  (implicit val executionContext: ExecutionContext,
-                   actorMaterializer: ActorMaterializer) {
+class GraphQLRoute @Inject()(httpHandler: HttpHandler,
+                             session: JWTSessionImpl,
+                             webSocketHandler: WebSocketHandler,
+                             graphQL: GraphQL)
+                            (implicit val executionContext: ExecutionContext,
+                             actorMaterializer: ActorMaterializer) {
 
   val routes: Route =
     path("graphql") {

@@ -1,6 +1,7 @@
 package common.slick
 
-import core.guice.injection.Injecting
+import core.guice.injection.InjectorProvider._
+import net.codingwell.scalaguice.InjectorExtensions._
 import slick.jdbc.meta.MTable
 import slick.relational.RelationalProfile
 
@@ -12,17 +13,17 @@ import scala.concurrent.{ExecutionContext, Future}
   * that initializes the tables for the received entity.
   *
   */
-trait SchemaInitializer[E <: RelationalProfile#Table[_]] extends Injecting {
+trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
 
   /**
     * Specific database
     */
-  val database = inject[slick.jdbc.JdbcBackend.Database]
+  lazy val database = injector.instance[slick.jdbc.JdbcBackend.Database]
 
   /**
     * Specific database profile
     */
-  val driver = inject[slick.jdbc.JdbcProfile]
+  lazy val driver = injector.instance[slick.jdbc.JdbcProfile]
 
   import driver.api._
 

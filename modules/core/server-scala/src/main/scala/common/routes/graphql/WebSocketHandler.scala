@@ -4,25 +4,27 @@ import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
+import com.google.inject.Inject
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
-import common.routes.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import common.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import common.routes.graphql.jsonProtocols.OperationMessageType._
+import common.routes.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
-import sangria.execution.{Executor, QueryReducer}
+import sangria.execution.Executor
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json._
 
 import scala.util.{Failure, Success}
 
-class WebSocketHandler(graphQL: GraphQL)
-                      (implicit val actorMaterializer: ActorMaterializer,
-                       implicit val scheduler: Scheduler) extends ControllerUtil {
+class WebSocketHandler @Inject()(graphQL: GraphQL,
+                                 graphQlExecutor: Executor[UserContext, Unit])
+                                (implicit val actorMaterializer: ActorMaterializer,
+                                 implicit val scheduler: Scheduler) extends RouteUtil {
 
   import spray.json.DefaultJsonProtocol._
 
@@ -55,13 +57,6 @@ class WebSocketHandler(graphQL: GraphQL)
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message]): Unit = {
     import sangria.streaming.akkaStreams._
-    val graphQlExecutor = Executor(
-      schema = graphQL.schema,
-      queryReducers = List(
-        QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-        QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
-      )
-    )
     operationMessage.payload.foreach {
       payload =>
         val graphQlMessage = payload.convertTo[GraphQLMessage]

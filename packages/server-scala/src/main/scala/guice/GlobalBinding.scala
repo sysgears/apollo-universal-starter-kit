@@ -1,19 +1,25 @@
 package guice
 
-import com.google.inject.Provides
+import com.google.inject._
+import common.graphql.schema.GraphQL
 import common.shapes.ServerModule
+import core.loader.ModuleFinder
 import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
-import core.guice.injection.Injecting.{injector, modulesPaths}
-import net.codingwell.scalaguice.ScalaModule
+import graphql.GraphQLSchema
 import org.clapper.classutil.ClassInfo
 
-class GlobalBindings extends ScalaModule {
+class GlobalBinding(moduleFinder: ModuleFinder) extends AbstractModule {
+
+  override def configure(): Unit = {
+    bind(classOf[GraphQL]).to(classOf[GraphQLSchema])
+  }
 
   @Provides
-  def modules: Seq[ServerModule] = {
+  @Singleton
+  def modules(injector: Injector): Seq[ServerModule] = {
     InitializedClasses[ServerModule](
       FilteredClasses(
-        FoundClasses(modulesPaths.toList),
+        FoundClasses(moduleFinder.modulesPaths.toList),
         serverModuleFilter
       ),
       initializer = Some(injector.getInstance(_).asInstanceOf[ServerModule])

@@ -14,7 +14,7 @@ import repositories.UserRepository
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class LinkedinAuthSpec extends TestHelper {
+class LinkedinAuthSpec extends UserHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 

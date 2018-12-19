@@ -1,6 +1,6 @@
 package repositories.auth
 
-import core.slick.SchemaInitializer
+import common.slick.SchemaInitializer
 import javax.inject.Inject
 import model.oauth.github.GithubAuthTable
 import model.oauth.github.GithubAuthTable.GithubAuthTable

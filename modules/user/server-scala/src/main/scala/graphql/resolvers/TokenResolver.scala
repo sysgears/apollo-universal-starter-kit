@@ -5,8 +5,7 @@ import akka.pattern._
 import com.google.inject.Inject
 import common.ActorNamed
 import common.errors.NotFound
-import model.Tokens
-import modules.jwt.model.JwtContent
+import modules.jwt.model.{JwtContent, Tokens}
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
 import common.implicits.RichFuture._

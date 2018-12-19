@@ -2,14 +2,14 @@ import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
-import akka.util.ByteString
 import akka.testkit.TestDuration
+import akka.util.ByteString
+import common.implicits.RichDBIO._
 import core.controllers.graphql.jsonProtocols.GraphQLMessage
 import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
-import common.implicits.RichDBIO._
 import spray.json._
 
 import scala.concurrent.duration._
@@ -126,8 +126,7 @@ class TokenSpec extends TestHelper {
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
-        response should include("\"accessToken\":\"\"")
-        response should include("\"refreshToken\":\"\"")
+        response should include("\"data\":null")
       }
     }
 

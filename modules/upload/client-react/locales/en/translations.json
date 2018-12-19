@@ -10,5 +10,5 @@
     },
     "btnDel": "Delete"
   },
-  "nativeMock": "Hello Upload!"
+  "btnUpload": "Upload"
 }

@@ -151,7 +151,7 @@ class User {
     return knex
       .transaction(async function(trx) {
         try {
-          await Promise.all(arrWithAsyncCallback.transacting(trx));
+          await Promise.all(arrWithAsyncCallback.map(func => func.transacting(trx)));
           await trx.commit;
         } catch (e) {
           await trx.rollback;

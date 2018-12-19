@@ -10,6 +10,7 @@ services:
     container_name: apollo_scala_server
     working_dir: ${APP_DIR}/packages/server-scala
     volumes:
+    - ./:${APP_DIR}
     - ./modules:${APP_DIR}/modules
     - ./packages/server-scala:${APP_DIR}/packages/server-scala
     - ./packages/server-scala/project/plugin.sbt:${APP_DIR}/packages/server-scala/project/plugin.sbt
@@ -19,7 +20,7 @@ services:
 
     - scala_server_sbt_cache:/root/.ivy2
     command: >
-      sh -c 'sbt run'
+      sh -c 'sbt ~reStart'
     ports:
     - 8080:8080
     stdin_open: true
@@ -35,7 +36,7 @@ services:
       - apollo_scala_server
       environment:
       - NODE_ENV=development
-      - SERVER_HOST=apollo_scala_server
+      - SERVER_HOST=apollo_scala_server:8080
       container_name: apollo_client
       tty: true
       stdin_open: true
@@ -46,7 +47,7 @@ services:
       working_dir: ${APP_DIR}
       user: node
       command: >
-        sh -c 'yarn && yarn watch-client'
+        sh -c 'cmp -s yarn.lock node_modules/yarn.lock || yarn install --frozen-lockfile && cp -f yarn.lock node_modules/yarn.lock && yarn watch-client'
       ports:
       - 3000:3000
 

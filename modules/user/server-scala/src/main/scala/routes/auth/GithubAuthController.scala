@@ -1,15 +1,17 @@
 package routes.auth
 
 import akka.http.scaladsl.model.StatusCodes
-import com.github.scribejava.core.oauth.OAuth20Service
 import akka.http.scaladsl.model.headers.HttpCookie
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import com.github.scribejava.core.oauth.OAuth20Service
 import com.google.inject.Inject
 import com.google.inject.name.Named
 import common.errors.AmbigousResult
-import core.controllers.AkkaRoute
+import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
 import model.User
+import model.oauth.github.{GithubAuth, GithubOauth2Response}
 import modules.jwt.model.JwtContent
 import modules.jwt.model.Tokens._
 import modules.jwt.service.JwtAuthService
@@ -17,24 +19,19 @@ import org.mindrot.jbcrypt.BCrypt
 import repositories.UserRepository
 import repositories.auth.GithubAuthRepository
 import services.ExternalApiService
-import common.implicits.RichDBIO._
-import common.implicits.RichFuture._
-import core.loaders.IgnoreModule
-import model.oauth.github.{GithubAuth, GithubOauth2Response}
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-@IgnoreModule
 class GithubAuthController @Inject()(@Named("github") oauth2Service: OAuth20Service,
                                      externalApiService: ExternalApiService,
                                      userRepository: UserRepository,
                                      githubAuthRepository: GithubAuthRepository,
                                      jwtAuthService: JwtAuthService[JwtContent])
-                                    (implicit val executionContext: ExecutionContext) extends AkkaRoute {
+                                    (implicit val executionContext: ExecutionContext) {
 
-  override val routes: Route =
+  val routes: Route =
     (path("auth" / "github") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "github" / "callback") & get) {

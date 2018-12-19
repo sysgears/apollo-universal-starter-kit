@@ -3,8 +3,8 @@ package graphql.schema
 import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver.resolveWithDispatcher
+import common.graphql.UserContext
 import common.{InputUnmarshallerGenerator, Logger}
-import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.ItemResolver
 import javax.inject.Inject
 import model.{Item, ItemsPayload, PaginationParams}
@@ -19,7 +19,7 @@ import scala.concurrent.ExecutionContext
   */
 class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
-                           executionContext: ExecutionContext) extends GraphQLSchema with InputUnmarshallerGenerator
+                           executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {
@@ -43,7 +43,7 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
   /**
     * List of endpoints.
     */
-  override def queries: List[Field[UserContext, Unit]] = List(
+  def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "getPaginatedList",
       fieldType = Types.ItemsPayload,

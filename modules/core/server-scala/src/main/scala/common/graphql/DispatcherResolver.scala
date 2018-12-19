@@ -2,10 +2,9 @@ package common.graphql
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.stream.ActorMaterializer
-import common.actors.Dispatcher
+import common.actors.{ActorMessageDelivering, Dispatcher}
+import common.ActorNamed
 import common.actors.Dispatcher.DispatcherMessage
-import common.{ActorMessageDelivering, ActorNamed}
-import core.graphql.UserContext
 import core.guice.injection.GuiceActorRefProvider
 
 import scala.concurrent.Future
@@ -23,7 +22,14 @@ object DispatcherResolver extends ActorMessageDelivering
 
     sendMessageWithFunc[T] {
       replyTo =>
-        provideActorRef(Dispatcher) ! DispatcherMessage(input, userContext, replyTo, provideActorRef(namedResolverActor), before, after)
+        provideActorRef(Dispatcher) ! DispatcherMessage(
+          input,
+          userContext,
+          replyTo,
+          provideActorRef(namedResolverActor),
+          before,
+          after
+        )
     }
   }
 }

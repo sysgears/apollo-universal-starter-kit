@@ -4,8 +4,8 @@ import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.Counter
 import spray.json._
 

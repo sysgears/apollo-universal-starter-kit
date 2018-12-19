@@ -1,23 +1,13 @@
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import core.controllers.graphql.GraphQLController
-import core.guice.injection.Injecting
+import app.PaginationModule
 import repositories.ItemSchemaInitializer
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-trait PaginationHelper extends WordSpec
-  with ScalatestRouteTest
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Injecting
-  with Matchers {
+trait PaginationHelper extends TestHelper {
 
-  val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].routes
-
+  val routes: Route = routesWithGraphQLSchema[PaginationModule]
   val paginationInitializer: ItemSchemaInitializer = inject[ItemSchemaInitializer]
 
   before {

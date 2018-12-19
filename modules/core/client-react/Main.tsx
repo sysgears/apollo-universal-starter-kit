@@ -23,7 +23,7 @@ const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = 
   store: null
 };
 
-export const onAppCreate = (modules: ClientModule) => {
+export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   ref.modules = modules;
   ref.client = createApolloClient({
     apiUrl,
@@ -32,7 +32,12 @@ export const onAppCreate = (modules: ClientModule) => {
     connectionParams: ref.modules.connectionParams,
     clientResolvers: ref.modules.resolvers
   });
-  ref.store = createReduxStore(ref.modules.reducers, {}, ref.client, routerMiddleware(history));
+  if (entryModule.hot && entryModule.hot.data && entryModule.hot.data.store) {
+    ref.store = entryModule.hot.data.store;
+    ref.store.replaceReducer(getStoreReducer(ref.modules.reducers));
+  } else {
+    ref.store = createReduxStore(ref.modules.reducers, {}, ref.client, routerMiddleware(history));
+  }
 };
 
 const history = createHistory();
@@ -46,11 +51,6 @@ ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));
-
-if (module.hot && module.hot.data && module.hot.data.store) {
-  ref.store = module.hot.data.store;
-  ref.store.replaceReducer(getStoreReducer(ref.modules.reducers));
-}
 
 export const onAppDispose = (_: any, data: any) => {
   data.store = ref.store;

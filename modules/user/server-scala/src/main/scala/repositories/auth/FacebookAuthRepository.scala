@@ -16,4 +16,7 @@ class FacebookAuthRepository @Inject()(override val driver: JdbcProfile)
   val pkType = implicitly[BaseTypedType[String]]
   val tableQuery = TableQuery[FacebookAuthTable]
   type TableType = FacebookAuthTable
+
+  def findOne(userId: Int): DBIO[Option[FacebookAuth]] =
+    tableQuery.filter(fbAuth => fbAuth.userId === userId).result.headOption
 }

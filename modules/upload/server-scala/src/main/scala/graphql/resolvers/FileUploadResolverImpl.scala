@@ -12,7 +12,8 @@ import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.name.Named
 import common.implicits.RichDBIO._
 import common.errors._
-import common.{ActorMessageDelivering, Logger}
+import common.Logger
+import common.actors.ActorMessageDelivering
 import graphql.resolvers.FileUploadResolverImpl._
 import javax.inject.Inject
 import models.FileMetadata

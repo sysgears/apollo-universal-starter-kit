@@ -16,4 +16,7 @@ class GithubAuthRepository @Inject()(override val driver: JdbcProfile)
   val pkType = implicitly[BaseTypedType[Int]]
   val tableQuery = TableQuery[GithubAuthTable]
   type TableType = GithubAuthTable
+
+  def findOne(userId: Int): DBIO[Option[GithubAuth]] =
+    tableQuery.filter(ghAuth => ghAuth.userId === userId).result.headOption
 }

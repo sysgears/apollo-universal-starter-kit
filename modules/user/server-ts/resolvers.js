@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
@@ -89,7 +88,11 @@ export default pubsub => ({
           e.throwIf();
 
           const [createdUserId] = await User.register({ ...input });
-          await User.editUserProfile({ id: createdUserId, ...input });
+
+          await User.transactionUser([
+            async () => createdUserId,
+            User.editUserProfile({ id: createdUserId, ...input })
+          ]);
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate({ id: createdUserId, ...input });
@@ -157,8 +160,7 @@ export default pubsub => ({
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          await User.editUser(userInfo);
-          await User.editUserProfile(input);
+          await User.transactionUser([User.editUser(userInfo), User.editUserProfile(input)]);
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);

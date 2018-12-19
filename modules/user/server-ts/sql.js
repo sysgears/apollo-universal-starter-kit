@@ -147,6 +147,19 @@ class User {
     return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
   }
 
+  async transactionUser(arrWithAsyncCallback) {
+    return knex
+      .transaction(async function(trx) {
+        try {
+          await Promise.all(arrWithAsyncCallback.transacting(trx));
+          await trx.commit;
+        } catch (e) {
+          await trx.rollback;
+        }
+      })
+      .catch(e => console.log(e));
+  }
+
   createFacebookAuth({ id, displayName, userId }) {
     return returnId(knex('auth_facebook')).insert({ fb_id: id, display_name: displayName, user_id: userId });
   }

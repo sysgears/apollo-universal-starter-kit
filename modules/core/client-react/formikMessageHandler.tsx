@@ -3,7 +3,7 @@ import { FieldError } from '@module/validation-common-react';
 
 export type HandleError = (
   asyncCallback: () => Promise<{ errors: Array<{ field: string; message: string }> }>,
-  messageError: string
+  errorMsg: string
 ) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 export type FormikMessageHandler = (Component: ComponentType) => ComponentType;
 export type AsyncCallback = () => Promise<{
@@ -12,13 +12,13 @@ export type AsyncCallback = () => Promise<{
 }>;
 
 export const formikMessageHandler: FormikMessageHandler = (Component: ComponentType) => {
-  const handleError: HandleError = async (asyncCallback: AsyncCallback, messageError: string) => {
+  const handleError: HandleError = async (asyncCallback: AsyncCallback, errorMsg: string) => {
     const result = await asyncCallback();
 
     const errors = new FieldError(result.errors);
 
     if (errors.hasAny()) {
-      throw { ...errors.errors, messageError };
+      throw { ...errors.errors, errorMsg };
     }
 
     return result;

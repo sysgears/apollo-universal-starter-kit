@@ -19,7 +19,7 @@ const ContactForm = ({
   t,
   status,
   errors
-}: FormikProps<ContactForm> & ContactFormProps & { errors: { messageError: string } }) => (
+}: FormikProps<ContactForm> & ContactFormProps & { errors: { errorMsg: string } }) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
@@ -32,7 +32,7 @@ const ContactForm = ({
       value={values.content}
     />
     <div className="text-center">
-      {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+      {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
       <Button color="primary" type="submit">
         {t('form.btnSubmit')}
       </Button>

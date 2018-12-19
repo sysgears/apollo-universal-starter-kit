@@ -43,7 +43,7 @@ const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {
         value={values.passwordConfirmation}
       />
       <div className="text-center">
-        {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+        {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
         <Button color="primary" type="submit" disabled={submitting}>
           {t('reg.form.btnSubmit')}
         </Button>

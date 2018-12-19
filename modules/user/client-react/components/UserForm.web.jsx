@@ -100,7 +100,7 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
         label={t('userEdit.form.field.passConf')}
         value={passwordConfirmation}
       />
-      {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+      {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
       <Button color="primary" type="submit">
         {t('userEdit.form.btnSubmit')}
       </Button>

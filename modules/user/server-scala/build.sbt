@@ -9,7 +9,8 @@ lazy val user = (project in file(".") dependsOn(modules.map(_ % "test->test; com
 
 lazy val modules = List(
   ProjectRef(base = file("../../core/server-scala"), id = "core"),
-  ProjectRef(base = file("../../mailer/server-scala"), id = "mailer")
+  ProjectRef(base = file("../../mailer/server-scala"), id = "mailer"),
+  ProjectRef(base = file("../../authentication/server-scala"), id = "authentication")
 )
 
 parallelExecution in test := false

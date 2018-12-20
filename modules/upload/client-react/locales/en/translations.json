@@ -10,5 +10,12 @@
     },
     "btnDel": "Delete"
   },
-  "btnUpload": "Upload"
+  "download": {
+    "successMsg": "The file was downloaded to the album",
+    "errorMsg": "Access error!"
+  },
+  "upload": {
+    "btn": "Upload",
+    "errorMsg": "This file type is not supported"
+  }
 }

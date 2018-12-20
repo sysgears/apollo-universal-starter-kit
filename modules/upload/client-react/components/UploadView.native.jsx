@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import path from 'path';
-import { DocumentPicker, MediaLibrary, Constants, FileSystem } from 'expo';
+import { DocumentPicker, MediaLibrary, Constants, FileSystem, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, Button, TouchableOpacity, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Button, TouchableOpacity, FlatList, Platform } from 'react-native';
+import { Modal } from '@module/look-client-react-native';
 import url from 'url';
 
 import uploadConfig from '../../../../config/upload';
@@ -26,28 +27,57 @@ export default class UploadView extends React.Component {
     handleRemoveFile: PropTypes.func
   };
 
+  state = {
+    notify: null
+  };
+
   uploadFile = async () => {
-    const { handleUploadFiles } = this.props;
+    const { handleUploadFiles, t } = this.props;
     const { uri, name } = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false });
     const type = mime.contentType(path.extname(name));
     if (type) {
       const imageData = new ReactNativeFile({ uri, name, type });
       await handleUploadFiles([imageData]);
+    } else {
+      this.setState({ notify: t('upload.errorMsg') });
     }
   };
 
   downloadFile = async (path, name) => {
+    const { t } = this.props;
     const { albumName } = uploadConfig;
-    const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
-    const createAsset = await MediaLibrary.createAssetAsync(uri);
+    if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
+      try {
+        const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
+        const createAsset = await MediaLibrary.createAssetAsync(uri);
 
-    // Remove file from cache directory
-    await FileSystem.deleteAsync(uri);
+        // Remove file from cache directory
+        await FileSystem.deleteAsync(uri);
 
-    const album = await MediaLibrary.getAlbumAsync(albumName);
-    album
-      ? await MediaLibrary.addAssetsToAlbumAsync([createAsset], album, false)
-      : await MediaLibrary.createAlbumAsync(albumName, createAsset, false);
+        const album = await MediaLibrary.getAlbumAsync(albumName);
+        album
+          ? await MediaLibrary.addAssetsToAlbumAsync([createAsset], album, false)
+          : await MediaLibrary.createAlbumAsync(albumName, createAsset, false);
+        this.setState({ notify: `${t('download.successMsg')} ${albumName}` });
+      } catch (e) {
+        this.setState({ notify: `${e}` });
+      }
+    } else {
+      this.setState({ notify: t('download.errorMsg') });
+    }
+  };
+
+  checkPermission = async (type, skip) => {
+    if (skip === Platform.OS) {
+      return true;
+    }
+    const { getAsync, askAsync } = Permissions;
+    const { status } = await getAsync(type);
+    if (status !== 'granted') {
+      const { status } = await askAsync(type);
+      return status === 'granted';
+    }
+    return true;
   };
 
   renderFileInfo = ({ item: { id, name, path } }) => {
@@ -62,22 +92,33 @@ export default class UploadView extends React.Component {
     );
   };
 
+  renderModal = () => (
+    <Modal isVisible={!!this.state.notify} onBackdropPress={() => this.setState({ notify: null })}>
+      <View style={styles.alertTextWrapper}>
+        <Text>{this.state.notify}</Text>
+      </View>
+    </Modal>
+  );
+
   render() {
     const { files, t } = this.props;
     return files ? (
-      <View style={styles.container}>
-        <View style={styles.btnContainer}>
-          <View style={styles.btn}>
-            <Button title={t('btnUpload')} onPress={this.uploadFile} />
+      <Fragment>
+        {this.renderModal()}
+        <View style={styles.container}>
+          <View style={styles.btnContainer}>
+            <View style={styles.btn}>
+              <Button title={t('upload.btn')} onPress={this.uploadFile} />
+            </View>
           </View>
+          <FlatList
+            data={files}
+            style={styles.list}
+            keyExtractor={item => `${item.id}`}
+            renderItem={this.renderFileInfo}
+          />
         </View>
-        <FlatList
-          data={files}
-          style={styles.list}
-          keyExtractor={item => `${item.id}`}
-          renderItem={this.renderFileInfo}
-        />
-      </View>
+      </Fragment>
     ) : null;
   }
 }
@@ -124,5 +165,9 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 5,
     width: '100%'
+  },
+  alertTextWrapper: {
+    backgroundColor: '#fff',
+    padding: 10
   }
 });

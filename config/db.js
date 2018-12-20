@@ -1,3 +1,5 @@
+const path = require('path');
+
 const db = {
   client: process.env.DB_CLIENT || 'sqlite3',
   connection: {
@@ -19,10 +21,10 @@ if (process.env.NODE_ENV === 'test') {
 if (db.client === 'sqlite3') {
   db.connection = {
     development: {
-      filename: './dev-db.sqlite3'
+      filename: path.resolve('./dev-db.sqlite3')
     },
     production: {
-      filename: './prod-db.sqlite3'
+      filename: path.resolve('./prod-db.sqlite3')
     },
     test: {
       filename: ':memory:'

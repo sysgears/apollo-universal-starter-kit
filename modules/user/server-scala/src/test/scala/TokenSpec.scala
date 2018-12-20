@@ -4,17 +4,17 @@ import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.util.ByteString
 import akka.testkit.TestDuration
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
 import common.implicits.RichDBIO._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
 import spray.json._
 
 import scala.concurrent.duration._
 
-class TokenSpec extends TestHelper {
+class TokenSpec extends UserHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   val userRepo: UserRepository = inject[UserRepository]
@@ -126,8 +126,7 @@ class TokenSpec extends TestHelper {
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
-        response should include("\"accessToken\":\"\"")
-        response should include("\"refreshToken\":\"\"")
+        response should include("\"data\":null")
       }
     }
 

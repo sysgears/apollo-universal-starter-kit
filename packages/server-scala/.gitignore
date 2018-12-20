@@ -2,7 +2,7 @@
 /.ensime
 /.ensime_cache
 /.idea
-/project
+*/target/*
 /.vscode
 target/
 *.log

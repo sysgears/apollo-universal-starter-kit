@@ -5,7 +5,7 @@ import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
 import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PubSubService
+import core.services.publisher.PublishElement
 import core.services.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject
@@ -14,10 +14,11 @@ import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, IntType, ObjectType}
 import sangria.streaming.akkaStreams._
 import services.count.CounterActor.GetAmount
+import services.publisher.CounterPubSubServiceImpl
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter],
+class CounterSchema @Inject()(implicit val counterPubSubService: CounterPubSubServiceImpl,
                               materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext) extends GraphQLSchema
@@ -50,7 +51,10 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
           input = amount,
           userContext = sc.ctx,
           namedResolverActor = CounterResolver
-        ).pub
+        ).map(counter =>
+          PublishElement(triggerName = "addServerCounter", element = counter))
+          .pub
+          .map(_.element)
       }
     )
   )
@@ -59,7 +63,10 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
     Field.subs(
       name = "counterUpdated",
       fieldType = Types.counter,
-      resolve = _ => pubsubService.subscribe
+      resolve = _ => {
+        counterPubSubService.subscribe(Seq("addServerCounter"))
+          .map(action => action.map(_.element))
+      }
     )
   )
 }

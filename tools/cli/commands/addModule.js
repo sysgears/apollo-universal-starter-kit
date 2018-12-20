@@ -6,7 +6,8 @@ const {
   getTemplatesPath,
   copyFiles,
   renameFiles,
-  computeModulesPath,
+  computeModulePath,
+  getModulesEntryPoint,
   computePackagePath,
   computeModulePackageName,
   addSymlink,
@@ -30,14 +31,18 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
   const templatesPath = getTemplatesPath(old);
 
   copyTemplates();
+  mergeWithModules();
 
   /* Add module steps */
 
+  /**
+   * Moves templates to newly created module.
+   */
   function copyTemplates() {
     logger.info(`Copying ${packageName} files…`);
 
     // create new module directory
-    const destinationPath = computeModulesPath(packageName, old, moduleName);
+    const destinationPath = computeModulePath(packageName, old, moduleName);
     const newModule = shell.mkdir('-p', destinationPath);
 
     // continue only if directory does not jet exist
@@ -52,33 +57,38 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
     logger.info(chalk.green(`✔ The ${packageName} files have been copied!`));
   }
 
-  function temp() {
-    // get index file path
-    const modulesPath = computeModulesPath(location, options);
-    const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
-    const indexPath = modulesPath + indexFullFileName;
+  /**
+   * Imports module to 'modules.ts' file.
+   */
+  function mergeWithModules() {
+    // Gets `modules.ts` file path
+    const modulesEntry = `${getModulesEntryPoint(module)}/${fs
+      .readdirSync(getModulesEntryPoint(module))
+      .find(_ => _.includes('modules.ts'))}`;
     let indexContent;
 
     try {
-      // prepend import module
+      // Retrieves the content of the modules.ts
       indexContent =
-        `import ${moduleName} from '${computeModulePackageName(location, options, moduleName)}';\n` +
-        fs.readFileSync(indexPath);
+        `import ${moduleName} from '${computeModulePackageName(moduleName, packageName, old)}';\n` +
+        fs.readFileSync(modulesEntry);
     } catch (e) {
-      logger.error(chalk.red(`Failed to read ${indexPath} file`));
+      logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
       process.exit();
     }
 
-    // extract application modules
+    // Extracts application modules from the modules.ts
     const appModuleRegExp = /Module\(([^()]+)\)/g;
     const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
 
-    // add module to app module list
+    // Adds a module to app module list
     shell
       .ShellString(indexContent.replace(RegExp(appModuleRegExp, 'g'), `Module(${moduleName}, ${appModules})`))
-      .to(indexPath);
-    runPrettier(indexPath);
+      .to(modulesEntry);
+    runPrettier(modulesEntry);
+  }
 
+  function temp() {
     if (!options.old) {
       // get package content
       const packagePath = computePackagePath(location);

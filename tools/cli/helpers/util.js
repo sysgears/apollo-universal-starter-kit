@@ -7,12 +7,12 @@ const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config
 /**
  * Provides a package name for the particular module based on the command option --old .
  *
- * @param module - The application module ('client', 'server' etc.)
+ * @param packageName - The application package ('client', 'server' etc.)
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
  */
-const getPackageName = (module, old) => {
-  return `${module}${old ? '' : module === 'server' ? '-ts' : '-react'}`;
+const getPackageName = (packageName, old) => {
+  return `${packageName}${old ? '' : packageName === 'server' ? '-ts' : '-react'}`;
 };
 
 /**
@@ -67,19 +67,26 @@ function renameFiles(destinationPath, moduleName) {
 }
 
 /**
- * Gets the computed path of the module or modules dir path.
+ * Gets the computed path of the new module.
  *
- * @param location - The location for a new module [client|server|both].
- * @param moduleName - The name of a new module.
- * @returns {string} - Return the computed path
+ * @param packageName - The application package ('client', 'server' etc.)
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @param moduleName - The name of a new module
+ * @returns {string} - Returns the computed path
  */
-function computeModulesPath(location, old, moduleName = '') {
-  return old || (moduleName === '' && location.split('-')[0] === 'server')
-    ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
-    : moduleName === ''
-      ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/`
-      : `${BASE_PATH}/modules/${moduleName}/${location}`;
-}
+const computeModulePath = (packageName, old, moduleName) => {
+  return old
+    ? `${BASE_PATH}/packages/${packageName}/src/modules/${moduleName}`
+    : `${BASE_PATH}/modules/${moduleName}/${packageName}`;
+};
+
+/**
+ * Gets the path of the modules entry point.
+ *
+ * @param packageName - The application package ('client', 'server' etc.)
+ * @returns {string} - Returns the computed path
+ */
+const getModulesEntryPoint = packageName => `${BASE_PATH}/packages/${packageName}/src`;
 
 /**
  * Gets the computed path of the root module path.
@@ -94,16 +101,13 @@ function computeRootModulesPath(moduleName) {
 /**
  * Gets the computed package path for the module.
  *
- * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server|both].
+ * @param moduleName - The name of a new module
+ * @param packageName - The application package ('client', 'server' etc.)
+ * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Return the computed path
  */
-function computeModulePackageName(location, options, moduleName) {
-  return options.old
-    ? `./${moduleName}`
-    : `@module/${decamelize(moduleName, {
-        separator: '-'
-      })}-${location}`;
+function computeModulePackageName(moduleName, packageName, old) {
+  return old ? `./${moduleName}` : `@module/${decamelize(moduleName)}-${packageName}`;
 }
 
 /**
@@ -163,7 +167,8 @@ module.exports = {
   getTemplatesPath,
   renameFiles,
   copyFiles,
-  computeModulesPath,
+  computeModulePath,
+  getModulesEntryPoint,
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,

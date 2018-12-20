@@ -2,6 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const {
+  getPackageName,
   computeModulesPath,
   computeRootModulesPath,
   computePackagePath,
@@ -18,10 +19,26 @@ const {
  * @param options - User defined options
  * @param location - The location for a new module [client|server|both].
  */
-function deleteModule({ logger, moduleName, options, location }) {
+function deleteModule({ logger, moduleName, module, old, options, location }) {
   console.log(temp);
+
+  const packageName = getPackageName(module, old);
+
+  deleteTemplates();
+
+  /* Delete module steps */
+
+  function deleteTemplates() {
+    logger.info(`Deleting ${packageName} files…`);
+    const modulePath = computeModulesPath(packageName, old, moduleName);
+    if (fs.existsSync(modulePath)) {
+      // remove module directory
+      shell.rm('-rf', modulePath);
+    }
+    logger.info(chalk.green(`✔ The ${packageName} files of the module ${moduleName} have been deleted!`));
+  }
+
   function temp() {
-    logger.info(`Deleting ${location} files…`);
     const modulePath = computeModulesPath(location, options, moduleName);
 
     if (fs.existsSync(modulePath)) {

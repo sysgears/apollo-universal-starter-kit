@@ -2,6 +2,8 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const {
+  getPackageName,
+  getTemplatesPath,
   copyFiles,
   renameFiles,
   computeModulesPath,
@@ -21,13 +23,21 @@ const {
  * @param location - The location for a new module [client|server|both].
  * @param finished - The flag about the end of the generating process.
  */
-function addModule({ logger, templatesPath, moduleName, options, location, finished = true }) {
+function addModule({ logger, moduleName, module, old, options, location, finished = true }) {
   console.log(temp);
-  function temp() {
-    logger.info(`Copying ${location} files…`);
+
+  const packageName = getPackageName(module, old);
+  const templatesPath = getTemplatesPath(old);
+
+  copyTemplates();
+
+  /* Add module steps */
+
+  function copyTemplates() {
+    logger.info(`Copying ${packageName} files…`);
 
     // create new module directory
-    const destinationPath = computeModulesPath(location, options, moduleName);
+    const destinationPath = computeModulesPath(packageName, old, moduleName);
     const newModule = shell.mkdir('-p', destinationPath);
 
     // continue only if directory does not jet exist
@@ -36,11 +46,13 @@ function addModule({ logger, templatesPath, moduleName, options, location, finis
       process.exit();
     }
     //copy and rename templates in destination directory
-    copyFiles(destinationPath, templatesPath, location);
+    copyFiles(destinationPath, templatesPath, packageName);
     renameFiles(destinationPath, moduleName);
 
-    logger.info(chalk.green(`✔ The ${location} files have been copied!`));
+    logger.info(chalk.green(`✔ The ${packageName} files have been copied!`));
+  }
 
+  function temp() {
     // get index file path
     const modulesPath = computeModulesPath(location, options);
     const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);

@@ -2,7 +2,26 @@ const shell = require('shelljs');
 const fs = require('fs');
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
-const { BASE_PATH } = require('../config');
+const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config');
+
+/**
+ * Provides a package name for the particular module based on the command option --old .
+ *
+ * @param module - The application module ('client', 'server' etc.)
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
+ */
+const getPackageName = (module, old) => {
+  return `${module}${old ? '' : module === 'server' ? '-ts' : '-react'}`;
+};
+
+/**
+ * Provides a path to the module templates.
+ *
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - path to the templates
+ */
+const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
 
 /**
  * Copies the templates to the destination directory.
@@ -54,8 +73,8 @@ function renameFiles(destinationPath, moduleName) {
  * @param moduleName - The name of a new module.
  * @returns {string} - Return the computed path
  */
-function computeModulesPath(location, options, moduleName = '') {
-  return options.old || (moduleName === '' && location.split('-')[0] === 'server')
+function computeModulesPath(location, old, moduleName = '') {
+  return old || (moduleName === '' && location.split('-')[0] === 'server')
     ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
     : moduleName === ''
       ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/`
@@ -140,6 +159,8 @@ function runPrettier(pathToFile) {
 }
 
 module.exports = {
+  getPackageName,
+  getTemplatesPath,
   renameFiles,
   copyFiles,
   computeModulesPath,

@@ -18,8 +18,16 @@ const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl
   port ? ':' + port : ''
 }`;
 
-const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
-  const uploadFile = async () => {
+export default class UploadView extends React.Component {
+  static propTypes = {
+    t: PropTypes.func,
+    handleUploadFiles: PropTypes.func,
+    files: PropTypes.array,
+    handleRemoveFile: PropTypes.func
+  };
+
+  uploadFile = async () => {
+    const { handleUploadFiles } = this.props;
     const { uri, name } = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false });
     const type = mime.contentType(path.extname(name));
     if (type) {
@@ -28,7 +36,7 @@ const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
     }
   };
 
-  const downloadFile = async (path, name) => {
+  downloadFile = async (path, name) => {
     const { albumName } = uploadConfig;
     const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
     const createAsset = await MediaLibrary.createAssetAsync(uri);
@@ -42,9 +50,10 @@ const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
       : await MediaLibrary.createAlbumAsync(albumName, createAsset, false);
   };
 
-  const renderFileInfo = ({ item: { id, name, path } }) => {
+  renderFileInfo = ({ item: { id, name, path } }) => {
+    const { handleRemoveFile } = this.props;
     return (
-      <TouchableOpacity style={styles.fileWrapper} onPress={() => downloadFile(path, name)}>
+      <TouchableOpacity style={styles.fileWrapper} onPress={() => this.downloadFile(path, name)}>
         <Text style={styles.text}>{name}</Text>
         <TouchableOpacity style={styles.iconWrapper} onPress={() => handleRemoveFile(id)}>
           <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
@@ -53,28 +62,25 @@ const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
     );
   };
 
-  renderFileInfo.propTypes = {
-    item: PropTypes.object
-  };
-
-  return files ? (
-    <View style={styles.container}>
-      <View style={styles.btnContainer}>
-        <View style={styles.btn}>
-          <Button title={t('btnUpload')} onPress={uploadFile} />
+  render() {
+    const { files, t } = this.props;
+    return files ? (
+      <View style={styles.container}>
+        <View style={styles.btnContainer}>
+          <View style={styles.btn}>
+            <Button title={t('btnUpload')} onPress={this.uploadFile} />
+          </View>
         </View>
+        <FlatList
+          data={files}
+          style={styles.list}
+          keyExtractor={item => `${item.id}`}
+          renderItem={this.renderFileInfo}
+        />
       </View>
-      <FlatList data={files} style={styles.list} keyExtractor={item => `${item.id}`} renderItem={renderFileInfo} />
-    </View>
-  ) : null;
-};
-
-UploadView.propTypes = {
-  t: PropTypes.func,
-  handleUploadFiles: PropTypes.func,
-  files: PropTypes.array,
-  handleRemoveFile: PropTypes.func
-};
+    ) : null;
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -120,5 +126,3 @@ const styles = StyleSheet.create({
     width: '100%'
   }
 });
-
-export default UploadView;

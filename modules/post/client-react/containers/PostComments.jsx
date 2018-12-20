@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView';
 
+import POST_QUERY from '../graphql/PostQuery.graphql';
 import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
 import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
@@ -137,18 +138,22 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
-          updateQueries: {
-            post: (
-              prev,
-              {
-                mutationResult: {
-                  data: { addComment }
-                }
+          update: ({ caches }, { data: { addComment } }) => {
+            /**
+             * Handle caches[0], we have Array caches [netCache, localCache],
+             * we should use netCache because it contains all data with the
+             * previous request
+             */
+
+            const prevPost = caches[0].readQuery({
+              query: POST_QUERY,
+              variables: {
+                id: String(postId)
               }
-            ) => {
-              if (prev.post) {
-                return AddComment(prev, addComment);
-              }
+            });
+
+            if (prevPost.post) {
+              return AddComment(prevPost, addComment);
             }
           }
         })
@@ -182,18 +187,22 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
-          updateQueries: {
-            post: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deleteComment }
-                }
+          update: ({ caches }, { data: { deleteComment } }) => {
+            /**
+             * Handle caches[0], we have Array caches [netCache, localCache],
+             * we should use netCache because it contains all data with the
+             * previous request
+             */
+
+            const prevPost = caches[0].readQuery({
+              query: POST_QUERY,
+              variables: {
+                id: String(postId)
               }
-            ) => {
-              if (prev.post) {
-                return DeleteComment(prev, deleteComment.id);
-              }
+            });
+
+            if (prevPost.post) {
+              return DeleteComment(prevPost, deleteComment.id);
             }
           }
         })

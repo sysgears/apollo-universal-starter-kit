@@ -18,24 +18,34 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
       const addServerCounter = (amount: number) => () =>
         mutate({
           variables: { amount },
-          updateQueries: {
-            serverCounterQuery: (prev: any, { mutationResult }: any) => {
-              const newAmount = mutationResult.data.addServerCounter.amount;
-              return update(prev, {
-                serverCounter: {
-                  amount: {
-                    $set: newAmount
-                  }
-                }
-              });
-            }
-          },
           optimisticResponse: {
             __typename: 'Mutation',
             addServerCounter: {
               __typename: 'Counter',
               amount: counter.amount + 1
             }
+          },
+          update: ({ caches }: any, { data }: any) => {
+            /**
+             * Handle caches[0], we have Array caches [netCache, localCache],
+             * we should use netCache because it contains all data with the
+             * previous request
+             */
+
+            const prevCounter = caches[0].readQuery({
+              query: COUNTER_QUERY,
+              variables: { amount }
+            });
+
+            const newAmount = data.addServerCounter.amount;
+
+            return update(prevCounter, {
+              serverCounter: {
+                amount: {
+                  $set: newAmount
+                }
+              }
+            });
           }
         });
 

@@ -194,6 +194,9 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
+            /**
+             * 'updateQueries' should be replaced by the method 'update'
+             */
             updateQueries: {
               messages: (
                 prev,
@@ -226,6 +229,9 @@ export default compose(
                 __typename: 'Message'
               }
             },
+            /**
+             * 'updateQueries' should be replaced by the method 'update'
+             */
             updateQueries: {
               messages: (
                 prev,
@@ -270,6 +276,9 @@ export default compose(
                 __typename: 'Message'
               }
             },
+            /**
+             * 'updateQueries' should be replaced by the method 'update'
+             */
             updateQueries: {
               messages: (
                 prev,

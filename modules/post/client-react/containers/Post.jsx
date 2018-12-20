@@ -190,17 +190,21 @@ export default compose(
               __typename: 'Post'
             }
           },
-          updateQueries: {
-            posts: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deletePost }
-                }
+          update: ({ caches }, { data: { deletePost } }) => {
+            /**
+             * Handle caches[0], we have Array caches [netCache, localCache],
+             * we should use netCache because it contains all data with the
+             * previous request
+             */
+            const prevPosts = caches[0].readQuery({
+              query: POSTS_QUERY,
+              variables: {
+                limit,
+                after: 0
               }
-            ) => {
-              return DeletePost(prev, deletePost.id);
-            }
+            });
+
+            return DeletePost(prevPosts, deletePost.id);
           }
         });
       }

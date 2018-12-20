@@ -5,9 +5,8 @@ import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.implicits.RichList._
 import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
-import common.errors.Error
-import common.{ActorMessageDelivering, ActorNamed}
-import core.graphql.UserContext
+import common.graphql.UserContext
+import common.ActorNamed
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
@@ -21,7 +20,6 @@ object Dispatcher extends ActorNamed {
                                      context: UserContext,
                                      replyTo: ActorRef,
                                      resolverActor: ActorRef,
-                                     onException: Exception => Any,
                                      before: List[ActorRef] = Nil,
                                      after: List[ActorRef] = Nil)
 
@@ -64,8 +62,7 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
       } else {
         sendMessageToActor[Any](msg.resolverActor, msg.input).andThen {
           case scala.util.Success(r) => msg.replyTo ! r
-          case scala.util.Failure(f: Error) => msg.replyTo ! msg.onException(f)
-          case scala.util.Failure(f) ⇒ msg.replyTo ! Status.Failure(f)
+          case scala.util.Failure(f) => msg.replyTo ! Status.Failure(f)
         }
       }
   }
@@ -78,6 +75,6 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
 
     case Failure(e) =>
       log.info(s"Interceptor has finished with failure. Reason: '$e'")
-      msg.replyTo ! msg.onException(e)
+      msg.replyTo ! Status.Failure(e)
   }
 }

@@ -14,7 +14,7 @@ export interface BaseModuleShape extends CommonModuleShape {
   connectionParam?: ConnectionParamsOptions[];
   reducer?: Array<{ [key: string]: Reducer }>;
   resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
-  routerFactory?: () => React.ComponentType;
+  router?: React.ReactElement<any>;
   rootComponentFactory?: Array<(req: Request) => React.ReactElement<any>>;
   dataRootComponent?: React.ComponentType[];
   data?: { [key: string]: any };
@@ -39,13 +39,9 @@ class BaseModule extends CommonModule {
     return this.connectionParam;
   }
 
-  get router() {
-    return this.routerFactory();
-  }
-
   public getDataRoot(root: React.ReactElement<any>) {
     let nestedRoot = root;
-    for (const component of this.dataRootComponent) {
+    for (const component of this.dataRootComponent || []) {
       nestedRoot = React.createElement(component, {}, nestedRoot);
     }
     return nestedRoot;

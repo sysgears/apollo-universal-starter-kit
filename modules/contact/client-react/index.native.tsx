@@ -1,12 +1,12 @@
 import React from 'react';
 import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
 
+import ClientModule from '@module/module-client-react-native';
 import { translate } from '@module/i18n-client-react';
-import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
+
+import { HeaderTitle, IconButton } from '@module/look-client-react-native';
 import Contact from './containers/Contact';
 import resources from './locales';
-
-import ClientModule from '@module/module-client-react-native';
 
 const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 

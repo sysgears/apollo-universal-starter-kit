@@ -39,13 +39,12 @@ export default class Main extends React.Component<MainProps> {
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });
-    const MainScreenNavigator = modules.router;
 
     log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
     return modules.getWrappedRoot(
       <Provider store={store}>
-        <ApolloProvider client={client}>{modules.getDataRoot(<MainScreenNavigator />)}</ApolloProvider>
+        <ApolloProvider client={client}>{modules.getDataRoot(modules.router)}</ApolloProvider>
       </Provider>
     );
   }

@@ -1,4 +1,4 @@
-package guice.modules
+package guice
 
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
@@ -6,7 +6,7 @@ import com.google.inject.Provides
 import com.google.inject.name.Names
 import core.guice.injection.GuiceActorRefProvider
 import graphql.resolvers.ItemResolver
-import javax.inject.{Inject, Named}
+import javax.inject.Named
 import model.Item
 import net.codingwell.scalaguice.ScalaModule
 import repositories.ItemRepository
@@ -17,11 +17,9 @@ import scala.concurrent.ExecutionContext
 /**
   * Provides dependency injection functionality.
   */
-class ItemModule extends ScalaModule with GuiceActorRefProvider {
+class ItemBinding extends ScalaModule with GuiceActorRefProvider {
 
-
-
-  override def configure() = {
+  override def configure(): Unit = {
     bind[Actor].annotatedWith(Names.named(ItemResolver.name)).to[ItemResolver]
   }
 

@@ -1,4 +1,4 @@
-package modules
+package guice
 
 import actors.FileActor
 import akka.actor.{Actor, ActorRef, ActorSystem}
@@ -13,11 +13,12 @@ import net.codingwell.scalaguice.ScalaModule
 import repositories.FileMetadataRepository
 import slick.jdbc.JdbcProfile
 
-class FileModule extends ScalaModule with GuiceActorRefProvider {
+class FileBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
     bind[FileUploadResolver].to[FileUploadResolverImpl]
     bind[Actor].annotatedWith(Names.named(FileActor.name)).to[FileActor]
+    install(new HashBinding)
   }
 
   @Provides

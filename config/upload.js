@@ -1,3 +1,4 @@
 export default {
-  uploadDir: 'public'
+  uploadDir: 'public',
+  albumName: 'StarterKit'
 };

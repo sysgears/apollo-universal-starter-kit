@@ -1,11 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import path from 'path';
-import { DocumentPicker } from 'expo';
+import { DocumentPicker, MediaLibrary, Constants, FileSystem } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View, Button, TouchableOpacity, FlatList } from 'react-native';
+import url from 'url';
+
+import uploadConfig from '../../../../config/upload';
+
+const {
+  manifest: { bundleUrl }
+} = Constants;
+const { protocol, port, hostname } = url.parse(__API_URL__);
+const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
+  port ? ':' + port : ''
+}`;
 
 const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
   const uploadFile = async () => {
@@ -17,9 +28,23 @@ const UploadView = ({ t, handleUploadFiles, files, handleRemoveFile }) => {
     }
   };
 
-  const renderFileInfo = ({ item: { id, name } }) => {
+  const downloadFile = async (path, name) => {
+    const { albumName } = uploadConfig;
+    const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
+    const createAsset = await MediaLibrary.createAssetAsync(uri);
+
+    // Remove file from cache directory
+    await FileSystem.deleteAsync(uri);
+
+    const album = await MediaLibrary.getAlbumAsync(albumName);
+    album
+      ? await MediaLibrary.addAssetsToAlbumAsync([createAsset], album, false)
+      : await MediaLibrary.createAlbumAsync(albumName, createAsset, false);
+  };
+
+  const renderFileInfo = ({ item: { id, name, path } }) => {
     return (
-      <TouchableOpacity style={styles.fileWrapper}>
+      <TouchableOpacity style={styles.fileWrapper} onPress={() => downloadFile(path, name)}>
         <Text style={styles.text}>{name}</Text>
         <TouchableOpacity style={styles.iconWrapper} onPress={() => handleRemoveFile(id)}>
           <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />

@@ -2,7 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const {
-  getPackageName,
+  getModulePackageName,
   computeModulePath,
   getModulesEntryPoint,
   computeRootModulesPath,
@@ -21,94 +21,104 @@ const {
  * @param old - The flag that describes if the command invoked for a new structure or not
  */
 function deleteModule({ logger, packageName, moduleName, old }) {
-  const modulePackageName = getPackageName(packageName, old);
+  const modulePackageName = getModulePackageName(packageName, old);
   const modulePath = computeModulePath(modulePackageName, old, moduleName);
+  const params = { logger, moduleName, modulePath, packageName, modulePackageName, old };
 
   if (fs.existsSync(modulePath)) {
-    deleteTemplates();
-    removeFromModules();
-    if (!old) removeDependency();
+    deleteTemplates(params);
+    removeFromModules(params);
+    if (!old) removeDependency(params);
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
   } else {
     logger.info(chalk.red(`✘ Module ${moduleName} for package ${packageName} not found!`));
   }
+}
 
-  /* Delete module steps */
+////////// DELETE MODULE STEPS //////////
 
-  function deleteTemplates() {
-    logger.info(`Deleting ${modulePackageName} files…`);
-    // remove module directory
-    shell.rm('-rf', modulePath);
+/**
+ * Removes templates from the module.
+ */
+function deleteTemplates({ logger, moduleName, modulePath, modulePackageName, old }) {
+  logger.info(`Deleting ${modulePackageName} files…`);
+  // remove module directory
+  shell.rm('-rf', modulePath);
 
-    // in new module structure remove root dir if no submodules exist
-    if (!old) {
-      const rootModulePath = computeRootModulesPath(moduleName);
-      if (!shell.ls(rootModulePath).length) {
-        shell.rm('-rf', rootModulePath);
-      }
+  // in new module structure remove root dir if no submodules exist
+  if (!old) {
+    const rootModulePath = computeRootModulesPath(moduleName);
+    if (!shell.ls(rootModulePath).length) {
+      shell.rm('-rf', rootModulePath);
     }
-    logger.info(chalk.green(`✔ The ${modulePackageName} files of the module ${moduleName} have been deleted!`));
+  }
+  logger.info(chalk.green(`✔ The ${modulePackageName} files of the module ${moduleName} have been deleted!`));
+}
+
+/**
+ * Removes module from modules entry file.
+ */
+function removeFromModules({ logger, moduleName, packageName, modulePackageName, old }) {
+  // Gets modules entry point file path
+  const modulesEntry = getModulesEntryPoint(packageName, old);
+
+  let indexContent;
+
+  try {
+    indexContent = fs.readFileSync(modulesEntry);
+  } catch (e) {
+    logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
+    process.exit();
   }
 
-  function removeFromModules() {
-    // Gets modules entry point file path
-    const modulesEntry = getModulesEntryPoint(packageName, old);
+  // Extract application modules
+  const appModuleRegExp = /Module\(([^()]+)\)/g;
+  const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
+  const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
 
-    let indexContent;
+  const contentWithoutDeletedModule = indexContent
+    .toString()
+    // Remove module from modules list
+    .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
+    // Remove module import
+    .replace(
+      RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n`, 'g'),
+      ''
+    );
 
-    try {
-      indexContent = fs.readFileSync(modulesEntry);
-    } catch (e) {
-      logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
-      process.exit();
-    }
+  fs.writeFileSync(modulesEntry, contentWithoutDeletedModule);
+  runPrettier(modulesEntry);
+}
 
-    // Extract application modules
-    const appModuleRegExp = /Module\(([^()]+)\)/g;
-    const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
-    const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
+/**
+ * Removes the module from the dependencies list.
+ */
+function removeDependency({ moduleName, packageName, modulePackageName, old }) {
+  // Get package content
+  const packagePath = computePackagePath(packageName);
+  const packageContent = `` + fs.readFileSync(packagePath);
 
-    const contentWithoutDeletedModule = indexContent
-      .toString()
-      // Remove module from modules list
-      .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
-      // Remove module import
-      .replace(
-        RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n`, 'g'),
-        ''
-      );
+  // Extract dependencies
+  const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+  const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
 
-    fs.writeFileSync(modulesEntry, contentWithoutDeletedModule);
-    runPrettier(modulesEntry);
-  }
+  // Remove package
+  const dependenciesWithoutDeleted = dependencies
+    .split(',')
+    .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
 
-  function removeDependency() {
-    // Get package content
-    const packagePath = computePackagePath(packageName);
-    const packageContent = `` + fs.readFileSync(packagePath);
-
-    // Extract dependencies
-    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
-    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
-
-    // Remove package
-    const dependenciesWithoutDeleted = dependencies
-      .split(',')
-      .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
-
-    // Remove module from package list
-    shell
-      .ShellString(
-        packageContent.replace(
-          RegExp(dependenciesRegExp, 'g'),
-          `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
-        )
+  // Remove module from package list
+  shell
+    .ShellString(
+      packageContent.replace(
+        RegExp(dependenciesRegExp, 'g'),
+        `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
       )
-      .to(packagePath);
+    )
+    .to(packagePath);
 
-    removeSymlink(packageName, modulePackageName);
-  }
+  removeSymlink(packageName, modulePackageName);
 }
 
 module.exports = deleteModule;

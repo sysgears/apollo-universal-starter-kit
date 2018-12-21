@@ -11,7 +11,7 @@ const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
  */
-const getPackageName = (packageName, old) => {
+const getModulePackageName = (packageName, old) => {
   return `${packageName}${old ? '' : packageName === 'server' ? '-ts' : '-react'}`;
 };
 
@@ -28,10 +28,10 @@ const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
  *
  * @param destinationPath - The destination path for a new module.
  * @param templatesPath - The path to the templates for a new module.
- * @param packageName - The application package ([client|server])
+ * @param modulePackageName - The application package ([client|server])
  */
-function copyFiles(destinationPath, templatesPath, packageName) {
-  shell.cp('-R', `${templatesPath}/${packageName}/*`, destinationPath);
+function copyFiles(destinationPath, templatesPath, modulePackageName) {
+  shell.cp('-R', `${templatesPath}/${modulePackageName}/*`, destinationPath);
 }
 
 /**
@@ -174,7 +174,7 @@ function runPrettier(pathToFile) {
 }
 
 module.exports = {
-  getPackageName,
+  getModulePackageName,
   getTemplatesPath,
   renameFiles,
   copyFiles,

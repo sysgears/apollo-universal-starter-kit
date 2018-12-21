@@ -1,22 +1,24 @@
 import akka.http.scaladsl.server.Route
-import app.UserModule
+import app.AuthenticationModule
 import com.google.inject.Guice
 import core.guice.bindings.CoreBinding
-import guice.{MailBinding, UserBinding}
+import guice.{AuthenticationBinding, MailBinding, UserBinding}
 import net.codingwell.scalaguice.ScalaModule
 import repositories.UserSchemaInitializer
-import repositories.auth.{FacebookAuthSchemaInitializer, GithubAuthSchemaInitializer, GoogleAuthSchemaInitializer, LinkedinAuthSchemaInitializer}
+
 import scala.collection.JavaConverters._
-import app.{AuthenticationModule, UserModule}
 import repositories._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-trait UserHelper extends TestHelper {
+trait AuthenticationTestHelper extends TestHelper {
 
-  val bindings: Seq[ScalaModule] = Seq(new UserBinding, new CoreBinding, new MailBinding)
+  val bindings: Seq[ScalaModule] = Seq(new UserBinding, new CoreBinding, new MailBinding, new AuthenticationBinding)
   Guice.createInjector(bindings.asJava)
+
+  val routes: Route = routesWithGraphQLSchema[AuthenticationModule]
+
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
   val googleAuthInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
   val githubAuthInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]

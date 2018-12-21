@@ -7,7 +7,7 @@ import monix.execution.Scheduler
 import monix.reactive.subjects.PublishSubject
 import sangria.schema.Action
 
-abstract class BasicPubSubService[T](implicit val scheduler: Scheduler) extends PubSubService[T]
+abstract class BasicPubSubService[T <: PublishElement[_]](implicit val scheduler: Scheduler) extends PubSubService[T]
   with Logger {
 
   lazy val source = PublishSubject[T]

@@ -14,5 +14,6 @@ class GlobalBinding extends ScalaModule {
     install(new FileBinding)
     install(new SangriaBinding)
     install(new ServerModulesBinding)
+    install(new AuthenticationBinding)
   }
 }

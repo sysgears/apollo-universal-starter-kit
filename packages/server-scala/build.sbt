@@ -2,15 +2,9 @@ name := "global"
 
 version := "0.1"
 
-scalaVersion := "2.12.6"
+scalaVersion := "2.12.7"
 
-lazy val global = (project in file(".") dependsOn(modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*))
-  .enablePlugins(BuildInfoPlugin, DockerPlugin, JavaAppPackaging)
-  .settings(
-    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(_.build)),
-    buildInfoPackage := "modulesinfo",
-    buildInfoObject := "ModulesInfo"
-  )
+lazy val global = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*)
 
 lazy val modules = List(
   ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload"),

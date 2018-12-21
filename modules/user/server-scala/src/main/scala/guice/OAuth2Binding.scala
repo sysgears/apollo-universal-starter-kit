@@ -1,4 +1,4 @@
-package modules
+package guice
 
 import com.github.scribejava.apis.{FacebookApi, GitHubApi, GoogleApi20, LinkedInApi20}
 import com.github.scribejava.core.builder.ServiceBuilder
@@ -9,7 +9,7 @@ import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
 import services.{ExternalApiService, ExternalApiServiceImpl}
 
-class Oauth2Module extends ScalaModule {
+class OAuth2Binding extends ScalaModule {
 
   override def configure() = {
     bind[ExternalApiService].to[ExternalApiServiceImpl]

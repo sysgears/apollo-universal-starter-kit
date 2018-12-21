@@ -1,14 +1,12 @@
 package guice
 
-import com.google.inject._
+import app._
+import com.google.inject.{Provides, Singleton}
 import common.graphql.schema.GraphQL
-import common.shapes.ServerModule
-import core.loader.ModuleFinder
-import core.loader.entities.{FilteredClasses, FoundClasses, InitializedClasses}
 import graphql.GraphQLSchema
-import org.clapper.classutil.ClassInfo
+import net.codingwell.scalaguice.ScalaModule
 
-class ServerModulesBinding(moduleFinder: ModuleFinder) extends AbstractModule {
+class ServerModulesBinding extends ScalaModule {
 
   override def configure(): Unit = {
     bind(classOf[GraphQL]).to(classOf[GraphQLSchema])
@@ -16,15 +14,19 @@ class ServerModulesBinding(moduleFinder: ModuleFinder) extends AbstractModule {
 
   @Provides
   @Singleton
-  def modules(injector: Injector): Seq[ServerModule] = {
-    InitializedClasses[ServerModule](
-      FilteredClasses(
-        FoundClasses(moduleFinder.modulesPaths.toList),
-        serverModuleFilter
-      ),
-      initializer = Some(injector.getInstance(_).asInstanceOf[ServerModule])
-    ).retrieve
+  def serverModules(contactModule: ContactModule,
+                    userModule: UserModule,
+                    uploadModule: UploadModule,
+                    paginationModule: PaginationModule,
+                    counterModule: CounterModule): GlobalModule = {
+    new GlobalModule(
+      Seq(
+        contactModule,
+        userModule,
+        uploadModule,
+        paginationModule,
+        counterModule
+      )
+    )
   }
-
-  def serverModuleFilter(classInfo: ClassInfo): Boolean = classInfo.superClassName == "common.shapes.ServerModule"
 }

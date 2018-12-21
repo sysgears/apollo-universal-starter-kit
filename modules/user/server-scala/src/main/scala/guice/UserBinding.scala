@@ -1,4 +1,4 @@
-package modules
+package guice
 
 import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.google.inject.Provides
@@ -9,12 +9,13 @@ import javax.inject.Named
 import net.codingwell.scalaguice.ScalaModule
 import repositories.{UserRepository, UserRepositoryImpl}
 
-class UserModule extends ScalaModule with GuiceActorRefProvider {
+class UserBinding extends ScalaModule with GuiceActorRefProvider {
 
-  override def configure() = {
+  override def configure(): Unit = {
     bind[UserRepository].to[UserRepositoryImpl]
     bind[Actor].annotatedWith(Names.named(TokenResolver.name)).to[TokenResolver]
     bind[Actor].annotatedWith(Names.named(UserResolver.name)).to[UserResolver]
+    install(new OAuth2Binding)
   }
 
   @Provides

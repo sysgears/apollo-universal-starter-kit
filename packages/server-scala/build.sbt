@@ -19,3 +19,5 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
   ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination")
 )
+
+resourceGenerators in Compile += DotEnvProcessor.concatenateTask.taskValue

@@ -4,7 +4,8 @@ version := "0.1"
 
 scalaVersion := "2.12.7"
 
-lazy val global = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*)
+lazy val global = (project in file(".") dependsOn(modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*))
+  .enablePlugins(DockerPlugin, JavaAppPackaging)
 
 lazy val modules = List(
   ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload"),
@@ -13,3 +14,11 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
   ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination")
 )
+
+packageName in Docker := "scala_server"
+dockerBaseImage := "openjdk:10"
+dockerExposedPorts := Seq(8080)
+defaultLinuxInstallLocation in Docker := "/usr/local"
+dockerExposedVolumes := Seq("/usr/local")
+
+mainClass in Compile := Some("Main")

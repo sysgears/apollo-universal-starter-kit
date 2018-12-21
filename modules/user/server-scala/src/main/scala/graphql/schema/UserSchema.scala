@@ -37,7 +37,7 @@ class UserSchema @Inject()(userProfileRepository: UserProfileRepository)
       name = "currentUser",
       fieldType = OptionType(user),
       arguments = List.empty,
-      resolve = sc => Some(User(Some(1), "user", "test@test.test", "123", "user", true))
+      resolve = _ => None
     )
   )
 }

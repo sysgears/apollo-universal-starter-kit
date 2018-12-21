@@ -13,7 +13,7 @@ import services.ExternalApiService
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class GoogleAuthSpec extends UserTestHelper {
+class GoogleAuthSpec extends AuthenticationTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 

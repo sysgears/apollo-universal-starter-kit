@@ -13,7 +13,7 @@ import services.ExternalApiService
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class FacebookAuthSpec extends UserTestHelper {
+class FacebookAuthSpec extends AuthenticationTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 

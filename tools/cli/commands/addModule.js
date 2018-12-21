@@ -20,18 +20,16 @@ const {
  * @param logger - The Logger.
  * @param templatesPath - The path to the templates for a new module.
  * @param moduleName - The name of a new module.
- * @param options - User defined options
- * @param location - The location for a new module [client|server|both].
- * @param finished - The flag about the end of the generating process.
  */
-function addModule({ logger, moduleName, module, old, options, location, finished = true }) {
-  console.log(temp);
-
+function addModule({ logger, moduleName, module, old }) {
   const packageName = getPackageName(module, old);
   const templatesPath = getTemplatesPath(old);
 
   copyTemplates();
   mergeWithModules();
+  if (!old) addDependency();
+
+  logger.info(chalk.green(`✔ New module ${moduleName} for ${module} successfully created!`));
 
   /* Add module steps */
 
@@ -41,16 +39,16 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
   function copyTemplates() {
     logger.info(`Copying ${packageName} files…`);
 
-    // create new module directory
+    // Create new module directory
     const destinationPath = computeModulePath(packageName, old, moduleName);
     const newModule = shell.mkdir('-p', destinationPath);
 
-    // continue only if directory does not jet exist
+    // Continue only if directory does not yet exist
     if (newModule.code !== 0) {
       logger.error(chalk.red(`The ${moduleName} directory is already exists.`));
       process.exit();
     }
-    //copy and rename templates in destination directory
+    // Copy and rename templates in destination directory
     copyFiles(destinationPath, templatesPath, packageName);
     renameFiles(destinationPath, moduleName);
 
@@ -61,12 +59,12 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
    * Imports module to 'modules.ts' file.
    */
   function mergeWithModules() {
-    // Gets modules entry point file path
+    // Get modules entry point file path
     const modulesEntry = getModulesEntryPoint(module, old);
     let indexContent;
 
     try {
-      // Retrieves the content of the modules.ts
+      // Retrieve the content of the modules.ts
       indexContent =
         `import ${moduleName} from '${computeModulePackageName(moduleName, packageName, old)}';\n` +
         fs.readFileSync(modulesEntry);
@@ -75,47 +73,42 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
       process.exit();
     }
 
-    // Extracts application modules from the modules.ts
+    // Extract application modules from the modules.ts
     const appModuleRegExp = /Module\(([^()]+)\)/g;
     const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
 
-    // Adds a module to app module list
+    // Add a module to app module list
     shell
       .ShellString(indexContent.replace(RegExp(appModuleRegExp, 'g'), `Module(${moduleName}, ${appModules})`))
       .to(modulesEntry);
     runPrettier(modulesEntry);
   }
 
-  function temp() {
-    if (!options.old) {
-      // get package content
-      const packagePath = computePackagePath(location);
-      const packageContent = `` + fs.readFileSync(packagePath);
+  function addDependency() {
+    // Get package content
+    const packagePath = computePackagePath(module);
+    const packageContent = `${fs.readFileSync(packagePath)}`;
 
-      // extract dependencies
-      const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
-      const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+    // Extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
 
-      // insert package and sort
-      const dependenciesSorted = dependencies.split(',');
-      dependenciesSorted.push(`\n    "${computeModulePackageName(location, options, moduleName)}": "^1.0.0"`);
-      dependenciesSorted.sort();
+    // Insert package and sort
+    const dependenciesSorted = dependencies.split(',');
+    dependenciesSorted.push(`\n    "${computeModulePackageName(moduleName, packageName, old)}": "^1.0.0"`);
+    dependenciesSorted.sort();
 
-      // add module to package list
-      shell
-        .ShellString(
-          packageContent.replace(
-            RegExp(dependenciesRegExp, 'g'),
-            `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
-          )
+    // Add module to package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
         )
-        .to(packagePath);
+      )
+      .to(packagePath);
 
-      addSymlink(location, moduleName);
-    }
-    if (finished) {
-      logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
-    }
+    addSymlink(module, packageName);
   }
 }
 

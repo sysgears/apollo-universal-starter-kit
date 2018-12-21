@@ -7,7 +7,7 @@ const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config
 /**
  * Provides a package name for the particular module based on the command option --old .
  *
- * @param packageName - The application package ('client', 'server' etc.)
+ * @param packageName - The application package ([client|server])
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
  */
@@ -28,10 +28,10 @@ const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
  *
  * @param destinationPath - The destination path for a new module.
  * @param templatesPath - The path to the templates for a new module.
- * @param location - The location for a new module [client|server|both].
+ * @param packageName - The application package ([client|server])
  */
-function copyFiles(destinationPath, templatesPath, location) {
-  shell.cp('-R', `${templatesPath}/${location}/*`, destinationPath);
+function copyFiles(destinationPath, templatesPath, packageName) {
+  shell.cp('-R', `${templatesPath}/${packageName}/*`, destinationPath);
 }
 
 /**
@@ -69,7 +69,7 @@ function renameFiles(destinationPath, moduleName) {
 /**
  * Gets the computed path of the new module.
  *
- * @param packageName - The application package ('client', 'server' etc.)
+ * @param packageName - The application package ([client|server])
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @param moduleName - The name of a new module
  * @returns {string} - Returns the computed path
@@ -92,7 +92,7 @@ const findFileInPath = (path, matcher) => fs.readdirSync(path).find(_ => _.match
 /**
  * Gets the path of the modules entry point.
  *
- * @param packageName - The application package ('client', 'server' etc.)
+ * @param packageName - The application package ([client|server])
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Returns the computed path
  */
@@ -117,7 +117,7 @@ function computeRootModulesPath(moduleName) {
  * Gets the computed package path for the module.
  *
  * @param moduleName - The name of a new module
- * @param packageName - The application package ('client', 'server' etc.)
+ * @param packageName - The application package ([client|server])
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Return the computed path
  */
@@ -128,41 +128,37 @@ function computeModulePackageName(moduleName, packageName, old) {
 /**
  * Gets the computed package path for the module.
  *
- * @param moduleName - The name of a new module.
+ * @param packageName - The application package ([client|server])
  * @returns {string} - Return the computed path
  */
-function computePackagePath(location) {
-  return `${BASE_PATH}/packages/${location.split('-')[0]}/package.json`;
+function computePackagePath(packageName) {
+  return `${BASE_PATH}/packages/${packageName}/package.json`;
 }
 
 /**
- * Add symlink
+ * Adds a symlink.
  *
+ * @param packageName - The application package ([client|server])
  * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server].
  */
-function addSymlink(location, moduleName) {
+function addSymlink(moduleName, packageName) {
   shell.ln(
     '-s',
-    `${BASE_PATH}/modules/${moduleName}/${location}`,
-    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
-      separator: '-'
-    })}-${location}`
+    `${BASE_PATH}/modules/${moduleName}/${packageName}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName)}-${packageName}`
   );
 }
 
 /**
  * Remove symlink
  *
+ * @param packageName - The application package ([client|server])
  * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server].
  */
-function removeSymlink(location, moduleName) {
+function removeSymlink(moduleName, packageName) {
   shell.rm(
-    `${BASE_PATH}/modules/${moduleName}/${location}`,
-    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
-      separator: '-'
-    })}-${location}`
+    `${BASE_PATH}/modules/${moduleName}/${packageName}`,
+    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName)}-${packageName}`
   );
 }
 

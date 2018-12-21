@@ -5,7 +5,7 @@ import { DocumentPicker, MediaLibrary, Constants, FileSystem, Permissions } from
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, Button, TouchableOpacity, FlatList, Platform } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { Modal } from '@module/look-client-react-native';
 import url from 'url';
 
@@ -14,9 +14,9 @@ import uploadConfig from '../../../../config/upload';
 const {
   manifest: { bundleUrl }
 } = Constants;
-const { protocol, port, hostname } = url.parse(__API_URL__);
-const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
-  port ? ':' + port : ''
+const { protocol, host, hostname, port } = url.parse(__API_URL__);
+const serverUrl = `${protocol}//${
+  hostname === 'localhost' ? url.parse(bundleUrl).hostname + (port ? ':' + port : '') : host
 }`;
 
 export default class UploadView extends React.Component {
@@ -33,7 +33,12 @@ export default class UploadView extends React.Component {
 
   uploadFile = async () => {
     const { handleUploadFiles, t } = this.props;
-    const { uri, name } = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false });
+    const { uri, name, type: pickerType } = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false });
+
+    if (pickerType === 'cancel') {
+      return;
+    }
+
     const type = mime.contentType(path.extname(name));
     if (type) {
       const imageData = new ReactNativeFile({ uri, name, type });
@@ -46,7 +51,7 @@ export default class UploadView extends React.Component {
   downloadFile = async (path, name) => {
     const { t } = this.props;
     const { albumName } = uploadConfig;
-    if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
+    if (await this.checkPermission(Permissions.CAMERA_ROLL)) {
       try {
         const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
         const createAsset = await MediaLibrary.createAssetAsync(uri);
@@ -67,10 +72,7 @@ export default class UploadView extends React.Component {
     }
   };
 
-  checkPermission = async (type, skip) => {
-    if (skip === Platform.OS) {
-      return true;
-    }
+  checkPermission = async type => {
     const { getAsync, askAsync } = Permissions;
     const { status } = await getAsync(type);
     if (status !== 'granted') {
@@ -107,9 +109,9 @@ export default class UploadView extends React.Component {
         {this.renderModal()}
         <View style={styles.container}>
           <View style={styles.btnContainer}>
-            <View style={styles.btn}>
-              <Button title={t('upload.btn')} onPress={this.uploadFile} />
-            </View>
+            <TouchableOpacity style={styles.btn} onPress={this.uploadFile}>
+              <Text style={styles.btnText}>{t('upload.btn')}</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             data={files}
@@ -126,19 +128,28 @@ export default class UploadView extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'center'
+    backgroundColor: '#fff'
   },
   btnContainer: {
     width: '100%',
+    padding: 10,
     alignItems: 'center',
+    justifyContent: 'center',
     borderBottomWidth: 1,
     borderBottomColor: '#000'
   },
   btn: {
     width: 200,
     height: 50,
-    marginTop: 20
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0275d8',
+    borderRadius: 10
+  },
+  btnText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold'
   },
   text: {
     fontSize: 18

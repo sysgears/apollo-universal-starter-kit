@@ -4,17 +4,16 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import repositories.auth.FacebookAuthRepository
-import services.ExternalApiService
-import routes.auth.FacebookAuthController
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
-import repositories.UserRepository
+import repositories.{FacebookAuthRepository, UserRepository}
+import routes.FacebookAuthController
+import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class FacebookAuthSpec extends UserHelper {
+class FacebookAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 

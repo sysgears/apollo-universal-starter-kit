@@ -4,36 +4,36 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import repositories.auth.GoogleAuthRepository
-import services.ExternalApiService
-import routes.auth.GoogleAuthController
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
-import repositories.UserRepository
+import repositories.{GithubAuthRepository, UserRepository}
+import routes.GithubAuthController
+import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class GoogleAuthSpec extends UserHelper {
+
+class GithubAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 
   val userRepository: UserRepository = inject[UserRepository]
-  val authRepository: GoogleAuthRepository = inject[GoogleAuthRepository]
+  val authRepository: GithubAuthRepository = inject[GithubAuthRepository]
   val externalApiService: ExternalApiService = inject[ExternalApiService]
   val jwtAuthService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]
 
   val oAuth2ServiceMock: OAuth20Service = stub[OAuth20Service]
   val responseMock: Response = stub[Response]
 
-  val authController = new GoogleAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(executionContext)
+  val authController = new GithubAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(executionContext)
   val authRoutes: Route = authController.routes
 
-  "GoogleAuthController" must {
-    "redirect to google auth page" in {
+  "GithubAuthController" must {
+    "redirect to github auth page" in {
       (() => oAuth2ServiceMock.getAuthorizationUrl).when.returns("localhostTest")
 
-      Get("/auth/google") ~> authRoutes ~> check {
+      Get("/auth/github") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("localhostTest")
@@ -46,14 +46,14 @@ class GoogleAuthSpec extends UserHelper {
       (() => responseMock.getBody).when.returns(
         """
           |{
-          |   "id":"testId",
+          |   "id":1,
           |   "email":"test@test.com",
           |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/google/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/profile")
@@ -70,14 +70,14 @@ class GoogleAuthSpec extends UserHelper {
       (() => responseMock.getBody).when.returns(
         """
           |{
-          |   "id":"testId",
+          |   "id":1,
           |   "email":"test@test.com",
           |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/google/callback?state=test&code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?state=test&code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("test?data=")
@@ -91,7 +91,7 @@ class GoogleAuthSpec extends UserHelper {
     }
 
     "redirect to login page if an error was capture" in {
-      Get("/auth/google/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/login")

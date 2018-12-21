@@ -1,16 +1,15 @@
 import akka.http.scaladsl.server.Route
-import app.UserModule
-import repositories.UserSchemaInitializer
-import repositories.auth.{FacebookAuthSchemaInitializer, GithubAuthSchemaInitializer, GoogleAuthSchemaInitializer, LinkedinAuthSchemaInitializer}
+import app.{AuthenticationModule, UserModule}
+import repositories._
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
-trait UserHelper extends TestHelper {
+trait AuthenticationTestHelper extends TestHelper {
+
+  val routes: Route = routesWithGraphQLSchema[AuthenticationModule]
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchema[UserModule]
-
   val googleAuthInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
   val githubAuthInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]
   val facebookAuthInitializer: FacebookAuthSchemaInitializer = inject[FacebookAuthSchemaInitializer]

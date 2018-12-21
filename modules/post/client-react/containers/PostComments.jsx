@@ -138,6 +138,10 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
+          /**
+           * "update" methods doing all the same that "subscribeToMore",
+           * difference is that previous data taken from cache
+           */
           update: ({ caches }, { data: { addComment } }) => {
             /**
              * Handle caches[0], we have Array caches [netCache, localCache],
@@ -145,6 +149,7 @@ const PostCommentsWithApollo = compose(
              * previous request
              */
 
+            // Read data from cache
             const prevPost = caches[0].readQuery({
               query: POST_QUERY,
               variables: {
@@ -153,7 +158,21 @@ const PostCommentsWithApollo = compose(
             });
 
             if (prevPost.post) {
-              return AddComment(prevPost, addComment);
+              const updatedPost = AddComment(prevPost, addComment);
+
+              // Update data
+              caches[0].writeQuery({
+                query: POST_QUERY,
+                variables: {
+                  id: String(postId)
+                },
+                data: {
+                  post: {
+                    ...updatedPost.post,
+                    __typename: 'Post'
+                  }
+                }
+              });
             }
           }
         })
@@ -187,6 +206,10 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
+          /**
+           * "update" methods doing all the same that "subscribeToMore",
+           * difference is that previous data taken from cache
+           */
           update: ({ caches }, { data: { deleteComment } }) => {
             /**
              * Handle caches[0], we have Array caches [netCache, localCache],
@@ -194,6 +217,7 @@ const PostCommentsWithApollo = compose(
              * previous request
              */
 
+            // Read data from cache
             const prevPost = caches[0].readQuery({
               query: POST_QUERY,
               variables: {
@@ -202,7 +226,21 @@ const PostCommentsWithApollo = compose(
             });
 
             if (prevPost.post) {
-              return DeleteComment(prevPost, deleteComment.id);
+              const updatedPost = DeleteComment(prevPost, deleteComment.id);
+
+              // Update data
+              caches[0].writeQuery({
+                query: POST_QUERY,
+                variables: {
+                  id: String(postId)
+                },
+                data: {
+                  post: {
+                    ...updatedPost.post,
+                    __typename: 'Post'
+                  }
+                }
+              });
             }
           }
         })

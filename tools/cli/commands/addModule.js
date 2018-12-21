@@ -17,19 +17,19 @@ const {
 /**
  * Adds application module to client or server code and adds it to the module list.
  *
- * @param logger - The Logger.
- * @param templatesPath - The path to the templates for a new module.
- * @param moduleName - The name of a new module.
+ * @param logger - The Logger
+ * @param templatesPath - The path to the templates for a new module
+ * @param moduleName - The name of a new module
  */
-function addModule({ logger, moduleName, module, old }) {
-  const packageName = getPackageName(module, old);
+function addModule({ logger, packageName, moduleName, old }) {
+  const modulePackageName = getPackageName(packageName, old);
   const templatesPath = getTemplatesPath(old);
 
   copyTemplates();
   mergeWithModules();
   if (!old) addDependency();
 
-  logger.info(chalk.green(`✔ New module ${moduleName} for ${module} successfully created!`));
+  logger.info(chalk.green(`✔ New module ${moduleName} for package ${packageName} successfully created!`));
 
   /* Add module steps */
 
@@ -37,10 +37,10 @@ function addModule({ logger, moduleName, module, old }) {
    * Moves templates to newly created module.
    */
   function copyTemplates() {
-    logger.info(`Copying ${packageName} files…`);
+    logger.info(`Copying ${modulePackageName} files…`);
 
     // Create new module directory
-    const destinationPath = computeModulePath(packageName, old, moduleName);
+    const destinationPath = computeModulePath(modulePackageName, old, moduleName);
     const newModule = shell.mkdir('-p', destinationPath);
 
     // Continue only if directory does not yet exist
@@ -49,10 +49,10 @@ function addModule({ logger, moduleName, module, old }) {
       process.exit();
     }
     // Copy and rename templates in destination directory
-    copyFiles(destinationPath, templatesPath, packageName);
+    copyFiles(destinationPath, templatesPath, modulePackageName);
     renameFiles(destinationPath, moduleName);
 
-    logger.info(chalk.green(`✔ The ${packageName} files have been copied!`));
+    logger.info(chalk.green(`✔ The ${modulePackageName} files have been copied!`));
   }
 
   /**
@@ -60,13 +60,13 @@ function addModule({ logger, moduleName, module, old }) {
    */
   function mergeWithModules() {
     // Get modules entry point file path
-    const modulesEntry = getModulesEntryPoint(module, old);
+    const modulesEntry = getModulesEntryPoint(packageName, old);
     let indexContent;
 
     try {
       // Retrieve the content of the modules.ts
       indexContent =
-        `import ${moduleName} from '${computeModulePackageName(moduleName, packageName, old)}';\n` +
+        `import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n` +
         fs.readFileSync(modulesEntry);
     } catch (e) {
       logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
@@ -86,7 +86,7 @@ function addModule({ logger, moduleName, module, old }) {
 
   function addDependency() {
     // Get package content
-    const packagePath = computePackagePath(module);
+    const packagePath = computePackagePath(packageName);
     const packageContent = `${fs.readFileSync(packagePath)}`;
 
     // Extract dependencies
@@ -95,7 +95,7 @@ function addModule({ logger, moduleName, module, old }) {
 
     // Insert package and sort
     const dependenciesSorted = dependencies.split(',');
-    dependenciesSorted.push(`\n    "${computeModulePackageName(moduleName, packageName, old)}": "^1.0.0"`);
+    dependenciesSorted.push(`\n    "${computeModulePackageName(moduleName, modulePackageName, old)}": "^1.0.0"`);
     dependenciesSorted.sort();
 
     // Add module to package list
@@ -108,7 +108,7 @@ function addModule({ logger, moduleName, module, old }) {
       )
       .to(packagePath);
 
-    addSymlink(module, packageName);
+    addSymlink(packageName, modulePackageName);
   }
 }
 

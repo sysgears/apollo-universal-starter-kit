@@ -15,27 +15,29 @@ const {
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
  *
- * @param logger - The Logger.
- * @param moduleName - The name of a new module.
+ * @param logger - The Logger
+ * @param packageName - Name of the package the module adding to ([client|server])
+ * @param moduleName - The name of a new module
+ * @param old - The flag that describes if the command invoked for a new structure or not
  */
-function deleteModule({ logger, moduleName, module, old }) {
-  const packageName = getPackageName(module, old);
-  const modulePath = computeModulePath(packageName, old, moduleName);
+function deleteModule({ logger, packageName, moduleName, old }) {
+  const modulePackageName = getPackageName(packageName, old);
+  const modulePath = computeModulePath(modulePackageName, old, moduleName);
 
   if (fs.existsSync(modulePath)) {
     deleteTemplates();
     removeFromModules();
     if (!old) removeDependency();
 
-    logger.info(chalk.green(`✔ Module ${moduleName} for package ${module} successfully deleted!`));
+    logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
   } else {
-    logger.info(chalk.red(`✘ Module ${moduleName} for package ${module} not found!`));
+    logger.info(chalk.red(`✘ Module ${moduleName} for package ${packageName} not found!`));
   }
 
   /* Delete module steps */
 
   function deleteTemplates() {
-    logger.info(`Deleting ${packageName} files…`);
+    logger.info(`Deleting ${modulePackageName} files…`);
     // remove module directory
     shell.rm('-rf', modulePath);
 
@@ -46,12 +48,12 @@ function deleteModule({ logger, moduleName, module, old }) {
         shell.rm('-rf', rootModulePath);
       }
     }
-    logger.info(chalk.green(`✔ The ${packageName} files of the module ${moduleName} have been deleted!`));
+    logger.info(chalk.green(`✔ The ${modulePackageName} files of the module ${moduleName} have been deleted!`));
   }
 
   function removeFromModules() {
     // Gets modules entry point file path
-    const modulesEntry = getModulesEntryPoint(module, old);
+    const modulesEntry = getModulesEntryPoint(packageName, old);
 
     let indexContent;
 
@@ -73,7 +75,7 @@ function deleteModule({ logger, moduleName, module, old }) {
       .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
       // Remove module import
       .replace(
-        RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, packageName, old)}';\n`, 'g'),
+        RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n`, 'g'),
         ''
       );
 
@@ -83,7 +85,7 @@ function deleteModule({ logger, moduleName, module, old }) {
 
   function removeDependency() {
     // Get package content
-    const packagePath = computePackagePath(module);
+    const packagePath = computePackagePath(packageName);
     const packageContent = `` + fs.readFileSync(packagePath);
 
     // Extract dependencies
@@ -93,7 +95,7 @@ function deleteModule({ logger, moduleName, module, old }) {
     // Remove package
     const dependenciesWithoutDeleted = dependencies
       .split(',')
-      .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, packageName, old)));
+      .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
 
     // Remove module from package list
     shell
@@ -105,7 +107,7 @@ function deleteModule({ logger, moduleName, module, old }) {
       )
       .to(packagePath);
 
-    removeSymlink(module, packageName);
+    removeSymlink(packageName, modulePackageName);
   }
 }
 

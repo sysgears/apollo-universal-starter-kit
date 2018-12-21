@@ -22,7 +22,7 @@ class CommandInvoker {
    * @param args - The function for deleting existing module.
    */
   static runCommand(func, { location, ...args }) {
-    const runFunc = module => func({ ...args, module });
+    const runFunc = packageName => func({ ...args, packageName });
 
     if (location === 'both') {
       runFunc('client');

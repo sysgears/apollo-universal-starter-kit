@@ -1,4 +1,4 @@
-package model.oauth.facebook
+package model.facebook
 
 import spray.json._
 

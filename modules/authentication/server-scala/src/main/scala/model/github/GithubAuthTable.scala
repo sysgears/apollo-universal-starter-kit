@@ -1,4 +1,4 @@
-package model.oauth.github
+package model.github
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable

@@ -1,4 +1,4 @@
-package model.oauth.google
+package model.google
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable

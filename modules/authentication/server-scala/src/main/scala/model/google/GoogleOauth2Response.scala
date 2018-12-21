@@ -1,4 +1,4 @@
-package model.oauth.google
+package model.google
 
 import spray.json._
 

@@ -1,4 +1,4 @@
-package model.oauth.linkedin
+package model.linkedin
 
 import spray.json._
 

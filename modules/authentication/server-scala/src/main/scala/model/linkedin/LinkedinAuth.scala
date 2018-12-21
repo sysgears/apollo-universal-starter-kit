@@ -1,4 +1,4 @@
-package model.oauth.linkedin
+package model.linkedin
 
 import akka.japi.Option.Some
 import com.byteslounge.slickrepo.meta.Entity

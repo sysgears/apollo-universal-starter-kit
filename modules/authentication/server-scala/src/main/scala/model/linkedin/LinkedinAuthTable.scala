@@ -1,4 +1,4 @@
-package model.oauth.linkedin
+package model.linkedin
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable

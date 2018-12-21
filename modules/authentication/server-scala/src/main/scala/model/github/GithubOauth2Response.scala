@@ -1,4 +1,4 @@
-package model.oauth.github
+package model.github
 
 import spray.json._
 

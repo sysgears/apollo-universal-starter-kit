@@ -6,7 +6,7 @@ import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.graphql.{Extension, UserContext}
 import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
-import graphql.resolvers.UserResolver
+import graphql.resolvers.AuthenticationResolver
 import javax.inject.Inject
 import model.facebook.FacebookAuth
 import model.github.GithubAuth
@@ -121,7 +121,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = (sc.args.arg[RegisterUserInput]("input"), authConfig.skipConfirmation),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     ),
     Field(
@@ -131,7 +131,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[ConfirmRegistrationInput]("input"),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     ),
     Field(
@@ -141,7 +141,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = sc.args.arg[ResendConfirmationMessageInput]("input"),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     ),
     Field(
@@ -151,7 +151,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[AuthPayload](
         input = sc.args.arg[LoginUserInput]("input"),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     ),
     Field(
@@ -161,7 +161,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[String](
         input = sc.args.arg[ForgotPasswordInput]("input"),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     ),
     Field(
@@ -171,7 +171,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       resolve = sc => resolveWithDispatcher[ResetPayload](
         input = sc.args.arg[ResetPasswordInput]("input"),
         userContext = sc.ctx,
-        namedResolverActor = UserResolver
+        namedResolverActor = AuthenticationResolver
       )
     )
   )

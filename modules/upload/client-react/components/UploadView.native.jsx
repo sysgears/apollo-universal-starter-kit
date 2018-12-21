@@ -5,8 +5,8 @@ import { DocumentPicker, MediaLibrary, Constants, FileSystem, Permissions } from
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import { FontAwesome } from '@expo/vector-icons';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
-import { Modal } from '@module/look-client-react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
+import { Loading, Modal } from '@module/look-client-react-native';
 import url from 'url';
 
 import uploadConfig from '../../../../config/upload';
@@ -21,14 +21,16 @@ const serverUrl = `${protocol}//${
 
 export default class UploadView extends React.Component {
   static propTypes = {
-    t: PropTypes.func,
-    handleUploadFiles: PropTypes.func,
+    loading: PropTypes.bool.isRequired,
+    t: PropTypes.func.isRequired,
+    handleUploadFiles: PropTypes.func.isRequired,
     files: PropTypes.array,
-    handleRemoveFile: PropTypes.func
+    handleRemoveFile: PropTypes.func.isRequired
   };
 
   state = {
-    notify: null
+    notify: null,
+    isDownload: false
   };
 
   uploadFile = async () => {
@@ -51,24 +53,28 @@ export default class UploadView extends React.Component {
   downloadFile = async (path, name) => {
     const { t } = this.props;
     const { albumName } = uploadConfig;
+    const { getAlbumAsync, addAssetsToAlbumAsync, createAlbumAsync, createAssetAsync } = MediaLibrary;
+    const { downloadAsync, deleteAsync, cacheDirectory } = FileSystem;
     if (await this.checkPermission(Permissions.CAMERA_ROLL)) {
       try {
-        const { uri } = await FileSystem.downloadAsync(serverUrl + '/' + path, FileSystem.cacheDirectory + name);
-        const createAsset = await MediaLibrary.createAssetAsync(uri);
+        this.setState({ isDownload: true });
+        const { uri } = await downloadAsync(serverUrl + '/' + path, cacheDirectory + name);
+        const createAsset = await createAssetAsync(uri);
 
         // Remove file from cache directory
-        await FileSystem.deleteAsync(uri);
+        await deleteAsync(uri);
 
-        const album = await MediaLibrary.getAlbumAsync(albumName);
+        const album = await getAlbumAsync(albumName);
         album
-          ? await MediaLibrary.addAssetsToAlbumAsync([createAsset], album, false)
-          : await MediaLibrary.createAlbumAsync(albumName, createAsset, false);
-        this.setState({ notify: `${t('download.successMsg')} ${albumName}` });
+          ? await addAssetsToAlbumAsync([createAsset], album, false)
+          : await createAlbumAsync(albumName, createAsset, false);
+
+        this.setState({ isDownload: false, notify: `${t('download.successMsg')}` });
       } catch (e) {
-        this.setState({ notify: `${e}` });
+        this.setState({ notify: `${e}`, isDownload: false });
       }
     } else {
-      this.setState({ notify: t('download.errorMsg') });
+      this.setState({ notify: t('download.errorMsg'), isDownload: false });
     }
   };
 
@@ -95,18 +101,33 @@ export default class UploadView extends React.Component {
   };
 
   renderModal = () => (
-    <Modal isVisible={!!this.state.notify} onBackdropPress={() => this.setState({ notify: null })}>
+    <Modal isVisible onBackdropPress={() => this.setState({ notify: null })}>
       <View style={styles.alertTextWrapper}>
         <Text>{this.state.notify}</Text>
       </View>
     </Modal>
   );
 
+  renderActivityIndicator = () => (
+    <Modal isVisible>
+      <View style={styles.uploading}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    </Modal>
+  );
+
   render() {
-    const { files, t } = this.props;
+    const { files, t, loading } = this.props;
+    const { notify, isDownload } = this.state;
+
+    if (loading) {
+      return <Loading text={t('loading')} />;
+    }
+
     return files ? (
       <Fragment>
-        {this.renderModal()}
+        {notify && this.renderModal()}
+        {isDownload && this.renderActivityIndicator()}
         <View style={styles.container}>
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={this.uploadFile}>
@@ -180,5 +201,10 @@ const styles = StyleSheet.create({
   alertTextWrapper: {
     backgroundColor: '#fff',
     padding: 10
+  },
+  uploading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 });

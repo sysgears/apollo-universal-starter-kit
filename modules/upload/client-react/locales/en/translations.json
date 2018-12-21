@@ -1,5 +1,6 @@
 {
   "navLink": "Upload",
+  "loading": "Loading...",
   "title": "Upload",
   "meta": "Upload example page",
   "message": "Try dropping some files here, or click to select files to upload.",
@@ -11,7 +12,7 @@
     "btnDel": "Delete"
   },
   "download": {
-    "successMsg": "The file was downloaded to the album",
+    "successMsg": "The file was downloaded to the gallery",
     "errorMsg": "Access error!"
   },
   "upload": {

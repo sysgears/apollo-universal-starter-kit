@@ -12,7 +12,7 @@ import scala.concurrent.{Await, Future}
 trait ContactSpecHelper extends TestHelper {
 
   val bindings: Seq[ScalaModule] = Seq(new ContactBinding, new CoreBinding, new MailBinding)
-  val injector = Guice.createInjector(bindings.asJava)
+  Guice.createInjector(bindings.asJava)
   val routes: Route = routesWithGraphQLSchema[ContactModule]
 
   before {

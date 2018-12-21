@@ -1,5 +1,6 @@
 type LogoutFromAllDevicesPayload {
   userId: Int!
+  mutation: String!
 }
 
 extend type Subscription {

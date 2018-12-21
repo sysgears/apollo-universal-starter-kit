@@ -1,9 +1,9 @@
-package repositories.auth
+package repositories
 
 import com.byteslounge.slickrepo.repository.Repository
 import javax.inject.Inject
-import model.oauth.linkedin.LinkedinAuth
-import model.oauth.linkedin.LinkedinAuthTable.LinkedinAuthTable
+import model.linkedin.LinkedinAuth
+import model.linkedin.LinkedinAuthTable.LinkedinAuthTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 

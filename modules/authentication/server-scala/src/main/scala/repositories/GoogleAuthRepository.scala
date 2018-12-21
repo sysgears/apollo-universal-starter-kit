@@ -1,9 +1,9 @@
-package repositories.auth
+package repositories
 
-import javax.inject.Inject
 import com.byteslounge.slickrepo.repository.Repository
-import model.oauth.google.GoogleAuthTable.GoogleAuthTable
-import model.oauth.google.GoogleAuth
+import javax.inject.Inject
+import model.google.GoogleAuth
+import model.google.GoogleAuthTable.GoogleAuthTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 

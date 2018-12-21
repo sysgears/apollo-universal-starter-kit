@@ -1,9 +1,9 @@
-package repositories.auth
+package repositories
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject
-import model.oauth.google.GoogleAuthTable
-import model.oauth.google.GoogleAuthTable.GoogleAuthTable
+import model.google.GoogleAuthTable
+import model.google.GoogleAuthTable.GoogleAuthTable
 import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext

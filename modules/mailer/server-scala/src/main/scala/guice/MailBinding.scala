@@ -1,4 +1,4 @@
-package modules
+package guice
 
 import actor.MailActor
 import akka.actor.{Actor, ActorRef, ActorSystem}
@@ -12,7 +12,7 @@ import net.codingwell.scalaguice.ScalaModule
 import services.MailService
 import services.ethereal.EtherealMailService
 
-class MailModule extends ScalaModule with GuiceActorRefProvider {
+class MailBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure(): Unit = {
     bind[Actor].annotatedWith(Names.named(MailActor.name)).to[MailActor]

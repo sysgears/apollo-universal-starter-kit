@@ -9,7 +9,7 @@ import slick.jdbc.{JdbcBackend, JdbcProfile}
 class DbBinding extends ScalaModule {
 
   override def configure(): Unit = {
-    bind[RichDBIO.type].toInstance(RichDBIO)
+    requestInjection(RichDBIO)
   }
 
   @Provides

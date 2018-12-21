@@ -3,7 +3,9 @@ import { AuthenticationError } from 'apollo-server-errors';
 import createTokens from './createTokens';
 import settings from '../../../../../settings';
 
-export default () => ({
+const LOGOUT_FROM_ALL_DEVICES = 'logout_from_all_devices_sub';
+
+export default pubsub => ({
   Mutation: {
     async refreshTokens(obj, { refreshToken: inputRefreshToken }, { User }) {
       const decodedToken = jwt.decode(inputRefreshToken);
@@ -28,7 +30,13 @@ export default () => ({
       };
     },
     async jwtLogoutFromAllDevices(obj, { userId }, { User }) {
-      User.increaseAuthSalt(userId);
+      await User.increaseAuthSalt(userId);
+      pubsub.publish(LOGOUT_FROM_ALL_DEVICES, {
+        logoutFromAllDevicesSub: {
+          mutation: 'LOGOUT_FROM_ALL_DEVICES',
+          userId
+        }
+      });
     }
   }
 });

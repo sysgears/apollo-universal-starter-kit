@@ -5,5 +5,5 @@ type LogoutFromAllDevicesPayload {
 
 extend type Subscription {
   # Subscription for logout from all devices
-  logoutFromAllDevicesSub(userId: Int!): LogoutFromAllDevicesPayload!
+  logoutFromAllDevicesSub: LogoutFromAllDevicesPayload!
 }

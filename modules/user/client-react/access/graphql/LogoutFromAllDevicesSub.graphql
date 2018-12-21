@@ -1,5 +1,5 @@
-subscription logoutFromAllDevicesSub($userId: Int!) {
-  logoutFromAllDevicesSub(userId: $userId) {
+subscription logoutFromAllDevicesSub {
+  logoutFromAllDevicesSub {
     mutation
     userId
   }

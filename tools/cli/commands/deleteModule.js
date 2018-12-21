@@ -3,7 +3,8 @@ const fs = require('fs');
 const chalk = require('chalk');
 const {
   getPackageName,
-  computeModulesPath,
+  computeModulePath,
+  getModulesEntryPoint,
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
@@ -25,12 +26,13 @@ function deleteModule({ logger, moduleName, module, old, options, location }) {
   const packageName = getPackageName(module, old);
 
   deleteTemplates();
+  removeFromModules();
 
   /* Delete module steps */
 
   function deleteTemplates() {
     logger.info(`Deleting ${packageName} files…`);
-    const modulePath = computeModulesPath(packageName, old, moduleName);
+    const modulePath = computeModulePath(packageName, old, moduleName);
     if (fs.existsSync(modulePath)) {
       // remove module directory
       shell.rm('-rf', modulePath);
@@ -38,8 +40,40 @@ function deleteModule({ logger, moduleName, module, old, options, location }) {
     logger.info(chalk.green(`✔ The ${packageName} files of the module ${moduleName} have been deleted!`));
   }
 
+  function removeFromModules() {
+    // Gets modules entry point file path
+    const modulesEntry = getModulesEntryPoint(module, old);
+
+    let indexContent;
+
+    try {
+      indexContent = fs.readFileSync(modulesEntry);
+    } catch (e) {
+      logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
+      process.exit();
+    }
+
+    // extract application modules
+    const appModuleRegExp = /Module\(([^()]+)\)/g;
+    const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
+    const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
+
+    const contentWithoutDeletedModule = indexContent
+      .toString()
+      // remove module from modules list
+      .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
+      // remove module import
+      .replace(
+        RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, packageName, old)}';\n`, 'g'),
+        ''
+      );
+
+    fs.writeFileSync(modulesEntry, contentWithoutDeletedModule);
+    runPrettier(modulesEntry);
+  }
+
   function temp() {
-    const modulePath = computeModulesPath(location, options, moduleName);
+    const modulePath = computeModulePath(location, options, moduleName);
 
     if (fs.existsSync(modulePath)) {
       // remove module directory
@@ -52,7 +86,7 @@ function deleteModule({ logger, moduleName, module, old, options, location }) {
           shell.rm('-rf', rootModulePath);
         }
       }
-      const modulesPath = computeModulesPath(location, options);
+      const modulesPath = computeModulePath(location, options);
 
       // get index file path
       const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);

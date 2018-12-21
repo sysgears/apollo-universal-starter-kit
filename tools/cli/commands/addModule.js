@@ -61,7 +61,7 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
    * Imports module to 'modules.ts' file.
    */
   function mergeWithModules() {
-    // Gets `modules.ts` file path
+    // Gets modules entry point file path
     const modulesEntry = getModulesEntryPoint(module, old);
     let indexContent;
 

@@ -25,6 +25,10 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
               amount: counter.amount + 1
             }
           },
+          /**
+           * "update" methods doing all the same that "subscribeToMore",
+           * difference is that previous data taken from cache
+           */
           update: ({ caches }: any, { data }: any) => {
             /**
              * Handle caches[0], we have Array caches [netCache, localCache],
@@ -32,17 +36,14 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
              * previous request
              */
 
-            const prevCounter = caches[0].readQuery({
-              query: COUNTER_QUERY,
-              variables: { amount }
-            });
-
             const newAmount = data.addServerCounter.amount;
 
-            return update(prevCounter, {
-              serverCounter: {
-                amount: {
-                  $set: newAmount
+            caches[0].writeQuery({
+              query: COUNTER_QUERY,
+              data: {
+                serverCounter: {
+                  amount: newAmount,
+                  __typename: 'Counter'
                 }
               }
             });

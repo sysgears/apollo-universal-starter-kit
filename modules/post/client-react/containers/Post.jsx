@@ -190,12 +190,19 @@ export default compose(
               __typename: 'Post'
             }
           },
+
+          /**
+           * "update" methods doing all the same that "subscribeToMore",
+           * difference is that previous data taken from cache
+           */
           update: ({ caches }, { data: { deletePost } }) => {
             /**
              * Handle caches[0], we have Array caches [netCache, localCache],
              * we should use netCache because it contains all data with the
              * previous request
              */
+
+            // Read data from cache
             const prevPosts = caches[0].readQuery({
               query: POSTS_QUERY,
               variables: {
@@ -204,7 +211,22 @@ export default compose(
               }
             });
 
-            return DeletePost(prevPosts, deletePost.id);
+            const newListPosts = DeletePost(prevPosts, deletePost.id);
+
+            // Update data
+            caches[0].writeQuery({
+              query: POSTS_QUERY,
+              variables: {
+                limit,
+                after: 0
+              },
+              data: {
+                posts: {
+                  ...newListPosts.posts,
+                  __typename: 'Posts'
+                }
+              }
+            });
           }
         });
       }

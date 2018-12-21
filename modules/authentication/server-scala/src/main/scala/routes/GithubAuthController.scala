@@ -1,4 +1,4 @@
-package routes.auth
+package routes
 
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.model.headers.HttpCookie
@@ -11,46 +11,44 @@ import common.errors.AmbigousResult
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import model.User
-import model.oauth.facebook.{FacebookAuth, FacebookOauth2Response}
+import model.github.{GithubAuth, GithubOauth2Response}
 import modules.jwt.model.JwtContent
-import modules.jwt.model.Tokens._
 import modules.jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
-import repositories.UserRepository
-import repositories.auth.FacebookAuthRepository
+import repositories.{GithubAuthRepository, UserRepository}
 import services.ExternalApiService
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class FacebookAuthController @Inject()(@Named("facebook") oauth2Service: OAuth20Service,
-                                       externalApiService: ExternalApiService,
-                                       userRepository: UserRepository,
-                                       facebookAuthRepository: FacebookAuthRepository,
-                                       jwtAuthService: JwtAuthService[JwtContent])
-                                      (implicit val executionContext: ExecutionContext) {
+class GithubAuthController @Inject()(@Named("github") oauth2Service: OAuth20Service,
+                                     externalApiService: ExternalApiService,
+                                     userRepository: UserRepository,
+                                     githubAuthRepository: GithubAuthRepository,
+                                     jwtAuthService: JwtAuthService[JwtContent])
+                                    (implicit val executionContext: ExecutionContext) {
 
   val routes: Route =
-    (path("auth" / "facebook") & get) {
+    (path("auth" / "github") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
-    } ~ (path("auth" / "facebook" / "callback") & get) {
+    } ~ (path("auth" / "github" / "callback") & get) {
       parameters('state.?, 'code) { (state, code) =>
         onComplete {
           for {
-            facebookAuthInfo <- externalApiService.getUserInfo[FacebookOauth2Response](code, "https://graph.facebook.com/me?fields=id,name,email", oauth2Service)
-            user <- facebookAuthRepository.findOne(facebookAuthInfo.id).run.flatMap {
-              case Some(fUser) => userRepository.findOne(fUser.userId).run failOnNone AmbigousResult(s"User with id: ${fUser.userId} stored in facebook auth table, but not in the user table")
+            githubAuthInfo <- externalApiService.getUserInfo[GithubOauth2Response](code, "https://api.github.com/user", oauth2Service)
+            user <- githubAuthRepository.findOne(githubAuthInfo.id).run.flatMap {
+              case Some(ghUser) => userRepository.findOne(ghUser.userId).run failOnNone AmbigousResult(s"User with id: ${ghUser.userId} stored in github auth table, but not in the user table")
               case None => for {
                 user <- userRepository.save(
                   User(
-                    username = facebookAuthInfo.name,
-                    email = facebookAuthInfo.email,
-                    password = BCrypt.hashpw(facebookAuthInfo.id, BCrypt.gensalt),
+                    username = githubAuthInfo.name,
+                    email = githubAuthInfo.email,
+                    password = BCrypt.hashpw(githubAuthInfo.id.toString + githubAuthInfo.name, BCrypt.gensalt),
                     role = "user",
                     isActive = true)
                 ).run
-                _ <- facebookAuthRepository.save(FacebookAuth(Some(facebookAuthInfo.id), facebookAuthInfo.name, user.id.get)).run
+                _ <- githubAuthRepository.save(GithubAuth(Some(githubAuthInfo.id), githubAuthInfo.name, user.id.get)).run
               } yield user
             }
           } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)

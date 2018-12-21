@@ -1,7 +1,7 @@
 package common
 
 import akka.http.scaladsl.Http.ServerBinding
-import loaders.DotEnvLoader
+import core.loaders.DotEnvLoader
 
 import scala.concurrent.{ExecutionContext, Future}
 

@@ -5,12 +5,12 @@ import akka.pattern._
 import com.google.inject.Inject
 import common.ActorNamed
 import common.errors.NotFound
+import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
+import common.implicits.RichTry._
 import modules.jwt.model.{JwtContent, Tokens}
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
-import common.implicits.RichFuture._
-import common.implicits.RichTry._
-import common.implicits.RichDBIO._
 
 import scala.concurrent.ExecutionContext
 

@@ -1,12 +1,5 @@
 import modules from './modules';
 
-modules.triggerOnAppCreate();
-
-if (module.hot) {
-  module.hot.dispose(modules.triggerOnAppDispose.bind(modules));
-  if (__CLIENT__) {
-    module.hot.accept();
-  }
-}
+modules.createApp(module);
 
 export default modules;

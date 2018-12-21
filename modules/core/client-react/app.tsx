@@ -16,9 +16,15 @@ let frontendReloadCount = 0;
 
 const renderApp = ({ key }: { key: number }) => renderFunc(<Main rootTag={root} key={key} />, root);
 
-const onAppCreate = (modules: ClientModule, appReloaded: false) => {
-  onCreateMain(modules);
-  if (appReloaded) {
+const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+  onCreateMain(modules, entryModule);
+  if (entryModule.hot) {
+    entryModule.hot.dispose(data => onAppDispose(modules, data));
+    if (__CLIENT__) {
+      entryModule.hot.accept();
+    }
+  }
+  if (entryModule.hot && entryModule.hot.data) {
     log.debug('Updating front-end');
     frontendReloadCount = (frontendReloadCount || 0) + 1;
   }
@@ -36,4 +42,4 @@ if (__DEV__) {
   }
 }
 
-export default new ClientModule({ onAppCreate: [onAppCreate], onAppDispose: [onAppDispose] });
+export default new ClientModule({ onAppCreate: [onAppCreate] });

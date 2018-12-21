@@ -10,7 +10,7 @@ import net.codingwell.scalaguice.ScalaModule
 import pdi.jwt.JwtAlgorithm
 import pdi.jwt.algorithms.JwtHmacAlgorithm
 
-class JwtModule extends ScalaModule {
+class JwtBinding extends ScalaModule {
 
   override def configure() {
     bind[JwtEncoder].to[JwtEncoderImpl]

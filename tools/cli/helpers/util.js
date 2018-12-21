@@ -81,12 +81,27 @@ const computeModulePath = (packageName, old, moduleName) => {
 };
 
 /**
+ * Finds and returns a file found in a specific path by regexp.
+ *
+ * @param path - The path where the file is supposed to be located in
+ * @param matcher - The regexp for finding the file
+ * @returns {string} - Returns the found file name, otherwise `undefined`
+ */
+const findFileInPath = (path, matcher) => fs.readdirSync(path).find(_ => _.match(matcher));
+
+/**
  * Gets the path of the modules entry point.
  *
  * @param packageName - The application package ('client', 'server' etc.)
+ * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Returns the computed path
  */
-const getModulesEntryPoint = packageName => `${BASE_PATH}/packages/${packageName}/src`;
+const getModulesEntryPoint = (packageName, old) => {
+  const src = `${BASE_PATH}/packages/${packageName}/src`;
+  const oldSrc = `${src}/modules`;
+
+  return old ? `${oldSrc}/${findFileInPath(oldSrc, /index\..+/)}` : `${src}/${findFileInPath(src, /modules\..+/)}`;
+};
 
 /**
  * Gets the computed path of the root module path.
@@ -168,6 +183,7 @@ module.exports = {
   renameFiles,
   copyFiles,
   computeModulePath,
+  findFileInPath,
   getModulesEntryPoint,
   computeRootModulesPath,
   computePackagePath,

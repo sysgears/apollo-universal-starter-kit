@@ -62,9 +62,7 @@ function addModule({ logger, moduleName, module, old, options, location, finishe
    */
   function mergeWithModules() {
     // Gets `modules.ts` file path
-    const modulesEntry = `${getModulesEntryPoint(module)}/${fs
-      .readdirSync(getModulesEntryPoint(module))
-      .find(_ => _.includes('modules.ts'))}`;
+    const modulesEntry = getModulesEntryPoint(module, old);
     let indexContent;
 
     try {

@@ -1,0 +1,6 @@
+subscription logoutFromAllDevices($userId: Int!) {
+  logoutFromAllDevices(userId: $userId) {
+    mutation
+    userId
+  }
+}

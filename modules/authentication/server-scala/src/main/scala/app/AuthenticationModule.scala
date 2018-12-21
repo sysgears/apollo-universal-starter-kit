@@ -2,10 +2,11 @@ package app
 
 import com.google.inject.Inject
 import common.shapes.ServerModule
-import graphql.schema.AuthenticationSchema
+import graphql.schema.{AuthenticationSchema, TokenSchema}
 import repositories._
 
 class AuthenticationModule @Inject()(authenticationSchema: AuthenticationSchema,
+                                     tokenSchema:TokenSchema,
                                      facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer,
                                      githubAuthSchemaInitializer: GithubAuthSchemaInitializer,
                                      googleAuthSchemaInitializer: GoogleAuthSchemaInitializer,
@@ -18,7 +19,7 @@ class AuthenticationModule @Inject()(authenticationSchema: AuthenticationSchema,
     linkedinAuthSchemaInitializer ::
     certificateAuthSchemaInitializer :: Nil
 
-  mutations ++= authenticationSchema.mutations
+  mutations ++= authenticationSchema.mutations ++ tokenSchema.mutations
 
   extensions += authenticationSchema.extension
 }

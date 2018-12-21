@@ -25,7 +25,7 @@ class AuthenticationSpec extends AuthenticationTestHelper {
   val testPassword = "12345678q"
   val testUsername = "testName"
 
-  "UserSpec" must {
+  "AuthenticationSpec" must {
     def registrationStep: RouteTestResult = {
       val registerMutation =
         """

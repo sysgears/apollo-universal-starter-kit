@@ -12,7 +12,7 @@ const config = {
       },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: ['tcp:localhost:8080'],
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['server'],
@@ -31,7 +31,9 @@ const config = {
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"',
-      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY
+        ? `"${process.env.STRIPE_PUBLIC_KEY}"`
+        : undefined
     },
     webpackConfig: {
       devServer: {

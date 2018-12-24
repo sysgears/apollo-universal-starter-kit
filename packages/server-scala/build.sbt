@@ -19,6 +19,6 @@ packageName in Docker := "scala_server"
 dockerBaseImage := "openjdk:jre-alpine"
 dockerExposedPorts := Seq(8080)
 defaultLinuxInstallLocation in Docker := "/usr/local"
-dockerExposedVolumes := Seq("/usr/local")
+dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 
 mainClass in Compile := Some("Main")

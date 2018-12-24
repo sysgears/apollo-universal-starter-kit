@@ -110,9 +110,9 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
 
     case input: ResetPasswordInput => {
        if (input.password != input.passwordConfirmation)
-        Future.successful(ResetPayload(Some(FieldError("password", "Passwords are not same.") :: Nil)))
+        Future.successful(ResetPayload(Some(FieldError("password", "Passwords are not the same.") :: Nil)))
       else if (input.password.length < authConfig.passwordMinLength)
-        Future.successful(ResetPayload(Some(FieldError("password", s"Password length must be more then ${authConfig.passwordMinLength}.") :: Nil)))
+        Future.successful(ResetPayload(Some(FieldError("password", s"Password length must be more than ${authConfig.passwordMinLength}.") :: Nil)))
       else for {
         tokenContent <- jwtAuthService.decodeAccessToken(input.token).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")

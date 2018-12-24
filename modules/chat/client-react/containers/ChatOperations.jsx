@@ -17,6 +17,8 @@ import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
+const { limit } = chatConfig;
+
 function AddMessage(prev, node) {
   // ignore if duplicate
   if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
@@ -135,7 +137,7 @@ export default compose(
     options: () => {
       return {
         fetchPolicy: 'network-only',
-        variables: { limit: chatConfig.limit, after: 0 }
+        variables: { limit, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -202,7 +204,7 @@ export default compose(
               // Read data from cache
               const prevMessages = caches[0].readQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 }
+                variables: { limit, after: 0 }
               });
 
               const newListMessages = AddMessage(prevMessages, addMessage);
@@ -210,7 +212,7 @@ export default compose(
               // Update data
               caches[0].writeQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 },
+                variables: { limit, after: 0 },
                 data: {
                   messages: {
                     ...newListMessages.messages,
@@ -247,7 +249,7 @@ export default compose(
               // Read data from cache
               const prevMessages = caches[0].readQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 }
+                variables: { limit, after: 0 }
               });
 
               const newListMessages = DeleteMessage(prevMessages, deleteMessage);
@@ -255,7 +257,7 @@ export default compose(
               // Update data
               caches[0].writeQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 },
+                variables: { limit, after: 0 },
                 data: {
                   messages: {
                     ...newListMessages.messages,
@@ -304,7 +306,7 @@ export default compose(
               // Read data from cache
               const prevMessages = caches[0].readQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 }
+                variables: { limit, after: 0 }
               });
 
               const newListMessages = EditMessage(prevMessages, editMessage);
@@ -312,7 +314,7 @@ export default compose(
               // Update data
               caches[0].writeQuery({
                 query: MESSAGES_QUERY,
-                variables: { limit: chatConfig.limit, after: 0 },
+                variables: { limit, after: 0 },
                 data: {
                   messages: {
                     ...newListMessages.messages,

@@ -58,7 +58,8 @@ libraryDependencies ++= Seq(
   "com.h2database" % "h2" % "1.3.148" % Test,
 
   "io.github.cdimascio" % "java-dotenv" % "3.1.7",
-  "com.github.scribejava" % "scribejava-apis" % "6.1.0"
+  "com.github.scribejava" % "scribejava-apis" % "6.1.0",
+  "com.typesafe" % "config" % "1.3.2"
 )
 
 parallelExecution in test := false

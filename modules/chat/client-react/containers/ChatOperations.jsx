@@ -194,20 +194,30 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
-            /**
-             * 'updateQueries' should be replaced by the method 'update'
-             */
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { addMessage }
+            update: ({ caches }, { data: { addMessage } }) => {
+              // Handle caches[0], we have Array caches [netCache, localCache],
+              // we should use netCache because it contains all data with the
+              // previous request
+
+              // Read data from cache
+              const prevMessages = caches[0].readQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 }
+              });
+
+              const newListMessages = AddMessage(prevMessages, addMessage);
+
+              // Update data
+              caches[0].writeQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 },
+                data: {
+                  messages: {
+                    ...newListMessages.messages,
+                    __typename: 'Messages'
                   }
                 }
-              ) => {
-                return AddMessage(prev, addMessage);
-              }
+              });
             }
           });
         } catch (e) {
@@ -229,20 +239,30 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            /**
-             * 'updateQueries' should be replaced by the method 'update'
-             */
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { deleteMessage }
+            update: ({ caches }, { data: { deleteMessage } }) => {
+              // Handle caches[0], we have Array caches [netCache, localCache],
+              // we should use netCache because it contains all data with the
+              // previous request
+
+              // Read data from cache
+              const prevMessages = caches[0].readQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 }
+              });
+
+              const newListMessages = DeleteMessage(prevMessages, deleteMessage);
+
+              // Update data
+              caches[0].writeQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 },
+                data: {
+                  messages: {
+                    ...newListMessages.messages,
+                    __typename: 'Messages'
                   }
                 }
-              ) => {
-                return DeleteMessage(prev, deleteMessage.id);
-              }
+              });
             }
           });
         } catch (e) {
@@ -276,20 +296,30 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            /**
-             * 'updateQueries' should be replaced by the method 'update'
-             */
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { editMessage }
+            update: ({ caches }, { data: { editMessage } }) => {
+              // Handle caches[0], we have Array caches [netCache, localCache],
+              // we should use netCache because it contains all data with the
+              // previous request
+
+              // Read data from cache
+              const prevMessages = caches[0].readQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 }
+              });
+
+              const newListMessages = EditMessage(prevMessages, editMessage);
+
+              // Update data
+              caches[0].writeQuery({
+                query: MESSAGES_QUERY,
+                variables: { limit: chatConfig.limit, after: 0 },
+                data: {
+                  messages: {
+                    ...newListMessages.messages,
+                    __typename: 'Messages'
                   }
                 }
-              ) => {
-                return EditMessage(prev, editMessage);
-              }
+              });
             }
           });
         } catch (e) {

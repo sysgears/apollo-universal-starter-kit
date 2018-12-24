@@ -2,42 +2,14 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 
-import UploadView from '../components/UploadView';
+import FileOperations from './FileOperations';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
 class Upload extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null
-    };
-  }
-
-  handleUploadFiles = async files => {
-    const { uploadFiles } = this.props;
-    const result = await uploadFiles(files);
-
-    this.setState({ error: result && result.error ? result.error : null });
-  };
-
-  handleRemoveFile = async id => {
-    const { removeFile } = this.props;
-    const result = await removeFile(id);
-
-    this.setState({ error: result && result.error ? result.error : null });
-  };
-
   render() {
-    return (
-      <UploadView
-        {...this.props}
-        error={this.state.error}
-        handleRemoveFile={this.handleRemoveFile}
-        handleUploadFiles={this.handleUploadFiles}
-      />
-    );
+    return <FileOperations {...this.props} />;
   }
 }
 

@@ -68,7 +68,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
 
     case input: ResendConfirmationMessageInput => {
       for {
-        user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
+        user <- userRepository.findByUsernameOrEmail(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
         _ <- if (!user.isActive) Future.successful() else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
         accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
@@ -84,7 +84,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
 
     case input: LoginUserInput => {
       for {
-        user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
+        user <- userRepository.findByUsernameOrEmail(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful() else Future.failed(Unauthenticated())
         accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(user.id.get), user.password)
@@ -96,7 +96,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
 
     case input: ForgotPasswordInput => {
       for {
-        user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")
+        user <- userRepository.findByEmail(input.email).run failOnNone NotFound(s"User with username or email: [${input.email}] not found.")
         token = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         _ <- mailService.send(
           messageTemplateService.createRecoverPasswordMessage(

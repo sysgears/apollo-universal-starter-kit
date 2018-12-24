@@ -128,7 +128,7 @@ class AuthenticationSpec extends AuthenticationTestHelper {
     "confirm registration" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run)
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run)
       await(userRepo.update(user.get.copy(isActive = false)).run)
       val token = authService.createAccessToken(JwtContent(1))
 
@@ -182,7 +182,7 @@ class AuthenticationSpec extends AuthenticationTestHelper {
     "resend confirmation message" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run)
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run)
       await(userRepo.update(user.get.copy(isActive = false)).run)
 
       val resendConfirmationMessageMutation =

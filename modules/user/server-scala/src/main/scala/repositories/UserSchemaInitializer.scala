@@ -12,12 +12,11 @@ class UserSchemaInitializer @Inject()(implicit val executionContext: ExecutionCo
 
   import driver.api._
 
-  override val context = executionContext
   override val name: String = UserTable.name
   override val table = TableQuery[UserTable]
 
-  override def seedDatabase(tableQuery: TableQuery[UserTable]): DBIOAction[_, NoStream, Effect.Write] = {
-    tableQuery ++= User(None, "user", "user@example.com", BCrypt.hashpw("user1234", BCrypt.gensalt), "user", true) ::
+  override def initData: DBIOAction[_, NoStream, Effect.Write] = {
+    table ++= User(None, "user", "user@example.com", BCrypt.hashpw("user1234", BCrypt.gensalt), "user", true) ::
       User(None, "admin", "admin@example.com", BCrypt.hashpw("admin123", BCrypt.gensalt), "admin", true) :: Nil
   }
 }

@@ -1,10 +1,9 @@
-package guice
+package core.guice.bindings
 
-import com.google.inject.Provides
+import com.google.inject.{Provides, Singleton}
 import common.graphql.UserContext
-import common.graphql.schema.GraphQL
-import graphql.GraphQLSchema
-import javax.inject.Singleton
+import common.graphql.schema.{GraphQL, GraphQLSchema}
+import common.shapes.ServerModule
 import net.codingwell.scalaguice.ScalaModule
 import sangria.execution.{Executor, QueryReducer}
 
@@ -12,8 +11,10 @@ import scala.concurrent.ExecutionContext
 
 class SangriaBinding extends ScalaModule {
 
-  override def configure(): Unit = {
-    bind(classOf[GraphQL]).to(classOf[GraphQLSchema])
+  @Provides
+  @Singleton
+  def graphQL(serverModule: ServerModule): GraphQL = {
+    new GraphQLSchema(serverModule)
   }
 
   @Provides

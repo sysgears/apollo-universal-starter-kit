@@ -17,9 +17,9 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
 
   implicit val fileUploadType: ScalarType[Unit] = new ScalarType[Unit](
     name = "FileUpload",
-    coerceOutput = (_, _) => null,
-    coerceUserInput = _ => Right(null),
-    coerceInput = _ => Right(null)
+    coerceOutput = (_, _) => Unit,
+    coerceUserInput = _ => Right(Unit),
+    coerceInput = _ => Right(Unit)
   )
 
   implicit val fileMetadata: ObjectType[Unit, FileMetadata] = deriveObjectType(ObjectTypeName("File"), RenameField("contentType", "type"))

@@ -2,16 +2,14 @@ package app
 
 import com.google.inject.Inject
 import common.shapes.ServerModule
-import graphql.schema.{TokenSchema, UserSchema}
-import repositories.UserSchemaInitializer
-
-import scala.collection.mutable.ListBuffer
+import graphql.schema.UserSchema
+import repositories.{UserProfileSchemaInitializer, UserSchemaInitializer}
 
 class UserModule @Inject()(userSchema: UserSchema,
-                           tokenSchema: TokenSchema,
-                           userSchemaInitializer: UserSchemaInitializer) extends ServerModule {
+                           userSchemaInitializer: UserSchemaInitializer,
+                           userProfileSchemaInitializer: UserProfileSchemaInitializer) extends ServerModule {
 
-  slickSchemas ++= ListBuffer(userSchemaInitializer)
+  slickSchemas ++= userSchemaInitializer :: userProfileSchemaInitializer :: Nil
 
-  mutations ++= userSchema.mutations ++ tokenSchema.mutations
+  queries ++= userSchema.queries
 }

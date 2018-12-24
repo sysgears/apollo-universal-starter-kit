@@ -137,14 +137,12 @@ class User {
     );
   }
 
-  async register({ username, email, password, role, isActive }) {
-    const passwordHash = await bcrypt.hash(password, 12);
+  createPasswordHash({ password }) {
+    return bcrypt.hash(password, 12);
+  }
 
-    if (role === undefined) {
-      role = 'user';
-    }
-
-    return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
+  register(input) {
+    return knex('user').insert(input);
   }
 
   createFacebookAuth({ id, displayName, userId }) {
@@ -163,13 +161,43 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  async editUser({ id, username, email, role, isActive, password }) {
+  async withTransaction(...asyncCallbacks) {
+    const promisify = fn => new Promise((resolve, reject) => fn(resolve).catch(reject));
+    const trx = await promisify(knex.transaction);
+    try {
+      let id;
+      for (let query of asyncCallbacks) {
+        if (id) {
+          await query(id[0]).transacting(trx);
+        } else {
+          id = await query().transacting(trx);
+        }
+      }
+      trx.commit();
+      return id;
+    } catch (e) {
+      trx.rollback();
+    }
+  }
+
+  editUser({ id, username, email, role, isActive, password }) {
     let localAuthInput = { email };
     if (password) {
-      const passwordHash = await bcrypt.hash(password, 12);
-      localAuthInput = { email, password_hash: passwordHash };
-    }
+      console.log('editUser password');
+      bcrypt.hash(password, 12).then(passwordHash => {
+        localAuthInput = { email, password_hash: passwordHash };
 
+        return knex('user')
+          .update({
+            username,
+            role,
+            is_active: isActive,
+            ...localAuthInput
+          })
+          .where({ id });
+      });
+    }
+    console.log('editUser');
     return knex('user')
       .update({
         username,
@@ -180,13 +208,15 @@ class User {
       .where({ id });
   }
 
-  async editUserProfile({ id, profile }) {
-    const userProfile = await knex
+  isUserProfile({ id }) {
+    return knex
       .select('id')
       .from('user_profile')
       .where({ user_id: id })
       .first();
+  }
 
+  editUserProfile({ id, profile }, userProfile) {
     if (userProfile) {
       return knex('user_profile')
         .update(decamelizeKeys(profile))

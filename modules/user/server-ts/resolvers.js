@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
+import { knex } from '@module/database-server-ts';
+import bcrypt from 'bcryptjs';
 
 import settings from '../../../settings';
 
@@ -88,8 +90,22 @@ export default pubsub => ({
 
           e.throwIf();
 
-          const [createdUserId] = await User.register({ ...input });
-          await User.editUserProfile({ id: createdUserId, ...input });
+          const passwordHash = await User.createPasswordHash(input);
+          if (input.role === undefined) {
+            input.role = 'user';
+          }
+          const [createdUserId] = await User.withTransaction(
+            () =>
+              User.register({
+                username: input.username,
+                email: input.email,
+                role: input.role,
+                password_hash: passwordHash,
+                is_active: !!input.isActive
+              }),
+            id => User.editUserProfile({ id: id, ...input })
+          );
+          console.log('createdUserId', createdUserId);
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate({ id: createdUserId, ...input });
@@ -157,8 +173,10 @@ export default pubsub => ({
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          await User.editUser(userInfo);
-          await User.editUserProfile(input);
+          const userProfile = await User.isUserProfile(input);
+          // const passwordHash = await User.createPasswordHash(input);
+          // await knex.select('id').from('user_profile').where({ user_id: input.id }).first();
+          await User.withTransaction(() => User.editUser(userInfo), () => User.editUserProfile(input, userProfile));
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);

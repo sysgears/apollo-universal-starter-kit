@@ -138,16 +138,10 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
-          /**
-           * "update" methods doing all the same that "subscribeToMore",
-           * difference is that previous data taken from cache
-           */
           update: ({ caches }, { data: { addComment } }) => {
-            /**
-             * Handle caches[0], we have Array caches [netCache, localCache],
-             * we should use netCache because it contains all data with the
-             * previous request
-             */
+            // Handle caches[0], we have Array caches [netCache, localCache],
+            // we should use netCache because it contains all data with the
+            // previous request
 
             // Read data from cache
             const prevPost = caches[0].readQuery({
@@ -206,16 +200,10 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
-          /**
-           * "update" methods doing all the same that "subscribeToMore",
-           * difference is that previous data taken from cache
-           */
           update: ({ caches }, { data: { deleteComment } }) => {
-            /**
-             * Handle caches[0], we have Array caches [netCache, localCache],
-             * we should use netCache because it contains all data with the
-             * previous request
-             */
+            // Handle caches[0], we have Array caches [netCache, localCache],
+            // we should use netCache because it contains all data with the
+            // previous request
 
             // Read data from cache
             const prevPost = caches[0].readQuery({

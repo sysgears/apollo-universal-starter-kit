@@ -25,19 +25,12 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
               amount: counter.amount + 1
             }
           },
-          /**
-           * "update" methods doing all the same that "subscribeToMore",
-           * difference is that previous data taken from cache
-           */
           update: ({ caches }: any, { data }: any) => {
-            /**
-             * Handle caches[0], we have Array caches [netCache, localCache],
-             * we should use netCache because it contains all data with the
-             * previous request
-             */
-
             const newAmount = data.addServerCounter.amount;
 
+            // Handle caches[0], we have Array caches [netCache, localCache],
+            // we should use netCache because it contains all data with the
+            // previous request
             caches[0].writeQuery({
               query: COUNTER_QUERY,
               data: {

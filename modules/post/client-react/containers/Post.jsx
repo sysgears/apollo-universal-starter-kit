@@ -191,16 +191,10 @@ export default compose(
             }
           },
 
-          /**
-           * "update" methods doing all the same that "subscribeToMore",
-           * difference is that previous data taken from cache
-           */
           update: ({ caches }, { data: { deletePost } }) => {
-            /**
-             * Handle caches[0], we have Array caches [netCache, localCache],
-             * we should use netCache because it contains all data with the
-             * previous request
-             */
+            // Handle caches[0], we have Array caches [netCache, localCache],
+            // we should use netCache because it contains all data with the
+            // previous request
 
             // Read data from cache
             const prevPosts = caches[0].readQuery({

@@ -109,7 +109,8 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
     input =>
       ResetPasswordInput(
         token = input("token").asInstanceOf[String],
-        password = input("password").asInstanceOf[String]
+        password = input("password").asInstanceOf[String],
+        passwordConfirmation = input("passwordConfirmation").asInstanceOf[String]
       )
   }
 
@@ -120,16 +121,6 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
       arguments = List(Argument("input", registerUserInput)),
       resolve = sc => resolveWithDispatcher[UserPayload](
         input = (sc.args.arg[RegisterUserInput]("input"), authConfig.skipConfirmation),
-        userContext = sc.ctx,
-        namedResolverActor = AuthenticationResolver
-      )
-    ),
-    Field(
-      name = "confirmRegistration",
-      fieldType = authPayload,
-      arguments = List(Argument("input", confirmRegistrationInput)),
-      resolve = sc => resolveWithDispatcher[AuthPayload](
-        input = sc.args.arg[ConfirmRegistrationInput]("input"),
         userContext = sc.ctx,
         namedResolverActor = AuthenticationResolver
       )

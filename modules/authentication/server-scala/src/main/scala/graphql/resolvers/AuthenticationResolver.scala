@@ -66,16 +66,6 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
         UserPayload(errors = Some(List(usernameWarning, emailWarning).flatten))
     }.pipeTo(sender)
 
-    case input: ConfirmRegistrationInput => {
-      for {
-        tokenContent <- jwtAuthService.decodeContent(input.token).asFuture
-        user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        activeUser <- if (!user.isActive) userRepository.update(user.copy(isActive = true)).run else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
-        accessToken = jwtAuthService.createAccessToken(JwtContent(activeUser.id.get))
-        refreshToken = jwtAuthService.createRefreshToken(JwtContent(activeUser.id.get), user.password)
-      } yield AuthPayload(Some(activeUser), Some(Tokens(accessToken, refreshToken)))
-    }.pipeTo(sender)
-
     case input: ResendConfirmationMessageInput => {
       for {
         user <- userRepository.findOne(input.usernameOrEmail).run failOnNone NotFound(s"User with username or email: [${input.usernameOrEmail}] not found.")

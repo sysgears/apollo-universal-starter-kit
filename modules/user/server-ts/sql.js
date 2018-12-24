@@ -147,17 +147,54 @@ class User {
     return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
   }
 
-  async transactionUser(arrWithAsyncCallback) {
-    return knex
-      .transaction(async function(trx) {
+  // arrWithAsyncCallback
+  transactionUser(arrWithAsyncCallback) {
+    // console.log(func1, func2, input)
+    // knex.transaction(async function (trx) {
+    //   try {
+    //     await func1().transacting(trx);
+    //     const userProfile = await knex.select('id').from('user_profile').where({ user_id: input.id }).first().transacting(trx)
+    //     await func2(input, userProfile ).transacting(trx);
+    //     await trx.commit;
+    //   } catch (e) {
+    //     console.log('rollback', e)
+    //     trx.rollback();
+    //   }
+    //
+    // })
+    knex
+      .transaction(async trx => {
         try {
-          await Promise.all(arrWithAsyncCallback.map(func => func.transacting(trx)));
-          await trx.commit;
+          // const withTransaction = arrWithAsyncCallback.map(func => func().transacting(trx));
+          // console.log('withTransaction', withTransaction);
+          // Promise.all(withTransaction).then(()=> console.log('tetetet'));
+
+          //TODO make a working transaction
+          const runRecursively = async () => {
+            await arrWithAsyncCallback[0]().transacting(trx);
+            arrWithAsyncCallback.splice(0, 1);
+            return arrWithAsyncCallback.length && (await runRecursively());
+          };
+
+          await runRecursively();
+
+          // for (let query of withTransaction) {
+          //   console.log('query', query)
+          //   await query;
+          // }
+          console.log('true');
+          trx.commit();
         } catch (e) {
-          await trx.rollback;
+          console.log('rollback', e);
+          trx.rollback();
         }
       })
       .catch(e => console.log(e));
+    // console.log('withTransaction',withTransaction);
+    // for (let query of withTransaction) {
+    //   console.log('query', query);
+    //   await query;
+    // }
   }
 
   createFacebookAuth({ id, displayName, userId }) {
@@ -176,13 +213,24 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  async editUser({ id, username, email, role, isActive, password }) {
+  editUser({ id, username, email, role, isActive, password }) {
     let localAuthInput = { email };
     if (password) {
-      const passwordHash = await bcrypt.hash(password, 12);
-      localAuthInput = { email, password_hash: passwordHash };
+      bcrypt.hash(password, 12).then(passwordHash => {
+        localAuthInput = { email, password_hash: passwordHash };
+
+        return knex('user')
+          .update({
+            username,
+            role,
+            is_active: isActive,
+            ...localAuthInput
+          })
+          .where({ id });
+      });
     }
 
+    console.log('editUser');
     return knex('user')
       .update({
         username,
@@ -193,19 +241,14 @@ class User {
       .where({ id });
   }
 
-  async editUserProfile({ id, profile }) {
-    const userProfile = await knex
-      .select('id')
-      .from('user_profile')
-      .where({ user_id: id })
-      .first();
-
+  editUserProfile({ id, profile }, userProfile) {
+    console.log('editUserProfile');
     if (userProfile) {
       return knex('user_profile')
         .update(decamelizeKeys(profile))
         .where({ user_id: id });
     } else {
-      return returnId(knex('user_profile')).insert({ ...decamelizeKeys(profile), user_id: id });
+      return knex('user_profile').insert({ ...decamelizeKeys(profile), user_id: id });
     }
   }
 

@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
+import { knex } from '@module/database-server-ts';
+
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
@@ -88,7 +90,8 @@ export default pubsub => ({
           e.throwIf();
 
           const [createdUserId] = await User.register({ ...input });
-
+          // await User.editUserProfile({ id: createdUserId, ...input });
+          console.log('input', input);
           await User.transactionUser([
             async () => createdUserId,
             User.editUserProfile({ id: createdUserId, ...input })
@@ -160,7 +163,31 @@ export default pubsub => ({
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          await User.transactionUser([User.editUser(userInfo), User.editUserProfile(input)]);
+          // knex.transaction(async function (trx) {
+          //
+          //   try {
+          //     await User.editUser(userInfo).transacting(trx);
+          //     const userProfile = await knex.select('id').from('user_profile').where({ user_id: input.id }).first().transacting(trx)
+          //     await User.editUserProfile(userProfile, input).transacting(trx);
+          //     await trx.commit;
+          //   } catch (e) {
+          //     console.log('rollback', e)
+          //     trx.rollback();
+          //   }
+          //
+          //   })
+          //   .catch(function(error) {
+          //     console.error('error',error);
+          //   });
+          const userProfile = await knex
+            .select('id')
+            .from('user_profile')
+            .where({ user_id: input.id })
+            .first();
+          await User.transactionUser([
+            () => User.editUser(userInfo),
+            () => User.editUserProfile({ ...input, id: 20 }, userProfile)
+          ]);
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);

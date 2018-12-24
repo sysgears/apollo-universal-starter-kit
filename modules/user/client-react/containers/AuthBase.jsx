@@ -15,8 +15,8 @@ const withUser = Component => {
   };
 
   return graphql(CURRENT_USER_QUERY, {
-    props({ data: { loading, currentUser, refetch } }) {
-      return { currentUserLoading: loading, currentUser, refetchCurrentUser: refetch };
+    props({ data: { loading, currentUser, refetch, subscribeToMore } }) {
+      return { currentUserLoading: loading, currentUser, refetchCurrentUser: refetch, subscribeToMore };
     }
   })(WithUser);
 };

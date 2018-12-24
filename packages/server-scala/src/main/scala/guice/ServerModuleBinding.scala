@@ -24,6 +24,7 @@ class ServerModuleBinding extends ScalaModule {
   @Singleton
   def serverModules(contactModule: ContactModule,
                     userModule: UserModule,
+                    authenticationModule: AuthenticationModule,
                     uploadModule: UploadModule,
                     paginationModule: PaginationModule,
                     counterModule: CounterModule): ServerModule = {
@@ -31,6 +32,7 @@ class ServerModuleBinding extends ScalaModule {
       Seq(
         contactModule,
         userModule,
+        authenticationModule,
         uploadModule,
         paginationModule,
         counterModule

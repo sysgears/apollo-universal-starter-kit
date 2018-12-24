@@ -1,10 +1,12 @@
 package graphql.resolvers
 
+import java.sql.SQLException
+
 import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.github.jurajburian.mailer.Message
 import com.google.inject.Inject
-import common.ActorNamed
+import common.{ActorNamed, FieldError}
 import common.config.AppConfig
 import common.errors.{AlreadyExists, NotFound}
 import config.{AuthConfig, MailConfig}
@@ -57,6 +59,11 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
           )
         } else Future.successful(MailPayload())
       } yield UserPayload(Some(createdUser), mailingResult.errors)
+    }.recover {
+      case e: SQLException =>
+        val usernameWarning = if (e.getMessage.contains("column USERNAME is not unique")) Some(FieldError("username", "Username already exists.")) else None
+        val emailWarning = if (e.getMessage.contains("column EMAIL is not unique")) Some(FieldError("email", "E-mail already exists.")) else None
+        UserPayload(errors = Some(List(usernameWarning, emailWarning).flatten))
     }.pipeTo(sender)
 
     case input: ConfirmRegistrationInput => {
@@ -92,6 +99,9 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
         accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(user.id.get), user.password)
       } yield AuthPayload(Some(user), Some(Tokens(accessToken, refreshToken)))
+    }.recover {
+      case _: NotFound => AuthPayload(errors = Some(FieldError("usernameOrEmail", "Please enter a valid username or e-mail.") :: Nil))
+      case _: Unauthenticated => AuthPayload(errors = Some(FieldError("password", "Please enter a valid password.") :: Nil))
     }.pipeTo(sender)
 
     case input: ForgotPasswordInput => {

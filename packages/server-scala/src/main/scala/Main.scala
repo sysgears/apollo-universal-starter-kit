@@ -29,7 +29,8 @@ object Main extends App
   val corsSettings = CorsSettings.apply(system)
 
   withActionsBefore {
-    globalModule.slickSchemas.map(_.create()).toSeq
+    (globalModule.slickSchemas.map(_.create()) ++
+      globalModule.slickSchemas.map(_.seedDatabase())).toSeq
   }(
     Http().bindAndHandle(
       cors(corsSettings)(routes.reduce(_ ~ _)),

@@ -10,7 +10,6 @@ import scala.concurrent.ExecutionContext
 
 class UserSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[UserTable] {
 
-  override val context = executionContext
   override val name: String = UserTable.name
   override val table = TableQuery[UserTable]
 }

@@ -25,7 +25,7 @@ export default class FileOperations extends React.Component {
 
   state = {
     notify: null,
-    isDownload: false
+    downloadingFiles: []
   };
 
   handleRemoveFile = async id => {
@@ -52,31 +52,35 @@ export default class FileOperations extends React.Component {
     }
   };
 
+  handleDownloadFile = async (path, name, id) => {
+    const { t } = this.props;
+
+    this.setState({ downloadingFiles: [...this.state.downloadingFiles, id] });
+    (await this.checkPermission(Permissions.CAMERA_ROLL))
+      ? await this.downloadFile(path, name)
+      : this.setState({ notify: t('download.errorMsg') });
+    this.setState({ downloadingFiles: this.state.downloadingFiles.filter(fileId => fileId !== id) });
+  };
+
   downloadFile = async (path, name) => {
     const { t } = this.props;
     const { albumName } = uploadConfig;
     const { getAlbumAsync, addAssetsToAlbumAsync, createAlbumAsync, createAssetAsync } = MediaLibrary;
     const { downloadAsync, deleteAsync, cacheDirectory } = FileSystem;
-    if (await this.checkPermission(Permissions.CAMERA_ROLL)) {
-      try {
-        this.setState({ isDownload: true });
-        const { uri } = await downloadAsync(serverUrl + '/' + path, cacheDirectory + name);
-        const createAsset = await createAssetAsync(uri);
+    try {
+      const { uri } = await downloadAsync(serverUrl + '/' + path, cacheDirectory + name);
+      const createAsset = await createAssetAsync(uri);
 
-        // Remove file from cache directory
-        await deleteAsync(uri);
+      // Remove file from cache directory
+      await deleteAsync(uri);
 
-        const album = await getAlbumAsync(albumName);
-        album
-          ? await addAssetsToAlbumAsync([createAsset], album, false)
-          : await createAlbumAsync(albumName, createAsset, false);
-
-        this.setState({ isDownload: false, notify: `${t('download.successMsg')}` });
-      } catch (e) {
-        this.setState({ notify: `${e}`, isDownloading: false });
-      }
-    } else {
-      this.setState({ notify: t('download.errorMsg'), isDownload: false });
+      const album = await getAlbumAsync(albumName);
+      album
+        ? await addAssetsToAlbumAsync([createAsset], album, false)
+        : await createAlbumAsync(albumName, createAsset, false);
+      this.setState({ notify: `${t('download.successMsg')}` });
+    } catch (e) {
+      this.setState({ notify: `${e}` });
     }
   };
 
@@ -96,9 +100,10 @@ export default class FileOperations extends React.Component {
         {...this.props}
         handleRemoveFile={this.handleRemoveFile}
         handleUploadFile={this.handleUploadFile}
-        downloadFile={this.downloadFile}
+        handleDownloadFile={this.handleDownloadFile}
         notify={this.state.notify}
         onBackgroundPress={() => this.setState({ notify: null })}
+        downloadingFiles={this.state.downloadingFiles}
       />
     );
   }

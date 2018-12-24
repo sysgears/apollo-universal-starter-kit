@@ -11,19 +11,26 @@ export default class UploadView extends React.Component {
     handleUploadFile: PropTypes.func.isRequired,
     handleRemoveFile: PropTypes.func.isRequired,
     files: PropTypes.array,
-    downloadFile: PropTypes.func.isRequired,
+    handleDownloadFile: PropTypes.func.isRequired,
+    downloadingFiles: PropTypes.array,
     notify: PropTypes.string,
     onBackgroundPress: PropTypes.func.isRequired
   };
 
   renderFileInfo = ({ item: { id, name, path } }) => {
-    const { handleRemoveFile, downloadFile } = this.props;
+    const { handleRemoveFile, handleDownloadFile, downloadingFiles } = this.props;
+    const icon = downloadingFiles.some(fileId => +fileId == +id) ? (
+      <ActivityIndicator style={styles.iconWrapper} size="small" color="#3B5998" />
+    ) : (
+      <TouchableOpacity style={styles.iconWrapper} onPress={() => handleRemoveFile(id)}>
+        <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+      </TouchableOpacity>
+    );
+
     return (
-      <TouchableOpacity style={styles.fileWrapper} onPress={() => downloadFile(path, name)}>
+      <TouchableOpacity style={styles.fileWrapper} onPress={() => handleDownloadFile(path, name, id)}>
         <Text style={styles.text}>{name}</Text>
-        <TouchableOpacity style={styles.iconWrapper} onPress={() => handleRemoveFile(id)}>
-          <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
-        </TouchableOpacity>
+        {icon}
       </TouchableOpacity>
     );
   };
@@ -39,16 +46,8 @@ export default class UploadView extends React.Component {
     );
   };
 
-  renderActivityIndicator = () => (
-    <Modal isVisible={false}>
-      <View style={styles.uploading}>
-        <ActivityIndicator size="large" color="#fff" />
-      </View>
-    </Modal>
-  );
-
   render() {
-    const { files, t, loading, handleUploadFile } = this.props;
+    const { files, t, loading, handleUploadFile, downloadingFiles } = this.props;
 
     if (loading) {
       return <Loading text={t('loading')} />;
@@ -57,7 +56,6 @@ export default class UploadView extends React.Component {
     return files ? (
       <Fragment>
         {this.renderModal()}
-        {this.renderActivityIndicator()}
         <View style={styles.container}>
           <View style={styles.btnContainer}>
             <TouchableOpacity style={styles.btn} onPress={handleUploadFile}>
@@ -68,6 +66,7 @@ export default class UploadView extends React.Component {
             data={files}
             style={styles.list}
             keyExtractor={item => `${item.id}`}
+            extraData={downloadingFiles}
             renderItem={this.renderFileInfo}
           />
         </View>
@@ -103,6 +102,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   text: {
+    width: '90%',
     fontSize: 18
   },
   iconWrapper: {

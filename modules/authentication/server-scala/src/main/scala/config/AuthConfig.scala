@@ -5,7 +5,6 @@ import com.typesafe.config.Config
 
 @Singleton
 class AuthConfig @Inject()(config: Config) {
-  val confirmRegistrationRoute: String = config.getString("confirmRegistrationRoute")
   val skipConfirmation: Boolean = config.getBoolean("skipConfirmation")
 
   object google {

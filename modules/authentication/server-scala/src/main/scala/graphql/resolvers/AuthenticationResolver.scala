@@ -55,7 +55,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
               createdUser,
               appConfig.name,
               mailConfig.address,
-              appConfig.url + authConfig.confirmRegistrationRoute + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get)))
+              appConfig.url + "/confirmation/" + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get)))
           )
         } else Future.successful(MailPayload())
       } yield UserPayload(Some(createdUser), mailingResult.errors)
@@ -87,7 +87,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
             user,
             appConfig.name,
             mailConfig.address,
-            appConfig.url + authConfig.confirmRegistrationRoute + accessToken)
+            appConfig.url + "/confirmation/" + accessToken)
         )
       } yield UserPayload(Some(user), mailingResult.errors)
     }.pipeTo(sender)
@@ -113,7 +113,7 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
             user,
             appConfig.name,
             mailConfig.address,
-            appConfig.url + authConfig.confirmRegistrationRoute + token)
+            appConfig.url + "/reset-password/" + token)
         )
       } yield token
     }.pipeTo(sender)

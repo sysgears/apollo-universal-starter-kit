@@ -101,7 +101,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
   implicit val forgotPasswordInputUnmarshaller: FromInput[ForgotPasswordInput] = inputUnmarshaller {
     input =>
       ForgotPasswordInput(
-        usernameOrEmail = input("usernameOrEmail").asInstanceOf[String]
+        email = input("email").asInstanceOf[String]
       )
   }
 

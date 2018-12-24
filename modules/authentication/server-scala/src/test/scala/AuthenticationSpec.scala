@@ -1,6 +1,6 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
-import akka.http.scaladsl.model.StatusCodes.OK
+import akka.http.scaladsl.model.StatusCodes.{OK, Found}
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
@@ -10,6 +10,7 @@ import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
+import routes.ConfirmRegistrationController
 import spray.json._
 
 import scala.concurrent.duration._
@@ -122,6 +123,23 @@ class AuthenticationSpec extends AuthenticationTestHelper {
         response should include("\"accessToken\"")
         response should include("\"refreshToken\"")
         response shouldNot include("password")
+      }
+    }
+
+    "confirm registration" in {
+      registrationStep ~> check()
+
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run)
+      await(userRepo.update(user.get.copy(isActive = false)).run)
+      val token = authService.createAccessToken(JwtContent(1))
+
+      val confirmRegistrationRoutes = inject[ConfirmRegistrationController].routes
+
+      Get(s"/confirmation?token=$token") ~> confirmRegistrationRoutes ~> check {
+        val response = responseAs[String]
+
+        status shouldBe Found
+        response should include("/login")
       }
     }
 

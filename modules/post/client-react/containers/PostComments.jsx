@@ -139,9 +139,9 @@ const PostCommentsWithApollo = compose(
             }
           },
           update: ({ caches }, { data: { addComment } }) => {
-            // Handle caches[0], we have Array caches [netCache, localCache],
-            // we should use netCache because it contains all data with the
-            // previous request
+            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
+            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
+            // For writing query the `netCache` is needed.
 
             // Read data from cache
             const prevPost = caches[0].readQuery({
@@ -201,9 +201,9 @@ const PostCommentsWithApollo = compose(
             }
           },
           update: ({ caches }, { data: { deleteComment } }) => {
-            // Handle caches[0], we have Array caches [netCache, localCache],
-            // we should use netCache because it contains all data with the
-            // previous request
+            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
+            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
+            // For writing query the `netCache` is needed.
 
             // Read data from cache
             const prevPost = caches[0].readQuery({

@@ -28,9 +28,9 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
           update: ({ caches }: any, { data }: any) => {
             const newAmount = data.addServerCounter.amount;
 
-            // Handle caches[0], we have Array caches [netCache, localCache],
-            // we should use netCache because it contains all data with the
-            // previous request
+            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
+            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
+            // For writing query the `netCache` is needed.
             caches[0].writeQuery({
               query: COUNTER_QUERY,
               data: {

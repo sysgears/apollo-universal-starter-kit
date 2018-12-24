@@ -12,7 +12,8 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/user/server-scala"), id = "user"),
   ProjectRef(base = file("../../modules/counter/server-scala"), id = "counter"),
   ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
-  ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination")
+  ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination"),
+  ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication")
 )
 
 packageName in Docker := "scala_server"

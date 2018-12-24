@@ -10,7 +10,6 @@ import scala.concurrent.ExecutionContext
 
 class CertificateAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[CertificateAuthTable] {
 
-  override val context = executionContext
   override val name: String = CertificateAuthTable.name
   override val table = TableQuery[CertificateAuthTable]
 }

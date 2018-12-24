@@ -10,7 +10,6 @@ import scala.concurrent.ExecutionContext
 
 class GoogleAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[GoogleAuthTable] {
 
-  override val context = executionContext
   override val name: String = GoogleAuthTable.name
   override val table = TableQuery[GoogleAuthTable]
 }

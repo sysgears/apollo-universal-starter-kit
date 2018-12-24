@@ -1,6 +1,6 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
-import akka.http.scaladsl.model.StatusCodes.OK
+import akka.http.scaladsl.model.StatusCodes.{OK, Found}
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
@@ -10,6 +10,7 @@ import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import modules.jwt.model.JwtContent
 import modules.jwt.service.JwtAuthService
 import repositories.UserRepository
+import routes.ConfirmRegistrationController
 import spray.json._
 
 import scala.concurrent.duration._
@@ -128,61 +129,24 @@ class AuthenticationSpec extends AuthenticationTestHelper {
     "confirm registration" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run)
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run)
       await(userRepo.update(user.get.copy(isActive = false)).run)
       val token = authService.createAccessToken(JwtContent(1))
 
-      val confirmRegistrationMutation =
-        """
-          |mutation ConfirmRegistration($input: ConfirmRegistrationInput!){
-          |	confirmRegistration(input: $input){
-          |		user {
-          |      id
-          |      username
-          |      email
-          |      role
-          |      isActive
-          |    }
-          |    tokens {
-          |      accessToken
-          |      refreshToken
-          |    }
-          |    errors {
-          |      field
-          |      message
-          |    }
-          |	}
-          |}
-        """.stripMargin
+      val confirmRegistrationRoutes = inject[ConfirmRegistrationController].routes
 
-      val confirmRegistrationVariables: JsObject =
-        s"""
-           |{"input":{"token": "$token"}}
-      """.stripMargin.parseJson.asJsObject
-
-      val graphQLMessage = ByteString(GraphQLMessage(confirmRegistrationMutation, None, Some(confirmRegistrationVariables)).toJson.compactPrint)
-      val entity = HttpEntity(`application/json`, graphQLMessage)
-
-      Post(endpoint, entity) ~> routes ~> check {
+      Get(s"/confirmation?token=$token") ~> confirmRegistrationRoutes ~> check {
         val response = responseAs[String]
 
-        status shouldBe OK
-        contentType.mediaType shouldBe `application/json`
-        response should include("\"id\":1")
-        response should include("\"username\":\"testName\"")
-        response should include("\"email\":\"scala-test@gmail.com\"")
-        response should include("\"role\":\"user\"")
-        response should include("\"isActive\":true")
-        response should include("\"accessToken\"")
-        response should include("\"refreshToken\"")
-        response shouldNot include("password")
+        status shouldBe Found
+        response should include("/login")
       }
     }
 
     "resend confirmation message" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run)
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run)
       await(userRepo.update(user.get.copy(isActive = false)).run)
 
       val resendConfirmationMessageMutation =
@@ -238,7 +202,7 @@ class AuthenticationSpec extends AuthenticationTestHelper {
 
       val forgotPasswordVariables: JsObject =
         s"""
-           |{"input":{"usernameOrEmail":"$testEmail"}}
+           |{"input":{"email":"$testEmail"}}
       """.stripMargin.parseJson.asJsObject
 
       val graphQLMessage = ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)
@@ -249,7 +213,6 @@ class AuthenticationSpec extends AuthenticationTestHelper {
         contentType.mediaType shouldBe `application/json`
       }
     }
-
 
     "reset password" in {
       registrationStep ~> check()
@@ -270,7 +233,7 @@ class AuthenticationSpec extends AuthenticationTestHelper {
 
       val forgotPasswordVariables: JsObject =
         s"""
-           |{"input":{"token":"$token", "password": "$testPassword"}}
+           |{"input":{"token":"$token", "password": "$testPassword", "passwordConfirmation": "$testPassword"}}
       """.stripMargin.parseJson.asJsObject
 
       val graphQLMessage = ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)

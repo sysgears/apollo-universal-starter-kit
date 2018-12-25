@@ -31,8 +31,7 @@ trait PaginationHelper extends TestHelper {
   def clean(): Unit = ()
 
   private def initDb(): Unit = {
-    await(paginationInitializer.create())
-    await(paginationInitializer.seedDatabase())
+    await(paginationInitializer.createAndSeed())
   }
 
   private def dropDb(): Unit = {

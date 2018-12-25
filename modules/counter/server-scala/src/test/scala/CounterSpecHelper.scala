@@ -32,6 +32,7 @@ trait CounterSpecHelper extends TestHelper {
 
   private def initDb(): Unit = {
     await(counterInitializer.create())
+    await(counterInitializer.seedDatabase())
   }
 
   private def dropDb(): Unit = {

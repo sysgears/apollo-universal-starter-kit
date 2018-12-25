@@ -1,3 +1,3 @@
 package model
 
-case class ForgotPasswordInput(usernameOrEmail: String)
+case class ForgotPasswordInput(email: String)

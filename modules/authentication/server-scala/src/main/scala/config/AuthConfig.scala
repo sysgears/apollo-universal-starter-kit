@@ -5,8 +5,8 @@ import com.typesafe.config.Config
 
 @Singleton
 class AuthConfig @Inject()(config: Config) {
-  val confirmRegistrationRoute: String = config.getString("confirmRegistrationRoute")
   val skipConfirmation: Boolean = config.getBoolean("skipConfirmation")
+  val passwordMinLength: Int = config.getInt("password.minLength")
 
   object google {
     val clientId: String = config.getString("oauth2.google.clientId")

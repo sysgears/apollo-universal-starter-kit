@@ -1,23 +1,23 @@
 import { pick } from 'lodash';
 import passport from 'passport';
-import GitHubStrategy from 'passport-github';
+import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
+import { User } from '@module/user-server-ts';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import User from '../../sql';
 import settings from '../../../../../settings';
 import access from '../../access';
 
 let middleware;
 
-if (settings.user.auth.github.enabled && !__TEST__) {
+if (settings.user.auth.linkedin.enabled && !__TEST__) {
   passport.use(
-    new GitHubStrategy(
+    new LinkedInStrategy(
       {
-        clientID: settings.user.auth.github.clientID,
-        clientSecret: settings.user.auth.github.clientSecret,
-        scope: settings.user.auth.github.scope,
-        callbackURL: settings.user.auth.github.callbackURL
+        clientID: settings.user.auth.linkedin.clientID,
+        clientSecret: settings.user.auth.linkedin.clientSecret,
+        callbackURL: settings.user.auth.linkedin.callbackURL,
+        scope: settings.user.auth.linkedin.scope
       },
       async function(accessToken, refreshToken, profile, cb) {
         const {
@@ -27,7 +27,7 @@ if (settings.user.auth.github.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await User.getUserByGHIdOrEmail(id, value);
+          let user = await User.getUserByLnInIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
@@ -38,15 +38,15 @@ if (settings.user.auth.github.enabled && !__TEST__) {
               isActive
             });
 
-            await User.createGithubAuth({
+            await User.createLinkedInAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
             user = await User.getUser(createdUserId);
-          } else if (!user.ghId) {
-            await User.createGithubAuth({
+          } else if (!user.lnId) {
+            await User.createLinkedInAuth({
               id,
               displayName,
               userId: user.id
@@ -62,12 +62,12 @@ if (settings.user.auth.github.enabled && !__TEST__) {
 
   middleware = app => {
     app.use(passport.initialize());
-    app.get('/auth/github', (req, res, next) => {
-      passport.authenticate('github', { state: req.query.expoUrl })(req, res, next);
+    app.get('/auth/linkedin', (req, res, next) => {
+      passport.authenticate('linkedin', { state: req.query.expoUrl })(req, res, next);
     });
     app.get(
-      '/auth/github/callback',
-      passport.authenticate('github', { session: false, failureRedirect: '/login' }),
+      '/auth/linkedin/callback',
+      passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
         const user = await User.getUser(req.user.id);
         const redirectUrl = req.query.state;

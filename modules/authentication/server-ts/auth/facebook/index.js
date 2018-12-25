@@ -1,10 +1,10 @@
 import { pick } from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
+import { User } from '@module/user-server-ts';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import User from '../../sql';
 import settings from '../../../../../settings';
 import access from '../../access';
 

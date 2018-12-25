@@ -1,6 +1,5 @@
 import jwt from './jwt';
 import session from './session';
-
 import AccessModule from './AccessModule';
 
 // Try to grant access via sessions first, and if that fails, then try using JWT

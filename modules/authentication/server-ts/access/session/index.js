@@ -1,11 +1,10 @@
 import { isApiExternal } from '@module/core-common';
+import { User, scopes } from '@module/user-server-ts';
 
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
-import scopes from '../../scopes';
-import User from '../../sql';
 import settings from '../../../../../settings';
 
 const grant = async (user, req) => {

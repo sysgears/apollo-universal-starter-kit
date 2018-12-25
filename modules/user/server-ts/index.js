@@ -1,7 +1,6 @@
 import ServerModule from '@module/module-server-ts';
+import { access, auth } from '@module/authentication-server-ts';
 
-import access from './access';
-import auth from './auth';
 import confirmMiddleware from './confirm';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
@@ -25,7 +24,7 @@ const middleware = app => {
   }
 };
 
-export { User };
+export { User, scopes };
 
 export default new ServerModule(access, auth, {
   schema: [schema],

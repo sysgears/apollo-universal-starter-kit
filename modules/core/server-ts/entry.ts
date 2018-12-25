@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import { log } from '@module/core-common';
 export { createServer, serverPromise } from './server';
 

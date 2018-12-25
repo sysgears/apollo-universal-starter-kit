@@ -10,12 +10,12 @@ class User {
     const queryBuilder = knex
       .select(
         'u.id as id',
-        'u.username',
+        'u.username as username',
         'u.role',
         'u.is_active',
-        'u.email',
-        'up.first_name',
-        'up.last_name',
+        'u.email as email',
+        'up.first_name as first_name',
+        'up.last_name as last_name',
         'ca.serial',
         'fa.fb_id',
         'fa.display_name AS fbDisplayName',
@@ -61,10 +61,10 @@ class User {
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('u.username', 'like', `%${filter.searchText}%`)
-            .orWhere('u.email', 'like', `%${filter.searchText}%`)
-            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
+          this.where(knex.raw('LOWER(??) LIKE LOWER(?)', ['username', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['email', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['first_name', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['last_name', `%${filter.searchText}%`]));
         });
       }
     }

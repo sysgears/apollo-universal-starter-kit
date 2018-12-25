@@ -3,7 +3,7 @@ package common.actors
 import akka.actor.{Actor, ActorLogging}
 import common.implicits.RichList._
 import common.actors.Dispatcher.{Failure, InterceptorBeforeMessage, Success}
-import core.graphql.UserContext
+import common.graphql.UserContext
 
 trait InterceptorBefore extends Actor
   with ActorLogging {

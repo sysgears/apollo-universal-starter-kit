@@ -1,7 +1,7 @@
 try {
   // tslint:disable-next-line
-  const modules = require('.').default;
-  modules.triggerOnAppCreate();
+  const modules = require('./modules').default;
+  modules.createApp(module);
 } catch (e) {
   if (typeof ErrorUtils !== 'undefined') {
     (ErrorUtils as any).reportFatalError(e);

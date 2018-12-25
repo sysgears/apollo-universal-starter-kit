@@ -1,24 +1,21 @@
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import core.controllers.graphql.GraphQLController
-import core.guice.injection.Injecting
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import app.CounterModule
+import com.google.inject.Guice
+import core.guice.bindings.CoreBinding
+import guice.CounterBinding
+import net.codingwell.scalaguice.ScalaModule
 import repositories.CounterSchemaInitializer
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
+import scala.collection.JavaConverters._
 
-trait CounterSpecHelper extends WordSpec
-  with ScalatestRouteTest
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Injecting
-  with Matchers {
+trait CounterSpecHelper extends TestHelper {
 
-  val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].routes
-
+  val bindings: Seq[ScalaModule] = Seq(new CounterBinding, new CoreBinding)
+  Guice.createInjector(bindings.asJava)
   val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
+  val routes: Route = routesWithGraphQLSchema[CounterModule]
 
   before {
     clean()

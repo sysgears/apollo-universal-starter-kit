@@ -4,9 +4,9 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
-import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PubSubService
-import core.services.publisher.RichPubSubService._
+import common.graphql.UserContext
+import common.publisher.PubSubService
+import common.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject
 import models.Counter
@@ -20,14 +20,13 @@ import scala.concurrent.ExecutionContext
 class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter],
                               materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
-                              executionContext: ExecutionContext) extends GraphQLSchema
-  with Logger {
+                              executionContext: ExecutionContext) extends Logger {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
-  override def queries: List[Field[UserContext, Unit]] = List(
+  def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "serverCounter",
       fieldType = Types.counter,
@@ -39,7 +38,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
     )
   )
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addServerCounter",
       fieldType = Types.counter,
@@ -55,7 +54,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
     )
   )
 
-  override def subscriptions: List[Field[UserContext, Unit]] = List(
+  def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
       name = "counterUpdated",
       fieldType = Types.counter,

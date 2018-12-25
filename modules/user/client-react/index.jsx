@@ -5,7 +5,8 @@ import { translate } from '@module/i18n-client-react';
 import { MenuItem } from '@module/look-client-react';
 import ClientModule from '@module/module-client-react';
 
-import access from './access';
+import AccessModule from '@module/authentication-client-react';
+
 import resolvers from './resolvers';
 import resources from './locales';
 import ProfileView from './components/ProfileView';
@@ -42,6 +43,7 @@ const LogoutLink = withRouter(
 );
 
 export * from './containers/Auth';
+export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
 
 const NavLinkUsersWithI18n = translate('user')(({ t }) => (
   <NavLink to="/users" className="nav-link" activeClassName="active">
@@ -54,7 +56,7 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   </NavLink>
 ));
 
-export default new ClientModule(access, {
+export default new ClientModule(AccessModule, {
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,

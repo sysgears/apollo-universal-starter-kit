@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import modules from './modules';
+import { runApp } from '@module/core-server-ts';
 
-modules.createApp(module);
-
-export default modules;
+runApp(modules, module);

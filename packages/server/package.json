@@ -57,6 +57,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@module/core-server-ts": "^1.0.0",
     "@module/core-common": "^1.0.0",
     "@module/database-server-ts": "^1.0.0",
     "@module/testing-server-ts": "^1.0.0",

@@ -51,20 +51,20 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
   }
 
   /**
+    * Сreates the table and add an init data
+    */
+  def createAndSeed(): Future[Unit] = {
+    database.run(MTable.getTables(name)).flatMap {
+      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData)) else Future.successful()
+    }(executionContext)
+  }
+
+  /**
     * Drops the table
     */
   def drop(): Future[Unit] = {
     database.run(MTable.getTables(name)).flatMap {
       tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
-    }(executionContext)
-  }
-
-  /**
-    * Add init data to the database
-    */
-  def seedDatabase(): Future[Unit] = {
-    database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.nonEmpty) database.run(DBIO.seq(initData)) else Future.successful()
     }(executionContext)
   }
 

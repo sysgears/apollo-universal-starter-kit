@@ -12,7 +12,7 @@ const {
   runPrettier
 } = require('../helpers/util');
 
-const installDependency = require('./installDependency');
+// const installDependency = require('./installDependency');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
@@ -32,7 +32,7 @@ function deleteModule({ logger, packageName, moduleName, old }) {
     removeFromModules(params);
     if (!old) {
       removeDependency(params);
-      installDependency({ logger, moduleName });
+      // installDependency({ logger, moduleName });
     }
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
@@ -123,7 +123,7 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
     )
     .to(packagePath);
 
-  removeSymlink(packageName, modulePackageName);
+  removeSymlink(moduleName, modulePackageName);
 }
 
 module.exports = deleteModule;

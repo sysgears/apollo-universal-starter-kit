@@ -142,8 +142,7 @@ function computePackagePath(packageName) {
  * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
 function addSymlink(packageName, modulePackageName) {
-  shell.ln(
-    '-s',
+  fs.symlinkSync(
     `${BASE_PATH}/modules/${packageName}/${modulePackageName}`,
     `${BASE_PATH}/node_modules/@module/${decamelize(packageName)}-${modulePackageName}`
   );
@@ -156,10 +155,7 @@ function addSymlink(packageName, modulePackageName) {
  * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
 function removeSymlink(packageName, modulePackageName) {
-  shell.rm(
-    `${BASE_PATH}/modules/${packageName}/${modulePackageName}`,
-    `${BASE_PATH}/node_modules/@module/${decamelize(packageName)}-${modulePackageName}`
-  );
+  fs.unlinkSync(`${BASE_PATH}/node_modules/@module/${decamelize(packageName)}-${modulePackageName}`);
 }
 
 /**

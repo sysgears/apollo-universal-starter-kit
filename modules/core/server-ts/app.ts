@@ -4,10 +4,8 @@ import { GraphQLSchema } from 'graphql';
 import { isApiExternal } from '@module/core-common';
 import ServerModule from '@module/module-server-ts';
 
-import graphiqlMiddleware from './middleware/graphiql';
-import websiteMiddleware from './middleware/website';
+import middleware from './middleware';
 import createApolloServer from './graphql';
-import errorMiddleware from './middleware/error';
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
   const app = express();
@@ -26,13 +24,14 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
     graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: { credentials: true, origin: true } });
   }
 
-  app.get('/graphiql', (req, res, next) => graphiqlMiddleware(req, res, next));
-  app.use(websiteMiddleware(schema, modules));
+  app.get('/graphiql', (req, res, next) => middleware.graphiql(req, res, next));
+
+  app.use(middleware.website(schema, modules));
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {
     app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
-    app.use(errorMiddleware);
+    app.use(middleware.error);
   }
   return app;
 };

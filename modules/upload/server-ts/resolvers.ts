@@ -1,11 +1,14 @@
 import fileSystemStorage, { UploadFileStream } from './FileSystemStorage';
 import settings from '../../../settings';
+import { PubSub } from 'graphql-subscriptions';
+
+const FILES_SUBSCRIPTION = 'files_subscription';
 
 interface UploadFileStreams {
   files: [Promise<UploadFileStream>];
 }
 
-export default () => ({
+export default (pubsub: PubSub) => ({
   Query: {
     files(obj: any, args: any, { Upload }: any) {
       return Upload.files();
@@ -21,8 +24,13 @@ export default () => ({
           files.map(async uploadPromise => fileSystemStorage.save(await uploadPromise, settings.upload.uploadDir))
         );
 
-        // save files data into DB
-        return Upload.saveFiles(uploadedFiles);
+        const ids = (await Promise.all(uploadedFiles.map(file => Upload.saveFiles(file)))).map(([id]) => id);
+        // publish for message list
+        pubsub.publish(FILES_SUBSCRIPTION, {
+          filesUpdated: { mutation: 'CREATED', files: await Upload.files(ids) }
+        });
+
+        return ids;
       } catch (e) {
         throw new Error(t('upload:fileNotLoaded'));
       }
@@ -42,8 +50,13 @@ export default () => ({
         throw new Error(t('upload:fileNotDeleted'));
       }
 
+      pubsub.publish(FILES_SUBSCRIPTION, { filesUpdated: { mutation: 'DELETED', files: [file] } });
       return true;
     }
   },
-  Subscription: {}
+  Subscription: {
+    filesUpdated: {
+      subscribe: () => pubsub.asyncIterator(FILES_SUBSCRIPTION)
+    }
+  }
 });

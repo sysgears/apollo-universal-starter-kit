@@ -16,3 +16,13 @@ extend type Mutation {
   uploadFiles(files: [FileUpload]!): Boolean!
   removeFile(id: Int!): Boolean!
 }
+
+extend type Subscription {
+  filesUpdated: UpdateFilesPayload
+}
+
+# Payload for filesUpdated Subscription
+type UpdateFilesPayload {
+  mutation: String!
+  files: [File]
+}

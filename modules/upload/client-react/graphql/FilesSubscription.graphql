@@ -1,0 +1,10 @@
+#import "./File.graphql"
+
+subscription onFilesUpdated {
+  filesUpdated {
+    mutation
+    files {
+      ...FileInfo
+    }
+  }
+}

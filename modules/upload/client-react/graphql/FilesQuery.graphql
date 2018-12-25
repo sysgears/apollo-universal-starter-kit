@@ -1,9 +1,7 @@
+#import "./File.graphql"
+
 query filesQuery {
   files {
-    id
-    name
-    type
-    size
-    path
+    ...FileInfo
   }
 }

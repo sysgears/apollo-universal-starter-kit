@@ -1,0 +1,7 @@
+fragment FileInfo on File {
+  id
+  name
+  type
+  size
+  path
+}

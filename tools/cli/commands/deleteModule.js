@@ -12,8 +12,6 @@ const {
   runPrettier
 } = require('../helpers/util');
 
-// const installDependency = require('./installDependency');
-
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
  *
@@ -30,10 +28,7 @@ function deleteModule({ logger, packageName, moduleName, old }) {
   if (fs.existsSync(modulePath)) {
     deleteTemplates(params);
     removeFromModules(params);
-    if (!old) {
-      removeDependency(params);
-      // installDependency({ logger, moduleName });
-    }
+    if (!old) removeDependency(params);
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
   } else {

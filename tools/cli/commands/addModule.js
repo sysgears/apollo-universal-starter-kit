@@ -14,8 +14,6 @@ const {
   runPrettier
 } = require('../helpers/util');
 
-// const installDependency = require('./installDependency');
-
 /**
  * Adds application module to client or server code and adds it to the module list.
  *
@@ -30,10 +28,7 @@ function addModule({ logger, packageName, moduleName, old }) {
 
   copyTemplates(params);
   mergeWithModules(params);
-  if (!old) {
-    addDependency(params);
-    // installDependency({ logger, moduleName });
-  }
+  if (!old) addDependency(params);
 
   logger.info(chalk.green(`✔ New module ${moduleName} for package ${packageName} successfully created!`));
 }

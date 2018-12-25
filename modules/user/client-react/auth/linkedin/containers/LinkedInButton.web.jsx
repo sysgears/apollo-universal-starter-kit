@@ -3,7 +3,8 @@ import { withApollo } from 'react-apollo';
 import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedin';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@module/look-client-react';
-import access from '../../../access';
+import AccessModule from '@module/authentication-client-react';
+
 import './LinkedInButton.css';
 
 const linkedInLogin = () => {
@@ -12,7 +13,12 @@ const linkedInLogin = () => {
 
 const LinkedInButton = withApollo(({ client, text }) => {
   return (
-    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(linkedInLogin)} className="linkedInBtn">
+    <Button
+      type="button"
+      size="lg"
+      onClick={() => AccessModule.doLogin(client).then(linkedInLogin)}
+      className="linkedInBtn"
+    >
       <div className="iconContainer">
         <FontAwesomeIcon icon={faLinkedInSquare} className="linkedInIcon" />
         <div className="separator" />
@@ -26,7 +32,7 @@ const LinkedInButton = withApollo(({ client, text }) => {
 
 const LinkedInLink = withApollo(({ client, text }) => {
   return (
-    <Button color="link" onClick={() => access.doLogin(client).then(linkedInLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => AccessModule.doLogin(client).then(linkedInLogin)} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
@@ -37,7 +43,7 @@ const LinkedInIcon = withApollo(({ client }) => {
     <FontAwesomeIcon
       icon={faLinkedInSquare}
       style={{ marginTop: 10, color: '#3B5998', fontSize: 40 }}
-      onClick={() => access.doLogin(client).then(linkedInLogin)}
+      onClick={() => AccessModule.doLogin(client).then(linkedInLogin)}
     />
   );
 });

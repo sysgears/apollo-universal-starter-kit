@@ -4,7 +4,6 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { translate } from '@module/i18n-client-react';
 import { MenuItem } from '@module/look-client-react';
 import ClientModule from '@module/module-client-react';
-
 import AccessModule from '@module/authentication-client-react';
 
 import resolvers from './resolvers';

@@ -3,7 +3,8 @@ import { withApollo } from 'react-apollo';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@module/look-client-react';
-import access from '../../../access';
+import AccessModule from '@module/authentication-client-react';
+
 import './GoogleButton.css';
 
 const googleLogin = () => {
@@ -12,7 +13,12 @@ const googleLogin = () => {
 
 const GoogleButton = withApollo(({ client, text }) => {
   return (
-    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(googleLogin)} className="googleBtn">
+    <Button
+      type="button"
+      size="lg"
+      onClick={() => AccessModule.doLogin(client).then(googleLogin)}
+      className="googleBtn"
+    >
       <div className="iconContainer">
         <FontAwesomeIcon icon={faGooglePlusSquare} className="googleIcon" />
         <div className="separator" />
@@ -26,7 +32,7 @@ const GoogleButton = withApollo(({ client, text }) => {
 
 const GoogleLink = withApollo(({ client, text }) => {
   return (
-    <Button color="link" onClick={() => access.doLogin(client).then(googleLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => AccessModule.doLogin(client).then(googleLogin)} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
@@ -37,7 +43,7 @@ const GoogleIcon = withApollo(({ client }) => {
     <FontAwesomeIcon
       icon={faGooglePlusSquare}
       style={{ marginTop: 10, color: '#c43832', fontSize: 40 }}
-      onClick={() => access.doLogin(client).then(googleLogin)}
+      onClick={() => AccessModule.doLogin(client).then(googleLogin)}
     />
   );
 });

@@ -2,12 +2,9 @@ import React from 'react';
 import UploadView from '../components/UploadView';
 
 export default class FileOperations extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null
-    };
-  }
+  state = {
+    error: null
+  };
 
   handleUploadFiles = async files => {
     const { uploadFiles } = this.props;
@@ -25,7 +22,12 @@ export default class FileOperations extends React.Component {
 
   render() {
     return (
-      <UploadView {...this.props} handleRemoveFile={this.handleRemoveFile} handleUploadFiles={this.handleUploadFiles} />
+      <UploadView
+        {...this.props}
+        handleRemoveFile={this.handleRemoveFile}
+        handleUploadFiles={this.handleUploadFiles}
+        error={this.state.error}
+      />
     );
   }
 }

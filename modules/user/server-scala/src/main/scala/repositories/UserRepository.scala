@@ -1,10 +1,27 @@
 package repositories
 
 import com.byteslounge.slickrepo.repository.Repository
-import com.byteslounge.slickrepo.scalaversion.JdbcProfile
+import javax.inject.Inject
 import model.User
-import slick.dbio.DBIO
+import model.UserTable.UserTable
+import slick.ast.BaseTypedType
+import slick.jdbc.JdbcProfile
+import slick.jdbc.JdbcBackend.Database
 
-abstract class UserRepository(override val driver: JdbcProfile) extends Repository[User, Int](driver) {
-  def findOne(usernameOrEmail: String): DBIO[Option[User]]
+import scala.concurrent.ExecutionContext
+
+class UserRepository @Inject()(override val driver: JdbcProfile, db: Database)
+                              (implicit executionContext: ExecutionContext) extends Repository[User, Int](driver) {
+
+  import driver.api._
+
+  val pkType = implicitly[BaseTypedType[Int]]
+  val tableQuery = TableQuery[UserTable]
+  type TableType = UserTable
+
+  def findByUsernameOrEmail(usernameOrEmail: String): DBIO[Option[User]] =
+    tableQuery.filter(user => user.email === usernameOrEmail || user.username === usernameOrEmail).result.headOption
+
+  def findByEmail(email: String): DBIO[Option[User]] =
+    tableQuery.filter(user => user.email === email).result.headOption
 }

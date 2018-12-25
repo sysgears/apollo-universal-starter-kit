@@ -1,6 +1,6 @@
 package repositories
 
-import core.slick.SchemaInitializer
+import common.slick.SchemaInitializer
 import javax.inject.Inject
 import models.FileMetadataTable
 import models.FileMetadataTable.FileMetadataTable
@@ -11,7 +11,6 @@ class FileSchemaInitializer @Inject()(implicit val executionContext: ExecutionCo
 
   import driver.api._
 
-  override val context = executionContext
   override val name: String = FileMetadataTable.name
   override val table = TableQuery[FileMetadataTable]
 }

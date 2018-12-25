@@ -1,6 +1,5 @@
 require('dotenv/config');
-require('@babel/register')({ cwd: __dirname + '/../..' });
+require('@babel/register')({ cwd: __dirname + '/../..', extensions: ['.js', '.ts'] });
 require('@babel/polyfill');
-const config = require('./knexdata');
 
-module.exports = config;
+module.exports = require('@module/database-server-ts/knexdata');

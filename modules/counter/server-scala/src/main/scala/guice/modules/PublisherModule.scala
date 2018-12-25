@@ -1,4 +1,3 @@
-package guice.modules
 
 import core.services.publisher.{PubSubService, PublishElement}
 import models.Counter

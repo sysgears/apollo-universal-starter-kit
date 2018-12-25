@@ -11,8 +11,8 @@
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
     "start": "node --harmony build",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"../../modules/**/server-ts/**/*.spec.*\" \"src/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"../../modules/**/server-ts/**/*.spec.*\" \"src/**/*.spec.*\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/server-ts/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/server-ts/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
@@ -23,7 +23,7 @@
     "watch": "spin watch",
     "heroku-postbuild": "yarn build && yarn seed && yarn stripe:setup",
     "cli": "node ../../tools/cli",
-    "stripe:setup": "node src/modules/payments/stripe/subscription/cli/stripeSetup"
+    "stripe:setup": "node ../../modules/payments/server-ts/stripe/subscription/cli/stripeSetup"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [
@@ -57,6 +57,9 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@module/core-common": "^1.0.0",
+    "@module/database-server-ts": "^1.0.0",
+    "@module/testing-server-ts": "^1.0.0",
     "apollo-cache-inmemory": "1.2.9",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",

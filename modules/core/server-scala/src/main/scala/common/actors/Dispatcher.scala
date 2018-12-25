@@ -3,10 +3,10 @@ package common.actors
 import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import akka.pattern._
 import akka.stream.ActorMaterializer
-import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
 import common.implicits.RichList._
-import common.{ActorMessageDelivering, ActorNamed}
-import core.graphql.UserContext
+import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
+import common.graphql.UserContext
+import common.ActorNamed
 import javax.inject.Inject
 
 import scala.concurrent.ExecutionContext
@@ -16,7 +16,12 @@ object Dispatcher extends ActorNamed {
 
   final val name = "Dispatcher"
 
-  final case class DispatcherMessage(input: Any, context: UserContext, replyTo: ActorRef, resolverActor: ActorRef, before: List[ActorRef] = Nil, after: List[ActorRef] = Nil)
+  final case class DispatcherMessage(input: Any,
+                                     context: UserContext,
+                                     replyTo: ActorRef,
+                                     resolverActor: ActorRef,
+                                     before: List[ActorRef] = Nil,
+                                     after: List[ActorRef] = Nil)
 
   final case class InterceptorBeforeMessage(input: Any,
                                             context: UserContext,

@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     web: {
-      entry: './src/index.tsx',
+      entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],

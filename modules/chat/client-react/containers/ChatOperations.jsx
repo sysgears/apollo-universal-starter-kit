@@ -97,6 +97,26 @@ function EditMessage(prev, node) {
   });
 }
 
+function readCache(cache) {
+  return cache.readQuery({
+    query: MESSAGES_QUERY,
+    variables: { limit, after: 0 }
+  });
+}
+
+function handleUpdateData(cache, messages) {
+  cache.writeQuery({
+    query: MESSAGES_QUERY,
+    variables: { limit, after: 0 },
+    data: {
+      messages: {
+        ...messages,
+        __typename: 'Messages'
+      }
+    }
+  });
+}
+
 class ChatOperations extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
@@ -202,24 +222,12 @@ export default compose(
               // For writing query the `netCache` is needed.
 
               // Read data from cache
-              const prevMessages = caches[0].readQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 }
-              });
+              const prevMessages = readCache(caches[0]);
 
-              const newListMessages = AddMessage(prevMessages, addMessage);
+              const { messages } = AddMessage(prevMessages, addMessage);
 
               // Update data
-              caches[0].writeQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 },
-                data: {
-                  messages: {
-                    ...newListMessages.messages,
-                    __typename: 'Messages'
-                  }
-                }
-              });
+              handleUpdateData(caches[0], messages);
             }
           });
         } catch (e) {
@@ -247,24 +255,12 @@ export default compose(
               // For writing query the `netCache` is needed.
 
               // Read data from cache
-              const prevMessages = caches[0].readQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 }
-              });
+              const prevMessages = readCache(caches[0]);
 
-              const newListMessages = DeleteMessage(prevMessages, deleteMessage);
+              const { messages } = DeleteMessage(prevMessages, deleteMessage);
 
               // Update data
-              caches[0].writeQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 },
-                data: {
-                  messages: {
-                    ...newListMessages.messages,
-                    __typename: 'Messages'
-                  }
-                }
-              });
+              handleUpdateData(caches[0], messages);
             }
           });
         } catch (e) {
@@ -304,24 +300,12 @@ export default compose(
               // For writing query the `netCache` is needed.
 
               // Read data from cache
-              const prevMessages = caches[0].readQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 }
-              });
+              const prevMessages = readCache(caches[0]);
 
-              const newListMessages = EditMessage(prevMessages, editMessage);
+              const { messages } = EditMessage(prevMessages, editMessage);
 
               // Update data
-              caches[0].writeQuery({
-                query: MESSAGES_QUERY,
-                variables: { limit, after: 0 },
-                data: {
-                  messages: {
-                    ...newListMessages.messages,
-                    __typename: 'Messages'
-                  }
-                }
-              });
+              handleUpdateData(caches[0], messages);
             }
           });
         } catch (e) {

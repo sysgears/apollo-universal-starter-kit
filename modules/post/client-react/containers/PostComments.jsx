@@ -46,6 +46,30 @@ function DeleteComment(prev, id) {
   });
 }
 
+function readCache(cache, postId) {
+  return cache.readQuery({
+    query: POST_QUERY,
+    variables: {
+      id: String(postId)
+    }
+  });
+}
+
+function handleUpdateData(cache, post, postId) {
+  cache.writeQuery({
+    query: POST_QUERY,
+    variables: {
+      id: String(postId)
+    },
+    data: {
+      post: {
+        ...post,
+        __typename: 'Post'
+      }
+    }
+  });
+}
+
 class PostComments extends React.Component {
   static propTypes = {
     postId: PropTypes.number.isRequired,
@@ -144,29 +168,13 @@ const PostCommentsWithApollo = compose(
             // For writing query the `netCache` is needed.
 
             // Read data from cache
-            const prevPost = caches[0].readQuery({
-              query: POST_QUERY,
-              variables: {
-                id: String(postId)
-              }
-            });
+            const prevPost = readCache(caches[0], postId);
 
             if (prevPost.post) {
-              const updatedPost = AddComment(prevPost, addComment);
+              const { post } = AddComment(prevPost, addComment);
 
               // Update data
-              caches[0].writeQuery({
-                query: POST_QUERY,
-                variables: {
-                  id: String(postId)
-                },
-                data: {
-                  post: {
-                    ...updatedPost.post,
-                    __typename: 'Post'
-                  }
-                }
-              });
+              handleUpdateData(caches[0], post, postId);
             }
           }
         })
@@ -206,29 +214,13 @@ const PostCommentsWithApollo = compose(
             // For writing query the `netCache` is needed.
 
             // Read data from cache
-            const prevPost = caches[0].readQuery({
-              query: POST_QUERY,
-              variables: {
-                id: String(postId)
-              }
-            });
+            const prevPost = readCache(caches[0], postId);
 
             if (prevPost.post) {
-              const updatedPost = DeleteComment(prevPost, deleteComment.id);
+              const { post } = DeleteComment(prevPost, deleteComment.id);
 
               // Update data
-              caches[0].writeQuery({
-                query: POST_QUERY,
-                variables: {
-                  id: String(postId)
-                },
-                data: {
-                  post: {
-                    ...updatedPost.post,
-                    __typename: 'Post'
-                  }
-                }
-              });
+              handleUpdateData(caches[0], post, postId);
             }
           }
         })

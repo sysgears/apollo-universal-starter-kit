@@ -1,18 +1,24 @@
 package app
 
-import com.google.inject.Inject
+import common.graphql.UserContext
 import common.shapes.ServerModule
+import common.slick.SchemaInitializer
+import core.guice.injection.InjectorProvider._
 import graphql.schema.FileSchema
+import guice.FileBinding
 import repositories.FileSchemaInitializer
+import sangria.schema.Field
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
 
-class UploadModule @Inject()(fileSchema: FileSchema,
-                             fileSchemaInitializer: FileSchemaInitializer) extends ServerModule {
+class UploadModule extends ServerModule {
 
-  slickSchemas ++= ListBuffer(fileSchemaInitializer)
+  lazy val fileSchema: FileSchema = inject[FileSchema]
+  lazy val fileSchemaInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 
-  queries ++= fileSchema.queries
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(fileSchemaInitializer)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(fileSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(fileSchema.mutations: _*)
 
-  mutations ++= fileSchema.mutations
+  bindings = new FileBinding
 }

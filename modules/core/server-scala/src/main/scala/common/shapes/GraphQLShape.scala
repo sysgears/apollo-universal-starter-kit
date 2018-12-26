@@ -7,11 +7,11 @@ import scala.collection.mutable
 
 trait GraphQLShape {
 
-  val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
+  lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 
-  val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
+  lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 
-  val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
+  lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet.empty
 
-  val extensions: mutable.HashSet[Extension[UserContext]] = mutable.HashSet.empty
+  lazy val extensions: mutable.HashSet[Extension[UserContext]] = mutable.HashSet.empty
 }

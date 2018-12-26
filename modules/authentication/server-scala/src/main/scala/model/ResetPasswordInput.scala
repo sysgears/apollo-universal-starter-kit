@@ -1,3 +1,3 @@
 package model
 
-case class ResetPasswordInput(token: String, password: String)
+case class ResetPasswordInput(token: String, password: String, passwordConfirmation: String)

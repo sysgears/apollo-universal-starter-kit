@@ -62,7 +62,7 @@ class TokenSpec extends AuthenticationTestHelper {
     "resend tokens [SUCCESS]" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run).get
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get
 
       val refreshToken = authService.createRefreshToken(JwtContent(1), user.password)
 
@@ -97,7 +97,7 @@ class TokenSpec extends AuthenticationTestHelper {
     "resend tokens [FAIL]" in {
       registrationStep ~> check()
 
-      val user = await(userRepo.findOne(testEmail).run).get
+      val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get
 
       val refreshToken = authService.createRefreshToken(JwtContent(1), user.password)
 

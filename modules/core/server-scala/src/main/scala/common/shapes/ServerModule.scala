@@ -1,8 +1,16 @@
 package common.shapes
 
+import com.google.inject.util.Modules.combine
+
 class ServerModule(modules: Seq[ServerModule] = Seq.empty) extends GraphQLShape
   with SlickSchemaShape
-  with AkkaRouteShape {
+  with AkkaRouteShape
+  with GuiceBindingShape {
+
+  def foldBindings: ServerModule = {
+    bindings = modules.foldLeft(this.bindings)((bindings, module) => combine(bindings, module.bindings))
+    this
+  }
 
   //TODO: implement generic fold function
   def fold: ServerModule = {

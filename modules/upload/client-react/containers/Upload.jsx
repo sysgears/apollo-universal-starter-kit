@@ -18,6 +18,19 @@ function DeleteFile(prev, [{ id }]) {
   return { ...prev, files: prev.files.filter(file => file.id !== id) };
 }
 
+function readCache(cache) {
+  return cache.readQuery({
+    query: FILES_QUERY
+  });
+}
+
+function handleUpdateData(cache, files) {
+  cache.writeQuery({
+    query: FILES_QUERY,
+    data: { files }
+  });
+}
+
 class Upload extends React.Component {
   componentDidUpdate() {
     const { filesUpdated, updateQuery } = this.props;
@@ -85,13 +98,18 @@ export default compose(
                 __typename: 'File'
               }
             },
-            update: store => {
-              const cachedFiles = store.readQuery({ query: FILES_QUERY });
+            update: ({ caches }) => {
+              // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
+              // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
+              // For writing query the `netCache` is needed.
 
-              store.writeQuery({
-                query: FILES_QUERY,
-                data: { files: cachedFiles.files.filter(file => file.id !== id) }
-              });
+              // Read data from cache
+              const { files: prevFiles } = readCache(caches[0]);
+
+              const files = prevFiles.filter(file => file.id !== id);
+
+              // Update data
+              handleUpdateData(caches[0], files);
             }
           });
         } catch (e) {

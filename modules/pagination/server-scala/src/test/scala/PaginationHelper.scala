@@ -14,7 +14,7 @@ trait PaginationHelper extends TestHelper {
 
   val bindings: Seq[ScalaModule] = Seq(new ItemBinding, new CoreBinding)
   Guice.createInjector(bindings.asJava)
-  val routes: Route = routesWithGraphQLSchema[PaginationModule]
+  val routes: Route = routesWithGraphQLSchema(new PaginationModule())
   val paginationInitializer: ItemSchemaInitializer = inject[ItemSchemaInitializer]
 
   before {
@@ -31,8 +31,7 @@ trait PaginationHelper extends TestHelper {
   def clean(): Unit = ()
 
   private def initDb(): Unit = {
-    await(paginationInitializer.create())
-    await(paginationInitializer.seedDatabase())
+    await(paginationInitializer.createAndSeed())
   }
 
   private def dropDb(): Unit = {

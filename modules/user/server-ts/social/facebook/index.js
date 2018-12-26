@@ -1,22 +1,23 @@
 import { pick } from 'lodash';
 import passport from 'passport';
-import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import { User } from '@module/user-server-ts';
-
+import FacebookStrategy from 'passport-facebook';
+import access from '@module/authentication-server-ts';
+import User from '../../sql';
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
-import access from '../../access';
 import settings from '../../../../../settings';
 
 let middleware;
 
-if (settings.user.auth.google.enabled && !__TEST__) {
+if (settings.user.auth.facebook.enabled && !__TEST__) {
   passport.use(
-    new GoogleStrategy(
+    new FacebookStrategy(
       {
-        clientID: settings.user.auth.google.clientID,
-        clientSecret: settings.user.auth.google.clientSecret,
-        callbackURL: settings.user.auth.google.callbackURL
+        clientID: settings.user.auth.facebook.clientID,
+        clientSecret: settings.user.auth.facebook.clientSecret,
+        callbackURL: settings.user.auth.facebook.callbackURL,
+        scope: settings.user.auth.facebook.scope,
+        profileFields: settings.user.auth.facebook.profileFields
       },
       async function(accessToken, refreshToken, profile, cb) {
         const {
@@ -26,40 +27,31 @@ if (settings.user.auth.google.enabled && !__TEST__) {
           emails: [{ value }]
         } = profile;
         try {
-          let user = await User.getUserByGoogleIdOrEmail(id, value);
+          let user = await User.getUserByFbIdOrEmail(id, value);
 
           if (!user) {
             const isActive = true;
             const [createdUserId] = await User.register({
-              username: username ? username : value,
+              username: username ? username : displayName,
               email: value,
               password: id,
               isActive
             });
 
-            await User.createGoogleOAuth({
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: createdUserId
             });
 
-            await User.editUserProfile({
-              id: createdUserId,
-              profile: {
-                firstName: profile.name.givenName,
-                lastName: profile.name.familyName
-              }
-            });
-
             user = await User.getUser(createdUserId);
-          } else if (!user.googleId) {
-            await User.createGoogleOAuth({
+          } else if (!user.fbId) {
+            await User.createFacebookAuth({
               id,
               displayName,
               userId: user.id
             });
           }
-
           return cb(null, pick(user, ['id', 'username', 'role', 'email']));
         } catch (err) {
           return cb(err, {});
@@ -70,14 +62,10 @@ if (settings.user.auth.google.enabled && !__TEST__) {
 
   middleware = app => {
     app.use(passport.initialize());
-    app.get('/auth/google', (req, res, next) => {
-      passport.authenticate('google', {
-        scope: settings.user.auth.google.scope,
-        state: req.query.expoUrl
-      })(req, res, next);
+    app.get('/auth/facebook', (req, res, next) => {
+      passport.authenticate('facebook', { state: req.query.expoUrl })(req, res, next);
     });
-
-    app.get('/auth/google/callback', passport.authenticate('google', { session: false }), async function(req, res) {
+    app.get('/auth/facebook/callback', passport.authenticate('facebook', { session: false }), async function(req, res) {
       const user = await User.getUser(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req);

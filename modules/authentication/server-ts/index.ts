@@ -1,4 +1,12 @@
-import access from './access';
-import auth from './auth';
+import ServerModule from '@module/module-server-ts';
 
-export { access, auth };
+import access from './access';
+
+const createContextFunc = (args: any) => {
+  return {
+    identity: 'test'
+  };
+};
+
+export default new ServerModule({ createContextFunc: [createContextFunc] }, access);
+export { access };

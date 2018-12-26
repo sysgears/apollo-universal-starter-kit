@@ -1,5 +1,4 @@
 import ServerModule from '@module/module-server-ts';
-import { access, auth } from '@module/authentication-server-ts';
 
 import confirmMiddleware from './confirm';
 import schema from './schema.graphql';
@@ -8,6 +7,7 @@ import scopes from './scopes';
 import settings from '../../../settings';
 import User from './sql';
 import resources from './locales';
+import social from './social';
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,
@@ -25,8 +25,7 @@ const middleware = app => {
 };
 
 export { User, scopes };
-
-export default new ServerModule(access, auth, {
+export default new ServerModule(social, {
   schema: [schema],
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],

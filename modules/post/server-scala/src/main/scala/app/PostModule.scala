@@ -1,19 +1,28 @@
 package app
 
-import com.google.inject.Inject
-import common.shapes.ServerModule
+import com.google.inject.util.Modules.combine
 import graphql.schema.PostSchema
 import repositories.{CommentSchemaInitializer, PostSchemaInitializer}
+import common.graphql.UserContext
+import common.shapes.ServerModule
+import common.slick.SchemaInitializer
+import core.guice.injection.InjectorProvider._
+import guice.{CommentBinding, PostBinding}
+import sangria.schema.Field
 
-class PostModule @Inject()(postSchema: PostSchema,
-                           postSchemaInitializer: PostSchemaInitializer,
-                           commentSchemaInitializer: CommentSchemaInitializer) extends ServerModule {
+import scala.collection.mutable
 
-  slickSchemas ++= postSchemaInitializer :: commentSchemaInitializer :: Nil
+class PostModule extends ServerModule {
 
-  queries ++= postSchema.queries
+  lazy val postSchema: PostSchema = inject[PostSchema]
+  lazy val postSchemaInitializer: PostSchemaInitializer = inject[PostSchemaInitializer]
+  lazy val commentSchemaInitializer: CommentSchemaInitializer = inject[CommentSchemaInitializer]
 
-  mutations ++= postSchema.mutations
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(postSchemaInitializer, commentSchemaInitializer)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.mutations: _*)
+  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.subscriptions: _*)
 
-  subscriptions ++= postSchema.subscriptions
+  bindings = combine(new PostBinding,
+                     new CommentBinding)
 }

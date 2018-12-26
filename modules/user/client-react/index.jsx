@@ -19,8 +19,8 @@ import ResetPassword from './containers/ResetPassword';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
-const ProfileName = withLoadedUser(({ currentUser }) =>
-  currentUser ? currentUser.fullName || currentUser.username : null
+const ProfileName = withLoadedUser(
+  ({ currentUser }) => (currentUser ? currentUser.fullName || currentUser.username : null)
 );
 
 const LogoutLink = withRouter(

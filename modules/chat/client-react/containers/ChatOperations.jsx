@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo/index';
+import { compose, graphql } from 'react-apollo';
 import update from 'immutability-helper';
 import { translate } from '@module/i18n-client-react';
 import { withUser } from '@module/user-client-react';
 
 import chatConfig from '../../../../config/chat';
-import withUuid from './withUuid';
+// import withUuid from './withUuid';
 import Chat from './Chat';
-import withImage from './withImage';
+// import withImage from './withImage';
 import withMessagesFormatter from './withMessagesFormatter';
 import withMessagesSubscription from './withMessagesSubscription';
 
@@ -126,6 +126,7 @@ class ChatOperations extends React.Component {
   };
 
   render() {
+    //return <div>TTEST</div>
     return <Chat {...this.props} />;
   }
 }
@@ -290,9 +291,9 @@ export default compose(
     })
   }),
   translate('chat'),
-  withUuid,
+  // withUuid,
   withUser,
-  withImage,
+  // withImage,
   withMessagesFormatter,
   withMessagesSubscription
 )(ChatOperations);

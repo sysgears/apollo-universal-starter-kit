@@ -11,7 +11,6 @@ class FileSchemaInitializer @Inject()(implicit val executionContext: ExecutionCo
 
   import driver.api._
 
-  override val context = executionContext
   override val name: String = FileMetadataTable.name
   override val table = TableQuery[FileMetadataTable]
 }

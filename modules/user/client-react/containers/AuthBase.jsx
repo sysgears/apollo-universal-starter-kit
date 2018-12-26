@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
 
-import access from '../access';
+import AccessModule from '@module/authentication-client-react';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
@@ -68,7 +68,7 @@ const withLogout = Component =>
   withApollo(({ client, ...props }) => {
     const newProps = {
       ...props,
-      logout: () => access.doLogout(client)
+      logout: () => AccessModule.doLogout(client)
     };
     return <Component {...newProps} />;
   });

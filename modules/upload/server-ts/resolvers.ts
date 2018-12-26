@@ -25,9 +25,9 @@ export default (pubsub: PubSub) => ({
         );
 
         const ids = (await Promise.all(uploadedFiles.map(file => Upload.saveFiles(file)))).map(([id]) => id);
-        // publish for message list
+        // publish for files list
         pubsub.publish(FILES_SUBSCRIPTION, {
-          filesUpdated: { mutation: 'CREATED', files: await Upload.files(ids) }
+          filesUpdated: { mutation: 'CREATED', files: await Upload.getFilesByIds(ids) }
         });
 
         return ids;

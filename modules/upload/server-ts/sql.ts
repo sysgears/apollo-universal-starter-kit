@@ -8,10 +8,14 @@ interface File {
 }
 
 export default class Upload {
-  public files(ids: number[] = []) {
+  public files() {
+    return knex('upload').select('*');
+  }
+
+  public getFilesByIds(ids: number[] = []) {
     return knex('upload')
       .select('*')
-      .where(builder => (ids.length ? builder.whereIn('id', ids) : builder));
+      .whereIn('id', ids);
   }
 
   public file(id: number) {

@@ -161,25 +161,6 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  async withTransaction(...asyncCallbacks) {
-    const promisify = fn => new Promise((resolve, reject) => fn(resolve).catch(reject));
-    const trx = await promisify(knex.transaction);
-    try {
-      let id;
-      for (let query of asyncCallbacks) {
-        if (id) {
-          await query(id[0]).transacting(trx);
-        } else {
-          id = await query().transacting(trx);
-        }
-      }
-      trx.commit();
-      return id;
-    } catch (e) {
-      trx.rollback();
-    }
-  }
-
   async createTransaction() {
     const trx = await new Promise(resolve => knex.transaction(resolve));
 

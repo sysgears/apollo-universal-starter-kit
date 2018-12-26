@@ -92,16 +92,16 @@ export default pubsub => ({
 
           const passwordHash = await User.createPasswordHash(input);
 
-          const operation1 = async trx => User.register(input, passwordHash).transacting(trx);
+          const register = async trx => User.register(input, passwordHash).transacting(trx);
 
-          const operation2 = async (trx, [id]) => {
+          const editUserProfile = async (trx, [id]) => {
             await User.editUserProfile({ id, ...input }).transacting(trx);
             return id;
           };
 
           const createdUserId = await (await User.createTransaction())
-            .addOperation(operation1)
-            .addOperation(operation2)
+            .addOperation(register)
+            .addOperation(editUserProfile)
             .run();
 
           if (settings.user.auth.certificate.enabled) {
@@ -171,9 +171,14 @@ export default pubsub => ({
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
           const userProfile = await User.isUserProfile(input);
-          // const passwordHash = await User.createPasswordHash(input);
-          // await knex.select('id').from('user_profile').where({ user_id: input.id }).first();
-          await User.withTransaction(() => User.editUser(userInfo), () => User.editUserProfile(input, userProfile));
+
+          const editUser = async trx => User.editUser(userInfo).transacting(trx);
+          const editUserProfile = async trx => User.editUserProfile(input, userProfile).transacting(trx);
+
+          await (await User.createTransaction())
+            .addOperation(editUser)
+            .addOperation(editUserProfile)
+            .run();
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);

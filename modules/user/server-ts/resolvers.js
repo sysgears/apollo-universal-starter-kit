@@ -94,11 +94,18 @@ export default pubsub => ({
           if (input.role === undefined) {
             input.role = 'user';
           }
-          const [createdUserId] = await User.withTransaction(
-            () => User.register(input, passwordHash),
-            id => User.editUserProfile({ id: id, ...input })
-          );
-          console.log('createdUserId', createdUserId);
+
+          const operation1 = async trx => User.register(input, passwordHash).transacting(trx);
+
+          const operation2 = async (trx, [id]) => {
+            await User.editUserProfile({ id, ...input }).transacting(trx);
+            return id;
+          };
+
+          const createdUserId = await (await User.createTransaction())
+            .addOperation(operation1)
+            .addOperation(operation2)
+            .run();
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate({ id: createdUserId, ...input });

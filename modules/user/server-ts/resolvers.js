@@ -4,8 +4,7 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-import { knex } from '@module/database-server-ts';
-import bcrypt from 'bcryptjs';
+import { createTransaction } from '@module/core-common';
 
 import settings from '../../../settings';
 
@@ -99,7 +98,7 @@ export default pubsub => ({
             return id;
           };
 
-          const createdUserId = await (await User.createTransaction())
+          const createdUserId = await (await createTransaction())
             .addOperation(register)
             .addOperation(editUserProfile)
             .run();
@@ -175,7 +174,7 @@ export default pubsub => ({
           const editUser = async trx => User.editUser(userInfo).transacting(trx);
           const editUserProfile = async trx => User.editUserProfile(input, userProfile).transacting(trx);
 
-          await (await User.createTransaction())
+          await (await createTransaction())
             .addOperation(editUser)
             .addOperation(editUserProfile)
             .run();

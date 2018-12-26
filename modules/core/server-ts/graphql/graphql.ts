@@ -5,7 +5,7 @@ import 'isomorphic-fetch';
 import { log } from '@module/core-common';
 import ServerModule from '@module/module-server-ts';
 
-import settings from '../../../settings';
+import settings from '../../../../settings';
 
 export default (schema: GraphQLSchema, modules: ServerModule) => {
   return new ApolloServer({

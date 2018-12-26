@@ -5,7 +5,7 @@ import { isApiExternal } from '@module/core-common';
 import ServerModule from '@module/module-server-ts';
 
 import middleware from './middleware';
-import createApolloServer from './graphql';
+import { createApolloServer } from './graphql';
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
   const app = express();

@@ -41,7 +41,7 @@ trait ModuleApp extends App with AppInitialization {
 
     val corsSettings = CorsSettings.apply(system)
     withActionsBefore {
-      serverModule.slickSchemas.map(_.create()).toSeq
+      serverModule.slickSchemas.map(_.createAndSeed()).toSeq
     }(
       Http().bindAndHandle(
         cors(corsSettings)(routes.reduce(_ ~ _)),

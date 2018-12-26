@@ -19,7 +19,7 @@ export default async () => {
     public async run() {
       try {
         const result = await this.operations.reduce(
-          async (prevResultPromise: Promise<object>, operation: (trx: object, prevResult: any) => any) => {
+          async (prevResultPromise: Promise<object>, operation: (trx: object, prevResult: any) => Transaction) => {
             const prevResult = await prevResultPromise;
             return operation(trx, prevResult);
           },

@@ -33,8 +33,9 @@ trait ModuleApp extends App with AppInitialization {
     implicit val scheduler: Scheduler = inject[Scheduler]
 
     val graphQL = new GraphQLSchema(serverModule)
-    val httpHandler = new HttpHandler(graphQL, executor(graphQL))
-    val webSocketHandler = new WebSocketHandler(graphQL, executor(graphQL))
+    val graphQlExecutor = executor(graphQL)
+    val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
+    val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
     val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
     val routes = List(graphQLRoute.routes, inject[FrontendRoute].routes)
 

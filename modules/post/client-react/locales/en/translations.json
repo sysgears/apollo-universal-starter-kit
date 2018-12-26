@@ -1,0 +1,58 @@
+{
+  "navLink": "Posts",
+  "comment": {
+    "title": "Comments",
+    "label": {
+      "field": "Comment",
+      "add": "Add",
+      "edit": "Edit",
+      "comment": "comment"
+    },
+    "btn": {
+      "edit": "Edit",
+      "submit": "Save",
+      "del": "Delete"
+    },
+    "column": {
+      "content": "Content",
+      "actions": "Actions"
+    }
+  },
+
+  "post": {
+    "title": "Edit post",
+    "meta": "Edit post example page",
+    "loadMsg": "Loading...",
+    "noPostsMsg": "There are no posts yet.",
+    "btn": {
+      "edit": "Edit",
+      "submit": "Save",
+      "del": "Delete",
+      "back": "Back"
+    },
+    "label": {
+      "edit": "Edit",
+      "create": "Create",
+      "post": "Post"
+    },
+    "field": {
+      "title": "Title",
+      "content": "Content"
+    }
+  },
+
+  "list": {
+    "title": "Posts",
+    "meta": "List of all posts example page",
+    "column": {
+      "title": "Title",
+      "actions": "Actions"
+    },
+    "btn": {
+      "add": "Add",
+      "del": "Delete",
+      "more": "Load more ..."
+    },
+    "subTitle": "Post list"
+  }
+}

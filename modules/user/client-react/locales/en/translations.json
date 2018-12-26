@@ -1,0 +1,185 @@
+{
+  "navLink": {
+    "users": "Users",
+    "signIn": "Sign In",
+    "logout": "Logout",
+    "profile": "Profile",
+    "editProfile": "Edit profile",
+    "editUser": "Edit user",
+    "forgotPassword": "Forgot password",
+    "register": "Register",
+    "resetPassword": "Reset password"
+  },
+  "forgotPass": {
+    "title": "Forgot password",
+    "meta": "Forgot password example page",
+    "errorMsg": "Reset password failed!",
+    "form": {
+      "title": "Password Reset",
+      "submitMsg": "Reset password instructions have been emailed to you.",
+      "fldEmail": "Email",
+      "btnSubmit": "Send Reset Instructions"
+    }
+  },
+
+  "login": {
+    "title": "Login",
+    "meta": "Login example page",
+    "errorMsg": "Login failed!",
+    "cardTitle": "Available logins",
+    "notRegText": "Not registered yet?",
+    "fbBtn": "Login with Facebook",
+    "googleBtn": "Login with Google",
+    "githubBtn": "Login with GitHub",
+    "linkedinBtn": "Login with LinkedIn",
+    "form": {
+      "title": "Sign In",
+      "field": {
+        "usernameOrEmail": "Username or Email",
+        "pass": "Password"
+      },
+      "btnSubmit": "Login"
+    },
+    "btn": {
+      "forgotPass": "Forgot your password?",
+      "notReg": "Not registered yet?",
+      "sign": "Sign Up"
+    }
+  },
+
+  "profile": {
+    "title": "Profile",
+    "headerText": "Profile info",
+    "meta": "Profile example page",
+    "loadMsg": "Loading...",
+    "errorMsg": "No current user logged in",
+    "editProfileText": "Edit Profile",
+    "card": {
+      "title": "Profile",
+      "group": {
+        "name": "User Name",
+        "email": "Email",
+        "role": "Role",
+        "full": "Full Name"
+      },
+      "fldEmail": "Email",
+      "btnSubmit": "Send Reset Instructions"
+    }
+  },
+
+  "reg": {
+    "title": "Register",
+    "meta": "Register example page",
+    "errorMsg": "Registration failed!",
+    "form": {
+      "title": "Sign Up",
+      "field": {
+        "name": "Username",
+        "email": "Email",
+        "pass": "Password",
+        "passConf": "Password Confirmation"
+      },
+      "btnSubmit": "Register"
+    }
+  },
+
+  "resetPass": {
+    "title": "Reset password",
+    "meta": "Reset password example page",
+    "errorMsg": "Reset password failed!",
+    "form": {
+      "title": "Reset password!",
+      "field": {
+        "pass": "Password",
+        "passConf": "Password Confirmation"
+      },
+      "btnSubmit": "Reset Password"
+    }
+  },
+
+  "userEdit": {
+    "title": "Edit User",
+    "meta": "Edit User example page",
+    "errorMsg": "Edit user failed!",
+    "loadMsg": "Loading...",
+    "form": {
+      "title": "User",
+      "titleEdit": "Edit",
+      "titleCreate": "Create",
+      "field": {
+        "name": "Username",
+        "email": "Email",
+        "role": {
+          "label": "Role",
+          "user": "user",
+          "admin": "admin"
+        },
+        "active": "Is Active",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "serial": "Serial",
+        "pass": "Password",
+        "passConf": "Password Confirmation"
+      },
+      "btnSubmit": "Save"
+    },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
+    },
+    "btnBack": "Back"
+  },
+
+  "users": {
+    "title": "Users",
+    "meta": "Users example page",
+    "loadMsg": "Loading...",
+    "list": {
+      "title": "Users",
+      "item": {
+        "filter": "Filter",
+        "search": "Search ...",
+        "role": {
+          "label": "Role",
+          "all": "All",
+          "user": "user",
+          "admin": "admin"
+        },
+        "active": "Is Active"
+      }
+    },
+    "select": {
+      "okText": "Done",
+      "dismissText": "Cancel"
+    },
+    "btnModalSubmit": "Submit",
+    "btnModalClose": "Close",
+    "orderByText": "Order by",
+    "column": {
+      "name": "Username",
+      "email": "Email",
+      "role": "Role",
+      "active": "Is Active",
+      "actions": "Actions"
+    },
+    "btn": {
+      "add": "Add user",
+      "delete": "Delete"
+    }
+  },
+
+  "nativeMock": "Hello, ",
+  "mobile": {
+    "login": {
+      "usernameOrEmail": {
+        "label": "Username or Email",
+        "placeholder": "Type Your Username or Email"
+      },
+      "pass": {
+        "label": "Password",
+        "placeholder": "Type Your Password"
+      }
+    },
+    "logout": "Log out"
+  }
+}

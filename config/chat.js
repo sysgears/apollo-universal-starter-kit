@@ -1,6 +1,7 @@
 export default {
   limit: 50,
-  images: true,
+  allowImages: true,
+  uploadDir: 'public',
   giftedChat: {
     alwaysShowSend: false,
     timeFormat: 'LT',
@@ -9,11 +10,11 @@ export default {
     showUserAvatar: false,
     showAvatarForEveryMessage: true,
     renderAvatarOnTop: false,
-    inverted: false,
+    inverted: true,
     keyboardShouldPersistTaps: 'never'
   },
   image: {
-    maxSize: 1000000,
+    maxSize: 1048576,
     imagePicker: {
       allowsEditing: true,
       base64: false,

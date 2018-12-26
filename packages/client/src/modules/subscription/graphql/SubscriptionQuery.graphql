@@ -1,7 +1,0 @@
-#import "./Subscription.graphql"
-
-query SubscriptionData {
-  subscription {
-    ...SubscriptionInfo
-  }
-}

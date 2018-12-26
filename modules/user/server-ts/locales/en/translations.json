@@ -1,0 +1,22 @@
+{
+  "accessDenied": "Access Denied",
+  "usernameIsExisted": "Username already exists.",
+  "emailIsExisted": "E-mail already exists.",
+  "passwordLength": "Password must be {{length}} characters or more.",
+  "usernameIsExisted.": "Username already exists.",
+  "userIsNotExisted": "User does not exist.",
+  "userCannotDeleteYourself": "You can not delete your self.",
+  "userCouldNotDeleted": "Could not delete user. Please try again later.",
+  "auth": {
+    "password": {
+      "validPasswordEmail": "Please enter a valid username or e-mail.",
+      "emailConfirmation": "Please confirm your e-mail first.",
+      "validPassword": "Please enter a valid password.",
+      "usernameIsExisted": "Username already exists",
+      "emailIsExisted": "E-mail already exists.",
+      "passwordsIsNotMatch": "Passwords do not match.",
+      "passwordLength": "Password must be {{length}} characters or more.",
+      "invalidToken": "Invalid token"
+    }
+  }
+}

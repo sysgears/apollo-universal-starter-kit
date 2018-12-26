@@ -1,0 +1,9 @@
+{
+  "name": "@module/i18n-client-react",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@module/look-client-react": "^1.0.0",
+    "@module/look-client-react-native": "^1.0.0"
+  }
+}

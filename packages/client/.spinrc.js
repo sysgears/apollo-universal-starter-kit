@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     web: {
-      entry: './src/index.tsx',
+      entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],
@@ -25,12 +25,13 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
-    ssr: true,
+    ssr: !process.env.DISABLE_SSR,
     webpackDll: true,
     reactHotLoader: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __API_URL__: '"/graphql"'
+      __API_URL__: '"/graphql"',
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     },
     webpackConfig: {
       devServer: {

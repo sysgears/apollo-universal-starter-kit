@@ -1,3 +1,0 @@
-mutation updateCard($input: SubscribeInput!) {
-  updateCard(input: $input)
-}

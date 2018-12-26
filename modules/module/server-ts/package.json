@@ -1,0 +1,9 @@
+{
+  "name": "@module/module-server-ts",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@module/module-common": "^1.0.0"
+  }
+}
+

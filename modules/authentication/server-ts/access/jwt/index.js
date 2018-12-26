@@ -7,9 +7,9 @@ import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 
-const grant = async user => {
-  const refreshSecret = settings.user.secret + user.passwordHash;
-  const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
+const grant = async identity => {
+  const refreshSecret = settings.auth.secret + identity.passwordHash;
+  const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret);
 
   return {
     accessToken,

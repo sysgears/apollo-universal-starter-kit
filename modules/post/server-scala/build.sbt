@@ -1,5 +1,8 @@
-lazy val post = project in file(".") dependsOn(core % "test->test; compile->compile", pagination % "test->test; compile->compile")
+lazy val post = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*)
 
-lazy val core = ProjectRef(base = file("../../core/server-scala"), id = "core")
+lazy val modules = List(
+  ProjectRef(base = file("../../core/server-scala"), id = "core"),
+  ProjectRef(base = file("../../pagination/server-scala"), id = "pagination")
+)
 
-lazy val pagination = ProjectRef(base = file("../../pagination/server-scala"), id = "pagination")
+parallelExecution in test := false

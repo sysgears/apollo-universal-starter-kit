@@ -4,9 +4,9 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
-import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PublishElement
-import core.services.publisher.RichPubSubService._
+import common.graphql.UserContext
+import common.publisher.PublishElement
+import common.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject
 import models.Counter

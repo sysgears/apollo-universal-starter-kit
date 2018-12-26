@@ -5,17 +5,17 @@ import akka.stream.ActorMaterializer
 import services.publisher._
 import common.{InputUnmarshallerGenerator, Logger}
 import common.graphql.DispatcherResolver.resolveWithDispatcher
-import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PublishElement
+import common.graphql.UserContext
+import common.publisher.PublishElement
 import graphql.resolvers
 import graphql.resolvers._
 import javax.inject.Inject
 import model._
 import sangria.macros.derive._
-import sangria.schema.{Argument, Field, InputObjectType, IntType, ListType, ObjectType}
+import sangria.schema.{Argument, Field, InputObjectType, IntType, ListType, ObjectType, OptionType}
 import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
 import sangria.streaming.akkaStreams._
-import core.services.publisher.RichPubSubService._
+import common.publisher.RichPubSubService._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -23,8 +23,8 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
                             implicit val commentPubSubPostService: CommentPubSubServiceImpl,
                             implicit val materializer: ActorMaterializer,
                             actorSystem: ActorSystem,
-                            implicit val executionContext: ExecutionContext) extends GraphQLSchema
-  with InputUnmarshallerGenerator with Logger {
+                            executionContext: ExecutionContext) extends InputUnmarshallerGenerator
+  with Logger {
 
   import types.unmarshallers._
 
@@ -60,7 +60,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     implicit val updateCommentPayloadOutput: ObjectType[Unit, UpdateCommentPayload] = deriveObjectType(ObjectTypeName("UpdateCommentPayload"))
   }
 
-  override def queries: List[Field[UserContext, Unit]] = List(
+  def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "post",
       fieldType = Types.post,
@@ -88,7 +88,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     )
   )
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addPost",
       fieldType = Types.post,
@@ -181,7 +181,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     )
   )
 
-  override def subscriptions: List[Field[UserContext, Unit]] = List(
+  def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
       name = "postUpdated",
       fieldType = Types.updatePostPayloadOutput,

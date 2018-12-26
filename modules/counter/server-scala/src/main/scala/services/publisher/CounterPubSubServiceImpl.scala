@@ -1,6 +1,6 @@
 package services.publisher
 
-import core.services.publisher.{BasicPubSubService, Param, PublishElement}
+import common.publisher.{BasicPubSubService, Param, PublishElement}
 import javax.inject.{Inject, Singleton}
 import models.Counter
 import monix.execution.Scheduler

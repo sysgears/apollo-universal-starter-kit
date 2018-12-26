@@ -1,4 +1,4 @@
-package core.services.publisher
+package common.publisher
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source

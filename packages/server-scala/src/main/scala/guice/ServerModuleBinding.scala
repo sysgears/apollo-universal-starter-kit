@@ -16,6 +16,8 @@ class ServerModuleBinding extends ScalaModule {
     install(new ItemBinding)
     install(new UserBinding)
     install(new FileBinding)
+    install(new PostBinding)
+    install(new CommentBinding)
 
     install(new SangriaBinding)
   }
@@ -27,6 +29,7 @@ class ServerModuleBinding extends ScalaModule {
                     authenticationModule: AuthenticationModule,
                     uploadModule: UploadModule,
                     paginationModule: PaginationModule,
+                    postModule: PostModule,
                     counterModule: CounterModule): ServerModule = {
     new ServerModule(
       Seq(
@@ -35,6 +38,7 @@ class ServerModuleBinding extends ScalaModule {
         authenticationModule,
         uploadModule,
         paginationModule,
+        postModule,
         counterModule
       )
     )

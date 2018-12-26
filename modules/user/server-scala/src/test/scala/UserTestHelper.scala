@@ -8,7 +8,7 @@ import scala.concurrent.duration.Duration
 trait UserTestHelper extends TestHelper {
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchema[UserModule]
+  val routes: Route = routesWithGraphQLSchema(new UserModule())
 
   before {
     clean()

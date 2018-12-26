@@ -10,7 +10,6 @@ import scala.concurrent.ExecutionContext
 
 class FacebookAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[FacebookAuthTable] {
 
-  override val context = executionContext
   override val name: String = FacebookAuthTable.name
   override val table = TableQuery[FacebookAuthTable]
 }

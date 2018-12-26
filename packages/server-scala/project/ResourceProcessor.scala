@@ -6,18 +6,17 @@ import scala.util._
 import scala.util.Try
 
 object ResourceProcessor {
-
+  
   val concatDotEnvsTask: Def.Initialize[Task[Seq[File]]] = Def.task {
     val logger: ManagedLogger = streams.value.log
 
     logger.info("About to load .env configs for modules...")
 
     val targetDotEnv = (classDirectory in Compile).value / "dotenv" / ".env"
-    val globalDir = baseDirectory.value
-    val auskBaseDir = globalDir.getParentFile.getParentFile
+    val auskBaseDir = baseDirectory.value.getParentFile.getParentFile
 
     val modulesDirs = file(s"${auskBaseDir getCanonicalPath}/modules/").getAbsoluteFile.listFiles().filter(_.isDirectory)
-    val dotEnvs = modulesDirs.filter(_.list().contains(".env")).map(_ / ".env")
+    val dotEnvs = (modulesDirs :+ auskBaseDir).filter(_.list().contains(".env")).map(_ / ".env")
     dotEnvs match {
       case seq if seq.isEmpty =>
         logger.warn("No .env configuration was found for any module")
@@ -47,11 +46,10 @@ object ResourceProcessor {
     logger.info("About to load server.config.json configs for modules...")
 
     val targetServerConfig = (classDirectory in Compile).value / "serverconfig" / "server.config.json"
-    val globalDir = baseDirectory.value
-    val auskBaseDir = globalDir.getParentFile.getParentFile
+    val auskBaseDir = baseDirectory.value.getParentFile.getParentFile
 
     val modulesDirs = file(s"${auskBaseDir getCanonicalPath}/modules/").getAbsoluteFile.listFiles().filter(_.isDirectory)
-    val serverConfigs = modulesDirs.filter(_.list().contains("server.config.json")).map(_ / "server.config.json")
+    val serverConfigs = (modulesDirs :+ auskBaseDir).filter(_.list().contains("server.config.json")).map(_ / "server.config.json")
     serverConfigs match {
       case seq if seq.isEmpty =>
         logger.warn("No server.config.json configuration was found for any module")

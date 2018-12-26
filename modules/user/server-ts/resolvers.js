@@ -91,9 +91,6 @@ export default pubsub => ({
           e.throwIf();
 
           const passwordHash = await User.createPasswordHash(input);
-          if (input.role === undefined) {
-            input.role = 'user';
-          }
 
           const operation1 = async trx => User.register(input, passwordHash).transacting(trx);
 

@@ -141,7 +141,7 @@ class User {
     return bcrypt.hash(password, 12);
   }
 
-  register({ username, email, role, isActive }, passwordHash) {
+  register({ username, email, role = 'user', isActive }, passwordHash) {
     return knex('user').insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
   }
 

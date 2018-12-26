@@ -12,7 +12,7 @@ import graphql.resolvers._
 import javax.inject.Inject
 import model._
 import sangria.macros.derive._
-import sangria.schema.{Argument, Field, InputObjectType, IntType, ListType, ObjectType, OptionType}
+import sangria.schema.{Argument, Field, InputObjectType, IntType, ListType, ObjectType, OptionInputType, OptionType}
 import sangria.macros.derive.{ExcludeFields, ObjectTypeName, deriveObjectType}
 import sangria.streaming.akkaStreams._
 import common.publisher.RichPubSubService._
@@ -63,7 +63,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "post",
-      fieldType = Types.post,
+      fieldType = OptionType(Types.post),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
@@ -75,9 +75,9 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "posts",
-      fieldType = Types.posts,
-      arguments = Argument(name = "limit", argumentType = IntType) ::
-                  Argument(name = "after", argumentType = IntType) :: Nil,
+      fieldType = OptionType(Types.posts),
+      arguments = Argument(name = "limit", argumentType = OptionInputType(IntType)) :: //TODO Unsafe (without default value)
+                  Argument(name = "after", argumentType = OptionInputType(IntType)) :: Nil, //TODO Unsafe (without default value)
       resolve = { sc =>
         resolveWithDispatcher[Posts](
           input = QueryPosts(sc.args.arg("limit"), sc.args.arg("after")),
@@ -91,7 +91,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addPost",
-      fieldType = Types.post,
+      fieldType = OptionType(Types.post),
       arguments = Argument(name = "input", argumentType = Types.addPostInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
@@ -106,7 +106,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "deletePost",
-      fieldType = Types.post,
+      fieldType = OptionType(Types.post),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
@@ -121,7 +121,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "editPost",
-      fieldType = Types.post,
+      fieldType = OptionType(Types.post),
       arguments = Argument(name = "input", argumentType = Types.editPostInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
@@ -136,7 +136,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "addComment",
-      fieldType = Types.comment,
+      fieldType = OptionType(Types.comment),
       arguments = Argument(name = "input", argumentType = Types.addCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
@@ -151,7 +151,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "editComment",
-      fieldType = Types.comment,
+      fieldType = OptionType(Types.comment),
       arguments = Argument(name = "input", argumentType = Types.editCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
@@ -166,7 +166,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field(
       name = "deleteComment",
-      fieldType = Types.comment,
+      fieldType = OptionType(Types.comment),
       arguments = Argument(name = "input", argumentType = Types.deleteCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
@@ -184,7 +184,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
   def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
       name = "postUpdated",
-      fieldType = Types.updatePostPayloadOutput,
+      fieldType = OptionType(Types.updatePostPayloadOutput),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = sc => {
         val id = sc.args.arg[Int]("id")
@@ -197,7 +197,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field.subs(
       name = "postsUpdated",
-      fieldType = Types.updatePostPayloadOutput,
+      fieldType = OptionType(Types.updatePostPayloadOutput),
       arguments = Argument(name = "endCursor", argumentType = IntType) :: Nil,
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
@@ -210,7 +210,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     ),
     Field.subs(
       name = "commentUpdated",
-      fieldType = Types.updateCommentPayloadOutput,
+      fieldType = OptionType(Types.updateCommentPayloadOutput),
       arguments = Argument(name = "postId", argumentType = IntType) :: Nil,
       resolve = sc => {
         val postId = sc.args.arg[Int]("postId")

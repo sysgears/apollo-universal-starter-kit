@@ -1,9 +1,10 @@
 type LogoutFromAllDevicesPayload {
   userId: Int!
   mutation: String!
+  currentUser: String
 }
 
 extend type Subscription {
   # Subscription for logout from all devices
-  logoutFromAllDevicesSub: LogoutFromAllDevicesPayload!
+  logoutFromAllDevicesSub(userId: Int): LogoutFromAllDevicesPayload!
 }

@@ -13,7 +13,7 @@ const createTokens = async (user, secret, refreshSecret) => {
     },
     secret,
     {
-      expiresIn: settings.user.auth.access.jwt.tokenExpiresIn
+      expiresIn: settings.auth.jwt.tokenExpiresIn
     }
   );
 
@@ -23,7 +23,7 @@ const createTokens = async (user, secret, refreshSecret) => {
     },
     refreshSecret,
     {
-      expiresIn: settings.user.auth.access.jwt.refreshTokenExpiresIn
+      expiresIn: settings.auth.jwt.refreshTokenExpiresIn
     }
   );
 

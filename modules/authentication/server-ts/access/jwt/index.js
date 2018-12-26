@@ -22,7 +22,7 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.user.secret);
+    const { user } = jwt.verify(token, settings.auth.secret);
     return user;
   }
 };
@@ -36,7 +36,7 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.access.jwt.enabled
+  settings.auth.jwt.enabled
     ? {
         grant: [grant],
         schema: [schema],

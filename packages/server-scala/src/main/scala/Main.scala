@@ -1,10 +1,20 @@
-import com.google.inject.Guice
+import app._
 import common.shapes.ServerModule
-import core.app.ModuleApp
-import core.guice.injection.InjectorProvider.inject
-import guice.ServerModuleBinding
+import core.app.{CoreModule, ModuleApp}
 
 object Main extends ModuleApp {
-  Guice.createInjector(new ServerModuleBinding)
-  createApp(inject[ServerModule])
+
+  val serverModule = new ServerModule(
+    Seq(
+      new CounterModule,
+      new CoreModule,
+      new MailModule,
+      new ContactModule,
+      new UserModule,
+      new AuthenticationModule,
+      new UploadModule,
+      new PaginationModule
+    )
+  )
+  createApp(serverModule)
 }

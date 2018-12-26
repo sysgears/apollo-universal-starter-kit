@@ -141,8 +141,14 @@ class User {
     return bcrypt.hash(password, 12);
   }
 
-  register(input) {
-    return knex('user').insert(input);
+  register({ username, email, role, isActive }, passwordHash) {
+    return knex('user').insert({
+      username,
+      email,
+      role,
+      password_hash: passwordHash,
+      is_active: !!isActive
+    });
   }
 
   createFacebookAuth({ id, displayName, userId }) {

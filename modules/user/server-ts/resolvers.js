@@ -95,14 +95,7 @@ export default pubsub => ({
             input.role = 'user';
           }
           const [createdUserId] = await User.withTransaction(
-            () =>
-              User.register({
-                username: input.username,
-                email: input.email,
-                role: input.role,
-                password_hash: passwordHash,
-                is_active: !!input.isActive
-              }),
+            () => User.register(input, passwordHash),
             id => User.editUserProfile({ id: id, ...input })
           );
           console.log('createdUserId', createdUserId);

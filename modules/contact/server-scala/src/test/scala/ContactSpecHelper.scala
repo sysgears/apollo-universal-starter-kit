@@ -13,7 +13,7 @@ trait ContactSpecHelper extends TestHelper {
 
   val bindings: Seq[ScalaModule] = Seq(new ContactBinding, new CoreBinding, new MailBinding)
   Guice.createInjector(bindings.asJava)
-  val routes: Route = routesWithGraphQLSchema[ContactModule]
+  val routes: Route = routesWithGraphQLSchema(new ContactModule())
 
   before {
     clean()

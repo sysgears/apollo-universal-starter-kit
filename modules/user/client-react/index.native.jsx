@@ -4,8 +4,8 @@ import { createStackNavigator } from 'react-navigation';
 import { translate } from '@module/i18n-client-react';
 import { HeaderTitle, IconButton } from '@module/look-client-react-native';
 import ClientModule from '@module/module-client-react-native';
+import AccessModule from '@module/authentication-client-react';
 
-import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
 import UserScreenNavigator from './containers/UserScreenNavigator';
@@ -146,7 +146,7 @@ const MainScreenNavigator = () => {
   return <Navigator />;
 };
 
-export default new ClientModule(access, {
+export default new ClientModule(AccessModule, {
   drawerItem: [
     {
       Profile: {

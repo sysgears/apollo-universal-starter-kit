@@ -42,7 +42,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
     (async () => {
       // Optimisation: imitate server response with empty user if no JWT token present in local storage
       if (
-        !settings.user.auth.access.session.enabled &&
+        !settings.auth.session.enabled &&
         operation.operationName === 'currentUser' &&
         !(await getItem('refreshToken'))
       ) {
@@ -136,7 +136,7 @@ class DataRootComponent extends React.Component {
     super(props);
     this.props = props;
     apolloClient = this.props.client;
-    this.state = { ready: settings.user.auth.access.session.enabled };
+    this.state = { ready: settings.auth.session.enabled };
   }
 
   async componentDidMount() {
@@ -181,7 +181,7 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default (settings.user.auth.access.jwt.enabled
+export default (settings.auth.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],

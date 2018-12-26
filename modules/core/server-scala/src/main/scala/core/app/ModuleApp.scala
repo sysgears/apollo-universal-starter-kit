@@ -10,7 +10,6 @@ import com.google.inject.Guice.createInjector
 import common.AppInitialization
 import common.graphql.UserContext
 import common.graphql.schema.{GraphQL, GraphQLSchema}
-import common.routes.frontend.FrontendRoute
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import common.shapes.ServerModule
 import core.guice.injection.InjectorProvider._
@@ -37,7 +36,7 @@ trait ModuleApp extends App with AppInitialization {
     val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
     val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
-    val routes = List(graphQLRoute.routes, inject[FrontendRoute].routes)
+    val routes = serverModule.routes + graphQLRoute.routes
 
     val corsSettings = CorsSettings.apply(system)
     withActionsBefore {

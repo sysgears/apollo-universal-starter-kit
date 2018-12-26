@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import passport from 'passport';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
-import access from '@module/authentication-server-ts';
+import { access } from '@module/authentication-server-ts';
 import User from '../../sql';
 
 import resolvers from './resolvers';

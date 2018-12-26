@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import access from '@module/authentication-server-ts';
+import { access } from '@module/authentication-server-ts';
 import User from '../../sql';
 
 import resolvers from './resolvers';

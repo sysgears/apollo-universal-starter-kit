@@ -6,11 +6,28 @@
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
     "sdkVersion": "31.0.0",
+    "scheme": "apollo-universal-starter-kit",
     "ios": {
-      "bundleIdentifier": "com.sysgears.apollokit"
+      "bundleIdentifier": "com.sysgears.apollokit",
+      "associatedDomains": []
     },
     "android": {
-      "package": "com.sysgears.apollokit"
+      "package": "com.sysgears.apollokit",
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": [
+            {
+              "scheme": "https",
+              "host": "apollo-universal-starter-kit.herokuapp.com"
+            }
+          ],
+          "category": [
+            "BROWSABLE",
+            "DEFAULT"
+          ]
+        }
+      ]
     }
   }
 }

@@ -1,9 +1,8 @@
 package graphql.schema
 
-import akka.actor.ActorSystem
-import akka.stream.ActorMaterializer
 import common.graphql.UserContext
 import common.{InputUnmarshallerGenerator, Logger}
+import graphql.resolvers.UserResolver
 import javax.inject.Inject
 import model._
 import repositories.UserProfileRepository
@@ -13,10 +12,9 @@ import sangria.marshalling.FromInput
 
 import scala.concurrent.ExecutionContext
 
-class UserSchema @Inject()(userProfileRepository: UserProfileRepository)
-                          (implicit val materializer: ActorMaterializer,
-                           actorSystem: ActorSystem,
-                           executionContext: ExecutionContext) extends InputUnmarshallerGenerator
+class UserSchema @Inject()(userResolver: UserResolver,
+                           userProfileRepository: UserProfileRepository)
+                          (implicit executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(ObjectTypeName("UserProfile"))
@@ -60,12 +58,11 @@ class UserSchema @Inject()(userProfileRepository: UserProfileRepository)
   )
 
   def mutations: List[Field[UserContext, Unit]] = List(
-    //TODO implement stub's functionality
     Field(
       name = "addUser",
       fieldType = userPayload,
       arguments = List(Argument("input", addUserInput)),
-      resolve = sc => UserPayload(Some(User(Some(1), "testusername", "testmail", "testpass", "user", true)))
+      resolve = ctx => userResolver.addUser(ctx.arg("input"))
     )
   )
 }

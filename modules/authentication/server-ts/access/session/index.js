@@ -7,40 +7,45 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
 
-const grant = async (user, req) => {
+const grant = async (identity, req) => {
   const session = {
     ...req.session,
-    userId: user.id
+    identityId: identity.id
   };
 
   req.session = writeSession(req, session);
 };
 
-const getCurrentUser = async ({ req }) => {
-  if (req && req.session.userId) {
-    return await User.getUser(req.session.userId);
+const getCurrentUser = async ({ req, getIdentify }) => {
+  if (req && req.session.identityId) {
+    return await getIdentify(req.session.identityId);
+  }
+};
+
+const checkCSRFToken = req => {
+  if (isApiExternal && req.path !== __API_URL__) {
+    return false;
+  }
+
+  if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
+    req.session = createSession(req);
+    throw new Error('CSRF token validation failed');
   }
 };
 
 const attachSession = req => {
-  if (req) {
-    req.session = readSession(req);
-    if (!req.session) {
-      req.session = createSession(req);
-    } else {
-      if (!isApiExternal && req.path === __API_URL__) {
-        if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
-          req.session = createSession(req);
-          throw new Error('CSRF token validation failed');
-        }
-      }
-    }
+  if (!req) {
+    return false;
   }
+
+  req.session = readSession(req);
+  return req.session ? checkCSRFToken(req) : (req.session = createSession(req));
 };
 
-const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
+const createContextFunc = async ({ req, context }) => {
+  const { getIdentify } = context;
   attachSession(req);
-  const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
+  const user = context.user || (await getCurrentUser({ req, getIdentify }));
   const auth = {
     isAuthenticated: !!user,
     scope: user ? scopes[user.role] : null

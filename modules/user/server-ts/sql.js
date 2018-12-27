@@ -167,12 +167,7 @@ class User {
       bcrypt.hash(password, 12).then(passwordHash => {
         localAuthInput = { email, password_hash: passwordHash };
         return knex('user')
-          .update({
-            username,
-            role,
-            is_active: isActive,
-            ...localAuthInput
-          })
+          .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
           .where({ id });
       });
     }

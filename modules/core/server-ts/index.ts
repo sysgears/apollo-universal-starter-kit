@@ -4,10 +4,9 @@ import { createServer } from './entry';
 
 export { serverPromise } from './entry';
 
-export default new ServerModule({
-  onAppCreate: [createServer]
-});
+export default new ServerModule({});
 
 export const runApp = (modules: ServerModule, entryModule: NodeModule) => {
   modules.createApp(entryModule);
+  createServer(modules, entryModule);
 };

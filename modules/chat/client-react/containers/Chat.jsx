@@ -1,9 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@module/look-client-react';
+import { Button, LayoutCenter, PageLayout } from '@module/look-client-react';
+import Helmet from 'react-helmet';
 
 import chatConfig from '../../../../config/chat';
 import { WebChat } from './webChat/WebChat';
+import settings from '../../../../settings';
 // import CustomView from '../components/CustomView';
 
 export default class extends React.Component {
@@ -122,32 +124,39 @@ export default class extends React.Component {
     const edges = messages ? messages.edges : [];
     const { id = uuid, username = null } = currentUser ? currentUser : {};
     return (
-      <div style={{ backgroundColor: '#eee' }}>
-        <div style={{ maxWidth: '700px', margin: '0px auto' }}>
-          <WebChat
-            {...chatConfig.giftedChat}
-            ref={gc => (this.gc = gc)}
-            text={message}
-            onInputTextChanged={text => this.setMessageState(text)}
-            placeholder={t('input.text')}
-            messages={edges}
-            //renderSend={this.renderSend}
-            onSend={this.onSend}
-            //loadEarlier={messages.totalCount > messages.edges.length}
-            //onLoadEarlier={this.onLoadEarlier}
-            user={{ _id: id, name: username }}
-            renderChatFooter={this.renderChatFooter}
-            // renderCustomView={this.renderCustomView}
-            renderActions={this.renderCustomActions}
-            activeMessage={this.state.activeMessage}
-            onLongPress={(context, currentMessage) =>
-              this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
-            }
-          />
-          {this.renderActionSheet()}
-          <div>Test message</div>
-        </div>
-      </div>
+      <PageLayout>
+        <Helmet
+          title={`${settings.app.name} - ${t('title')}`}
+          meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}
+        />
+        <LayoutCenter>
+          <div style={{ backgroundColor: '#eee' }}>
+            <div style={{ maxWidth: '700px', margin: '0px auto' }}>
+              <WebChat
+                {...chatConfig.giftedChat}
+                ref={gc => (this.gc = gc)}
+                text={message}
+                onInputTextChanged={text => this.setMessageState(text)}
+                placeholder={t('input.text')}
+                messages={edges}
+                //renderSend={this.renderSend}
+                onSend={this.onSend}
+                //loadEarlier={messages.totalCount > messages.edges.length}
+                //onLoadEarlier={this.onLoadEarlier}
+                user={{ _id: id, name: username }}
+                renderChatFooter={this.renderChatFooter}
+                // renderCustomView={this.renderCustomView}
+                renderActions={this.renderCustomActions}
+                activeMessage={this.state.activeMessage}
+                onLongPress={(context, currentMessage) =>
+                  this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
+                }
+              />
+              {this.renderActionSheet()}
+            </div>
+          </div>
+        </LayoutCenter>
+      </PageLayout>
     );
   }
 }

@@ -22,8 +22,8 @@ trait TestHelper extends WordSpec
 
   def inject[T: Manifest]: T = InjectorProvider.inject[T]
 
-  def routesWithGraphQLSchema[T <: ServerModule : Manifest]: Route = {
-    val graphQl = new TestGraphQLSchema(inject[T])
+  def routesWithGraphQLSchema(serverModule: ServerModule): Route = {
+    val graphQl = new TestGraphQLSchema(serverModule)
     val graphQlExecutor = Executor(
       schema = graphQl.schema,
       queryReducers = List(

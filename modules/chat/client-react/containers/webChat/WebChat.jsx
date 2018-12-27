@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import moment from 'moment';
 import uuid from 'uuid';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 import * as utils from './utils';
 //import Actions from './Actions';
@@ -273,7 +274,9 @@ class WebChat extends React.Component {
   render() {
     return (
       <div style={{ width: '700px', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
-        {this.renderMessages()}
+        <Scrollbars style={{ width: 550, height: 600 }} autoHide renderTrackHorizontal={() => <p />}>
+          {this.renderMessages()}
+        </Scrollbars>
         {this.renderInputToolbar()}
       </div>
     );

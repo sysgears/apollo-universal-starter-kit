@@ -83,6 +83,7 @@
     "react-apollo": "^2.3.1",
     "react-art": "16.5.0",
     "react-cookie": "^2.2.0",
+    "react-custom-scrollbars": "^4.2.1",
     "react-debounce-input": "^3.1.0",
     "react-dom": "16.5.0",
     "react-dropzone": "^4.2.3",

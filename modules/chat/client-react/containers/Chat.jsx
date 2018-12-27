@@ -131,29 +131,27 @@ export default class extends React.Component {
         />
         <LayoutCenter>
           <div style={{ backgroundColor: '#eee' }}>
-            <div style={{ maxWidth: '700px', margin: '0px auto' }}>
-              <WebChat
-                {...chatConfig.giftedChat}
-                ref={gc => (this.gc = gc)}
-                text={message}
-                onInputTextChanged={text => this.setMessageState(text)}
-                placeholder={t('input.text')}
-                messages={edges}
-                //renderSend={this.renderSend}
-                onSend={this.onSend}
-                //loadEarlier={messages.totalCount > messages.edges.length}
-                //onLoadEarlier={this.onLoadEarlier}
-                user={{ _id: id, name: username }}
-                renderChatFooter={this.renderChatFooter}
-                // renderCustomView={this.renderCustomView}
-                renderActions={this.renderCustomActions}
-                activeMessage={this.state.activeMessage}
-                onLongPress={(context, currentMessage) =>
-                  this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
-                }
-              />
-              {this.renderActionSheet()}
-            </div>
+            <WebChat
+              {...chatConfig.giftedChat}
+              ref={gc => (this.gc = gc)}
+              text={message}
+              onInputTextChanged={text => this.setMessageState(text)}
+              placeholder={t('input.text')}
+              messages={edges}
+              //renderSend={this.renderSend}
+              onSend={this.onSend}
+              //loadEarlier={messages.totalCount > messages.edges.length}
+              //onLoadEarlier={this.onLoadEarlier}
+              user={{ _id: id, name: username }}
+              renderChatFooter={this.renderChatFooter}
+              // renderCustomView={this.renderCustomView}
+              renderActions={this.renderCustomActions}
+              activeMessage={this.state.activeMessage}
+              onLongPress={(context, currentMessage) =>
+                this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
+              }
+            />
+            {this.renderActionSheet()}
           </div>
         </LayoutCenter>
       </PageLayout>

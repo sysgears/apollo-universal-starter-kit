@@ -164,16 +164,15 @@ class User {
       .where({ id });
   }
 
-  isUserProfile({ id }) {
-    return knex
-      .select('id')
-      .from('user_profile')
-      .where({ user_id: id })
-      .first();
+  async isUserProfileExists(userId) {
+    return !!(await knex('user_profile')
+      .count('id as count')
+      .where(decamelizeKeys({ userId }))
+      .first()).count;
   }
 
-  editUserProfile({ id, profile }, userProfile) {
-    if (userProfile) {
+  editUserProfile({ id, profile }, isExists) {
+    if (isExists) {
       return knex('user_profile')
         .update(decamelizeKeys(profile))
         .where({ user_id: id });

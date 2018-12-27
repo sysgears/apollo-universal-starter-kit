@@ -173,12 +173,11 @@ export default pubsub => ({
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          const userProfile = await User.isUserProfile(input);
-
+          const isProfileExists = await User.isUserProfileExists(input.id);
           const passwordHash = await createPasswordHash(input.password);
 
           const editUser = async trx => User.editUser(userInfo, passwordHash).transacting(trx);
-          const editUserProfile = async trx => User.editUserProfile(input, userProfile).transacting(trx);
+          const editUserProfile = async trx => User.editUserProfile(input, isProfileExists).transacting(trx);
 
           await (await createTransaction())
             .addOperation(editUser)

@@ -158,10 +158,7 @@ class User {
   }
 
   editUser({ id, username, email, role, isActive }, passwordHash) {
-    let localAuthInput = { email };
-    if (passwordHash) {
-      localAuthInput = { email, password_hash: passwordHash };
-    }
+    const localAuthInput = passwordHash ? { email, passwordHash } : { email };
     return knex('user')
       .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
       .where({ id });

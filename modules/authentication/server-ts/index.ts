@@ -1,10 +1,22 @@
 import ServerModule from '@module/module-server-ts';
-
+import { scopes } from '@module/user-server-ts';
 import access from './access';
 
-const createContextFunc = (args: any) => {
+interface ParamsType {
+  req: object;
+  res: object;
+  connectionParams: object;
+  webSocket: object;
+  context: any;
+}
+
+const createContextFunc = ({ context: { user } }: ParamsType) => {
   return {
-    identity: 'test'
+    user,
+    auth: {
+      isAuthenticated: !!user,
+      scope: user ? scopes[user.role] : null
+    }
   };
 };
 

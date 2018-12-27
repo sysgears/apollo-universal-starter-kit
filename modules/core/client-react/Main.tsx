@@ -9,7 +9,7 @@ import ReactGA from 'react-ga';
 import { apiUrl } from '@module/core-common';
 import ClientModule from '@module/module-client-react';
 
-import RedBox from './RedBox';
+import { RedBox } from './components';
 import createApolloClient from '../../../packages/common/createApolloClient';
 import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
 import log from '../../../packages/common/log';

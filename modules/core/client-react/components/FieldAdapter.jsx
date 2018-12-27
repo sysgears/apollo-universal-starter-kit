@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
-import { PLATFORM } from '../../../packages/common/utils';
+import { PLATFORM } from '../../../../packages/common/utils';
 
 class FieldAdapter extends Component {
   static propTypes = {

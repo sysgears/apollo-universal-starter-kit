@@ -1,5 +1,7 @@
 import modules from './modules';
+import { runApp } from '@module/core-client-react';
 
-modules.createApp(module);
+runApp(modules, module);
 
+// For SSR use
 export default modules;

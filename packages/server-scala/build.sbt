@@ -14,3 +14,8 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination"),
   ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication")
 )
+
+resourceGenerators in Compile ++= Seq(
+  ResourceProcessor.concatDotEnvsTask.taskValue,
+  ResourceProcessor.concatServerConfigsTask.taskValue
+)

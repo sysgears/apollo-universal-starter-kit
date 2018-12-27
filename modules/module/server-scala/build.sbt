@@ -15,7 +15,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-stream" % akkaVersion,
 
   "com.softwaremill.akka-http-session" %% "core" % "0.5.6",
-  "com.softwaremill.akka-http-session" %% "jwt" % "0.5.6",
+  "com.softwaremill.akka-http-session" %% "jwt"  % "0.5.6",
 
   "ch.megard" %% "akka-http-cors" % "0.3.1",
 
@@ -50,6 +50,8 @@ libraryDependencies ++= Seq(
   "com.byteslounge" %% "slick-repo" % "1.5.2",
   "com.h2database" % "h2" % "1.3.148" % Test,
 
-  "com.github.scribejava" % "scribejava-apis" % "6.1.0"
+  "io.github.cdimascio" % "java-dotenv" % "3.1.7",
+  "com.github.scribejava" % "scribejava-apis" % "6.1.0",
+  "com.typesafe" % "config" % "1.3.2"
 )
 parallelExecution in test := false

@@ -1,6 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
@@ -9,6 +10,10 @@ import { createTransaction } from '@module/core-common';
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
+
+const createPasswordHash = password => {
+  return bcrypt.hash(password, 12) || false;
+};
 
 export default pubsub => ({
   Query: {
@@ -89,8 +94,7 @@ export default pubsub => ({
 
           e.throwIf();
 
-          const passwordHash = await User.createPasswordHash(input);
-
+          const passwordHash = await createPasswordHash(input);
           const register = async trx => User.register(input, passwordHash).transacting(trx);
 
           const editUserProfile = async (trx, [id]) => {
@@ -171,7 +175,8 @@ export default pubsub => ({
 
           const userProfile = await User.isUserProfile(input);
 
-          const passwordHash = await User.createPasswordHash(userInfo);
+          const passwordHash = await createPasswordHash(input.password);
+
           const editUser = async trx => User.editUser(userInfo, passwordHash).transacting(trx);
           const editUserProfile = async trx => User.editUserProfile(input, userProfile).transacting(trx);
 

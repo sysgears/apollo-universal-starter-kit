@@ -137,13 +137,6 @@ class User {
     );
   }
 
-  createPasswordHash({ password }) {
-    if (password) {
-      return bcrypt.hash(password, 12);
-    }
-    return false;
-  }
-
   register({ username, email, role = 'user', isActive }, passwordHash) {
     return knex('user').insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
   }

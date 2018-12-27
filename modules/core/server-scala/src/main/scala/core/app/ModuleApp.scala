@@ -11,17 +11,18 @@ import common.AppInitialization
 import common.graphql.UserContext
 import common.graphql.schema.{GraphQL, GraphQLSchema}
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
-import common.shapes.ServerModule
+import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import sangria.execution.{Executor, QueryReducer}
+import shapes.ServerModule
 
 import scala.concurrent.ExecutionContext
 
 trait ModuleApp extends App with AppInitialization {
 
-  def createApp(serverModule: ServerModule): Unit = {
+  def createApp(serverModule: ServerModule[UserContext, SchemaInitializer[_]]): Unit = {
 
     createInjector(serverModule.foldBindings.bindings)
     serverModule.fold

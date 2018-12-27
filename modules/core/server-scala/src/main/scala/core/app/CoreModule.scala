@@ -1,14 +1,16 @@
 package core.app
 
 import akka.http.scaladsl.server.Route
+import common.graphql.UserContext
 import common.routes.frontend.FrontendRoute
-import common.shapes.ServerModule
-import core.guice.injection.InjectorProvider._
+import common.slick.SchemaInitializer
 import core.guice.bindings.CoreBinding
+import core.guice.injection.InjectorProvider._
+import shapes.ServerModule
 
 import scala.collection.mutable
 
-class CoreModule extends ServerModule {
+class CoreModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val frontendRoute: FrontendRoute = inject[FrontendRoute]
 

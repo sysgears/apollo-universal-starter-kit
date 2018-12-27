@@ -138,7 +138,10 @@ class User {
   }
 
   createPasswordHash({ password }) {
-    return bcrypt.hash(password, 12);
+    if (password) {
+      return bcrypt.hash(password, 12);
+    }
+    return false;
   }
 
   register({ username, email, role = 'user', isActive }, passwordHash) {
@@ -161,23 +164,13 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  editUser({ id, username, email, role, isActive, password }) {
+  editUser({ id, username, email, role, isActive }, passwordHash) {
     let localAuthInput = { email };
-    if (password) {
-      bcrypt.hash(password, 12).then(passwordHash => {
-        localAuthInput = { email, password_hash: passwordHash };
-        return knex('user')
-          .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
-          .where({ id });
-      });
+    if (passwordHash) {
+      localAuthInput = { email, password_hash: passwordHash };
     }
     return knex('user')
-      .update({
-        username,
-        role,
-        is_active: isActive,
-        ...localAuthInput
-      })
+      .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
       .where({ id });
   }
 

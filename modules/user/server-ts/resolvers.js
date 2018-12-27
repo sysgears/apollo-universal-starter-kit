@@ -171,7 +171,8 @@ export default pubsub => ({
 
           const userProfile = await User.isUserProfile(input);
 
-          const editUser = async trx => User.editUser(userInfo).transacting(trx);
+          const passwordHash = await User.createPasswordHash(userInfo);
+          const editUser = async trx => User.editUser(userInfo, passwordHash).transacting(trx);
           const editUserProfile = async trx => User.editUserProfile(input, userProfile).transacting(trx);
 
           await (await createTransaction())

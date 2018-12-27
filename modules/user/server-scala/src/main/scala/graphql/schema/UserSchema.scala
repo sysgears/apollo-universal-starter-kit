@@ -47,16 +47,6 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
-  def queries: List[Field[UserContext, Unit]] = List(
-    //TODO implement stub's functionality
-    Field(
-      name = "currentUser",
-      fieldType = OptionType(user),
-      arguments = List.empty,
-      resolve = _ => None
-    )
-  )
-
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addUser",

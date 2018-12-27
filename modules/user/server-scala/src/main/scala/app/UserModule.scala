@@ -12,4 +12,6 @@ class UserModule @Inject()(userSchema: UserSchema,
   slickSchemas ++= userSchemaInitializer :: userProfileSchemaInitializer :: Nil
 
   queries ++= userSchema.queries
+
+  mutations ++= userSchema.mutations
 }

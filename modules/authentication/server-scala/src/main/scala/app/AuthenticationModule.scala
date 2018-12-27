@@ -6,7 +6,7 @@ import graphql.schema.{AuthenticationSchema, TokenSchema}
 import repositories._
 
 class AuthenticationModule @Inject()(authenticationSchema: AuthenticationSchema,
-                                     tokenSchema:TokenSchema,
+                                     tokenSchema: TokenSchema,
                                      facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer,
                                      githubAuthSchemaInitializer: GithubAuthSchemaInitializer,
                                      googleAuthSchemaInitializer: GoogleAuthSchemaInitializer,
@@ -18,6 +18,8 @@ class AuthenticationModule @Inject()(authenticationSchema: AuthenticationSchema,
     googleAuthSchemaInitializer ::
     linkedinAuthSchemaInitializer ::
     certificateAuthSchemaInitializer :: Nil
+
+  queries ++= authenticationSchema.queries
 
   mutations ++= authenticationSchema.mutations ++ tokenSchema.mutations
 

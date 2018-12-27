@@ -3,24 +3,37 @@ import { AuthenticationError } from 'apollo-server-errors';
 import createTokens from './createTokens';
 import settings from '../../../../../settings';
 
+const MESSAGE_INVALID_TOKEN = 'Error: Refresh token invalid';
+const MESSAGE_GET_IDENTIFY =
+  'Error: Can not find "getIdentifyWithPassword" method. Please, add this method to the context.';
+const MESSAGE_WITHOUT_ID = 'Error: Identify must have "id" method.';
+
+const throwError = message => {
+  throw new AuthenticationError(message);
+};
+
 export default () => ({
   Mutation: {
-    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { User }) {
+    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { getIdentifyWithPassword, getHash }) {
       const decodedToken = jwt.decode(inputRefreshToken);
-      if (!decodedToken || !decodedToken.user) {
-        throw new AuthenticationError('Refresh token invalid');
-      }
+      const isValidToken = !decodedToken || !decodedToken.identity;
+      const isGetIdentifyerExist = getIdentifyWithPassword || typeof getIdentifyWithPassword === 'function';
 
-      const user = await User.getUserWithPassword(decodedToken.user);
-      const refreshSecret = settings.user.secret + user.passwordHash;
+      !isValidToken && throwError(MESSAGE_INVALID_TOKEN);
+      !isGetIdentifyerExist && throwError(MESSAGE_GET_IDENTIFY);
+
+      const user = await getIdentifyWithPassword(decodedToken.identity);
+      const refreshSecret = settings.auth.secret + getHash(user);
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);
       } catch (e) {
-        throw new AuthenticationError(e);
+        throwError(e);
       }
 
-      const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
+      !user.id && throwError(MESSAGE_WITHOUT_ID);
+
+      const [accessToken, refreshToken] = await createTokens(user, settings.auth.secret, refreshSecret);
 
       return {
         accessToken,

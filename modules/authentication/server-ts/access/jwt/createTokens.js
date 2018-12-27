@@ -3,29 +3,14 @@ import { pick } from 'lodash';
 
 import settings from '../../../../../settings';
 
-const createTokens = async (user, secret, refreshSecret) => {
-  let tokenUser = pick(user, ['id', 'username', 'role']);
-  tokenUser.fullName = user.firstName ? `${user.firstName} ${user.lastName}` : null;
+const { tokenExpiresIn, refreshTokenExpiresIn } = settings.auth.jwt;
 
-  const createToken = jwt.sign(
-    {
-      user: tokenUser
-    },
-    secret,
-    {
-      expiresIn: settings.auth.jwt.tokenExpiresIn
-    }
-  );
+const createTokens = async (identity, secret, refreshSecret) => {
+  let tokenUser = pick(identity, ['id']);
 
-  const createRefreshToken = jwt.sign(
-    {
-      user: user.id
-    },
-    refreshSecret,
-    {
-      expiresIn: settings.auth.jwt.refreshTokenExpiresIn
-    }
-  );
+  const createToken = jwt.sign({ identity: tokenUser }, secret, { expiresIn: tokenExpiresIn });
+
+  const createRefreshToken = jwt.sign({ identity: identity.id }, refreshSecret, { expiresIn: refreshTokenExpiresIn });
 
   return Promise.all([createToken, createRefreshToken]);
 };

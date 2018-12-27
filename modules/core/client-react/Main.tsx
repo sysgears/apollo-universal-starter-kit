@@ -1,4 +1,5 @@
 import React from 'react';
+import { hydrate, render } from 'react-dom';
 import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
@@ -40,6 +41,18 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
+export const onAppDispose = (_: any, data: any) => {
+  data.store = ref.store;
+  delete window.__APOLLO_STATE__;
+};
+
+export const renderApp = ({ key }: { key: number }) => {
+  const renderFunc = __SSR__ ? hydrate : render;
+  const root = document.getElementById('root');
+
+  return renderFunc(<Main data={ref} rootTag={root} key={key} />, root);
+};
+
 const history = createHistory();
 const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
@@ -51,11 +64,6 @@ ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));
-
-export const onAppDispose = (_: any, data: any) => {
-  data.store = ref.store;
-  delete window.__APOLLO_STATE__;
-};
 
 class ServerError extends Error {
   constructor(error: any) {

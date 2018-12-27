@@ -1,5 +1,3 @@
-import * as React from 'react';
-import { hydrate, render } from 'react-dom';
 import ClientModule from '@module/module-client-react';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
@@ -7,14 +5,9 @@ import ClientModule from '@module/module-client-react';
 import 'backend_reload';
 
 import log from '../../../packages/common/log';
-import { onAppCreate as onCreateMain, Main, onAppDispose } from './Main';
-
-const renderFunc = __SSR__ ? hydrate : render;
-const root = document.getElementById('root');
+import { onAppCreate as onCreateMain, onAppDispose, renderApp } from './Main';
 
 let frontendReloadCount = 0;
-
-const renderApp = ({ key }: { key: number }) => renderFunc(<Main rootTag={root} key={key} />, root);
 
 const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   onCreateMain(modules, entryModule);

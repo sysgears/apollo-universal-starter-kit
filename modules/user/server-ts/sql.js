@@ -164,10 +164,8 @@ class User {
   editUser({ id, username, email, role, isActive, password }) {
     let localAuthInput = { email };
     if (password) {
-      console.log('editUser password');
       bcrypt.hash(password, 12).then(passwordHash => {
         localAuthInput = { email, password_hash: passwordHash };
-
         return knex('user')
           .update({
             username,

@@ -5,7 +5,7 @@ export default () => ({
     logout(obj, args, { req }) {
       const session = { ...req.session };
 
-      delete session.userId;
+      delete session.id;
 
       req.session = writeSession(req, session);
     }

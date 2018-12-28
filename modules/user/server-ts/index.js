@@ -9,13 +9,13 @@ import User from './sql';
 import resources from './locales';
 import social from './social';
 
-const createContextFunc = async ({ context: { user } }) => ({
-  User,
-  user,
-  auth: {
-    isAuthenticated: !!user,
-    scope: user ? scopes[user.role] : null
-  }
+const getIdentity = async id => await User.getUser(id);
+const getHash = async id => (await User.getUserWithPassword(id)) || '';
+
+const createContextFunc = async () => ({
+  getIdentity,
+  getHash,
+  User
 });
 
 const middleware = app => {

@@ -191,13 +191,7 @@ class WebChat extends React.Component {
       this.textInput.clear();
     }
     this.notifyInputTextReset();
-    const newComposerHeight = MIN_COMPOSER_HEIGHT;
-    // const newMessagesContainerHeight = this.getMessagesContainerHeightWithKeyboard(newComposerHeight);
-    this.setState({
-      text: this.getTextFromProp(''),
-      composerHeight: newComposerHeight
-      // messagesContainerHeight: this.prepareMessagesContainerHeight(newMessagesContainerHeight),
-    });
+    this.setState({ text: this.getTextFromProp('') });
   }
 
   focusTextInput() {
@@ -227,11 +221,9 @@ class WebChat extends React.Component {
 
   onInitialLayoutViewLayout() {
     this.notifyInputTextReset();
-    const newComposerHeight = MIN_COMPOSER_HEIGHT;
     this.setState({
       isInitialized: true,
-      text: this.getTextFromProp(''),
-      composerHeight: newComposerHeight
+      text: this.getTextFromProp('')
     });
   }
 
@@ -239,7 +231,7 @@ class WebChat extends React.Component {
     const inputToolbarProps = {
       ...this.props,
       text: this.getTextFromProp(this.state.text),
-      composerHeight: Math.max(MIN_COMPOSER_HEIGHT, this.state.composerHeight),
+      composerHeight: MIN_COMPOSER_HEIGHT,
       onSend: this.onSend,
       onTextChanged: this.onInputTextChanged,
       textInputProps: {
@@ -274,7 +266,7 @@ class WebChat extends React.Component {
   render() {
     return (
       <div style={{ width: '700px', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
-        <Scrollbars style={{ width: 550, height: 600 }} autoHide renderTrackHorizontal={() => <p />}>
+        <Scrollbars style={{ width: 550, height: 600 }} autoHide renderTrackHorizontal={() => <div />}>
           {this.renderMessages()}
         </Scrollbars>
         {this.renderInputToolbar()}

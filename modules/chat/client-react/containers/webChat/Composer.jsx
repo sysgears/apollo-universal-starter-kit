@@ -1,5 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
+import { Input } from 'reactstrap';
 
 import { MIN_COMPOSER_HEIGHT, DEFAULT_PLACEHOLDER } from './Constant';
 import Color from './Color';
@@ -11,13 +12,11 @@ export default class Composer extends React.Component {
 
   render() {
     return (
-      <input
+      <Input
+        type={this.props.multiline ? 'textarea' : 'input'}
+        style={{ ...styles.textInput, ...this.props.textInputStyle, height: this.props.composerHeight }}
         placeholder={this.props.placeholder}
-        //placeholderTextColor={this.props.placeholderTextColor}
-        //multiline={this.props.multiline}
-        //onChange={e => this.onContentSizeChange(e)}
         onChange={text => this.onChangeText(text)}
-        style={[styles.textInput, this.props.textInputStyle, { height: this.props.composerHeight }]}
         value={this.props.text}
       />
     );

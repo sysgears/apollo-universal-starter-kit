@@ -14,7 +14,6 @@ class ServerModuleBinding extends ScalaModule {
     install(new CounterBinding)
     install(new MailBinding)
     install(new ItemBinding)
-    install(new UserBinding)
     install(new FileBinding)
 
     install(new SangriaBinding)

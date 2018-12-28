@@ -2,7 +2,7 @@ import akka.http.scaladsl.server.Route
 import app.AuthenticationModule
 import com.google.inject.Guice
 import core.guice.bindings.CoreBinding
-import guice.{AuthenticationBinding, MailBinding, UserBinding}
+import guice.{AuthenticationBinding, MailBinding}
 import net.codingwell.scalaguice.ScalaModule
 import repositories.UserSchemaInitializer
 
@@ -14,7 +14,7 @@ import scala.concurrent.{Await, Future}
 
 trait AuthenticationTestHelper extends TestHelper {
 
-  val bindings: Seq[ScalaModule] = Seq(new UserBinding, new CoreBinding, new MailBinding, new AuthenticationBinding)
+  val bindings: Seq[ScalaModule] = Seq(new CoreBinding, new MailBinding, new AuthenticationBinding)
   Guice.createInjector(bindings.asJava)
 
   val routes: Route = routesWithGraphQLSchema[AuthenticationModule]

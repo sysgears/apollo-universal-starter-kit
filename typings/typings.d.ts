@@ -21,3 +21,9 @@ declare module 'mocha-steps' {
   const step: Mocha.TestFunction;
   const xstep: Mocha.TestFunction;
 }
+
+declare module '@module/user-server-ts' {
+  const scopes: any;
+  const User: any;
+  export = { scopes, User };
+}

@@ -1,6 +1,7 @@
 import ServerModule from '@module/module-server-ts';
-import { scopes } from '@module/user-server-ts';
 import access from './access';
+
+const { scopes } = require('@module/user-server-ts');
 
 interface ParamsType {
   req: object;

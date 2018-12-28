@@ -79,8 +79,10 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       arguments = Argument(name = "limit", argumentType = OptionInputType(IntType)) :: //TODO Unsafe (without default value)
                   Argument(name = "after", argumentType = OptionInputType(IntType)) :: Nil, //TODO Unsafe (without default value)
       resolve = { sc =>
+        val limit: Option[Int] = sc.argOpt("limit")
+        val after: Option[Int] = sc.argOpt("after")
         resolveWithDispatcher[Posts](
-          input = QueryPosts(sc.args.arg("limit"), sc.args.arg("after")),
+          input = QueryPosts(limit.getOrElse(10), after.getOrElse(0)),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
         )

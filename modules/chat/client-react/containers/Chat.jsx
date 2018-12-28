@@ -98,7 +98,6 @@ export default class extends React.Component {
     const { currentMessage, showActionSheet } = this.state;
     return showActionSheet ? (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button color="primary">Copy</Button>
         <Button color="primary">Edit</Button>
         <Button
           color="primary"
@@ -108,7 +107,7 @@ export default class extends React.Component {
         >
           Reply
         </Button>
-        <Button color="primary" onClick={() => deleteMessage({ id: currentMessage._id })}>
+        <Button color="primary" onClick={() => deleteMessage(currentMessage._id)}>
           Delete
         </Button>
         <Button color="primary">Cancel</Button>

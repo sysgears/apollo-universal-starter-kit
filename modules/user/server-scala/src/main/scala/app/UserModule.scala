@@ -1,17 +1,17 @@
 package app
 
 import common.graphql.UserContext
-import common.shapes.ServerModule
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
 import graphql.schema.UserSchema
 import guice.UserBinding
 import repositories.{UserProfileSchemaInitializer, UserSchemaInitializer}
 import sangria.schema.Field
+import shapes.ServerModule
 
 import scala.collection.mutable
 
-class UserModule extends ServerModule {
+class UserModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val userSchema: UserSchema = inject[UserSchema]
   lazy val userSchemaInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]

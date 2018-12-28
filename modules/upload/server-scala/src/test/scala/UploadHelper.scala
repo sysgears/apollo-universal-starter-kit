@@ -14,7 +14,7 @@ trait UploadHelper extends TestHelper {
 
   val bindings: Seq[ScalaModule] = Seq(new CoreBinding, new FileBinding)
   Guice.createInjector(bindings.asJava)
-  val routes: Route = routesWithGraphQLSchema[UploadModule]
+  val routes: Route = routesWithGraphQLSchema(new UploadModule())
 
   val fileInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
 

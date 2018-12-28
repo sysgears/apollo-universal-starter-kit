@@ -16,6 +16,11 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication")
 )
 
+resourceGenerators in Compile ++= Seq(
+  ResourceProcessor.concatDotEnvsTask.taskValue,
+  ResourceProcessor.concatServerConfigsTask.taskValue
+)
+
 packageName in Docker := "scala_server"
 dockerBaseImage := "openjdk:jre-alpine"
 dockerExposedPorts := Seq(8080)

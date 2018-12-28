@@ -5,7 +5,7 @@ import ClientModule from '@module/module-client-react';
 import 'backend_reload';
 
 import log from '../../../packages/common/log';
-import { onAppCreate } from './Main';
+import { onAppCreate } from './entry';
 
 if (__DEV__) {
   if (module.hot) {

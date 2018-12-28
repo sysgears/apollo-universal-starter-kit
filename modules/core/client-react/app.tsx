@@ -5,24 +5,7 @@ import ClientModule from '@module/module-client-react';
 import 'backend_reload';
 
 import log from '../../../packages/common/log';
-import { onAppCreate as onCreateMain, onAppDispose, renderApp } from './Main';
-
-let frontendReloadCount = 0;
-
-const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
-  onCreateMain(modules, entryModule);
-  if (entryModule.hot) {
-    entryModule.hot.dispose(data => onAppDispose(modules, data));
-    if (__CLIENT__) {
-      entryModule.hot.accept();
-    }
-  }
-  if (entryModule.hot && entryModule.hot.data) {
-    log.debug('Updating front-end');
-    frontendReloadCount = (frontendReloadCount || 0) + 1;
-  }
-  renderApp({ key: frontendReloadCount });
-};
+import { onAppCreate } from './Main';
 
 if (__DEV__) {
   if (module.hot) {

@@ -24,7 +24,15 @@ const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = 
   store: null
 };
 
+let frontendReloadCount = 0;
+
 export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+  initRef(modules, entryModule);
+  acceptMHR(modules, entryModule);
+  renderApp({ key: frontendReloadCount });
+};
+
+const initRef = (modules: ClientModule, entryModule: NodeModule) => {
   ref.modules = modules;
   ref.client = createApolloClient({
     apiUrl,
@@ -41,12 +49,25 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
-export const onAppDispose = (_: any, data: any) => {
+const acceptMHR = (modules: ClientModule, entryModule: NodeModule) => {
+  if (entryModule.hot) {
+    entryModule.hot.dispose(data => onAppDispose(modules, data));
+    if (__CLIENT__) {
+      entryModule.hot.accept();
+    }
+  }
+  if (entryModule.hot && entryModule.hot.data) {
+    log.debug('Updating front-end');
+    frontendReloadCount = (frontendReloadCount || 0) + 1;
+  }
+};
+
+const onAppDispose = (_: any, data: any) => {
   data.store = ref.store;
   delete window.__APOLLO_STATE__;
 };
 
-export const renderApp = ({ key }: { key: number }) => {
+const renderApp = ({ key }: { key: number }) => {
   const renderFunc = __SSR__ ? hydrate : render;
   const root = document.getElementById('root');
 

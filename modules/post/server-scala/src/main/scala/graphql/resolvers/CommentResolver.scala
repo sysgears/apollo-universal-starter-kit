@@ -4,11 +4,12 @@ import akka.actor.{Actor, ActorLogging}
 import akka.pattern._
 import com.google.inject.Inject
 import common.ActorNamed
+import common.errors.NotFound
 import common.implicits.RichDBIO._
 import model.{AddCommentInput, DeleteCommentInput, EditCommentInput}
 import repositories.{CommentRepository, PostRepository}
 
-import scala.concurrent.ExecutionContext
+import scala.concurrent.{ExecutionContext, Future}
 
 object CommentResolver extends ActorNamed {
   final val name = "CommentResolver"
@@ -20,8 +21,8 @@ case class MutationEditComment(editCommentInput: EditCommentInput)
 case class MutationDeleteComment(deleteCommentInput: DeleteCommentInput)
 
 class CommentResolver @Inject()(postRepository: PostRepository,
-                             commentRepository: CommentRepository)
-                            (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
+                                commentRepository: CommentRepository)
+                               (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
 
   override def receive: Receive = {
 
@@ -47,7 +48,9 @@ class CommentResolver @Inject()(postRepository: PostRepository,
       log.info(s"Mutation with param: [{}]", input)
       val comment = for {
           maybeComment      <- commentRepository.findOne(input.deleteCommentInput.id).run
-          deletedComment    <- commentRepository.delete(maybeComment.get).run
+          comment           <- if (maybeComment.isDefined) Future.successful(maybeComment.get)
+                               else Future.failed(NotFound(s"Comment with id: ${input.deleteCommentInput.id} not found."))
+          deletedComment    <- commentRepository.delete(comment).run
         } yield deletedComment
       comment.pipeTo(sender)
     }

@@ -34,8 +34,8 @@ class PostResolver @Inject()(postRepository: PostRepository,
 
       val post = for {
         maybePost <- postRepository.findOne(input.id).run
-        post      <- if (maybePost.nonEmpty) Future.successful(maybePost.get)
-                     else Future.failed(NotFound(s"Post with id ${input.id} not found.")) /*TODO: Check is sangria correct handle an error*/
+        post      <- if (maybePost.isDefined) Future.successful(maybePost.get)
+                     else Future.failed(NotFound(s"Post with id: ${input.id} not found."))
       } yield post
         post.pipeTo(sender)
     }
@@ -72,7 +72,9 @@ class PostResolver @Inject()(postRepository: PostRepository,
       log.info(s"Mutation with param: [{}]", input)
       val post = for {
             maybePost     <- postRepository.findOne(input.id).run
-            deletedPost   <- postRepository.delete(maybePost.get).run
+            post          <- if (maybePost.isDefined) Future.successful(maybePost.get)
+                             else Future.failed(NotFound(s"Post with id: ${input.id} not found."))
+            deletedPost   <- postRepository.delete(post).run
           } yield deletedPost
       post.pipeTo(sender)
     }

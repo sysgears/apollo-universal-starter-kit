@@ -57,4 +57,10 @@ class UserResolver @Inject()(userRepository: UserRepository,
     user <- userRepository.findOne(id).run failOnNone NotFound(s"User with id = $id")
     deletedUser <- userRepository.delete(user).run
   } yield UserPayload(user = Some(deletedUser))
+
+  def users(orderBy: Option[OrderByUserInput], filter: Option[FilterUserInput]): Future[List[User]] = {
+    val OrderByUserInput(column, order) = orderBy.getOrElse(OrderByUserInput(None, None))
+    val FilterUserInput(usernameOrEmail, role, isActive) = filter.getOrElse(FilterUserInput(None, None, None))
+    userRepository.findAll(usernameOrEmail, role, isActive, column, order).run.map(_.toList)
+  }
 }

@@ -9,13 +9,11 @@ import User from './sql';
 import resources from './locales';
 import social from './social';
 
-const getIdentifyWithPassword = async id => await User.getUserWithPassword(id);
-const getIdentify = async id => await User.getUser(id);
-const getHash = async ({ passwordHash }) => passwordHash || '';
+const getIdentity = async id => await User.getUser(id);
+const getHash = async id => (await User.getUserWithPassword(id)) || '';
 
 const createContextFunc = async () => ({
-  getIdentifyWithPassword,
-  getIdentify,
+  getIdentity,
   getHash,
   User
 });

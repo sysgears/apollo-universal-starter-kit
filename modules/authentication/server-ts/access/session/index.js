@@ -7,18 +7,14 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
 
-const grant = async (identity, req) => {
-  const session = {
-    ...req.session,
-    identityId: identity.id
-  };
-
+const grant = async ({ id }, req) => {
+  const session = { ...req.session, id };
   req.session = writeSession(req, session);
 };
 
-const getCurrentUser = async ({ req, getIdentify }) => {
-  if (req && req.session.identityId) {
-    return await getIdentify(req.session.identityId);
+const getCurrentUser = async ({ req, getIdentity }) => {
+  if (req && req.session.id) {
+    return await getIdentity(req.session.id);
   }
 };
 
@@ -43,9 +39,9 @@ const attachSession = req => {
 };
 
 const createContextFunc = async ({ req, context }) => {
-  const { getIdentify } = context;
+  const { getIdentity } = context;
   attachSession(req);
-  const user = context.user || (await getCurrentUser({ req, getIdentify }));
+  const user = context.user || (await getCurrentUser({ req, getIdentity }));
   const auth = {
     isAuthenticated: !!user,
     scope: user ? scopes[user.role] : null

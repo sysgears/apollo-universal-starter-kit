@@ -52,4 +52,9 @@ class UserResolver @Inject()(userRepository: UserRepository,
         )).run
     ).getOrElse(Future.successful())
   } yield UserPayload(user = Some(editedUser))
+
+  def deleteUser(id: Int): Future[UserPayload] = for {
+    user <- userRepository.findOne(id).run failOnNone NotFound(s"User with id = $id")
+    deletedUser <- userRepository.delete(user).run
+  } yield UserPayload(user = Some(deletedUser))
 }

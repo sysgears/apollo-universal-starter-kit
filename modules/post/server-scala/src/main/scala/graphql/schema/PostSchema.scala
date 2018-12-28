@@ -76,8 +76,8 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     Field(
       name = "posts",
       fieldType = OptionType(Types.posts),
-      arguments = Argument(name = "limit", argumentType = OptionInputType(IntType)) :: //TODO Unsafe (without default value)
-                  Argument(name = "after", argumentType = OptionInputType(IntType)) :: Nil, //TODO Unsafe (without default value)
+      arguments = Argument(name = "limit", argumentType = OptionInputType(IntType)) ::
+                  Argument(name = "after", argumentType = OptionInputType(IntType)) :: Nil,
       resolve = { sc =>
         val limit: Option[Int] = sc.argOpt("limit")
         val after: Option[Int] = sc.argOpt("after")

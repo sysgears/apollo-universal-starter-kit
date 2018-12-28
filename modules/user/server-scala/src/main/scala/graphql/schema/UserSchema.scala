@@ -6,7 +6,7 @@ import graphql.resolvers.UserResolver
 import javax.inject.Inject
 import model._
 import repositories.UserProfileRepository
-import sangria.schema.{Argument, Field, InputObjectType, ObjectType, OptionType}
+import sangria.schema.{Argument, Field, InputObjectType, ObjectType, OptionType, IntType}
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 
@@ -74,6 +74,12 @@ class UserSchema @Inject()(userResolver: UserResolver,
       fieldType = userPayload,
       arguments = List(Argument("input", editUserInput)),
       resolve = ctx => userResolver.editUser(ctx.arg("input"))
+    ),
+    Field(
+      name = "deleteUser",
+      fieldType = userPayload,
+      arguments = List(Argument("id", IntType)),
+      resolve = ctx => userResolver.editUser(ctx.arg("id"))
     )
   )
 }

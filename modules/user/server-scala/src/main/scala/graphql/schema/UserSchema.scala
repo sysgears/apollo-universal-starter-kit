@@ -47,12 +47,33 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
+  implicit val editUserInput: InputObjectType[EditUserInput] = deriveInputObjectType(InputObjectTypeName("EditUserInput"))
+
+  implicit val editUserInputUnmarshaller: FromInput[EditUserInput] = inputUnmarshaller {
+    input =>
+      EditUserInput(
+        id = input("id").asInstanceOf[Int],
+        username = input("username").asInstanceOf[String],
+        role = input("role").asInstanceOf[String],
+        isActive = input.get("isActive").flatMap(_.asInstanceOf[Option[Boolean]]),
+        email = input("email").asInstanceOf[String],
+        password = input.get("password").flatMap(_.asInstanceOf[Option[String]]),
+        profile = input.get("profile").flatMap(_.asInstanceOf[Option[ProfileInput]])
+      )
+  }
+
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "addUser",
       fieldType = userPayload,
       arguments = List(Argument("input", addUserInput)),
       resolve = ctx => userResolver.addUser(ctx.arg("input"))
+    ),
+    Field(
+      name = "editUser",
+      fieldType = userPayload,
+      arguments = List(Argument("input", editUserInput)),
+      resolve = ctx => userResolver.editUser(ctx.arg("input"))
     )
   )
 }

@@ -1,10 +1,12 @@
 package graphql.resolvers
 
 import com.google.inject.Inject
-import model.{AddUserInput, User, UserPayload, UserProfile}
+import common.errors.NotFound
+import model._
 import org.mindrot.jbcrypt.BCrypt
 import repositories.{UserProfileRepository, UserRepository}
 import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -29,4 +31,25 @@ class UserResolver @Inject()(userRepository: UserRepository,
         ).withId(user.id.get)).run
     ).getOrElse(Future.successful())
   } yield UserPayload(user = Some(user))
+
+  def editUser(input: EditUserInput): Future[UserPayload] = for {
+    user <- userRepository.findOne(input.id).run failOnNone NotFound(s"User with id = ${input.id}")
+    editedUser <- userRepository.update(User(
+      id = Some(input.id),
+      username = input.username,
+      email = input.email,
+      password = input.password.map(BCrypt.hashpw(_, BCrypt.gensalt)).getOrElse(user.password),
+      role = input.role,
+      isActive = input.isActive.getOrElse(user.isActive)
+    )).run
+    _ <- input.profile.map(
+      profile =>
+        userProfileRepository.update(UserProfile(
+          id = Some(input.id),
+          firstName = profile.firstName,
+          lastName = profile.lastName,
+          fullName = None
+        )).run
+    ).getOrElse(Future.successful())
+  } yield UserPayload(user = Some(editedUser))
 }

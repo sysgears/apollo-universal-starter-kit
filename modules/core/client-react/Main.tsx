@@ -1,16 +1,14 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
-import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
-import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
 import { apiUrl } from '@module/core-common';
 import ClientModule from '@module/module-client-react';
 
-import { RedBox } from './components';
+import { Main } from './components';
 import createApolloClient from '../../../packages/common/createApolloClient';
 import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
 import log from '../../../packages/common/log';
@@ -71,7 +69,7 @@ const renderApp = ({ key }: { key: number }) => {
   const renderFunc = __SSR__ ? hydrate : render;
   const root = document.getElementById('root');
 
-  return renderFunc(<Main data={ref} rootTag={root} key={key} />, root);
+  return renderFunc(<Main data={ref} history={history} rootTag={root} key={key} />, root);
 };
 
 const history = createHistory();
@@ -85,45 +83,3 @@ ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));
-
-class ServerError extends Error {
-  constructor(error: any) {
-    super();
-    for (const key of Object.getOwnPropertyNames(error)) {
-      this[key] = error[key];
-    }
-    this.name = 'ServerError';
-  }
-}
-
-interface MainState {
-  error?: ServerError;
-  info?: any;
-  ready?: boolean;
-}
-
-export class Main extends React.Component<any, MainState> {
-  constructor(props: any) {
-    super(props);
-    const serverError = window.__SERVER_ERROR__;
-    serverError ? (this.state = { error: new ServerError(serverError), ready: true }) : (this.state = {});
-  }
-
-  public componentDidCatch(error: ServerError, info: any) {
-    this.setState({ error, info });
-  }
-
-  public render() {
-    return this.state.error ? (
-      <RedBox error={this.state.error} />
-    ) : (
-      ref.modules.getWrappedRoot(
-        <Provider store={ref.store}>
-          <ApolloProvider client={ref.client}>
-            {ref.modules.getDataRoot(<ConnectedRouter history={history}>{ref.modules.router}</ConnectedRouter>)}
-          </ApolloProvider>
-        </Provider>
-      )
-    );
-  }
-}

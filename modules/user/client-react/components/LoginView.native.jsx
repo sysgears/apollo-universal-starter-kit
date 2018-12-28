@@ -16,6 +16,10 @@ class LoginView extends React.PureComponent {
   }
 
   componentWillUnmount() {
+    console.log('--------------------');
+    console.log('LoginView --->', "Linking.removeListener('url')");
+    console.log('--------------------');
+
     Linking.removeListener('url');
   }
 
@@ -28,6 +32,10 @@ class LoginView extends React.PureComponent {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
     }
+    console.log('--------------------');
+    console.log(' LoginView handleOpenURL --->', 'handleOpenURL');
+    console.log('--------------------');
+
     await client.query({ query: CURRENT_USER_QUERY });
 
     if (Platform.OS === 'ios') {
@@ -58,6 +66,10 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
+    console.log('--------------------');
+    console.log('LoginView RENDER--->', 'LoginView');
+    console.log('--------------------');
+
     const { login, navigation } = this.props;
     return (
       <View style={styles.container}>

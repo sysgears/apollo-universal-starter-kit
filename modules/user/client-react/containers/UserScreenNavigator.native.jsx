@@ -48,6 +48,11 @@ class UserScreenNavigator extends React.Component {
 
   getInitialRoute = () => {
     const { currentUser } = this.props;
+
+    console.log('--------------------');
+    console.log('UserScreenNavigator currentUser --->', currentUser);
+    console.log('--------------------');
+
     return currentUser ? 'Profile' : 'Counter';
   };
 

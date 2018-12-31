@@ -4,15 +4,15 @@ import com.google.inject.util.Modules.combine
 import graphql.schema.PostSchema
 import repositories.{CommentSchemaInitializer, PostSchemaInitializer}
 import common.graphql.UserContext
-import common.shapes.ServerModule
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
 import guice.{CommentBinding, PostBinding}
 import sangria.schema.Field
+import shapes.ServerModule
 
 import scala.collection.mutable
 
-class PostModule extends ServerModule {
+class PostModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val postSchema: PostSchema = inject[PostSchema]
   lazy val postSchemaInitializer: PostSchemaInitializer = inject[PostSchemaInitializer]

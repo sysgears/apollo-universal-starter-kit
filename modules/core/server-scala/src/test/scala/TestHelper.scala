@@ -7,12 +7,13 @@ import core.guice.injection.InjectorProvider
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import org.scalatest._
 import sangria.execution.{Executor, QueryReducer}
 
 trait TestHelper extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
+  with BeforeAndAfterEach
   with BeforeAndAfterAll
   with Matchers
   with MockFactory {

@@ -9,7 +9,8 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class PostRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext) extends Repository[Post, Int](driver) with Pagination {
+class PostRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext) extends
+  Repository[Post, Int](driver) with Pagination {
 
   import driver.api._
 

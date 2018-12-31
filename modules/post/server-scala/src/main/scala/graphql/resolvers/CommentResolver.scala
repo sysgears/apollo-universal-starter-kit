@@ -40,8 +40,13 @@ class CommentResolver @Inject()(postRepository: PostRepository,
 
     case input: MutationEditComment => {
       log.info(s"Mutation with param: [{}]", input)
-      commentRepository.update(input.editCommentInput).run
-        .pipeTo(sender)
+      val comment = for {
+        maybeComment        <- commentRepository.findOne(input.editCommentInput.id).run
+        comment             <- if (maybeComment.isDefined) Future.successful(maybeComment.get)
+                               else Future.failed(NotFound(s"Comment with id: ${input.editCommentInput.id} not found."))
+        updatedComment      <- commentRepository.update(input.editCommentInput).run
+      } yield updatedComment
+      comment.pipeTo(sender)
     }
 
     case input: MutationDeleteComment => {

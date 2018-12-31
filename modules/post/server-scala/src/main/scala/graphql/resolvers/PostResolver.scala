@@ -81,8 +81,13 @@ class PostResolver @Inject()(postRepository: PostRepository,
 
     case input: MutationEditPost => {
       log.info(s"Mutation with param: [{}]", input)
-      postRepository.update(input.editPostInput).run
-        .pipeTo(sender)
+      val post = for {
+        maybePost     <- postRepository.findOne(input.editPostInput.id).run
+        post          <- if (maybePost.isDefined) Future.successful(maybePost.get)
+                         else Future.failed(NotFound(s"Post with id: ${input.editPostInput.id} not found."))
+        updatedPost   <- postRepository.update(input.editPostInput).run
+      } yield updatedPost
+      post.pipeTo(sender)
     }
   }
 }

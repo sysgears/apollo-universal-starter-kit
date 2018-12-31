@@ -1,4 +1,4 @@
-package common.shapes
+package shapes
 
 import com.google.inject.Module
 import com.google.inject.util.Modules.EMPTY_MODULE

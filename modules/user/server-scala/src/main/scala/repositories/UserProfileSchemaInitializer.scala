@@ -2,8 +2,8 @@ package repositories
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject
-import model.UserProfileTable.UserProfileTable
 import model.UserProfileTable
+import model.UserProfileTable.UserProfileTable
 import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext

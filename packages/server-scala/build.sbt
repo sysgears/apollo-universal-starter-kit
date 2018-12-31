@@ -4,7 +4,8 @@ version := "0.1"
 
 scalaVersion := "2.12.7"
 
-lazy val global = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*)
+lazy val global = (project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*))
+  .enablePlugins(DockerPlugin, JavaAppPackaging, AshScriptPlugin)
 
 lazy val modules = List(
   ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload"),
@@ -20,3 +21,11 @@ resourceGenerators in Compile ++= Seq(
   ResourceProcessor.concatDotEnvsTask.taskValue,
   ResourceProcessor.concatServerConfigsTask.taskValue
 )
+
+packageName in Docker := "scala_server"
+dockerBaseImage := "openjdk:jre-alpine"
+dockerExposedPorts := Seq(8080)
+defaultLinuxInstallLocation in Docker := "/usr/local"
+dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
+
+mainClass in Compile := Some("Main")

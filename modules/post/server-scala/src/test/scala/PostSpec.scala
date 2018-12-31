@@ -113,7 +113,7 @@ class PostSpec extends PostHelper {
       }
     }
 
-    "net delete not existed post" in {
+    "not delete a not existed post" in {
 
       val mutationEditPost = "mutation { deletePost(id: 100) {id}}"
 
@@ -133,6 +133,83 @@ class PostSpec extends PostHelper {
           val result = responseAs[String]
           result shouldEqual "{\"data\":{\"posts\":{\"totalCount\":5}}}"
         }
+      }
+    }
+
+    "add comment to existed post" in {
+
+      val mutationAddComment = "mutation { addComment(input: {postId: 1, content: \"New comment\"}) {id content}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationAddComment))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        result shouldEqual "{\"data\":{\"addComment\":{\"id\":11,\"content\":\"New comment\"}}}"
+      }
+    }
+
+    "not add comment to non existed post" in {
+
+      val mutationAddComment = "mutation { addComment(input: {postId: 100, content: \"New comment\"}) {id content}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationAddComment))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        result shouldEqual "{\"data\":{\"addComment\":null},\"errors\":[{\"message\":\"Couldn't add a comment. " +
+          "Post with id: 100 not found.\",\"path\":[\"addComment\"],\"locations\":[{\"line\":1,\"column\":12}]}]}"
+      }
+    }
+
+    "edit an existed comment" in {
+
+      val mutationEditComment = "mutation { editComment(input: {id: 1, postId: 1, content: \"Updated comment\"}) {id content}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditComment))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        result shouldEqual "{\"data\":{\"editComment\":{\"id\":1,\"content\":\"Updated comment\"}}}"
+      }
+    }
+
+    "not edit a not existed comment" in {
+
+      val mutationEditComment = "mutation { editComment(input: {id: 100, postId: 1, content: \"Updated comment\"}) {id content}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditComment))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        result shouldEqual "{\"data\":{\"editComment\":null},\"errors\":[{\"message\":\"Comment with id: 100 not found.\"" +
+          ",\"path\":[\"editComment\"],\"locations\":[{\"line\":1,\"column\":12}]}]}"
+      }
+    }
+
+    "delete an existed comment" in {
+
+      val mutationEditPost = "mutation { deleteComment(input: {id: 1, postId: 1}) {id}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditPost))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        result shouldEqual "{\"data\":{\"deleteComment\":{\"id\":1}}}"
+      }
+    }
+
+
+    "not delete a not existed comment" in {
+
+      val mutationEditPost = "mutation { deleteComment(input: {id: 100, postId: 1}) {id}}"
+
+      val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditPost))
+      Post(endpoint, entity) ~> routes ~> check {
+        status shouldBe OK
+        val result = responseAs[String]
+        println(result)
+        result shouldEqual "{\"data\":{\"deleteComment\":null},\"errors\":[{\"message\":\"Comment with id: 100 not found.\"," +
+          "\"path\":[\"deleteComment\"],\"locations\":[{\"line\":1,\"column\":12}]}]}"
       }
     }
   }

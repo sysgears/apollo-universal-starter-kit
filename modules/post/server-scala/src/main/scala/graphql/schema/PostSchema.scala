@@ -100,10 +100,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = MutationAddPost(sc.args.arg[AddPostInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).map(post =>
-          PublishElement(triggerName = "addPost", element = post))
-          .pub
-          .map(_.element)
+        ).pub("addPost")
       }
     ),
     Field(
@@ -115,10 +112,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = resolvers.MutationDeletePost(sc.args.arg("id")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).map(post =>
-          PublishElement(triggerName = "deletePost", element = post))
-          .pub
-          .map(_.element)
+        ).pub("deletePost")
       }
     ),
     Field(
@@ -130,10 +124,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = resolvers.MutationEditPost(sc.args.arg[EditPostInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).map(post =>
-          PublishElement(triggerName = "editPost", element = post))
-          .pub
-          .map(_.element)
+        ).pub("editPost")
       }
     ),
     Field(
@@ -145,10 +136,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = resolvers.MutationAddComment(sc.args.arg[AddCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).map(comment =>
-          PublishElement(triggerName = "addComment", element = comment))
-          .pub
-          .map(_.element)
+        ).pub("addComment")
       }
     ),
     Field(
@@ -160,10 +148,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = resolvers.MutationEditComment(sc.args.arg[EditCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).map(comment =>
-          PublishElement(triggerName = "editComment", element = comment))
-          .pub
-          .map(_.element)
+        ).pub("editComment")
       }
     ),
     Field(
@@ -175,10 +160,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
           input = resolvers.MutationDeleteComment(sc.args.arg[DeleteCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).map(comment =>
-          PublishElement(triggerName = "deleteComment", element = comment))
-          .pub
-          .map(_.element)
+        ).pub("deleteComment")
       }
     )
   )

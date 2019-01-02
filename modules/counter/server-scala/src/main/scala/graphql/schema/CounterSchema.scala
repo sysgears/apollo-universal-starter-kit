@@ -50,10 +50,7 @@ class CounterSchema @Inject()(implicit val counterPubSubService: CounterPubSubSe
           input = amount,
           userContext = sc.ctx,
           namedResolverActor = CounterResolver
-        ).map(counter =>
-          PublishElement(triggerName = "addServerCounter", element = counter))
-          .pub
-          .map(_.element)
+        ).pub("addServerCounter")
       }
     )
   )

@@ -1,21 +1,21 @@
 import React from 'react';
 // import PropTypes from 'prop-types';
-import withExportPDF from '../containers/withExportPDF';
+import ExportPDF from '../containers/withExportPDF';
 
 class PrintText extends React.PureComponent {
   // static propTypes = {};
 
   render() {
     return (
-      <div>
+      <ExportPDF>
         <div>Make</div>
         <div>Report</div>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
-      </div>
+      </ExportPDF>
     );
   }
 }
 
-export default withExportPDF(PrintText);
+export default PrintText;

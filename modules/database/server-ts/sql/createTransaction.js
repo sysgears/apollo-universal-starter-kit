@@ -1,4 +1,4 @@
-import knex from './connector';
+import knex from '.';
 
 export default async () => {
   const trx = await new Promise(resolve => knex.transaction(resolve));

@@ -29,9 +29,13 @@ const getCurrentIdentity = async ({ req }) => {
 
 const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
   try {
+    const { appendContext } = context;
     const identity = context.identity || (await getCurrentIdentity({ req, connectionParams, webSocket }));
 
-    return { identity };
+    return {
+      identity,
+      ...appendContext(identity)
+    };
   } catch (e) {
     throw new AuthenticationError(e);
   }

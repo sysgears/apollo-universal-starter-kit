@@ -1,8 +1,13 @@
 import React from 'react';
+import { View, Text } from 'react-native';
 import { LayoutCenter } from '@module/look-client-react-native';
 
-export default (
+const Loading = () => (
   <LayoutCenter>
-    <div className="text-center">App is loading...</div>
+    <View className="text-center">
+      <Text>App is loading...</Text>
+    </View>
   </LayoutCenter>
 );
+
+export default Loading;

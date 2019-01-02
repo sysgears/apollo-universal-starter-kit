@@ -4,7 +4,7 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
-import CURRENT_USER_QUERY from '@module/user-client-react';
+import { CURRENT_USER_QUERY } from '@module/user-client-react';
 import Loading from './components/Loading';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';

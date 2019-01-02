@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
-import { Loading, Modal } from '@module/look-client-react-native';
+import { Loading } from '@module/look-client-react-native';
 import filesize from 'filesize';
 
 export default class UploadView extends React.Component {
@@ -43,17 +43,6 @@ export default class UploadView extends React.Component {
     );
   };
 
-  renderModal = () => {
-    const { notify, onBackgroundPress } = this.props;
-    return (
-      <Modal isVisible={!!notify} onBackdropPress={onBackgroundPress}>
-        <View style={styles.alertTextWrapper}>
-          <Text>{notify}</Text>
-        </View>
-      </Modal>
-    );
-  };
-
   render() {
     const { files, t, loading, handleUploadFile, downloadingFiles } = this.props;
 
@@ -62,23 +51,20 @@ export default class UploadView extends React.Component {
     }
 
     return files ? (
-      <Fragment>
-        {this.renderModal()}
-        <View style={styles.container}>
-          <View style={styles.btnContainer}>
-            <TouchableOpacity style={styles.btn} onPress={handleUploadFile}>
-              <Text style={styles.btnText}>{t('upload.btn')}</Text>
-            </TouchableOpacity>
-          </View>
-          <FlatList
-            data={files}
-            style={styles.list}
-            keyExtractor={item => `${item.id}`}
-            extraData={downloadingFiles}
-            renderItem={this.renderFileInfo}
-          />
+      <View style={styles.container}>
+        <View style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btn} onPress={handleUploadFile}>
+            <Text style={styles.btnText}>{t('upload.btn')}</Text>
+          </TouchableOpacity>
         </View>
-      </Fragment>
+        <FlatList
+          data={files}
+          style={styles.list}
+          keyExtractor={item => `${item.id}`}
+          extraData={downloadingFiles}
+          renderItem={this.renderFileInfo}
+        />
+      </View>
     ) : null;
   }
 }
@@ -141,10 +127,6 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 5,
     width: '100%'
-  },
-  alertTextWrapper: {
-    backgroundColor: '#fff',
-    padding: 10
   },
   uploading: {
     flex: 1,

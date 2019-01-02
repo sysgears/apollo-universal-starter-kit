@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import path from 'path';
 import { DocumentPicker, MediaLibrary, ImagePicker, Constants, FileSystem, Permissions } from 'expo';
 import { compose } from 'react-apollo';
+import { Alert } from 'react-native';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet';
@@ -33,20 +34,19 @@ const withActionSheetProvider = Component => {
 
 class FileOperations extends React.Component {
   static propTypes = {
-    loading: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired
   };
 
   state = {
-    notify: null,
-    downloadingFiles: [],
-    error: null
+    downloadingFiles: []
   };
 
   handleRemoveFile = async id => {
     const { removeFile } = this.props;
     const result = await removeFile(id);
-    this.setState({ notify: result && result.error ? result.error : null });
+    if (result && result.error) {
+      Alert.alert(result.error);
+    }
   };
 
   handleUploadFile = async () => {
@@ -82,9 +82,11 @@ class FileOperations extends React.Component {
     if (type) {
       const imageData = new ReactNativeFile({ uri, name, type });
       const result = await uploadFiles([imageData]);
-      this.setState({ notify: result && result.error ? result.error : null });
+      if (result && result.error) {
+        Alert.alert(result.error);
+      }
     } else {
-      this.setState({ notify: t('upload.errorMsg') });
+      Alert.alert(t('upload.errorMsg'));
     }
   };
 
@@ -94,7 +96,7 @@ class FileOperations extends React.Component {
     this.setState({ downloadingFiles: [...this.state.downloadingFiles, id] });
     (await this.checkPermission(Permissions.CAMERA_ROLL))
       ? await this.downloadFile(path, name)
-      : this.setState({ notify: t('download.errorMsg') });
+      : Alert.alert(t('download.errorMsg'));
     this.setState({ downloadingFiles: this.state.downloadingFiles.filter(fileId => fileId !== id) });
   };
 
@@ -114,9 +116,9 @@ class FileOperations extends React.Component {
       album
         ? await addAssetsToAlbumAsync([createAsset], album, false)
         : await createAlbumAsync(albumName, createAsset, false);
-      this.setState({ notify: `${t('download.successMsg')}` });
+      Alert.alert(t('download.successMsg'));
     } catch (e) {
-      this.setState({ notify: `${e}` });
+      Alert.alert(e);
     }
   };
 
@@ -137,7 +139,6 @@ class FileOperations extends React.Component {
         handleRemoveFile={this.handleRemoveFile}
         handleUploadFile={this.handleUploadFile}
         handleDownloadFile={this.handleDownloadFile}
-        notify={this.state.notify}
         onBackgroundPress={() => this.setState({ notify: null })}
         downloadingFiles={this.state.downloadingFiles}
       />

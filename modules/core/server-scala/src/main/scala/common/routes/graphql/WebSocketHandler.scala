@@ -4,7 +4,6 @@ import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import com.google.inject.Inject
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
@@ -21,10 +20,10 @@ import spray.json._
 
 import scala.util.{Failure, Success}
 
-class WebSocketHandler @Inject()(graphQL: GraphQL,
-                                 graphQlExecutor: Executor[UserContext, Unit])
-                                (implicit val actorMaterializer: ActorMaterializer,
-                                 implicit val scheduler: Scheduler) extends RouteUtil {
+class WebSocketHandler(graphQL: GraphQL,
+                       graphQlExecutor: Executor[UserContext, Unit])
+                      (implicit val actorMaterializer: ActorMaterializer,
+                       implicit val scheduler: Scheduler) extends RouteUtil {
 
   import spray.json.DefaultJsonProtocol._
 

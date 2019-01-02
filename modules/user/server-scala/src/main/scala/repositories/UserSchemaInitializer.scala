@@ -1,9 +1,9 @@
 package repositories
 
-import model.{User, UserTable}
-import model.UserTable.UserTable
 import common.slick.SchemaInitializer
 import javax.inject.Inject
+import model.UserTable.UserTable
+import model.{User, UserTable}
 import org.mindrot.jbcrypt.BCrypt
 
 import scala.concurrent.ExecutionContext

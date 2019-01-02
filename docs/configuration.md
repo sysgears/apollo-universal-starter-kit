@@ -107,7 +107,7 @@ By default, Apollo Universal Starter Kit uses Twitter Bootstrap for the client a
 app. You can enable the alternatives this way: 
 
 * To use Ant Design instead of Twitter Bootstrap, uncomment the respective import for Ant Design and comment out the 
-import for Bootstrap in the `packages/client/src/modules/common/components/web/index.jsx` file: 
+import for Bootstrap in the `packages/client/src/modules/common/components/web/index.tsx` file: 
 
 ```javascript
 // export * from './ui-bootstrap';
@@ -115,7 +115,7 @@ export * from './ui-antd';
 ```
 
 * To use Ant Design Mobile instead of NativeBase, uncomment the Ant Design Mobile export and comment out the NativeBase
-export in the `packages/client/src/modules/common/components/native/index.jsx` file:
+export in the `packages/client/src/modules/common/components/native/index.tsx` file:
 
 ```javascript
 // export * from './ui-native-base';

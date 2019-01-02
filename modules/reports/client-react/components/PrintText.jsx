@@ -8,8 +8,8 @@ class PrintText extends React.PureComponent {
   render() {
     return (
       <div>
-        <div>Сделать</div>
-        <div>Репорт</div>
+        <div>Make</div>
+        <div>Report</div>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>

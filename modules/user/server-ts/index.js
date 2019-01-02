@@ -9,10 +9,18 @@ import User from './sql';
 import resources from './locales';
 import social from './social';
 
+const appendContext = identity => ({
+  auth: {
+    isAuthenticated: !!identity,
+    scope: identity && identity.role ? scopes[identity.role] : null
+  }
+});
+
 const getIdentity = async id => await User.getUser(id);
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
-const createContextFunc = async () => ({
+const createContextFunc = () => ({
+  appendContext,
   getIdentity,
   getHash,
   User

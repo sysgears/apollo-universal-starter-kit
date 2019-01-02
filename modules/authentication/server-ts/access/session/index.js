@@ -1,5 +1,4 @@
 import { isApiExternal } from '@module/core-common';
-import { User, scopes } from '@module/user-server-ts';
 
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
@@ -39,18 +38,13 @@ const attachSession = req => {
 };
 
 const createContextFunc = async ({ req, context }) => {
-  const { getIdentity } = context;
+  const { getIdentity, appendContext } = context;
   attachSession(req);
   const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
-  const auth = {
-    isAuthenticated: !!identity,
-    scope: identity && identity.role ? scopes[identity.role] : null
-  };
 
   return {
-    User,
     identity,
-    auth
+    ...appendContext(identity)
   };
 };
 

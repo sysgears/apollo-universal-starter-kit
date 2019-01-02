@@ -1,8 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'btn',
-  template: `<button mat-raised-button color="primary"><ng-content></ng-content></button>`,
+  template: `<button mat-raised-button color="{{color}}"><ng-content></ng-content></button>`,
   styles: []
 })
-export class ButtonComponent {}
+export class ButtonComponent {
+  @Input()
+  public color: string = 'primary';
+}

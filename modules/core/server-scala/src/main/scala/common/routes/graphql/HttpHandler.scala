@@ -6,7 +6,6 @@ import akka.http.scaladsl.marshalling.sse.EventStreamMarshalling._
 import akka.http.scaladsl.model.StatusCodes._
 import akka.http.scaladsl.model.sse.ServerSentEvent
 import akka.stream.ActorMaterializer
-import com.google.inject.Inject
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessage
@@ -25,10 +24,10 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-class HttpHandler @Inject()(graphQL: GraphQL,
-                            graphQlExecutor: Executor[UserContext, Unit])
-                           (implicit val scheduler: Scheduler,
-                            implicit val actorMaterializer: ActorMaterializer) extends RouteUtil {
+class HttpHandler(graphQL: GraphQL,
+                  graphQlExecutor: Executor[UserContext, Unit])
+                 (implicit val scheduler: Scheduler,
+                  implicit val actorMaterializer: ActorMaterializer) extends RouteUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {

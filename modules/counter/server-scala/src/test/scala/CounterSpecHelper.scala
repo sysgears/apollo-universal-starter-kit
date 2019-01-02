@@ -15,7 +15,7 @@ trait CounterSpecHelper extends TestHelper {
   val bindings: Seq[ScalaModule] = Seq(new CounterBinding, new CoreBinding)
   Guice.createInjector(bindings.asJava)
   val counterInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchema[CounterModule]
+  val routes: Route = routesWithGraphQLSchema(new CounterModule())
 
   before {
     clean()

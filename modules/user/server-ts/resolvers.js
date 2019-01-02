@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-import { createTransaction } from '@module/core-common';
+import { createTransaction } from '@module/database-server-ts';
 
 import settings from '../../../settings';
 

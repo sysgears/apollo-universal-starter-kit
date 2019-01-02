@@ -89,9 +89,7 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
         label={t('login.form.field.pass')}
         value={values.password}
       />
-      <div className="text-center">
-        {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
-      </div>
+      <div className="text-center">{errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}</div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">
           <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>

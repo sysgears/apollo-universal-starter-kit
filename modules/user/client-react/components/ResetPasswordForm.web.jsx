@@ -29,7 +29,7 @@ const ResetPasswordForm = ({ values, handleSubmit, errors, t }) => (
       label={t('resetPass.form.field.passConf')}
       value={values.passwordConfirmation}
     />
-    {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+    {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
     <Button color="primary" type="submit">
       {t('resetPass.form.btnSubmit')}
     </Button>

@@ -22,7 +22,7 @@ const ForgotPasswordForm = ({ handleSubmit, errors, sent, values, t }) => {
         value={values.email}
       />
       <div className="text-center">
-        {errors && errors.messageError && <Alert color="error">{errors.messageError}</Alert>}
+        {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
         <Button color="primary" type="submit">
           {t('forgotPass.form.btnSubmit')}
         </Button>

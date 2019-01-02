@@ -17,7 +17,7 @@ const grant = async identity => {
   };
 };
 
-const getCurrentUser = async ({ req }) => {
+const getCurrentIdentity = async ({ req }) => {
   const authorization = req && req.headers['authorization'];
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
@@ -29,7 +29,13 @@ const getCurrentUser = async ({ req }) => {
 
 const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
   try {
-    context.user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
+    const { appendContext } = context;
+    const identity = context.identity || (await getCurrentIdentity({ req, connectionParams, webSocket }));
+
+    return {
+      identity,
+      ...appendContext(identity)
+    };
   } catch (e) {
     throw new AuthenticationError(e);
   }

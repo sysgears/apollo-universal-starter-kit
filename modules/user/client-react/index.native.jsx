@@ -18,6 +18,8 @@ import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 
+export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
+
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <HeaderTitleWithI18n i18nKey="navLink.signIn" style="subTitle" />,

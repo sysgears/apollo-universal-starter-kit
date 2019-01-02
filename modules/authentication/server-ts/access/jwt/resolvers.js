@@ -5,7 +5,6 @@ import settings from '../../../../../settings';
 
 const MESSAGE_INVALID_TOKEN = 'Error: Refresh token invalid';
 const MESSAGE_GET_IDENTIFY = 'Error: Can not find "getIdentity" method. Please, add this method to the context.';
-const MESSAGE_WITHOUT_ID = 'Error: Identify must have "id" method.';
 
 const throwError = message => {
   throw new AuthenticationError(message);
@@ -28,8 +27,6 @@ export default () => ({
       } catch (e) {
         throwError(e);
       }
-
-      !identity.id && throwError(MESSAGE_WITHOUT_ID);
 
       const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret);
 

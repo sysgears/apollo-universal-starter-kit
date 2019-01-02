@@ -75,6 +75,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
         // console.log('user --->', user);
 
         const tokens = await access.grantAccess(user, req);
+        // const currentUser = await getCurrentUser(req, res);
 
         // console.log('redirectUrl --->', redirectUrl);
 

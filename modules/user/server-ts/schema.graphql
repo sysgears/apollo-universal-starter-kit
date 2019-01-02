@@ -68,6 +68,8 @@ extend type Mutation {
   editUser(input: EditUserInput!): UserPayload!
   # Delete a user
   deleteUser(id: Int!): UserPayload!
+  # Activate a user
+  updateActive(input: updateActiveInput!): UserPayload!
 }
 
 # Input for ordering users
@@ -147,6 +149,11 @@ input EditUserInput {
 input ProfileInput {
   firstName: String
   lastName: String
+}
+
+input updateActiveInput {
+  isActive: Boolean!
+  id: Int!
 }
 
 extend type Subscription {

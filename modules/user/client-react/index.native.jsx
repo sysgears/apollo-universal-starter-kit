@@ -17,6 +17,7 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
+import WaitingPage from './containers/WaitingPage';
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -135,6 +136,12 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
+class WaitingScreen extends React.Component {
+  render() {
+    return <WaitingPage />;
+  }
+}
+
 const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
@@ -237,6 +244,9 @@ export default new ClientModule(access, {
             drawerLabel: <Logout navigation={navigation} />
           };
         }
+      },
+      Waiting: {
+        screen: WaitingScreen
       }
     }
   ],

@@ -1,9 +1,9 @@
 import React from 'react';
+import { Linking } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
-import { Provider } from 'react-redux';
 import url from 'url';
-
+import { Provider } from 'react-redux';
 import ClientModule from '@module/module-client-react-native';
 import log from '../../../packages/common/log';
 import createApolloClient from '../../../packages/common/createApolloClient';
@@ -17,6 +17,24 @@ interface MainProps {
 }
 
 export default class Main extends React.Component<MainProps> {
+  public async componentDidMount() {
+    Linking.addEventListener('url', this.hundlerUrl);
+    const link = await Linking.getInitialURL();
+    if (link.includes('/confirmation/')) {
+      this.redirectOnWaiting(link);
+    }
+  }
+  public hundlerUrl = (event: any) => {
+    // this.props.navigation.navigate('Waiting')
+    if (event.url.includes('/confirmation/')) {
+      this.redirectOnWaiting(event.url);
+    }
+  };
+
+  public redirectOnWaiting = (link: string) => {
+    // this.props.navigation.navigate({routeName: 'Waiting', query: url})
+  };
+
   public render() {
     const { hostname } = url.parse(__API_URL__);
     const { modules } = this.props;

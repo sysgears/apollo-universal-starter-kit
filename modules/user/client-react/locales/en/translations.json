@@ -180,6 +180,7 @@
         "placeholder": "Type Your Password"
       }
     },
-    "logout": "Log out"
+    "logout": "Log out",
+    "waiting": "Activation"
   }
 }

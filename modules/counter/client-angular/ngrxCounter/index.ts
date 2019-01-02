@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { LookModule } from '@module/look-client-angular';
+
 import CounterModule from '../CounterModule';
-import { reducer } from './reducers';
 import { NgRxCounterButtonComponent, NgRxCounterViewComponent } from './components/NgRxCounterView';
+import { reducer } from './reducers';
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, LookModule],
   declarations: [NgRxCounterButtonComponent, NgRxCounterViewComponent],
   exports: [NgRxCounterButtonComponent, NgRxCounterViewComponent]
 })

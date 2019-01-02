@@ -12,7 +12,7 @@ const grant = async ({ id }, req) => {
   req.session = writeSession(req, session);
 };
 
-const getCurrentUser = async ({ req, getIdentity }) => {
+const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.session.id) {
     return await getIdentity(req.session.id);
   }
@@ -41,15 +41,15 @@ const attachSession = req => {
 const createContextFunc = async ({ req, context }) => {
   const { getIdentity } = context;
   attachSession(req);
-  const user = context.user || (await getCurrentUser({ req, getIdentity }));
+  const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
   const auth = {
-    isAuthenticated: !!user,
-    scope: user ? scopes[user.role] : null
+    isAuthenticated: !!identity,
+    scope: identity && identity.role ? scopes[identity.role] : null
   };
 
   return {
     User,
-    user,
+    identity,
     auth
   };
 };

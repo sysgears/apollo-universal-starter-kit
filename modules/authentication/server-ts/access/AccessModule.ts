@@ -1,9 +1,9 @@
 import { merge } from 'lodash';
 import ServerModule, { ServerModuleShape } from '@module/module-server-ts';
 
-// TODO: Change type of user variable from any to User type, after converting the User DAO into Typescript
+// TODO: Change type of identity variable from any to User type, after converting the User DAO into Typescript
 interface AccessModuleShape extends ServerModuleShape {
-  grant: Array<(user: any, req: Request) => { [key: string]: any } | void>;
+  grant: Array<(identity: any, req: Request) => { [key: string]: any } | void>;
 }
 
 interface AccessModule extends AccessModuleShape {}

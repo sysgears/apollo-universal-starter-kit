@@ -17,19 +17,21 @@ const grant = async identity => {
   };
 };
 
-const getCurrentUser = async ({ req }) => {
+const getCurrentIdentity = async ({ req }) => {
   const authorization = req && req.headers['authorization'];
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.auth.secret);
-    return user;
+    const { identity } = jwt.verify(token, settings.auth.secret);
+    return identity;
   }
 };
 
 const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
   try {
-    context.user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
+    const identity = context.identity || (await getCurrentIdentity({ req, connectionParams, webSocket }));
+
+    return { identity };
   } catch (e) {
     throw new AuthenticationError(e);
   }

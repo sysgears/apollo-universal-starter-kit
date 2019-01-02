@@ -1,13 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import path from 'path';
-import { DocumentPicker, MediaLibrary, Constants, FileSystem, Permissions } from 'expo';
+import { DocumentPicker, MediaLibrary, ImagePicker, Constants, FileSystem, Permissions } from 'expo';
+import { compose } from 'react-apollo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
+import { ActionSheetProvider, connectActionSheet } from '@expo/react-native-action-sheet';
 import url from 'url';
 
 import uploadConfig from '../../../../config/upload';
 import UploadView from '../components/UploadView';
+import chatConfig from '../../../../config/chat';
 
 const {
   manifest: { bundleUrl }
@@ -17,7 +20,18 @@ const serverUrl = `${protocol}//${
   hostname === 'localhost' ? url.parse(bundleUrl).hostname + (port ? ':' + port : '') : host
 }`;
 
-export default class FileOperations extends React.Component {
+const withActionSheetProvider = Component => {
+  const ActionSheet = props => {
+    return (
+      <ActionSheetProvider>
+        <Component {...props} />
+      </ActionSheetProvider>
+    );
+  };
+  return ActionSheet;
+};
+
+class FileOperations extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     t: PropTypes.func.isRequired
@@ -36,9 +50,30 @@ export default class FileOperations extends React.Component {
   };
 
   handleUploadFile = async () => {
-    const { t, uploadFiles } = this.props;
-    const { uri, name, type: pickerType } = await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false });
+    const { showActionSheetWithOptions, t } = this.props;
+    const options = [t('upload.media'), t('upload.documents'), t('upload.cancel')];
 
+    showActionSheetWithOptions({ options, cancelButtonIndex: 2 }, async buttonIndex => {
+      switch (buttonIndex) {
+        case 0:
+          if (this.checkPermission(Permissions.CAMERA_ROLL)) {
+            const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
+            if (!cancelled) {
+              const name = uri.match(/[^\\/]*\.\w+$/)[0];
+              this.uploadFile({ uri, name });
+            }
+          }
+          break;
+
+        case 1:
+          this.uploadFile(await DocumentPicker.getDocumentAsync({ copyToCacheDirectory: false }));
+          break;
+      }
+    });
+  };
+
+  uploadFile = async ({ uri, name, type: pickerType }) => {
+    const { uploadFiles, t } = this.props;
     if (pickerType === 'cancel') {
       return;
     }
@@ -109,3 +144,8 @@ export default class FileOperations extends React.Component {
     );
   }
 }
+
+export default compose(
+  withActionSheetProvider,
+  connectActionSheet
+)(FileOperations);

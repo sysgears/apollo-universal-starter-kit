@@ -17,6 +17,9 @@
   },
   "upload": {
     "btn": "Upload",
-    "errorMsg": "This file type is not supported"
+    "errorMsg": "This file type is not supported",
+    "media": "Upload from media",
+    "documents": "Upload from documents",
+    "cancel": "Cancel"
   }
 }

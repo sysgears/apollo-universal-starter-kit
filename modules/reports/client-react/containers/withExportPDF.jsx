@@ -1,57 +1,58 @@
 import React, { Fragment, Component } from 'react';
 import ReactToPrint from 'react-to-print';
-import { Button } from '@module/look-client-react';
+
 import PropTypes from 'prop-types';
 
-// export default Component => {
-//   return class ExportPDF extends React.Component {
-//     render() {
-//       return (
-//         <Fragment>
-//           <Component {...this.props} ref={el => (this.componentRef = el)}>
-//             {' '}
-//           </Component>
-//           <ReactToPrint trigger={() => <Button>Print this out!</Button>} content={() => this.componentRef} />
-//         </Fragment>
-//       );
-//     }
-//   };
-// };
+const noVisibly = { position: 'fixed', right: -1000 };
 
-const block = { display: 'block' };
-const noVisibly = { position: 'absolute', transform: 'translateX(-100000px)' };
+const left = { display: 'flex', justifyContent: 'flex-start' };
+const center = { display: 'flex', justifyContent: 'center' };
+const right = { display: 'flex', justifyContent: 'flex-end' };
 
 class ExportPDF extends Component {
-  state = {
-    visibly: block
-  };
   static propTypes = {
-    children: PropTypes.node,
-    visibly: PropTypes.bool
+    children: PropTypes.node.isRequired,
+    button: PropTypes.element.isRequired,
+    visibly: PropTypes.bool,
+    positionButton: PropTypes.string
+  };
+
+  state = {
+    visibly: { display: 'block' },
+    positionButton: {}
   };
 
   componentDidMount() {
-    const { visibly = true } = this.props;
+    const { visibly = true, positionButton = 'left' } = this.props;
+
     if (!visibly) {
       this.setState({
         visibly: noVisibly
       });
     }
+
+    switch (positionButton) {
+      case 'left':
+        return this.setState({ positionButton: left });
+      case 'center':
+        return this.setState({ positionButton: center });
+      case 'right':
+        return this.setState({ positionButton: right });
+    }
   }
 
-  handlePDF = () => {
-    return this.componentRef;
-  };
-
   render() {
-    const { children } = this.props;
+    const { children, button } = this.props;
+    const { visibly, positionButton } = this.state;
 
     return (
       <Fragment>
-        <div ref={el => (this.componentRef = el)} style={this.state.visibly}>
-          {children}
+        <div style={visibly}>
+          <div ref={el => (this.ref = el)}>{children}</div>
         </div>
-        <ReactToPrint trigger={() => <Button>Print this out!</Button>} content={this.handlePDF} />
+        <div style={positionButton}>
+          <ReactToPrint trigger={() => button} content={() => this.ref} />
+        </div>
       </Fragment>
     );
   }

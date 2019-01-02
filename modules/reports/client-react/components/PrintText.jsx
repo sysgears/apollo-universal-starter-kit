@@ -1,13 +1,14 @@
 import React from 'react';
-// import PropTypes from 'prop-types';
+import { Button } from '@module/look-client-react';
+
 import ExportPDF from '../containers/withExportPDF';
 
-class PrintText extends React.PureComponent {
-  // static propTypes = {};
+const button = <Button>Print this out!</Button>;
 
+class PrintText extends React.PureComponent {
   render() {
     return (
-      <ExportPDF visibly={false}>
+      <ExportPDF button={button} visibly={false} positionButton="center">
         <div>Make</div>
         <div>Report</div>
         <p>

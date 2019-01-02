@@ -7,7 +7,7 @@ class PrintText extends React.PureComponent {
 
   render() {
     return (
-      <ExportPDF>
+      <ExportPDF visibly={false}>
         <div>Make</div>
         <div>Report</div>
         <p>

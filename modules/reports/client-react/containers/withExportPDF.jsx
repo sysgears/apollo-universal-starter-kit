@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, Component } from 'react';
 import ReactToPrint from 'react-to-print';
 import { Button } from '@module/look-client-react';
 import PropTypes from 'prop-types';
@@ -18,9 +18,12 @@ import PropTypes from 'prop-types';
 //   };
 // };
 
-class ExportPDF extends React.Component {
+const block = { display: 'block' };
+const noVisibly = { position: 'absolute', transform: 'translateX(-100000px)' };
+
+class ExportPDF extends Component {
   state = {
-    visibly: 'block'
+    visibly: block
   };
   static propTypes = {
     children: PropTypes.node,
@@ -31,7 +34,7 @@ class ExportPDF extends React.Component {
     const { visibly = true } = this.props;
     if (!visibly) {
       this.setState({
-        visibly: 'none'
+        visibly: noVisibly
       });
     }
   }
@@ -45,7 +48,7 @@ class ExportPDF extends React.Component {
 
     return (
       <Fragment>
-        <div ref={el => (this.componentRef = el)} style={{ display: this.state.visibly }}>
+        <div ref={el => (this.componentRef = el)} style={this.state.visibly}>
           {children}
         </div>
         <ReactToPrint trigger={() => <Button>Print this out!</Button>} content={this.handlePDF} />

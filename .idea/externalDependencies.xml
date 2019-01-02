@@ -3,5 +3,6 @@
   <component name="ExternalDependencies">
     <plugin id="com.dubreuia" />
     <plugin id="org.intellij.scala" />
+    <plugin id="org.scalafmt.ScalaFmt" />
   </component>
 </project>

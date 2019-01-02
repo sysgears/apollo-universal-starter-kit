@@ -12,7 +12,7 @@ const createTokens = async (identity, secret, refreshSecret) => {
   }
 
   const tokenIdentity = pick(identity, ['id', 'username', 'role']);
-  const createToken = jwt.sign({ id: tokenIdentity }, secret, { expiresIn: tokenExpiresIn });
+  const createToken = jwt.sign({ identity: tokenIdentity }, secret, { expiresIn: tokenExpiresIn });
   const createRefreshToken = jwt.sign({ id: identity.id }, refreshSecret, { expiresIn: refreshTokenExpiresIn });
 
   return Promise.all([createToken, createRefreshToken]);

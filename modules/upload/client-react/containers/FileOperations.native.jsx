@@ -31,8 +31,8 @@ export default class FileOperations extends React.Component {
 
   handleRemoveFile = async id => {
     const { removeFile } = this.props;
-    const { error } = await removeFile(id);
-    this.setState({ notify: error || null });
+    const result = await removeFile(id);
+    this.setState({ notify: result && result.error ? result.error : null });
   };
 
   handleUploadFile = async () => {
@@ -46,8 +46,8 @@ export default class FileOperations extends React.Component {
     const type = mime.contentType(path.extname(name));
     if (type) {
       const imageData = new ReactNativeFile({ uri, name, type });
-      const { error } = await uploadFiles([imageData]);
-      this.setState({ notify: error || null });
+      const result = await uploadFiles([imageData]);
+      this.setState({ notify: result && result.error ? result.error : null });
     } else {
       this.setState({ notify: t('upload.errorMsg') });
     }

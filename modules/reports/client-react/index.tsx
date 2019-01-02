@@ -1,15 +1,15 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { translate } from '@module/i18n-client-react';
+import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { MenuItem } from '@module/look-client-react';
 import ClientModule from '@module/module-client-react';
 
 import Reports from './containers/Reports';
 import resources from './locales';
 
-const NavLinkWithI18n = translate()(({ t }) => (
+const NavLinkWithI18n = translate('reports')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/reports" className="nav-link" activeClassName="active">
-    {t('reports:navLink')}
+    {t('navLink')}
   </NavLink>
 ));
 

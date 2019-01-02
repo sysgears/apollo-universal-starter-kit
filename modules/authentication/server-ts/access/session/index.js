@@ -18,24 +18,30 @@ const getCurrentUser = async ({ req, getIdentity }) => {
   }
 };
 
-const checkCSRFToken = req => {
-  if (isApiExternal && req.path !== __API_URL__) {
-    return false;
-  }
-
-  if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
-    req.session = createSession(req);
-    throw new Error('CSRF token validation failed');
-  }
-};
+// const checkCSRFToken = req => {
+//   if (isApiExternal && req.path !== __API_URL__) {
+//     return false;
+//   }
+// if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
+//   req.session = createSession(req);
+//   throw new Error('CSRF token validation failed');
+// }
+// };
 
 const attachSession = req => {
-  if (!req) {
-    return false;
+  if (req) {
+    req.session = readSession(req);
+    if (!req.session) {
+      req.session = createSession(req);
+    } else {
+      if (!isApiExternal && req.path === __API_URL__) {
+        if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
+          req.session = createSession(req);
+          throw new Error('CSRF token validation failed');
+        }
+      }
+    }
   }
-
-  req.session = readSession(req);
-  return req.session ? checkCSRFToken(req) : (req.session = createSession(req));
 };
 
 const createContextFunc = async ({ req, context }) => {

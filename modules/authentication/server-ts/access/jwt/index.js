@@ -22,8 +22,8 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.auth.secret);
-    return user;
+    const { identity } = jwt.verify(token, settings.auth.secret);
+    return identity;
   }
 };
 

@@ -27,3 +27,8 @@ declare module '@module/user-server-ts' {
   const User: any;
   export = { scopes, User };
 }
+
+declare module '@module/authentication-client-react' {
+  const AccessModule: any;
+  export = AccessModule;
+}

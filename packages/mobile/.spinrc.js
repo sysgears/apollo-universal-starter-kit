@@ -10,7 +10,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: false
+      enabled: true
     },
     ios: {
       entry: './src/index.ts',
@@ -40,7 +40,9 @@ const config = {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',
       __WEBSITE_URL__: '"http://localhost:8080"',
-      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY
+        ? `"${process.env.STRIPE_PUBLIC_KEY}"`
+        : undefined
     }
   }
 };

@@ -8,7 +8,7 @@ import { setItem } from '@module/core-common/clientStorage';
 
 import LoginForm from './LoginForm';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
+// import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
@@ -16,9 +16,9 @@ class LoginView extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    console.log('--------------------');
-    console.log('LoginView --->', "Linking.removeListener('url')");
-    console.log('--------------------');
+    // console.log('--------------------');
+    // console.log('LoginView --->', "Linking.removeListener('url')");
+    // console.log('--------------------');
 
     Linking.removeListener('url');
   }
@@ -27,7 +27,7 @@ class LoginView extends React.PureComponent {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-    const { client } = this.props;
+    // const { client } = this.props;
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
@@ -36,7 +36,8 @@ class LoginView extends React.PureComponent {
     console.log(' LoginView handleOpenURL --->', 'handleOpenURL');
     console.log('--------------------');
 
-    await client.query({ query: CURRENT_USER_QUERY });
+    // await client.query({ query: CURRENT_USER_QUERY })
+    // setTimeout(async() => await client.query({ query: CURRENT_USER_QUERY }), 1000)
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
@@ -66,9 +67,9 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
-    console.log('--------------------');
-    console.log('LoginView RENDER--->', 'LoginView');
-    console.log('--------------------');
+    // console.log('--------------------');
+    // console.log('LoginView RENDER--->', 'LoginView');
+    // console.log('--------------------');
 
     const { login, navigation } = this.props;
     return (

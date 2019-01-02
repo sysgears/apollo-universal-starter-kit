@@ -17,7 +17,6 @@ const registerFormSchema = {
 };
 
 const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {
-  // console.log(errors);
   return (
     <Form name="register" onSubmit={handleSubmit}>
       <Field

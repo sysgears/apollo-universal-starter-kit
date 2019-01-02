@@ -7,3 +7,4 @@ lazy val modules = List(
 )
 
 parallelExecution in test := false
+scalafmtOnCompile := true

@@ -10,3 +10,4 @@ ensimeIgnoreMissingDirectories := true
 ensimeScalaVersion in ThisBuild := scalaVersion.value
 
 parallelExecution in test := false
+scalafmtOnCompile := true

@@ -1,3 +1,5 @@
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
+
 name := "global"
 
 version := "0.1"
@@ -28,3 +30,5 @@ defaultLinuxInstallLocation in Docker := "/usr/local"
 dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 
 mainClass in Compile := Some("Main")
+
+scalafmtOnCompile := true

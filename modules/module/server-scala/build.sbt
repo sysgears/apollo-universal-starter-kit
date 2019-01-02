@@ -55,3 +55,4 @@ libraryDependencies ++= Seq(
   "com.typesafe" % "config" % "1.3.2"
 )
 parallelExecution in test := false
+scalafmtOnCompile := true

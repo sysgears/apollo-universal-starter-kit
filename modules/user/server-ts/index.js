@@ -10,7 +10,7 @@ import resources from './locales';
 import social from './social';
 
 const getIdentity = async id => await User.getUser(id);
-const getHash = async id => (await User.getUserWithPassword(id)) || '';
+const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
 const createContextFunc = async () => ({
   getIdentity,

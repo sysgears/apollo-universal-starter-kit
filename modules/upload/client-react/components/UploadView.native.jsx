@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, ActivityIndicator } from 'react-native';
 import { Loading, Modal } from '@module/look-client-react-native';
+import filesize from 'filesize';
 
 export default class UploadView extends React.Component {
   static propTypes = {
@@ -17,21 +18,28 @@ export default class UploadView extends React.Component {
     onBackgroundPress: PropTypes.func.isRequired
   };
 
-  renderFileInfo = ({ item: { id, name, path } }) => {
+  renderFileInfo = ({ item: { id, name, path, size } }) => {
     const { handleRemoveFile, handleDownloadFile, downloadingFiles } = this.props;
-    const icon = downloadingFiles.some(fileId => +fileId == +id) ? (
-      <ActivityIndicator style={styles.iconWrapper} size="small" color="#3B5998" />
+    const icon = downloadingFiles.some(fileId => fileId === id) ? (
+      <ActivityIndicator style={styles.icon} size="small" color="#3B5998" />
     ) : (
-      <TouchableOpacity style={styles.iconWrapper} onPress={() => handleRemoveFile(id)}>
-        <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+      <TouchableOpacity style={styles.icon} onPress={() => handleDownloadFile(path, name, id)}>
+        <FontAwesome name="download" size={20} style={{ color: '#3B5998' }} />
       </TouchableOpacity>
     );
 
     return (
-      <TouchableOpacity style={styles.fileWrapper} onPress={() => handleDownloadFile(path, name, id)}>
-        <Text style={styles.text}>{name}</Text>
-        {icon}
-      </TouchableOpacity>
+      <View style={styles.fileWrapper}>
+        <Text style={styles.text}>
+          {name} ({filesize(size)})
+        </Text>
+        <View style={{ ...styles.iconWrapper }}>
+          {icon}
+          <TouchableOpacity style={styles.icon} onPress={() => handleRemoveFile(id)}>
+            <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   };
 
@@ -102,16 +110,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold'
   },
   text: {
-    width: '90%',
+    flex: 1,
     fontSize: 18
   },
   iconWrapper: {
-    backgroundColor: 'transparent',
-    width: 50,
-    height: 50,
+    flex: 0,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row'
+  },
+  icon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    width: 50,
+    height: 50
   },
   fileWrapper: {
     flex: 1,
@@ -122,7 +135,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomWidth: 0.8,
     height: 50,
-    paddingLeft: 7
+    paddingLeft: 7,
+    paddingRight: 7
   },
   list: {
     marginTop: 5,

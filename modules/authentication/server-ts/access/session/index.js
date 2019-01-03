@@ -5,7 +5,7 @@ import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
-import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
+import { MESSAGE_APPEND_CONTEXT, MESSAGE_INVALID_CSRF } from '../errorMessages';
 
 const grant = async ({ id }, req) => {
   const session = { ...req.session, id };
@@ -18,16 +18,6 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-// const checkCSRFToken = req => {
-//   if (isApiExternal && req.path !== __API_URL__) {
-//     return false;
-//   }
-// if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
-//   req.session = createSession(req);
-//   throw new Error('CSRF token validation failed');
-// }
-// };
-
 const attachSession = req => {
   if (req) {
     req.session = readSession(req);
@@ -37,7 +27,7 @@ const attachSession = req => {
       if (!isApiExternal && req.path === __API_URL__) {
         if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
           req.session = createSession(req);
-          throw new Error('CSRF token validation failed');
+          throw new Error(MESSAGE_INVALID_CSRF);
         }
       }
     }

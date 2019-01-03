@@ -29,25 +29,62 @@ class WebSocketSpec extends PostHelper {
           wsClient.sendMessage(start(Some(GraphQLMessage("subscription onPostUpdated {postUpdated(id: 1) {mutation, node {id title}}}").toJson)))
           wsClient.expectNoMessage()
 
-          val editPostMutation1 = GraphQLMessage("mutation { editPost(input: {id: 1 title: \"New title\", content: \"Content post\" }) {id title }}").toJson
-          val editPostMutationEntity1 = HttpEntity(`application/json`, editPostMutation1.compactPrint)
+          val editPostMutationFirst = GraphQLMessage("mutation { editPost(input: {id: 1 title: \"New title\", content: \"Content post\" }) {id title }}").toJson
+          val editPostMutationEntityFirst = HttpEntity(`application/json`, editPostMutationFirst.compactPrint)
 
-          Post(endpoint, editPostMutationEntity1) ~> routes ~> check {
+          Post(endpoint, editPostMutationEntityFirst) ~> routes ~> check {
             status shouldBe OK
             val result = responseAs[String]
             result shouldEqual "{\"data\":{\"editPost\":{\"id\":1,\"title\":\"New title\"}}}"
 
             wsClient.expectMessage(data(Some(GraphQLResponse("{\"postUpdated\":{\"mutation\":\"editPost\",\"node\":{\"id\":1,\"title\":\"New title\"}}}".parseJson).toJson)))          }
 
-          val editPostMutation2 = GraphQLMessage("mutation { editPost(input: {id: 1 title: \"Old title\", content: \"Content post\" }) {id title }}").toJson
-          val editPostMutationEntity2 = HttpEntity(`application/json`, editPostMutation2.compactPrint)
+          val editPostMutationSecond = GraphQLMessage("mutation { editPost(input: {id: 1 title: \"Old title\", content: \"Content post\" }) {id title }}").toJson
+          val editPostMutationEntitySecond = HttpEntity(`application/json`, editPostMutationSecond.compactPrint)
 
-          Post(endpoint, editPostMutationEntity2) ~> routes ~> check {
+          Post(endpoint, editPostMutationEntitySecond) ~> routes ~> check {
             status shouldBe OK
             val result = responseAs[String]
             result shouldEqual "{\"data\":{\"editPost\":{\"id\":1,\"title\":\"Old title\"}}}"
 
             wsClient.expectMessage(data(Some(GraphQLResponse("{\"postUpdated\":{\"mutation\":\"editPost\",\"node\":{\"id\":1,\"title\":\"Old title\"}}}".parseJson).toJson)))
+          }
+
+          wsClient.sendCompletion()
+          wsClient.expectCompletion()
+        }
+    }
+    "subscribe to comment updated events and receive several event" in {
+      val wsClient = WSProbe()
+      WS(endpoint, wsClient.flow, websocketProtocol) ~> routes ~>
+        check {
+          isWebSocketUpgrade shouldEqual true
+
+          wsClient.sendMessage(init)
+          wsClient.expectMessage(ack)
+
+          wsClient.sendMessage(start(Some(GraphQLMessage("subscription onCommentUpdated {commentUpdated(postId: 1) {mutation, postId, node {id content}}}").toJson)))
+          wsClient.expectNoMessage()
+
+          val editCommentMutationFirst = GraphQLMessage("mutation { editComment(input: {id: 1, content: \"New comment\", postId: 1}) {id content }}").toJson
+          val editCommentMutationEntityFirst = HttpEntity(`application/json`, editCommentMutationFirst.compactPrint)
+
+          Post(endpoint, editCommentMutationEntityFirst) ~> routes ~> check {
+            status shouldBe OK
+            val result = responseAs[String]
+            result shouldEqual "{\"data\":{\"editComment\":{\"id\":1,\"content\":\"New comment\"}}}"
+
+            wsClient.expectMessage(data(Some(GraphQLResponse("{\"commentUpdated\":{\"mutation\":\"editComment\",\"postId\":1,\"node\":{\"id\":1,\"content\":\"New comment\"}}}".parseJson).toJson)))          }
+
+          val editCommentMutationSecond = GraphQLMessage("mutation { editComment(input: {id: 1, content: \"Old comment\", postId: 1}) {id content }}").toJson
+          val editCommentMutationEntitySecond = HttpEntity(`application/json`, editCommentMutationSecond.compactPrint)
+
+          Post(endpoint, editCommentMutationEntitySecond) ~> routes ~> check {
+            status shouldBe OK
+            val result = responseAs[String]
+            result shouldEqual "{\"data\":{\"editComment\":{\"id\":1,\"content\":\"Old comment\"}}}"
+
+            wsClient.expectMessage(data(Some(GraphQLResponse("{\"commentUpdated\":{\"mutation\":\"editComment\",\"postId\":1,\"node\":{\"id\":1,\"content\":\"Old comment\"}}}".parseJson).toJson)))
           }
 
           wsClient.sendCompletion()

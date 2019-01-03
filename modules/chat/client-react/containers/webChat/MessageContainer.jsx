@@ -79,7 +79,7 @@ export default class MessageContainer extends React.PureComponent {
     const messages = this.props.messages.map((message, i) => this.renderRow(message, i));
     return (
       <div style={styles.contentContainerStyle}>
-        <div style={styles.listStyle}>{messages}</div>
+        <div style={styles.listStyle}>{this.props.inverted ? messages.reverse() : messages}</div>
       </div>
     );
   }

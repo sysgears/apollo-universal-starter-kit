@@ -8,8 +8,8 @@ import { TIME_FORMAT } from './Constant';
 
 export default function Time({ position, containerStyle, currentMessage, timeFormat, textStyle }, context) {
   return (
-    <div style={[styles[position].container, containerStyle[position]]}>
-      <span style={[styles[position].text, textStyle[position]]}>
+    <div style={{ ...styles[position].container, ...containerStyle[position] }}>
+      <span style={{ ...styles[position].text, ...textStyle[position] }}>
         {moment(currentMessage.createdAt)
           .locale(context.getLocale())
           .format(timeFormat)}

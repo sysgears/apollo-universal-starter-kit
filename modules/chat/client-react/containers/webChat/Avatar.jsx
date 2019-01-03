@@ -65,7 +65,7 @@ export default class Avatar extends React.PureComponent {
       isSameDay(this.props.currentMessage, messageToCompare)
     ) {
       return (
-        <div style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
+        <div style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}>
           <GiftedAvatar
             avatarStyle={{ ...styles[this.props.position].image, ...this.props.imageStyle[this.props.position] }}
           />

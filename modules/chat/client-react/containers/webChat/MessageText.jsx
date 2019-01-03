@@ -61,10 +61,17 @@ export default class MessageText extends React.Component {
   // }
 
   render() {
-    // const linkStyle = StyleSheet.flatten([styles[this.props.position].link, this.props.linkStyle[this.props.position]]);
     return (
-      <div style={[styles[this.props.position].container, this.props.containerStyle[this.props.position]]}>
-        {this.props.currentMessage.text}
+      <div style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}>
+        <p
+          style={{
+            ...styles[this.props.position].text,
+            ...this.props.textStyle[this.props.position],
+            ...this.props.customTextStyle
+          }}
+        >
+          {this.props.currentMessage.text}
+        </p>
       </div>
     );
   }
@@ -72,7 +79,6 @@ export default class MessageText extends React.Component {
 
 const textStyle = {
   fontSize: 16,
-  lineHeight: 20,
   marginTop: 5,
   marginBottom: 5,
   marginLeft: 10,

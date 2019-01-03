@@ -92,6 +92,7 @@ export default class GiftedAvatar extends React.PureComponent {
 
 const styles = {
   avatarStyle: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     width: '40px',

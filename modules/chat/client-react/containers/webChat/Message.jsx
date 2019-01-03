@@ -93,9 +93,9 @@ export default class Message extends React.PureComponent {
             style={{
               width: '100%',
               ...styles[this.props.position].container,
-              ...{ marginBottom: sameUser ? 2 : 10 }
-              // !this.props.inverted && { marginBottom: 2 },
-              // ...this.props.containerStyle[this.props.position]
+              ...{ marginBottom: sameUser ? 2 : 10 },
+              ...(!this.props.inverted ? { marginBottom: 2 } : {}),
+              ...this.props.containerStyle[this.props.position]
             }}
           >
             {this.props.position === 'left' ? this.renderAvatar() : null}

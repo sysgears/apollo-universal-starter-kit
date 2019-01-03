@@ -3,6 +3,7 @@ import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import { access } from '@module/authentication-server-ts';
 import User from '../../sql';
+import getCurrentUser from '../../utils';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
@@ -81,6 +82,7 @@ if (settings.user.auth.google.enabled && !__TEST__) {
       const user = await User.getUser(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req);
+      const currentUser = await getCurrentUser(req, res);
 
       if (redirectUrl) {
         res.redirect(
@@ -88,7 +90,8 @@ if (settings.user.auth.google.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens
+                  tokens,
+                  user: currentUser.data
                 })
               : '')
         );

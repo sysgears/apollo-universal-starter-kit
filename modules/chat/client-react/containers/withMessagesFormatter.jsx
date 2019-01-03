@@ -1,5 +1,5 @@
 import React from 'react';
-//import * as uuidGenerator from 'uuid';
+import * as uuidGenerator from 'uuid';
 
 export default Component => {
   return props => {
@@ -11,8 +11,7 @@ export default Component => {
           ({
             node: { id, text, userId, username, createdAt, uuid, quotedId, image, path, filename, quotedMessage }
           }) => ({
-            // _id: id || uuidGenerator.v4(),
-            _id: id,
+            _id: id || uuidGenerator.v4(),
             text,
             createdAt: new Date(Date.parse(createdAt.replace(' ', 'T'))),
             user: { _id: userId || uuid, name: username || 'Anonymous' },

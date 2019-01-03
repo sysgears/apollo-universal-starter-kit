@@ -57,7 +57,6 @@ export default class extends React.Component {
     const { isEdit, messageInfo, message, currentMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
     const quotedId = currentMessage && currentMessage.hasOwnProperty('_id') ? currentMessage._id : null;
-    console.log('quotedId === ', quotedId);
     const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
     if (isEdit) {
@@ -80,7 +79,7 @@ export default class extends React.Component {
         username,
         userId: 1,
         id,
-        uuid: 1,
+        uuid,
         quotedId,
         quotedMessage: this.state.isQuoted ? defQuote : defQuote
       });

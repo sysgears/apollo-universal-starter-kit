@@ -1,6 +1,5 @@
-import 'dotenv/config';
 import { log } from '@module/core-common';
-export { createServer, serverPromise, onAppDispose } from './server';
+export { createServer, serverPromise } from './server';
 
 process.on('uncaughtException', ex => {
   log.error(ex);

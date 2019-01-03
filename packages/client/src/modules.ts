@@ -8,7 +8,7 @@ import validation from '@module/validation-common-react';
 import ClientModule from '@module/module-client-react';
 import defaultRouter from '@module/router-client-react';
 import payments from '@module/payments-client-react';
-import AccessModule from '@module/authentication-client-react';
+import access from '@module/authentication-client-react';
 import '@module/favicon-common';
 
 const post = require('@module/post-client-react').default;
@@ -32,7 +32,7 @@ const modules = new ClientModule(
   i18n,
   pageNotFound,
   core,
-  AccessModule
+  access
 );
 
 export default modules;

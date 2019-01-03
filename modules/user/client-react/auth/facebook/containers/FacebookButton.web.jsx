@@ -3,7 +3,7 @@ import { withApollo } from 'react-apollo';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@module/look-client-react';
-import AccessModule from '@module/authentication-client-react';
+import access from '@module/authentication-client-react';
 
 import './FacebookButton.css';
 
@@ -13,12 +13,7 @@ const facebookLogin = () => {
 
 const FacebookButton = withApollo(({ client, text }) => {
   return (
-    <Button
-      type="button"
-      size="lg"
-      onClick={() => AccessModule.doLogin(client).then(facebookLogin)}
-      className="facebookBtn"
-    >
+    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(facebookLogin)} className="facebookBtn">
       <div className="iconContainer">
         <FontAwesomeIcon icon={faFacebookSquare} className="facebookIcon" />
         <div className="separator" />
@@ -32,7 +27,7 @@ const FacebookButton = withApollo(({ client, text }) => {
 
 const FacebookLink = withApollo(({ client, text }) => {
   return (
-    <Button color="link" onClick={() => AccessModule.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => access.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
@@ -43,7 +38,7 @@ const FacebookIcon = withApollo(({ client }) => {
     <FontAwesomeIcon
       icon={faFacebookSquare}
       style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
-      onClick={() => AccessModule.doLogin(client).then(facebookLogin)}
+      onClick={() => access.doLogin(client).then(facebookLogin)}
     />
   );
 });

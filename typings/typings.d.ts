@@ -29,6 +29,6 @@ declare module '@module/user-server-ts' {
 }
 
 declare module '@module/authentication-client-react' {
-  const AccessModule: any;
-  export = AccessModule;
+  const access: any;
+  export = access;
 }

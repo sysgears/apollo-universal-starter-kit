@@ -1,3 +1,3 @@
-import AccessModule from './access';
+import access from './access';
 
-export default AccessModule;
+export default access;

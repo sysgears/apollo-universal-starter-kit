@@ -14,7 +14,7 @@ import {
   btnTextContainer,
   btnText
 } from '@module/look-client-react-native/styles';
-import AccessModule from '@module/authentication-client-react';
+import access from '@module/authentication-client-react';
 
 import buildRedirectUrlForMobile from '../../../helpers';
 
@@ -29,7 +29,7 @@ const googleLogin = () => {
 
 const GoogleButton = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => AccessModule.doLogin(client).then(googleLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(googleLogin)}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="google-plus-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -43,7 +43,7 @@ const GoogleButton = withApollo(({ client, text }) => {
 
 const GoogleLink = withApollo(({ client, text }) => {
   return (
-    <TouchableOpacity onPress={() => AccessModule.doLogin(client).then(googleLogin)} style={styles.link}>
+    <TouchableOpacity onPress={() => access.doLogin(client).then(googleLogin)} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
@@ -54,7 +54,7 @@ const GoogleIcon = withApollo(({ client }) => {
     <View style={styles.iconWrapper}>
       <FontAwesome
         style={{ color: '#c43832' }}
-        onPress={() => AccessModule.doLogin(client).then(googleLogin)}
+        onPress={() => access.doLogin(client).then(googleLogin)}
         name="google-plus-square"
         size={45}
       />

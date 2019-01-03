@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { compose } from 'react-apollo';
 import { DrawerComponent } from '@module/look-client-react-native';
-// import { getItem } from '@module/core-common/clientStorage';
 
 import { withUser } from './Auth';
 
@@ -15,6 +14,10 @@ class UserScreenNavigator extends React.Component {
     currentUserLoading: PropTypes.bool.isRequired,
     routeConfigs: PropTypes.object
   };
+
+  componentDidMount() {
+    console.log('MOUNT UserScreenNavigator --->', 'MOUNT UserScreenNavigator');
+  }
 
   shouldComponentUpdate(nextProps) {
     const { currentUserLoading, currentUser } = this.props;
@@ -33,6 +36,10 @@ class UserScreenNavigator extends React.Component {
     );
   }
 
+  componentWillUnmount() {
+    console.log('UNMOUNT UserScreenNavigator --->', 'UNMOUNT UserScreenNavigator');
+  }
+
   navItemsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 
@@ -49,23 +56,8 @@ class UserScreenNavigator extends React.Component {
 
   getInitialRoute = () => {
     const { currentUser } = this.props;
-
-    // console.log('--------------------');
-    // console.log('UserScreenNavigator currentUser --->', currentUser);
-    // console.log('--------------------');
-    // this._showToken()
     return currentUser ? 'Profile' : 'Counter';
   };
-
-  // _showToken = async () => {
-  //   console.log('--------------------');
-  //   console.log('getItem --->', await getItem('accessToken'));
-  //   console.log('--------------------');
-  // }
-
-  componentDidMount() {
-    console.log('MOUNT UserScreenNavigator --->', 'MOUNT UserScreenNavigator');
-  }
 
   render() {
     const MainScreenNavigatorComponent = createDrawerNavigator(

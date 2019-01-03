@@ -3,6 +3,7 @@ import passport from 'passport';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 import { access } from '@module/authentication-server-ts';
 import User from '../../sql';
+import getCurrentUser from '../../utils';
 
 import resolvers from './resolvers';
 import AuthModule from '../AuthModule';
@@ -71,23 +72,19 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
       async function(req, res) {
         const user = await User.getUser(req.user.id);
         const redirectUrl = req.query.state;
-
-        // console.log('user --->', user);
-
         const tokens = await access.grantAccess(user, req);
-        // const currentUser = await getCurrentUser(req, res);
+        const currentUser = await getCurrentUser(req, res);
 
-        // console.log('redirectUrl --->', redirectUrl);
+        // console.log('currentUser --->', currentUser);
 
         if (redirectUrl) {
-          console.log('tokens --->', tokens);
-
           res.redirect(
             redirectUrl +
               (tokens
                 ? '?data=' +
                   JSON.stringify({
-                    tokens
+                    tokens,
+                    user: currentUser.data
                   })
                 : '')
           );

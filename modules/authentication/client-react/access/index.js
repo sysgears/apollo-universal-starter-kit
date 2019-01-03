@@ -10,7 +10,7 @@ const ref = React.createRef();
 
 const clearApolloStoreAndReloadComponent = async client => {
   await client.clearStore();
-  ref.current.reloadPage();
+  // ref.current.reloadPage();
 };
 
 const login = async client => {

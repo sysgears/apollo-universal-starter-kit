@@ -8,36 +8,40 @@ import { setItem } from '@module/core-common/clientStorage';
 
 import LoginForm from './LoginForm';
 
-// import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
+import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
+    console.log('LoginView componentDidMount --->', 'componentDidMount');
     Linking.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
-    // console.log('--------------------');
-    // console.log('LoginView --->', "Linking.removeListener('url')");
-    // console.log('--------------------');
-
-    Linking.removeListener('url');
+    console.log('LoginView componentWillUnmount --->', 'componentWillUnmount');
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
   handleOpenURL = async ({ url }) => {
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
-    // const { client } = this.props;
+    const { client } = this.props;
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
+
+      console.log('tokens writen --->', 'tokens writen');
     }
-    console.log('--------------------');
-    console.log(' LoginView handleOpenURL --->', 'handleOpenURL');
-    console.log('--------------------');
+
+    if (decodedData.user) {
+      await client.writeQuery({
+        query: CURRENT_USER_QUERY,
+        data: decodedData.user
+      });
+    }
+    this.props.navigation.navigate('Profile');
 
     // await client.query({ query: CURRENT_USER_QUERY })
-    // setTimeout(async() => await client.query({ query: CURRENT_USER_QUERY }), 1000)
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
@@ -67,10 +71,6 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
-    // console.log('--------------------');
-    // console.log('LoginView RENDER--->', 'LoginView');
-    // console.log('--------------------');
-
     const { login, navigation } = this.props;
     return (
       <View style={styles.container}>

@@ -5,6 +5,7 @@ import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
+import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
 const grant = async ({ id }, req) => {
   const session = { ...req.session, id };
@@ -45,6 +46,11 @@ const attachSession = req => {
 
 const createContextFunc = async ({ req, context }) => {
   const { getIdentity, appendContext } = context;
+
+  if (!appendContext) {
+    throw new Error(MESSAGE_APPEND_CONTEXT);
+  }
+
   attachSession(req);
   const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
 

@@ -6,6 +6,7 @@ import resolvers from './resolvers';
 import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
+import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
 const grant = async identity => {
   const refreshSecret = settings.auth.secret + identity.passwordHash;
@@ -27,10 +28,15 @@ const getCurrentIdentity = async ({ req }) => {
   }
 };
 
-const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
+const createContextFunc = async ({ req, context }) => {
   try {
     const { appendContext } = context;
-    const identity = context.identity || (await getCurrentIdentity({ req, connectionParams, webSocket }));
+
+    if (!appendContext) {
+      throw new Error(MESSAGE_APPEND_CONTEXT);
+    }
+
+    const identity = context.identity || (await getCurrentIdentity({ req }));
 
     return {
       identity,

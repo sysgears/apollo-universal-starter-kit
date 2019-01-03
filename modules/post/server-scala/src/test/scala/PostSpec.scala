@@ -1,23 +1,16 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.StatusCodes.OK
-import akka.http.scaladsl.model.StatusCodes.NotFound
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import common.implicits.RichDBIO._
 import common.routes.graphql.jsonProtocols.GraphQLMessage
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import repositories.{CommentRepository, PostRepository}
 import spray.json._
-
 
 import scala.concurrent.duration._
 
 class PostSpec extends PostHelper {
-
-  lazy val postRepo: PostRepository = inject[PostRepository]
-  lazy val commentRepo: CommentRepository = inject[CommentRepository]
 
   def graphQLMessage(query: String) = ByteString(GraphQLMessage(query).toJson.compactPrint)
 
@@ -212,35 +205,5 @@ class PostSpec extends PostHelper {
           "\"path\":[\"deleteComment\"],\"locations\":[{\"line\":1,\"column\":12}]}]}"
       }
     }
-  }
-
-  def seedPostDatabase = {
-    val posts = List.range(1, 6).map(num =>
-      model.Post(id = Some(num),
-        title = s"Post title #[$num]",
-        content = s"Test post content. $num")
-    )
-    posts.map(post => await(postRepo.save(post).run))
-  }
-
-  def seedCommentDatabase = {
-    val comments = List.range(1, 11).map(num =>
-      model.Comment(id = Some(num),
-        content = s"Test comment. $num",
-        postId = 1))
-    comments.map(comment => await(commentRepo.save(comment).run))
-  }
-
-  override def beforeEach() {
-    clean()
-    dropDb()
-    initDb()
-    seedPostDatabase
-    seedCommentDatabase
-  }
-
-  override protected def afterEach() {
-    dropDb()
-    initDb()
   }
 }

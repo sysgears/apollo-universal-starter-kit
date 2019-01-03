@@ -1,4 +1,4 @@
-package common.shapes
+package shapes
 
 import akka.http.scaladsl.server.Route
 

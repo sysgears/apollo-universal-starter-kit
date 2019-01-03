@@ -5,6 +5,7 @@ import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
+import { MESSAGE_APPEND_CONTEXT, MESSAGE_INVALID_CSRF } from '../errorMessages';
 
 const grant = async ({ id }, req) => {
   const session = { ...req.session, id };
@@ -24,7 +25,7 @@ const checkCSRFToken = req => {
 
   if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
     req.session = createSession(req);
-    throw new Error('CSRF token validation failed');
+    throw new Error(MESSAGE_INVALID_CSRF);
   }
 };
 
@@ -39,6 +40,11 @@ const attachSession = req => {
 
 const createContextFunc = async ({ req, context }) => {
   const { getIdentity, appendContext } = context;
+
+  if (!appendContext) {
+    throw new Error(MESSAGE_APPEND_CONTEXT);
+  }
+
   attachSession(req);
   const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
 

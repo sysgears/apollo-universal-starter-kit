@@ -19,6 +19,9 @@ class UserRepository @Inject()(override val driver: JdbcProfile, db: Database)
   val tableQuery = TableQuery[UserTable]
   type TableType = UserTable
 
-  def findOne(usernameOrEmail: String): DBIO[Option[User]] =
+  def findByUsernameOrEmail(usernameOrEmail: String): DBIO[Option[User]] =
     tableQuery.filter(user => user.email === usernameOrEmail || user.username === usernameOrEmail).result.headOption
+
+  def findByEmail(email: String): DBIO[Option[User]] =
+    tableQuery.filter(user => user.email === email).result.headOption
 }

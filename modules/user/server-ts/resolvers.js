@@ -36,12 +36,8 @@ export default pubsub => ({
     }),
     currentUser(obj, args, { User, identity }) {
       if (identity) {
-        console.log('111111111111 --->', 111111111111);
-
         return User.getUser(identity.id);
       } else {
-        console.log('222222222222 --->', 222222222222);
-
         return null;
       }
     }

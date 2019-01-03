@@ -12,12 +12,10 @@ import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
-    console.log('LoginView componentDidMount --->', 'componentDidMount');
     Linking.addEventListener('url', this.handleOpenURL);
   }
 
   componentWillUnmount() {
-    console.log('LoginView componentWillUnmount --->', 'componentWillUnmount');
     Linking.removeEventListener('url', this.handleOpenURL);
   }
 
@@ -29,17 +27,15 @@ class LoginView extends React.PureComponent {
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
-
-      console.log('tokens writen --->', 'tokens writen');
     }
-
     if (decodedData.user) {
       await client.writeQuery({
         query: CURRENT_USER_QUERY,
         data: decodedData.user
       });
     }
-    this.props.navigation.navigate('Profile');
+
+    // this.props.navigation.navigate('Users');
 
     // await client.query({ query: CURRENT_USER_QUERY })
 

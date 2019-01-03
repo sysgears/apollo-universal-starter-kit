@@ -16,7 +16,7 @@ class UserScreenNavigator extends React.Component {
   };
 
   componentDidMount() {
-    console.log('MOUNT UserScreenNavigator --->', 'MOUNT UserScreenNavigator');
+    // console.log('MOUNT UserScreenNavigator --->', 'MOUNT UserScreenNavigator');
   }
 
   shouldComponentUpdate(nextProps) {
@@ -37,7 +37,7 @@ class UserScreenNavigator extends React.Component {
   }
 
   componentWillUnmount() {
-    console.log('UNMOUNT UserScreenNavigator --->', 'UNMOUNT UserScreenNavigator');
+    // console.log('UNMOUNT UserScreenNavigator --->', 'UNMOUNT UserScreenNavigator');
   }
 
   navItemsFilter = () => {

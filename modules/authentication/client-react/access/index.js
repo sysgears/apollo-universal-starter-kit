@@ -15,10 +15,12 @@ const clearApolloStoreAndReloadComponent = async client => {
 
 const login = async client => {
   clearApolloStoreAndReloadComponent(client);
+  // ref.current.reloadPage();
 };
 
 const logout = async client => {
   clearApolloStoreAndReloadComponent(client);
+  ref.current.reloadPage();
 };
 
 class PageReloader extends React.Component {

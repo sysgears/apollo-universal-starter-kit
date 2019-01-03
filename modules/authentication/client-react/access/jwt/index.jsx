@@ -14,10 +14,6 @@ import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
 
-  if (operation.operationName === 'currentUser') {
-    console.log('currentUser request--->', 'currentUser');
-  }
-
   const headers =
     ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
       ? { Authorization: `Bearer ${accessToken}` }

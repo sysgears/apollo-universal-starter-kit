@@ -1,10 +1,10 @@
-package graphql.schema.types
+package graphql.schema.marshalling
 
 import common.InputUnmarshallerGenerator
 import model._
 import sangria.marshalling.FromInput
 
-object unmarshallers extends InputUnmarshallerGenerator {
+object Unmarshallers extends InputUnmarshallerGenerator {
 
   implicit val addPostInputUnmarshaller: FromInput[EditPostInput] = inputUnmarshaller {
     input =>

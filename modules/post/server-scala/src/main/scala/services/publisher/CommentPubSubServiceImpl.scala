@@ -12,12 +12,12 @@ class CommentPubSubServiceImpl @Inject()(implicit scheduler: Scheduler) extends 
     triggerNames.contains(element.triggerName) && withParams(element, params)
   }
 
-  private def withParams(element: PublishElement[Comment] , params: Seq[Param]): Boolean = {
+  private def withParams(pe: PublishElement[Comment], params: Seq[Param]): Boolean = {
     if (params isEmpty) {
       true
     } else {
       params.exists {
-        case postId: PostId => element.element.postId == postId.id
+        case postId: PostId => pe.element.postId == postId.id
       }
     }
   }

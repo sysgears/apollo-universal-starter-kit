@@ -12,13 +12,13 @@ class PostPubSubServiceImpl @Inject()(implicit scheduler: Scheduler) extends Bas
     triggerNames.contains(element.triggerName) && withParams(element, params)
   }
 
-  private def withParams(element: PublishElement[Post], params: Seq[Param]): Boolean = {
+  private def withParams(pe: PublishElement[Post], params: Seq[Param]): Boolean = {
     if (params isEmpty) {
       true
     } else {
       params.exists {
-        case entityId: EntityId => element.element.id.get == entityId.id
-        case endCursor: EndCursor => endCursor.cursor <= element.element.id.get
+        case entityId: EntityId => pe.element.id.isDefined && pe.element.id.get == entityId.id
+        case endCursor: EndCursor => pe.element.id.isDefined && endCursor.cursor <= pe.element.id.get
       }
     }
   }

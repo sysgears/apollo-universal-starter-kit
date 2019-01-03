@@ -6,7 +6,6 @@ import services.publisher._
 import common.{InputUnmarshallerGenerator, Logger}
 import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.graphql.UserContext
-import common.publisher.PublishElement
 import graphql.resolvers
 import graphql.resolvers._
 import javax.inject.Inject
@@ -26,14 +25,12 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
                             executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {
 
-  import types.unmarshallers._
-
   object Types {
 
     implicit val comment: ObjectType[UserContext, Comment] = deriveObjectType(ObjectTypeName("Comment"), ExcludeFields("postId"))
     implicit val post: ObjectType[UserContext, Post] = deriveObjectType(ObjectTypeName("Post"), AddFields(
       Field(name = "comments",
-        fieldType = ListType(Types.comment),
+        fieldType = ListType(comment),
         resolve = { sc =>
           sc.value.id.map(id =>
             resolveWithDispatcher[Seq[Comment]](
@@ -60,10 +57,34 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
     implicit val updateCommentPayloadOutput: ObjectType[Unit, UpdateCommentPayload] = deriveObjectType(ObjectTypeName("UpdateCommentPayload"))
   }
 
+  object Names {
+
+    //Queries
+    final val POST = "post"
+    final val POSTS = "posts"
+
+    //Mutations
+    final val ADD_POST = "addPost"
+    final val DELETE_POST = "deletePost"
+    final val EDIT_POST = "editPost"
+    final val ADD_COMMENT = "addComment"
+    final val EDIT_COMMENT = "editComment"
+    final val DELETE_COMMENT = "deleteComment"
+
+    //Subscriptions
+    final val POST_UPDATED = "postUpdated"
+    final val POSTS_UPDATED = "postsUpdated"
+    final val COMMENT_UPDATED = "commentUpdated"
+  }
+
+  import marshalling.Unmarshallers._
+  import Names._
+  import Types._
+
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "post",
-      fieldType = OptionType(Types.post),
+      name = POST,
+      fieldType = OptionType(post),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
@@ -74,8 +95,8 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       }
     ),
     Field(
-      name = "posts",
-      fieldType = OptionType(Types.posts),
+      name = POSTS,
+      fieldType = OptionType(posts),
       arguments = Argument(name = "limit", argumentType = OptionInputType(IntType)) ::
                   Argument(name = "after", argumentType = OptionInputType(IntType)) :: Nil,
       resolve = { sc =>
@@ -92,87 +113,87 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "addPost",
-      fieldType = OptionType(Types.post),
+      name = ADD_POST,
+      fieldType = OptionType(post),
       arguments = Argument(name = "input", argumentType = Types.addPostInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
           input = MutationAddPost(sc.args.arg[AddPostInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).pub("addPost")
+        ).pub(ADD_POST)
       }
     ),
     Field(
-      name = "deletePost",
-      fieldType = OptionType(Types.post),
+      name = DELETE_POST,
+      fieldType = OptionType(post),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
           input = resolvers.MutationDeletePost(sc.args.arg("id")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).pub("deletePost")
+        ).pub(DELETE_POST)
       }
     ),
     Field(
-      name = "editPost",
-      fieldType = OptionType(Types.post),
+      name = EDIT_POST,
+      fieldType = OptionType(post),
       arguments = Argument(name = "input", argumentType = Types.editPostInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Post](
           input = resolvers.MutationEditPost(sc.args.arg[EditPostInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = PostResolver
-        ).pub("editPost")
+        ).pub(EDIT_POST)
       }
     ),
     Field(
-      name = "addComment",
-      fieldType = OptionType(Types.comment),
+      name = ADD_COMMENT,
+      fieldType = OptionType(comment),
       arguments = Argument(name = "input", argumentType = Types.addCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
           input = resolvers.MutationAddComment(sc.args.arg[AddCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).pub("addComment")
+        ).pub(ADD_COMMENT)
       }
     ),
     Field(
-      name = "editComment",
-      fieldType = OptionType(Types.comment),
+      name = EDIT_COMMENT,
+      fieldType = OptionType(comment),
       arguments = Argument(name = "input", argumentType = Types.editCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
           input = resolvers.MutationEditComment(sc.args.arg[EditCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).pub("editComment")
+        ).pub(EDIT_COMMENT)
       }
     ),
     Field(
-      name = "deleteComment",
-      fieldType = OptionType(Types.comment),
+      name = DELETE_COMMENT,
+      fieldType = OptionType(comment),
       arguments = Argument(name = "input", argumentType = Types.deleteCommentInput) :: Nil,
       resolve = { sc =>
         resolveWithDispatcher[Comment](
           input = resolvers.MutationDeleteComment(sc.args.arg[DeleteCommentInput]("input")),
           userContext = sc.ctx,
           namedResolverActor = CommentResolver
-        ).pub("deleteComment")
+        ).pub(DELETE_COMMENT)
       }
     )
   )
 
   def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
-      name = "postUpdated",
-      fieldType = OptionType(Types.updatePostPayloadOutput),
+      name = POST_UPDATED,
+      fieldType = OptionType(updatePostPayloadOutput),
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = sc => {
         val id = sc.args.arg[Int]("id")
-        postPubSubPostService.subscribe(Seq("editPost", "deletePost"), Seq(EntityId(id)))
+        postPubSubPostService.subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))
           .map(action => action.map(publishElement => {
             UpdatePostPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get.toString, node = publishElement.element)
           }
@@ -180,12 +201,12 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       }
     ),
     Field.subs(
-      name = "postsUpdated",
-      fieldType = OptionType(Types.updatePostPayloadOutput),
+      name = POSTS_UPDATED,
+      fieldType = OptionType(updatePostPayloadOutput),
       arguments = Argument(name = "endCursor", argumentType = IntType) :: Nil,
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
-        postPubSubPostService.subscribe(Seq("addPost", "editPost", "deletePost"), Seq(EndCursor(endCursor)))
+        postPubSubPostService.subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))
           .map(action => action.map(publishElement => {
             UpdatePostPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get.toString, node = publishElement.element)
           }
@@ -193,12 +214,12 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       }
     ),
     Field.subs(
-      name = "commentUpdated",
-      fieldType = OptionType(Types.updateCommentPayloadOutput),
+      name = COMMENT_UPDATED,
+      fieldType = OptionType(updateCommentPayloadOutput),
       arguments = Argument(name = "postId", argumentType = IntType) :: Nil,
       resolve = sc => {
         val postId = sc.args.arg[Int]("postId")
-        commentPubSubPostService.subscribe(Seq("editComment", "deleteComment"), Seq(PostId(id = postId)))
+        commentPubSubPostService.subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))
           .map(action => action.map(publishElement => {
             UpdateCommentPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get, postId = postId, node = publishElement.element)
           }

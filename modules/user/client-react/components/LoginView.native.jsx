@@ -20,6 +20,8 @@ class LoginView extends React.PureComponent {
   }
 
   handleOpenURL = async ({ url }) => {
+    if (!url.match(/data=([^#]+)/)) return;
+
     // Extract stringified user string out of the URL
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
@@ -34,10 +36,6 @@ class LoginView extends React.PureComponent {
         data: decodedData.user
       });
     }
-
-    // this.props.navigation.navigate('Users');
-
-    // await client.query({ query: CURRENT_USER_QUERY })
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();

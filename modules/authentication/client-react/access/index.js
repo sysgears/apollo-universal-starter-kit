@@ -9,13 +9,11 @@ import AccessModule from './AccessModule';
 const ref = React.createRef();
 
 const clearApolloStoreAndReloadComponent = async client => {
-  await client.clearStore();
-  // ref.current.reloadPage();
+  await client.cache.reset();
 };
 
 const login = async client => {
   clearApolloStoreAndReloadComponent(client);
-  // ref.current.reloadPage();
 };
 
 const logout = async client => {

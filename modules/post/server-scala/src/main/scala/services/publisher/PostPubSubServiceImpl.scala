@@ -5,6 +5,8 @@ import javax.inject.{Inject, Singleton}
 import model.Post
 import monix.execution.Scheduler
 
+import scala.language.postfixOps
+
 @Singleton
 class PostPubSubServiceImpl @Inject()(implicit scheduler: Scheduler) extends BasicPubSubService[PublishElement[Post]] {
 

@@ -97,14 +97,14 @@ function EditMessage(prev, node) {
   });
 }
 
-function receiveListPreviousMsgs(client) {
-  return client.readQuery({
+function getMsgsFromCache(cache) {
+  return cache.readQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 }
   });
 }
 
-function handleUpdateData(cache, messages) {
+function writeMsgsToCache(cache, messages) {
   cache.writeQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 },
@@ -218,13 +218,13 @@ export default compose(
               }
             },
             update: (prev, { data: { addMessage } }) => {
-              // Receive previous list of messages
-              const prevMessages = receiveListPreviousMsgs(client);
+              // Get previous messages
+              const prevMessages = getMsgsFromCache(client);
 
               const { messages } = AddMessage(prevMessages, addMessage);
 
-              // Update list of messages
-              handleUpdateData(client, messages);
+              // Write messages to cache
+              writeMsgsToCache(client, messages);
             }
           });
         } catch (e) {
@@ -247,13 +247,13 @@ export default compose(
               }
             },
             update: (prev, { data: { deleteMessage } }) => {
-              // Receive previous list of messages
-              const prevMessages = receiveListPreviousMsgs(client);
+              // Get previous messages
+              const prevMessages = getMsgsFromCache(client);
 
               const { messages } = DeleteMessage(prevMessages, deleteMessage);
 
-              // Update list of messages
-              handleUpdateData(client, messages);
+              // Write messages to cache
+              writeMsgsToCache(client, messages);
             }
           });
         } catch (e) {
@@ -288,13 +288,13 @@ export default compose(
               }
             },
             update: (prev, { data: { editMessage } }) => {
-              // Receive previous list of messages
-              const prevMessages = receiveListPreviousMsgs(client);
+              // Get previous messages
+              const prevMessages = getMsgsFromCache(client);
 
               const { messages } = EditMessage(prevMessages, editMessage);
 
-              // Update list of messages
-              handleUpdateData(client, messages);
+              // Write messages to cache
+              writeMsgsToCache(client, messages);
             }
           });
         } catch (e) {

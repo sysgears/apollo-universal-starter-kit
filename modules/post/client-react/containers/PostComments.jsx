@@ -46,8 +46,8 @@ function DeleteComment(prev, id) {
   });
 }
 
-function receivePreviousPost(client, postId) {
-  return client.readQuery({
+function getPostFromCache(cache, postId) {
+  return cache.readQuery({
     query: POST_QUERY,
     variables: {
       id: String(postId)
@@ -55,8 +55,8 @@ function receivePreviousPost(client, postId) {
   });
 }
 
-function handleUpdateData(client, post, postId) {
-  client.writeQuery({
+function writePostToCache(cache, post, postId) {
+  cache.writeQuery({
     query: POST_QUERY,
     variables: {
       id: String(postId)
@@ -164,14 +164,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           update: (prev, { data: { addComment } }) => {
-            // Receive prevoius post
-            const prevPost = receivePreviousPost(client, postId);
+            // Get prevoius post
+            const prevPost = getPostFromCache(client, postId);
 
             if (prevPost.post) {
               const { post } = AddComment(prevPost, addComment);
 
-              // Update list of comments
-              handleUpdateData(client, post, postId);
+              // Write post to cache
+              writePostToCache(client, post, postId);
             }
           }
         })
@@ -206,14 +206,14 @@ const PostCommentsWithApollo = compose(
             }
           },
           update: (prev, { data: { deleteComment } }) => {
-            // Receive prevoius post
-            const prevPost = receivePreviousPost(client, postId);
+            // Get prevoius post
+            const prevPost = getPostFromCache(client, postId);
 
             if (prevPost.post) {
               const { post } = DeleteComment(prevPost, deleteComment.id);
 
-              // Update list of comments
-              handleUpdateData(client, post, postId);
+              // Write post to cache
+              writePostToCache(client, post, postId);
             }
           }
         })

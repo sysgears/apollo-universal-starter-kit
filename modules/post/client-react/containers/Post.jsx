@@ -193,7 +193,7 @@ export default compose(
           },
 
           update: (prev, { data: { deletePost } }) => {
-            // Receive previous list posts
+            // Get previous posts from cache
             const prevPosts = client.readQuery({
               query: POSTS_QUERY,
               variables: {
@@ -204,7 +204,7 @@ export default compose(
 
             const newListPosts = DeletePost(prevPosts, deletePost.id);
 
-            // Update list posts
+            // Write posts to cache
             client.writeQuery({
               query: POSTS_QUERY,
               variables: {

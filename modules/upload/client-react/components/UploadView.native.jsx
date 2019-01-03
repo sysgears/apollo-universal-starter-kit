@@ -13,8 +13,7 @@ export default class UploadView extends React.Component {
     handleRemoveFile: PropTypes.func.isRequired,
     files: PropTypes.array,
     handleDownloadFile: PropTypes.func.isRequired,
-    downloadingFiles: PropTypes.array,
-    onBackgroundPress: PropTypes.func.isRequired
+    downloadingFiles: PropTypes.array
   };
 
   renderFileInfo = ({ item: { id, name, path, size } }) => {
@@ -126,10 +125,5 @@ const styles = StyleSheet.create({
   list: {
     marginTop: 5,
     width: '100%'
-  },
-  uploading: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center'
   }
 });

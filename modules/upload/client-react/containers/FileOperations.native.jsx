@@ -55,7 +55,7 @@ class FileOperations extends React.Component {
     showActionSheetWithOptions({ options, cancelButtonIndex: 2 }, async buttonIndex => {
       switch (buttonIndex) {
         case 0:
-          if (this.checkPermission(Permissions.CAMERA_ROLL)) {
+          if (await this.checkPermission(Permissions.CAMERA_ROLL)) {
             const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync();
             if (!cancelled) {
               const name = uri.match(/[^\\/]*\.\w+$/)[0];
@@ -94,12 +94,13 @@ class FileOperations extends React.Component {
 
   handleDownloadFile = async (path, name, id) => {
     const { t } = this.props;
+    const { downloadingFiles } = this.state;
 
-    this.setState({ downloadingFiles: [...this.state.downloadingFiles, id] });
+    this.setState({ downloadingFiles: [...downloadingFiles, id] });
     (await this.checkPermission(Permissions.CAMERA_ROLL))
       ? await this.downloadFile(path, name)
       : Alert.alert(t('download.errorMsg'));
-    this.setState({ downloadingFiles: this.state.downloadingFiles.filter(fileId => fileId !== id) });
+    this.setState({ downloadingFiles: downloadingFiles.filter(fileId => fileId !== id) });
   };
 
   downloadFile = async (path, name) => {
@@ -120,7 +121,7 @@ class FileOperations extends React.Component {
         : await createAlbumAsync(albumName, createAsset, false);
       Alert.alert(t('download.successMsg'));
     } catch (e) {
-      Alert.alert(e);
+      Alert.alert(`${e}`);
     }
   };
 
@@ -141,7 +142,6 @@ class FileOperations extends React.Component {
         handleRemoveFile={this.handleRemoveFile}
         handleUploadFile={this.handleUploadFile}
         handleDownloadFile={this.handleDownloadFile}
-        onBackgroundPress={() => this.setState({ notify: null })}
         downloadingFiles={this.state.downloadingFiles}
       />
     );

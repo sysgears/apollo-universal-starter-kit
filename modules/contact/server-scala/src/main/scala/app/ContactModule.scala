@@ -1,15 +1,16 @@
 package app
 
 import common.graphql.UserContext
-import common.shapes.ServerModule
+import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
 import graphql.schema.ContactSchema
 import guice.ContactBinding
 import sangria.schema.Field
+import shapes.ServerModule
 
 import scala.collection.mutable
 
-class ContactModule extends ServerModule {
+class ContactModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val contactSchema: ContactSchema = inject[ContactSchema]
 

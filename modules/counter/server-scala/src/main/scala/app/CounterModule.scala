@@ -1,17 +1,17 @@
 package app
 
 import common.graphql.UserContext
-import common.shapes.ServerModule
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
 import graphql.schema.CounterSchema
 import guice.CounterBinding
 import repositories.CounterSchemaInitializer
 import sangria.schema.Field
+import shapes.ServerModule
 
 import scala.collection.mutable
 
-class CounterModule extends ServerModule {
+class CounterModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val counterSchema: CounterSchema = inject[CounterSchema]
   lazy val counterSchemaInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]

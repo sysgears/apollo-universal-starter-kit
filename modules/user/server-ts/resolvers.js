@@ -8,30 +8,32 @@ import { FieldError } from '@module/validation-common-react';
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
+const {
+  auth: { secret },
+  user: {
+    auth: { certificate, password }
+  },
+  app
+} = settings;
 
 export default pubsub => ({
   Query: {
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
       return User.getUsers(orderBy, filter);
     }),
-    user: withAuth(
-      () => {
-        return ['user:view:self'];
-      },
-      (obj, { id }, { identity, User, req: { t } }) => {
-        if (identity.id === id || identity.role === 'admin') {
-          try {
-            return { identity: User.getUser(id) };
-          } catch (e) {
-            return { errors: e };
-          }
+    user: withAuth(['user:view:self'], (obj, { id }, { identity, User, req: { t } }) => {
+      if (identity.id === id || identity.role === 'admin') {
+        try {
+          return { user: User.getUser(id) };
+        } catch (e) {
+          return { errors: e };
         }
-
-        const e = new FieldError();
-        e.setError('user', t('user:accessDenied'));
-        return { identity: null, errors: e.getErrors() };
       }
-    ),
+
+      const e = new FieldError();
+      e.setError('user', t('user:accessDenied'));
+      return { user: null, errors: e.getErrors() };
+    }),
     currentUser(obj, args, { User, identity }) {
       if (identity) {
         console.log('111111111111 --->', 111111111111);
@@ -69,10 +71,10 @@ export default pubsub => ({
   },
   Mutation: {
     addUser: withAuth(
-      (obj, args, { User, identity }) => {
-        return identity.id !== args.input.id ? ['user:create'] : ['user:create:self'];
+      (obj, { input }, { identity }) => {
+        return identity.id !== input.id ? ['user:create'] : ['user:create:self'];
       },
-      async (obj, { input }, { User, identity, req: { universalCookies }, mailer, req, req: { t } }) => {
+      async (obj, { input }, { User, mailer, req, req: { t, universalCookies } }) => {
         try {
           const e = new FieldError();
 
@@ -86,8 +88,8 @@ export default pubsub => ({
             e.setError('email', t('user:emailIsExisted'));
           }
 
-          if (input.password.length < settings.user.auth.password.minLength) {
-            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
+          if (input.password.length < password.minLength) {
+            e.setError('password', t('user:passwordLength', { length: password.minLength }));
           }
 
           e.throwIf();
@@ -95,51 +97,46 @@ export default pubsub => ({
           const [createdUserId] = await User.register({ ...input });
           await User.editUserProfile({ id: createdUserId, ...input });
 
-          if (settings.user.auth.certificate.enabled) {
+          if (certificate.enabled) {
             await User.editAuthCertificate({ id: createdUserId, ...input });
           }
 
-          const identity = await User.getUser(createdUserId);
+          const user = await User.getUser(createdUserId);
 
-          if (mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && req) {
+          if (mailer && password.sendAddNewUserEmail && !emailExists && req) {
             // async email
-            jwt.sign(
-              { identity: pick(identity, 'id') },
-              settings.auth.secret,
-              { expiresIn: '1d' },
-              (err, emailToken) => {
-                const encodedToken = Buffer.from(emailToken).toString('base64');
-                const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
-                mailer.sendMail({
-                  from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
-                  to: identity.email,
-                  subject: 'Your account has been created',
-                  html: `<p>Hi, ${identity.username}!</p>
-                <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
+            jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
+              const encodedToken = Buffer.from(emailToken).toString('base64');
+              const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
+              mailer.sendMail({
+                from: `${app.name} <${process.env.EMAIL_USER}>`,
+                to: user.email,
+                subject: 'Your account has been created',
+                html: `<p>Hi, ${user.username}!</p>
+                <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>
-                <p>Your email is: ${identity.email}</p>
-                <p>Your password is: ${identity.password}</p>`
-                });
-              }
-            );
+                <p>Your email is: ${user.email}</p>
+                <p>Your password is: ${user.password}</p>`
+              });
+            });
           }
 
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'CREATED',
-              node: identity
+              node: user
             }
           });
 
-          return { identity };
+          return { user };
         } catch (e) {
           return { errors: e };
         }
       }
     ),
     editUser: withAuth(
-      (obj, args, { User, identity }) => {
+      (obj, args, { identity }) => {
         return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
       async (obj, { input }, { User, identity, req: { t } }) => {
@@ -158,8 +155,8 @@ export default pubsub => ({
             e.setError('email', t('user:emailIsExisted'));
           }
 
-          if (input.password && input.password.length < settings.user.auth.password.minLength) {
-            e.setError('password', t('user:passwordLength', { length: settings.user.auth.password.minLength }));
+          if (input.password && input.password.length < password.minLength) {
+            e.setError('password', t('user:passwordLength', { length: password.minLength }));
           }
 
           e.throwIf();
@@ -169,40 +166,37 @@ export default pubsub => ({
           await User.editUser(userInfo);
           await User.editUserProfile(input);
 
-          if (settings.user.auth.certificate.enabled) {
+          if (certificate.enabled) {
             await User.editAuthCertificate(input);
           }
-          const identity = await User.getUser(input.id);
+
+          const user = await User.getUser(input.id);
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'UPDATED',
-              node: identity
+              node: user
             }
           });
 
-          return { identity };
+          return { user };
         } catch (e) {
           return { errors: e };
         }
       }
     ),
     deleteUser: withAuth(
-      (obj, args, { User, identity }) => {
+      (obj, args, { identity }) => {
         return identity.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, context) => {
-        const {
-          User,
-          req: { t }
-        } = context;
-        const isAdmin = () => context.identity.role === 'admin';
-        const isSelf = () => context.identity.id === id;
+      async (obj, { id }, { identity, User, req: { t } }) => {
+        const isAdmin = () => identity.role === 'admin';
+        const isSelf = () => identity.id === id;
 
         try {
           const e = new FieldError();
-          const identity = await User.getUser(id);
+          const user = await User.getUser(id);
 
-          if (!identity) {
+          if (!user) {
             e.setError('delete', t('user:userIsNotExisted'));
             e.throwIf();
           }
@@ -218,10 +212,10 @@ export default pubsub => ({
             pubsub.publish(USERS_SUBSCRIPTION, {
               usersUpdated: {
                 mutation: 'DELETED',
-                node: identity
+                node: user
               }
             });
-            return { identity };
+            return { user };
           } else {
             e.setError('delete', t('user:userCouldNotDeleted'));
             e.throwIf();

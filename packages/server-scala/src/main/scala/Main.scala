@@ -1,10 +1,12 @@
 import app._
-import common.shapes.ServerModule
+import common.graphql.UserContext
+import common.slick.SchemaInitializer
 import core.app.{CoreModule, ModuleApp}
+import shapes.ServerModule
 
 object Main extends ModuleApp {
 
-  val serverModule = new ServerModule(
+  val serverModule: ServerModule[UserContext, SchemaInitializer[_]] = new ServerModule[UserContext, SchemaInitializer[_]](
     Seq(
       new CounterModule,
       new CoreModule,

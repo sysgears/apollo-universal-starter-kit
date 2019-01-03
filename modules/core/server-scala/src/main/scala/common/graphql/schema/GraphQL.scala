@@ -1,12 +1,13 @@
 package common.graphql.schema
 
 import common.graphql.UserContext
-import common.shapes.ServerModule
+import common.slick.SchemaInitializer
 import sangria.schema.{Field, IntType, ObjectType, Schema}
+import shapes.ServerModule
 
 trait GraphQL {
 
-  val serverModule: ServerModule
+  val serverModule: ServerModule[UserContext, SchemaInitializer[_]]
 
   val maxQueryDepth = 15
   val maxQueryComplexity = 1000

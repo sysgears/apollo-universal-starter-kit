@@ -5,13 +5,14 @@ import { translate } from '@module/i18n-client-react';
 
 import { compose } from 'react-apollo';
 
-class Waiting extends React.Component {
+class Waiting extends React.PureComponent {
   static propTypes = {
-    navigation: PropTypes.object,
     t: PropTypes.func
   };
+
   render() {
     const { t } = this.props;
+
     return (
       <View style={[styles.container, styles.horizontal]}>
         <ActivityIndicator size="large" color="#0000ff" />

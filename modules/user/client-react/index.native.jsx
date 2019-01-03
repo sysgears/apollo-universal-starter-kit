@@ -138,9 +138,12 @@ ProfileScreen.propTypes = {
 
 class WaitingScreen extends React.Component {
   render() {
-    return <WaitingPage />;
+    return <WaitingPage navigation={this.props.navigation} />;
   }
 }
+WaitingScreen.propTypes = {
+  navigation: PropTypes.object
+};
 
 const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
@@ -246,7 +249,10 @@ export default new ClientModule(access, {
         }
       },
       Waiting: {
-        screen: WaitingScreen
+        screen: WaitingScreen,
+        navigationOptions: {
+          drawerLabel: () => null
+        }
       }
     }
   ],

@@ -69,7 +69,6 @@ extend type Mutation {
   # Delete a user
   deleteUser(id: Int!): UserPayload!
   # Activate a user
-  updateActive(input: updateActiveInput!): UserPayload!
 }
 
 # Input for ordering users
@@ -151,11 +150,6 @@ input ProfileInput {
   lastName: String
 }
 
-input updateActiveInput {
-  isActive: Boolean!
-  id: Int!
-}
-
 extend type Subscription {
   # Subscription for users list
   usersUpdated(filter: FilterUserInput): UpdateUserPayload
@@ -165,4 +159,7 @@ extend type Subscription {
 type UpdateUserPayload {
   mutation: String!
   node: User!
+}
+type ActivationLink {
+  link: String
 }

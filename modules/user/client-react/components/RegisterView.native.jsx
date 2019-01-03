@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Linking } from 'react-native';
 import { translate } from '@module/i18n-client-react';
 
 import RegisterForm from '../components/RegisterForm';
@@ -8,7 +8,26 @@ import RegisterForm from '../components/RegisterForm';
 class RegisterView extends React.PureComponent {
   static propTypes = {
     register: PropTypes.func.isRequired,
-    t: PropTypes.func
+    t: PropTypes.func,
+    navigation: PropTypes.object
+  };
+
+  async componentDidMount() {
+    Linking.addEventListener('url', this.hundlerUrl);
+    const url = await Linking.getInitialURL();
+    if (url.includes('/confirmation/')) {
+      this.redirectOnWaiting(url);
+    }
+  }
+  hundlerUrl = ({ url }) => {
+    this.props.navigation.navigate('Waiting', { url });
+    if (url.includes('/confirmation/')) {
+      this.redirectOnWaiting(url);
+    }
+  };
+
+  redirectOnWaiting = url => {
+    this.props.navigation.navigate('Waiting', { url });
   };
 
   onSubmit = async values => {

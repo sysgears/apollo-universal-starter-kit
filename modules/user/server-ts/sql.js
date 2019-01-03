@@ -165,26 +165,19 @@ class User {
   }
 
   async addUserTransaction(firstCallback, secondCallback) {
-    console.log('asdasd');
     const trx = await new Promise(resolve => knex.transaction(resolve));
-    console.log('trx', trx);
     try {
       const [createdUserId] = await firstCallback().transacting(trx);
-
-      console.log('createdUserId', createdUserId);
-
       await secondCallback(createdUserId).transacting(trx);
       trx.commit();
       return createdUserId;
     } catch (e) {
-      console.log('error', e);
       trx.rollback();
     }
   }
 
   async editUserTransaction(firstCallback, secondCallback) {
     const trx = await new Promise(resolve => knex.transaction(resolve));
-
     try {
       await firstCallback().transacting(trx);
       await secondCallback().transacting(trx);

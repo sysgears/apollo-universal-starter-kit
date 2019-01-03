@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql, compose, withApollo } from 'react-apollo';
 import update from 'immutability-helper';
 import { PLATFORM } from '@module/core-common';
 
@@ -141,6 +141,7 @@ class Post extends React.Component {
 }
 
 export default compose(
+  withApollo,
   graphql(POSTS_QUERY, {
     options: () => {
       return {
@@ -179,7 +180,7 @@ export default compose(
     }
   }),
   graphql(DELETE_POST, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps: { client } }) => ({
       deletePost: id => {
         mutate({
           variables: { id },
@@ -191,13 +192,9 @@ export default compose(
             }
           },
 
-          update: ({ caches }, { data: { deletePost } }) => {
-            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-            // For writing query the `netCache` is needed.
-
-            // Read data from cache
-            const prevPosts = caches[0].readQuery({
+          update: (prev, { data: { deletePost } }) => {
+            // Receive previous list posts
+            const prevPosts = client.readQuery({
               query: POSTS_QUERY,
               variables: {
                 limit,
@@ -207,8 +204,8 @@ export default compose(
 
             const newListPosts = DeletePost(prevPosts, deletePost.id);
 
-            // Update data
-            caches[0].writeQuery({
+            // Update list posts
+            client.writeQuery({
               query: POSTS_QUERY,
               variables: {
                 limit,

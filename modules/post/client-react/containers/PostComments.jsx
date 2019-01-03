@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql, compose, withApollo } from 'react-apollo';
 import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView';
@@ -46,8 +46,8 @@ function DeleteComment(prev, id) {
   });
 }
 
-function readCache(cache, postId) {
-  return cache.readQuery({
+function receivePreviousPost(client, postId) {
+  return client.readQuery({
     query: POST_QUERY,
     variables: {
       id: String(postId)
@@ -55,8 +55,8 @@ function readCache(cache, postId) {
   });
 }
 
-function handleUpdateData(cache, post, postId) {
-  cache.writeQuery({
+function handleUpdateData(client, post, postId) {
+  client.writeQuery({
     query: POST_QUERY,
     variables: {
       id: String(postId)
@@ -149,8 +149,9 @@ class PostComments extends React.Component {
 }
 
 const PostCommentsWithApollo = compose(
+  withApollo,
   graphql(ADD_COMMENT, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps: { client } }) => ({
       addComment: (content, postId) =>
         mutate({
           variables: { input: { content, postId } },
@@ -162,26 +163,22 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
-          update: ({ caches }, { data: { addComment } }) => {
-            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-            // For writing query the `netCache` is needed.
-
-            // Read data from cache
-            const prevPost = readCache(caches[0], postId);
+          update: (prev, { data: { addComment } }) => {
+            // Receive prevoius post
+            const prevPost = receivePreviousPost(client, postId);
 
             if (prevPost.post) {
               const { post } = AddComment(prevPost, addComment);
 
-              // Update data
-              handleUpdateData(caches[0], post, postId);
+              // Update list of comments
+              handleUpdateData(client, post, postId);
             }
           }
         })
     })
   }),
   graphql(EDIT_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }) => ({
+    props: ({ mutate, ownProps: { postId } }) => ({
       editComment: (id, content) =>
         mutate({
           variables: { input: { id, postId, content } },
@@ -197,7 +194,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(DELETE_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }) => ({
+    props: ({ mutate, ownProps: { postId, client } }) => ({
       deleteComment: id =>
         mutate({
           variables: { input: { id, postId } },
@@ -208,19 +205,15 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
-          update: ({ caches }, { data: { deleteComment } }) => {
-            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-            // For writing query the `netCache` is needed.
-
-            // Read data from cache
-            const prevPost = readCache(caches[0], postId);
+          update: (prev, { data: { deleteComment } }) => {
+            // Receive prevoius post
+            const prevPost = receivePreviousPost(client, postId);
 
             if (prevPost.post) {
               const { post } = DeleteComment(prevPost, deleteComment.id);
 
-              // Update data
-              handleUpdateData(caches[0], post, postId);
+              // Update list of comments
+              handleUpdateData(client, post, postId);
             }
           }
         })

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo/index';
+import { compose, graphql, withApollo } from 'react-apollo/index';
 import update from 'immutability-helper';
 import { translate } from '@module/i18n-client-react';
 import { withUser } from '@module/user-client-react';
@@ -97,8 +97,8 @@ function EditMessage(prev, node) {
   });
 }
 
-function readCache(cache) {
-  return cache.readQuery({
+function receiveListPreviousMsgs(client) {
+  return client.readQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 }
   });
@@ -153,6 +153,7 @@ class ChatOperations extends React.Component {
 }
 
 export default compose(
+  withApollo,
   graphql(MESSAGES_QUERY, {
     options: () => {
       return {
@@ -192,7 +193,7 @@ export default compose(
     }
   }),
   graphql(ADD_MESSAGE, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps: { client } }) => ({
       addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
         try {
           await mutate({
@@ -216,18 +217,14 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
-            update: ({ caches }, { data: { addMessage } }) => {
-              // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-              // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-              // For writing query the `netCache` is needed.
-
-              // Read data from cache
-              const prevMessages = readCache(caches[0]);
+            update: (prev, { data: { addMessage } }) => {
+              // Receive previous list of messages
+              const prevMessages = receiveListPreviousMsgs(client);
 
               const { messages } = AddMessage(prevMessages, addMessage);
 
-              // Update data
-              handleUpdateData(caches[0], messages);
+              // Update list of messages
+              handleUpdateData(client, messages);
             }
           });
         } catch (e) {
@@ -237,7 +234,7 @@ export default compose(
     })
   }),
   graphql(DELETE_MESSAGE, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps: { client } }) => ({
       deleteMessage: async id => {
         try {
           await mutate({
@@ -249,18 +246,14 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: ({ caches }, { data: { deleteMessage } }) => {
-              // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-              // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-              // For writing query the `netCache` is needed.
-
-              // Read data from cache
-              const prevMessages = readCache(caches[0]);
+            update: (prev, { data: { deleteMessage } }) => {
+              // Receive previous list of messages
+              const prevMessages = receiveListPreviousMsgs(client);
 
               const { messages } = DeleteMessage(prevMessages, deleteMessage);
 
-              // Update data
-              handleUpdateData(caches[0], messages);
+              // Update list of messages
+              handleUpdateData(client, messages);
             }
           });
         } catch (e) {
@@ -270,7 +263,7 @@ export default compose(
     })
   }),
   graphql(EDIT_MESSAGE, {
-    props: ({ mutate }) => ({
+    props: ({ mutate, ownProps: { client } }) => ({
       editMessage: async ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
         try {
           await mutate({
@@ -294,18 +287,14 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: ({ caches }, { data: { editMessage } }) => {
-              // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-              // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-              // For writing query the `netCache` is needed.
-
-              // Read data from cache
-              const prevMessages = readCache(caches[0]);
+            update: (prev, { data: { editMessage } }) => {
+              // Receive previous list of messages
+              const prevMessages = receiveListPreviousMsgs(client);
 
               const { messages } = EditMessage(prevMessages, editMessage);
 
-              // Update data
-              handleUpdateData(caches[0], messages);
+              // Update list of messages
+              handleUpdateData(client, messages);
             }
           });
         } catch (e) {

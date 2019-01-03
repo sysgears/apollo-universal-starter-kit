@@ -14,7 +14,7 @@ interface ButtonProps {
 
 const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
   <Mutation mutation={ADD_COUNTER}>
-    {(mutate: any) => {
+    {(mutate: any, { client }: any) => {
       const addServerCounter = (amount: number) => () =>
         mutate({
           variables: { amount },
@@ -25,13 +25,10 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
               amount: counter.amount + 1
             }
           },
-          update: ({ caches }: any, { data }: any) => {
+          update: (prev: any, { data }: any) => {
             const newAmount = data.addServerCounter.amount;
 
-            // Since the application uses 2 caches (`netCache` and `localCache`) at the same time
-            // (see createApolloClient.ts file for more details) we get `caches` array as a parameter.
-            // For writing query the `netCache` is needed.
-            caches[0].writeQuery({
+            client.writeQuery({
               query: COUNTER_QUERY,
               data: {
                 serverCounter: {

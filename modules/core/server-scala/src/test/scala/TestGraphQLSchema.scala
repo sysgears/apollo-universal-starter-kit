@@ -1,6 +1,8 @@
+import common.graphql.UserContext
 import common.graphql.schema.GraphQL
-import common.shapes.ServerModule
+import common.slick.SchemaInitializer
+import shapes.ServerModule
 
-class TestGraphQLSchema(module: ServerModule) extends GraphQL {
-  override val serverModule: ServerModule = module
+class TestGraphQLSchema(module: ServerModule[UserContext, SchemaInitializer[_]]) extends GraphQL {
+  override val serverModule: ServerModule[UserContext, SchemaInitializer[_]] = module
 }

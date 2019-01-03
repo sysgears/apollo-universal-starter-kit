@@ -11,7 +11,6 @@ import url from 'url';
 
 import uploadConfig from '../../../../config/upload';
 import UploadView from '../components/UploadView';
-import chatConfig from '../../../../config/chat';
 
 const {
   manifest: { bundleUrl }
@@ -57,10 +56,13 @@ class FileOperations extends React.Component {
       switch (buttonIndex) {
         case 0:
           if (this.checkPermission(Permissions.CAMERA_ROLL)) {
-            const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
+            const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync();
             if (!cancelled) {
               const name = uri.match(/[^\\/]*\.\w+$/)[0];
-              this.uploadFile({ uri, name });
+              await this.uploadFile({ uri, name });
+
+              // Remove image from cache directory
+              FileSystem.deleteAsync(uri, { idempotent: false });
             }
           }
           break;

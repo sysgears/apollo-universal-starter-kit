@@ -14,7 +14,6 @@ export default class UploadView extends React.Component {
     files: PropTypes.array,
     handleDownloadFile: PropTypes.func.isRequired,
     downloadingFiles: PropTypes.array,
-    notify: PropTypes.string,
     onBackgroundPress: PropTypes.func.isRequired
   };
 

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-import { createTrxAwait } from '@module/database-server-ts';
+import { createTransaction } from '@module/database-server-ts';
 
 import settings from '../../../settings';
 
@@ -96,7 +96,7 @@ export default pubsub => ({
 
           const passwordHash = await createPasswordHash(input.password);
 
-          const trx = await createTrxAwait();
+          const trx = await createTransaction();
           let createdUserId;
           try {
             [createdUserId] = await User.register(input, passwordHash).transacting(trx);
@@ -175,7 +175,7 @@ export default pubsub => ({
           const isProfileExists = await User.isUserProfileExists(input.id);
           const passwordHash = await createPasswordHash(input.password);
 
-          const trx = await createTrxAwait();
+          const trx = await createTransaction();
           try {
             await User.editUser(userInfo, passwordHash).transacting(trx);
             await User.editUserProfile(input, isProfileExists).transacting(trx);

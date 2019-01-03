@@ -164,29 +164,6 @@ class User {
       .where({ id });
   }
 
-  async addUserTransaction(firstCallback, secondCallback) {
-    const trx = await new Promise(resolve => knex.transaction(resolve));
-    try {
-      const [createdUserId] = await firstCallback().transacting(trx);
-      await secondCallback(createdUserId).transacting(trx);
-      trx.commit();
-      return createdUserId;
-    } catch (e) {
-      trx.rollback();
-    }
-  }
-
-  async editUserTransaction(firstCallback, secondCallback) {
-    const trx = await new Promise(resolve => knex.transaction(resolve));
-    try {
-      await firstCallback().transacting(trx);
-      await secondCallback().transacting(trx);
-      trx.commit();
-    } catch (e) {
-      trx.rollback();
-    }
-  }
-
   async isUserProfileExists(userId) {
     return !!(await knex('user_profile')
       .count('id as count')

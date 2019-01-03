@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-// import { createTransaction } from '@module/database-server-ts';
+import { knex } from '@module/database-server-ts';
 
 import settings from '../../../settings';
 
@@ -96,10 +96,15 @@ export default pubsub => ({
 
           const passwordHash = await createPasswordHash(input.password);
 
-          const createdUserId = await User.addUserTransaction(
-            () => User.register(input, passwordHash),
-            id => User.editUserProfile({ ...input, id })
-          );
+          const trx = await new Promise(resolve => knex.transaction(resolve));
+          let createdUserId;
+          try {
+            [createdUserId] = await User.register(input, passwordHash).transacting(trx);
+            await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
+            trx.commit();
+          } catch (e) {
+            trx.rollback();
+          }
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate({ id: createdUserId, ...input });
@@ -170,10 +175,14 @@ export default pubsub => ({
           const isProfileExists = await User.isUserProfileExists(input.id);
           const passwordHash = await createPasswordHash(input.password);
 
-          await User.editUserTransaction(
-            () => User.editUser(userInfo, passwordHash),
-            () => User.editUserProfile(input, isProfileExists)
-          );
+          const trx = await new Promise(resolve => knex.transaction(resolve));
+          try {
+            await User.editUser(userInfo, passwordHash).transacting(trx);
+            await User.editUserProfile(input, isProfileExists).transacting(trx);
+            trx.commit();
+          } catch (e) {
+            trx.rollback();
+          }
 
           if (settings.user.auth.certificate.enabled) {
             await User.editAuthCertificate(input);

@@ -6,6 +6,7 @@ import services.publisher._
 import common.{InputUnmarshallerGenerator, Logger}
 import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.graphql.UserContext
+import common.publisher.{Event, PubSubService}
 import graphql.resolvers
 import graphql.resolvers._
 import javax.inject.Inject
@@ -18,11 +19,11 @@ import common.publisher.RichPubSubService._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubServiceImpl,
-                            commentPubSubPostService: CommentPubSubServiceImpl,
-                            materializer: ActorMaterializer,
-                            actorSystem: ActorSystem,
-                            executionContext: ExecutionContext) extends InputUnmarshallerGenerator
+class PostSchema @Inject()(implicit val postPubSubPostService: PubSubService[Event[Post]],
+                           commentPubSubPostService: PubSubService[Event[Comment]],
+                           materializer: ActorMaterializer,
+                           actorSystem: ActorSystem,
+                           executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {
 
   object Types {

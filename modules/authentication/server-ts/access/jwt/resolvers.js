@@ -18,7 +18,7 @@ export default () => ({
       !getIdentity && throwError(MESSAGE_GET_IDENTIFY);
 
       const identity = await getIdentity(decodedToken.id);
-      const refreshSecret = settings.auth.secret + getHash(decodedToken.id);
+      const refreshSecret = settings.auth.secret + getHash ? getHash(decodedToken.id) : '';
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);

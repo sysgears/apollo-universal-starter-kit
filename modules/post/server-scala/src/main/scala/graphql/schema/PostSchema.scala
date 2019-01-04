@@ -19,8 +19,8 @@ import common.publisher.RichPubSubService._
 import scala.concurrent.{ExecutionContext, Future}
 
 class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubServiceImpl,
-                            implicit val commentPubSubPostService: CommentPubSubServiceImpl,
-                            implicit val materializer: ActorMaterializer,
+                            commentPubSubPostService: CommentPubSubServiceImpl,
+                            materializer: ActorMaterializer,
                             actorSystem: ActorSystem,
                             executionContext: ExecutionContext) extends InputUnmarshallerGenerator
   with Logger {

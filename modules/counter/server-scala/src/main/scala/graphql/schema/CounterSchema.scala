@@ -26,9 +26,23 @@ class CounterSchema @Inject()(implicit val counterPubSubService: CounterPubSubSe
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
+  object Names {
+
+    //Queries
+    final val SERVER_COUNTER = "serverCounter"
+
+    //Mutations
+    final val ADD_SERVER_COUNTER = "addServerCounter"
+
+    //Subscriptions
+    final val COUNTER_UPDATED = "counterUpdated"
+  }
+
+  import Names._
+
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "serverCounter",
+      name = SERVER_COUNTER,
       fieldType = Types.counter,
       resolve = sc => resolveWithDispatcher[Counter](
         input = GetAmount,
@@ -40,7 +54,7 @@ class CounterSchema @Inject()(implicit val counterPubSubService: CounterPubSubSe
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "addServerCounter",
+      name = ADD_SERVER_COUNTER,
       fieldType = Types.counter,
       arguments = Argument(name = "amount", argumentType = IntType) :: Nil,
       resolve = sc => {
@@ -49,17 +63,17 @@ class CounterSchema @Inject()(implicit val counterPubSubService: CounterPubSubSe
           input = amount,
           userContext = sc.ctx,
           namedResolverActor = CounterResolver
-        ).pub("addServerCounter")
+        ).pub(ADD_SERVER_COUNTER)
       }
     )
   )
 
   def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
-      name = "counterUpdated",
+      name = COUNTER_UPDATED,
       fieldType = Types.counter,
       resolve = _ => {
-        counterPubSubService.subscribe(Seq("addServerCounter"))
+        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER))
           .map(action => action.map(_.element))
       }
     )

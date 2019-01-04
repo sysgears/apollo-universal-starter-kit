@@ -48,7 +48,7 @@ export default () => ({
 
         await validateUserPassword(user, password, req.t);
 
-        const tokens = await access.grantAccess(user, req);
+        const tokens = await access.grantAccess(user, req, user.passwordHash);
 
         return { user, tokens };
       } catch (e) {

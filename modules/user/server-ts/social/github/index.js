@@ -72,7 +72,7 @@ if (settings.user.auth.github.enabled && !__TEST__) {
       async function(req, res) {
         const user = await User.getUser(req.user.id);
         const redirectUrl = req.query.state;
-        const tokens = await access.grantAccess(user, req);
+        const tokens = await access.grantAccess(user, req, user.passwordHash);
         const currentUser = await getCurrentUser(req, res);
 
         if (redirectUrl) {

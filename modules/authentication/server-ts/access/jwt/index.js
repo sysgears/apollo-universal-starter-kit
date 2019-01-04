@@ -8,8 +8,8 @@ import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
-const grant = async identity => {
-  const refreshSecret = settings.auth.secret + identity.passwordHash;
+const grant = async (identity, req, passwordHash = '') => {
+  const refreshSecret = settings.auth.secret + passwordHash;
   const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret);
 
   return {

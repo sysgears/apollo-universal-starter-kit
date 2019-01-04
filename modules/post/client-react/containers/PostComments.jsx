@@ -46,16 +46,15 @@ const onDeleteComment = (prev, id) => {
   });
 };
 
-const getPostFromCache = (cache, postId) => {
-  return cache.readQuery({
+const getPostFromCache = (cache, postId) =>
+  cache.readQuery({
     query: POST_QUERY,
     variables: {
       id: postId
     }
   });
-};
 
-const writePostToCache = (cache, post, postId) => {
+const writePostToCache = (cache, post, postId) =>
   cache.writeQuery({
     query: POST_QUERY,
     variables: {
@@ -68,7 +67,6 @@ const writePostToCache = (cache, post, postId) => {
       }
     }
   });
-};
 
 class PostComments extends React.Component {
   static propTypes = {

@@ -97,14 +97,13 @@ const onEditMessage = (prev, node) => {
   });
 };
 
-const getMsgsFromCache = cache => {
-  return cache.readQuery({
+const getMsgsFromCache = cache =>
+  cache.readQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 }
   });
-};
 
-const writeMsgsToCache = (cache, messages) => {
+const writeMsgsToCache = (cache, messages) =>
   cache.writeQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 },
@@ -115,7 +114,6 @@ const writeMsgsToCache = (cache, messages) => {
       }
     }
   });
-};
 
 class ChatOperations extends React.Component {
   static propTypes = {

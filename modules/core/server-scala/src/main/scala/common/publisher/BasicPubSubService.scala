@@ -21,7 +21,7 @@ abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Schedul
     require(eventNames.nonEmpty)
     Source.fromPublisher(source.toReactivePublisher[T])
       .filter { event =>
-        withFilter(event: T, eventNames: Seq[String], params: Seq[Param])
+        eventNames.contains(event.name) && filter(event: T, params: Seq[Param])
       }
       .map {
         event =>
@@ -30,5 +30,8 @@ abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Schedul
     }
   }
 
-   def withFilter(event: T, eventNames: Seq[String], params: Seq[Param]): Boolean
+  /**
+    * To filter subscription by specified params, override this method.
+    */
+  def filter(event: T, params: Seq[Param]) = true
 }

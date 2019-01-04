@@ -72,14 +72,14 @@ export default class extends React.Component {
     } else {
       const {
         text = null,
-        user: { name: username },
+        user: { _id: userId, name: username },
         _id: id
       } = messages[0];
 
       addMessage({
         text,
         username,
-        userId: 1,
+        userId,
         id,
         uuid,
         quotedId,
@@ -153,8 +153,6 @@ export default class extends React.Component {
               user={{ _id: id, name: username }}
               renderChatFooter={this.renderChatFooter}
               renderCustomView={this.renderCustomView}
-              renderActions={this.renderCustomActions}
-              activeMessage={this.state.activeMessage}
               onLongPress={(e, currentMessage) =>
                 this.onLongPress(e, currentMessage, id, deleteMessage, this.setEditState)
               }

@@ -106,10 +106,8 @@ export default class Bubble extends React.PureComponent {
   }
 
   render() {
-    const { currentMessage, activeMessage } = this.props;
-    const background = currentMessage._id === activeMessage ? { backgroundColor: '#eee' } : {};
     return (
-      <div onContextMenu={this.onLongPress} style={{ width: '100%', ...background }}>
+      <div onContextMenu={this.onLongPress} style={{ width: '100%' }}>
         <div
           className="message"
           style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}
@@ -239,7 +237,6 @@ Bubble.propTypes = {
   currentMessage: PropTypes.object,
   nextMessage: PropTypes.object,
   previousMessage: PropTypes.object,
-  activeMessage: PropTypes.number,
   containerStyle: PropTypes.shape({
     left: PropTypes.object,
     right: PropTypes.object

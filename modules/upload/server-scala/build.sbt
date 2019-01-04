@@ -2,6 +2,8 @@ libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.6"
 )
 
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
+
 lazy val upload = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*)
 
 lazy val modules = List(

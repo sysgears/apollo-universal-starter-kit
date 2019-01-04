@@ -1,23 +1,53 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Waiting from '../components/WaitingPage';
+import { graphql } from 'react-apollo';
 
-export default class WaitingPage extends React.Component {
-  static propTypes = {
-    navigation: PropTypes.object
-  };
+import Waiting from '../components/WaitingPage';
+import ACTIVATE_USER from '../graphql/ActivateUser.graphql';
+
+class WaitingPage extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   componentDidMount() {
     this.activate();
   }
+
   activate = () => {
-    const { url } = this.props.navigation.state.params;
-    console.log(url);
-    // temporary redirect
-    setTimeout(() => {
-      this.props.navigation.navigate('Login');
-    }, 1000);
+    try {
+      const { url } = this.props.navigation.state.params;
+      const [, token] = url.split('/confirmation/');
+      this.props.activateUser(token, this.props.navigation);
+    } catch (error) {
+      console.log(error);
+    }
   };
+
   render() {
     return <Waiting {...this.props} />;
   }
 }
+export default graphql(ACTIVATE_USER, {
+  props: ({ ownProps: { history, navigation }, mutate }) => ({
+    activateUser: async token => {
+      try {
+        const res = await mutate({
+          variables: { token }
+        });
+        if (res.data.activateUser.success) {
+          if (navigation) {
+            return navigation.navigate('Login');
+          }
+          if (history) {
+            return history.push('/login/');
+          }
+        } else {
+          console.log('activation error');
+        }
+        return;
+      } catch (e) {
+        console.log('e', e.graphQLErrors);
+      }
+    }
+  })
+})(WaitingPage);

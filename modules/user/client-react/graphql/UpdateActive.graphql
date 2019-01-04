@@ -1,4 +1,0 @@
-#import "./User.graphql"
-mutation updateActive($input: updateActiveInput) {
-  updateActive(input: $input)
-}

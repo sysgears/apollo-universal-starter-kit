@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Linking } from 'react-native';
+import { View, StyleSheet, Linking, Platform } from 'react-native';
 import { translate } from '@module/i18n-client-react';
 
 import RegisterForm from '../components/RegisterForm';
@@ -14,13 +14,15 @@ class RegisterView extends React.PureComponent {
 
   async componentDidMount() {
     Linking.addEventListener('url', this.hundlerUrl);
-    const url = await Linking.getInitialURL();
-    if (url.includes('/confirmation/')) {
-      this.redirectOnWaiting(url);
+    if (Platform.OS === 'ios') {
+      const url = await Linking.getInitialURL();
+      if (url.includes('/confirmation/')) {
+        this.redirectOnWaiting(url);
+      }
     }
   }
+
   hundlerUrl = ({ url }) => {
-    this.props.navigation.navigate('Waiting', { url });
     if (url.includes('/confirmation/')) {
       this.redirectOnWaiting(url);
     }

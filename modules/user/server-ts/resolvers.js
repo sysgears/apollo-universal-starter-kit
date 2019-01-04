@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
+import User from './sql';
 
 import settings from '../../../settings';
 
@@ -221,7 +222,24 @@ export default pubsub => ({
           return { errors: e };
         }
       }
-    )
+    ),
+    activateUser: async (obj, token) => {
+      try {
+        const decodedToken = Buffer.from(token.token, 'base64').toString();
+        const {
+          user: { id }
+        } = jwt.verify(decodedToken, settings.user.secret);
+        await User.updateActive(id, true);
+        return {
+          success: true
+        };
+      } catch (e) {
+        console.log('error', e);
+        return {
+          success: false
+        };
+      }
+    }
   },
   Subscription: {
     usersUpdated: {

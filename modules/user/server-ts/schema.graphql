@@ -60,6 +60,9 @@ type UserPayload {
   user: User
   errors: [FieldError!]
 }
+type ActivateUserResponse {
+  success: Boolean
+}
 
 extend type Mutation {
   # Create new user
@@ -69,6 +72,7 @@ extend type Mutation {
   # Delete a user
   deleteUser(id: Int!): UserPayload!
   # Activate a user
+  activateUser(token: String!): ActivateUserResponse!
 }
 
 # Input for ordering users
@@ -159,7 +163,4 @@ extend type Subscription {
 type UpdateUserPayload {
   mutation: String!
   node: User!
-}
-type ActivationLink {
-  link: String
 }

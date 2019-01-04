@@ -27,13 +27,13 @@ class CommentResolver @Inject()(postRepository: PostRepository,
   override def receive: Receive = {
 
     case input: QueryComments => {
-      log.info(s"Query with param: [{}]", input)
+      log.debug(s"Query with param: [ $input ]")
       commentRepository.getAllByPostId(input.postId).run
         .pipeTo(sender)
     }
 
     case input: MutationAddComment => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       val comment = for {
         maybePost           <- postRepository.findOne(input.addCommentInput.postId).run
         _                   <- if (maybePost.isDefined) Future.successful(maybePost.get)
@@ -44,7 +44,7 @@ class CommentResolver @Inject()(postRepository: PostRepository,
     }
 
     case input: MutationEditComment => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       val comment = for {
         maybeComment        <- commentRepository.findOne(input.editCommentInput.id).run
         comment             <- if (maybeComment.isDefined) Future.successful(maybeComment.get)
@@ -55,7 +55,7 @@ class CommentResolver @Inject()(postRepository: PostRepository,
     }
 
     case input: MutationDeleteComment => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       val comment = for {
           maybeComment      <- commentRepository.findOne(input.deleteCommentInput.id).run
           comment           <- if (maybeComment.isDefined) Future.successful(maybeComment.get)

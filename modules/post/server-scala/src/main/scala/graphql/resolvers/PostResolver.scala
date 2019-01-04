@@ -30,7 +30,7 @@ class PostResolver @Inject()(postRepository: PostRepository,
   override def receive: Receive = {
 
     case input: QueryPost => {
-      log.info(s"Query with param: [{}]", input)
+      log.debug(s"Query with param: [ $input ]")
 
       val post = for {
         maybePost <- postRepository.findOne(input.id).run
@@ -41,7 +41,7 @@ class PostResolver @Inject()(postRepository: PostRepository,
     }
 
     case input: QueryPosts => {
-      log.info(s"Query with param: [{}]", input)
+      log.debug(s"Query with param: [ $input ]")
       implicit def toEdges(entities: List[Post]): Seq[PostEdges] =
         Map((1 to entities.size).zip(entities): _*).map(value => {
           val (index, post) = value
@@ -63,13 +63,13 @@ class PostResolver @Inject()(postRepository: PostRepository,
     }
 
     case input: MutationAddPost => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       postRepository.save(input.addPostInput).run
         .pipeTo(sender)
     }
 
     case input: MutationDeletePost => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       val post = for {
             maybePost     <- postRepository.findOne(input.id).run
             post          <- if (maybePost.isDefined) Future.successful(maybePost.get)
@@ -80,7 +80,7 @@ class PostResolver @Inject()(postRepository: PostRepository,
     }
 
     case input: MutationEditPost => {
-      log.info(s"Mutation with param: [{}]", input)
+      log.debug(s"Mutation with param: [ $input ]")
       val post = for {
         maybePost     <- postRepository.findOne(input.editPostInput.id).run
         post          <- if (maybePost.isDefined) Future.successful(maybePost.get)

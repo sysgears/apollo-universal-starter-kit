@@ -1,9 +1,11 @@
-type Post {
+# Report
+type Report {
   id: Int!
   title: String!
   content: String!
 }
 
 extend type Query {
-  posts: [Post]
+  # Report
+  report(id: Int!): Report
 }

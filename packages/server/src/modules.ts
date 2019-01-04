@@ -10,6 +10,7 @@ import upload from '@module/upload-server-ts';
 import subscription from '@module/payments-server-ts';
 import mailer from '@module/mailer-server-ts';
 import graphqlTypes from '@module/graphql-types-server-ts';
+import reports from '@module/reports-server-ts';
 import '@module/debug-server-ts';
 
 import ServerModule from '@module/module-server-ts';
@@ -28,6 +29,7 @@ const modules: ServerModule = new ServerModule(
   contact,
   mailer,
   chat,
+  reports,
   graphqlTypes,
   core
 );

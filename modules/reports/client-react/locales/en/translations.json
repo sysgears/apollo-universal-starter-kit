@@ -1,4 +1,10 @@
 {
   "navLink": "Reports",
-  "title": "Reports PDF"
+  "title": "Reports PDF",
+  "list": {
+    "title": {
+      "front": "Report front",
+      "server": "Report server"
+    }
+  }
 }

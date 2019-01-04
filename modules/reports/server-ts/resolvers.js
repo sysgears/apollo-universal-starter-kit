@@ -1,7 +1,7 @@
 export default () => ({
   Query: {
-    posts(obj, args, { Report }) {
-      return Report.posts();
+    report(obj, { id }, { Report }) {
+      return Report.report(id);
     }
   },
   Mutation: {},

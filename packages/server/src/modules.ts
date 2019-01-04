@@ -10,7 +10,7 @@ import upload from '@module/upload-server-ts';
 import subscription from '@module/payments-server-ts';
 import mailer from '@module/mailer-server-ts';
 import graphqlTypes from '@module/graphql-types-server-ts';
-import authenticate from '@module/authentication-server-ts';
+import authentication from '@module/authentication-server-ts';
 import '@module/debug-server-ts';
 
 import ServerModule from '@module/module-server-ts';
@@ -25,7 +25,7 @@ const modules: ServerModule = new ServerModule(
   post,
   upload,
   user,
-  authenticate,
+  authentication,
   subscription,
   contact,
   mailer,

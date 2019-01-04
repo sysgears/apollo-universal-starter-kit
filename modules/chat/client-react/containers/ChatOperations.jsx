@@ -19,7 +19,7 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
 const { limit } = chatConfig;
 
-function AddMessage(prev, node) {
+function onAddMessage(prev, node) {
   // ignore if duplicate
   if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
     return prev;
@@ -52,7 +52,7 @@ function AddMessage(prev, node) {
   });
 }
 
-function DeleteMessage(prev, id) {
+function onDeleteMessage(prev, id) {
   const index = prev.messages.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -81,7 +81,7 @@ function DeleteMessage(prev, id) {
   });
 }
 
-function EditMessage(prev, node) {
+function onEditMessage(prev, node) {
   const newEdge = {
     cursor: node.id,
     node,
@@ -136,11 +136,11 @@ class ChatOperations extends React.Component {
     updateQuery(prev => {
       switch (mutation) {
         case 'CREATED':
-          return AddMessage(prev, node);
+          return onAddMessage(prev, node);
         case 'DELETED':
-          return DeleteMessage(prev, node.id);
+          return onDeleteMessage(prev, node.id);
         case 'UPDATED':
-          return EditMessage(prev, node);
+          return onEditMessage(prev, node);
         default:
           return prev;
       }
@@ -218,7 +218,7 @@ export default compose(
             },
             update: (cache, { data: { addMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
-              const { messages } = AddMessage(prevMessages, addMessage);
+              const { messages } = onAddMessage(prevMessages, addMessage);
               writeMsgsToCache(cache, messages);
             }
           });
@@ -243,7 +243,7 @@ export default compose(
             },
             update: (cache, { data: { deleteMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
-              const { messages } = DeleteMessage(prevMessages, deleteMessage);
+              const { messages } = onDeleteMessage(prevMessages, deleteMessage);
               writeMsgsToCache(cache, messages);
             }
           });
@@ -280,7 +280,7 @@ export default compose(
             },
             update: (cache, { data: { editMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
-              const { messages } = EditMessage(prevMessages, editMessage);
+              const { messages } = onEditMessage(prevMessages, editMessage);
               writeMsgsToCache(cache, messages);
             }
           });

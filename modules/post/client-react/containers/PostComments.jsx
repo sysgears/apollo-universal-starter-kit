@@ -13,7 +13,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
 import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
-function AddComment(prev, node) {
+function onAddComment(prev, node) {
   // ignore if duplicate
   if (prev.post.comments.some(comment => comment.id === node.id)) {
     return prev;
@@ -29,7 +29,7 @@ function AddComment(prev, node) {
   });
 }
 
-function DeleteComment(prev, id) {
+function onDeleteComment(prev, id) {
   const index = prev.post.comments.findIndex(x => x.id === id);
 
   // ignore if not found
@@ -133,9 +133,9 @@ class PostComments extends React.Component {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
-          newResult = AddComment(prev, node);
+          newResult = onAddComment(prev, node);
         } else if (mutation === 'DELETED') {
-          newResult = DeleteComment(prev, id);
+          newResult = onDeleteComment(prev, id);
         }
 
         return newResult;
@@ -166,7 +166,7 @@ const PostCommentsWithApollo = compose(
             const prevPost = getPostFromCache(cache, postId);
 
             if (prevPost.post) {
-              const { post } = AddComment(prevPost, addComment);
+              const { post } = onAddComment(prevPost, addComment);
               writePostToCache(cache, post, postId);
             }
           }
@@ -205,7 +205,7 @@ const PostCommentsWithApollo = compose(
             const prevPost = getPostFromCache(cache, postId);
 
             if (prevPost.post) {
-              const { post } = DeleteComment(prevPost, deleteComment.id);
+              const { post } = onDeleteComment(prevPost, deleteComment.id);
               writePostToCache(cache, post, postId);
             }
           }

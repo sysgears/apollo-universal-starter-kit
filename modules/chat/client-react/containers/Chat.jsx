@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Button, LayoutCenter, PageLayout } from '@module/look-client-react';
+import { LayoutCenter, PageLayout } from '@module/look-client-react';
 import Helmet from 'react-helmet';
+import { Menu, Item, contextMenu } from 'react-contexify';
+import 'react-contexify/dist/ReactContexify.min.css';
 
 import chatConfig from '../../../../config/chat';
 import { WebChat } from './webChat/WebChat';
@@ -29,9 +31,8 @@ export default class extends React.Component {
     messageInfo: null,
     isQuoted: false,
     quotedMessage: null,
-    showActionSheet: false,
     activeMessage: null,
-    currentMessage: () => {}
+    currentMessage: null
   };
 
   setMessageState = text => {
@@ -39,18 +40,19 @@ export default class extends React.Component {
   };
 
   onLongPress = (context, currentMessage, id) => {
-    const { t } = this.props;
-    const options = [t('msg.btn.copy'), t('msg.btn.reply')];
+    context.preventDefault();
 
-    if (id === currentMessage.user._id) {
-      options.push(t('msg.btn.edit'), t('msg.btn.delete'));
-    }
+    this.setState({
+      isOwnMessage: id === currentMessage.user._id,
+      ...(currentMessage._id === this.state.activeMessage
+        ? { currentMessage: null, activeMessage: null }
+        : { currentMessage, activeMessage: currentMessage._id })
+    });
 
-    this.setState(
-      currentMessage._id === this.state.activeMessage
-        ? { showActionSheet: !this.state.showActionSheet, currentMessage: null, activeMessage: null }
-        : { showActionSheet: true, currentMessage, activeMessage: currentMessage._id }
-    );
+    contextMenu.show({
+      id: 'menu',
+      event: context
+    });
   };
 
   onSend = (messages = []) => {
@@ -93,25 +95,25 @@ export default class extends React.Component {
   // };
 
   renderActionSheet = () => {
-    const { deleteMessage } = this.props;
-    const { currentMessage, showActionSheet } = this.state;
-    return showActionSheet ? (
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Button color="primary">Edit</Button>
-        <Button
-          color="primary"
+    const { t, deleteMessage } = this.props;
+    const { currentMessage, isOwnMessage } = this.state;
+    return (
+      <Menu id={'menu'}>
+        <Item
           onClick={() => {
             this.setState({ isQuoted: true });
           }}
         >
-          Reply
-        </Button>
-        <Button color="primary" onClick={() => deleteMessage(currentMessage._id)}>
-          Delete
-        </Button>
-        <Button color="primary">Cancel</Button>
-      </div>
-    ) : null;
+          {t('msg.btn.reply')}
+        </Item>
+        {isOwnMessage && (
+          <React.Fragment>
+            <Item onClick={() => {}}>{t('msg.btn.edit')}</Item>
+            <Item onClick={() => deleteMessage(currentMessage._id)}>{t('msg.btn.delete')}</Item>
+          </React.Fragment>
+        )}
+      </Menu>
+    );
   };
 
   render() {
@@ -145,8 +147,8 @@ export default class extends React.Component {
               // renderCustomView={this.renderCustomView}
               renderActions={this.renderCustomActions}
               activeMessage={this.state.activeMessage}
-              onLongPress={(context, currentMessage) =>
-                this.onLongPress(context, currentMessage, id, deleteMessage, this.setEditState)
+              onLongPress={(e, currentMessage) =>
+                this.onLongPress(e, currentMessage, id, deleteMessage, this.setEditState)
               }
             />
             {this.renderActionSheet()}

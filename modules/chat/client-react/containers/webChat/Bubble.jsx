@@ -14,27 +14,9 @@ export default class Bubble extends React.PureComponent {
     this.onLongPress = this.onLongPress.bind(this);
   }
 
-  onLongPress() {
+  onLongPress(e) {
     if (this.props.onLongPress) {
-      this.props.onLongPress(this.context, this.props.currentMessage);
-    } else if (this.props.currentMessage.text) {
-      const options = ['Copy Text', 'Cancel'];
-      const cancelButtonIndex = options.length - 1;
-      this.context.actionSheet().showActionSheetWithOptions(
-        {
-          options,
-          cancelButtonIndex
-        },
-        buttonIndex => {
-          switch (buttonIndex) {
-            case 0:
-              //Clipboard.setString(this.props.currentMessage.text);
-              break;
-            default:
-              break;
-          }
-        }
-      );
+      this.props.onLongPress(e, this.props.currentMessage);
     }
   }
 
@@ -127,7 +109,7 @@ export default class Bubble extends React.PureComponent {
     const { currentMessage, activeMessage } = this.props;
     const background = currentMessage._id === activeMessage ? { backgroundColor: '#eee' } : {};
     return (
-      <div onClick={this.onLongPress} style={{ width: '100%', ...background }}>
+      <div onContextMenu={this.onLongPress} style={{ width: '100%', ...background }}>
         <div
           className="message"
           style={{ ...styles[this.props.position].container, ...this.props.containerStyle[this.props.position] }}

@@ -82,6 +82,7 @@
     "react": "16.5.0",
     "react-apollo": "^2.3.1",
     "react-art": "16.5.0",
+    "react-contexify": "^4.0.1",
     "react-cookie": "^2.2.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-debounce-input": "^3.1.0",

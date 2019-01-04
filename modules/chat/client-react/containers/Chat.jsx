@@ -8,7 +8,7 @@ import 'react-contexify/dist/ReactContexify.min.css';
 import chatConfig from '../../../../config/chat';
 import { WebChat } from './webChat/WebChat';
 import settings from '../../../../settings';
-// import CustomView from '../components/CustomView';
+import CustomView from '../components/CustomView';
 
 export default class extends React.Component {
   static propTypes = {
@@ -90,9 +90,9 @@ export default class extends React.Component {
     }
   };
 
-  // renderCustomView = chatProps => {
-  //   return <CustomView {...chatProps} />;
-  // };
+  renderCustomView = chatProps => {
+    return <CustomView {...chatProps} />;
+  };
 
   renderActionSheet = () => {
     const { t, deleteMessage } = this.props;
@@ -144,7 +144,7 @@ export default class extends React.Component {
               //onLoadEarlier={this.onLoadEarlier}
               user={{ _id: id, name: username }}
               renderChatFooter={this.renderChatFooter}
-              // renderCustomView={this.renderCustomView}
+              renderCustomView={this.renderCustomView}
               renderActions={this.renderCustomActions}
               activeMessage={this.state.activeMessage}
               onLongPress={(e, currentMessage) =>

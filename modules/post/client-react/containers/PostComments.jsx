@@ -5,6 +5,7 @@ import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView';
 
+import POST_QUERY from '../graphql/PostQuery.graphql';
 import ADD_COMMENT from '../graphql/AddComment.graphql';
 import EDIT_COMMENT from '../graphql/EditComment.graphql';
 import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
@@ -12,7 +13,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
 import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
-function AddComment(prev, node) {
+const onAddComment = (prev, node) => {
   // ignore if duplicate
   if (prev.post.comments.some(comment => comment.id === node.id)) {
     return prev;
@@ -26,9 +27,9 @@ function AddComment(prev, node) {
       }
     }
   });
-}
+};
 
-function DeleteComment(prev, id) {
+const onDeleteComment = (prev, id) => {
   const index = prev.post.comments.findIndex(x => x.id === id);
 
   // ignore if not found
@@ -43,7 +44,29 @@ function DeleteComment(prev, id) {
       }
     }
   });
-}
+};
+
+const getPostFromCache = (cache, postId) =>
+  cache.readQuery({
+    query: POST_QUERY,
+    variables: {
+      id: postId
+    }
+  });
+
+const writePostToCache = (cache, post, postId) =>
+  cache.writeQuery({
+    query: POST_QUERY,
+    variables: {
+      id: postId
+    },
+    data: {
+      post: {
+        ...post,
+        __typename: 'Post'
+      }
+    }
+  });
 
 class PostComments extends React.Component {
   static propTypes = {
@@ -108,9 +131,9 @@ class PostComments extends React.Component {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
-          newResult = AddComment(prev, node);
+          newResult = onAddComment(prev, node);
         } else if (mutation === 'DELETED') {
-          newResult = DeleteComment(prev, id);
+          newResult = onDeleteComment(prev, id);
         }
 
         return newResult;
@@ -137,25 +160,19 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
-          updateQueries: {
-            post: (
-              prev,
-              {
-                mutationResult: {
-                  data: { addComment }
-                }
-              }
-            ) => {
-              if (prev.post) {
-                return AddComment(prev, addComment);
-              }
+          update: (cache, { data: { addComment } }) => {
+            const prevPost = getPostFromCache(cache, postId);
+
+            if (prevPost.post) {
+              const { post } = onAddComment(prevPost, addComment);
+              writePostToCache(cache, post, postId);
             }
           }
         })
     })
   }),
   graphql(EDIT_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }) => ({
+    props: ({ mutate, ownProps: { postId } }) => ({
       editComment: (id, content) =>
         mutate({
           variables: { input: { id, postId, content } },
@@ -171,7 +188,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(DELETE_COMMENT, {
-    props: ({ ownProps: { postId }, mutate }) => ({
+    props: ({ mutate, ownProps: { postId } }) => ({
       deleteComment: id =>
         mutate({
           variables: { input: { id, postId } },
@@ -182,18 +199,12 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
-          updateQueries: {
-            post: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deleteComment }
-                }
-              }
-            ) => {
-              if (prev.post) {
-                return DeleteComment(prev, deleteComment.id);
-              }
+          update: (cache, { data: { deleteComment } }) => {
+            const prevPost = getPostFromCache(cache, postId);
+
+            if (prevPost.post) {
+              const { post } = onDeleteComment(prevPost, deleteComment.id);
+              writePostToCache(cache, post, postId);
             }
           }
         })

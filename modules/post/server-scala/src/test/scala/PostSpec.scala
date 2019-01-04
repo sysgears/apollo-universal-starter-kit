@@ -1,20 +1,14 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.model.MediaTypes.`application/json`
-import akka.http.scaladsl.testkit.RouteTestTimeout
-import akka.testkit.TestDuration
 import akka.util.ByteString
 import common.routes.graphql.jsonProtocols.GraphQLMessage
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import spray.json._
 
-import scala.concurrent.duration._
-
 class PostSpec extends PostHelper {
 
   def graphQLMessage(query: String) = ByteString(GraphQLMessage(query).toJson.compactPrint)
-
-  implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   "PostSpec" must {
 

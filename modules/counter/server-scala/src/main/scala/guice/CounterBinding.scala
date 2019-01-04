@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
-import common.publisher.{PubSubService, PublishElement}
+import common.publisher.{PubSubService, Event}
 import core.guice.injection.GuiceActorRefProvider
 import graphql.resolvers.CounterResolver
 import javax.inject.Named
@@ -20,7 +20,7 @@ class CounterBinding extends ScalaModule with GuiceActorRefProvider {
   override def configure() {
     bind[Actor].annotatedWith(Names.named(CounterActor.name)).to[CounterActor]
     bind[Actor].annotatedWith(Names.named(CounterResolver.name)).to[CounterResolver]
-    bind[PubSubService[PublishElement[Counter]]].to[CounterPubSubServiceImpl]
+    bind[PubSubService[Event[Counter]]].to[CounterPubSubServiceImpl]
   }
 
   @Provides

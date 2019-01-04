@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
-import common.publisher.{PubSubService, PublishElement}
+import common.publisher.{PubSubService, Event}
 import core.guice.injection.GuiceActorRefProvider
 import graphql.resolvers.CommentResolver
 import javax.inject.Named
@@ -21,7 +21,7 @@ class CommentBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
     bind[Actor].annotatedWith(Names.named(CommentResolver.name)).to[CommentResolver]
-    bind[PubSubService[PublishElement[Comment]]].to[CommentPubSubServiceImpl]
+    bind[PubSubService[Event[Comment]]].to[CommentPubSubServiceImpl]
   }
 
   @Provides

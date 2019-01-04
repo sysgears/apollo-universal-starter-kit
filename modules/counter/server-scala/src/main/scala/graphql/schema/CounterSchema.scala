@@ -5,7 +5,6 @@ import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
 import common.graphql.UserContext
-import common.publisher.PublishElement
 import common.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject

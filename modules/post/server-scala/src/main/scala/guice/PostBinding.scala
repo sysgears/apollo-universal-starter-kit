@@ -4,7 +4,7 @@ import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Provides
 import com.google.inject.name.Names
-import common.publisher.{PubSubService, PublishElement}
+import common.publisher.{PubSubService, Event}
 import core.guice.injection.GuiceActorRefProvider
 import graphql.resolvers.PostResolver
 import javax.inject.Named
@@ -23,7 +23,7 @@ class PostBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
     bind[Actor].annotatedWith(Names.named(PostResolver.name)).to[PostResolver]
-    bind[PubSubService[PublishElement[Post]]].to[PostPubSubServiceImpl]
+    bind[PubSubService[Event[Post]]].to[PostPubSubServiceImpl]
   }
 
   @Provides

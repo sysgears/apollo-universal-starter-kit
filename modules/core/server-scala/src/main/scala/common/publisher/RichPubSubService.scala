@@ -5,10 +5,10 @@ import scala.concurrent.{ExecutionContext, Future}
 object RichPubSubService {
 
   implicit class Publisher[T](element: Future[T])(implicit executionContext: ExecutionContext) {
-    def pub(triggerName: String)(implicit pubSubService: PubSubService[PublishElement[T]]): Future[T] = {
+    def pub(eventName: String)(implicit pubSubService: PubSubService[Event[T]]): Future[T] = {
       element.map {
         publishingElement => {
-          pubSubService.publish(PublishElement(triggerName, publishingElement))
+          pubSubService.publish(Event(eventName, publishingElement))
           publishingElement
         }
       }

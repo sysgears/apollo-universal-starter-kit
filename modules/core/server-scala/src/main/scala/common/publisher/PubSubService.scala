@@ -14,9 +14,9 @@ trait PubSubService[T] {
   /**
     * Subscribe to the event by specified params.
     */
-  def subscribe(triggerNames: Seq[String], params: Seq[Param]): Source[Action[Nothing, T], NotUsed]
+  def subscribe(eventNames: Seq[String], params: Seq[Param]): Source[Action[Nothing, T], NotUsed]
 }
 
 trait Param
 
-case class PublishElement[T](triggerName: String, element: T)
+case class Event[T](name: String, element: T)

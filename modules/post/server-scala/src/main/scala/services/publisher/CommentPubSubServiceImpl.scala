@@ -1,6 +1,6 @@
 package services.publisher
 
-import common.publisher.{BasicPubSubService, Param, PublishElement}
+import common.publisher.{BasicPubSubService, Param, Event}
 import javax.inject.{Inject, Singleton}
 import model.Comment
 import monix.execution.Scheduler
@@ -8,13 +8,13 @@ import monix.execution.Scheduler
 import scala.language.postfixOps
 
 @Singleton
-class CommentPubSubServiceImpl @Inject()(implicit scheduler: Scheduler) extends BasicPubSubService[PublishElement[Comment]] {
+class CommentPubSubServiceImpl @Inject()(implicit scheduler: Scheduler) extends BasicPubSubService[Event[Comment]] {
 
-  override def withFilter(element: PublishElement[Comment], triggerNames: Seq[String], params: Seq[Param]): Boolean = {
-    triggerNames.contains(element.triggerName) && withParams(element, params)
+  override def withFilter(element: Event[Comment], triggerNames: Seq[String], params: Seq[Param]): Boolean = {
+    triggerNames.contains(element.name) && withParams(element, params)
   }
 
-  private def withParams(pe: PublishElement[Comment], params: Seq[Param]): Boolean = {
+  private def withParams(pe: Event[Comment], params: Seq[Param]): Boolean = {
     if (params isEmpty) {
       true
     } else {

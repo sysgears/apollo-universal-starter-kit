@@ -195,7 +195,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
         val id = sc.args.arg[Int]("id")
         postPubSubPostService.subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))
           .map(action => action.map(publishElement => {
-            UpdatePostPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get.toString, node = publishElement.element)
+            UpdatePostPayload(mutation = publishElement.name, id = publishElement.element.id.get.toString, node = publishElement.element)
           }
           ))
       }
@@ -207,8 +207,8 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
         postPubSubPostService.subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))
-          .map(action => action.map(publishElement => {
-            UpdatePostPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get.toString, node = publishElement.element)
+          .map(action => action.map(event => {
+            UpdatePostPayload(mutation = event.name, id = event.element.id.get.toString, node = event.element)
           }
           ))
       }
@@ -220,8 +220,8 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PostPubSubService
       resolve = sc => {
         val postId = sc.args.arg[Int]("postId")
         commentPubSubPostService.subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))
-          .map(action => action.map(publishElement => {
-            UpdateCommentPayload(mutation = publishElement.triggerName, id = publishElement.element.id.get, postId = postId, node = publishElement.element)
+          .map(action => action.map(event => {
+            UpdateCommentPayload(mutation = event.name, id = event.element.id.get, postId = postId, node = event.element)
           }
           ))
       }

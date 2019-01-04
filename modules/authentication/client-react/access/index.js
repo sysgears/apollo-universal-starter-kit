@@ -8,16 +8,16 @@ import AccessModule from './AccessModule';
 
 const ref = React.createRef();
 
-const clearApolloStoreAndReloadComponent = async client => {
+const resetApolloCache = async client => {
   await client.cache.reset();
 };
 
 const login = async client => {
-  clearApolloStoreAndReloadComponent(client);
+  resetApolloCache(client);
 };
 
 const logout = async client => {
-  clearApolloStoreAndReloadComponent(client);
+  resetApolloCache(client);
   ref.current.reloadPage();
 };
 

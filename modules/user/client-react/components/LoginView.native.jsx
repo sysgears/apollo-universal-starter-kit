@@ -26,6 +26,7 @@ class LoginView extends React.PureComponent {
     const [, data] = url.match(/data=([^#]+)/);
     const decodedData = JSON.parse(decodeURI(data));
     const { client } = this.props;
+
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);

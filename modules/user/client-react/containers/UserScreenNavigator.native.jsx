@@ -15,10 +15,6 @@ class UserScreenNavigator extends React.Component {
     routeConfigs: PropTypes.object
   };
 
-  componentDidMount() {
-    console.log('MOUNT UserScreenNavigator --->', 'MOUNT UserScreenNavigator');
-  }
-
   shouldComponentUpdate(nextProps) {
     const { currentUserLoading, currentUser } = this.props;
     /**
@@ -34,10 +30,6 @@ class UserScreenNavigator extends React.Component {
       currentUser.id === nextProps.currentUser.id &&
       currentUser.role === nextProps.currentUser.role
     );
-  }
-
-  componentWillUnmount() {
-    console.log('UNMOUNT UserScreenNavigator --->', 'UNMOUNT UserScreenNavigator');
   }
 
   navItemsFilter = () => {

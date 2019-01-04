@@ -13,7 +13,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
 import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
-function onAddComment(prev, node) {
+const onAddComment = (prev, node) => {
   // ignore if duplicate
   if (prev.post.comments.some(comment => comment.id === node.id)) {
     return prev;
@@ -27,9 +27,9 @@ function onAddComment(prev, node) {
       }
     }
   });
-}
+};
 
-function onDeleteComment(prev, id) {
+const onDeleteComment = (prev, id) => {
   const index = prev.post.comments.findIndex(x => x.id === id);
 
   // ignore if not found
@@ -44,18 +44,18 @@ function onDeleteComment(prev, id) {
       }
     }
   });
-}
+};
 
-function getPostFromCache(cache, postId) {
+const getPostFromCache = (cache, postId) => {
   return cache.readQuery({
     query: POST_QUERY,
     variables: {
       id: postId
     }
   });
-}
+};
 
-function writePostToCache(cache, post, postId) {
+const writePostToCache = (cache, post, postId) => {
   cache.writeQuery({
     query: POST_QUERY,
     variables: {
@@ -68,7 +68,7 @@ function writePostToCache(cache, post, postId) {
       }
     }
   });
-}
+};
 
 class PostComments extends React.Component {
   static propTypes = {

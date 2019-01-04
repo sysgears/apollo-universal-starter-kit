@@ -16,7 +16,7 @@ const limit =
     ? settings.pagination.web.itemsNumber
     : settings.pagination.mobile.itemsNumber;
 
-export function onAddPost(prev, node) {
+export const onAddPost = (prev, node) => {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
     return update(prev, {
@@ -49,9 +49,9 @@ export function onAddPost(prev, node) {
       }
     }
   });
-}
+};
 
-function onDeletePost(prev, id) {
+const onDeletePost = (prev, id) => {
   const index = prev.posts.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -69,7 +69,7 @@ function onDeletePost(prev, id) {
       }
     }
   });
-}
+};
 
 class Post extends React.Component {
   static propTypes = {

@@ -19,7 +19,7 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
 const { limit } = chatConfig;
 
-function onAddMessage(prev, node) {
+const onAddMessage = (prev, node) => {
   // ignore if duplicate
   if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
     return prev;
@@ -50,9 +50,9 @@ function onAddMessage(prev, node) {
       }
     }
   });
-}
+};
 
-function onDeleteMessage(prev, id) {
+const onDeleteMessage = (prev, id) => {
   const index = prev.messages.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -79,9 +79,9 @@ function onDeleteMessage(prev, id) {
       }
     }
   });
-}
+};
 
-function onEditMessage(prev, node) {
+const onEditMessage = (prev, node) => {
   const newEdge = {
     cursor: node.id,
     node,
@@ -95,16 +95,16 @@ function onEditMessage(prev, node) {
       }
     }
   });
-}
+};
 
-function getMsgsFromCache(cache) {
+const getMsgsFromCache = cache => {
   return cache.readQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 }
   });
-}
+};
 
-function writeMsgsToCache(cache, messages) {
+const writeMsgsToCache = (cache, messages) => {
   cache.writeQuery({
     query: MESSAGES_QUERY,
     variables: { limit, after: 0 },
@@ -115,7 +115,7 @@ function writeMsgsToCache(cache, messages) {
       }
     }
   });
-}
+};
 
 class ChatOperations extends React.Component {
   static propTypes = {

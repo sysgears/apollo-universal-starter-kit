@@ -86,13 +86,13 @@ class WebChat extends React.Component {
   }
 
   componentDidUpdate() {
-    const { scrollbars } = this;
+    const {
+      scrollbars: { scrollTop, getScrollTop, getScrollHeight }
+    } = this;
     const amountMessages = this.getMessages().length;
-    if (
-      amountMessages !== this.state.amountMessages &&
-      scrollbars.getScrollTop() >= scrollbars.getScrollHeight() * 0.7
-    ) {
-      scrollbars.scrollTop(scrollbars.getScrollHeight());
+
+    if (amountMessages !== this.state.amountMessages && getScrollTop() >= getScrollHeight() * 0.7) {
+      scrollTop(getScrollHeight());
       this.setState({ amountMessages });
     }
   }
@@ -159,14 +159,11 @@ class WebChat extends React.Component {
 
   renderMessages() {
     return (
-      <div style={{ display: 'flex', flexWrap: 'wrap', height: '100%' }}>
-        <MessageContainer
-          {...this.props}
-          invertibleScrollViewProps={this.invertibleScrollViewProps}
-          messages={this.getMessages()}
-        />
-        <div style={{ alignSelf: 'flex-end', width: '100%' }}>{this.renderChatFooter()}</div>
-      </div>
+      <MessageContainer
+        {...this.props}
+        invertibleScrollViewProps={this.invertibleScrollViewProps}
+        messages={this.getMessages()}
+      />
     );
   }
 
@@ -279,15 +276,18 @@ class WebChat extends React.Component {
 
   render() {
     return (
-      <div style={{ width: '700px', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
-        <Scrollbars
-          style={{ height: 600, width: '100%' }}
-          autoHide
-          renderTrackHorizontal={() => <div />}
-          ref={scrollbars => (this.scrollbars = scrollbars)}
-        >
-          {this.renderMessages()}
-        </Scrollbars>
+      <div style={{ width: '700px', height: '80vh', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
+        <div style={{ height: '100%', width: '100%', position: 'relative' }}>
+          <Scrollbars
+            style={{ height: '100%', width: '100%' }}
+            autoHide
+            renderTrackHorizontal={() => <div />}
+            ref={scrollbars => (this.scrollbars = scrollbars)}
+          >
+            {this.renderMessages()}
+          </Scrollbars>
+          <div style={{ width: '100%', position: 'absolute', bottom: 0 }}>{this.renderChatFooter()}</div>
+        </div>
         {this.renderInputToolbar()}
       </div>
     );

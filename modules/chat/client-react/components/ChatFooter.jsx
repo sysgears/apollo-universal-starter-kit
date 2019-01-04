@@ -22,7 +22,8 @@ ChatFooter.propTypes = {
 const styles = {
   container: {
     position: 'relative',
-    borderLeft: '5px solid red'
+    borderLeft: '5px solid red',
+    backgroundColor: '#fff'
   },
 
   username: {

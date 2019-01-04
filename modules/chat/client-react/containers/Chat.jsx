@@ -56,16 +56,16 @@ export default class extends React.Component {
   };
 
   onSend = (messages = []) => {
-    const { isEdit, messageInfo, message, currentMessage } = this.state;
+    const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
-    const quotedId = currentMessage && currentMessage.hasOwnProperty('_id') ? currentMessage._id : null;
+    const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
     const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
         text: message,
-        quotedMessage: currentMessage ? currentMessage : defQuote,
+        quotedMessage: quotedMessage ? quotedMessage : defQuote,
         uuid
       });
       this.setState({ isEdit: false });
@@ -83,10 +83,10 @@ export default class extends React.Component {
         id,
         uuid,
         quotedId,
-        quotedMessage: this.state.isQuoted ? defQuote : defQuote
+        quotedMessage: quotedMessage ? quotedMessage : defQuote
       });
 
-      this.setState({ isQuoted: false, currentMessage: null });
+      this.setState({ isQuoted: false, quotedMessage: null });
     }
   };
 
@@ -96,6 +96,11 @@ export default class extends React.Component {
 
   setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
     this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
+    this.gc.focusTextInput();
+  };
+
+  setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
+    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, quotedId } });
     this.gc.focusTextInput();
   };
 
@@ -116,7 +121,7 @@ export default class extends React.Component {
         <Item onClick={() => this.setQuotedState(currentMessage)}>{t('msg.btn.reply')}</Item>
         {isOwnMessage && (
           <React.Fragment>
-            <Item onClick={() => {}}>{t('msg.btn.edit')}</Item>
+            <Item onClick={() => this.setEditState(currentMessage)}>{t('msg.btn.edit')}</Item>
             <Item onClick={() => deleteMessage(currentMessage._id)}>{t('msg.btn.delete')}</Item>
           </React.Fragment>
         )}

@@ -15,7 +15,9 @@ trait Pagination {
     * @param paginationParams contains Pagination entity
     * @return paginated query
     */
-  def withPagination[E <: RelationalProfile#Table[_], Y, U, C[Z]](query: Query[Y, U, C], paginationParams: PaginationParams) = {
+  def withPagination[E <: RelationalProfile#Table[_], Y, U, C[Z]](
+      query: Query[Y, U, C],
+      paginationParams: PaginationParams) = {
     query.drop(paginationParams.offset).take(paginationParams.limit)
   }
 }

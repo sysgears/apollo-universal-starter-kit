@@ -10,6 +10,7 @@ object UserResolver extends ActorNamed {
 class UserResolver extends Actor with ActorLogging {
 
   override def receive: Receive = {
-    case unknownMessage@_ => log.warning(s"Received unknown message: $unknownMessage")
+    case unknownMessage @ _ =>
+      log.warning(s"Received unknown message: $unknownMessage")
   }
 }

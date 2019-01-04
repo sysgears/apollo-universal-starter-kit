@@ -12,9 +12,14 @@ import pdi.jwt.{Jwt, JwtClaim}
 class JwtEncoderImpl @Inject()(algorithm: JwtHmacAlgorithm) extends JwtEncoder {
 
   /** @inheritdoc */
-  override def encode(content: String, secret: String): String = Jwt.encode(JwtClaim(content), secret, algorithm)
+  override def encode(content: String, secret: String): String =
+    Jwt.encode(JwtClaim(content), secret, algorithm)
 
   /** @inheritdoc */
-  override def encode(content: String, secret: String, expiration: Long): String =
-    Jwt.encode(JwtClaim(content).issuedNow.expiresIn(expiration), secret, algorithm)
+  override def encode(content: String,
+                      secret: String,
+                      expiration: Long): String =
+    Jwt.encode(JwtClaim(content).issuedNow.expiresIn(expiration),
+               secret,
+               algorithm)
 }

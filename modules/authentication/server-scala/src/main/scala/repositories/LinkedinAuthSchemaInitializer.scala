@@ -8,7 +8,9 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class LinkedinAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[LinkedinAuthTable] {
+class LinkedinAuthSchemaInitializer @Inject()(
+    implicit val executionContext: ExecutionContext)
+    extends SchemaInitializer[LinkedinAuthTable] {
 
   override val name: String = LinkedinAuthTable.name
   override val table = TableQuery[LinkedinAuthTable]

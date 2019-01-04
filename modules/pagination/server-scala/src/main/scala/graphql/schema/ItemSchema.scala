@@ -19,25 +19,29 @@ import scala.concurrent.ExecutionContext
   */
 class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
-                           executionContext: ExecutionContext) extends InputUnmarshallerGenerator
-  with Logger {
+                           executionContext: ExecutionContext)
+    extends InputUnmarshallerGenerator
+    with Logger {
 
-  implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {
-    input =>
+  implicit val paginationInputUnmarshaller: FromInput[PaginationParams] =
+    inputUnmarshaller { input =>
       PaginationParams(
         offset = input("offset").asInstanceOf[Int],
         limit = input("limit").asInstanceOf[Int]
       )
-  }
+    }
 
   /**
     * Defines a list of graphQl types for input and output data.
     */
   object Types {
 
-    implicit val Item: ObjectType[Unit, Item] = deriveObjectType(ObjectTypeName("Item"), ExcludeFields("id"))
-    implicit val ItemsPayload: ObjectType[Unit, ItemsPayload] = deriveObjectType(ObjectTypeName("ItemsPayload"))
-    implicit val PaginationInput: InputObjectType[PaginationParams] = deriveInputObjectType[PaginationParams](InputObjectTypeName("Pagination"))
+    implicit val Item: ObjectType[Unit, Item] =
+      deriveObjectType(ObjectTypeName("Item"), ExcludeFields("id"))
+    implicit val ItemsPayload: ObjectType[Unit, ItemsPayload] =
+      deriveObjectType(ObjectTypeName("ItemsPayload"))
+    implicit val PaginationInput: InputObjectType[PaginationParams] =
+      deriveInputObjectType[PaginationParams](InputObjectTypeName("Pagination"))
   }
 
   /**

@@ -11,7 +11,8 @@ import scala.util.Try
   *
   * @param algorithm injected implementation of HMAC algorithm
   */
-class JwtValidatorImpl @Inject()(algorithm: JwtHmacAlgorithm) extends JwtValidator {
+class JwtValidatorImpl @Inject()(algorithm: JwtHmacAlgorithm)
+    extends JwtValidator {
 
   /** @inheritdoc */
   override def validate(token: String, secret: String): Try[Boolean] =

@@ -9,7 +9,9 @@ object FileMetadataTable extends JdbcProfile {
 
   val name = "FILES"
 
-  class FileMetadataTable(tag: Tag) extends SlickTable[FileMetadata](tag, name) with Keyed[Int] {
+  class FileMetadataTable(tag: Tag)
+      extends SlickTable[FileMetadata](tag, name)
+      with Keyed[Int] {
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 
     def name = column[String]("NAME")

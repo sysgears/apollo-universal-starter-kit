@@ -3,7 +3,12 @@ package common.routes.graphql
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
-import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
+import akka.stream.{
+  ActorMaterializer,
+  KillSwitches,
+  OverflowStrategy,
+  SharedKillSwitch
+}
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
@@ -21,14 +26,16 @@ import spray.json._
 import scala.util.{Failure, Success}
 
 class WebSocketHandler(graphQL: GraphQL,
-                       graphQlExecutor: Executor[UserContext, Unit])
-                      (implicit val actorMaterializer: ActorMaterializer,
-                       implicit val scheduler: Scheduler) extends RouteUtil {
+                       graphQlExecutor: Executor[UserContext, Unit])(
+    implicit val actorMaterializer: ActorMaterializer,
+    implicit val scheduler: Scheduler)
+    extends RouteUtil {
 
   import spray.json.DefaultJsonProtocol._
 
   def handleMessages: Flow[Message, Message, NotUsed] = {
-    implicit val (queue, publisher) = Source.queue[Message](16, OverflowStrategy.backpressure)
+    implicit val (queue, publisher) = Source
+      .queue[Message](16, OverflowStrategy.backpressure)
       .toMat(Sink.asPublisher(false))(Keep.both)
       .run()
     val killSwitches = KillSwitches.shared(this.getClass.getSimpleName)
@@ -44,60 +51,68 @@ class WebSocketHandler(graphQL: GraphQL,
           }
       }
       .to {
-        Sink.onComplete {
-          _ =>
-            killSwitches.shutdown
-            queue.complete
+        Sink.onComplete { _ =>
+          killSwitches.shutdown
+          queue.complete
         }
       }
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
-  private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
-                                (implicit queue: SourceQueueWithComplete[Message]): Unit = {
+  private def handleGraphQlQuery(operationMessage: OperationMessage,
+                                 killSwitches: SharedKillSwitch)(
+      implicit queue: SourceQueueWithComplete[Message]): Unit = {
     import sangria.streaming.akkaStreams._
-    operationMessage.payload.foreach {
-      payload =>
-        val graphQlMessage = payload.convertTo[GraphQLMessage]
-        QueryParser.parse(graphQlMessage.query) match {
-          case Success(queryAst) =>
-            queryAst.operationType(graphQlMessage.operationName) match {
-              case Some(Subscription) =>
-                graphQlExecutor.execute(
+    operationMessage.payload.foreach { payload =>
+      val graphQlMessage = payload.convertTo[GraphQLMessage]
+      QueryParser.parse(graphQlMessage.query) match {
+        case Success(queryAst) =>
+          queryAst.operationType(graphQlMessage.operationName) match {
+            case Some(Subscription) =>
+              graphQlExecutor
+                .execute(
                   queryAst = queryAst,
                   userContext = UserContext(),
                   root = (),
                   operationName = graphQlMessage.operationName,
                   variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                ).viaMat(killSwitches.flow)(Keep.none)
-                  .runForeach {
-                    result =>
-                      reply(OperationMessage(GQL_DATA, operationMessage.id, Some(result)))
-                  }
-              case _ =>
-                reply(OperationMessage(
+                )
+                .viaMat(killSwitches.flow)(Keep.none)
+                .runForeach { result =>
+                  reply(
+                    OperationMessage(GQL_DATA,
+                                     operationMessage.id,
+                                     Some(result)))
+                }
+            case _ =>
+              reply(
+                OperationMessage(
                   GQL_ERROR,
                   operationMessage.id,
-                  Some(s"Unsupported type: ${queryAst.operationType(None)}".toJson)
+                  Some(
+                    s"Unsupported type: ${queryAst.operationType(None)}".toJson)
                 ))
-            }
-          case Failure(e: SyntaxError) =>
-            reply(OperationMessage(
+          }
+        case Failure(e: SyntaxError) =>
+          reply(
+            OperationMessage(
               GQL_ERROR,
               operationMessage.id,
               Some(syntaxError(e))
             ))
-          case Failure(_) =>
-            reply(OperationMessage(
+        case Failure(_) =>
+          reply(
+            OperationMessage(
               GQL_ERROR,
               operationMessage.id,
               Some("Internal Server Error".toJson)
             ))
-        }
+      }
     }
   }
 
-  private def reply(operationMessage: OperationMessage)(implicit queue: SourceQueueWithComplete[Message]): Unit = {
+  private def reply(operationMessage: OperationMessage)(
+      implicit queue: SourceQueueWithComplete[Message]): Unit = {
     queue.offer(TextMessage(operationMessage.toJson.toString))
   }
 }

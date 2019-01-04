@@ -7,13 +7,16 @@ import akka.stream.{ActorMaterializer, OverflowStrategy}
 import scala.concurrent.Future
 
 trait ActorMessageDelivering {
-  def sendMessageWithFunc[T](f: ActorRef => Unit)(implicit actorMaterializer: ActorMaterializer): Future[T] = {
-    Source.actorRef[T](1024, OverflowStrategy.fail)
+  def sendMessageWithFunc[T](f: ActorRef => Unit)(
+      implicit actorMaterializer: ActorMaterializer): Future[T] = {
+    Source
+      .actorRef[T](1024, OverflowStrategy.fail)
       .mapMaterializedValue(f)
       .runWith(Sink.head[T])
   }
 
-  def sendMessageToActor[T](recipient: ActorRef, message: Any)(implicit actorMaterializer: ActorMaterializer): Future[T] = {
+  def sendMessageToActor[T](recipient: ActorRef, message: Any)(
+      implicit actorMaterializer: ActorMaterializer): Future[T] = {
     sendMessageWithFunc[T](sender => recipient.tell(message, sender))
   }
 }

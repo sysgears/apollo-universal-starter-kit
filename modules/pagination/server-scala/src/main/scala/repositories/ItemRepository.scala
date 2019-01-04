@@ -9,7 +9,10 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext) extends Repository[Item, Int](driver) with Pagination {
+class ItemRepository @Inject()(override val driver: JdbcProfile)(
+    implicit executionContext: ExecutionContext)
+    extends Repository[Item, Int](driver)
+    with Pagination {
 
   import driver.api._
 
@@ -17,18 +20,18 @@ class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit execut
   val tableQuery = TableQuery[ItemTable]
   type TableType = ItemTable
 
-  def getPaginatedObjectsList(paginationParams: PaginationParams): DBIO[PaginatedResult[Item]] = {
+  def getPaginatedObjectsList(
+      paginationParams: PaginationParams): DBIO[PaginatedResult[Item]] = {
     val (offset, limit) = (paginationParams.offset, paginationParams.limit)
     val paginatedQuery = withPagination(tableQuery, paginationParams)
     for {
       totalCount <- tableQuery.size.result
       paginatedResult <- paginatedQuery.result
-    } yield PaginatedResult(
-      totalCount = totalCount,
-      entities = paginatedResult.toList,
-      hasNextPage = (totalCount - (offset + limit)) > 0
-    )
+    } yield
+      PaginatedResult(
+        totalCount = totalCount,
+        entities = paginatedResult.toList,
+        hasNextPage = (totalCount - (offset + limit)) > 0
+      )
   }
 }
-
-

@@ -4,7 +4,12 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.implicits.RichList._
-import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
+import common.actors.Dispatcher.{
+  DispatcherMessage,
+  Failure,
+  InterceptorBeforeMessage,
+  Success
+}
 import common.graphql.UserContext
 import common.ActorNamed
 import javax.inject.Inject
@@ -43,9 +48,10 @@ object Dispatcher extends ActorNamed {
 }
 
 class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
-                           executionContext: ExecutionContext) extends Actor
-  with ActorLogging
-  with ActorMessageDelivering {
+                           executionContext: ExecutionContext)
+    extends Actor
+    with ActorLogging
+    with ActorMessageDelivering {
 
   override def receive: Receive = {
     case msg: DispatcherMessage =>

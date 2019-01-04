@@ -20,7 +20,7 @@ object RichTry {
       * @return a Future.failed with a errorHandler output type error.
       */
     def asFuture(implicit ec: ExecutionContext): Future[A] = tryVal match {
-      case Success(value) => Future.successful(value)
+      case Success(value)     => Future.successful(value)
       case Failure(exception) => Future.failed(exception)
     }
   }

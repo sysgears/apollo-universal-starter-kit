@@ -16,10 +16,11 @@ object GraphQLTypes {
     },
     coerceUserInput = {
       case dateStr: String => parseDate(dateStr, dateTimeFormat)
-      case _ => Left(DateCoercionViolation)
+      case _               => Left(DateCoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(dateStr, _, _, _, _) => parseDate(dateStr, dateTimeFormat)
+      case sangria.ast.StringValue(dateStr, _, _, _, _) =>
+        parseDate(dateStr, dateTimeFormat)
       case _ => Left(DateCoercionViolation)
     }
   )
@@ -32,10 +33,11 @@ object GraphQLTypes {
     },
     coerceUserInput = {
       case dateStr: String => parseDate(dateStr, dateFormat)
-      case _ => Left(DateCoercionViolation)
+      case _               => Left(DateCoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(dateStr, _, _, _, _) => parseDate(dateStr, dateFormat)
+      case sangria.ast.StringValue(dateStr, _, _, _, _) =>
+        parseDate(dateStr, dateFormat)
       case _ => Left(DateCoercionViolation)
     }
   )
@@ -48,10 +50,11 @@ object GraphQLTypes {
     },
     coerceUserInput = {
       case dateStr: String => parseDate(dateStr, timeFormat)
-      case _ => Left(DateCoercionViolation)
+      case _               => Left(DateCoercionViolation)
     },
     coerceInput = {
-      case sangria.ast.StringValue(dateStr, _, _, _, _) => parseDate(dateStr, timeFormat)
+      case sangria.ast.StringValue(dateStr, _, _, _, _) =>
+        parseDate(dateStr, timeFormat)
       case _ => Left(DateCoercionViolation)
     }
   )

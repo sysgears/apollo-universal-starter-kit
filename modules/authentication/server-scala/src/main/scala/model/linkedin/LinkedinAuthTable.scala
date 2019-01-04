@@ -10,7 +10,9 @@ object LinkedinAuthTable extends JdbcProfile {
 
   val name = "LINKEDIN_AUTH"
 
-  class LinkedinAuthTable(tag: Tag) extends SlickTable[LinkedinAuth](tag, name) with Keyed[String] {
+  class LinkedinAuthTable(tag: Tag)
+      extends SlickTable[LinkedinAuth](tag, name)
+      with Keyed[String] {
 
     def id = column[String]("LINKEDIN_ID", O.Unique)
 
@@ -18,7 +20,11 @@ object LinkedinAuthTable extends JdbcProfile {
 
     def userId = column[Int]("USER_ID", O.Unique)
 
-    def userFk = foreignKey("LINKEDIN_USER_ID_FK", userId, TableQuery[UserTable])(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
+    def userFk =
+      foreignKey("LINKEDIN_USER_ID_FK", userId, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade)
 
     def * = (id.?, displayName, userId).mapTo[LinkedinAuth]
   }

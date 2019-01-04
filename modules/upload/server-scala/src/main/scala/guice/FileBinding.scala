@@ -22,9 +22,12 @@ class FileBinding extends ScalaModule with GuiceActorRefProvider {
   }
 
   @Provides
-  def fileMetadataRepository(driver: JdbcProfile): Repository[FileMetadata, Int] = new FileMetadataRepository(driver)
+  def fileMetadataRepository(
+      driver: JdbcProfile): Repository[FileMetadata, Int] =
+    new FileMetadataRepository(driver)
 
   @Provides
   @Named(FileActor.name)
-  def actor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(FileActor)
+  def actor(implicit actorSystem: ActorSystem): ActorRef =
+    provideActorRef(FileActor)
 }

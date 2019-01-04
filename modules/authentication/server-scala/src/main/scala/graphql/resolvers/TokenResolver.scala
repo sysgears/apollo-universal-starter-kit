@@ -19,21 +19,29 @@ object TokenResolver extends ActorNamed {
 }
 
 class TokenResolver @Inject()(userRepository: UserRepository,
-                              jwtAuthService: JwtAuthService[JwtContent])
-                             (implicit executionContext: ExecutionContext) extends Actor
-  with ActorLogging {
+                              jwtAuthService: JwtAuthService[JwtContent])(
+    implicit executionContext: ExecutionContext)
+    extends Actor
+    with ActorLogging {
 
   override def receive: Receive = {
     case refreshToken: String => {
       for {
         tokenContent <- jwtAuthService.decodeContent(refreshToken).asFuture
-        user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-        _ <- jwtAuthService.decodeRefreshToken(refreshToken, user.password).asFuture
-        accessToken = jwtAuthService.createAccessToken(JwtContent(tokenContent.id))
-        refreshToken = jwtAuthService.createRefreshToken(JwtContent(tokenContent.id), user.password)
+        user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(
+          s"User with id: [${tokenContent.id}] not found.")
+        _ <- jwtAuthService
+          .decodeRefreshToken(refreshToken, user.password)
+          .asFuture
+        accessToken = jwtAuthService.createAccessToken(
+          JwtContent(tokenContent.id))
+        refreshToken = jwtAuthService.createRefreshToken(
+          JwtContent(tokenContent.id),
+          user.password)
       } yield Tokens(accessToken, refreshToken)
     }.pipeTo(sender)
 
-    case unknownMessage@_ => log.warning(s"Received unknown message: $unknownMessage")
+    case unknownMessage @ _ =>
+      log.warning(s"Received unknown message: $unknownMessage")
   }
 }

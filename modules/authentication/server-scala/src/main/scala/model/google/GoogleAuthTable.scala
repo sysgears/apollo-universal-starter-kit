@@ -10,7 +10,9 @@ object GoogleAuthTable extends JdbcProfile {
 
   val name = "GOOGLE_AUTH"
 
-  class GoogleAuthTable(tag: Tag) extends SlickTable[GoogleAuth](tag, name) with Keyed[String] {
+  class GoogleAuthTable(tag: Tag)
+      extends SlickTable[GoogleAuth](tag, name)
+      with Keyed[String] {
 
     def id = column[String]("GOOGLE_ID", O.Unique)
 
@@ -18,7 +20,11 @@ object GoogleAuthTable extends JdbcProfile {
 
     def userId = column[Int]("USER_ID", O.Unique)
 
-    def userFk = foreignKey("GOOGLE_USER_ID_FK", userId, TableQuery[UserTable])(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
+    def userFk =
+      foreignKey("GOOGLE_USER_ID_FK", userId, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade)
 
     def * = (id.?, displayName, userId).mapTo[GoogleAuth]
   }

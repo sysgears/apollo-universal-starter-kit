@@ -36,12 +36,14 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Name of the database table
     */
   val name: String
+
   /**
     * Represents a database table
     */
   val table: TableQuery[E]
 
-  private def withDBAction(f: scala.Vector[MTable] => Future[Unit])(implicit executionContext: ExecutionContext) = {
+  private def withDBAction(f: scala.Vector[MTable] => Future[Unit])(
+      implicit executionContext: ExecutionContext) = {
     database.run(MTable.getTables(name)).flatMap(f)
   }
 
@@ -50,7 +52,8 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     */
   def create(): Future[Unit] = {
     withDBAction { tables =>
-      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create)) else Future.successful()
+      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create))
+      else Future.successful()
     }
   }
 
@@ -59,7 +62,8 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     */
   def createAndSeed(): Future[Unit] = {
     withDBAction { tables =>
-      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData)) else Future.successful()
+      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData))
+      else Future.successful()
     }
   }
 
@@ -68,7 +72,8 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     */
   def drop(): Future[Unit] = {
     withDBAction { tables =>
-      if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
+      if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop))
+      else Future.successful()
     }
   }
 

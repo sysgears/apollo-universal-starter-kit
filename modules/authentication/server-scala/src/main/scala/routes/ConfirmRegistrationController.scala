@@ -15,9 +15,10 @@ import repositories.UserRepository
 import scala.concurrent.{ExecutionContext, Future}
 import scala.util.{Failure, Success}
 
-class ConfirmRegistrationController @Inject()(userRepository: UserRepository,
-                                              jwtAuthService: JwtAuthService[JwtContent])
-                                             (implicit val executionContext: ExecutionContext) {
+class ConfirmRegistrationController @Inject()(
+    userRepository: UserRepository,
+    jwtAuthService: JwtAuthService[JwtContent])(
+    implicit val executionContext: ExecutionContext) {
 
   val routes: Route =
     (path("confirmation") & get) {
@@ -25,8 +26,15 @@ class ConfirmRegistrationController @Inject()(userRepository: UserRepository,
         onComplete {
           for {
             tokenContent <- jwtAuthService.decodeContent(token).asFuture
-            user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(s"User with id: [${tokenContent.id}] not found.")
-            _ <- if (!user.isActive) userRepository.update(user.copy(isActive = true)).run else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
+            user <- userRepository
+              .findOne(tokenContent.id)
+              .run failOnNone NotFound(
+              s"User with id: [${tokenContent.id}] not found.")
+            _ <- if (!user.isActive)
+              userRepository.update(user.copy(isActive = true)).run
+            else
+              Future.failed(
+                AlreadyExists(s"User with id: [${user.id}] is active"))
           } yield ()
         } {
           case Success(_) => redirect("/login", StatusCodes.Found)

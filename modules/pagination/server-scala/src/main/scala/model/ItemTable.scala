@@ -12,7 +12,9 @@ object ItemTable extends JdbcProfile {
   /**
     * Defines entity fields for slick.
     */
-  class ItemTable(tag: Tag) extends SlickTable[Item](tag, name) with Keyed[Int] {
+  class ItemTable(tag: Tag)
+      extends SlickTable[Item](tag, name)
+      with Keyed[Int] {
 
     def id = column[Int]("ID", O.PrimaryKey, O.AutoInc)
 
@@ -22,4 +24,3 @@ object ItemTable extends JdbcProfile {
   }
 
 }
-

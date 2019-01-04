@@ -22,12 +22,13 @@ import spray.json._
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class LinkedinAuthController @Inject()(@Named("linkedin") oauth2Service: OAuth20Service,
-                                       externalApiService: ExternalApiService,
-                                       userRepository: UserRepository,
-                                       linkedinAuthRepository: LinkedinAuthRepository,
-                                       jwtAuthService: JwtAuthService[JwtContent])
-                                      (implicit val executionContext: ExecutionContext) {
+class LinkedinAuthController @Inject()(
+    @Named("linkedin") oauth2Service: OAuth20Service,
+    externalApiService: ExternalApiService,
+    userRepository: UserRepository,
+    linkedinAuthRepository: LinkedinAuthRepository,
+    jwtAuthService: JwtAuthService[JwtContent])(
+    implicit val executionContext: ExecutionContext) {
 
   val routes: Route =
     (path("auth" / "linkedin") & get) {
@@ -36,27 +37,51 @@ class LinkedinAuthController @Inject()(@Named("linkedin") oauth2Service: OAuth20
       parameters('state.?, 'code) { (state, code) =>
         onComplete {
           for {
-            linkedinAuthInfo <- externalApiService.getUserInfo[LinkedinOauth2Response](code, "https://api.linkedin.com/v2/me", oauth2Service)
-            user <- linkedinAuthRepository.findOne(linkedinAuthInfo.id).run.flatMap {
-              case Some(lnUser) => userRepository.findOne(lnUser.userId).run failOnNone AmbigousResult(s"User with id: ${lnUser.userId} stored in linkedin auth table, but not in the user table")
-              case None => for {
-                user <- userRepository.save(
-                  User(
-                    username = linkedinAuthInfo.name,
-                    email = linkedinAuthInfo.email,
-                    password = BCrypt.hashpw(linkedinAuthInfo.id, BCrypt.gensalt),
-                    role = "user",
-                    isActive = true)
-                ).run
-                _ <- linkedinAuthRepository.save(LinkedinAuth(Some(linkedinAuthInfo.id), linkedinAuthInfo.name, user.id.get)).run
-              } yield user
-            }
-          } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
+            linkedinAuthInfo <- externalApiService
+              .getUserInfo[LinkedinOauth2Response](
+                code,
+                "https://api.linkedin.com/v2/me",
+                oauth2Service)
+            user <- linkedinAuthRepository
+              .findOne(linkedinAuthInfo.id)
+              .run
+              .flatMap {
+                case Some(lnUser) =>
+                  userRepository
+                    .findOne(lnUser.userId)
+                    .run failOnNone AmbigousResult(
+                    s"User with id: ${lnUser.userId} stored in linkedin auth table, but not in the user table")
+                case None =>
+                  for {
+                    user <- userRepository
+                      .save(
+                        User(username = linkedinAuthInfo.name,
+                             email = linkedinAuthInfo.email,
+                             password = BCrypt.hashpw(linkedinAuthInfo.id,
+                                                      BCrypt.gensalt),
+                             role = "user",
+                             isActive = true)
+                      )
+                      .run
+                    _ <- linkedinAuthRepository
+                      .save(
+                        LinkedinAuth(Some(linkedinAuthInfo.id),
+                                     linkedinAuthInfo.name,
+                                     user.id.get))
+                      .run
+                  } yield user
+              }
+          } yield
+            jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
         } {
           case Success(tokens) =>
-            setCookie(HttpCookie("access-token", value = tokens.accessToken), HttpCookie("refresh-token", value = tokens.refreshToken)) {
+            setCookie(
+              HttpCookie("access-token", value = tokens.accessToken),
+              HttpCookie("refresh-token", value = tokens.refreshToken)) {
               state match {
-                case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
+                case Some(redirectUrl) =>
+                  redirect(s"$redirectUrl?data=${tokens.toJson.toString}",
+                           StatusCodes.Found)
                 case None => redirect("/profile", StatusCodes.Found)
               }
             }

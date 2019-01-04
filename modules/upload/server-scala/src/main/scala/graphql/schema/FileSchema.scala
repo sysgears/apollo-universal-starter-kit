@@ -10,10 +10,11 @@ import sangria.macros.derive.{ObjectTypeName, RenameField, deriveObjectType}
 import sangria.schema.{Argument, Field, _}
 import spray.json.DefaultJsonProtocol
 
-class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
-                          (implicit val materializer: ActorMaterializer) extends InputUnmarshallerGenerator
-  with Logger
-  with DefaultJsonProtocol {
+class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)(
+    implicit val materializer: ActorMaterializer)
+    extends InputUnmarshallerGenerator
+    with Logger
+    with DefaultJsonProtocol {
 
   implicit val fileUploadType: ScalarType[Unit] = new ScalarType[Unit](
     name = "FileUpload",
@@ -22,13 +23,16 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)
     coerceInput = _ => Right(Unit)
   )
 
-  implicit val fileMetadata: ObjectType[Unit, FileMetadata] = deriveObjectType(ObjectTypeName("File"), RenameField("contentType", "type"))
+  implicit val fileMetadata: ObjectType[Unit, FileMetadata] =
+    deriveObjectType(ObjectTypeName("File"), RenameField("contentType", "type"))
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "uploadFiles",
       fieldType = sangria.schema.BooleanType,
-      arguments = Argument(name = "files", argumentType = ListInputType(OptionInputType(fileUploadType))) :: Nil,
+      arguments = Argument(
+        name = "files",
+        argumentType = ListInputType(OptionInputType(fileUploadType))) :: Nil,
       resolve = sc => {
         fileUploadResolver.uploadFiles(sc.ctx.filesData)
       }

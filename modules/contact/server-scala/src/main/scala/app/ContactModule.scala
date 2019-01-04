@@ -14,7 +14,8 @@ class ContactModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val contactSchema: ContactSchema = inject[ContactSchema]
 
-  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(contactSchema.mutations: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(contactSchema.mutations: _*)
 
   bindings = new ContactBinding
 }

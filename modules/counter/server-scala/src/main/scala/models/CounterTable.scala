@@ -9,7 +9,9 @@ object CounterTable extends JdbcProfile {
 
   val name = "COUNTER"
 
-  class CounterTable(tag: Tag) extends SlickTable[Counter](tag, name) with Keyed[Int] {
+  class CounterTable(tag: Tag)
+      extends SlickTable[Counter](tag, name)
+      with Keyed[Int] {
 
     def id = column[Int]("ID", O.PrimaryKey)
 

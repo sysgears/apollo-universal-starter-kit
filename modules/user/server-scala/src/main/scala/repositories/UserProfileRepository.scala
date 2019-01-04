@@ -9,8 +9,9 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class UserProfileRepository @Inject()(override val driver: JdbcProfile)
-                                     (implicit executionContext: ExecutionContext) extends Repository[UserProfile, Int](driver) {
+class UserProfileRepository @Inject()(override val driver: JdbcProfile)(
+    implicit executionContext: ExecutionContext)
+    extends Repository[UserProfile, Int](driver) {
 
   import driver.api._
 

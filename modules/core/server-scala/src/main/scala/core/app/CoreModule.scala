@@ -14,7 +14,8 @@ class CoreModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val frontendRoute: FrontendRoute = inject[FrontendRoute]
 
-  override lazy val routes: mutable.HashSet[Route] = mutable.HashSet(frontendRoute.routes)
+  override lazy val routes: mutable.HashSet[Route] =
+    mutable.HashSet(frontendRoute.routes)
 
   bindings = new CoreBinding
 }

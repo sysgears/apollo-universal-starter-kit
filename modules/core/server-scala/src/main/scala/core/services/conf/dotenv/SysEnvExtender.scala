@@ -13,6 +13,7 @@ import scala.collection.JavaConverters._
   * after any other service, that depends on ENV variables.</i>
   */
 object SysEnvExtender {
+
   /**
     * Appends the environment variables from the given Map to a "sys.env".
     *
@@ -26,36 +27,46 @@ object SysEnvExtender {
       (newEnv ++ sys.env).asJava
     }
     Try {
-      val processEnvironmentClass = Class.forName("java.lang.ProcessEnvironment")
+      val processEnvironmentClass =
+        Class.forName("java.lang.ProcessEnvironment")
 
-      val theEnvironmentField = processEnvironmentClass.getDeclaredField("theEnvironment")
+      val theEnvironmentField =
+        processEnvironmentClass.getDeclaredField("theEnvironment")
       theEnvironmentField.setAccessible(true)
-      val env = theEnvironmentField.get(null).asInstanceOf[java.util.Map[String, String]]
+      val env = theEnvironmentField
+        .get(null)
+        .asInstanceOf[java.util.Map[String, String]]
       env.putAll(newEnvAsJavaMap)
 
-      val theCaseInsensitiveEnvironmentField = processEnvironmentClass.getDeclaredField("theCaseInsensitiveEnvironment")
+      val theCaseInsensitiveEnvironmentField =
+        processEnvironmentClass.getDeclaredField(
+          "theCaseInsensitiveEnvironment")
       theCaseInsensitiveEnvironmentField.setAccessible(true)
-      val ciEnv = theCaseInsensitiveEnvironmentField.get(null).asInstanceOf[java.util.Map[String, String]]
+      val ciEnv = theCaseInsensitiveEnvironmentField
+        .get(null)
+        .asInstanceOf[java.util.Map[String, String]]
       ciEnv.putAll(newEnvAsJavaMap)
     } match {
       case Failure(_: NoSuchFieldException) =>
         Try {
           val classes = classOf[Collections].getDeclaredClasses
           val env = System.getenv
-          classes.filter(_.getName == "java.util.Collections$UnmodifiableMap").foreach {
-            cl =>
+          classes
+            .filter(_.getName == "java.util.Collections$UnmodifiableMap")
+            .foreach { cl =>
               val field = cl.getDeclaredField("m")
               field.setAccessible(true)
-              val map = field.get(env).asInstanceOf[java.util.Map[String, String]]
+              val map =
+                field.get(env).asInstanceOf[java.util.Map[String, String]]
               map.clear()
               map.putAll(newEnvAsJavaMap)
-          }
+            }
         } match {
           case Failure(NonFatal(e2)) => e2.printStackTrace()
-          case Success(_) =>
+          case Success(_)            =>
         }
       case Failure(NonFatal(e1)) => e1.printStackTrace()
-      case Success(_) =>
+      case Success(_)            =>
     }
   }
 }

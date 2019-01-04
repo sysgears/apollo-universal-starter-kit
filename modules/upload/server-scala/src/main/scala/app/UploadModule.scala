@@ -14,11 +14,15 @@ import scala.collection.mutable
 class UploadModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val fileSchema: FileSchema = inject[FileSchema]
-  lazy val fileSchemaInitializer: FileSchemaInitializer = inject[FileSchemaInitializer]
+  lazy val fileSchemaInitializer: FileSchemaInitializer =
+    inject[FileSchemaInitializer]
 
-  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(fileSchemaInitializer)
-  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(fileSchema.queries: _*)
-  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(fileSchema.mutations: _*)
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] =
+    mutable.HashSet(fileSchemaInitializer)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(fileSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(fileSchema.mutations: _*)
 
   bindings = new FileBinding
 }

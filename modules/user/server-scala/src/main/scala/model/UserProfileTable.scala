@@ -10,10 +10,16 @@ object UserProfileTable extends JdbcProfile {
 
   val name = "USER_PROFILE"
 
-  class UserProfileTable(tag: Tag) extends SlickTable[UserProfile](tag, name) with Keyed[Int] {
+  class UserProfileTable(tag: Tag)
+      extends SlickTable[UserProfile](tag, name)
+      with Keyed[Int] {
     def id = column[Int]("ID", O.PrimaryKey)
 
-    def userFk = foreignKey("PROFILE_USER_ID_FK", id, TableQuery[UserTable])(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
+    def userFk =
+      foreignKey("PROFILE_USER_ID_FK", id, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade)
 
     def firstName = column[String]("FIRST_NAME")
 

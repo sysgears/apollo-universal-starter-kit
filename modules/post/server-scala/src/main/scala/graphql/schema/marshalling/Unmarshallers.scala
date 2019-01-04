@@ -6,18 +6,18 @@ import sangria.marshalling.FromInput
 
 object Unmarshallers extends InputUnmarshallerGenerator {
 
-  implicit val addPostInputUnmarshaller: FromInput[EditPostInput] = inputUnmarshaller {
+  implicit val addPostInputUnmarshaller: FromInput[AddPostInput] = inputUnmarshaller {
     input =>
-      EditPostInput(
-        id = input("id").asInstanceOf[Int],
+      AddPostInput(
         title = input("title").asInstanceOf[String],
         content = input("content").asInstanceOf[String]
       )
   }
 
-  implicit val editPostInputUnmarshaller: FromInput[AddPostInput] = inputUnmarshaller {
+  implicit val editPostInputUnmarshaller: FromInput[EditPostInput] = inputUnmarshaller {
     input =>
-      AddPostInput(
+      EditPostInput(
+        id = input("id").asInstanceOf[Int],
         title = input("title").asInstanceOf[String],
         content = input("content").asInstanceOf[String]
       )

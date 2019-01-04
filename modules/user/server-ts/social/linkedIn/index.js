@@ -70,7 +70,7 @@ if (settings.user.auth.linkedin.enabled && !__TEST__) {
       '/auth/linkedin/callback',
       passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
       async function(req, res) {
-        const user = await User.getUser(req.user.id);
+        const user = await User.getUserWithPassword(req.user.id);
         const redirectUrl = req.query.state;
         const tokens = await access.grantAccess(user, req, user.passwordHash);
         const currentUser = await getCurrentUser(req, res);

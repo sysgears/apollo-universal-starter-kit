@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql, withApollo } from 'react-apollo/index';
+import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import { translate } from '@module/i18n-client-react';
 import { withUser } from '@module/user-client-react';
@@ -153,7 +153,6 @@ class ChatOperations extends React.Component {
 }
 
 export default compose(
-  withApollo,
   graphql(MESSAGES_QUERY, {
     options: () => {
       return {
@@ -193,7 +192,7 @@ export default compose(
     }
   }),
   graphql(ADD_MESSAGE, {
-    props: ({ mutate, ownProps: { client } }) => ({
+    props: ({ mutate }) => ({
       addMessage: async ({ text, userId, username, uuid, quotedId, attachment, quotedMessage }) => {
         try {
           await mutate({
@@ -217,14 +216,10 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
-            update: (prev, { data: { addMessage } }) => {
-              // Get previous messages
-              const prevMessages = getMsgsFromCache(client);
-
+            update: (cache, { data: { addMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
               const { messages } = AddMessage(prevMessages, addMessage);
-
-              // Write messages to cache
-              writeMsgsToCache(client, messages);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {
@@ -234,7 +229,7 @@ export default compose(
     })
   }),
   graphql(DELETE_MESSAGE, {
-    props: ({ mutate, ownProps: { client } }) => ({
+    props: ({ mutate }) => ({
       deleteMessage: async id => {
         try {
           await mutate({
@@ -246,14 +241,10 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: (prev, { data: { deleteMessage } }) => {
-              // Get previous messages
-              const prevMessages = getMsgsFromCache(client);
-
+            update: (cache, { data: { deleteMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
               const { messages } = DeleteMessage(prevMessages, deleteMessage);
-
-              // Write messages to cache
-              writeMsgsToCache(client, messages);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {
@@ -263,7 +254,7 @@ export default compose(
     })
   }),
   graphql(EDIT_MESSAGE, {
-    props: ({ mutate, ownProps: { client } }) => ({
+    props: ({ mutate }) => ({
       editMessage: async ({ text, id, createdAt, userId, username, uuid, quotedId, quotedMessage }) => {
         try {
           await mutate({
@@ -287,14 +278,10 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: (prev, { data: { editMessage } }) => {
-              // Get previous messages
-              const prevMessages = getMsgsFromCache(client);
-
+            update: (cache, { data: { editMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
               const { messages } = EditMessage(prevMessages, editMessage);
-
-              // Write messages to cache
-              writeMsgsToCache(client, messages);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose, withApollo } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
 import PostCommentsView from '../components/PostCommentsView';
@@ -50,7 +50,7 @@ function getPostFromCache(cache, postId) {
   return cache.readQuery({
     query: POST_QUERY,
     variables: {
-      id: String(postId)
+      id: postId
     }
   });
 }
@@ -59,7 +59,7 @@ function writePostToCache(cache, post, postId) {
   cache.writeQuery({
     query: POST_QUERY,
     variables: {
-      id: String(postId)
+      id: postId
     },
     data: {
       post: {
@@ -149,9 +149,8 @@ class PostComments extends React.Component {
 }
 
 const PostCommentsWithApollo = compose(
-  withApollo,
   graphql(ADD_COMMENT, {
-    props: ({ mutate, ownProps: { client } }) => ({
+    props: ({ mutate }) => ({
       addComment: (content, postId) =>
         mutate({
           variables: { input: { content, postId } },
@@ -163,15 +162,12 @@ const PostCommentsWithApollo = compose(
               content: content
             }
           },
-          update: (prev, { data: { addComment } }) => {
-            // Get prevoius post
-            const prevPost = getPostFromCache(client, postId);
+          update: (cache, { data: { addComment } }) => {
+            const prevPost = getPostFromCache(cache, postId);
 
             if (prevPost.post) {
               const { post } = AddComment(prevPost, addComment);
-
-              // Write post to cache
-              writePostToCache(client, post, postId);
+              writePostToCache(cache, post, postId);
             }
           }
         })
@@ -194,7 +190,7 @@ const PostCommentsWithApollo = compose(
     })
   }),
   graphql(DELETE_COMMENT, {
-    props: ({ mutate, ownProps: { postId, client } }) => ({
+    props: ({ mutate, ownProps: { postId } }) => ({
       deleteComment: id =>
         mutate({
           variables: { input: { id, postId } },
@@ -205,15 +201,12 @@ const PostCommentsWithApollo = compose(
               id: id
             }
           },
-          update: (prev, { data: { deleteComment } }) => {
-            // Get prevoius post
-            const prevPost = getPostFromCache(client, postId);
+          update: (cache, { data: { deleteComment } }) => {
+            const prevPost = getPostFromCache(cache, postId);
 
             if (prevPost.post) {
               const { post } = DeleteComment(prevPost, deleteComment.id);
-
-              // Write post to cache
-              writePostToCache(client, post, postId);
+              writePostToCache(cache, post, postId);
             }
           }
         })

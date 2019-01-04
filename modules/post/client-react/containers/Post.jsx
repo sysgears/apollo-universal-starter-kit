@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose, withApollo } from 'react-apollo';
+import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import { PLATFORM } from '@module/core-common';
 
@@ -141,7 +141,6 @@ class Post extends React.Component {
 }
 
 export default compose(
-  withApollo,
   graphql(POSTS_QUERY, {
     options: () => {
       return {
@@ -180,7 +179,7 @@ export default compose(
     }
   }),
   graphql(DELETE_POST, {
-    props: ({ mutate, ownProps: { client } }) => ({
+    props: ({ mutate }) => ({
       deletePost: id => {
         mutate({
           variables: { id },
@@ -192,9 +191,9 @@ export default compose(
             }
           },
 
-          update: (prev, { data: { deletePost } }) => {
+          update: (cache, { data: { deletePost } }) => {
             // Get previous posts from cache
-            const prevPosts = client.readQuery({
+            const prevPosts = cache.readQuery({
               query: POSTS_QUERY,
               variables: {
                 limit,
@@ -205,7 +204,7 @@ export default compose(
             const newListPosts = DeletePost(prevPosts, deletePost.id);
 
             // Write posts to cache
-            client.writeQuery({
+            cache.writeQuery({
               query: POSTS_QUERY,
               variables: {
                 limit,

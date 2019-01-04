@@ -14,7 +14,7 @@ interface ButtonProps {
 
 const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
   <Mutation mutation={ADD_COUNTER}>
-    {(mutate: any, { client }: any) => {
+    {(mutate: any) => {
       const addServerCounter = (amount: number) => () =>
         mutate({
           variables: { amount },
@@ -25,10 +25,10 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
               amount: counter.amount + 1
             }
           },
-          update: (prev: any, { data }: any) => {
+          update: (cache: any, { data }: any) => {
             const newAmount = data.addServerCounter.amount;
 
-            client.writeQuery({
+            cache.writeQuery({
               query: COUNTER_QUERY,
               data: {
                 serverCounter: {

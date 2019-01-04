@@ -6,5 +6,6 @@
       "front": "Report front",
       "server": "Report server"
     }
-  }
+  },
+  "btn": "Print this report"
 }

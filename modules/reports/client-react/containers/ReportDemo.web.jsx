@@ -39,7 +39,7 @@ class ReportDemo extends Component {
     const { t } = this.props;
     const { reportType } = this.state;
 
-    const button = <Button>Print this out!</Button>;
+    const button = <Button>{t('btn')}</Button>;
 
     return (
       <PageLayout>

@@ -145,13 +145,13 @@ class WebChat extends React.Component {
 
   renderMessages() {
     return (
-      <div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', height: '100%' }}>
         <MessageContainer
           {...this.props}
           invertibleScrollViewProps={this.invertibleScrollViewProps}
           messages={this.getMessages()}
         />
-        {/*{this.renderChatFooter()}*/}
+        <div style={{ alignSelf: 'flex-end', width: '100%' }}>{this.renderChatFooter()}</div>
       </div>
     );
   }

@@ -9,6 +9,7 @@ import chatConfig from '../../../../config/chat';
 import { WebChat } from './webChat/WebChat';
 import settings from '../../../../settings';
 import CustomView from '../components/CustomView';
+import ChatFooter from '../components/ChatFooter';
 
 export default class extends React.Component {
   static propTypes = {
@@ -44,9 +45,8 @@ export default class extends React.Component {
 
     this.setState({
       isOwnMessage: id === currentMessage.user._id,
-      ...(currentMessage._id === this.state.activeMessage
-        ? { currentMessage: null, activeMessage: null }
-        : { currentMessage, activeMessage: currentMessage._id })
+      currentMessage,
+      activeMessage: currentMessage._id === this.state.activeMessage ? null : currentMessage._id
     });
 
     contextMenu.show({
@@ -94,18 +94,26 @@ export default class extends React.Component {
     return <CustomView {...chatProps} />;
   };
 
+  setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
+    this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
+    this.gc.focusTextInput();
+  };
+
+  renderChatFooter = () => {
+    if (this.state.isQuoted) {
+      const { quotedMessage } = this.state;
+      return (
+        <ChatFooter {...quotedMessage} undoQuote={() => this.setState({ isQuoted: false, quotedMessage: null })} />
+      );
+    }
+  };
+
   renderActionSheet = () => {
     const { t, deleteMessage } = this.props;
     const { currentMessage, isOwnMessage } = this.state;
     return (
       <Menu id={'menu'}>
-        <Item
-          onClick={() => {
-            this.setState({ isQuoted: true });
-          }}
-        >
-          {t('msg.btn.reply')}
-        </Item>
+        <Item onClick={() => this.setQuotedState(currentMessage)}>{t('msg.btn.reply')}</Item>
         {isOwnMessage && (
           <React.Fragment>
             <Item onClick={() => {}}>{t('msg.btn.edit')}</Item>

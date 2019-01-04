@@ -87,13 +87,8 @@ export default class MessageContainer extends React.PureComponent {
 
 const styles = {
   contentContainerStyle: {
-    justifyContent: 'flex-end'
-  },
-  headerWrapper: {
-    flex: 1
-  },
-  listStyle: {
-    flex: 1
+    justifyContent: 'flex-end',
+    width: '100%'
   }
 };
 

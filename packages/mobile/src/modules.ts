@@ -6,6 +6,7 @@ import contact from '@module/contact-client-react';
 import validation from '@module/validation-common-react';
 import defaultRouter from '@module/router-client-react-native';
 import payments from '@module/payments-client-react';
+import authentication from '@module/authentication-client-react';
 
 import ClientModule from '@module/module-client-react-native';
 
@@ -26,7 +27,8 @@ const modules = new ClientModule(
   payments,
   user,
   i18n,
-  core
+  core,
+  authentication
 );
 
 export default modules;

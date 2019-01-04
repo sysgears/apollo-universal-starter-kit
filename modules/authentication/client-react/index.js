@@ -1,3 +1,3 @@
-import access from './access';
+import authentication from './access';
 
-export default access;
+export default authentication;

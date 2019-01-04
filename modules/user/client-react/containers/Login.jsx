@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 
-import AccessModule from '@module/authentication-client-react';
+import authentication from '@module/authentication-client-react';
 
 import LoginView from '../components/LoginView';
 
@@ -25,7 +25,7 @@ const LoginWithApollo = compose(
           variables: { input: { usernameOrEmail, password } }
         });
         if (!login.errors) {
-          await AccessModule.doLogin(client);
+          await authentication.doLogin(client);
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
           if (onLogin) {
             onLogin();

@@ -3,7 +3,7 @@ import { withApollo } from 'react-apollo';
 import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@module/look-client-react';
-import access from '@module/authentication-client-react';
+import authentication from '@module/authentication-client-react';
 
 import './GitHubButton.css';
 
@@ -13,7 +13,12 @@ const githubLogin = () => {
 
 const GitHubButton = withApollo(({ client, text }) => {
   return (
-    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(githubLogin)} className="githubBtn">
+    <Button
+      type="button"
+      size="lg"
+      onClick={() => authentication.doLogin(client).then(githubLogin)}
+      className="githubBtn"
+    >
       <div className="iconContainer">
         <FontAwesomeIcon icon={faGithubSquare} className="githubIcon" />
         <div className="separator" />
@@ -27,7 +32,7 @@ const GitHubButton = withApollo(({ client, text }) => {
 
 const GitHubLink = withApollo(({ client, text }) => {
   return (
-    <Button color="link" onClick={() => access.doLogin(client).then(githubLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={() => authentication.doLogin(client).then(githubLogin)} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
@@ -38,7 +43,7 @@ const GitHubIcon = withApollo(({ client }) => {
     <FontAwesomeIcon
       icon={faGithubSquare}
       style={{ marginTop: 10, color: '#5f5e5e', fontSize: 40 }}
-      onClick={() => access.doLogin(client).then(githubLogin)}
+      onClick={() => authentication.doLogin(client).then(githubLogin)}
     />
   );
 });

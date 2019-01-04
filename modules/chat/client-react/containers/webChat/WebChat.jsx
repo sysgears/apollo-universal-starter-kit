@@ -45,11 +45,13 @@ class WebChat extends React.Component {
     this._isMounted = false;
     this._locale = 'en';
     this._messages = [];
+    this.scrollbars = React.createRef();
 
     this.state = {
       isInitialized: false, // initialization will calculate maxHeight before rendering the chat
       messagesContainerHeight: null,
-      typingDisabled: false
+      typingDisabled: false,
+      amountMessages: 0
     };
 
     this.onSend = this.onSend.bind(this);
@@ -81,6 +83,18 @@ class WebChat extends React.Component {
     const { messages, text } = nextProps;
     this.setMessages(messages || []);
     this.setTextFromProp(text);
+  }
+
+  componentDidUpdate() {
+    const { scrollbars } = this;
+    const amountMessages = this.getMessages().length;
+    if (
+      amountMessages !== this.state.amountMessages &&
+      scrollbars.getScrollTop() >= scrollbars.getScrollHeight() * 0.7
+    ) {
+      scrollbars.scrollTop(scrollbars.getScrollHeight());
+      this.setState({ amountMessages });
+    }
   }
 
   componentWillUnmount() {
@@ -266,7 +280,12 @@ class WebChat extends React.Component {
   render() {
     return (
       <div style={{ width: '700px', margin: '0px auto', backgroundColor: '#fff', padding: '0px 50px' }}>
-        <Scrollbars style={{ width: 550, height: 600 }} autoHide renderTrackHorizontal={() => <div />}>
+        <Scrollbars
+          style={{ height: 600, width: '100%' }}
+          autoHide
+          renderTrackHorizontal={() => <div />}
+          ref={scrollbars => (this.scrollbars = scrollbars)}
+        >
           {this.renderMessages()}
         </Scrollbars>
         {this.renderInputToolbar()}

@@ -12,7 +12,7 @@ const config = {
       },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: [`tcp:${process.env.SERVER_HOST || 'localhost:8080'}`],
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['server'],

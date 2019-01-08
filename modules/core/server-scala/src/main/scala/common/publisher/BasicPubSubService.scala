@@ -21,7 +21,7 @@ abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Schedul
     require(eventNames.nonEmpty)
     Source.fromPublisher(source.toReactivePublisher[T])
       .filter { event =>
-        eventNames.contains(event.name) && filter(event: T, params: Seq[Param])
+        eventNames.contains(event.name) && filter(event, params)
       }
       .map {
         event =>

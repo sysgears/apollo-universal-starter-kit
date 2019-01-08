@@ -19,8 +19,8 @@ import common.publisher.RichPubSubService._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class PostSchema @Inject()(implicit val postPubSubPostService: PubSubService[Event[Post]],
-                           commentPubSubPostService: PubSubService[Event[Comment]],
+class PostSchema @Inject()(implicit val postPubSubService: PubSubService[Event[Post]],
+                           commentPubSubService: PubSubService[Event[Comment]],
                            materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
                            executionContext: ExecutionContext) extends InputUnmarshallerGenerator
@@ -194,7 +194,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PubSubService[Eve
       arguments = Argument(name = "id", argumentType = IntType) :: Nil,
       resolve = sc => {
         val id = sc.args.arg[Int]("id")
-        postPubSubPostService.subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))
+        postPubSubService.subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))
           .map(action => action.map(publishElement => {
             UpdatePostPayload(mutation = publishElement.name, id = publishElement.element.id.get.toString, node = publishElement.element)
           }
@@ -207,7 +207,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PubSubService[Eve
       arguments = Argument(name = "endCursor", argumentType = IntType) :: Nil,
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
-        postPubSubPostService.subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))
+        postPubSubService.subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))
           .map(action => action.map(event => {
             UpdatePostPayload(mutation = event.name, id = event.element.id.get.toString, node = event.element)
           }
@@ -220,7 +220,7 @@ class PostSchema @Inject()(implicit val postPubSubPostService: PubSubService[Eve
       arguments = Argument(name = "postId", argumentType = IntType) :: Nil,
       resolve = sc => {
         val postId = sc.args.arg[Int]("postId")
-        commentPubSubPostService.subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))
+        commentPubSubService.subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))
           .map(action => action.map(event => {
             UpdateCommentPayload(mutation = event.name, id = event.element.id.get, postId = postId, node = event.element)
           }

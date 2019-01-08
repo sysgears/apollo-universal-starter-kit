@@ -2,7 +2,6 @@ import { pick } from 'lodash';
 import { access } from '@module/authentication-server-ts';
 import getLinkedInAuth from '@module/authentication-server-ts/social/linkedIn';
 import User from '../../sql';
-import getCurrentUser from '../../utils';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
 
@@ -45,10 +44,16 @@ async function onSuccess(req, res) {
   const user = await User.getUserWithPassword(req.user.id);
   const redirectUrl = req.query.state;
   const tokens = await access.grantAccess(user, req, user.passwordHash);
-  const currentUser = await getCurrentUser(req, res);
 
   return redirectUrl
-    ? res.redirect(redirectUrl + (tokens ? `?data=${JSON.stringify({ tokens, user: currentUser.data })}` : ''))
+    ? res.redirect(
+        redirectUrl +
+          (tokens
+            ? `?data=${JSON.stringify({
+                tokens
+              })}`
+            : '')
+      )
     : res.redirect('/profile');
 }
 

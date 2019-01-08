@@ -6,7 +6,6 @@ import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
-import getCurrentUser from '../../utils';
 
 let middleware;
 
@@ -70,7 +69,6 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
       const user = await User.getUserWithPassword(req.user.id);
       const redirectUrl = req.query.state;
       const tokens = await access.grantAccess(user, req, user.passwordHash);
-      const currentUser = await getCurrentUser(req, res);
 
       if (redirectUrl) {
         res.redirect(
@@ -78,8 +76,7 @@ if (settings.user.auth.facebook.enabled && !__TEST__) {
             (tokens
               ? '?data=' +
                 JSON.stringify({
-                  tokens,
-                  user: currentUser.data
+                  tokens
                 })
               : '')
         );

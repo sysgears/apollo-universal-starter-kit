@@ -30,12 +30,15 @@ class LoginView extends React.PureComponent {
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
-    }
-    if (decodedData.user) {
-      await client.writeQuery({
-        query: CURRENT_USER_QUERY,
-        data: decodedData.user
-      });
+
+      const userInfo = await client.query({ query: CURRENT_USER_QUERY });
+
+      if (userInfo.data.currentUser) {
+        await client.writeQuery({
+          query: CURRENT_USER_QUERY,
+          data: userInfo.data
+        });
+      }
     }
 
     if (Platform.OS === 'ios') {

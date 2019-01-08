@@ -4,7 +4,6 @@ import GitHubStrategy from 'passport-github';
 import { access } from '@module/authentication-server-ts';
 import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
-import getCurrentUser from '../../utils';
 
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
@@ -73,7 +72,6 @@ if (settings.user.auth.github.enabled && !__TEST__) {
         const user = await User.getUserWithPassword(req.user.id);
         const redirectUrl = req.query.state;
         const tokens = await access.grantAccess(user, req, user.passwordHash);
-        const currentUser = await getCurrentUser(req, res);
 
         if (redirectUrl) {
           res.redirect(
@@ -81,8 +79,7 @@ if (settings.user.auth.github.enabled && !__TEST__) {
               (tokens
                 ? '?data=' +
                   JSON.stringify({
-                    tokens,
-                    user: currentUser.data
+                    tokens
                   })
                 : '')
           );

@@ -16,7 +16,6 @@ case class User(id: Option[Int] = None,
   override def withId(id: Int): User = this.copy(id = Some(id))
 
   def userProfile(userProfileRepository: UserProfileRepository)(
-      implicit executionContext: ExecutionContext)
-    : Future[Option[UserProfile]] =
+      implicit executionContext: ExecutionContext): Future[Option[UserProfile]] =
     userProfileRepository.findOne(id.get).run
 }

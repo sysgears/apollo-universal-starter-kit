@@ -8,8 +8,6 @@ import com.typesafe.config.Config
 @Singleton
 class JwtConfig @Inject()(config: Config) {
   val secret: String = config.getString("jwt.secretKey")
-  val accessTokenExpiration: Long =
-    config.getDuration("jwt.accessTokenExpiration", TimeUnit.MILLISECONDS)
-  val refreshTokenExpiration: Long =
-    config.getDuration("jwt.refreshTokenExpiration", TimeUnit.MILLISECONDS)
+  val accessTokenExpiration: Long = config.getDuration("jwt.accessTokenExpiration", TimeUnit.MILLISECONDS)
+  val refreshTokenExpiration: Long = config.getDuration("jwt.refreshTokenExpiration", TimeUnit.MILLISECONDS)
 }

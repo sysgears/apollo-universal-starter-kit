@@ -9,6 +9,5 @@ trait HashAppender {
 
 class HashAppenderImpl extends HashAppender {
 
-  override def append(str: String): String =
-    UUID.randomUUID.toString.take(9) + str
+  override def append(str: String): String = UUID.randomUUID.toString.take(9) + str
 }

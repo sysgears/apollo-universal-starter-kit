@@ -22,8 +22,7 @@ import scala.concurrent.ExecutionContext
 
 trait ModuleApp extends App with AppInitialization {
 
-  def createApp(
-      serverModule: ServerModule[UserContext, SchemaInitializer[_]]): Unit = {
+  def createApp(serverModule: ServerModule[UserContext, SchemaInitializer[_]]): Unit = {
 
     createInjector(serverModule.foldBindings.bindings)
     serverModule.fold
@@ -37,10 +36,7 @@ trait ModuleApp extends App with AppInitialization {
     val graphQlExecutor = executor(graphQL)
     val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler,
-                                        inject[JWTSessionImpl],
-                                        webSocketHandler,
-                                        graphQL)
+    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
     val routes = serverModule.routes + graphQLRoute.routes
 
     val corsSettings = CorsSettings.apply(system)
@@ -54,14 +50,12 @@ trait ModuleApp extends App with AppInitialization {
     )
   }
 
-  def executor(graphQL: GraphQL)(implicit executionContext: ExecutionContext)
-    : Executor[UserContext, Unit] = Executor(
+  def executor(graphQL: GraphQL)(implicit executionContext: ExecutionContext): Executor[UserContext, Unit] = Executor(
     schema = graphQL.schema,
     queryReducers = List(
       QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-      QueryReducer.rejectComplexQueries[UserContext](
-        graphQL.maxQueryComplexity,
-        (_, _) => new Exception("maxQueryComplexity"))
+      QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity,
+                                                     (_, _) => new Exception("maxQueryComplexity"))
     )
   )
 }

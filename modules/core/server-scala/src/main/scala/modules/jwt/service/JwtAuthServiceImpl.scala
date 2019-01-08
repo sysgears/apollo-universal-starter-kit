@@ -28,52 +28,38 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
 
   /** @inheritdoc */
   override def createAccessToken(content: JwtContent): String =
-    jwtEncoder.encode(content.toJson.toString,
-                      jwtConfig.secret,
-                      jwtConfig.accessTokenExpiration)
+    jwtEncoder.encode(content.toJson.toString, jwtConfig.secret, jwtConfig.accessTokenExpiration)
 
   /** @inheritdoc */
   override def createRefreshToken(content: JwtContent, secret: String): String =
-    jwtEncoder.encode(content.toJson.toString,
-                      jwtConfig.secret + secret,
-                      jwtConfig.refreshTokenExpiration)
+    jwtEncoder.encode(content.toJson.toString, jwtConfig.secret + secret, jwtConfig.refreshTokenExpiration)
 
   /** @inheritdoc */
   def createTokens(content: JwtContent, secret: String): Tokens =
     Tokens(createAccessToken(content), createRefreshToken(content, secret))
 
   /** @inheritdoc */
-  override def decodeContent(token: String): Try[JwtContent] =
-    withExceptionTransform {
-      jwtDecoder.decode(token).map(_.parseJson.convertTo[JwtContent])
-    }
+  override def decodeContent(token: String): Try[JwtContent] = withExceptionTransform {
+    jwtDecoder.decode(token).map(_.parseJson.convertTo[JwtContent])
+  }
 
   /** @inheritdoc */
-  override def decodeAccessToken(token: String): Try[JwtContent] =
-    withExceptionTransform {
-      jwtDecoder
-        .decode(token, jwtConfig.secret)
-        .map(_.parseJson.convertTo[JwtContent])
-    }
+  override def decodeAccessToken(token: String): Try[JwtContent] = withExceptionTransform {
+    jwtDecoder.decode(token, jwtConfig.secret).map(_.parseJson.convertTo[JwtContent])
+  }
 
   /** @inheritdoc */
-  override def decodeRefreshToken(token: String,
-                                  secret: String): Try[JwtContent] =
-    withExceptionTransform {
-      jwtDecoder
-        .decode(token, jwtConfig.secret + secret)
-        .map(_.parseJson.convertTo[JwtContent])
-    }
+  override def decodeRefreshToken(token: String, secret: String): Try[JwtContent] = withExceptionTransform {
+    jwtDecoder.decode(token, jwtConfig.secret + secret).map(_.parseJson.convertTo[JwtContent])
+  }
 
   /** @inheritdoc */
-  override def validate(token: String, secret: String): Try[Boolean] =
-    withExceptionTransform {
-      jwtValidator.validate(token, secret)
-    }
+  override def validate(token: String, secret: String): Try[Boolean] = withExceptionTransform {
+    jwtValidator.validate(token, secret)
+  }
 
-  private def withExceptionTransform[T](maybeResult: Try[T]): Try[T] =
-    maybeResult.recover {
-      case _: JwtExpirationException => throw InvalidToken("Token is expired")
-      case _                         => throw InvalidToken()
-    }
+  private def withExceptionTransform[T](maybeResult: Try[T]): Try[T] = maybeResult.recover {
+    case _: JwtExpirationException => throw InvalidToken("Token is expired")
+    case _                         => throw InvalidToken()
+  }
 }

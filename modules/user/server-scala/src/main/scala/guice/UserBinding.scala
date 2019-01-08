@@ -16,6 +16,5 @@ class UserBinding extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(UserResolver.name)
-  def userResolver(implicit actorSystem: ActorSystem): ActorRef =
-    provideActorRef(UserResolver)
+  def userResolver(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(UserResolver)
 }

@@ -10,9 +10,7 @@ object GithubAuthTable extends JdbcProfile {
 
   val name = "GITHUB_AUTH"
 
-  class GithubAuthTable(tag: Tag)
-      extends SlickTable[GithubAuth](tag, name)
-      with Keyed[Int] {
+  class GithubAuthTable(tag: Tag) extends SlickTable[GithubAuth](tag, name) with Keyed[Int] {
 
     def id = column[Int]("GITHUB_ID", O.Unique)
 
@@ -21,10 +19,9 @@ object GithubAuthTable extends JdbcProfile {
     def userId = column[Int]("USER_ID", O.Unique)
 
     def userFk =
-      foreignKey("GITHUB_USER_ID_FK", userId, TableQuery[UserTable])(
-        _.id,
-        onUpdate = ForeignKeyAction.Restrict,
-        onDelete = ForeignKeyAction.Cascade)
+      foreignKey("GITHUB_USER_ID_FK", userId, TableQuery[UserTable])(_.id,
+                                                                     onUpdate = ForeignKeyAction.Restrict,
+                                                                     onDelete = ForeignKeyAction.Cascade)
 
     def * = (id.?, displayName, userId).mapTo[GithubAuth]
   }

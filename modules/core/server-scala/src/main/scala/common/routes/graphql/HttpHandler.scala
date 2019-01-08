@@ -13,12 +13,7 @@ import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
 import sangria.execution.batch.BatchExecutor
-import sangria.execution.{
-  ErrorWithResolver,
-  Executor,
-  QueryAnalysisError,
-  QueryReducer
-}
+import sangria.execution.{ErrorWithResolver, Executor, QueryAnalysisError, QueryReducer}
 import sangria.marshalling.sprayJson._
 import sangria.parser.{QueryParser, SyntaxError}
 import spray.json.DefaultJsonProtocol._
@@ -29,14 +24,12 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-class HttpHandler(graphQL: GraphQL,
-                  graphQlExecutor: Executor[UserContext, Unit])(
+class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val scheduler: Scheduler,
     implicit val actorMaterializer: ActorMaterializer)
     extends RouteUtil {
 
-  def handleQuery(graphQlMessage: GraphQLMessage,
-                  userCtx: UserContext): Future[ToResponseMarshallable] =
+  def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {
       case Success(queryAst) =>
         queryAst.operationType(graphQlMessage.operationName) match {
@@ -61,11 +54,8 @@ class HttpHandler(graphQL: GraphQL,
                     })
               }
               .recover {
-                case error: QueryAnalysisError =>
-                  ToResponseMarshallable(BadRequest -> error.resolveError)
-                case error: ErrorWithResolver =>
-                  ToResponseMarshallable(
-                    InternalServerError -> error.resolveError)
+                case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
+                case error: ErrorWithResolver  => ToResponseMarshallable(InternalServerError -> error.resolveError)
               }
           case _ =>
             graphQlExecutor
@@ -78,22 +68,17 @@ class HttpHandler(graphQL: GraphQL,
               )
               .map(response => ToResponseMarshallable(OK -> response))
               .recover {
-                case error: QueryAnalysisError =>
-                  BadRequest -> error.resolveError
-                case error: ErrorWithResolver =>
-                  InternalServerError -> error.resolveError
+                case error: QueryAnalysisError => BadRequest -> error.resolveError
+                case error: ErrorWithResolver  => InternalServerError -> error.resolveError
               }
         }
-      case Failure(e: SyntaxError) =>
-        Future[ToResponseMarshallable](BadRequest, syntaxError(e))
-      case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
+      case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
+      case Failure(_)              => Future[ToResponseMarshallable](InternalServerError)
     }
 
-  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage],
-                       userCtx: UserContext): Future[ToResponseMarshallable] = {
+  def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage], userCtx: UserContext): Future[ToResponseMarshallable] = {
     import sangria.streaming.monix._
-    val operations =
-      graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
+    val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
     QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
       case Success(queryAst) =>
         BatchExecutor
@@ -101,17 +86,14 @@ class HttpHandler(graphQL: GraphQL,
             schema = graphQL.schema,
             queryAst = queryAst,
             operationNames = operations,
-            variables = graphQlMessages
-              .map(_.variables.getOrElse(JsObject.empty))
-              .fold(JsObject.empty) { (o1, o2) =>
-                JsObject(o1.fields ++ o2.fields)
-              },
+            variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) { (o1, o2) =>
+              JsObject(o1.fields ++ o2.fields)
+            },
             userContext = userCtx,
             queryReducers = List(
               QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-              QueryReducer.rejectComplexQueries[UserContext](
-                graphQL.maxQueryComplexity,
-                (_, _) => new Exception("maxQueryComplexity"))
+              QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity,
+                                                             (_, _) => new Exception("maxQueryComplexity"))
             ),
             middleware = List(
               BatchExecutor.OperationNameExtension
@@ -138,12 +120,10 @@ class HttpHandler(graphQL: GraphQL,
           }
           .recover {
             case error: QueryAnalysisError => BadRequest -> error.resolveError
-            case error: ErrorWithResolver =>
-              InternalServerError -> error.resolveError
+            case error: ErrorWithResolver  => InternalServerError -> error.resolveError
           }
-      case Failure(e: SyntaxError) =>
-        Future[ToResponseMarshallable](BadRequest, syntaxError(e))
-      case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
+      case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
+      case Failure(_)              => Future[ToResponseMarshallable](InternalServerError)
     }
   }
 }

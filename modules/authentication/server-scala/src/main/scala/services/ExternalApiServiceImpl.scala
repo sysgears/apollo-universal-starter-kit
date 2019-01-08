@@ -8,9 +8,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ExternalApiServiceImpl extends ExternalApiService {
 
-  def getUserInfo[T](code: String,
-                     userInfoUrl: String,
-                     service: OAuth20Service)(
+  def getUserInfo[T](code: String, userInfoUrl: String, service: OAuth20Service)(
       implicit formatter: RootJsonFormat[T],
       executionContext: ExecutionContext): Future[T] =
     for {

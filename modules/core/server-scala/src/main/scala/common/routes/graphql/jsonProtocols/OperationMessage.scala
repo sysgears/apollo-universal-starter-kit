@@ -1,14 +1,7 @@
 package common.routes.graphql.jsonProtocols
 
 import common.routes.graphql.jsonProtocols.OperationMessageType.OperationMessageType
-import spray.json.{
-  DefaultJsonProtocol,
-  DeserializationException,
-  JsObject,
-  JsString,
-  JsValue,
-  JsonFormat
-}
+import spray.json.{DefaultJsonProtocol, DeserializationException, JsObject, JsString, JsValue, JsonFormat}
 
 case class OperationMessage(operationType: OperationMessageType,
                             id: Option[String] = None,
@@ -39,8 +32,7 @@ object OperationMessageType extends Enumeration {
 
 object OperationMessageJsonProtocol extends DefaultJsonProtocol {
 
-  implicit object OperationMessageTypeJsonFormat
-      extends JsonFormat[OperationMessageType] {
+  implicit object OperationMessageTypeJsonFormat extends JsonFormat[OperationMessageType] {
     def write(obj: OperationMessageType): JsValue = JsString(obj.toString)
 
     def read(json: JsValue): OperationMessageType = json match {
@@ -49,8 +41,7 @@ object OperationMessageJsonProtocol extends DefaultJsonProtocol {
     }
   }
 
-  implicit object OperationMessageJsonFormat
-      extends JsonFormat[OperationMessage] {
+  implicit object OperationMessageJsonFormat extends JsonFormat[OperationMessage] {
     def write(operationMessage: OperationMessage) = JsObject(
       "type" -> JsString(operationMessage.operationType.toString),
       "id" -> JsString(operationMessage.id.getOrElse("")),
@@ -60,25 +51,13 @@ object OperationMessageJsonProtocol extends DefaultJsonProtocol {
     def read(value: JsValue): OperationMessage = {
       value.asJsObject.getFields("type", "id", "payload") match {
         case Seq(operationMessageType) =>
-          OperationMessage(
-            OperationMessageTypeJsonFormat.read(operationMessageType),
-            None,
-            None)
+          OperationMessage(OperationMessageTypeJsonFormat.read(operationMessageType), None, None)
         case Seq(operationMessageType, JsString(id)) =>
-          OperationMessage(
-            OperationMessageTypeJsonFormat.read(operationMessageType),
-            Some(id),
-            None)
+          OperationMessage(OperationMessageTypeJsonFormat.read(operationMessageType), Some(id), None)
         case Seq(operationMessageType, payload) =>
-          OperationMessage(
-            OperationMessageTypeJsonFormat.read(operationMessageType),
-            None,
-            Some(payload))
+          OperationMessage(OperationMessageTypeJsonFormat.read(operationMessageType), None, Some(payload))
         case Seq(operationMessageType, JsString(id), payload) =>
-          OperationMessage(
-            OperationMessageTypeJsonFormat.read(operationMessageType),
-            Some(id),
-            Some(payload))
+          OperationMessage(OperationMessageTypeJsonFormat.read(operationMessageType), Some(id), Some(payload))
         case _ =>
           throw DeserializationException("OperationMessage expected")
       }

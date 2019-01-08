@@ -7,6 +7,4 @@ package model
   * @param entities    list of entities of type T
   * @param hasNextPage marker which showing whether there are still objects to request
   */
-case class PaginatedResult[T](totalCount: Int,
-                              entities: List[T],
-                              hasNextPage: Boolean)
+case class PaginatedResult[T](totalCount: Int, entities: List[T], hasNextPage: Boolean)

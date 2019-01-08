@@ -25,14 +25,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class FileUploadResolverImpl @Inject()(
     @Named(FileActor.name) fileActor: ActorRef,
     fileRepository: Repository[FileMetadata, Int],
-    hashAppender: HashAppender)(implicit executionContext: ExecutionContext,
-                                materializer: ActorMaterializer)
+    hashAppender: HashAppender)(implicit executionContext: ExecutionContext, materializer: ActorMaterializer)
     extends FileUploadResolver
     with Logger
     with ActorMessageDelivering {
 
-  override def uploadFiles(
-      parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
+  override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts
       .filter(_.filename.nonEmpty)
       .mapAsync(1) { part =>
@@ -52,8 +50,7 @@ class FileUploadResolverImpl @Inject()(
         }
       }
       .mapAsync(1) { fileMetadata =>
-        sendMessageWithFunc[FileMetadata](actorRef =>
-          fileActor ! SaveFileMetadata(fileMetadata, actorRef))
+        sendMessageWithFunc[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
       }
       .toMat(Sink.ignore)(Keep.right)
       .run
@@ -64,16 +61,14 @@ class FileUploadResolverImpl @Inject()(
       false
   }
 
-  override def files: Future[List[FileMetadata]] =
-    fileRepository.findAll.run.map(_.toList)
+  override def files: Future[List[FileMetadata]] = fileRepository.findAll.run.map(_.toList)
 
   override def removeFile(id: Int): Future[Boolean] = {
     fileRepository
       .executeTransactionally(
         for {
           fileMetadataOption <- fileRepository.findOne(id)
-          fileMetadata <- if (fileMetadataOption.nonEmpty)
-            DBIO.successful(fileMetadataOption.get)
+          fileMetadata <- if (fileMetadataOption.nonEmpty) DBIO.successful(fileMetadataOption.get)
           else DBIO.failed(NotFound(s"FileMetadata(id: $id)"))
           deletedFileMetadata <- fileRepository.delete(fileMetadata)
         } yield deletedFileMetadata

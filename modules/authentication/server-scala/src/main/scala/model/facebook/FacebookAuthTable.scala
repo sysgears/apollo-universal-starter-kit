@@ -10,9 +10,7 @@ object FacebookAuthTable extends JdbcProfile {
 
   val name = "FACEBOOK_AUTH"
 
-  class FacebookAuthTable(tag: Tag)
-      extends SlickTable[FacebookAuth](tag, name)
-      with Keyed[String] {
+  class FacebookAuthTable(tag: Tag) extends SlickTable[FacebookAuth](tag, name) with Keyed[String] {
 
     def id = column[String]("FACEBOOK_ID", O.Unique)
 
@@ -21,10 +19,9 @@ object FacebookAuthTable extends JdbcProfile {
     def userId = column[Int]("USER_ID", O.Unique)
 
     def userFk =
-      foreignKey("FACEBOOK_USER_ID_FK", userId, TableQuery[UserTable])(
-        _.id,
-        onUpdate = ForeignKeyAction.Restrict,
-        onDelete = ForeignKeyAction.Cascade)
+      foreignKey("FACEBOOK_USER_ID_FK", userId, TableQuery[UserTable])(_.id,
+                                                                       onUpdate = ForeignKeyAction.Restrict,
+                                                                       onDelete = ForeignKeyAction.Cascade)
 
     def * = (id.?, displayName, userId).mapTo[FacebookAuth]
   }

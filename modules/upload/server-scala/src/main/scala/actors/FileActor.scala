@@ -26,9 +26,6 @@ class FileActor @Inject()(fileMetadataRepository: Repository[FileMetadata, Int])
   override def receive: Receive = {
     case saveFileMetadata: SaveFileMetadata =>
       log.info(s"Received a message: [ $saveFileMetadata ]")
-      fileMetadataRepository
-        .save(saveFileMetadata.file)
-        .run
-        .pipeTo(saveFileMetadata.sender)
+      fileMetadataRepository.save(saveFileMetadata.file).run.pipeTo(saveFileMetadata.sender)
   }
 }

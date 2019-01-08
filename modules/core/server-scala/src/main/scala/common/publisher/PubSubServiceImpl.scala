@@ -9,9 +9,7 @@ import monix.reactive.subjects.PublishSubject
 import sangria.schema.Action
 
 @Singleton
-class PubSubServiceImpl[T] @Inject()(implicit val scheduler: Scheduler)
-    extends PubSubService[T]
-    with Logger {
+class PubSubServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends PubSubService[T] with Logger {
 
   private lazy val source = PublishSubject[T]
 

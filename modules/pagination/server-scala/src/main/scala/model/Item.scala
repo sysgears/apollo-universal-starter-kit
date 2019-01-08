@@ -6,8 +6,7 @@ import spray.json.{DefaultJsonProtocol, JsonFormat}
 /**
   * The 'Item' entity.
   */
-case class Item(id: Option[Int] = None, description: String)
-    extends Entity[Item, Int] {
+case class Item(id: Option[Int] = None, description: String) extends Entity[Item, Int] {
 
   override def withId(id: Int): Item = this.copy(id = Some(id))
 }

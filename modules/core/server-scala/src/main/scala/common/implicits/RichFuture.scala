@@ -20,11 +20,10 @@ object RichFuture {
       * @param ec    an execution context for the Future
       * @return a Future.failed with a given error.
       */
-    def failOnNone(error: Throwable)(implicit ec: ExecutionContext): Future[A] =
-      futureOfOption.flatMap {
-        case Some(value) => Future.successful(value)
-        case _           => Future.failed(error)
-      }
+    def failOnNone(error: Throwable)(implicit ec: ExecutionContext): Future[A] = futureOfOption.flatMap {
+      case Some(value) => Future.successful(value)
+      case _           => Future.failed(error)
+    }
   }
 
 }

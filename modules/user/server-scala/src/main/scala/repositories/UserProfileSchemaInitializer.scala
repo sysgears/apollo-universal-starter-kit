@@ -8,8 +8,7 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class UserProfileSchemaInitializer @Inject()(
-    implicit val executionContext: ExecutionContext)
+class UserProfileSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
     extends SchemaInitializer[UserProfileTable] {
 
   override val name: String = UserProfileTable.name

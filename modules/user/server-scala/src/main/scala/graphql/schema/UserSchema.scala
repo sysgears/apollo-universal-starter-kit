@@ -12,15 +12,13 @@ import sangria.macros.derive._
 
 import scala.concurrent.ExecutionContext
 
-class UserSchema @Inject()(userProfileRepository: UserProfileRepository)(
-    implicit val materializer: ActorMaterializer,
-    actorSystem: ActorSystem,
-    executionContext: ExecutionContext)
+class UserSchema @Inject()(userProfileRepository: UserProfileRepository)(implicit val materializer: ActorMaterializer,
+                                                                         actorSystem: ActorSystem,
+                                                                         executionContext: ExecutionContext)
     extends InputUnmarshallerGenerator
     with Logger {
 
-  val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(
-    ObjectTypeName("UserProfile"))
+  val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(ObjectTypeName("UserProfile"))
 
   val user: ObjectType[UserContext, User] = deriveObjectType(
     ObjectTypeName("User"),

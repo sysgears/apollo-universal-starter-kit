@@ -3,12 +3,7 @@ package common.routes.graphql
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
-import akka.stream.{
-  ActorMaterializer,
-  KillSwitches,
-  OverflowStrategy,
-  SharedKillSwitch
-}
+import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
@@ -25,8 +20,7 @@ import spray.json._
 
 import scala.util.{Failure, Success}
 
-class WebSocketHandler(graphQL: GraphQL,
-                       graphQlExecutor: Executor[UserContext, Unit])(
+class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val actorMaterializer: ActorMaterializer,
     implicit val scheduler: Scheduler)
     extends RouteUtil {
@@ -59,8 +53,7 @@ class WebSocketHandler(graphQL: GraphQL,
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
-  private def handleGraphQlQuery(operationMessage: OperationMessage,
-                                 killSwitches: SharedKillSwitch)(
+  private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)(
       implicit queue: SourceQueueWithComplete[Message]): Unit = {
     import sangria.streaming.akkaStreams._
     operationMessage.payload.foreach { payload =>
@@ -79,18 +72,14 @@ class WebSocketHandler(graphQL: GraphQL,
                 )
                 .viaMat(killSwitches.flow)(Keep.none)
                 .runForeach { result =>
-                  reply(
-                    OperationMessage(GQL_DATA,
-                                     operationMessage.id,
-                                     Some(result)))
+                  reply(OperationMessage(GQL_DATA, operationMessage.id, Some(result)))
                 }
             case _ =>
               reply(
                 OperationMessage(
                   GQL_ERROR,
                   operationMessage.id,
-                  Some(
-                    s"Unsupported type: ${queryAst.operationType(None)}".toJson)
+                  Some(s"Unsupported type: ${queryAst.operationType(None)}".toJson)
                 ))
           }
         case Failure(e: SyntaxError) =>
@@ -111,8 +100,7 @@ class WebSocketHandler(graphQL: GraphQL,
     }
   }
 
-  private def reply(operationMessage: OperationMessage)(
-      implicit queue: SourceQueueWithComplete[Message]): Unit = {
+  private def reply(operationMessage: OperationMessage)(implicit queue: SourceQueueWithComplete[Message]): Unit = {
     queue.offer(TextMessage(operationMessage.toJson.toString))
   }
 }

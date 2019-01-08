@@ -8,8 +8,7 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class FacebookAuthSchemaInitializer @Inject()(
-    implicit val executionContext: ExecutionContext)
+class FacebookAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
     extends SchemaInitializer[FacebookAuthTable] {
 
   override val name: String = FacebookAuthTable.name

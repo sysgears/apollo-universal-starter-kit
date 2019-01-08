@@ -22,6 +22,5 @@ class DbBinding extends ScalaModule {
 
   private def databaseConfig = loadConfig("slick.dbs.default")
 
-  private def loadConfig(path: String) =
-    DatabaseConfig.forConfig[JdbcProfile](path)
+  private def loadConfig(path: String) = DatabaseConfig.forConfig[JdbcProfile](path)
 }

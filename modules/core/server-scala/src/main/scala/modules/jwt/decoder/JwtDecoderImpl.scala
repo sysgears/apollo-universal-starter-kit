@@ -14,10 +14,8 @@ import scala.util.Try
 class JwtDecoderImpl @Inject()(algorithm: JwtHmacAlgorithm) extends JwtDecoder {
 
   /** @inheritdoc */
-  override def decode(token: String): Try[String] =
-    Jwt.decodeRaw(token, JwtOptions(signature = false))
+  override def decode(token: String): Try[String] = Jwt.decodeRaw(token, JwtOptions(signature = false))
 
   /** @inheritdoc */
-  override def decode(token: String, secret: String): Try[String] =
-    Jwt.decodeRaw(token, secret, Seq(algorithm))
+  override def decode(token: String, secret: String): Try[String] = Jwt.decodeRaw(token, secret, Seq(algorithm))
 }

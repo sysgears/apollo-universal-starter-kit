@@ -8,8 +8,7 @@ import model.{Item, ItemTable}
 import scala.concurrent.ExecutionContext
 
 /** @inheritdoc*/
-class ItemSchemaInitializer @Inject()(
-    implicit val executionContext: ExecutionContext)
+class ItemSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
     extends SchemaInitializer[ItemTable] {
 
   import driver.api._

@@ -8,8 +8,7 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class GithubAuthSchemaInitializer @Inject()(
-    implicit val executionContext: ExecutionContext)
+class GithubAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
     extends SchemaInitializer[GithubAuthTable] {
 
   override val name: String = GithubAuthTable.name

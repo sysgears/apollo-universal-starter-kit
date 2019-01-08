@@ -20,8 +20,7 @@ object ItemResolver extends ActorNamed {
   *
   * @param itemRepo provides methods for operating an entity in a database
   */
-class ItemResolver @Inject()(itemRepo: ItemRepository)(
-    implicit executionContext: ExecutionContext)
+class ItemResolver @Inject()(itemRepo: ItemRepository)(implicit executionContext: ExecutionContext)
     extends Actor
     with ActorLogging {
 
@@ -30,11 +29,7 @@ class ItemResolver @Inject()(itemRepo: ItemRepository)(
       log.info(s"Received message: [ $paginationParams ]")
       itemRepo
         .getPaginatedObjectsList(paginationParams)
-        .map(
-          res =>
-            ItemsPayload(hasNextPage = res.hasNextPage,
-                         entities = res.entities,
-                         totalCount = res.totalCount))
+        .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))
         .run
         .pipeTo(sender)
     }

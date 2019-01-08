@@ -33,118 +33,96 @@ import modules.jwt.model.Tokens
 
 import scala.concurrent.ExecutionContext
 
-class AuthenticationSchema @Inject()(
-    authConfig: AuthConfig,
-    userProfileRepository: UserProfileRepository,
-    facebookAuthRepo: FacebookAuthRepository,
-    googleAuthRepository: GoogleAuthRepository,
-    githubAuthRepository: GithubAuthRepository,
-    linkedinAuthRepository: LinkedinAuthRepository,
-    certificateAuthRepository: CertificateAuthRepository,
-    userSchema: UserSchema)(implicit actorSystem: ActorSystem,
-                            materializer: ActorMaterializer,
-                            executionContext: ExecutionContext)
+class AuthenticationSchema @Inject()(authConfig: AuthConfig,
+                                     userProfileRepository: UserProfileRepository,
+                                     facebookAuthRepo: FacebookAuthRepository,
+                                     googleAuthRepository: GoogleAuthRepository,
+                                     githubAuthRepository: GithubAuthRepository,
+                                     linkedinAuthRepository: LinkedinAuthRepository,
+                                     certificateAuthRepository: CertificateAuthRepository,
+                                     userSchema: UserSchema)(implicit actorSystem: ActorSystem,
+                                                             materializer: ActorMaterializer,
+                                                             executionContext: ExecutionContext)
     extends InputUnmarshallerGenerator
     with Logger {
 
-  val registerUserInput: InputObjectType[RegisterUserInput] =
-    deriveInputObjectType(InputObjectTypeName("RegisterUserInput"))
-  val confirmRegistrationInput: InputObjectType[ConfirmRegistrationInput] =
-    deriveInputObjectType(InputObjectTypeName("ConfirmRegistrationInput"))
-  val resendConfirmationMessageInput
-    : InputObjectType[ResendConfirmationMessageInput] = deriveInputObjectType(
+  val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(
+    InputObjectTypeName("RegisterUserInput"))
+  val confirmRegistrationInput: InputObjectType[ConfirmRegistrationInput] = deriveInputObjectType(
+    InputObjectTypeName("ConfirmRegistrationInput"))
+  val resendConfirmationMessageInput: InputObjectType[ResendConfirmationMessageInput] = deriveInputObjectType(
     InputObjectTypeName("ResendConfirmationMessageInput"))
 
-  implicit val certificateAuth: ObjectType[UserContext, CertificateAuth] =
-    deriveObjectType(ObjectTypeName("CertificateAuth"))
+  implicit val certificateAuth: ObjectType[UserContext, CertificateAuth] = deriveObjectType(
+    ObjectTypeName("CertificateAuth"))
 
   implicit val facebookAuth: ObjectType[UserContext, FacebookAuth] =
-    deriveObjectType(ObjectTypeName("FacebookAuth"),
-                     ExcludeFields("userId"),
-                     RenameField("id", "fbId"))
+    deriveObjectType(ObjectTypeName("FacebookAuth"), ExcludeFields("userId"), RenameField("id", "fbId"))
 
   implicit val googleAuth: ObjectType[UserContext, GoogleAuth] =
-    deriveObjectType(ObjectTypeName("GoogleAuth"),
-                     ExcludeFields("userId"),
-                     RenameField("id", "googleId"))
+    deriveObjectType(ObjectTypeName("GoogleAuth"), ExcludeFields("userId"), RenameField("id", "googleId"))
 
   implicit val githubAuth: ObjectType[UserContext, GithubAuth] =
-    deriveObjectType(ObjectTypeName("GithubAuth"),
-                     ExcludeFields("userId"),
-                     RenameField("id", "ghId"))
+    deriveObjectType(ObjectTypeName("GithubAuth"), ExcludeFields("userId"), RenameField("id", "ghId"))
 
   implicit val linkedinAuth: ObjectType[UserContext, LinkedinAuth] =
-    deriveObjectType(ObjectTypeName("LinkedInAuth"),
-                     ExcludeFields("userId"),
-                     RenameField("id", "lnId"))
+    deriveObjectType(ObjectTypeName("LinkedInAuth"), ExcludeFields("userId"), RenameField("id", "lnId"))
 
   implicit val user: ObjectType[UserContext, User] = userSchema.user
 
-  implicit val userAuth: ObjectType[UserContext, UserAuth] = deriveObjectType(
-    ObjectTypeName("UserAuth"))
-  val loginUserInput: InputObjectType[LoginUserInput] = deriveInputObjectType(
-    InputObjectTypeName("LoginUserInput"))
-  val authPayload: ObjectType[UserContext, AuthPayload] = deriveObjectType(
-    ObjectTypeName("AuthPayload"))
-  implicit val tokens: ObjectType[UserContext, Tokens] = deriveObjectType(
-    ObjectTypeName("Tokens"))
-  val forgotPasswordInput: InputObjectType[ForgotPasswordInput] =
-    deriveInputObjectType(InputObjectTypeName("ForgotPasswordInput"))
-  val resetPasswordInput: InputObjectType[ResetPasswordInput] =
-    deriveInputObjectType(InputObjectTypeName("ResetPasswordInput"))
-  val resetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(
-    ObjectTypeName("ResetPayload"))
-  implicit val userPayload: ObjectType[UserContext, UserPayload] =
-    deriveObjectType(ObjectTypeName("UserPayload"))
+  implicit val userAuth: ObjectType[UserContext, UserAuth] = deriveObjectType(ObjectTypeName("UserAuth"))
+  val loginUserInput: InputObjectType[LoginUserInput] = deriveInputObjectType(InputObjectTypeName("LoginUserInput"))
+  val authPayload: ObjectType[UserContext, AuthPayload] = deriveObjectType(ObjectTypeName("AuthPayload"))
+  implicit val tokens: ObjectType[UserContext, Tokens] = deriveObjectType(ObjectTypeName("Tokens"))
+  val forgotPasswordInput: InputObjectType[ForgotPasswordInput] = deriveInputObjectType(
+    InputObjectTypeName("ForgotPasswordInput"))
+  val resetPasswordInput: InputObjectType[ResetPasswordInput] = deriveInputObjectType(
+    InputObjectTypeName("ResetPasswordInput"))
+  val resetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(ObjectTypeName("ResetPayload"))
+  implicit val userPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
 
-  implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] =
-    inputUnmarshaller { input =>
-      RegisterUserInput(
-        username = input("username").asInstanceOf[String],
-        email = input("email").asInstanceOf[String],
-        password = input("password").asInstanceOf[String]
-      )
-    }
+  implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller { input =>
+    RegisterUserInput(
+      username = input("username").asInstanceOf[String],
+      email = input("email").asInstanceOf[String],
+      password = input("password").asInstanceOf[String]
+    )
+  }
 
-  implicit val confirmRegistrationInputUnmarshaller
-    : FromInput[ConfirmRegistrationInput] = inputUnmarshaller { input =>
+  implicit val confirmRegistrationInputUnmarshaller: FromInput[ConfirmRegistrationInput] = inputUnmarshaller { input =>
     ConfirmRegistrationInput(
       token = input("token").asInstanceOf[String]
     )
   }
 
-  implicit val resendConfirmationMessageInputUnmarshaller
-    : FromInput[ResendConfirmationMessageInput] = inputUnmarshaller { input =>
-    ResendConfirmationMessageInput(
-      usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
-      password = input("password").asInstanceOf[String]
-    )
-  }
-
-  implicit val loginUserInputUnmarshaller: FromInput[LoginUserInput] =
+  implicit val resendConfirmationMessageInputUnmarshaller: FromInput[ResendConfirmationMessageInput] =
     inputUnmarshaller { input =>
-      LoginUserInput(
+      ResendConfirmationMessageInput(
         usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
         password = input("password").asInstanceOf[String]
       )
     }
 
-  implicit val forgotPasswordInputUnmarshaller: FromInput[ForgotPasswordInput] =
-    inputUnmarshaller { input =>
-      ForgotPasswordInput(
-        email = input("email").asInstanceOf[String]
-      )
-    }
+  implicit val loginUserInputUnmarshaller: FromInput[LoginUserInput] = inputUnmarshaller { input =>
+    LoginUserInput(
+      usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
+      password = input("password").asInstanceOf[String]
+    )
+  }
 
-  implicit val resetPasswordInputUnmarshaller: FromInput[ResetPasswordInput] =
-    inputUnmarshaller { input =>
-      ResetPasswordInput(
-        token = input("token").asInstanceOf[String],
-        password = input("password").asInstanceOf[String],
-        passwordConfirmation =
-          input("passwordConfirmation").asInstanceOf[String]
-      )
-    }
+  implicit val forgotPasswordInputUnmarshaller: FromInput[ForgotPasswordInput] = inputUnmarshaller { input =>
+    ForgotPasswordInput(
+      email = input("email").asInstanceOf[String]
+    )
+  }
+
+  implicit val resetPasswordInputUnmarshaller: FromInput[ResetPasswordInput] = inputUnmarshaller { input =>
+    ResetPasswordInput(
+      token = input("token").asInstanceOf[String],
+      password = input("password").asInstanceOf[String],
+      passwordConfirmation = input("passwordConfirmation").asInstanceOf[String]
+    )
+  }
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
@@ -153,8 +131,7 @@ class AuthenticationSchema @Inject()(
       arguments = List(Argument("input", registerUserInput)),
       resolve = sc =>
         resolveWithDispatcher[UserPayload](
-          input = (sc.args.arg[RegisterUserInput]("input"),
-                   authConfig.skipConfirmation),
+          input = (sc.args.arg[RegisterUserInput]("input"), authConfig.skipConfirmation),
           userContext = sc.ctx,
           namedResolverActor = AuthenticationResolver
       )
@@ -224,16 +201,10 @@ class AuthenticationSchema @Inject()(
             } yield
               (certificate, fbAuth, gAuth, ghAuth, lnAuth) match {
                 case (None, None, None, None, None) => None
-                case _ =>
-                  Some(UserAuth(certificate, fbAuth, gAuth, ghAuth, lnAuth))
+                case _                              => Some(UserAuth(certificate, fbAuth, gAuth, ghAuth, lnAuth))
               }
       },
-      AdditionalTypes(userAuth,
-                      certificateAuth,
-                      googleAuth,
-                      facebookAuth,
-                      githubAuth,
-                      linkedinAuth)
+      AdditionalTypes(userAuth, certificateAuth, googleAuth, facebookAuth, githubAuth, linkedinAuth)
     )
   )
 }

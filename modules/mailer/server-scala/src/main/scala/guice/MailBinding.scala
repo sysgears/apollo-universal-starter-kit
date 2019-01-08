@@ -21,8 +21,7 @@ class MailBinding extends ScalaModule with GuiceActorRefProvider {
 
   @Provides
   @Named(MailActor.name)
-  def actor(implicit actorSystem: ActorSystem): ActorRef =
-    provideActorRef(MailActor)
+  def actor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(MailActor)
 
   @Provides
   @Singleton
@@ -35,8 +34,7 @@ class MailBinding extends ScalaModule with GuiceActorRefProvider {
       :: SmtpStartTls()
       :: SessionFactory()).session(
       Some(
-        config.getString("email.ethereal.user") -> config.getString(
-          "email.ethereal.password")
+        config.getString("email.ethereal.user") -> config.getString("email.ethereal.password")
       )
     )
     Mailer(session)

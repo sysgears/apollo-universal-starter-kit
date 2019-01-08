@@ -9,8 +9,7 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class GithubAuthRepository @Inject()(override val driver: JdbcProfile)(
-    implicit executionContext: ExecutionContext)
+class GithubAuthRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
     extends Repository[GithubAuth, Int](driver) {
   import driver.api._
 

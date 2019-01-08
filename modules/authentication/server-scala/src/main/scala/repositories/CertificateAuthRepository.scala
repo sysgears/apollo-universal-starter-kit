@@ -9,8 +9,7 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class CertificateAuthRepository @Inject()(override val driver: JdbcProfile)(
-    implicit executionContext: ExecutionContext)
+class CertificateAuthRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
     extends Repository[CertificateAuth, Int](driver) {
   import driver.api._
 

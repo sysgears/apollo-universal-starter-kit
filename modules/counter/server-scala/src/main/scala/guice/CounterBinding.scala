@@ -18,18 +18,14 @@ class CounterBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() {
     bind[Actor].annotatedWith(Names.named(CounterActor.name)).to[CounterActor]
-    bind[Actor]
-      .annotatedWith(Names.named(CounterResolver.name))
-      .to[CounterResolver]
+    bind[Actor].annotatedWith(Names.named(CounterResolver.name)).to[CounterResolver]
     bind[PubSubService[Counter]].to[PubSubServiceImpl[Counter]]
   }
 
   @Provides
-  def counterRepository(driver: JdbcProfile): Repository[Counter, Int] =
-    new CounterRepository(driver)
+  def counterRepository(driver: JdbcProfile): Repository[Counter, Int] = new CounterRepository(driver)
 
   @Provides
   @Named(CounterActor.name)
-  def counterActor(implicit actorSystem: ActorSystem): ActorRef =
-    provideActorRef(CounterActor)
+  def counterActor(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(CounterActor)
 }

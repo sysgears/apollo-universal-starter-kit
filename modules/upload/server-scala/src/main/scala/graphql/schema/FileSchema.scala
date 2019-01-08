@@ -10,8 +10,7 @@ import sangria.macros.derive.{ObjectTypeName, RenameField, deriveObjectType}
 import sangria.schema.{Argument, Field, _}
 import spray.json.DefaultJsonProtocol
 
-class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)(
-    implicit val materializer: ActorMaterializer)
+class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)(implicit val materializer: ActorMaterializer)
     extends InputUnmarshallerGenerator
     with Logger
     with DefaultJsonProtocol {
@@ -30,9 +29,7 @@ class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)(
     Field(
       name = "uploadFiles",
       fieldType = sangria.schema.BooleanType,
-      arguments = Argument(
-        name = "files",
-        argumentType = ListInputType(OptionInputType(fileUploadType))) :: Nil,
+      arguments = Argument(name = "files", argumentType = ListInputType(OptionInputType(fileUploadType))) :: Nil,
       resolve = sc => {
         fileUploadResolver.uploadFiles(sc.ctx.filesData)
       }

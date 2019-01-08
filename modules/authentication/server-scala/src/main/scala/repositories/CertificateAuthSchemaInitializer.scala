@@ -8,8 +8,7 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class CertificateAuthSchemaInitializer @Inject()(
-    implicit val executionContext: ExecutionContext)
+class CertificateAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
     extends SchemaInitializer[CertificateAuthTable] {
 
   override val name: String = CertificateAuthTable.name

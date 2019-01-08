@@ -4,12 +4,7 @@ import akka.actor.{Actor, ActorLogging, ActorRef, Status}
 import akka.pattern._
 import akka.stream.ActorMaterializer
 import common.implicits.RichList._
-import common.actors.Dispatcher.{
-  DispatcherMessage,
-  Failure,
-  InterceptorBeforeMessage,
-  Success
-}
+import common.actors.Dispatcher.{DispatcherMessage, Failure, InterceptorBeforeMessage, Success}
 import common.graphql.UserContext
 import common.ActorNamed
 import javax.inject.Inject
@@ -28,14 +23,9 @@ object Dispatcher extends ActorNamed {
                                      before: List[ActorRef] = Nil,
                                      after: List[ActorRef] = Nil)
 
-  final case class InterceptorBeforeMessage(input: Any,
-                                            context: UserContext,
-                                            before: List[ActorRef])
+  final case class InterceptorBeforeMessage(input: Any, context: UserContext, before: List[ActorRef])
 
-  final case class InterceptorAfterMessage(input: Any,
-                                           output: Any,
-                                           context: UserContext,
-                                           after: List[ActorRef])
+  final case class InterceptorAfterMessage(input: Any, output: Any, context: UserContext, after: List[ActorRef])
 
   final case class ResolverMessage(input: Any, context: UserContext)
 
@@ -47,8 +37,7 @@ object Dispatcher extends ActorNamed {
 
 }
 
-class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
-                           executionContext: ExecutionContext)
+class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer, executionContext: ExecutionContext)
     extends Actor
     with ActorLogging
     with ActorMessageDelivering {

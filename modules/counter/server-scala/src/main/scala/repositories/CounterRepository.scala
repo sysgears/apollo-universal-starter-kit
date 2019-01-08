@@ -7,8 +7,7 @@ import models.CounterTable.CounterTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 
-class CounterRepository @Inject()(override val driver: JdbcProfile)
-    extends Repository[Counter, Int](driver) {
+class CounterRepository @Inject()(override val driver: JdbcProfile) extends Repository[Counter, Int](driver) {
 
   import driver.api._
 

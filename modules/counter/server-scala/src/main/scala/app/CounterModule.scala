@@ -14,15 +14,11 @@ import scala.collection.mutable
 class CounterModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val counterSchema: CounterSchema = inject[CounterSchema]
-  lazy val counterSchemaInitializer: CounterSchemaInitializer =
-    inject[CounterSchemaInitializer]
+  lazy val counterSchemaInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
 
-  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] =
-    mutable.HashSet(counterSchemaInitializer)
-  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] =
-    mutable.HashSet(counterSchema.queries: _*)
-  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] =
-    mutable.HashSet(counterSchema.mutations: _*)
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(counterSchemaInitializer)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.mutations: _*)
   override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] =
     mutable.HashSet(counterSchema.subscriptions: _*)
 

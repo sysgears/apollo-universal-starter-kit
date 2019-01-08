@@ -46,7 +46,7 @@ class PostResolver @Inject()(postRepository: PostRepository,
         Map((1 to entities.size).zip(entities): _*).map(value => {
           val (index, post) = value
           PostEdges(node = post, cursor = input.after + index)
-        }).toSeq
+        }).toSeq.sortBy(pe => pe.cursor)
 
       def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
 

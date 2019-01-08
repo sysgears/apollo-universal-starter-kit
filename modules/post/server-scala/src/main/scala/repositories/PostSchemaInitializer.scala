@@ -15,11 +15,10 @@ class PostSchemaInitializer @Inject()(implicit val executionContext: ExecutionCo
   override val table = TableQuery[PostTable]
 
   override def initData: driver.api.DBIOAction[_, driver.api.NoStream, Effect.Write] = {
-    val posts = List.range(1, 6).map(num =>
+    val posts = List.range(1, 21).sorted.map(num =>
       Post(id = Some(num),
-        title = s"Post title #[$num]",
-        content = s"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt " +
-          s"ut labore et dolore magna aliqua. $num")
+        title = s"Post title [$num]",
+        content = s"Post content [$num]")
     )
     table ++= posts
   }

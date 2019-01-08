@@ -15,11 +15,13 @@ class CommentSchemaInitializer @Inject()(implicit val executionContext: Executio
   override val table = TableQuery[CommentTable]
 
   override def initData: driver.api.DBIOAction[_, driver.api.NoStream, Effect.Write] = {
-    val comments = List.range(1, 11).map(num =>
-      Comment(id = Some(num),
-        content = s" Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim " +
-          s"id [$num] est laborum.",
-        postId = 1))
+    val comments = List.range(1, 21).sorted.flatMap(postId =>
+      List.range(1, 3).map(commentId =>
+        Comment(id = Some(postId*commentId),
+          content = s"Comment title [$commentId] for post [$postId]",
+          postId = postId)
+      )
+    )
     table ++= comments
   }
 }

@@ -60,11 +60,9 @@ class PostSchema @Inject()(implicit val postPubSubService: PubSubService[Event[P
 
   object Names {
 
-    //Queries
     final val POST = "post"
     final val POSTS = "posts"
 
-    //Mutations
     final val ADD_POST = "addPost"
     final val DELETE_POST = "deletePost"
     final val EDIT_POST = "editPost"
@@ -72,7 +70,6 @@ class PostSchema @Inject()(implicit val postPubSubService: PubSubService[Event[P
     final val EDIT_COMMENT = "editComment"
     final val DELETE_COMMENT = "deleteComment"
 
-    //Subscriptions
     final val POST_UPDATED = "postUpdated"
     final val POSTS_UPDATED = "postsUpdated"
     final val COMMENT_UPDATED = "commentUpdated"

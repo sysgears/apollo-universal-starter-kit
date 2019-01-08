@@ -28,13 +28,10 @@ class CounterSchema @Inject()(implicit val counterPubSubService: PubSubService[E
 
   object Names {
 
-    //Queries
     final val SERVER_COUNTER = "serverCounter"
 
-    //Mutations
     final val ADD_SERVER_COUNTER = "addServerCounter"
 
-    //Subscriptions
     final val COUNTER_UPDATED = "counterUpdated"
   }
 

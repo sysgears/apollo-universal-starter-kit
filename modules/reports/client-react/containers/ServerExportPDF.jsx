@@ -1,15 +1,13 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
+import { removeTypename } from '@module/core-common';
+import { translate } from '@module/i18n-client-react';
 import { Query } from 'react-apollo';
 import { Button } from '@module/look-client-react';
-import { translate } from '@module/i18n-client-react';
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-
-import ReportQuery from '../graphql/ReportQuery.graphql';
-
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import WithExportPDF from './WithExportPDF';
+import ServerReportDemo from '../components/ServerReportDemo';
+import ReportsQuery from '../graphql/ReportsQuery.graphql';
 
 @translate('reports')
 class ServerExportPDF extends Component {
@@ -17,23 +15,18 @@ class ServerExportPDF extends Component {
     t: PropTypes.func
   };
 
-  handleServerPDF = docDefinition => {
-    console.log(docDefinition);
-    pdfMake.createPdf(docDefinition).print();
-  };
-
   render() {
     const { t } = this.props;
-
+    const button = <Button>{t('btn')}</Button>;
     return (
-      <Query query={ReportQuery} variables={{ id: 1 }}>
-        {({ loading, data: { report } }) => {
+      <Query query={ReportsQuery}>
+        {({ loading, data: { reports } }) => {
           if (loading) return null;
+          reports = Object.values(removeTypename(reports));
           return (
-            <div>
-              <Button onClick={() => this.handleServerPDF(JSON.parse(report.content))}>{t('btn')}</Button>
-              {/*<div id="iframeContainer"></div>*/}
-            </div>
+            <WithExportPDF button={button} visibly={false}>
+              <ServerReportDemo reports={reports} />
+            </WithExportPDF>
           );
         }}
       </Query>

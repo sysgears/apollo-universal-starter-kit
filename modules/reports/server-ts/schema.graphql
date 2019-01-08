@@ -1,11 +1,14 @@
 # Report
 type Report {
   id: Int!
-  title: String!
-  content: String!
+  name: String!
+  phone: String!
+  email: String!
 }
 
 extend type Query {
   # Report
   report(id: Int!): Report
+  #Reporst
+  reports: [Report]
 }

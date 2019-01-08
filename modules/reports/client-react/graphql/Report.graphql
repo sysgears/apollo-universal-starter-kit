@@ -1,5 +1,5 @@
 fragment ReportInfo on Report {
-  id
-  title
-  content
+  name
+  email
+  phone
 }

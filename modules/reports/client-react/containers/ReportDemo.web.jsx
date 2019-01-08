@@ -50,7 +50,7 @@ class ReportDemo extends Component {
           <Option value="server">{t('list.title.server')}</Option>
         </Select>
         {reportType === 'front' ? (
-          <WithExportPDF button={button} visibly={false} positionButton="center">
+          <WithExportPDF button={button} positionButton="center">
             <ReportDemoPrint />
           </WithExportPDF>
         ) : (

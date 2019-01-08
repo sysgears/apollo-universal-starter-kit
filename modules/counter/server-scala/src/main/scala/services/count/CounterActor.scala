@@ -31,7 +31,7 @@ class CounterActor @Inject()(counterRepository: Repository[Counter, Int])
 
   override def receive: Receive = {
     case incrementAndGet: IncrementAndGet =>
-      log.info(s"Received message: [ $incrementAndGet ]")
+      log.debug(s"Received message: [ $incrementAndGet ]")
       counterRepository.executeTransactionally(
         for {
           optionCounter <- counterRepository.findOne(defaultId)

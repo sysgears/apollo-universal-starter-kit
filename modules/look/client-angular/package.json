@@ -1,0 +1,10 @@
+{
+  "name": "@module/look-client-angular",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@angular/animations": "^7.1.4",
+    "@angular/cdk": "^7.2.0",
+    "@angular/material": "^7.2.0"
+  }
+}

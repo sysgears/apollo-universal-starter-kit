@@ -101,13 +101,11 @@ export default pubsub => ({
           try {
             [createdUserId] = await User.register(input, passwordHash).transacting(trx);
             await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
+            if (settings.user.auth.certificate.enabled)
+              await User.editAuthCertificate({ id: createdUserId, ...input }).transacting(trx);
             trx.commit();
           } catch (e) {
             trx.rollback();
-          }
-
-          if (settings.user.auth.certificate.enabled) {
-            await User.editAuthCertificate({ id: createdUserId, ...input });
           }
 
           const user = await User.getUser(createdUserId);

@@ -7,7 +7,7 @@ import resolvers from './resolvers';
 import settings from '../../../../../settings';
 
 const registerUser = async ({ id, username, displayName, emails: [{ value }] }) => {
-  return await User.register({
+  return User.register({
     username: username ? username : displayName,
     email: value,
     password: id,
@@ -15,7 +15,7 @@ const registerUser = async ({ id, username, displayName, emails: [{ value }] }) 
   });
 };
 
-const createLinkedInAuth = async user => await User.createLinkedInAuth(user);
+const createLinkedInAuth = async user => User.createLinkedInAuth(user);
 
 async function verifyCallback(accessToken, refreshToken, profile, cb) {
   const {

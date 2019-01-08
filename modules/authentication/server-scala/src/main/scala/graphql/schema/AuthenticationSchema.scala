@@ -4,32 +4,25 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.graphql.DispatcherResolver.resolveWithDispatcher
 import common.graphql.{Extension, UserContext}
+import common.implicits.RichDBIO._
 import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
 import graphql.resolvers.AuthenticationResolver
 import javax.inject.Inject
+import model._
 import model.facebook.FacebookAuth
 import model.github.GithubAuth
 import model.google.GoogleAuth
 import model.linkedin.LinkedinAuth
-import model._
+import modules.jwt.model.Tokens
 import repositories._
+import sangria.macros._
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.AstSchemaBuilder.{FieldName, TypeName}
 import sangria.schema.{
-  AdditionalTypes,
-  Argument,
-  AstSchemaBuilder,
-  Field,
-  FieldResolver,
-  InputObjectType,
-  ObjectType,
-  StringType
+  AdditionalTypes, Argument, AstSchemaBuilder, Field, FieldResolver, InputObjectType, ObjectType, StringType
 }
-import sangria.macros._
-import common.implicits.RichDBIO._
-import modules.jwt.model.Tokens
 
 import scala.concurrent.ExecutionContext
 

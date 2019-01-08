@@ -9,3 +9,4 @@ lazy val modules = List(
 
 parallelExecution in test := false
 scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

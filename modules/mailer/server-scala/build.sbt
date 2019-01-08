@@ -7,3 +7,4 @@ lazy val modules = List(
 )
 
 scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

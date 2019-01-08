@@ -58,3 +58,4 @@ libraryDependencies ++= Seq(
 )
 parallelExecution in test := false
 scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

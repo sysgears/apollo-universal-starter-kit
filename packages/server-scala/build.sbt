@@ -34,3 +34,4 @@ dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 mainClass in Compile := Some("Main")
 
 scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

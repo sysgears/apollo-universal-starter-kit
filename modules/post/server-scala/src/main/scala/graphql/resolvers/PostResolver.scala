@@ -8,8 +8,9 @@ import common.errors.NotFound
 import common.implicits.RichDBIO._
 import model._
 import repositories.{CommentRepository, PostRepository}
+import slick.dbio.DBIO
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object PostResolver extends ActorNamed {
   final val name = "PostResolver"
@@ -31,13 +32,13 @@ class PostResolver @Inject()(postRepository: PostRepository,
 
     case input: QueryPost => {
       log.debug(s"Query with param: [ $input ]")
-
-      val post = for {
-        maybePost <- postRepository.findOne(input.id).run
-        post      <- if (maybePost.isDefined) Future.successful(maybePost.get)
-                     else Future.failed(NotFound(s"Post with id: ${input.id} not found."))
-      } yield post
-        post.pipeTo(sender)
+      postRepository.executeTransactionally(
+        for {
+          maybePost <- postRepository.findOne(input.id)
+          post      <- if (maybePost.isDefined) DBIO.successful(maybePost.get)
+                       else DBIO.failed(NotFound(s"Post with id: ${input.id} not found."))
+        } yield post
+      ).run.pipeTo(sender)
     }
 
     case input: QueryPosts => {
@@ -50,44 +51,46 @@ class PostResolver @Inject()(postRepository: PostRepository,
 
       def endCursorValue(pageSize: Int): Int = if (pageSize > 0 ) pageSize - 1 else 0
 
-      val posts = for {
-        paginatedResult <- postRepository.getPaginatedObjectsList(PaginationParams(offset = input.after, limit = input.limit)).run
-      } yield Posts(
-        totalCount = paginatedResult.totalCount,
-        edges = paginatedResult.entities,
-        pageInfo = PostPageInfo(
-          endCursor = endCursorValue(paginatedResult.entities.size),
-          hasNextPage = paginatedResult.hasNextPage)
-      )
-      posts.pipeTo(sender)
+      {
+        for {
+          paginatedResult <- postRepository.getPaginatedObjectsList(PaginationParams(offset = input.after, limit = input.limit)).run
+        } yield Posts(
+          totalCount = paginatedResult.totalCount,
+          edges = paginatedResult.entities,
+          pageInfo = PostPageInfo(
+            endCursor = endCursorValue(paginatedResult.entities.size),
+            hasNextPage = paginatedResult.hasNextPage)
+        )
+      }.pipeTo(sender)
     }
 
     case input: MutationAddPost => {
       log.debug(s"Mutation with param: [ $input ]")
-      postRepository.save(input.addPostInput).run
-        .pipeTo(sender)
+      postRepository.save(input.addPostInput).run.pipeTo(sender)
     }
 
     case input: MutationDeletePost => {
       log.debug(s"Mutation with param: [ $input ]")
-      val post = for {
-            maybePost     <- postRepository.findOne(input.id).run
-            post          <- if (maybePost.isDefined) Future.successful(maybePost.get)
-                             else Future.failed(NotFound(s"Post with id: ${input.id} not found."))
-            deletedPost   <- postRepository.delete(post).run
-          } yield deletedPost
-      post.pipeTo(sender)
+      postRepository.executeTransactionally(
+        for{
+          maybePost     <- postRepository.findOne(input.id)
+          post          <- if (maybePost.isDefined) DBIO.successful(maybePost.get)
+                           else DBIO.failed(NotFound(s"Post with id: ${input.id} not found."))
+          deletedPost   <- postRepository.delete(post)
+        } yield deletedPost
+      ).run.pipeTo(sender)
     }
 
     case input: MutationEditPost => {
       log.debug(s"Mutation with param: [ $input ]")
-      val post = for {
-        maybePost     <- postRepository.findOne(input.editPostInput.id).run
-        post          <- if (maybePost.isDefined) Future.successful(maybePost.get)
-                         else Future.failed(NotFound(s"Post with id: ${input.editPostInput.id} not found."))
-        updatedPost   <- postRepository.update(input.editPostInput).run
-      } yield updatedPost
-      post.pipeTo(sender)
+      postRepository.executeTransactionally(
+        for {
+          maybePost     <- postRepository.findOne(input.editPostInput.id)
+          post          <- if (maybePost.isDefined) DBIO.successful(maybePost.get)
+                           else DBIO.failed(NotFound(s"Post with id: ${input.editPostInput.id} not found."))
+          updatedPost   <- postRepository.update(input.editPostInput)
+        } yield updatedPost
+      ).run.pipeTo(sender)
     }
   }
 }

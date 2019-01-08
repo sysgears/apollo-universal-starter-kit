@@ -8,8 +8,9 @@ import common.errors.NotFound
 import common.implicits.RichDBIO._
 import model.{AddCommentInput, DeleteCommentInput, EditCommentInput}
 import repositories.{CommentRepository, PostRepository}
+import slick.dbio.DBIO
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 object CommentResolver extends ActorNamed {
   final val name = "CommentResolver"
@@ -28,41 +29,43 @@ class CommentResolver @Inject()(postRepository: PostRepository,
 
     case input: QueryComments => {
       log.debug(s"Query with param: [ $input ]")
-      commentRepository.getAllByPostId(input.postId).run
-        .pipeTo(sender)
+      commentRepository.getAllByPostId(input.postId).run.pipeTo(sender)
     }
 
     case input: MutationAddComment => {
       log.debug(s"Mutation with param: [ $input ]")
-      val comment = for {
-        maybePost           <- postRepository.findOne(input.addCommentInput.postId).run
-        _                   <- if (maybePost.isDefined) Future.successful(maybePost.get)
-                               else Future.failed(NotFound(s"Couldn't add a comment. Post with id: ${input.addCommentInput.postId} not found."))
-        comment             <- commentRepository.save(input.addCommentInput).run
-      } yield comment
-      comment.pipeTo(sender)
+      postRepository.executeTransactionally(
+        for {
+          maybePost    <- postRepository.findOne(input.addCommentInput.postId)
+          post         <- if (maybePost.isDefined) DBIO.successful(maybePost.get)
+                          else DBIO.failed(NotFound(s"Couldn't add a comment. Post with id: ${input.addCommentInput.postId} not found."))
+          comment      <- commentRepository.save(input.addCommentInput)
+        } yield comment
+      ).run.pipeTo(sender)
     }
 
     case input: MutationEditComment => {
       log.debug(s"Mutation with param: [ $input ]")
-      val comment = for {
-        maybeComment        <- commentRepository.findOne(input.editCommentInput.id).run
-        comment             <- if (maybeComment.isDefined) Future.successful(maybeComment.get)
-                               else Future.failed(NotFound(s"Comment with id: ${input.editCommentInput.id} not found."))
-        updatedComment      <- commentRepository.update(input.editCommentInput).run
-      } yield updatedComment
-      comment.pipeTo(sender)
+      commentRepository.executeTransactionally(
+        for {
+          maybeComment        <- commentRepository.findOne(input.editCommentInput.id)
+          comment             <- if (maybeComment.isDefined) DBIO.successful(maybeComment.get)
+                                 else DBIO.failed(NotFound(s"Comment with id: ${input.editCommentInput.id} not found."))
+          updatedComment      <- commentRepository.update(input.editCommentInput)
+        } yield updatedComment
+      ).run.pipeTo(sender)
     }
 
     case input: MutationDeleteComment => {
       log.debug(s"Mutation with param: [ $input ]")
-      val comment = for {
-          maybeComment      <- commentRepository.findOne(input.deleteCommentInput.id).run
-          comment           <- if (maybeComment.isDefined) Future.successful(maybeComment.get)
-                               else Future.failed(NotFound(s"Comment with id: ${input.deleteCommentInput.id} not found."))
-          deletedComment    <- commentRepository.delete(comment).run
+      commentRepository.executeTransactionally(
+        for {
+          maybeComment      <- commentRepository.findOne(input.deleteCommentInput.id)
+          comment           <- if (maybeComment.isDefined) DBIO.successful(maybeComment.get)
+                               else DBIO.failed(NotFound(s"Comment with id: ${input.deleteCommentInput.id} not found."))
+          deletedComment    <- commentRepository.delete(comment)
         } yield deletedComment
-      comment.pipeTo(sender)
+      ).run.pipeTo(sender)
     }
   }
 }

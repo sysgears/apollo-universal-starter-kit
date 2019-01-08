@@ -6,11 +6,7 @@ import { FieldAdapter as Field } from '@module/core-client-react';
 import { translate } from '@module/i18n-client-react';
 import { required, minLength, validate } from '@module/validation-common-react';
 import { Form, RenderField, Alert, Button } from '@module/look-client-react';
-
-import FacebookButton from '../auth/facebook';
-import GoogleButton from '../auth/google';
-import LinkedInButton from '../auth/linkedin';
-import GitHubButton from '../auth/github';
+import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@module/authentication-client-react';
 
 import settings from '../../../../settings';
 

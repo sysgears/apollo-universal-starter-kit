@@ -8,11 +8,8 @@ import { translate } from '@module/i18n-client-react';
 import { RenderField, Button, primary, FormView } from '@module/look-client-react-native';
 import { placeholderColor, submit } from '@module/look-client-react-native/styles';
 import { required, minLength, validate } from '@module/validation-common-react';
+import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@module/authentication-client-react';
 
-import FacebookButton from '../auth/facebook';
-import GoogleButton from '../auth/google';
-import GitHubButton from '../auth/github';
-import LinkedInButton from '../auth/linkedin';
 import settings from '../../../../settings';
 
 const loginFormSchema = {

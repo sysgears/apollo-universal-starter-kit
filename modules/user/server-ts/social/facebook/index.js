@@ -2,9 +2,9 @@ import { pick } from 'lodash';
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 import { access } from '@module/authentication-server-ts';
+import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
 import resolvers from './resolvers';
-import AuthModule from '../AuthModule';
 import settings from '../../../../../settings';
 import getCurrentUser from '../../utils';
 

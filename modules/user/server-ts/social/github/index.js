@@ -2,11 +2,11 @@ import { pick } from 'lodash';
 import passport from 'passport';
 import GitHubStrategy from 'passport-github';
 import { access } from '@module/authentication-server-ts';
+import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
 import getCurrentUser from '../../utils';
 
 import resolvers from './resolvers';
-import AuthModule from '../AuthModule';
 import settings from '../../../../../settings';
 
 let middleware;

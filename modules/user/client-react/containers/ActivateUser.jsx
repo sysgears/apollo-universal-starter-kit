@@ -15,13 +15,14 @@ class Activate extends React.Component {
 
   activate = () => {
     try {
-      if (this.props.history) {
+      const { history, navigation } = this.props;
+      if (history) {
         const token = this.props.match.params.token;
-        this.props.activateUser(token, this.props.history);
+        this.props.activateUser(token, history);
       } else {
-        const { url } = this.props.navigation.state.params;
+        const { url } = navigation.state.params;
         const [, token] = url.split('/confirmation/');
-        this.props.activateUser(token, this.props.navigation);
+        this.props.activateUser(token, navigation);
       }
     } catch (error) {
       console.log(error);

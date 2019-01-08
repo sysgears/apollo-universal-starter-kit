@@ -5,9 +5,9 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
-import User from './sql';
 import { createTransaction } from '@module/database-server-ts';
 
+import User from './sql';
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';

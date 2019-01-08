@@ -7,6 +7,7 @@ import settings from '../../../../settings';
 
 import ReportDemoPrint from '../components/ReportDemoPrint';
 import WithExportPDF from './WithExportPDF';
+import ServerExportPDF from './ServerExportPDF';
 
 @translate('reports')
 class ReportDemo extends Component {
@@ -53,7 +54,7 @@ class ReportDemo extends Component {
             <ReportDemoPrint />
           </WithExportPDF>
         ) : (
-          <div>server</div>
+          <ServerExportPDF />
         )}
       </PageLayout>
     );

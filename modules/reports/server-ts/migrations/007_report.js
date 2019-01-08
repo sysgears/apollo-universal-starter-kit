@@ -2,8 +2,9 @@ exports.up = function(knex, Promise) {
   return Promise.all([
     knex.schema.createTable('report', table => {
       table.increments();
-      table.string('title');
-      table.string('content');
+      table.string('name');
+      table.string('phone');
+      table.string('email');
       table.timestamps(false, true);
     })
   ]);

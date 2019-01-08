@@ -3,7 +3,7 @@ import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 
 import { AuthModule } from '../AuthModule';
 
-const createMiddleware = onSuccess => app => {
+const createMiddleware = onAuthenticationSuccess => app => {
   app.use(passport.initialize());
 
   app.get('/auth/linkedin', (req, res, next) => {
@@ -13,12 +13,21 @@ const createMiddleware = onSuccess => app => {
   app.get(
     '/auth/linkedin/callback',
     passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
-    onSuccess
+    onAuthenticationSuccess
   );
 };
 
 const getLinkedInAuth = config => {
-  const { enabled, clientID, clientSecret, callbackURL, scope, resolvers, verifyCallback, onSuccess } = config;
+  const {
+    enabled,
+    clientID,
+    clientSecret,
+    callbackURL,
+    scope,
+    resolvers,
+    verifyCallback,
+    onAuthenticationSuccess
+  } = config;
 
   if (!enabled || __TEST__) {
     return undefined;
@@ -26,7 +35,7 @@ const getLinkedInAuth = config => {
 
   passport.use(new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, verifyCallback));
 
-  const middleware = createMiddleware(onSuccess);
+  const middleware = createMiddleware(onAuthenticationSuccess);
 
   return new AuthModule({
     middleware: [middleware],

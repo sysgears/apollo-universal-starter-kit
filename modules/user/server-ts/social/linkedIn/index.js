@@ -41,7 +41,7 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
   }
 }
 
-async function onSuccess(req, res) {
+async function onAuthenticationSuccess(req, res) {
   const user = await User.getUserWithPassword(req.user.id);
   const redirectUrl = req.query.state;
   const tokens = await access.grantAccess(user, req, user.passwordHash);
@@ -55,6 +55,6 @@ async function onSuccess(req, res) {
 export default getLinkedInAuth({
   ...settings.user.auth.linkedin,
   verifyCallback,
-  onSuccess,
+  onAuthenticationSuccess,
   resolvers
 });

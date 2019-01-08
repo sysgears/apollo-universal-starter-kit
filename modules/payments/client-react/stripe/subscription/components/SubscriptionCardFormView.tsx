@@ -3,7 +3,7 @@ import { withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { Form, RenderField, Button, Alert, Label } from '@module/look-client-react';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { FieldAdapter as Field } from '@module/forms-client-react';
 import { required, validate } from '@module/validation-common-react';
 
 interface SubscriptionCardFormViewProps {

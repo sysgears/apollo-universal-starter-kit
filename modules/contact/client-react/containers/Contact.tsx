@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mutation, FetchResult, compose } from 'react-apollo';
-import { formikMessageHandler, HandleError } from '@module/core-client-react';
+import { formikMessageHandler, HandleError } from '@module/forms-client-react';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';

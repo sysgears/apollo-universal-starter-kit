@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { formikMessageHandler } from '@module/core-client-react';
+import { formikMessageHandler } from '@module/forms-client-react';
 
 import UserEditView from '../components/UserEditView';
 

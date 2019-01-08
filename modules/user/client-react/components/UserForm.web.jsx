@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 import { email, minLength, required, match, validate } from '@module/validation-common-react';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '@module/look-client-react';

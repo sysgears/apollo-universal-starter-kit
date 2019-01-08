@@ -1,99 +1,60 @@
 import { pick } from 'lodash';
-import passport from 'passport';
-import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
 import { access } from '@module/authentication-server-ts';
+import getLinkedInAuth from '@module/authentication-server-ts/social/linkedIn';
 import User from '../../sql';
 import getCurrentUser from '../../utils';
-
 import resolvers from './resolvers';
-import AuthModule from '../AuthModule';
 import settings from '../../../../../settings';
 
-let middleware;
+const registerUser = async ({ id, username, displayName, emails: [{ value }] }) => {
+  return await User.register({
+    username: username ? username : displayName,
+    email: value,
+    password: id,
+    isActive: true
+  });
+};
 
-if (settings.user.auth.linkedin.enabled && !__TEST__) {
-  passport.use(
-    new LinkedInStrategy(
-      {
-        clientID: settings.user.auth.linkedin.clientID,
-        clientSecret: settings.user.auth.linkedin.clientSecret,
-        callbackURL: settings.user.auth.linkedin.callbackURL,
-        scope: settings.user.auth.linkedin.scope
-      },
-      async function(accessToken, refreshToken, profile, cb) {
-        const {
-          id,
-          username,
-          displayName,
-          emails: [{ value }]
-        } = profile;
-        try {
-          let user = await User.getUserByLnInIdOrEmail(id, value);
+const createLinkedInAuth = async user => await User.createLinkedInAuth(user);
 
-          if (!user) {
-            const isActive = true;
-            const [createdUserId] = await User.register({
-              username: username ? username : displayName,
-              email: value,
-              password: id,
-              isActive
-            });
+async function verifyCallback(accessToken, refreshToken, profile, cb) {
+  const {
+    id,
+    displayName,
+    emails: [{ value }]
+  } = profile;
 
-            await User.createLinkedInAuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
+  try {
+    let user = await User.getUserByLnInIdOrEmail(id, value);
 
-            user = await User.getUser(createdUserId);
-          } else if (!user.lnId) {
-            await User.createLinkedInAuth({
-              id,
-              displayName,
-              userId: user.id
-            });
-          }
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
-      }
-    )
-  );
+    if (!user) {
+      const [createdUserId] = await registerUser(profile);
+      await createLinkedInAuth({ id, displayName, userId: createdUserId });
+      user = await User.getUser(createdUserId);
+    } else if (!user.lnId) {
+      await createLinkedInAuth({ id, displayName, userId: user.id });
+    }
 
-  middleware = app => {
-    app.use(passport.initialize());
-    app.get('/auth/linkedin', (req, res, next) => {
-      passport.authenticate('linkedin', { state: req.query.expoUrl })(req, res, next);
-    });
-    app.get(
-      '/auth/linkedin/callback',
-      passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
-      async function(req, res) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const redirectUrl = req.query.state;
-        const tokens = await access.grantAccess(user, req, user.passwordHash);
-        const currentUser = await getCurrentUser(req, res);
-
-        if (redirectUrl) {
-          res.redirect(
-            redirectUrl +
-              (tokens
-                ? '?data=' +
-                  JSON.stringify({
-                    tokens,
-                    user: currentUser.data
-                  })
-                : '')
-          );
-        } else {
-          res.redirect('/profile');
-        }
-      }
-    );
-  };
+    return cb(null, pick(user, ['id', 'username', 'role', 'email']));
+  } catch (err) {
+    return cb(err, {});
+  }
 }
 
-export default (middleware
-  ? new AuthModule({ middleware: [middleware], createResolversFunc: [resolvers] })
-  : undefined);
+async function onSuccess(req, res) {
+  const user = await User.getUserWithPassword(req.user.id);
+  const redirectUrl = req.query.state;
+  const tokens = await access.grantAccess(user, req, user.passwordHash);
+  const currentUser = await getCurrentUser(req, res);
+
+  return redirectUrl
+    ? res.redirect(redirectUrl + (tokens ? `?data=${JSON.stringify({ tokens, user: currentUser.data })}` : ''))
+    : res.redirect('/profile');
+}
+
+export default getLinkedInAuth({
+  ...settings.user.auth.linkedin,
+  verifyCallback,
+  onSuccess,
+  resolvers
+});

@@ -178,7 +178,7 @@
         "placeholder": "Введите пароль"
       }
     },
-    "logout": "Выйти",
-    "waiting": "Активация"
-  }
+    "logout": "Выйти"
+  },
+  "activateUser": "Активация"
 }

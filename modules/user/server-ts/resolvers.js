@@ -234,7 +234,6 @@ export default pubsub => ({
           success: true
         };
       } catch (e) {
-        console.log('error', e);
         return {
           success: false
         };

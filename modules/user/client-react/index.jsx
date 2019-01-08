@@ -16,6 +16,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
+import ActivateUser from './containers/ActivateUser';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
@@ -71,7 +72,8 @@ export default new ClientModule(access, {
       ))}
     />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
-    <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
+    <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />,
+    <AuthRoute path="/confirmation/:token" redirectOnLoggedIn redirect="/profile" component={ActivateUser} />
   ],
   navItem: [
     <IfLoggedIn key="/users" role="admin">

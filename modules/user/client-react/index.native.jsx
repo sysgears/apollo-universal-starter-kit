@@ -17,7 +17,7 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
-import WaitingPage from './containers/WaitingPage';
+import ActivateUser from './containers/ActivateUser';
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -136,12 +136,12 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class WaitingScreen extends React.Component {
+class ActivateUserScreen extends React.Component {
   render() {
-    return <WaitingPage navigation={this.props.navigation} />;
+    return <ActivateUser navigation={this.props.navigation} />;
   }
 }
-WaitingScreen.propTypes = {
+ActivateUserScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -248,8 +248,8 @@ export default new ClientModule(access, {
           };
         }
       },
-      Waiting: {
-        screen: WaitingScreen,
+      ActivateUser: {
+        screen: ActivateUserScreen,
         navigationOptions: {
           drawerLabel: () => null
         }

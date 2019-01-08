@@ -1,10 +1,10 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 
-import Waiting from '../components/WaitingPage';
+import ActivateUser from '../components/ActivateUser';
 import ACTIVATE_USER from '../graphql/ActivateUser.graphql';
 
-class WaitingPage extends React.Component {
+class Activate extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -15,26 +15,33 @@ class WaitingPage extends React.Component {
 
   activate = () => {
     try {
-      const { url } = this.props.navigation.state.params;
-      const [, token] = url.split('/confirmation/');
-      this.props.activateUser(token, this.props.navigation);
+      if (this.props.history) {
+        const token = this.props.match.params.token;
+        this.props.activateUser(token, this.props.history);
+      } else {
+        const { url } = this.props.navigation.state.params;
+        const [, token] = url.split('/confirmation/');
+        this.props.activateUser(token, this.props.navigation);
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
   render() {
-    return <Waiting {...this.props} />;
+    return <ActivateUser {...this.props} />;
   }
 }
 export default graphql(ACTIVATE_USER, {
   props: ({ ownProps: { history, navigation }, mutate }) => ({
     activateUser: async token => {
       try {
-        const res = await mutate({
+        const {
+          data: { activateUser }
+        } = await mutate({
           variables: { token }
         });
-        if (res.data.activateUser.success) {
+        if (activateUser.success) {
           if (navigation) {
             return navigation.navigate('Login');
           }
@@ -42,12 +49,16 @@ export default graphql(ACTIVATE_USER, {
             return history.push('/login/');
           }
         } else {
-          console.log('activation error');
+          if (navigation) {
+            return navigation.navigate('Counter');
+          }
+          if (history) {
+            return history.push('/');
+          }
         }
-        return;
       } catch (e) {
         console.log('e', e.graphQLErrors);
       }
     }
   })
-})(WaitingPage);
+})(Activate);

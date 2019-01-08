@@ -17,19 +17,19 @@ class RegisterView extends React.PureComponent {
     if (Platform.OS === 'ios') {
       const url = await Linking.getInitialURL();
       if (url.includes('/confirmation/')) {
-        this.redirectOnWaiting(url);
+        this.redirectOnActivateUser(url);
       }
     }
   }
 
   hundlerUrl = ({ url }) => {
     if (url.includes('/confirmation/')) {
-      this.redirectOnWaiting(url);
+      this.redirectOnActivateUser(url);
     }
   };
 
-  redirectOnWaiting = url => {
-    this.props.navigation.navigate('Waiting', { url });
+  redirectOnActivateUser = url => {
+    this.props.navigation.navigate('ActivateUser', { url });
   };
 
   onSubmit = async values => {

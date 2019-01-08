@@ -49,17 +49,12 @@ export default compose(
   graphql(ADD_USER, {
     props: ({ mutate }) => ({
       addUser: async input => {
-        try {
-          const {
-            data: { addUser }
-          } = await mutate({
-            variables: { input }
-          });
-
-          return addUser;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        const {
+          data: { addUser }
+        } = await mutate({
+          variables: { input }
+        });
+        return addUser;
       }
     })
   })

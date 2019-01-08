@@ -71,17 +71,13 @@ export default compose(
   graphql(EDIT_USER, {
     props: ({ mutate }) => ({
       editUser: async input => {
-        try {
-          const {
-            data: { editUser }
-          } = await mutate({
-            variables: { input }
-          });
+        const {
+          data: { editUser }
+        } = await mutate({
+          variables: { input }
+        });
 
-          return editUser;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        return editUser;
       }
     })
   })

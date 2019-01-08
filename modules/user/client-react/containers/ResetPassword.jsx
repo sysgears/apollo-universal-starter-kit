@@ -29,17 +29,13 @@ const ResetPasswordWithApollo = compose(
   graphql(RESET_PASSWORD, {
     props: ({ mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
-        try {
-          const {
-            data: { resetPassword }
-          } = await mutate({
-            variables: { input: { password, passwordConfirmation, token } }
-          });
+        const {
+          data: { resetPassword }
+        } = await mutate({
+          variables: { input: { password, passwordConfirmation, token } }
+        });
 
-          return resetPassword;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        return resetPassword;
       }
     })
   })

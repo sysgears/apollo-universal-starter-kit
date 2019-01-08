@@ -34,17 +34,13 @@ const ForgotPasswordWithApollo = compose(
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {
-        try {
-          const {
-            data: { forgotPassword }
-          } = await mutate({
-            variables: { input: { email } }
-          });
+        const {
+          data: { forgotPassword }
+        } = await mutate({
+          variables: { input: { email } }
+        });
 
-          return forgotPassword;
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        return forgotPassword;
       }
     })
   })

@@ -17,7 +17,7 @@ import repositories._
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
 import sangria.schema.AstSchemaBuilder.{FieldName, TypeName}
-import sangria.schema.{AdditionalTypes, Argument, AstSchemaBuilder, Field, FieldResolver, InputObjectType, ObjectType, StringType}
+import sangria.schema.{AdditionalTypes, Argument, AstSchemaBuilder, Field, FieldResolver, InputObjectType, ObjectType, OptionType, StringType}
 import sangria.macros._
 import common.implicits.RichDBIO._
 import modules.jwt.model.Tokens
@@ -64,7 +64,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
   val forgotPasswordInput: InputObjectType[ForgotPasswordInput] = deriveInputObjectType(InputObjectTypeName("ForgotPasswordInput"))
   val resetPasswordInput: InputObjectType[ResetPasswordInput] = deriveInputObjectType(InputObjectTypeName("ResetPasswordInput"))
   val resetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(ObjectTypeName("ResetPayload"))
-  implicit val userPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
+  implicit val userPayload: ObjectType[UserContext, UserPayload] = userSchema.userPayload
 
   implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller {
     input =>
@@ -113,6 +113,16 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
         passwordConfirmation = input("passwordConfirmation").asInstanceOf[String]
       )
   }
+
+  def queries: List[Field[UserContext, Unit]] = List(
+    //TODO implement stub's functionality
+    Field(
+      name = "currentUser",
+      fieldType = OptionType(user),
+      arguments = List.empty,
+      resolve = ctx => None
+    )
+  )
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
@@ -167,12 +177,29 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
     )
   )
 
+  implicit val authInput: InputObjectType[AuthInput] = deriveInputObjectType(InputObjectTypeName("AuthInput"))
+
+  implicit val authCertificateInput: InputObjectType[AuthCertificateInput] = deriveInputObjectType(InputObjectTypeName("AuthCertificateInput"))
+  implicit val authFacebookInput: InputObjectType[AuthFacebookInput] = deriveInputObjectType(InputObjectTypeName("AuthFacebookInput"))
+  implicit val authGoogleInput: InputObjectType[AuthGoogleInput] = deriveInputObjectType(InputObjectTypeName("AuthGoogleInput"))
+  implicit val authGitHubInput: InputObjectType[AuthGitHubInput] = deriveInputObjectType(InputObjectTypeName("AuthGitHubInput"))
+  implicit val authLinkedInInput: InputObjectType[AuthLinkedInInput] = deriveInputObjectType(InputObjectTypeName("AuthLinkedInInput"))
+  implicit val addUserWithAuthInput: InputObjectType[AddUserWithAuthInput] = deriveInputObjectType(InputObjectTypeName("AddUserWithAuthInput"))
+  implicit val profileInput: InputObjectType[ProfileInput] = userSchema.profileInput
+
+  //TODO override the addUser mutation to able to use the auth field
   val extension: Extension[UserContext] = Extension[UserContext](
     gql"""
                  extend type User {
                    auth: UserAuth
+                 }
+
+                 extend input AddUserInput {
+                   auth: AuthInput
                  }""",
     AstSchemaBuilder.resolverBased[UserContext](
+      AdditionalTypes(userAuth, certificateAuth, googleAuth, facebookAuth, githubAuth, linkedinAuth,
+        authInput, authCertificateInput, authFacebookInput, authGoogleInput, authGitHubInput, authLinkedInInput),
       FieldResolver {
         case (TypeName("User"), FieldName("auth")) ⇒ ctx =>
           val user = ctx.value.asInstanceOf[User]
@@ -186,8 +213,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
             case (None, None, None, None, None) => None
             case _ => Some(UserAuth(certificate, fbAuth, gAuth, ghAuth, lnAuth))
           }
-      },
-      AdditionalTypes(userAuth, certificateAuth, googleAuth, facebookAuth, githubAuth, linkedinAuth)
+      }
     )
   )
 }

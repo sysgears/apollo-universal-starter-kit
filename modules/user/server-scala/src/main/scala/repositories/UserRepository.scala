@@ -2,7 +2,7 @@ package repositories
 
 import com.byteslounge.slickrepo.repository.Repository
 import javax.inject.Inject
-import model.User
+import model.{FilterUserInput, OrderByUserInput, User}
 import model.UserTable.UserTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
@@ -21,24 +21,27 @@ class UserRepository @Inject()(override val driver: JdbcProfile, db: Database)
   val tableQuery = TableQuery[UserTable]
   type TableType = UserTable
 
-  def findAll(usernameOrEmailFilter: Option[String],
-              roleFilter: Option[String],
-              isActiveFilter: Option[Boolean],
-              orderingColumn: Option[String],
-              orderDirection: Option[String]): DBIO[Seq[User]] = {
-    val filteringQuery = tableQuery.filter(
+  def findAll(orderBy: Option[OrderByUserInput],
+              filter: Option[FilterUserInput]): DBIO[Seq[User]] = {
+    val filteringQuery = tableQuery.filter {
       user =>
-        usernameOrEmailFilter.map(usernameOrEmail =>
-          user.email === usernameOrEmail || user.username === usernameOrEmail).getOrElse(LiteralColumn(true)) &&
-          roleFilter.map(role => user.role === role).getOrElse(LiteralColumn(true)) &&
-          isActiveFilter.map(isActive => user.isActive === isActive).getOrElse(LiteralColumn(true))
-    )
+        filter.map {
+          filterVal =>
+            filterVal.searchText.map {
+              usernameOrEmail =>
+                user.email === usernameOrEmail || user.username === usernameOrEmail
+            }.getOrElse(LiteralColumn(true)) &&
+              filterVal.role.map(user.role === _).getOrElse(LiteralColumn(true)) &&
+              filterVal.isActive.map(user.isActive === _).getOrElse(LiteralColumn(true))
+        }.getOrElse(LiteralColumn(true))
+    }
     val sortingQuery = for {
-      ordering <- orderDirection.map {
+      orderByVal <- orderBy
+      ordering <- orderByVal.order.map {
         case "asc" => Ordering(Ordering.Asc)
         case "desc" => Ordering(Ordering.Desc)
       }
-      sortedResult <- orderingColumn.map {
+      sortedResult <- orderByVal.column.map {
         case "id" => filteringQuery.sortBy(user => ColumnOrdered(user.id, ordering)).result
         case "username" => filteringQuery.sortBy(user => ColumnOrdered(user.username, ordering)).result
         case "role" => filteringQuery.sortBy(user => ColumnOrdered(user.role, ordering)).result

@@ -1,10 +1,23 @@
-import com.google.inject.Guice
-import common.shapes.ServerModule
-import core.app.ModuleApp
-import core.guice.injection.InjectorProvider.inject
-import guice.ServerModuleBinding
+import app._
+import common.graphql.UserContext
+import common.slick.SchemaInitializer
+import core.app.{CoreModule, ModuleApp}
+import shapes.ServerModule
 
 object Main extends ModuleApp {
-  Guice.createInjector(new ServerModuleBinding)
-  createApp(inject[ServerModule])
+
+  val serverModule: ServerModule[UserContext, SchemaInitializer[_]] = new ServerModule[UserContext, SchemaInitializer[_]](
+    Seq(
+      new CounterModule,
+      new CoreModule,
+      new MailModule,
+      new ContactModule,
+      new UserModule,
+      new AuthenticationModule,
+      new UploadModule,
+      new PaginationModule,
+      new PostModule
+    )
+  )
+  createApp(serverModule)
 }

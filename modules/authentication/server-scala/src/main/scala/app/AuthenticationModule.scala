@@ -1,27 +1,36 @@
 package app
 
-import com.google.inject.Inject
-import common.shapes.ServerModule
+import common.graphql.UserContext
+import common.slick.SchemaInitializer
+import core.guice.injection.InjectorProvider._
 import graphql.schema.{AuthenticationSchema, TokenSchema}
+import guice.AuthenticationBinding
 import repositories._
+import sangria.schema.Field
+import shapes.ServerModule
+import shapes.graphql.GraphQLSchemaExtension
 
-class AuthenticationModule @Inject()(authenticationSchema: AuthenticationSchema,
-                                     tokenSchema: TokenSchema,
-                                     facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer,
-                                     githubAuthSchemaInitializer: GithubAuthSchemaInitializer,
-                                     googleAuthSchemaInitializer: GoogleAuthSchemaInitializer,
-                                     linkedinAuthSchemaInitializer: LinkedinAuthSchemaInitializer,
-                                     certificateAuthSchemaInitializer: CertificateAuthSchemaInitializer) extends ServerModule {
+import scala.collection.mutable
 
-  slickSchemas ++= facebookAuthSchemaInitializer ::
-    githubAuthSchemaInitializer ::
-    googleAuthSchemaInitializer ::
-    linkedinAuthSchemaInitializer ::
-    certificateAuthSchemaInitializer :: Nil
+class AuthenticationModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
-  queries ++= authenticationSchema.queries
+  lazy val authenticationSchema: AuthenticationSchema = inject[AuthenticationSchema]
+  lazy val tokenSchema: TokenSchema = inject[TokenSchema]
+  lazy val facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer = inject[FacebookAuthSchemaInitializer]
+  lazy val githubAuthSchemaInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]
+  lazy val googleAuthSchemaInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
+  lazy val linkedinAuthSchemaInitializer: LinkedinAuthSchemaInitializer = inject[LinkedinAuthSchemaInitializer]
+  lazy val certificateAuthSchemaInitializer: CertificateAuthSchemaInitializer = inject[CertificateAuthSchemaInitializer]
 
-  mutations ++= authenticationSchema.mutations ++ tokenSchema.mutations
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(
+    facebookAuthSchemaInitializer,
+    githubAuthSchemaInitializer,
+    googleAuthSchemaInitializer,
+    linkedinAuthSchemaInitializer,
+    certificateAuthSchemaInitializer
+  )
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(authenticationSchema.mutations ++ tokenSchema.mutations: _*)
+  override lazy val extensions: mutable.HashSet[GraphQLSchemaExtension[UserContext]] = mutable.HashSet(authenticationSchema.extension)
 
-  extensions += authenticationSchema.extension
+  bindings = new AuthenticationBinding
 }

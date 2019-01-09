@@ -1,20 +1,25 @@
 package app
 
-import com.google.inject.Inject
-import common.shapes.ServerModule
+import common.graphql.UserContext
+import common.slick.SchemaInitializer
+import core.guice.injection.InjectorProvider._
 import graphql.schema.CounterSchema
+import guice.CounterBinding
 import repositories.CounterSchemaInitializer
+import sangria.schema.Field
+import shapes.ServerModule
 
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
 
-class CounterModule @Inject()(counterSchema: CounterSchema,
-                              counterSchemaInitializer: CounterSchemaInitializer) extends ServerModule {
+class CounterModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
-  slickSchemas ++= ListBuffer(counterSchemaInitializer)
+  lazy val counterSchema: CounterSchema = inject[CounterSchema]
+  lazy val counterSchemaInitializer: CounterSchemaInitializer = inject[CounterSchemaInitializer]
 
-  queries ++= counterSchema.queries
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(counterSchemaInitializer)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.mutations: _*)
+  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.subscriptions: _*)
 
-  mutations ++= counterSchema.mutations
-
-  subscriptions ++= counterSchema.subscriptions
+  bindings = new CounterBinding
 }

@@ -16,7 +16,7 @@ const limit =
     ? settings.pagination.web.itemsNumber
     : settings.pagination.mobile.itemsNumber;
 
-export function AddPost(prev, node) {
+export const onAddPost = (prev, node) => {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
     return update(prev, {
@@ -49,9 +49,9 @@ export function AddPost(prev, node) {
       }
     }
   });
-}
+};
 
-function DeletePost(prev, id) {
+const onDeletePost = (prev, id) => {
   const index = prev.posts.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -69,7 +69,7 @@ function DeletePost(prev, id) {
       }
     }
   });
-}
+};
 
 class Post extends React.Component {
   static propTypes = {
@@ -125,9 +125,9 @@ class Post extends React.Component {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
-          newResult = AddPost(prev, node);
+          newResult = onAddPost(prev, node);
         } else if (mutation === 'DELETED') {
-          newResult = DeletePost(prev, node.id);
+          newResult = onDeletePost(prev, node.id);
         }
 
         return newResult;
@@ -190,17 +190,33 @@ export default compose(
               __typename: 'Post'
             }
           },
-          updateQueries: {
-            posts: (
-              prev,
-              {
-                mutationResult: {
-                  data: { deletePost }
+
+          update: (cache, { data: { deletePost } }) => {
+            // Get previous posts from cache
+            const prevPosts = cache.readQuery({
+              query: POSTS_QUERY,
+              variables: {
+                limit,
+                after: 0
+              }
+            });
+
+            const newListPosts = onDeletePost(prevPosts, deletePost.id);
+
+            // Write posts to cache
+            cache.writeQuery({
+              query: POSTS_QUERY,
+              variables: {
+                limit,
+                after: 0
+              },
+              data: {
+                posts: {
+                  ...newListPosts.posts,
+                  __typename: 'Posts'
                 }
               }
-            ) => {
-              return DeletePost(prev, deletePost.id);
-            }
+            });
           }
         });
       }

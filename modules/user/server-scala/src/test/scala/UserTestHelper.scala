@@ -16,7 +16,7 @@ trait UserTestHelper extends TestHelper {
   Guice.createInjector(bindings.asJava)
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchema[UserModule]
+  val routes: Route = routesWithGraphQLSchema(new UserModule())
 
   before {
     clean()

@@ -17,7 +17,7 @@ trait AuthenticationTestHelper extends TestHelper {
   val bindings: Seq[ScalaModule] = Seq(new CoreBinding, new MailBinding, new AuthenticationBinding)
   Guice.createInjector(bindings.asJava)
 
-  val routes: Route = routesWithGraphQLSchema[AuthenticationModule]
+  val routes: Route = routesWithGraphQLSchema(new AuthenticationModule())
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
   val googleAuthInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]

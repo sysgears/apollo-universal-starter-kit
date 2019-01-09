@@ -5,7 +5,7 @@ import google, { googleData } from './google';
 import linkedin, { linkedinData } from './linkedIn';
 import password from './password';
 
-export const social = {
+const social = {
   ...linkedinData,
   ...facebookData,
   ...googleData,

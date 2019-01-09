@@ -32,7 +32,6 @@ const middleware = app => {
   }
 };
 
-export { User, scopes };
 export default new ServerModule(social, {
   schema: [schema],
   createResolversFunc: [resolvers],

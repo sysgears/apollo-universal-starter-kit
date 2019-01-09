@@ -16,8 +16,7 @@ const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(settings.user.auth.password.minLength)]
 };
-const { facebook, linkedin, google } = settings.user.auth;
-const { github } = settings.auth.social;
+const { github, facebook, linkedin, google } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (

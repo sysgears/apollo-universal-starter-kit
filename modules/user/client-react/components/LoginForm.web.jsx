@@ -14,28 +14,27 @@ const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(8)]
 };
-const { facebook, linkedin, google } = settings.user.auth;
-const { github } = settings.auth.social;
+const { github, facebook, linkedin, google } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
-      {settings.user.auth.facebook.enabled && (
+      {facebook.enabled && (
         <div className="text-center">
           <FacebookButton text={t('login.fbBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.google.enabled && (
+      {google.enabled && (
         <div className="text-center">
           <GoogleButton text={t('login.googleBtn')} type={'icon'} />
         </div>
       )}
-      {settings.auth.social.github.enabled && (
+      {github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.linkedin.enabled && (
+      {linkedin.enabled && (
         <div className="text-center">
           <LinkedInButton text={t('login.linkedinBtn')} type={'icon'} />
         </div>
@@ -43,22 +42,22 @@ const renderSocialButtons = (buttonsLength, t) => {
     </div>
   ) : (
     <div>
-      {settings.user.auth.facebook.enabled && (
+      {facebook.enabled && (
         <div className="text-center">
           <FacebookButton text={t('login.fbBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.google.enabled && (
+      {google.enabled && (
         <div className="text-center">
           <GoogleButton text={t('login.googleBtn')} type={'button'} />
         </div>
       )}
-      {settings.auth.social.github.enabled && (
+      {github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.linkedin.enabled && (
+      {linkedin.enabled && (
         <div className="text-center">
           <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
         </div>

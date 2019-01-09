@@ -245,7 +245,7 @@ export default pubsub => ({
         }
       }
     ),
-    activateUser: async token => {
+    activateUser: async (obj, token) => {
       try {
         const decodedToken = Buffer.from(token.token, 'base64').toString();
         const {

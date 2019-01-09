@@ -13,12 +13,13 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnm
 
   implicit val contactInput: InputObjectType[Contact] =
     deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
-  implicit val contactInputUnmarshaller: FromInput[Contact] = inputUnmarshaller { input =>
-    Contact(
-      name = input("name").asInstanceOf[String],
-      email = input("email").asInstanceOf[String],
-      content = input("content").asInstanceOf[String],
-    )
+  implicit val contactInputUnmarshaller: FromInput[Contact] = inputUnmarshaller {
+    input =>
+      Contact(
+        name = input("name").asInstanceOf[String],
+        email = input("email").asInstanceOf[String],
+        content = input("content").asInstanceOf[String],
+      )
   }
 
   implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(

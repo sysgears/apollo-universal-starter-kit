@@ -16,9 +16,10 @@ class PubSubServiceImpl[T] @Inject()(implicit val scheduler: Scheduler) extends 
   override def publish(event: T): Unit = source.onNext(event)
 
   override def subscribe: Source[Action[Nothing, T], NotUsed] = {
-    Source.fromPublisher(source.toReactivePublisher[T]).map { element =>
-      log.info(s"Sending event [$element] to client ...")
-      Action(element)
+    Source.fromPublisher(source.toReactivePublisher[T]).map {
+      element =>
+        log.info(s"Sending event [$element] to client ...")
+        Action(element)
     }
   }
 }

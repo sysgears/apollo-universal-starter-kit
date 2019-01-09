@@ -24,8 +24,9 @@ class UserSchema @Inject()(userProfileRepository: UserProfileRepository)(implici
     ObjectTypeName("User"),
     ExcludeFields("password"),
     AddFields(
-      Field("profile", OptionType(userProfile), resolve = { sangriaContext =>
-        sangriaContext.value.userProfile(userProfileRepository)
+      Field("profile", OptionType(userProfile), resolve = {
+        sangriaContext =>
+          sangriaContext.value.userProfile(userProfileRepository)
       })
     )
   )

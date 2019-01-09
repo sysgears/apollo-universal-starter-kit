@@ -33,44 +33,44 @@ class LinkedinAuthController @Inject()(
     (path("auth" / "linkedin") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "linkedin" / "callback") & get) {
-      parameters('state.?, 'code) { (state, code) =>
-        onComplete {
-          for {
-            linkedinAuthInfo <- externalApiService.getUserInfo[LinkedinOauth2Response](code,
-                                                                                       "https://api.linkedin.com/v2/me",
-                                                                                       oauth2Service)
-            user <- linkedinAuthRepository.findOne(linkedinAuthInfo.id).run.flatMap {
-              case Some(lnUser) =>
-                userRepository.findOne(lnUser.userId).run failOnNone AmbigousResult(
-                  s"User with id: ${lnUser.userId} stored in linkedin auth table, but not in the user table")
-              case None =>
-                for {
-                  user <- userRepository
-                    .save(
-                      User(username = linkedinAuthInfo.name,
-                           email = linkedinAuthInfo.email,
-                           password = BCrypt.hashpw(linkedinAuthInfo.id, BCrypt.gensalt),
-                           role = "user",
-                           isActive = true)
-                    )
-                    .run
-                  _ <- linkedinAuthRepository
-                    .save(LinkedinAuth(Some(linkedinAuthInfo.id), linkedinAuthInfo.name, user.id.get))
-                    .run
-                } yield user
-            }
-          } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
-        } {
-          case Success(tokens) =>
-            setCookie(HttpCookie("access-token", value = tokens.accessToken),
-                      HttpCookie("refresh-token", value = tokens.refreshToken)) {
-              state match {
-                case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
-                case None              => redirect("/profile", StatusCodes.Found)
+      parameters('state.?, 'code) {
+        (state, code) =>
+          onComplete {
+            for {
+              linkedinAuthInfo <- externalApiService
+                .getUserInfo[LinkedinOauth2Response](code, "https://api.linkedin.com/v2/me", oauth2Service)
+              user <- linkedinAuthRepository.findOne(linkedinAuthInfo.id).run.flatMap {
+                case Some(lnUser) =>
+                  userRepository.findOne(lnUser.userId).run failOnNone AmbigousResult(
+                    s"User with id: ${lnUser.userId} stored in linkedin auth table, but not in the user table")
+                case None =>
+                  for {
+                    user <- userRepository
+                      .save(
+                        User(username = linkedinAuthInfo.name,
+                             email = linkedinAuthInfo.email,
+                             password = BCrypt.hashpw(linkedinAuthInfo.id, BCrypt.gensalt),
+                             role = "user",
+                             isActive = true)
+                      )
+                      .run
+                    _ <- linkedinAuthRepository
+                      .save(LinkedinAuth(Some(linkedinAuthInfo.id), linkedinAuthInfo.name, user.id.get))
+                      .run
+                  } yield user
               }
-            }
-          case Failure(_) => redirect("/login", StatusCodes.Found)
-        }
+            } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
+          } {
+            case Success(tokens) =>
+              setCookie(HttpCookie("access-token", value = tokens.accessToken),
+                        HttpCookie("refresh-token", value = tokens.refreshToken)) {
+                state match {
+                  case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
+                  case None              => redirect("/profile", StatusCodes.Found)
+                }
+              }
+            case Failure(_) => redirect("/login", StatusCodes.Found)
+          }
       }
     }
 }

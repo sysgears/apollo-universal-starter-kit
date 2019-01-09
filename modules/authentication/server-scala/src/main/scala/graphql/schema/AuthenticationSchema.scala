@@ -74,47 +74,53 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
   val resetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(ObjectTypeName("ResetPayload"))
   implicit val userPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
 
-  implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller { input =>
-    RegisterUserInput(
-      username = input("username").asInstanceOf[String],
-      email = input("email").asInstanceOf[String],
-      password = input("password").asInstanceOf[String]
-    )
+  implicit val registerUserInputUnmarshaller: FromInput[RegisterUserInput] = inputUnmarshaller {
+    input =>
+      RegisterUserInput(
+        username = input("username").asInstanceOf[String],
+        email = input("email").asInstanceOf[String],
+        password = input("password").asInstanceOf[String]
+      )
   }
 
-  implicit val confirmRegistrationInputUnmarshaller: FromInput[ConfirmRegistrationInput] = inputUnmarshaller { input =>
-    ConfirmRegistrationInput(
-      token = input("token").asInstanceOf[String]
-    )
+  implicit val confirmRegistrationInputUnmarshaller: FromInput[ConfirmRegistrationInput] = inputUnmarshaller {
+    input =>
+      ConfirmRegistrationInput(
+        token = input("token").asInstanceOf[String]
+      )
   }
 
   implicit val resendConfirmationMessageInputUnmarshaller: FromInput[ResendConfirmationMessageInput] =
-    inputUnmarshaller { input =>
-      ResendConfirmationMessageInput(
+    inputUnmarshaller {
+      input =>
+        ResendConfirmationMessageInput(
+          usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
+          password = input("password").asInstanceOf[String]
+        )
+    }
+
+  implicit val loginUserInputUnmarshaller: FromInput[LoginUserInput] = inputUnmarshaller {
+    input =>
+      LoginUserInput(
         usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
         password = input("password").asInstanceOf[String]
       )
-    }
-
-  implicit val loginUserInputUnmarshaller: FromInput[LoginUserInput] = inputUnmarshaller { input =>
-    LoginUserInput(
-      usernameOrEmail = input("usernameOrEmail").asInstanceOf[String],
-      password = input("password").asInstanceOf[String]
-    )
   }
 
-  implicit val forgotPasswordInputUnmarshaller: FromInput[ForgotPasswordInput] = inputUnmarshaller { input =>
-    ForgotPasswordInput(
-      email = input("email").asInstanceOf[String]
-    )
+  implicit val forgotPasswordInputUnmarshaller: FromInput[ForgotPasswordInput] = inputUnmarshaller {
+    input =>
+      ForgotPasswordInput(
+        email = input("email").asInstanceOf[String]
+      )
   }
 
-  implicit val resetPasswordInputUnmarshaller: FromInput[ResetPasswordInput] = inputUnmarshaller { input =>
-    ResetPasswordInput(
-      token = input("token").asInstanceOf[String],
-      password = input("password").asInstanceOf[String],
-      passwordConfirmation = input("passwordConfirmation").asInstanceOf[String]
-    )
+  implicit val resetPasswordInputUnmarshaller: FromInput[ResetPasswordInput] = inputUnmarshaller {
+    input =>
+      ResetPasswordInput(
+        token = input("token").asInstanceOf[String],
+        password = input("password").asInstanceOf[String],
+        passwordConfirmation = input("passwordConfirmation").asInstanceOf[String]
+      )
   }
 
   def mutations: List[Field[UserContext, Unit]] = List(

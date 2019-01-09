@@ -18,15 +18,16 @@ object DispatcherResolver extends ActorMessageDelivering with GuiceActorRefProvi
       before: List[ActorRef] = Nil,
       after: List[ActorRef] = Nil)(implicit actorSystem: ActorSystem, materializer: ActorMaterializer): Future[T] = {
 
-    sendMessageWithFunc[T] { replyTo =>
-      provideActorRef(Dispatcher) ! DispatcherMessage(
-        input,
-        userContext,
-        replyTo,
-        provideActorRef(namedResolverActor),
-        before,
-        after
-      )
+    sendMessageWithFunc[T] {
+      replyTo =>
+        provideActorRef(Dispatcher) ! DispatcherMessage(
+          input,
+          userContext,
+          replyTo,
+          provideActorRef(namedResolverActor),
+          before,
+          after
+        )
     }
   }
 }

@@ -33,24 +33,25 @@ class FileUploadResolverImpl @Inject()(
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts
       .filter(_.filename.nonEmpty)
-      .mapAsync(1) { part =>
-        {
-          val hashedFilename = hashAppender.append(part.filename.get)
-          if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
-          part.entity.dataBytes
-            .runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename)))
-            .map { ioResult =>
-              FileMetadata(
-                name = part.filename.get,
-                contentType = part.entity.contentType.toString,
-                size = ioResult.count,
-                path = s"public/$hashedFilename"
-              )
+      .mapAsync(1) {
+        part =>
+          {
+            val hashedFilename = hashAppender.append(part.filename.get)
+            if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
+            part.entity.dataBytes.runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename))).map {
+              ioResult =>
+                FileMetadata(
+                  name = part.filename.get,
+                  contentType = part.entity.contentType.toString,
+                  size = ioResult.count,
+                  path = s"public/$hashedFilename"
+                )
             }
-        }
+          }
       }
-      .mapAsync(1) { fileMetadata =>
-        sendMessageWithFunc[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
+      .mapAsync(1) {
+        fileMetadata =>
+          sendMessageWithFunc[FileMetadata](actorRef => fileActor ! SaveFileMetadata(fileMetadata, actorRef))
       }
       .toMat(Sink.ignore)(Keep.right)
       .run
@@ -74,8 +75,9 @@ class FileUploadResolverImpl @Inject()(
         } yield deletedFileMetadata
       )
       .run
-      .map { deletedFileMetadata =>
-        Files.deleteIfExists(resourcesDirPath.resolve(deletedFileMetadata.path))
+      .map {
+        deletedFileMetadata =>
+          Files.deleteIfExists(resourcesDirPath.resolve(deletedFileMetadata.path))
       }
   }.recover {
     case error: Error =>

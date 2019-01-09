@@ -50,8 +50,9 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Сreates the table
     */
   def create(): Future[Unit] = {
-    withDBAction { tables =>
-      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create)) else Future.successful()
+    withDBAction {
+      tables =>
+        if (tables.isEmpty) database.run(DBIO.seq(table.schema.create)) else Future.successful()
     }
   }
 
@@ -59,8 +60,9 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Сreates the table and add an init data
     */
   def createAndSeed(): Future[Unit] = {
-    withDBAction { tables =>
-      if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData)) else Future.successful()
+    withDBAction {
+      tables =>
+        if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData)) else Future.successful()
     }
   }
 
@@ -68,8 +70,9 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
     * Drops the table
     */
   def drop(): Future[Unit] = {
-    withDBAction { tables =>
-      if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
+    withDBAction {
+      tables =>
+        if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
     }
   }
 

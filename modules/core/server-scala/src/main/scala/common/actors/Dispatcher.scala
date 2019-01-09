@@ -65,8 +65,7 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer, execut
   def withInterceptors(msg: DispatcherMessage): Receive = {
     case Success =>
       log.info(s"Interceptor has finished successfully")
-      sendMessageToActor(msg.resolverActor, msg.input)
-        .pipeTo(msg.replyTo)
+      sendMessageToActor(msg.resolverActor, msg.input).pipeTo(msg.replyTo)
 
     case Failure(e) =>
       log.info(s"Interceptor has finished with failure. Reason: '$e'")

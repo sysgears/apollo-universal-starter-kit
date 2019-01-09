@@ -43,15 +43,12 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
                 operationName = graphQlMessage.operationName,
                 variables = graphQlMessage.variables.getOrElse(JsObject.empty)
               )
-              .map { preparedQuery =>
-                ToResponseMarshallable(
-                  preparedQuery
-                    .execute()
-                    .map(r => ServerSentEvent(r.compactPrint))
-                    .recover {
-                      case NonFatal(error) =>
-                        ServerSentEvent(error.getMessage)
-                    })
+              .map {
+                preparedQuery =>
+                  ToResponseMarshallable(preparedQuery.execute().map(r => ServerSentEvent(r.compactPrint)).recover {
+                    case NonFatal(error) =>
+                      ServerSentEvent(error.getMessage)
+                  })
               }
               .recover {
                 case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
@@ -86,8 +83,9 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
             schema = graphQL.schema,
             queryAst = queryAst,
             operationNames = operations,
-            variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) { (o1, o2) =>
-              JsObject(o1.fields ++ o2.fields)
+            variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
+              (o1, o2) =>
+                JsObject(o1.fields ++ o2.fields)
             },
             userContext = userCtx,
             queryReducers = List(
@@ -101,22 +99,25 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
           )
           .toListL
           .runAsync
-          .map { jsonResponse =>
-            var jsonResponseList = new ListBuffer[JsValue]()
-            operations.foreach { operation =>
-              jsonResponse
-                .find { jsonElement =>
-                  jsonElement.asJsObject
-                    .fields("extensions")
-                    .asJsObject
-                    .fields("batch")
-                    .asJsObject
-                    .fields("operationName")
-                    .convertTo[String] == operation
-                }
-                .foreach(jsonResponseList += _)
-            }
-            ToResponseMarshallable(OK -> jsonResponseList.toList.toJson)
+          .map {
+            jsonResponse =>
+              var jsonResponseList = new ListBuffer[JsValue]()
+              operations.foreach {
+                operation =>
+                  jsonResponse
+                    .find {
+                      jsonElement =>
+                        jsonElement.asJsObject
+                          .fields("extensions")
+                          .asJsObject
+                          .fields("batch")
+                          .asJsObject
+                          .fields("operationName")
+                          .convertTo[String] == operation
+                    }
+                    .foreach(jsonResponseList += _)
+              }
+              ToResponseMarshallable(OK -> jsonResponseList.toList.toJson)
           }
           .recover {
             case error: QueryAnalysisError => BadRequest -> error.resolveError

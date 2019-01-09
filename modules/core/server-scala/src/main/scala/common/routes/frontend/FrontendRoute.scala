@@ -5,7 +5,8 @@ import akka.http.scaladsl.server.Route
 
 class FrontendRoute {
 
-  val routes: Route = (path("public" / Segment) & get) { str =>
-    getFromResource(s"public/$str")
+  val routes: Route = (path("public" / Segment) & get) {
+    str =>
+      getFromResource(s"public/$str")
   }
 }

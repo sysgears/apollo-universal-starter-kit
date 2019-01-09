@@ -23,11 +23,12 @@ class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
     extends InputUnmarshallerGenerator
     with Logger {
 
-  implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller { input =>
-    PaginationParams(
-      offset = input("offset").asInstanceOf[Int],
-      limit = input("limit").asInstanceOf[Int]
-    )
+  implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {
+    input =>
+      PaginationParams(
+        offset = input("offset").asInstanceOf[Int],
+        limit = input("limit").asInstanceOf[Int]
+      )
   }
 
   /**

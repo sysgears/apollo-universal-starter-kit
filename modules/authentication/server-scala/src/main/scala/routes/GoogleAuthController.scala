@@ -33,45 +33,46 @@ class GoogleAuthController @Inject()(
     (path("auth" / "google") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "google" / "callback") & get) {
-      parameters('state.?, 'code) { (state, code) =>
-        onComplete {
-          for {
-            googleAuthInfo <- externalApiService.getUserInfo[GoogleOauth2Response](
-              code,
-              "https://content.googleapis.com/oauth2/v2/userinfo",
-              oauth2Service)
-            user <- googleAuthRepository.findOne(googleAuthInfo.id).run.flatMap {
-              case Some(gUser) =>
-                userRepository.findOne(gUser.userId).run failOnNone AmbigousResult(
-                  s"User with id: ${gUser.userId} stored in google auth table, but not in the user table")
-              case None =>
-                for {
-                  user <- userRepository
-                    .save(
-                      User(username = googleAuthInfo.name,
-                           email = googleAuthInfo.email,
-                           password = BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt),
-                           role = "user",
-                           isActive = true)
-                    )
-                    .run
-                  _ <- googleAuthRepository
-                    .save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get))
-                    .run
-                } yield user
-            }
-          } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
-        } {
-          case Success(tokens) =>
-            setCookie(HttpCookie("access-token", value = tokens.accessToken),
-                      HttpCookie("refresh-token", value = tokens.refreshToken)) {
-              state match {
-                case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
-                case None              => redirect("/profile", StatusCodes.Found)
+      parameters('state.?, 'code) {
+        (state, code) =>
+          onComplete {
+            for {
+              googleAuthInfo <- externalApiService.getUserInfo[GoogleOauth2Response](
+                code,
+                "https://content.googleapis.com/oauth2/v2/userinfo",
+                oauth2Service)
+              user <- googleAuthRepository.findOne(googleAuthInfo.id).run.flatMap {
+                case Some(gUser) =>
+                  userRepository.findOne(gUser.userId).run failOnNone AmbigousResult(
+                    s"User with id: ${gUser.userId} stored in google auth table, but not in the user table")
+                case None =>
+                  for {
+                    user <- userRepository
+                      .save(
+                        User(username = googleAuthInfo.name,
+                             email = googleAuthInfo.email,
+                             password = BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt),
+                             role = "user",
+                             isActive = true)
+                      )
+                      .run
+                    _ <- googleAuthRepository
+                      .save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get))
+                      .run
+                  } yield user
               }
-            }
-          case Failure(_) => redirect("/login", StatusCodes.Found)
-        }
+            } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
+          } {
+            case Success(tokens) =>
+              setCookie(HttpCookie("access-token", value = tokens.accessToken),
+                        HttpCookie("refresh-token", value = tokens.refreshToken)) {
+                state match {
+                  case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
+                  case None              => redirect("/profile", StatusCodes.Found)
+                }
+              }
+            case Failure(_) => redirect("/login", StatusCodes.Found)
+          }
       }
     }
 }

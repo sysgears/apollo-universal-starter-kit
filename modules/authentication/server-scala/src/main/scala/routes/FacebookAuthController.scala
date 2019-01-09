@@ -33,45 +33,46 @@ class FacebookAuthController @Inject()(
     (path("auth" / "facebook") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
     } ~ (path("auth" / "facebook" / "callback") & get) {
-      parameters('state.?, 'code) { (state, code) =>
-        onComplete {
-          for {
-            facebookAuthInfo <- externalApiService.getUserInfo[FacebookOauth2Response](
-              code,
-              "https://graph.facebook.com/me?fields=id,name,email",
-              oauth2Service)
-            user <- facebookAuthRepository.findOne(facebookAuthInfo.id).run.flatMap {
-              case Some(fUser) =>
-                userRepository.findOne(fUser.userId).run failOnNone AmbigousResult(
-                  s"User with id: ${fUser.userId} stored in facebook auth table, but not in the user table")
-              case None =>
-                for {
-                  user <- userRepository
-                    .save(
-                      User(username = facebookAuthInfo.name,
-                           email = facebookAuthInfo.email,
-                           password = BCrypt.hashpw(facebookAuthInfo.id, BCrypt.gensalt),
-                           role = "user",
-                           isActive = true)
-                    )
-                    .run
-                  _ <- facebookAuthRepository
-                    .save(FacebookAuth(Some(facebookAuthInfo.id), facebookAuthInfo.name, user.id.get))
-                    .run
-                } yield user
-            }
-          } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
-        } {
-          case Success(tokens) =>
-            setCookie(HttpCookie("access-token", value = tokens.accessToken),
-                      HttpCookie("refresh-token", value = tokens.refreshToken)) {
-              state match {
-                case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
-                case None              => redirect("/profile", StatusCodes.Found)
+      parameters('state.?, 'code) {
+        (state, code) =>
+          onComplete {
+            for {
+              facebookAuthInfo <- externalApiService.getUserInfo[FacebookOauth2Response](
+                code,
+                "https://graph.facebook.com/me?fields=id,name,email",
+                oauth2Service)
+              user <- facebookAuthRepository.findOne(facebookAuthInfo.id).run.flatMap {
+                case Some(fUser) =>
+                  userRepository.findOne(fUser.userId).run failOnNone AmbigousResult(
+                    s"User with id: ${fUser.userId} stored in facebook auth table, but not in the user table")
+                case None =>
+                  for {
+                    user <- userRepository
+                      .save(
+                        User(username = facebookAuthInfo.name,
+                             email = facebookAuthInfo.email,
+                             password = BCrypt.hashpw(facebookAuthInfo.id, BCrypt.gensalt),
+                             role = "user",
+                             isActive = true)
+                      )
+                      .run
+                    _ <- facebookAuthRepository
+                      .save(FacebookAuth(Some(facebookAuthInfo.id), facebookAuthInfo.name, user.id.get))
+                      .run
+                  } yield user
               }
-            }
-          case Failure(_) => redirect("/login", StatusCodes.Found)
-        }
+            } yield jwtAuthService.createTokens(JwtContent(user.id.get), user.password)
+          } {
+            case Success(tokens) =>
+              setCookie(HttpCookie("access-token", value = tokens.accessToken),
+                        HttpCookie("refresh-token", value = tokens.refreshToken)) {
+                state match {
+                  case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
+                  case None              => redirect("/profile", StatusCodes.Found)
+                }
+              }
+            case Failure(_) => redirect("/login", StatusCodes.Found)
+          }
       }
     }
 }

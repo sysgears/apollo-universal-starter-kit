@@ -28,10 +28,8 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   import spray.json.DefaultJsonProtocol._
 
   def handleMessages: Flow[Message, Message, NotUsed] = {
-    implicit val (queue, publisher) = Source
-      .queue[Message](16, OverflowStrategy.backpressure)
-      .toMat(Sink.asPublisher(false))(Keep.both)
-      .run()
+    implicit val (queue, publisher) =
+      Source.queue[Message](16, OverflowStrategy.backpressure).toMat(Sink.asPublisher(false))(Keep.both).run()
     val killSwitches = KillSwitches.shared(this.getClass.getSimpleName)
     val incoming = Flow[Message]
       .collect {
@@ -45,9 +43,10 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
           }
       }
       .to {
-        Sink.onComplete { _ =>
-          killSwitches.shutdown
-          queue.complete
+        Sink.onComplete {
+          _ =>
+            killSwitches.shutdown
+            queue.complete
         }
       }
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
@@ -56,47 +55,49 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)(
       implicit queue: SourceQueueWithComplete[Message]): Unit = {
     import sangria.streaming.akkaStreams._
-    operationMessage.payload.foreach { payload =>
-      val graphQlMessage = payload.convertTo[GraphQLMessage]
-      QueryParser.parse(graphQlMessage.query) match {
-        case Success(queryAst) =>
-          queryAst.operationType(graphQlMessage.operationName) match {
-            case Some(Subscription) =>
-              graphQlExecutor
-                .execute(
-                  queryAst = queryAst,
-                  userContext = UserContext(),
-                  root = (),
-                  operationName = graphQlMessage.operationName,
-                  variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-                )
-                .viaMat(killSwitches.flow)(Keep.none)
-                .runForeach { result =>
-                  reply(OperationMessage(GQL_DATA, operationMessage.id, Some(result)))
-                }
-            case _ =>
-              reply(
-                OperationMessage(
-                  GQL_ERROR,
-                  operationMessage.id,
-                  Some(s"Unsupported type: ${queryAst.operationType(None)}".toJson)
-                ))
-          }
-        case Failure(e: SyntaxError) =>
-          reply(
-            OperationMessage(
-              GQL_ERROR,
-              operationMessage.id,
-              Some(syntaxError(e))
-            ))
-        case Failure(_) =>
-          reply(
-            OperationMessage(
-              GQL_ERROR,
-              operationMessage.id,
-              Some("Internal Server Error".toJson)
-            ))
-      }
+    operationMessage.payload.foreach {
+      payload =>
+        val graphQlMessage = payload.convertTo[GraphQLMessage]
+        QueryParser.parse(graphQlMessage.query) match {
+          case Success(queryAst) =>
+            queryAst.operationType(graphQlMessage.operationName) match {
+              case Some(Subscription) =>
+                graphQlExecutor
+                  .execute(
+                    queryAst = queryAst,
+                    userContext = UserContext(),
+                    root = (),
+                    operationName = graphQlMessage.operationName,
+                    variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+                  )
+                  .viaMat(killSwitches.flow)(Keep.none)
+                  .runForeach {
+                    result =>
+                      reply(OperationMessage(GQL_DATA, operationMessage.id, Some(result)))
+                  }
+              case _ =>
+                reply(
+                  OperationMessage(
+                    GQL_ERROR,
+                    operationMessage.id,
+                    Some(s"Unsupported type: ${queryAst.operationType(None)}".toJson)
+                  ))
+            }
+          case Failure(e: SyntaxError) =>
+            reply(
+              OperationMessage(
+                GQL_ERROR,
+                operationMessage.id,
+                Some(syntaxError(e))
+              ))
+          case Failure(_) =>
+            reply(
+              OperationMessage(
+                GQL_ERROR,
+                operationMessage.id,
+                Some("Internal Server Error".toJson)
+              ))
+        }
     }
   }
 

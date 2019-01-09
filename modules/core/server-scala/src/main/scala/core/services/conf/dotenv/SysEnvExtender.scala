@@ -43,12 +43,13 @@ object SysEnvExtender {
         Try {
           val classes = classOf[Collections].getDeclaredClasses
           val env = System.getenv
-          classes.filter(_.getName == "java.util.Collections$UnmodifiableMap").foreach { cl =>
-            val field = cl.getDeclaredField("m")
-            field.setAccessible(true)
-            val map = field.get(env).asInstanceOf[java.util.Map[String, String]]
-            map.clear()
-            map.putAll(newEnvAsJavaMap)
+          classes.filter(_.getName == "java.util.Collections$UnmodifiableMap").foreach {
+            cl =>
+              val field = cl.getDeclaredField("m")
+              field.setAccessible(true)
+              val map = field.get(env).asInstanceOf[java.util.Map[String, String]]
+              map.clear()
+              map.putAll(newEnvAsJavaMap)
           }
         } match {
           case Failure(NonFatal(e2)) => e2.printStackTrace()

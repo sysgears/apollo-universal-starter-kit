@@ -26,7 +26,7 @@ class ItemResolver @Inject()(itemRepo: ItemRepository)(implicit executionContext
 
   override def receive: Receive = {
     case paginationParams: PaginationParams => {
-      log.info(s"Received message: [ $paginationParams ]")
+      log.debug(s"Received message: [ $paginationParams ]")
       itemRepo
         .getPaginatedObjectsList(paginationParams)
         .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))

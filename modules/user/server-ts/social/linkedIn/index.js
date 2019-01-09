@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import { access } from '@module/authentication-server-ts';
-import getLinkedInAuth from '@module/authentication-server-ts/social/linkedIn';
+import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
@@ -45,21 +45,20 @@ async function onAuthenticationSuccess(req, res) {
   const redirectUrl = req.query.state;
   const tokens = await access.grantAccess(user, req, user.passwordHash);
 
-  return redirectUrl
-    ? res.redirect(
-        redirectUrl +
-          (tokens
-            ? `?data=${JSON.stringify({
-                tokens
-              })}`
-            : '')
-      )
-    : res.redirect('/profile');
+  if (redirectUrl) {
+    res.redirect(redirectUrl + (tokens ? '?data=' + JSON.stringify({ tokens }) : ''));
+  } else {
+    res.redirect('/profile');
+  }
 }
 
-export default getLinkedInAuth({
-  ...settings.user.auth.linkedin,
-  verifyCallback,
-  onAuthenticationSuccess,
-  resolvers
-});
+export const linkedinData = {
+  linkedin: {
+    onAuthenticationSuccess,
+    verifyCallback
+  }
+};
+
+export default (settings.auth.social.linkedin.enabled && !__TEST__
+  ? new AuthModule({ createResolversFunc: [resolvers] })
+  : undefined);

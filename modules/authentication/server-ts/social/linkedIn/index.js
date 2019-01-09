@@ -1,9 +1,15 @@
 import passport from 'passport';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
-
+import settings from '../../../../../settings';
 import { AuthModule } from '../AuthModule';
 
-const createMiddleware = onAuthenticationSuccess => app => {
+const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.linkedin;
+
+const middleware = (app, { data }) => {
+  if (!enabled || __TEST__) {
+    return false;
+  }
+
   app.use(passport.initialize());
 
   app.get('/auth/linkedin', (req, res, next) => {
@@ -13,34 +19,19 @@ const createMiddleware = onAuthenticationSuccess => app => {
   app.get(
     '/auth/linkedin/callback',
     passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
-    onAuthenticationSuccess
+    data.social.linkedin.onAuthenticationSuccess
   );
 };
 
-const getLinkedInAuth = config => {
-  const {
-    enabled,
-    clientID,
-    clientSecret,
-    callbackURL,
-    scope,
-    resolvers,
-    verifyCallback,
-    onAuthenticationSuccess
-  } = config;
-
-  if (!enabled || __TEST__) {
-    return undefined;
+const onAppCreate = ({ data }) => {
+  if (enabled && !__TEST__) {
+    passport.use(
+      new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, data.social.linkedin.verifyCallback)
+    );
   }
-
-  passport.use(new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, verifyCallback));
-
-  const middleware = createMiddleware(onAuthenticationSuccess);
-
-  return new AuthModule({
-    middleware: [middleware],
-    createResolversFunc: [resolvers]
-  });
 };
 
-export default getLinkedInAuth;
+export default new AuthModule({
+  middleware: [middleware],
+  onAppCreate: [onAppCreate]
+});

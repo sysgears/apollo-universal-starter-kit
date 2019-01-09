@@ -1,9 +1,17 @@
 import { AuthModule } from '@module/authentication-server-ts/social';
-import facebook from './facebook';
-import github from './github';
-import google from './google';
+import facebook, { facebookData } from './facebook';
+import github, { githubData } from './github';
+import google, { googleData } from './google';
+import linkedin, { linkedinData } from './linkedIn';
 import password from './password';
-import linkedin from './linkedIn';
-// import serial from './serial';
 
-export default new AuthModule(facebook, github, google, linkedin, password);
+export const social = {
+  ...linkedinData,
+  ...facebookData,
+  ...googleData,
+  ...githubData
+};
+
+export default new AuthModule(facebook, github, google, linkedin, password, {
+  data: { social }
+});

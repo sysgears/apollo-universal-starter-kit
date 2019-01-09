@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
-import { access } from '@module/authentication-server-ts';
 import { AuthModule } from '@module/authentication-server-ts/social';
+import { onAuthenticationSuccess } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
@@ -47,18 +47,6 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
     return cb(null, pick(user, ['id', 'username', 'role', 'email']));
   } catch (err) {
     return cb(err, {});
-  }
-}
-
-async function onAuthenticationSuccess(req, res) {
-  const user = await User.getUserWithPassword(req.user.id);
-  const redirectUrl = req.query.state;
-  const tokens = await access.grantAccess(user, req, user.passwordHash);
-
-  if (redirectUrl) {
-    res.redirect(redirectUrl + (tokens ? '?data=' + JSON.stringify({ tokens }) : ''));
-  } else {
-    res.redirect('/profile');
   }
 }
 

@@ -10,8 +10,8 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.ExecutionContext
 
 class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
-    extends Repository[Item, Int](driver)
-    with Pagination {
+  extends Repository[Item, Int](driver)
+  with Pagination {
 
   import driver.api._
 

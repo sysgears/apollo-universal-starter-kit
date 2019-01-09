@@ -9,7 +9,7 @@ import org.mindrot.jbcrypt.BCrypt
 import scala.concurrent.ExecutionContext
 
 class UserSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
-    extends SchemaInitializer[UserTable] {
+  extends SchemaInitializer[UserTable] {
 
   import driver.api._
 

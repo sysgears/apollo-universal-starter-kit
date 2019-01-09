@@ -11,7 +11,7 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class ContactResolverImpl @Inject()(mailService: MailService[Message, MailPayload], config: Config)(
     implicit executionContext: ExecutionContext)
-    extends ContactResolver {
+  extends ContactResolver {
 
   override def sendMail(contact: Contact): Future[ContactPayload] =
     mailService

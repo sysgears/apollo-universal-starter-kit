@@ -20,8 +20,8 @@ import scala.concurrent.ExecutionContext
 class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
                            actorSystem: ActorSystem,
                            executionContext: ExecutionContext)
-    extends InputUnmarshallerGenerator
-    with Logger {
+  extends InputUnmarshallerGenerator
+  with Logger {
 
   implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {
     input =>

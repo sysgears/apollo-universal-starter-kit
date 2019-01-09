@@ -5,10 +5,10 @@ import shapes.graphql.GraphQLShape
 import shapes.slick.SlickSchemaShape
 
 class ServerModule[Ctx, SchemaInitializer](modules: Seq[ServerModule[Ctx, SchemaInitializer]] = Seq.empty)
-    extends GraphQLShape[Ctx, Unit]
-    with SlickSchemaShape[SchemaInitializer]
-    with AkkaRouteShape
-    with GuiceBindingShape {
+  extends GraphQLShape[Ctx, Unit]
+  with SlickSchemaShape[SchemaInitializer]
+  with AkkaRouteShape
+  with GuiceBindingShape {
 
   def foldBindings: ServerModule[Ctx, SchemaInitializer] = {
     bindings = modules.foldLeft(this.bindings)((bindings, module) => combine(bindings, module.bindings))

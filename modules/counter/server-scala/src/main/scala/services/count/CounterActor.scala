@@ -25,8 +25,8 @@ object CounterActor extends ActorNamed {
 }
 
 class CounterActor @Inject()(counterRepository: Repository[Counter, Int])(implicit executionContext: ExecutionContext)
-    extends Actor
-    with ActorLogging {
+  extends Actor
+  with ActorLogging {
   private val defaultId = 1
 
   override def receive: Receive = {

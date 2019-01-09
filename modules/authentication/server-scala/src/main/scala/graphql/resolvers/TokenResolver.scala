@@ -20,8 +20,8 @@ object TokenResolver extends ActorNamed {
 
 class TokenResolver @Inject()(userRepository: UserRepository, jwtAuthService: JwtAuthService[JwtContent])(
     implicit executionContext: ExecutionContext)
-    extends Actor
-    with ActorLogging {
+  extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
     case refreshToken: String => {

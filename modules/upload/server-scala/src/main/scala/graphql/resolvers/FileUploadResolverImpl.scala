@@ -26,9 +26,9 @@ class FileUploadResolverImpl @Inject()(
     @Named(FileActor.name) fileActor: ActorRef,
     fileRepository: Repository[FileMetadata, Int],
     hashAppender: HashAppender)(implicit executionContext: ExecutionContext, materializer: ActorMaterializer)
-    extends FileUploadResolver
-    with Logger
-    with ActorMessageDelivering {
+  extends FileUploadResolver
+  with Logger
+  with ActorMessageDelivering {
 
   override def uploadFiles(parts: Source[FormData.BodyPart, Any]): Future[Boolean] = {
     parts

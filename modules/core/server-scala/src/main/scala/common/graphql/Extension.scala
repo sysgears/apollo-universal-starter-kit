@@ -6,4 +6,4 @@ import shapes.graphql.GraphQLSchemaExtension
 
 case class Extension[Ctx](override val document: ast.Document,
                           override val builder: AstSchemaBuilder[Ctx] = AstSchemaBuilder.default[Ctx])
-    extends GraphQLSchemaExtension[Ctx]
+  extends GraphQLSchemaExtension[Ctx]

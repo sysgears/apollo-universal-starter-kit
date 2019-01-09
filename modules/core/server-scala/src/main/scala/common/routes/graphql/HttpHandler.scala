@@ -27,7 +27,7 @@ import scala.util.{Failure, Success}
 class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val scheduler: Scheduler,
     implicit val actorMaterializer: ActorMaterializer)
-    extends RouteUtil {
+  extends RouteUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {

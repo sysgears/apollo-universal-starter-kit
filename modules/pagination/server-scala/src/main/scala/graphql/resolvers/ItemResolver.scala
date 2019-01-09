@@ -21,8 +21,8 @@ object ItemResolver extends ActorNamed {
   * @param itemRepo provides methods for operating an entity in a database
   */
 class ItemResolver @Inject()(itemRepo: ItemRepository)(implicit executionContext: ExecutionContext)
-    extends Actor
-    with ActorLogging {
+  extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
     case paginationParams: PaginationParams => {

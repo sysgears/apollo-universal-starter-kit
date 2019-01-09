@@ -38,9 +38,9 @@ object Dispatcher extends ActorNamed {
 }
 
 class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer, executionContext: ExecutionContext)
-    extends Actor
-    with ActorLogging
-    with ActorMessageDelivering {
+  extends Actor
+  with ActorLogging
+  with ActorMessageDelivering {
 
   override def receive: Receive = {
     case msg: DispatcherMessage =>

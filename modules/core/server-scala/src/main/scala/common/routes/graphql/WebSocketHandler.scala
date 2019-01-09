@@ -23,7 +23,7 @@ import scala.util.{Failure, Success}
 class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val actorMaterializer: ActorMaterializer,
     implicit val scheduler: Scheduler)
-    extends RouteUtil {
+  extends RouteUtil {
 
   import spray.json.DefaultJsonProtocol._
 

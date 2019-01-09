@@ -35,8 +35,8 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
                                        mailConfig: MailConfig,
                                        authConfig: AuthConfig,
                                        appConfig: AppConfig)(implicit executionContext: ExecutionContext)
-    extends Actor
-    with ActorLogging {
+  extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
     case (input: RegisterUserInput, skipConfirmation: Boolean) => {

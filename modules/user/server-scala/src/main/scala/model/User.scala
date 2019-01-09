@@ -12,7 +12,7 @@ case class User(id: Option[Int] = None,
                 password: String,
                 role: String,
                 isActive: Boolean)
-    extends Entity[User, Int] {
+  extends Entity[User, Int] {
   override def withId(id: Int): User = this.copy(id = Some(id))
 
   def userProfile(userProfileRepository: UserProfileRepository)(

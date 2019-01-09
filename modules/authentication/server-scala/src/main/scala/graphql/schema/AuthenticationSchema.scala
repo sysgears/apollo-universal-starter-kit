@@ -36,8 +36,8 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
                                      userSchema: UserSchema)(implicit actorSystem: ActorSystem,
                                                              materializer: ActorMaterializer,
                                                              executionContext: ExecutionContext)
-    extends InputUnmarshallerGenerator
-    with Logger {
+  extends InputUnmarshallerGenerator
+  with Logger {
 
   val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(
     InputObjectTypeName("RegisterUserInput"))

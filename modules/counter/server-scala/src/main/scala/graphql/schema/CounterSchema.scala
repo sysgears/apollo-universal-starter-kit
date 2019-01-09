@@ -21,7 +21,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
                               materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext)
-    extends Logger {
+  extends Logger {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))

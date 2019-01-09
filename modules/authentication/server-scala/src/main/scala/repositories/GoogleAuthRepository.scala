@@ -10,7 +10,7 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.ExecutionContext
 
 class GoogleAuthRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
-    extends Repository[GoogleAuth, String](driver) {
+  extends Repository[GoogleAuth, String](driver) {
   import driver.api._
 
   val pkType = implicitly[BaseTypedType[String]]

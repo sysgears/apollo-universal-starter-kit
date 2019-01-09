@@ -12,8 +12,8 @@ import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, ObjectType, StringType}
 
 class TokenSchema @Inject()(implicit val materializer: ActorMaterializer, actorSystem: ActorSystem)
-    extends InputUnmarshallerGenerator
-    with Logger {
+  extends InputUnmarshallerGenerator
+  with Logger {
 
   implicit val tokens: ObjectType[UserContext, Tokens] = deriveObjectType(ObjectTypeName("Tokens"))
 

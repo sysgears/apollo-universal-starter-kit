@@ -11,9 +11,9 @@ import sangria.schema.{Argument, Field, _}
 import spray.json.DefaultJsonProtocol
 
 class FileSchema @Inject()(fileUploadResolver: FileUploadResolver)(implicit val materializer: ActorMaterializer)
-    extends InputUnmarshallerGenerator
-    with Logger
-    with DefaultJsonProtocol {
+  extends InputUnmarshallerGenerator
+  with Logger
+  with DefaultJsonProtocol {
 
   implicit val fileUploadType: ScalarType[Unit] = new ScalarType[Unit](
     name = "FileUpload",

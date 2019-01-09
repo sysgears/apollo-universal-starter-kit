@@ -10,7 +10,7 @@ import slick.jdbc.JdbcProfile
 import scala.concurrent.ExecutionContext
 
 class FacebookAuthRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
-    extends Repository[FacebookAuth, String](driver) {
+  extends Repository[FacebookAuth, String](driver) {
   import driver.api._
 
   val pkType = implicitly[BaseTypedType[String]]

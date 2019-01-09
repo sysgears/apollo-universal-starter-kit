@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
 
 class UserRepository @Inject()(override val driver: JdbcProfile, db: Database)(
     implicit executionContext: ExecutionContext)
-    extends Repository[User, Int](driver) {
+  extends Repository[User, Int](driver) {
 
   import driver.api._
 

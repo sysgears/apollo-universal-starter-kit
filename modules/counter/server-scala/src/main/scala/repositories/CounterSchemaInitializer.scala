@@ -8,7 +8,7 @@ import models.{Counter, CounterTable}
 import scala.concurrent.ExecutionContext
 
 class CounterSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
-    extends SchemaInitializer[CounterTable] {
+  extends SchemaInitializer[CounterTable] {
 
   import driver.api._
 

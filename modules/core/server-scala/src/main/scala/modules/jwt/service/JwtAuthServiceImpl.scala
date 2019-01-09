@@ -24,7 +24,7 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
                                    jwtDecoder: JwtDecoder,
                                    jwtValidator: JwtValidator,
                                    jwtConfig: JwtConfig)
-    extends JwtAuthService[JwtContent] {
+  extends JwtAuthService[JwtContent] {
 
   /** @inheritdoc */
   override def createAccessToken(content: JwtContent): String =

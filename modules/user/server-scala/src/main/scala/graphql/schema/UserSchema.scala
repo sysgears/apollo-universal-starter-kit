@@ -15,8 +15,8 @@ import scala.concurrent.ExecutionContext
 class UserSchema @Inject()(userProfileRepository: UserProfileRepository)(implicit val materializer: ActorMaterializer,
                                                                          actorSystem: ActorSystem,
                                                                          executionContext: ExecutionContext)
-    extends InputUnmarshallerGenerator
-    with Logger {
+  extends InputUnmarshallerGenerator
+  with Logger {
 
   val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(ObjectTypeName("UserProfile"))
 

@@ -16,21 +16,18 @@ object Dispatcher extends ActorNamed {
 
   final val name = "Dispatcher"
 
-  final case class DispatcherMessage(input: Any,
-                                     context: UserContext,
-                                     replyTo: ActorRef,
-                                     resolverActor: ActorRef,
-                                     before: List[ActorRef] = Nil,
-                                     after: List[ActorRef] = Nil)
+  final case class DispatcherMessage(
+      input: Any,
+      context: UserContext,
+      replyTo: ActorRef,
+      resolverActor: ActorRef,
+      before: List[ActorRef] = Nil,
+      after: List[ActorRef] = Nil
+  )
 
-  final case class InterceptorBeforeMessage(input: Any,
-                                            context: UserContext,
-                                            before: List[ActorRef])
+  final case class InterceptorBeforeMessage(input: Any, context: UserContext, before: List[ActorRef])
 
-  final case class InterceptorAfterMessage(input: Any,
-                                           output: Any,
-                                           context: UserContext,
-                                           after: List[ActorRef])
+  final case class InterceptorAfterMessage(input: Any, output: Any, context: UserContext, after: List[ActorRef])
 
   final case class ResolverMessage(input: Any, context: UserContext)
 
@@ -42,8 +39,8 @@ object Dispatcher extends ActorNamed {
 
 }
 
-class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
-                           executionContext: ExecutionContext) extends Actor
+class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer, executionContext: ExecutionContext)
+  extends Actor
   with ActorLogging
   with ActorMessageDelivering {
 
@@ -70,8 +67,7 @@ class Dispatcher @Inject()(implicit actorMaterializer: ActorMaterializer,
   def withInterceptors(msg: DispatcherMessage): Receive = {
     case Success =>
       log.info(s"Interceptor has finished successfully")
-      sendMessageToActor(msg.resolverActor, msg.input)
-        .pipeTo(msg.replyTo)
+      sendMessageToActor(msg.resolverActor, msg.input).pipeTo(msg.replyTo)
 
     case Failure(e) =>
       log.info(s"Interceptor has finished with failure. Reason: '$e'")

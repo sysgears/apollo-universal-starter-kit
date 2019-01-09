@@ -1,1 +1,0 @@
-export { ButtonComponent } from './Button';

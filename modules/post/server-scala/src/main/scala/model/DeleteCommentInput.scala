@@ -1,4 +1,3 @@
 package model
 
-case class DeleteCommentInput(id: Int,
-                              postId: Int)
+case class DeleteCommentInput(id: Int, postId: Int)

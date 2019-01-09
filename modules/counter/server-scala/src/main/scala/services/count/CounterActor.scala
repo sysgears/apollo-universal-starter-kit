@@ -24,21 +24,25 @@ object CounterActor extends ActorNamed {
 
 }
 
-class CounterActor @Inject()(counterRepository: Repository[Counter, Int])
-                            (implicit executionContext: ExecutionContext) extends Actor
+class CounterActor @Inject()(counterRepository: Repository[Counter, Int])(implicit executionContext: ExecutionContext)
+  extends Actor
   with ActorLogging {
   private val defaultId = 1
 
   override def receive: Receive = {
     case incrementAndGet: IncrementAndGet =>
       log.debug(s"Received message: [ $incrementAndGet ]")
-      counterRepository.executeTransactionally(
-        for {
-          optionCounter <- counterRepository.findOne(defaultId)
-          counter <- if (optionCounter.nonEmpty) DBIO.successful(optionCounter.get) else DBIO.failed(InternalServerError())
-          updatedCounter <- counterRepository.update(counter.copy(amount = counter.amount + incrementAndGet.amount))
-        } yield updatedCounter
-      ).run.pipeTo(sender)
+      counterRepository
+        .executeTransactionally(
+          for {
+            optionCounter <- counterRepository.findOne(defaultId)
+            counter <- if (optionCounter.nonEmpty) DBIO.successful(optionCounter.get)
+            else DBIO.failed(InternalServerError())
+            updatedCounter <- counterRepository.update(counter.copy(amount = counter.amount + incrementAndGet.amount))
+          } yield updatedCounter
+        )
+        .run
+        .pipeTo(sender)
 
     case GetAmount => counterRepository.findOne(defaultId).run.failOnNone(InternalServerError()).pipeTo(sender)
   }

@@ -2,6 +2,7 @@ import React from 'react';
 import { graphql } from 'react-apollo';
 
 import PostAddView from '../components/PostAddView';
+import { AddPost } from './Post';
 
 import ADD_POST from '../graphql/AddPost.graphql';
 
@@ -29,6 +30,18 @@ export default graphql(ADD_POST, {
             title: title,
             content: content,
             comments: []
+          }
+        },
+        updateQueries: {
+          posts: (
+            prev,
+            {
+              mutationResult: {
+                data: { addPost }
+              }
+            }
+          ) => {
+            return AddPost(prev, addPost);
           }
         }
       });

@@ -17,9 +17,7 @@ import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
-const { limit } = chatConfig;
-
-const onAddMessage = (prev, node) => {
+function AddMessage(prev, node) {
   // ignore if duplicate
   if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
     return prev;
@@ -50,9 +48,9 @@ const onAddMessage = (prev, node) => {
       }
     }
   });
-};
+}
 
-const onDeleteMessage = (prev, id) => {
+function DeleteMessage(prev, id) {
   const index = prev.messages.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -79,9 +77,9 @@ const onDeleteMessage = (prev, id) => {
       }
     }
   });
-};
+}
 
-const onEditMessage = (prev, node) => {
+function EditMessage(prev, node) {
   const newEdge = {
     cursor: node.id,
     node,
@@ -95,25 +93,7 @@ const onEditMessage = (prev, node) => {
       }
     }
   });
-};
-
-const getMsgsFromCache = cache =>
-  cache.readQuery({
-    query: MESSAGES_QUERY,
-    variables: { limit, after: 0 }
-  });
-
-const writeMsgsToCache = (cache, messages) =>
-  cache.writeQuery({
-    query: MESSAGES_QUERY,
-    variables: { limit, after: 0 },
-    data: {
-      messages: {
-        ...messages,
-        __typename: 'Messages'
-      }
-    }
-  });
+}
 
 class ChatOperations extends React.Component {
   static propTypes = {
@@ -134,11 +114,11 @@ class ChatOperations extends React.Component {
     updateQuery(prev => {
       switch (mutation) {
         case 'CREATED':
-          return onAddMessage(prev, node);
+          return AddMessage(prev, node);
         case 'DELETED':
-          return onDeleteMessage(prev, node.id);
+          return DeleteMessage(prev, node.id);
         case 'UPDATED':
-          return onEditMessage(prev, node);
+          return EditMessage(prev, node);
         default:
           return prev;
       }
@@ -155,7 +135,7 @@ export default compose(
     options: () => {
       return {
         fetchPolicy: 'network-only',
-        variables: { limit, after: 0 }
+        variables: { limit: chatConfig.limit, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -214,10 +194,17 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
-            update: (cache, { data: { addMessage } }) => {
-              const prevMessages = getMsgsFromCache(cache);
-              const { messages } = onAddMessage(prevMessages, addMessage);
-              writeMsgsToCache(cache, messages);
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { addMessage }
+                  }
+                }
+              ) => {
+                return AddMessage(prev, addMessage);
+              }
             }
           });
         } catch (e) {
@@ -239,10 +226,17 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: (cache, { data: { deleteMessage } }) => {
-              const prevMessages = getMsgsFromCache(cache);
-              const { messages } = onDeleteMessage(prevMessages, deleteMessage);
-              writeMsgsToCache(cache, messages);
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { deleteMessage }
+                  }
+                }
+              ) => {
+                return DeleteMessage(prev, deleteMessage.id);
+              }
             }
           });
         } catch (e) {
@@ -276,10 +270,17 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            update: (cache, { data: { editMessage } }) => {
-              const prevMessages = getMsgsFromCache(cache);
-              const { messages } = onEditMessage(prevMessages, editMessage);
-              writeMsgsToCache(cache, messages);
+            updateQueries: {
+              messages: (
+                prev,
+                {
+                  mutationResult: {
+                    data: { editMessage }
+                  }
+                }
+              ) => {
+                return EditMessage(prev, editMessage);
+              }
             }
           });
         } catch (e) {

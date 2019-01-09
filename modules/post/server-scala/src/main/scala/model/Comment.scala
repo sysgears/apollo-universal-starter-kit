@@ -9,8 +9,6 @@ import com.byteslounge.slickrepo.meta.Entity
   * @param content
   * @param postId
   */
-case class Comment(id: Option[Int] = None,
-                   content: String,
-                   postId: Int) extends Entity[Comment, Int] {
+case class Comment(id: Option[Int] = None, content: String, postId: Int) extends Entity[Comment, Int] {
   override def withId(id: Int): Comment = this.copy(id = Some(id))
 }

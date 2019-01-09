@@ -16,7 +16,7 @@ const limit =
     ? settings.pagination.web.itemsNumber
     : settings.pagination.mobile.itemsNumber;
 
-export const onAddPost = (prev, node) => {
+export function AddPost(prev, node) {
   // ignore if duplicate
   if (prev.posts.edges.some(post => node.id === post.cursor)) {
     return update(prev, {
@@ -49,9 +49,9 @@ export const onAddPost = (prev, node) => {
       }
     }
   });
-};
+}
 
-const onDeletePost = (prev, id) => {
+function DeletePost(prev, id) {
   const index = prev.posts.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -69,7 +69,7 @@ const onDeletePost = (prev, id) => {
       }
     }
   });
-};
+}
 
 class Post extends React.Component {
   static propTypes = {
@@ -125,9 +125,9 @@ class Post extends React.Component {
         let newResult = prev;
 
         if (mutation === 'CREATED') {
-          newResult = onAddPost(prev, node);
+          newResult = AddPost(prev, node);
         } else if (mutation === 'DELETED') {
-          newResult = onDeletePost(prev, node.id);
+          newResult = DeletePost(prev, node.id);
         }
 
         return newResult;
@@ -190,33 +190,17 @@ export default compose(
               __typename: 'Post'
             }
           },
-
-          update: (cache, { data: { deletePost } }) => {
-            // Get previous posts from cache
-            const prevPosts = cache.readQuery({
-              query: POSTS_QUERY,
-              variables: {
-                limit,
-                after: 0
-              }
-            });
-
-            const newListPosts = onDeletePost(prevPosts, deletePost.id);
-
-            // Write posts to cache
-            cache.writeQuery({
-              query: POSTS_QUERY,
-              variables: {
-                limit,
-                after: 0
-              },
-              data: {
-                posts: {
-                  ...newListPosts.posts,
-                  __typename: 'Posts'
+          updateQueries: {
+            posts: (
+              prev,
+              {
+                mutationResult: {
+                  data: { deletePost }
                 }
               }
-            });
+            ) => {
+              return DeletePost(prev, deletePost.id);
+            }
           }
         });
       }

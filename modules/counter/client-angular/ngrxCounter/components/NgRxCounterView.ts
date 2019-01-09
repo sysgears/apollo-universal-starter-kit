@@ -5,7 +5,7 @@ import { CounterIncrement } from '../reducers';
 @Component({
   selector: 'ngrx-counter-button',
   template: `
-    <btn id="ngrx-button" (click)="increaseCounter()">Click to increase ngrxCount</btn>
+    <button id="ngrx-button" (click)="increaseCounter()">Click to increase ngrxCount</button>
   `,
   styles: []
 })

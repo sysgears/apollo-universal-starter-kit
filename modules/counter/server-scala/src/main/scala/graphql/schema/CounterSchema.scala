@@ -17,10 +17,12 @@ import services.count.CounterActor.GetAmount
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(implicit val counterPubSubService: PubSubService[Event[Counter]],
-                              materializer: ActorMaterializer,
-                              actorSystem: ActorSystem,
-                              executionContext: ExecutionContext) extends Logger {
+class CounterSchema @Inject()(
+    implicit val counterPubSubService: PubSubService[Event[Counter]],
+    materializer: ActorMaterializer,
+    actorSystem: ActorSystem,
+    executionContext: ExecutionContext
+) extends Logger {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
@@ -41,10 +43,11 @@ class CounterSchema @Inject()(implicit val counterPubSubService: PubSubService[E
     Field(
       name = SERVER_COUNTER,
       fieldType = Types.counter,
-      resolve = sc => resolveWithDispatcher[Counter](
-        input = GetAmount,
-        userContext = sc.ctx,
-        namedResolverActor = CounterResolver
+      resolve = sc =>
+        resolveWithDispatcher[Counter](
+          input = GetAmount,
+          userContext = sc.ctx,
+          namedResolverActor = CounterResolver
       )
     )
   )
@@ -70,8 +73,7 @@ class CounterSchema @Inject()(implicit val counterPubSubService: PubSubService[E
       name = COUNTER_UPDATED,
       fieldType = Types.counter,
       resolve = _ => {
-        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty)
-          .map(action => action.map(_.element))
+        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty).map(action => action.map(_.element))
       }
     )
   )

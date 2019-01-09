@@ -1,4 +1,3 @@
 package model
 
-case class AuthLinkedInInput(lnId: Option[String],
-                             displayName: Option[String])
+case class AuthLinkedInInput(lnId: Option[String], displayName: Option[String])

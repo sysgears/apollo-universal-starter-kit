@@ -14,7 +14,8 @@ const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
   password: [required, minLength(8)]
 };
-const { facebook, linkedin, google, github } = settings.user.auth;
+const { facebook, linkedin, google } = settings.user.auth;
+const { github } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (
@@ -29,7 +30,7 @@ const renderSocialButtons = (buttonsLength, t) => {
           <GoogleButton text={t('login.googleBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.github.enabled && (
+      {settings.auth.social.github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'icon'} />
         </div>
@@ -52,7 +53,7 @@ const renderSocialButtons = (buttonsLength, t) => {
           <GoogleButton text={t('login.googleBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.github.enabled && (
+      {settings.auth.social.github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'button'} />
         </div>

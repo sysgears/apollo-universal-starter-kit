@@ -1,9 +1,11 @@
 /*eslint-disable no-unused-vars*/
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
+import { createTransaction } from '@module/database-server-ts';
 
 import settings from '../../../settings';
 
@@ -15,6 +17,10 @@ const {
   },
   app
 } = settings;
+
+const createPasswordHash = password => {
+  return bcrypt.hash(password, 12) || false;
+};
 
 export default pubsub => ({
   Query: {
@@ -90,11 +96,18 @@ export default pubsub => ({
 
           e.throwIf();
 
-          const [createdUserId] = await User.register({ ...input });
-          await User.editUserProfile({ id: createdUserId, ...input });
+          const passwordHash = await createPasswordHash(input.password);
 
-          if (certificate.enabled) {
-            await User.editAuthCertificate({ id: createdUserId, ...input });
+          const trx = await createTransaction();
+          let createdUserId;
+          try {
+            [createdUserId] = await User.register(input, passwordHash).transacting(trx);
+            await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
+            if (settings.user.auth.certificate.enabled)
+              await User.editAuthCertificate({ id: createdUserId, ...input }).transacting(trx);
+            trx.commit();
+          } catch (e) {
+            trx.rollback();
           }
 
           const user = await User.getUser(createdUserId);
@@ -159,8 +172,17 @@ export default pubsub => ({
 
           const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-          await User.editUser(userInfo);
-          await User.editUserProfile(input);
+          const isProfileExists = await User.isUserProfileExists(input.id);
+          const passwordHash = await createPasswordHash(input.password);
+
+          const trx = await createTransaction();
+          try {
+            await User.editUser(userInfo, passwordHash).transacting(trx);
+            await User.editUserProfile(input, isProfileExists).transacting(trx);
+            trx.commit();
+          } catch (e) {
+            trx.rollback();
+          }
 
           if (certificate.enabled) {
             await User.editAuthCertificate(input);

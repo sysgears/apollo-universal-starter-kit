@@ -15,7 +15,8 @@ object Main extends ModuleApp {
       new UserModule,
       new AuthenticationModule,
       new UploadModule,
-      new PaginationModule
+      new PaginationModule,
+      new PostModule
     )
   )
   createApp(serverModule)

@@ -5,7 +5,7 @@ import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
 import common.graphql.UserContext
-import common.publisher.PubSubService
+import common.publisher.{Event, PubSubService}
 import common.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject
@@ -17,7 +17,7 @@ import services.count.CounterActor.GetAmount
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter],
+class CounterSchema @Inject()(implicit val counterPubSubService: PubSubService[Event[Counter]],
                               materializer: ActorMaterializer,
                               actorSystem: ActorSystem,
                               executionContext: ExecutionContext) extends Logger {
@@ -26,9 +26,20 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
+  object Names {
+
+    final val SERVER_COUNTER = "serverCounter"
+
+    final val ADD_SERVER_COUNTER = "addServerCounter"
+
+    final val COUNTER_UPDATED = "counterUpdated"
+  }
+
+  import Names._
+
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "serverCounter",
+      name = SERVER_COUNTER,
       fieldType = Types.counter,
       resolve = sc => resolveWithDispatcher[Counter](
         input = GetAmount,
@@ -40,7 +51,7 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "addServerCounter",
+      name = ADD_SERVER_COUNTER,
       fieldType = Types.counter,
       arguments = Argument(name = "amount", argumentType = IntType) :: Nil,
       resolve = sc => {
@@ -49,16 +60,19 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
           input = amount,
           userContext = sc.ctx,
           namedResolverActor = CounterResolver
-        ).pub
+        ).pub(ADD_SERVER_COUNTER)
       }
     )
   )
 
   def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
-      name = "counterUpdated",
+      name = COUNTER_UPDATED,
       fieldType = Types.counter,
-      resolve = _ => pubsubService.subscribe
+      resolve = _ => {
+        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty)
+          .map(action => action.map(_.element))
+      }
     )
   )
 }

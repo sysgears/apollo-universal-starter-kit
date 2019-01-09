@@ -8,7 +8,7 @@ import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counte
 @Component({
   selector: 'server-counter-button',
   template: `
-    <button id="graphql-button" color="primary" (click)="increaseCounter()">Click to increase counter</button>
+    <btn id="graphql-button" color="primary" (click)="increaseCounter()">Click to increase counter</btn>
   `,
   styles: []
 })

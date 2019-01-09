@@ -20,13 +20,6 @@ export default {
       scope: ['email'],
       profileFields: ['id', 'emails', 'displayName']
     },
-    github: {
-      enabled: false,
-      clientID: process.env.GITHUB_CLIENTID,
-      clientSecret: process.env.GITHUB_CLIENTSECRET,
-      callbackURL: '/auth/github/callback',
-      scope: ['user:email']
-    },
     linkedin: {
       enabled: false,
       clientID: process.env.LINKEDIN_CLIENTID,

@@ -15,42 +15,47 @@ class UserResolver @Inject()(userRepository: UserRepository,
                             (implicit executionContext: ExecutionContext) {
 
   def addUser(input: AddUserInput): Future[UserPayload] = for {
-    user <- userRepository.save(User(
-      username = input.username,
-      email = input.email,
-      password = BCrypt.hashpw(input.password, BCrypt.gensalt),
-      role = input.role,
-      isActive = input.isActive.getOrElse(false)
-    )).run
-    _ <- input.profile.map(
+    user <- userRepository.save {
+      User(
+        username = input.username,
+        email = input.email,
+        password = BCrypt.hashpw(input.password, BCrypt.gensalt),
+        role = input.role,
+        isActive = input.isActive.getOrElse(false))
+    }.run
+    _ <- input.profile.fold(Future.successful(UserProfile())) {
       profile =>
-        userProfileRepository.save(UserProfile(
-          firstName = profile.firstName,
-          lastName = profile.lastName,
-          fullName = None
-        ).withId(user.id.get)).run
-    ).getOrElse(Future.successful())
+        userProfileRepository.save {
+          UserProfile(
+            id = user.id,
+            firstName = profile.firstName,
+            lastName = profile.lastName,
+            fullName = profile.firstName.flatMap(firstName => profile.lastName.map(firstName + _)))
+        }.run
+    }
   } yield UserPayload(user = Some(user))
 
   def editUser(input: EditUserInput): Future[UserPayload] = for {
     user <- userRepository.findOne(input.id).run failOnNone NotFound(s"User with id = ${input.id}")
-    editedUser <- userRepository.update(User(
-      id = Some(input.id),
-      username = input.username,
-      email = input.email,
-      password = input.password.map(BCrypt.hashpw(_, BCrypt.gensalt)).getOrElse(user.password),
-      role = input.role,
-      isActive = input.isActive.getOrElse(user.isActive)
-    )).run
-    _ <- input.profile.map(
+    editedUser <- userRepository.update {
+      User(
+        id = Some(input.id),
+        username = input.username,
+        email = input.email,
+        password = input.password.map(BCrypt.hashpw(_, BCrypt.gensalt)).getOrElse(user.password),
+        role = input.role,
+        isActive = input.isActive.getOrElse(user.isActive))
+    }.run
+    _ <- input.profile.fold(Future.successful(UserProfile())) {
       profile =>
-        userProfileRepository.update(UserProfile(
-          id = Some(input.id),
-          firstName = profile.firstName,
-          lastName = profile.lastName,
-          fullName = None
-        )).run
-    ).getOrElse(Future.successful())
+        userProfileRepository.update {
+          UserProfile(
+            id = Some(input.id),
+            firstName = profile.firstName,
+            lastName = profile.lastName,
+            fullName = profile.firstName.flatMap(firstName => profile.lastName.map(firstName + _)))
+        }.run
+    }
   } yield UserPayload(user = Some(editedUser))
 
   def deleteUser(id: Int): Future[UserPayload] = for {

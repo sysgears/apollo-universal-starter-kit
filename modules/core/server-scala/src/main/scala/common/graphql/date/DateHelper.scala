@@ -21,6 +21,6 @@ object DateHelper {
   def parseDate(dateStr: String, dateFormat: SimpleDateFormat): Either[DateCoercionViolation.type, Date] =
     Try(dateFormat.parse(dateStr)) match {
       case Success(date) => Right(date)
-      case Failure(_)    => Left(DateCoercionViolation)
+      case Failure(_) => Left(DateCoercionViolation)
     }
 }

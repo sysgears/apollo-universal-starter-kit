@@ -12,7 +12,7 @@ object GoogleOauth2Response extends DefaultJsonProtocol {
 
     def read(value: JsValue): GoogleOauth2Response = value.asJsObject.getFields("id", "email", "name") match {
       case Seq(JsString(id), JsString(email), JsString(name)) => GoogleOauth2Response(id, email, name)
-      case _                                                  => throw DeserializationException("GithubOauth2Response expected")
+      case _ => throw DeserializationException("GithubOauth2Response expected")
     }
   }
 

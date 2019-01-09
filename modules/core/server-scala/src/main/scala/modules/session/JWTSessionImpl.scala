@@ -29,7 +29,7 @@ class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext)
   def withChanges(requestSession: Option[SessionData], newSession: Option[SessionData]): Directive0 =
     newSession match {
       case Some(sessionData) if requestSession.isEmpty => withNew(sessionData)
-      case None if requestSession.isDefined            => withInvalidating
-      case _                                           => Directive.Empty
+      case None if requestSession.isDefined => withInvalidating
+      case _ => Directive.Empty
     }
 }

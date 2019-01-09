@@ -37,7 +37,7 @@ object OperationMessageJsonProtocol extends DefaultJsonProtocol {
 
     def read(json: JsValue): OperationMessageType = json match {
       case JsString(str) => OperationMessageType.withName(str)
-      case _             => throw DeserializationException("Enumeration string expected")
+      case _ => throw DeserializationException("Enumeration string expected")
     }
   }
 

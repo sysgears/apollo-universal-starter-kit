@@ -60,6 +60,6 @@ class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
 
   private def withExceptionTransform[T](maybeResult: Try[T]): Try[T] = maybeResult.recover {
     case _: JwtExpirationException => throw InvalidToken("Token is expired")
-    case _                         => throw InvalidToken()
+    case _ => throw InvalidToken()
   }
 }

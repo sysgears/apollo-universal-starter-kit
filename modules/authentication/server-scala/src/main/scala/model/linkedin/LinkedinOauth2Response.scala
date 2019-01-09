@@ -13,7 +13,7 @@ object LinkedinOauth2Response extends DefaultJsonProtocol {
     def read(value: JsValue): LinkedinOauth2Response =
       value.asJsObject.getFields("id", "email-address", "formatted-name") match {
         case Seq(JsString(id), JsString(email), JsString(name)) => LinkedinOauth2Response(id, email, name)
-        case _                                                  => throw DeserializationException("LinkedInOauth2Response expected")
+        case _ => throw DeserializationException("LinkedInOauth2Response expected")
       }
   }
 

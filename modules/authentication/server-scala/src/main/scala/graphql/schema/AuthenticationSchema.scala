@@ -200,7 +200,7 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
             } yield
               (certificate, fbAuth, gAuth, ghAuth, lnAuth) match {
                 case (None, None, None, None, None) => None
-                case _                              => Some(UserAuth(certificate, fbAuth, gAuth, ghAuth, lnAuth))
+                case _ => Some(UserAuth(certificate, fbAuth, gAuth, ghAuth, lnAuth))
               }
       },
       AdditionalTypes(userAuth, certificateAuth, googleAuth, facebookAuth, githubAuth, linkedinAuth)

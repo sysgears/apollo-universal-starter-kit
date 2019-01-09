@@ -69,7 +69,7 @@ class GithubAuthController @Inject()(
                         HttpCookie("refresh-token", value = tokens.refreshToken)) {
                 state match {
                   case Some(redirectUrl) => redirect(s"$redirectUrl?data=${tokens.toJson.toString}", StatusCodes.Found)
-                  case None              => redirect("/profile", StatusCodes.Found)
+                  case None => redirect("/profile", StatusCodes.Found)
                 }
               }
             case Failure(_) => redirect("/login", StatusCodes.Found)

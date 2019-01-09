@@ -23,7 +23,7 @@ class MailActor extends Actor with ActorLogging {
       val payload = Try {
         sendMail.mailer.send(sendMail.message)
       } match {
-        case Success(_)         => MailPayload()
+        case Success(_) => MailPayload()
         case Failure(exception) => MailPayload(Some(List(FieldError("", exception.getMessage))))
       }
       sender ! payload

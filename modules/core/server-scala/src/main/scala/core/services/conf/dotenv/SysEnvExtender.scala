@@ -53,10 +53,10 @@ object SysEnvExtender {
           }
         } match {
           case Failure(NonFatal(e2)) => e2.printStackTrace()
-          case Success(_)            =>
+          case Success(_) =>
         }
       case Failure(NonFatal(e1)) => e1.printStackTrace()
-      case Success(_)            =>
+      case Success(_) =>
     }
   }
 }

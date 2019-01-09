@@ -12,7 +12,7 @@ object FacebookOauth2Response extends DefaultJsonProtocol {
 
     def read(value: JsValue): FacebookOauth2Response = value.asJsObject.getFields("id", "email", "name") match {
       case Seq(JsString(id), JsString(email), JsString(name)) => FacebookOauth2Response(id, email, name)
-      case _                                                  => throw DeserializationException("FacebookOauth2Response expected")
+      case _ => throw DeserializationException("FacebookOauth2Response expected")
     }
   }
 

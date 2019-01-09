@@ -52,7 +52,7 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
               }
               .recover {
                 case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
-                case error: ErrorWithResolver  => ToResponseMarshallable(InternalServerError -> error.resolveError)
+                case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
               }
           case _ =>
             graphQlExecutor
@@ -66,11 +66,11 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
               .map(response => ToResponseMarshallable(OK -> response))
               .recover {
                 case error: QueryAnalysisError => BadRequest -> error.resolveError
-                case error: ErrorWithResolver  => InternalServerError -> error.resolveError
+                case error: ErrorWithResolver => InternalServerError -> error.resolveError
               }
         }
       case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
-      case Failure(_)              => Future[ToResponseMarshallable](InternalServerError)
+      case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
     }
 
   def handleBatchQuery(graphQlMessages: Seq[GraphQLMessage], userCtx: UserContext): Future[ToResponseMarshallable] = {
@@ -121,10 +121,10 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
           }
           .recover {
             case error: QueryAnalysisError => BadRequest -> error.resolveError
-            case error: ErrorWithResolver  => InternalServerError -> error.resolveError
+            case error: ErrorWithResolver => InternalServerError -> error.resolveError
           }
       case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
-      case Failure(_)              => Future[ToResponseMarshallable](InternalServerError)
+      case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
     }
   }
 }

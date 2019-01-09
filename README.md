@@ -122,7 +122,7 @@ To learn more about the features and modules available in Apollo Universal Start
 
 ## Demo
 
-Here's a demo of Apollo Universal Starter Kit in work:
+Here's a demo of Apollo Universal Starter Kit in action:
 
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)
 

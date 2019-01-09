@@ -116,7 +116,7 @@ class UserSchema @Inject()(userResolver: UserResolver,
       name = "deleteUser",
       fieldType = userPayload,
       arguments = List(Argument("id", IntType)),
-      resolve = ctx => userResolver.editUser(ctx.arg("id"))
+      resolve = ctx => userResolver.deleteUser(ctx.arg("id"))
     )
   )
 }

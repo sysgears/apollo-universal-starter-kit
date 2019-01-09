@@ -1,6 +1,4 @@
 import { pick } from 'lodash';
-import passport from 'passport';
-import GitHubStrategy from 'passport-github';
 import { access } from '@module/authentication-server-ts';
 import { AuthModule } from '@module/authentication-server-ts/social';
 import User from '../../sql';
@@ -8,89 +6,62 @@ import User from '../../sql';
 import resolvers from './resolvers';
 import settings from '../../../../../settings';
 
-let middleware;
+const registerUser = async ({ id, username, displayName, emails: [{ value }] }) => {
+  return User.register({
+    username: username ? username : displayName,
+    email: value,
+    password: id,
+    isActive: true
+  });
+};
 
-if (settings.user.auth.github.enabled && !__TEST__) {
-  passport.use(
-    new GitHubStrategy(
-      {
-        clientID: settings.user.auth.github.clientID,
-        clientSecret: settings.user.auth.github.clientSecret,
-        scope: settings.user.auth.github.scope,
-        callbackURL: settings.user.auth.github.callbackURL
-      },
-      async function(accessToken, refreshToken, profile, cb) {
-        const {
-          id,
-          username,
-          displayName,
-          emails: [{ value }]
-        } = profile;
-        try {
-          let user = await User.getUserByGHIdOrEmail(id, value);
+const createLinkedInAuth = async user => User.createLinkedInAuth(user);
 
-          if (!user) {
-            const isActive = true;
-            const [createdUserId] = await User.register({
-              username: username ? username : displayName,
-              email: value,
-              password: id,
-              isActive
-            });
+async function verifyCallback(accessToken, refreshToken, profile, cb) {
+  const {
+    id,
+    displayName,
+    emails: [{ value }]
+  } = profile;
 
-            await User.createGithubAuth({
-              id,
-              displayName,
-              userId: createdUserId
-            });
+  try {
+    let user = await User.getUserByLnInIdOrEmail(id, value);
 
-            user = await User.getUser(createdUserId);
-          } else if (!user.ghId) {
-            await User.createGithubAuth({
-              id,
-              displayName,
-              userId: user.id
-            });
-          }
-          return cb(null, pick(user, ['id', 'username', 'role', 'email']));
-        } catch (err) {
-          return cb(err, {});
-        }
-      }
-    )
-  );
+    if (!user) {
+      const [createdUserId] = await registerUser(profile);
+      await createLinkedInAuth({ id, displayName, userId: createdUserId });
+      user = await User.getUser(createdUserId);
+    } else if (!user.lnId) {
+      await createLinkedInAuth({ id, displayName, userId: user.id });
+    }
 
-  middleware = app => {
-    app.use(passport.initialize());
-    app.get('/auth/github', (req, res, next) => {
-      passport.authenticate('github', { state: req.query.expoUrl })(req, res, next);
-    });
-    app.get(
-      '/auth/github/callback',
-      passport.authenticate('github', { session: false, failureRedirect: '/login' }),
-      async function(req, res) {
-        const user = await User.getUserWithPassword(req.user.id);
-        const redirectUrl = req.query.state;
-        const tokens = await access.grantAccess(user, req, user.passwordHash);
-
-        if (redirectUrl) {
-          res.redirect(
-            redirectUrl +
-              (tokens
-                ? '?data=' +
-                  JSON.stringify({
-                    tokens
-                  })
-                : '')
-          );
-        } else {
-          res.redirect('/profile');
-        }
-      }
-    );
-  };
+    return cb(null, pick(user, ['id', 'username', 'role', 'email']));
+  } catch (err) {
+    return cb(err, {});
+  }
 }
 
-export default (middleware
-  ? new AuthModule({ middleware: [middleware], createResolversFunc: [resolvers] })
+async function onAuthenticationSuccess(req, res) {
+  const user = await User.getUserWithPassword(req.user.id);
+  const redirectUrl = req.query.state;
+  const tokens = await access.grantAccess(user, req, user.passwordHash);
+
+  if (redirectUrl) {
+    res.redirect(redirectUrl + (tokens ? '?data=' + JSON.stringify({ tokens }) : ''));
+  } else {
+    res.redirect('/profile');
+  }
+}
+
+const data = {
+  social: {
+    github: {
+      onAuthenticationSuccess,
+      verifyCallback
+    }
+  }
+};
+
+export default (settings.auth.social.github.enabled && !__TEST__
+  ? new AuthModule({ createResolversFunc: [resolvers], data })
   : undefined);

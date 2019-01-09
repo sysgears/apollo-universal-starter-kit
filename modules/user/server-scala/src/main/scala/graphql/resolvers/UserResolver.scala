@@ -63,4 +63,6 @@ class UserResolver @Inject()(userRepository: UserRepository,
     val FilterUserInput(usernameOrEmail, role, isActive) = filter.getOrElse(FilterUserInput(None, None, None))
     userRepository.findAll(usernameOrEmail, role, isActive, column, order).run.map(_.toList)
   }
+
+  def user(id: Int): Future[UserPayload] = userRepository.findOne(id).run.map(user => UserPayload(user))
 }

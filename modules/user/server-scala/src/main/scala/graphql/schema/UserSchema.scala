@@ -85,6 +85,12 @@ class UserSchema @Inject()(userResolver: UserResolver,
 
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
+      name = "user",
+      fieldType = userPayload,
+      arguments = List(Argument("id", IntType)),
+      resolve = ctx => userResolver.user(ctx.arg[Int]("id"))
+    ),
+    Field(
       name = "users",
       fieldType = ListType(user),
       arguments = List(Argument("orderBy", OptionInputType(orderByUserInput)), Argument("filter", OptionInputType(filterUserInput))),

@@ -26,26 +26,25 @@ class UserSpec extends UserTestHelper {
   val testPassword = "12345678q"
   val testUsername = "testName"
 
+  val getUserQuery: String =
+    """
+      |query GetUser($input: Int!){
+      |  user(id: $input) {
+      |    user {
+      |      id
+      |      username
+      |      email
+      |    }
+      |    errors {
+      |      field
+      |      message
+      |    }
+      |  }
+      |}
+    """.stripMargin
+
   "UserSpec" must {
-
     "get user by id [SUCCESS]" in {
-      val getUserQuery =
-        """
-          |query GetUser($input: Int!){
-          |  user(id: $input) {
-          |    user {
-          |      id
-          |      username
-          |      email
-          |    }
-          |    errors {
-          |      field
-          |      message
-          |    }
-          |  }
-          |}
-        """.stripMargin
-
       val getUserVariables: JsObject =
         """
           |{
@@ -70,23 +69,6 @@ class UserSpec extends UserTestHelper {
     }
   }
   "get user by id [FAILURE]" in {
-    val getUserQuery =
-      """
-        |query GetUser($input: Int!){
-        |  user(id: $input) {
-        |    user {
-        |      id
-        |      username
-        |      email
-        |    }
-        |    errors {
-        |      field
-        |      message
-        |    }
-        |  }
-        |}
-      """.stripMargin
-
     val getUserVariables: JsObject =
       """
         |{

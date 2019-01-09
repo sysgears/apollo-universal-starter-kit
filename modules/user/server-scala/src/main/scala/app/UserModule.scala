@@ -16,7 +16,8 @@ class UserModule extends ServerModule[UserContext, SchemaInitializer[_]] {
   lazy val userSchemaInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
   lazy val userProfileSchemaInitializer: UserProfileSchemaInitializer = inject[UserProfileSchemaInitializer]
 
-  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(userSchemaInitializer, userProfileSchemaInitializer)
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] =
+    mutable.HashSet(userSchemaInitializer, userProfileSchemaInitializer)
   override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(userSchema.queries: _*)
   override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(userSchema.mutations: _*)
 }

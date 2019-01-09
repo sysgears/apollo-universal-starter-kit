@@ -12,9 +12,9 @@ import sangria.marshalling.FromInput
 
 import scala.concurrent.ExecutionContext
 
-class UserSchema @Inject()(userResolver: UserResolver,
-                           userProfileRepository: UserProfileRepository)
-                          (implicit executionContext: ExecutionContext) extends InputUnmarshallerGenerator
+class UserSchema @Inject()(userResolver: UserResolver, userProfileRepository: UserProfileRepository)(
+    implicit executionContext: ExecutionContext
+) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val userProfile: ObjectType[UserContext, UserProfile] = deriveObjectType(ObjectTypeName("UserProfile"))
@@ -47,7 +47,9 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
-  implicit val editUserInput: InputObjectType[EditUserInput] = deriveInputObjectType(InputObjectTypeName("EditUserInput"))
+  implicit val editUserInput: InputObjectType[EditUserInput] = deriveInputObjectType(
+    InputObjectTypeName("EditUserInput")
+  )
 
   implicit val editUserInputUnmarshaller: FromInput[EditUserInput] = inputUnmarshaller {
     input =>
@@ -62,7 +64,9 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
-  implicit val orderByUserInput: InputObjectType[OrderByUserInput] = deriveInputObjectType(InputObjectTypeName("OrderByUserInput"))
+  implicit val orderByUserInput: InputObjectType[OrderByUserInput] = deriveInputObjectType(
+    InputObjectTypeName("OrderByUserInput")
+  )
 
   implicit val orderByUserInputUnmarshaller: FromInput[OrderByUserInput] = inputUnmarshaller {
     input =>
@@ -72,7 +76,9 @@ class UserSchema @Inject()(userResolver: UserResolver,
       )
   }
 
-  implicit val filterUserInput: InputObjectType[FilterUserInput] = deriveInputObjectType(InputObjectTypeName("FilterUserInput"))
+  implicit val filterUserInput: InputObjectType[FilterUserInput] = deriveInputObjectType(
+    InputObjectTypeName("FilterUserInput")
+  )
 
   implicit val filterUserInputUnmarshaller: FromInput[FilterUserInput] = inputUnmarshaller {
     input =>
@@ -93,9 +99,12 @@ class UserSchema @Inject()(userResolver: UserResolver,
     Field(
       name = "users",
       fieldType = ListType(user),
-      arguments = List(Argument("orderBy", OptionInputType(orderByUserInput)), Argument("filter", OptionInputType(filterUserInput))),
-      resolve = ctx =>
-        userResolver.users(ctx.argOpt[OrderByUserInput]("orderBy"), ctx.argOpt[FilterUserInput]("filter"))
+      arguments = List(
+        Argument("orderBy", OptionInputType(orderByUserInput)),
+        Argument("filter", OptionInputType(filterUserInput))
+      ),
+      resolve =
+        ctx => userResolver.users(ctx.argOpt[OrderByUserInput]("orderBy"), ctx.argOpt[FilterUserInput]("filter"))
     )
   )
 

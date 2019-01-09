@@ -1,4 +1,3 @@
 package model
 
-case class AuthGitHubInput(ghId: Option[String],
-                           displayName: Option[String])
+case class AuthGitHubInput(ghId: Option[String], displayName: Option[String])

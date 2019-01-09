@@ -29,9 +29,12 @@ class AuthenticationModule extends ServerModule[UserContext, SchemaInitializer[_
     linkedinAuthSchemaInitializer,
     certificateAuthSchemaInitializer
   )
-  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(authenticationSchema.queries: _*)
-  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(authenticationSchema.mutations ++ tokenSchema.mutations: _*)
-  override lazy val extensions: mutable.HashSet[GraphQLSchemaExtension[UserContext]] = mutable.HashSet(authenticationSchema.extension)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(authenticationSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(authenticationSchema.mutations ++ tokenSchema.mutations: _*)
+  override lazy val extensions: mutable.HashSet[GraphQLSchemaExtension[UserContext]] =
+    mutable.HashSet(authenticationSchema.extension)
 
   bindings = new AuthenticationBinding
 }

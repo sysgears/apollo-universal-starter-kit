@@ -22,19 +22,22 @@ class UserRepository @Inject()(override val driver: JdbcProfile, db: Database)(
   val tableQuery = TableQuery[UserTable]
   type TableType = UserTable
 
-  def findAll(orderBy: Option[OrderByUserInput],
-              filter: Option[FilterUserInput]): DBIO[Seq[User]] = {
+  def findAll(orderBy: Option[OrderByUserInput], filter: Option[FilterUserInput]): DBIO[Seq[User]] = {
     val filteringQuery = tableQuery.filter {
       user =>
-        filter.map {
-          filterVal =>
-            filterVal.searchText.map {
-              usernameOrEmail =>
-                user.email === usernameOrEmail || user.username === usernameOrEmail
-            }.getOrElse(LiteralColumn(true)) &&
+        filter
+          .map {
+            filterVal =>
+              filterVal.searchText
+                .map {
+                  usernameOrEmail =>
+                    user.email === usernameOrEmail || user.username === usernameOrEmail
+                }
+                .getOrElse(LiteralColumn(true)) &&
               filterVal.role.map(user.role === _).getOrElse(LiteralColumn(true)) &&
               filterVal.isActive.map(user.isActive === _).getOrElse(LiteralColumn(true))
-        }.getOrElse(LiteralColumn(true))
+          }
+          .getOrElse(LiteralColumn(true))
     }
     val sortingQuery = for {
       orderByVal <- orderBy

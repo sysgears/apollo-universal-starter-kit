@@ -1,4 +1,3 @@
 package model
 
-case class ProfileInput(firstName: Option[String],
-                        lastName: Option[String])
+case class ProfileInput(firstName: Option[String], lastName: Option[String])

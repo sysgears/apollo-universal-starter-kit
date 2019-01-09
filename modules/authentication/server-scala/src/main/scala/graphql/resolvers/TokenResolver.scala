@@ -19,8 +19,8 @@ object TokenResolver extends ActorNamed {
 }
 
 class TokenResolver @Inject()(userRepository: UserRepository, jwtAuthService: JwtAuthService[JwtContent])(
-    implicit executionContext: ExecutionContext)
-  extends Actor
+    implicit executionContext: ExecutionContext
+) extends Actor
   with ActorLogging {
 
   override def receive: Receive = {
@@ -28,7 +28,8 @@ class TokenResolver @Inject()(userRepository: UserRepository, jwtAuthService: Jw
       for {
         tokenContent <- jwtAuthService.decodeContent(refreshToken).asFuture
         user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(
-          s"User with id: [${tokenContent.id}] not found.")
+          s"User with id: [${tokenContent.id}] not found."
+        )
         _ <- jwtAuthService.decodeRefreshToken(refreshToken, user.password).asFuture
         accessToken = jwtAuthService.createAccessToken(JwtContent(tokenContent.id))
         refreshToken = jwtAuthService.createRefreshToken(JwtContent(tokenContent.id), user.password)

@@ -12,11 +12,13 @@ object FileMetadataJsonProtocol extends DefaultJsonProtocol {
 
   implicit object FileMetadataFormat extends RootJsonFormat[FileMetadata] {
     def write(response: FileMetadata) =
-      JsArray(JsNumber(response.id.get),
-              JsString(response.name),
-              JsString(response.contentType),
-              JsNumber(response.size),
-              JsString(response.path))
+      JsArray(
+        JsNumber(response.id.get),
+        JsString(response.name),
+        JsString(response.contentType),
+        JsNumber(response.size),
+        JsString(response.path)
+      )
 
     def read(value: JsValue): FileMetadata = value.asJsObject.getFields("id", "name", "type", "size", "path") match {
       case Seq(JsNumber(id), JsString(name), JsString(contentType), JsNumber(size), JsString(path)) =>

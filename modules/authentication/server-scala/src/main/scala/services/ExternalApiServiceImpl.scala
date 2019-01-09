@@ -10,7 +10,8 @@ class ExternalApiServiceImpl extends ExternalApiService {
 
   def getUserInfo[T](code: String, userInfoUrl: String, service: OAuth20Service)(
       implicit formatter: RootJsonFormat[T],
-      executionContext: ExecutionContext): Future[T] =
+      executionContext: ExecutionContext
+  ): Future[T] =
     for {
       oauthAccessToken <- Future(service.getAccessToken(code))
       request = new OAuthRequest(Verb.GET, userInfoUrl)

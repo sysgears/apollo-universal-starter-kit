@@ -23,7 +23,8 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnm
   }
 
   implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(
-    ObjectTypeName("ContactPayload"))
+    ObjectTypeName("ContactPayload")
+  )
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(

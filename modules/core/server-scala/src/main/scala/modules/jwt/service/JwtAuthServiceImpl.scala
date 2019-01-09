@@ -20,11 +20,12 @@ import scala.util.Try
   * @param jwtValidator JWT validator
   * @param jwtConfig    JWT configs provider
   */
-class JwtAuthServiceImpl @Inject()(jwtEncoder: JwtEncoder,
-                                   jwtDecoder: JwtDecoder,
-                                   jwtValidator: JwtValidator,
-                                   jwtConfig: JwtConfig)
-  extends JwtAuthService[JwtContent] {
+class JwtAuthServiceImpl @Inject()(
+    jwtEncoder: JwtEncoder,
+    jwtDecoder: JwtDecoder,
+    jwtValidator: JwtValidator,
+    jwtConfig: JwtConfig
+) extends JwtAuthService[JwtContent] {
 
   /** @inheritdoc */
   override def createAccessToken(content: JwtContent): String =

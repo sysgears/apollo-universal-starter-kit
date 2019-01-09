@@ -3,9 +3,11 @@ package common.routes.graphql.jsonProtocols
 import common.routes.graphql.jsonProtocols.OperationMessageType.OperationMessageType
 import spray.json.{DefaultJsonProtocol, DeserializationException, JsObject, JsString, JsValue, JsonFormat}
 
-case class OperationMessage(operationType: OperationMessageType,
-                            id: Option[String] = None,
-                            payload: Option[JsValue] = None)
+case class OperationMessage(
+    operationType: OperationMessageType,
+    id: Option[String] = None,
+    payload: Option[JsValue] = None
+)
 
 object OperationMessageType extends Enumeration {
   type OperationMessageType = Value

@@ -17,10 +17,11 @@ import scala.concurrent.ExecutionContext
 /**
   * Defines the graphQl scheme for working with the 'Item' objects in a paginated form.
   */
-class ItemSchema @Inject()(implicit val materializer: ActorMaterializer,
-                           actorSystem: ActorSystem,
-                           executionContext: ExecutionContext)
-  extends InputUnmarshallerGenerator
+class ItemSchema @Inject()(
+    implicit val materializer: ActorMaterializer,
+    actorSystem: ActorSystem,
+    executionContext: ExecutionContext
+) extends InputUnmarshallerGenerator
   with Logger {
 
   implicit val paginationInputUnmarshaller: FromInput[PaginationParams] = inputUnmarshaller {

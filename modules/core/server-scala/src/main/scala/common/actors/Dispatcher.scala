@@ -16,12 +16,14 @@ object Dispatcher extends ActorNamed {
 
   final val name = "Dispatcher"
 
-  final case class DispatcherMessage(input: Any,
-                                     context: UserContext,
-                                     replyTo: ActorRef,
-                                     resolverActor: ActorRef,
-                                     before: List[ActorRef] = Nil,
-                                     after: List[ActorRef] = Nil)
+  final case class DispatcherMessage(
+      input: Any,
+      context: UserContext,
+      replyTo: ActorRef,
+      resolverActor: ActorRef,
+      before: List[ActorRef] = Nil,
+      after: List[ActorRef] = Nil
+  )
 
   final case class InterceptorBeforeMessage(input: Any, context: UserContext, before: List[ActorRef])
 

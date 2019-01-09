@@ -14,9 +14,11 @@ object CertificateAuthTable extends JdbcProfile {
     def id = column[Int]("ID", O.PrimaryKey)
 
     def userFk =
-      foreignKey("CERTIFICATE_AUTH_USER_ID_FK", id, TableQuery[UserTable])(_.id,
-                                                                           onUpdate = ForeignKeyAction.Restrict,
-                                                                           onDelete = ForeignKeyAction.Cascade)
+      foreignKey("CERTIFICATE_AUTH_USER_ID_FK", id, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade
+      )
 
     def serial = column[String]("SERIAL")
 

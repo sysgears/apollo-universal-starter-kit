@@ -28,13 +28,15 @@ object AuthenticationResolver extends ActorNamed {
   final val name = "AuthenticationResolver"
 }
 
-class AuthenticationResolver @Inject()(userRepository: UserRepository,
-                                       jwtAuthService: JwtAuthService[JwtContent],
-                                       mailService: MailService[Message, MailPayload],
-                                       messageTemplateService: MessageTemplateService,
-                                       mailConfig: MailConfig,
-                                       authConfig: AuthConfig,
-                                       appConfig: AppConfig)(implicit executionContext: ExecutionContext)
+class AuthenticationResolver @Inject()(
+    userRepository: UserRepository,
+    jwtAuthService: JwtAuthService[JwtContent],
+    mailService: MailService[Message, MailPayload],
+    messageTemplateService: MessageTemplateService,
+    mailConfig: MailConfig,
+    authConfig: AuthConfig,
+    appConfig: AppConfig
+)(implicit executionContext: ExecutionContext)
   extends Actor
   with ActorLogging {
 
@@ -49,7 +51,8 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
               role = "user",
               isActive = skipConfirmation,
               password = BCrypt.hashpw(input.password, BCrypt.gensalt)
-            ))
+            )
+          )
           .run
         mailingResult <- if (!skipConfirmation) {
           mailService.send(
@@ -57,7 +60,8 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
               createdUser,
               appConfig.name,
               mailConfig.address,
-              appConfig.url + "/confirmation/" + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get)))
+              appConfig.url + "/confirmation/" + jwtAuthService.createAccessToken(JwtContent(createdUser.id.get))
+            )
           )
         } else Future.successful(MailPayload())
       } yield UserPayload(Some(createdUser), mailingResult.errors)
@@ -77,17 +81,20 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
     case input: ResendConfirmationMessageInput => {
       for {
         user <- userRepository.findByUsernameOrEmail(input.usernameOrEmail).run failOnNone NotFound(
-          s"User with username or email: [${input.usernameOrEmail}] not found.")
+          s"User with username or email: [${input.usernameOrEmail}] not found."
+        )
         _ <- if (!user.isActive) Future.successful()
         else Future.failed(AlreadyExists(s"User with id: [${user.id}] is active"))
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful()
         else Future.failed(Unauthenticated())
         accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         mailingResult <- mailService.send(
-          messageTemplateService.createConfirmRegistrationMessage(user,
-                                                                  appConfig.name,
-                                                                  mailConfig.address,
-                                                                  appConfig.url + "/confirmation/" + accessToken)
+          messageTemplateService.createConfirmRegistrationMessage(
+            user,
+            appConfig.name,
+            mailConfig.address,
+            appConfig.url + "/confirmation/" + accessToken
+          )
         )
       } yield UserPayload(Some(user), mailingResult.errors)
     }.pipeTo(sender)
@@ -95,7 +102,8 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
     case input: LoginUserInput => {
       for {
         user <- userRepository.findByUsernameOrEmail(input.usernameOrEmail).run failOnNone NotFound(
-          s"User with username or email: [${input.usernameOrEmail}] not found.")
+          s"User with username or email: [${input.usernameOrEmail}] not found."
+        )
         _ <- if (BCrypt.checkpw(input.password, user.password)) Future.successful()
         else Future.failed(Unauthenticated())
         accessToken = jwtAuthService.createAccessToken(JwtContent(user.id.get))
@@ -112,13 +120,16 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
     case input: ForgotPasswordInput => {
       for {
         user <- userRepository.findByEmail(input.email).run failOnNone NotFound(
-          s"User with username or email: [${input.email}] not found.")
+          s"User with username or email: [${input.email}] not found."
+        )
         token = jwtAuthService.createAccessToken(JwtContent(user.id.get))
         _ <- mailService.send(
-          messageTemplateService.createRecoverPasswordMessage(user,
-                                                              appConfig.name,
-                                                              mailConfig.address,
-                                                              appConfig.url + "/reset-password/" + token)
+          messageTemplateService.createRecoverPasswordMessage(
+            user,
+            appConfig.name,
+            mailConfig.address,
+            appConfig.url + "/reset-password/" + token
+          )
         )
       } yield token
     }.pipeTo(sender)
@@ -129,12 +140,15 @@ class AuthenticationResolver @Inject()(userRepository: UserRepository,
       else if (input.password.length < authConfig.passwordMinLength)
         Future.successful(
           ResetPayload(
-            Some(FieldError("password", s"Password length must be more than ${authConfig.passwordMinLength}.") :: Nil)))
+            Some(FieldError("password", s"Password length must be more than ${authConfig.passwordMinLength}.") :: Nil)
+          )
+        )
       else
         for {
           tokenContent <- jwtAuthService.decodeAccessToken(input.token).asFuture
           user <- userRepository.findOne(tokenContent.id).run failOnNone NotFound(
-            s"User with id: [${tokenContent.id}] not found.")
+            s"User with id: [${tokenContent.id}] not found."
+          )
           _ <- userRepository.update(user.copy(password = BCrypt.hashpw(input.password, BCrypt.gensalt))).run
         } yield ResetPayload()
     }.pipeTo(sender)

@@ -26,8 +26,8 @@ import scala.util.{Failure, Success}
 
 class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val scheduler: Scheduler,
-    implicit val actorMaterializer: ActorMaterializer)
-  extends RouteUtil {
+    implicit val actorMaterializer: ActorMaterializer
+) extends RouteUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {
@@ -90,8 +90,10 @@ class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit]
             userContext = userCtx,
             queryReducers = List(
               QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-              QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity,
-                                                             (_, _) => new Exception("maxQueryComplexity"))
+              QueryReducer.rejectComplexQueries[UserContext](
+                graphQL.maxQueryComplexity,
+                (_, _) => new Exception("maxQueryComplexity")
+              )
             ),
             middleware = List(
               BatchExecutor.OperationNameExtension

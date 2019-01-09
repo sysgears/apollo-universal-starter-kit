@@ -22,8 +22,8 @@ import scala.util.{Failure, Success}
 
 class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
     implicit val actorMaterializer: ActorMaterializer,
-    implicit val scheduler: Scheduler)
-  extends RouteUtil {
+    implicit val scheduler: Scheduler
+) extends RouteUtil {
 
   import spray.json.DefaultJsonProtocol._
 
@@ -53,7 +53,8 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   }
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)(
-      implicit queue: SourceQueueWithComplete[Message]): Unit = {
+      implicit queue: SourceQueueWithComplete[Message]
+  ): Unit = {
     import sangria.streaming.akkaStreams._
     operationMessage.payload.foreach {
       payload =>
@@ -81,7 +82,8 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                     GQL_ERROR,
                     operationMessage.id,
                     Some(s"Unsupported type: ${queryAst.operationType(None)}".toJson)
-                  ))
+                  )
+                )
             }
           case Failure(e: SyntaxError) =>
             reply(
@@ -89,14 +91,16 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                 GQL_ERROR,
                 operationMessage.id,
                 Some(syntaxError(e))
-              ))
+              )
+            )
           case Failure(_) =>
             reply(
               OperationMessage(
                 GQL_ERROR,
                 operationMessage.id,
                 Some("Internal Server Error".toJson)
-              ))
+              )
+            )
         }
     }
   }

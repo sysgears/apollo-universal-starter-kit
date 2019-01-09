@@ -14,8 +14,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 class EtherealMailService @Inject()(@Named(MailActor.name) mailActor: ActorRef, @Named("ethereal") mailer: Mailer)(
     implicit executionContext: ExecutionContext,
-    materializer: ActorMaterializer)
-  extends MailService[Message, MailPayload]
+    materializer: ActorMaterializer
+) extends MailService[Message, MailPayload]
   with ActorMessageDelivering {
 
   override def send(message: Message): Future[MailPayload] = sendMessageToActor(mailActor, SendMail(message, mailer))

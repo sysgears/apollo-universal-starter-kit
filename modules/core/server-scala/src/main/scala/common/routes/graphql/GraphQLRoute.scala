@@ -24,7 +24,8 @@ class GraphQLRoute(
     httpHandler: HttpHandler,
     session: JWTSessionImpl,
     webSocketHandler: WebSocketHandler,
-    graphQL: GraphQL)(implicit val executionContext: ExecutionContext, actorMaterializer: ActorMaterializer) {
+    graphQL: GraphQL
+)(implicit val executionContext: ExecutionContext, actorMaterializer: ActorMaterializer) {
 
   val routes: Route =
     path("graphql") {
@@ -64,8 +65,12 @@ class GraphQLRoute(
                                 val filesMap = files.asJson.convertTo[Map[String, List[String]]]
                                 val formDataParts: Source[FormData.BodyPart, Any] =
                                   formData.parts.filter(part => filesMap.keySet.contains(part.name))
-                                onComplete(httpHandler.handleQuery(graphQLMessage.asJson.convertTo[GraphQLMessage],
-                                                                   userCtx.copy(filesData = formDataParts))) {
+                                onComplete(
+                                  httpHandler.handleQuery(
+                                    graphQLMessage.asJson.convertTo[GraphQLMessage],
+                                    userCtx.copy(filesData = formDataParts)
+                                  )
+                                ) {
                                   response: Try[ToResponseMarshallable] =>
                                     session.withChanges(maybeSession, userCtx.session) {
                                       complete(response)
@@ -89,5 +94,6 @@ class GraphQLRoute(
     mapResponseHeaders(
       _ ++
         userCtx.newHeaders.toList ++
-        userCtx.newCookies.toList.map(`Set-Cookie`(_)))(ctxToRoute(userCtx))
+        userCtx.newCookies.toList.map(`Set-Cookie`(_))
+    )(ctxToRoute(userCtx))
 }

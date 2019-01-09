@@ -26,28 +26,32 @@ import sangria.schema.{
 
 import scala.concurrent.ExecutionContext
 
-class AuthenticationSchema @Inject()(authConfig: AuthConfig,
-                                     userProfileRepository: UserProfileRepository,
-                                     facebookAuthRepo: FacebookAuthRepository,
-                                     googleAuthRepository: GoogleAuthRepository,
-                                     githubAuthRepository: GithubAuthRepository,
-                                     linkedinAuthRepository: LinkedinAuthRepository,
-                                     certificateAuthRepository: CertificateAuthRepository,
-                                     userSchema: UserSchema)(implicit actorSystem: ActorSystem,
-                                                             materializer: ActorMaterializer,
-                                                             executionContext: ExecutionContext)
+class AuthenticationSchema @Inject()(
+    authConfig: AuthConfig,
+    userProfileRepository: UserProfileRepository,
+    facebookAuthRepo: FacebookAuthRepository,
+    googleAuthRepository: GoogleAuthRepository,
+    githubAuthRepository: GithubAuthRepository,
+    linkedinAuthRepository: LinkedinAuthRepository,
+    certificateAuthRepository: CertificateAuthRepository,
+    userSchema: UserSchema
+)(implicit actorSystem: ActorSystem, materializer: ActorMaterializer, executionContext: ExecutionContext)
   extends InputUnmarshallerGenerator
   with Logger {
 
   val registerUserInput: InputObjectType[RegisterUserInput] = deriveInputObjectType(
-    InputObjectTypeName("RegisterUserInput"))
+    InputObjectTypeName("RegisterUserInput")
+  )
   val confirmRegistrationInput: InputObjectType[ConfirmRegistrationInput] = deriveInputObjectType(
-    InputObjectTypeName("ConfirmRegistrationInput"))
+    InputObjectTypeName("ConfirmRegistrationInput")
+  )
   val resendConfirmationMessageInput: InputObjectType[ResendConfirmationMessageInput] = deriveInputObjectType(
-    InputObjectTypeName("ResendConfirmationMessageInput"))
+    InputObjectTypeName("ResendConfirmationMessageInput")
+  )
 
   implicit val certificateAuth: ObjectType[UserContext, CertificateAuth] = deriveObjectType(
-    ObjectTypeName("CertificateAuth"))
+    ObjectTypeName("CertificateAuth")
+  )
 
   implicit val facebookAuth: ObjectType[UserContext, FacebookAuth] =
     deriveObjectType(ObjectTypeName("FacebookAuth"), ExcludeFields("userId"), RenameField("id", "fbId"))
@@ -68,9 +72,11 @@ class AuthenticationSchema @Inject()(authConfig: AuthConfig,
   val authPayload: ObjectType[UserContext, AuthPayload] = deriveObjectType(ObjectTypeName("AuthPayload"))
   implicit val tokens: ObjectType[UserContext, Tokens] = deriveObjectType(ObjectTypeName("Tokens"))
   val forgotPasswordInput: InputObjectType[ForgotPasswordInput] = deriveInputObjectType(
-    InputObjectTypeName("ForgotPasswordInput"))
+    InputObjectTypeName("ForgotPasswordInput")
+  )
   val resetPasswordInput: InputObjectType[ResetPasswordInput] = deriveInputObjectType(
-    InputObjectTypeName("ResetPasswordInput"))
+    InputObjectTypeName("ResetPasswordInput")
+  )
   val resetPayload: ObjectType[UserContext, ResetPayload] = deriveObjectType(ObjectTypeName("ResetPayload"))
   implicit val userPayload: ObjectType[UserContext, UserPayload] = deriveObjectType(ObjectTypeName("UserPayload"))
 

@@ -54,8 +54,8 @@ trait ModuleApp extends App with AppInitialization {
     schema = graphQL.schema,
     queryReducers = List(
       QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-      QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity,
-                                                     (_, _) => new Exception("maxQueryComplexity"))
+      QueryReducer
+        .rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
     )
   )
 }

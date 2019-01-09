@@ -14,9 +14,11 @@ object UserProfileTable extends JdbcProfile {
     def id = column[Int]("ID", O.PrimaryKey)
 
     def userFk =
-      foreignKey("PROFILE_USER_ID_FK", id, TableQuery[UserTable])(_.id,
-                                                                  onUpdate = ForeignKeyAction.Restrict,
-                                                                  onDelete = ForeignKeyAction.Cascade)
+      foreignKey("PROFILE_USER_ID_FK", id, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade
+      )
 
     def firstName = column[String]("FIRST_NAME")
 

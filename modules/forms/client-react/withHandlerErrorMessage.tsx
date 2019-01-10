@@ -1,15 +1,13 @@
 import React, { ComponentType } from 'react';
-import { FieldError } from '@module/validation-common-react';
+import { FieldError, Errors } from '@module/validation-common-react';
 
-export type HandleError = (
-  asyncCallback: () => Promise<{ errors: Array<{ field: string; message: string }> }>,
-  errorMsg: string
-) => Promise<{ errors: Array<{ field: string; message: string }> }>;
-export type WithHandlerErrorMessage = (Component: ComponentType) => ComponentType;
-export type AsyncCallback = () => Promise<{
-  errors: Array<{ field: string; message: string }>;
-  user: { [key: string]: any };
-}>;
+type PromiseObject = Promise<{ errors: Errors }>;
+
+type AsyncCallback = () => PromiseObject;
+
+type WithHandlerErrorMessage = (Component: ComponentType) => ComponentType;
+
+export type HandleError = (asyncCallback: AsyncCallback, errorMsg: string) => PromiseObject;
 
 export const withHandlerErrorMessage: WithHandlerErrorMessage = (Component: ComponentType) => {
   const handleError: HandleError = async (asyncCallback: AsyncCallback, errorMsg: string) => {

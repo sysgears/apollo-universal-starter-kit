@@ -7,7 +7,10 @@ import i18n from 'i18next';
  * @param value
  * @return {undefined | string}
  */
-export const required = (value: any) => (value ? undefined : i18n.t('validation:required'));
+export const required = (value: any) => {
+  const trim = (field: any) => (typeof field === 'string' ? field.trim() : field);
+  return trim(value) ? undefined : i18n.t('validation:required');
+};
 
 /**
  * Validates if the value matches a particular value.

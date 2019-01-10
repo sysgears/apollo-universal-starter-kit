@@ -20,8 +20,8 @@
   },
 
   "post": {
-    "title": "Edit post",
-    "meta": "Edit post example page",
+    "title": "Edit Post",
+    "meta": "An Edit Post page example",
     "loadMsg": "Loading...",
     "noPostsMsg": "There are no posts yet.",
     "btn": {
@@ -43,7 +43,7 @@
 
   "list": {
     "title": "Posts",
-    "meta": "List of all posts example page",
+    "meta": "A List of All Posts page example",
     "column": {
       "title": "Title",
       "actions": "Actions"
@@ -53,6 +53,6 @@
       "del": "Delete",
       "more": "Load more ..."
     },
-    "subTitle": "Post list"
+    "subTitle": "Post List"
   }
 }

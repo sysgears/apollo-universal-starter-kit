@@ -3,10 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import counters from './counters';
 import ClientModule from '@module/module-client-angular';
+import { LookModule } from '@module/look-client-angular';
 import { CounterComponent } from './containers/Counter';
 
 @NgModule({
-  imports: [CommonModule, ...counters.counterModule],
+  imports: [CommonModule, LookModule, ...counters.counterModule],
   declarations: [CounterComponent],
   exports: [...counters.counterModule]
 })

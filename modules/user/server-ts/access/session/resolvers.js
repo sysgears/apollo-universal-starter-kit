@@ -2,9 +2,7 @@ import { writeSession } from './sessions';
 import User from '../../sql';
 import settings from '../../../../../settings';
 
-const LOGOUT_FROM_ALL_DEVICES = 'logout_from_all_devices_sub';
-
-export default pubsub => ({
+export default () => ({
   Mutation: {
     logout(obj, args, { req }) {
       const session = { ...req.session };
@@ -18,12 +16,6 @@ export default pubsub => ({
 
       if (!settings.user.auth.access.jwt.enabled) {
         await User.increaseAuthSalt(session.userId);
-        pubsub.publish(LOGOUT_FROM_ALL_DEVICES, {
-          logoutFromAllDevicesSub: {
-            mutation: 'LOGOUT_FROM_ALL_DEVICES',
-            userId: session.userId
-          }
-        });
       }
 
       delete session.userId;

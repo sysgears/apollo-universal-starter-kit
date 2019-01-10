@@ -1,7 +1,0 @@
-subscription logoutFromAllDevicesSub($userId: Int) {
-  logoutFromAllDevicesSub(userId: $userId) {
-    mutation
-    userId
-    currentUser
-  }
-}

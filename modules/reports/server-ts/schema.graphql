@@ -1,3 +1,5 @@
+scalar ReportFile
+
 # Report
 type Report {
   id: Int!
@@ -11,4 +13,6 @@ extend type Query {
   report(id: Int!): Report
   #Reporst
   reports: [Report]
+  #getReport
+  getReport: ReportFile
 }

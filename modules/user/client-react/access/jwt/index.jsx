@@ -99,6 +99,7 @@ const JWTLink = getApolloClient =>
                         await saveTokens({ accessToken, refreshToken });
                       } catch (e) {
                         await removeTokens();
+                        await apolloClient.cache.reset();
                       }
                     } else {
                       await removeTokens();

@@ -13,6 +13,7 @@ import scala.collection.JavaConverters._
   * after any other service, that depends on ENV variables.</i>
   */
 object SysEnvExtender {
+
   /**
     * Appends the environment variables from the given Map to a "sys.env".
     *

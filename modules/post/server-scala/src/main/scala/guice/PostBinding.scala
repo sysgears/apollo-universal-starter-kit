@@ -31,5 +31,6 @@ class PostBinding extends ScalaModule with GuiceActorRefProvider {
   def actorPost(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(PostResolver)
 
   @Provides
-  def postRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[Post, Int] = new PostRepository(driver)
+  def postRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[Post, Int] =
+    new PostRepository(driver)
 }

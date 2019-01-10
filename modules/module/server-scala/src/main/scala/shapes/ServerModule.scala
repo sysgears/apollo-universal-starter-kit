@@ -4,7 +4,8 @@ import com.google.inject.util.Modules.combine
 import shapes.graphql.GraphQLShape
 import shapes.slick.SlickSchemaShape
 
-class ServerModule[Ctx, SchemaInitializer](modules: Seq[ServerModule[Ctx, SchemaInitializer]] = Seq.empty) extends GraphQLShape[Ctx, Unit]
+class ServerModule[Ctx, SchemaInitializer](modules: Seq[ServerModule[Ctx, SchemaInitializer]] = Seq.empty)
+  extends GraphQLShape[Ctx, Unit]
   with SlickSchemaShape[SchemaInitializer]
   with AkkaRouteShape
   with GuiceBindingShape {

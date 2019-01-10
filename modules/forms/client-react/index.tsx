@@ -1,2 +1,2 @@
-export * from './formikMessageHandler';
+export * from './withHandlerErrorMessage';
 export { default as FieldAdapter } from './FieldAdapter';

@@ -5,7 +5,7 @@ import { translate } from '@module/i18n-client-react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import { formikMessageHandler } from '@module/forms-client-react';
+import { withHandlerErrorMessage } from '@module/forms-client-react';
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
@@ -30,7 +30,7 @@ class Register extends React.Component {
 
 const RegisterWithApollo = compose(
   translate('user'),
-  formikMessageHandler,
+  withHandlerErrorMessage,
   graphql(REGISTER, {
     props: ({ mutate }) => ({
       register: async ({ username, email, password }) => {

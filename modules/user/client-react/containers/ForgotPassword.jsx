@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { formikMessageHandler } from '@module/forms-client-react';
+import { withHandlerErrorMessage } from '@module/forms-client-react';
 
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
@@ -30,7 +30,7 @@ class ForgotPassword extends React.Component {
 
 const ForgotPasswordWithApollo = compose(
   translate('user'),
-  formikMessageHandler,
+  withHandlerErrorMessage,
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {

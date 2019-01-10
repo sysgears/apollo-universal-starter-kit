@@ -3,7 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
 
-import { formikMessageHandler } from '@module/forms-client-react';
+import { withHandlerErrorMessage } from '@module/forms-client-react';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
@@ -45,7 +45,7 @@ class UserAdd extends React.Component {
 
 export default compose(
   translate('user'),
-  formikMessageHandler,
+  withHandlerErrorMessage,
   graphql(ADD_USER, {
     props: ({ mutate }) => ({
       addUser: async input => {

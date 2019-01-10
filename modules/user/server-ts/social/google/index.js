@@ -1,5 +1,5 @@
 import { pick } from 'lodash';
-import { AuthModule } from '@module/authentication-server-ts/social';
+import AuthModule from '@module/authentication-server-ts/social/AuthModule';
 import { onAuthenticationSuccess } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';

@@ -1,4 +1,4 @@
-import { AuthModule } from '@module/authentication-server-ts/social';
+import AuthModule from '@module/authentication-server-ts/social/AuthModule';
 import facebook, { facebookData } from './facebook';
 import github, { githubData } from './github';
 import google, { googleData } from './google';

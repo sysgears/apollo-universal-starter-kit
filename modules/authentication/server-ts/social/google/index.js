@@ -1,7 +1,7 @@
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
 import settings from '../../../../../settings';
-import { AuthModule } from '../AuthModule';
+import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.google;
 

@@ -9,4 +9,4 @@ class AuthModule extends ServerModule {
   }
 }
 
-export { AuthModule };
+export default AuthModule;

@@ -3,7 +3,7 @@ import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
 
-import { withHandlerErrorMessage } from '@module/forms-client-react';
+import { withFormErrorHandler } from '@module/forms-client-react';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
@@ -16,7 +16,7 @@ class UserAdd extends React.Component {
   }
 
   onSubmit = async values => {
-    const { addUser, t, history, navigation, handleError } = this.props;
+    const { addUser, t, history, navigation, handleFormErrors } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -28,7 +28,7 @@ class UserAdd extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    await handleError(() => addUser(userValues), t('userAdd.errorMsg'));
+    await handleFormErrors(() => addUser(userValues), t('userAdd.errorMsg'));
 
     if (history) {
       return history.push('/users/');
@@ -45,7 +45,7 @@ class UserAdd extends React.Component {
 
 export default compose(
   translate('user'),
-  withHandlerErrorMessage,
+  withFormErrorHandler,
   graphql(ADD_USER, {
     props: ({ mutate }) => ({
       addUser: async input => {

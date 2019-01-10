@@ -5,16 +5,16 @@ import { translate } from '@module/i18n-client-react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import { withHandlerErrorMessage } from '@module/forms-client-react';
+import { withFormErrorHandler } from '@module/forms-client-react';
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
 class Register extends React.Component {
   onSubmit = async values => {
-    const { t, register, history, navigation, handleError } = this.props;
+    const { t, register, history, navigation, handleFormErrors } = this.props;
 
-    await handleError(() => register(values), t('reg.errorMsg'));
+    await handleFormErrors(() => register(values), t('reg.errorMsg'));
 
     if (history) {
       history.push('/profile');
@@ -30,7 +30,7 @@ class Register extends React.Component {
 
 const RegisterWithApollo = compose(
   translate('user'),
-  withHandlerErrorMessage,
+  withFormErrorHandler,
   graphql(REGISTER, {
     props: ({ mutate }) => ({
       register: async ({ username, email, password }) => {

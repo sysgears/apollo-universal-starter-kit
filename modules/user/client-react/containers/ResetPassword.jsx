@@ -1,16 +1,16 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { withHandlerErrorMessage } from '@module/forms-client-react';
+import { withFormErrorHandler } from '@module/forms-client-react';
 
 import ResetPasswordView from '../components/ResetPasswordView';
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 class ResetPassword extends React.Component {
   onSubmit = async values => {
-    const { t, resetPassword, history, handleError } = this.props;
+    const { t, resetPassword, history, handleFormErrors } = this.props;
 
-    await handleError(
+    await handleFormErrors(
       () => resetPassword({ ...values, token: this.props.match.params.token }),
       t('resetPass.errorMsg')
     );
@@ -25,7 +25,7 @@ class ResetPassword extends React.Component {
 
 const ResetPasswordWithApollo = compose(
   translate('user'),
-  withHandlerErrorMessage,
+  withFormErrorHandler,
   graphql(RESET_PASSWORD, {
     props: ({ mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {

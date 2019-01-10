@@ -1,3 +1,5 @@
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
+
 lazy val contact = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*)
 
 lazy val modules = List(
@@ -6,3 +8,5 @@ lazy val modules = List(
 )
 
 parallelExecution in test := false
+scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

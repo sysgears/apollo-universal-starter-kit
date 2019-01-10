@@ -1,4 +1,3 @@
 package model
 
-case class PostEdges(node: Post,
-                     cursor: Int)
+case class PostEdges(node: Post, cursor: Int)

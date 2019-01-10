@@ -17,8 +17,11 @@ trait GraphQL {
   lazy val schema: Schema[UserContext, Unit] = serverModule.extensions.foldLeft(
     sangria.schema.Schema(
       query = if (serverModule.queries.nonEmpty) ObjectType("Query", serverModule.queries.toList) else dummy,
-      mutation = if (serverModule.mutations.nonEmpty) Some(ObjectType("Mutation", serverModule.mutations.toList)) else None,
-      subscription = if (serverModule.subscriptions.nonEmpty) Some(ObjectType("Subscription", serverModule.subscriptions.toList)) else None
+      mutation =
+        if (serverModule.mutations.nonEmpty) Some(ObjectType("Mutation", serverModule.mutations.toList)) else None,
+      subscription =
+        if (serverModule.subscriptions.nonEmpty) Some(ObjectType("Subscription", serverModule.subscriptions.toList))
+        else None
     )
   )((schema, extension) => schema.extend(extension.document, extension.builder))
 }

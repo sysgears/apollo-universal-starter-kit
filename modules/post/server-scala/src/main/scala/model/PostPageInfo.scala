@@ -1,4 +1,3 @@
 package model
 
-case class PostPageInfo(endCursor: Int,
-                        hasNextPage: Boolean)
+case class PostPageInfo(endCursor: Int, hasNextPage: Boolean)

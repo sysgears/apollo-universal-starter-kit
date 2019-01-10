@@ -13,7 +13,12 @@ object CertificateAuthTable extends JdbcProfile {
   class CertificateAuthTable(tag: Tag) extends SlickTable[CertificateAuth](tag, name) with Keyed[Int] {
     def id = column[Int]("ID", O.PrimaryKey)
 
-    def userFk = foreignKey("CERTIFICATE_AUTH_USER_ID_FK", id, TableQuery[UserTable])(_.id, onUpdate = ForeignKeyAction.Restrict, onDelete = ForeignKeyAction.Cascade)
+    def userFk =
+      foreignKey("CERTIFICATE_AUTH_USER_ID_FK", id, TableQuery[UserTable])(
+        _.id,
+        onUpdate = ForeignKeyAction.Restrict,
+        onDelete = ForeignKeyAction.Cascade
+      )
 
     def serial = column[String]("SERIAL")
 

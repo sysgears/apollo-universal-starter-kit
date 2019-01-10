@@ -18,11 +18,12 @@ class PostModule extends ServerModule[UserContext, SchemaInitializer[_]] {
   lazy val postSchemaInitializer: PostSchemaInitializer = inject[PostSchemaInitializer]
   lazy val commentSchemaInitializer: CommentSchemaInitializer = inject[CommentSchemaInitializer]
 
-  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(postSchemaInitializer, commentSchemaInitializer)
+  override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] =
+    mutable.HashSet(postSchemaInitializer, commentSchemaInitializer)
   override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.queries: _*)
   override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.mutations: _*)
-  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(postSchema.subscriptions: _*)
+  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(postSchema.subscriptions: _*)
 
-  bindings = combine(new PostBinding,
-                     new CommentBinding)
+  bindings = combine(new PostBinding, new CommentBinding)
 }

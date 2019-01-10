@@ -7,7 +7,8 @@ import models.FileMetadataTable.FileMetadataTable
 
 import scala.concurrent.ExecutionContext
 
-class FileSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[FileMetadataTable] {
+class FileSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
+  extends SchemaInitializer[FileMetadataTable] {
 
   import driver.api._
 

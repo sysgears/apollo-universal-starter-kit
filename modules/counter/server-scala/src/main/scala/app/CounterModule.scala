@@ -19,7 +19,8 @@ class CounterModule extends ServerModule[UserContext, SchemaInitializer[_]] {
   override lazy val slickSchemas: mutable.HashSet[SchemaInitializer[_]] = mutable.HashSet(counterSchemaInitializer)
   override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.queries: _*)
   override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.mutations: _*)
-  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(counterSchema.subscriptions: _*)
+  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(counterSchema.subscriptions: _*)
 
   bindings = new CounterBinding
 }

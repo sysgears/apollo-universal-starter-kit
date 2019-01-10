@@ -27,13 +27,12 @@ class MailBinding extends ScalaModule with GuiceActorRefProvider {
   @Singleton
   @Named("ethereal")
   def provideMailer(config: Config): Mailer = {
-    val session = (
-      SmtpAddress(
-        config.getString("email.ethereal.host"),
-        config.getInt("email.ethereal.port")
-      )
-        :: SmtpStartTls()
-        :: SessionFactory()).session(
+    val session = (SmtpAddress(
+      config.getString("email.ethereal.host"),
+      config.getInt("email.ethereal.port")
+    )
+      :: SmtpStartTls()
+      :: SessionFactory()).session(
       Some(
         config.getString("email.ethereal.user") -> config.getString("email.ethereal.password")
       )

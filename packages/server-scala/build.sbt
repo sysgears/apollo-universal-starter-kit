@@ -1,3 +1,7 @@
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
+
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
+
 name := "global"
 
 version := "0.1"
@@ -29,3 +33,6 @@ defaultLinuxInstallLocation in Docker := "/usr/local"
 dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 
 mainClass in Compile := Some("Main")
+
+scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

@@ -8,11 +8,11 @@ import { translate } from '@module/i18n-client-react';
 
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '@module/look-client-react-native';
 import { placeholderColor, submit } from '@module/look-client-react-native/styles';
-import { email, minLength, required, match, validate } from '@module/validation-common-react';
+import { email, minLength, required, match, validate, noSpaces } from '@module/validation-common-react';
 import settings from '../../../../settings';
 
 const userFormSchema = {
-  username: [required, minLength(3)],
+  username: [required, minLength(3), noSpaces],
   email: [required, email],
   password: [required, minLength(settings.user.auth.password.minLength)],
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]

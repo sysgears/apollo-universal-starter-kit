@@ -8,8 +8,17 @@ import i18n from 'i18next';
  * @return {undefined | string}
  */
 export const required = (value: any) => {
-  const trim = (field: any) => (typeof field === 'string' ? field.trim() : field);
-  return trim(value) ? undefined : i18n.t('validation:required');
+  return value ? undefined : i18n.t('validation:required');
+};
+
+/**
+ * Validates if the value does not contain spaces.
+ *
+ * @param value
+ * @return {undefined | string}
+ */
+export const noSpaces = (value: string) => {
+  return !value.includes(' ') ? undefined : i18n.t('validation:noSpaces');
 };
 
 /**

@@ -8,5 +8,6 @@
   "minValue": "Must be at least {{ min }}",
   "email": "Invalid email address",
   "alphaNumeric": "Only alphanumeric characters",
-  "phoneNumber": "Invalid phone number, must be 10 digits"
+  "phoneNumber": "Invalid phone number, must be 10 digits",
+  "noSpaces": "Must not contain spaces"
 }

@@ -1,0 +1,17 @@
+import session.CryptoService
+import session.model.Session
+
+class CryptoServiceSpec extends AuthenticationTestHelper {
+
+  val cryptoService: CryptoService = inject[CryptoService]
+
+  "CryptoService" must {
+    "encrypt and decrypt session data correctly" in {
+      val session = Session(id = 43)
+      val encSession = cryptoService.encryptSession(session)
+      val decSession = cryptoService.decryptSession(encSession)
+
+      decSession.get shouldBe session
+    }
+  }
+}

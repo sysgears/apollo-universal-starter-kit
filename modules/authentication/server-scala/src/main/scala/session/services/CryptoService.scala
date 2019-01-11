@@ -1,4 +1,4 @@
-package session
+package session.services
 
 import java.nio.charset.Charset
 import java.security.SecureRandom
@@ -6,8 +6,8 @@ import java.util.Base64
 
 import com.google.inject.Inject
 import config.AuthConfig
-import javax.crypto.{Cipher, Mac, SecretKeyFactory}
 import javax.crypto.spec.{IvParameterSpec, PBEKeySpec, SecretKeySpec}
+import javax.crypto.{Cipher, Mac, SecretKeyFactory}
 import session.model.Session
 import session.model.SessionJsonProtocol._
 import spray.json._

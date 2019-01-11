@@ -1,5 +1,5 @@
-import session.CryptoService
 import session.model.Session
+import session.services.CryptoService
 
 class CryptoServiceSpec extends AuthenticationTestHelper {
 

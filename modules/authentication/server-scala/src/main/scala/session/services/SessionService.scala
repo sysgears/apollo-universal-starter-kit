@@ -1,4 +1,4 @@
-package session
+package session.services
 
 import java.security.SecureRandom
 
@@ -12,7 +12,7 @@ import scala.collection.mutable.ListBuffer
 
 class SessionService @Inject()(cryptoService: CryptoService) {
 
-  def createSession(cookies: ListBuffer[HttpCookie]): Session = {
+  def createSession(cookies: ListBuffer[HttpCookie]): String = {
     val randomBytes = new SecureRandom().generateSeed(16)
     val randomBytesHex = DatatypeConverter.printHexBinary(randomBytes)
     writeSession(cookies, Session(csrfToken = randomBytesHex))
@@ -24,10 +24,11 @@ class SessionService @Inject()(cryptoService: CryptoService) {
       session <- cryptoService.decryptSession(sessionHeader.value)
     } yield session
 
-  def writeSession(cookies: ListBuffer[HttpCookie], session: Session): Session = {
+  def writeSession(cookies: ListBuffer[HttpCookie], session: Session): String = {
+    val encSession = cryptoService.encryptSession(session)
     val sessionCookie = HttpCookie(
       name = "session",
-      value = cryptoService.encryptSession(session),
+      value = encSession,
       httpOnly = true,
       maxAge = Some(7 * 24 * 3600),
       path = Some("/")
@@ -41,6 +42,6 @@ class SessionService @Inject()(cryptoService: CryptoService) {
     )
 
     cookies ++= sessionCookie :: csrfTokenCookie :: Nil
-    session
+    encSession
   }
 }

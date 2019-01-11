@@ -7,5 +7,7 @@
       "server": "Report server"
     }
   },
-  "btn": "Print report"
+  "btn": "Print report",
+  "download": "Download report",
+  "loading": "Loading..."
 }

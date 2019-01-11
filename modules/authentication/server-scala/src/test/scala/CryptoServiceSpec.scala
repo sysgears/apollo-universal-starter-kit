@@ -7,7 +7,7 @@ class CryptoServiceSpec extends AuthenticationTestHelper {
 
   "CryptoService" must {
     "encrypt and decrypt session data correctly" in {
-      val session = Session(id = 43)
+      val session = Session(userId = Some(43), csrfToken = "token")
       val encSession = cryptoService.encryptSession(session)
       val decSession = cryptoService.decryptSession(encSession)
 

@@ -2,8 +2,8 @@ package session.model
 
 import spray.json._
 
-case class Session(id: Int)
+case class Session(userId: Option[Int] = None, csrfToken: String)
 
 object SessionJsonProtocol extends DefaultJsonProtocol {
-  implicit val sessionFormatter = jsonFormat1(Session)
+  implicit val sessionFormatter = jsonFormat2(Session)
 }

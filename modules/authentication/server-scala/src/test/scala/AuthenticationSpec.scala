@@ -54,10 +54,13 @@ class AuthenticationSpec extends AuthenticationTestHelper {
            |}
       """.stripMargin.parseJson.asJsObject
 
-      Post(endpoint,
-        HttpEntity(`application/json`,
+      Post(
+        endpoint,
+        HttpEntity(
+          `application/json`,
           ByteString(GraphQLMessage(registerMutation, None, Some(registerVariables)).toJson.compactPrint)
-        )) ~> routes
+        )
+      ) ~> routes
     }
 
     "register user" in {
@@ -173,7 +176,9 @@ class AuthenticationSpec extends AuthenticationTestHelper {
            |{"input":{"usernameOrEmail":"$testEmail","password":"$testPassword"}}
       """.stripMargin.parseJson.asJsObject
 
-      val graphQLMessage = ByteString(GraphQLMessage(resendConfirmationMessageMutation, None, Some(resendConfirmationMessageVariables)).toJson.compactPrint)
+      val graphQLMessage = ByteString(
+        GraphQLMessage(resendConfirmationMessageMutation, None, Some(resendConfirmationMessageVariables)).toJson.compactPrint
+      )
       val entity = HttpEntity(`application/json`, graphQLMessage)
 
       Post(endpoint, entity) ~> routes ~> check {
@@ -205,7 +210,8 @@ class AuthenticationSpec extends AuthenticationTestHelper {
            |{"input":{"email":"$testEmail"}}
       """.stripMargin.parseJson.asJsObject
 
-      val graphQLMessage = ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)
+      val graphQLMessage =
+        ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)
       val entity = HttpEntity(`application/json`, graphQLMessage)
 
       Post(endpoint, entity) ~> routes ~> check {
@@ -236,7 +242,8 @@ class AuthenticationSpec extends AuthenticationTestHelper {
            |{"input":{"token":"$token", "password": "$testPassword", "passwordConfirmation": "$testPassword"}}
       """.stripMargin.parseJson.asJsObject
 
-      val graphQLMessage = ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)
+      val graphQLMessage =
+        ByteString(GraphQLMessage(forgotPasswordMutation, None, Some(forgotPasswordVariables)).toJson.compactPrint)
       val entity = HttpEntity(`application/json`, graphQLMessage)
 
       Post(endpoint, entity) ~> routes ~> check {

@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { FieldError } from '@module/validation-common-react';
+import { FieldError, noSpaces } from '@module/validation-common-react';
 import { createTransaction } from '@module/database-server-ts';
 
 import settings from '../../../settings';
@@ -77,6 +77,11 @@ export default pubsub => ({
       async (obj, { input }, { User, user, req: { universalCookies }, mailer, req, req: { t } }) => {
         try {
           const e = new FieldError();
+
+          const hasSpaces = noSpaces(input.username);
+          if (hasSpaces) {
+            e.setError('username', hasSpaces);
+          }
 
           const userExists = await User.getUserByUsername(input.username);
           if (userExists) {

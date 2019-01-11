@@ -10,12 +10,12 @@ class User {
     const queryBuilder = knex
       .select(
         'u.id as id',
-        'u.username',
+        'u.username as username',
         'u.role',
         'u.is_active',
-        'u.email',
-        'up.first_name',
-        'up.last_name',
+        'u.email as email',
+        'up.first_name as first_name',
+        'up.last_name as last_name',
         'ca.serial',
         'fa.fb_id',
         'fa.display_name AS fbDisplayName',
@@ -61,10 +61,10 @@ class User {
 
       if (has(filter, 'searchText') && filter.searchText !== '') {
         queryBuilder.where(function() {
-          this.where('u.username', 'like', `%${filter.searchText}%`)
-            .orWhere('u.email', 'like', `%${filter.searchText}%`)
-            .orWhere('up.first_name', 'like', `%${filter.searchText}%`)
-            .orWhere('up.last_name', 'like', `%${filter.searchText}%`);
+          this.where(knex.raw('LOWER(??) LIKE LOWER(?)', ['username', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['email', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['first_name', `%${filter.searchText}%`]))
+            .orWhere(knex.raw('LOWER(??) LIKE LOWER(?)', ['last_name', `%${filter.searchText}%`]));
         });
       }
     }
@@ -148,14 +148,8 @@ class User {
     );
   }
 
-  async register({ username, email, password, role, isActive }) {
-    const passwordHash = await bcrypt.hash(password, 12);
-
-    if (role === undefined) {
-      role = 'user';
-    }
-
-    return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
+  register({ username, email, role = 'user', isActive }, passwordHash) {
+    return knex('user').insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
   }
 
   createFacebookAuth({ id, displayName, userId }) {
@@ -174,31 +168,22 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  async editUser({ id, username, email, role, isActive, password }) {
-    let localAuthInput = { email };
-    if (password) {
-      const passwordHash = await bcrypt.hash(password, 12);
-      localAuthInput = { email, password_hash: passwordHash };
-    }
-
+  editUser({ id, username, email, role, isActive }, passwordHash) {
+    const localAuthInput = passwordHash ? { email, passwordHash } : { email };
     return knex('user')
-      .update({
-        username,
-        role,
-        is_active: isActive,
-        ...localAuthInput
-      })
+      .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
       .where({ id });
   }
 
-  async editUserProfile({ id, profile }) {
-    const userProfile = await knex
-      .select('id')
-      .from('user_profile')
-      .where({ user_id: id })
-      .first();
+  async isUserProfileExists(userId) {
+    return !!(await knex('user_profile')
+      .count('id as count')
+      .where(decamelizeKeys({ userId }))
+      .first()).count;
+  }
 
-    if (userProfile) {
+  editUserProfile({ id, profile }, isExists) {
+    if (isExists) {
       return knex('user_profile')
         .update(decamelizeKeys(profile))
         .where({ user_id: id });

@@ -1,18 +1,15 @@
-
 libraryDependencies ++= Seq(
   "commons-io" % "commons-io" % "2.6"
 )
 
-lazy val pagination = (project in file(".") dependsOn(modules.map(_ % "test->test; compile->compile"): _*))
-  .enablePlugins(BuildInfoPlugin)
-  .settings(
-    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(_.build)),
-    buildInfoPackage := s"paginationSubModules",
-    buildInfoObject := "ModulesInfo"
-  )
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
+
+lazy val pagination = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*)
 
 lazy val modules = List(
   ProjectRef(base = file("../../core/server-scala"), id = "core")
 )
 
 parallelExecution in test := false
+scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

@@ -1,6 +1,6 @@
 package core.guice.bindings
 
-import com.google.inject.Provides
+import com.google.inject.{Provides, Singleton}
 import common.implicits.RichDBIO
 import net.codingwell.scalaguice.ScalaModule
 import slick.basic.DatabaseConfig
@@ -9,13 +9,15 @@ import slick.jdbc.{JdbcBackend, JdbcProfile}
 class DbBinding extends ScalaModule {
 
   override def configure(): Unit = {
-    bind[RichDBIO.type].toInstance(RichDBIO)
+    requestInjection(RichDBIO)
   }
 
   @Provides
+  @Singleton
   def database: JdbcBackend#DatabaseDef = databaseConfig.db
 
   @Provides
+  @Singleton
   def driver: JdbcProfile = databaseConfig.profile
 
   private def databaseConfig = loadConfig("slick.dbs.default")

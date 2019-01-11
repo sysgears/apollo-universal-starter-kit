@@ -30,39 +30,56 @@ trait SchemaInitializer[E <: RelationalProfile#Table[_]] {
   /**
     * Thread pool for operations
     */
-  val context: ExecutionContext
+  implicit val executionContext: ExecutionContext
 
   /**
     * Name of the database table
     */
   val name: String
+
   /**
     * Represents a database table
     */
   val table: TableQuery[E]
 
+  private def withDBAction(f: scala.Vector[MTable] => Future[Unit])(implicit executionContext: ExecutionContext) = {
+    database.run(MTable.getTables(name)).flatMap(f)
+  }
+
   /**
     * Сreates the table
     */
   def create(): Future[Unit] = {
-    database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, seedDatabase(table))) else Future.successful()
-    }(context)
+    withDBAction {
+      tables =>
+        if (tables.isEmpty) database.run(DBIO.seq(table.schema.create)) else Future.successful()
+    }
+  }
+
+  /**
+    * Сreates the table and add an init data
+    */
+  def createAndSeed(): Future[Unit] = {
+    withDBAction {
+      tables =>
+        if (tables.isEmpty) database.run(DBIO.seq(table.schema.create, initData)) else Future.successful()
+    }
   }
 
   /**
     * Drops the table
     */
   def drop(): Future[Unit] = {
-    database.run(MTable.getTables(name)).flatMap {
-      tables => if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
-    }(context)
+    withDBAction {
+      tables =>
+        if (tables.nonEmpty) database.run(DBIO.seq(table.schema.drop)) else Future.successful()
+    }
   }
 
   /**
-    * Override and implement this method to fill the database.
+    * Override and implement this method to prepare init data
     */
-  def seedDatabase(tableQuery: TableQuery[E]): DBIOAction[_, NoStream, Effect.Write] = {
-    DBIO.successful()
+  def initData: DBIOAction[_, NoStream, Effect.Write] = {
+    table ++= Nil
   }
 }

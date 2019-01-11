@@ -1,41 +1,31 @@
 import akka.http.scaladsl.server.Route
 import akka.http.scaladsl.testkit.ScalatestRouteTest
-import com.google.inject.Guice
-import com.typesafe.config.ConfigFactory
 import common.graphql.UserContext
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
-import common.shapes.ServerModule
+import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider
-import core.loader.{ModuleFinder, ScalaModuleFinder}
 import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import org.scalatest._
 import sangria.execution.{Executor, QueryReducer}
-
-import scala.collection.JavaConverters._
+import shapes.ServerModule
 
 trait TestHelper extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
+  with BeforeAndAfterEach
   with BeforeAndAfterAll
   with Matchers
   with MockFactory {
 
-  private val config = ConfigFactory.load
-  private val loadPaths = config.getList("loadPaths").unwrapped.asScala.map(_.toString).toList
-
-  val moduleFinder = ModuleFinder(loadPaths)
-  val scalaModuleFinder = ScalaModuleFinder(moduleFinder)
-  Guice.createInjector(scalaModuleFinder.scalaModules.asJava)
-
   val endpoint: String = "/graphql"
-  implicit val scheduler: Scheduler = inject[Scheduler]
+  lazy implicit val scheduler: Scheduler = inject[Scheduler]
 
   def inject[T: Manifest]: T = InjectorProvider.inject[T]
 
-  def routesWithGraphQLSchema[T <: ServerModule : Manifest]: Route = {
-    val graphQl = new TestGraphQLSchema(inject[T])
+  def routesWithGraphQLSchema(serverModule: ServerModule[UserContext, SchemaInitializer[_]]): Route = {
+    val graphQl = new TestGraphQLSchema(serverModule)
     val graphQlExecutor = Executor(
       schema = graphQl.schema,
       queryReducers = List(

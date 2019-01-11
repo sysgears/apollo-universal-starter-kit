@@ -5,6 +5,6 @@ import net.codingwell.scalaguice.ScalaModule
 
 class InjectorBinding extends ScalaModule {
   override def configure(): Unit = {
-    bind[InjectorProvider.type].toInstance(InjectorProvider)
+    requestInjection(InjectorProvider)
   }
 }

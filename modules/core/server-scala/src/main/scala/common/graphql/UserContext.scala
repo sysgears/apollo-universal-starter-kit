@@ -8,8 +8,10 @@ import modules.session.SessionData
 
 import scala.collection.mutable.ListBuffer
 
-case class UserContext(requestHeaders: List[HttpHeader] = List.empty,
-                       newHeaders: ListBuffer[HttpHeader] = ListBuffer.empty,
-                       newCookies: ListBuffer[HttpCookie] = ListBuffer.empty,
-                       filesData: Source[FormData.BodyPart, Any] = Source.empty,
-                       var session: Option[SessionData] = None)
+case class UserContext(
+    requestHeaders: List[HttpHeader] = List.empty,
+    newHeaders: ListBuffer[HttpHeader] = ListBuffer.empty,
+    newCookies: ListBuffer[HttpCookie] = ListBuffer.empty,
+    filesData: Source[FormData.BodyPart, Any] = Source.empty,
+    var session: Option[SessionData] = None
+)

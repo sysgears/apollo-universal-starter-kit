@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { ApolloConsumer } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { Query } from 'react-apollo';
+import { Button } from '@module/look-client-react';
 import getReport from '../graphql/getReport.graphql';
 
 function getObjectURLFromArray(array) {
@@ -11,27 +12,41 @@ function getObjectURLFromArray(array) {
   return window.URL.createObjectURL(blob);
 }
 
+function openPDF(array) {
+  const url = getObjectURLFromArray(array);
+  window.open(url, '_blank');
+}
+
 @translate('reports')
 class ServerExportPDF extends Component {
   static propTypes = {
     t: PropTypes.func
   };
 
+  state = {
+    isLoading: false
+  };
+
   render() {
     const { t } = this.props;
-    return (
-      <Query query={getReport}>
-        {({ loading, data: { getReport } }) => {
-          if (loading) return null;
-          const pdfURL = getObjectURLFromArray(getReport.data);
 
-          return (
-            <a href={pdfURL} target="_blank" rel="noopener noreferrer">
-              {t('btn')}
-            </a>
-          );
-        }}
-      </Query>
+    return (
+      <ApolloConsumer>
+        {client => (
+          <Button
+            onClick={async () => {
+              this.setState({ isLoading: true });
+              const { data } = await client.query({
+                query: getReport
+              });
+              openPDF(data.getReport.data);
+              this.setState({ isLoading: false });
+            }}
+          >
+            {this.state.isLoading ? t('loading') : t('download')}
+          </Button>
+        )}
+      </ApolloConsumer>
     );
   }
 }

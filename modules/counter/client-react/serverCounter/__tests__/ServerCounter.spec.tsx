@@ -50,17 +50,17 @@ describe('Server counter example UI works', () => {
   });
 
   step('Counter section renders with queries data', () => {
-    content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_VALUE}.`);
   });
 
   step('Clicking on increase counter button shows optimistic response', () => {
     const graphQLButton = find(container, '#graphql-button');
     click(graphQLButton);
-    content.textContent.should.has.string(`Current counter, is ${COUNTER_APOLLO_VALUE + 1}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_VALUE + 1}.`);
   });
 
   step('Section shows GraphQL response when it arrives after button click', () => {
-    content.textContent.should.has.string(`Current counter, is ${INC_COUNTER_VALUE + 1}.`);
+    content.textContent.should.has.string(`The current counter value is ${INC_COUNTER_VALUE + 1}.`);
   });
 
   step('Check subscribed to counter updates', () => {
@@ -74,7 +74,7 @@ describe('Server counter example UI works', () => {
         counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
       }
     });
-    content.textContent.should.has.string(`Current counter, is ${COUNTER_SUBSCRIPTION_VALUE}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_SUBSCRIPTION_VALUE}.`);
   });
 
   step('Unmount section and check unsubscription', () => {

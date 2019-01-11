@@ -4,7 +4,6 @@ import common.graphql.UserContext
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider
-import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
@@ -35,7 +34,7 @@ trait TestHelper extends WordSpec
     )
     val httpHandler = new HttpHandler(graphQl, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQl, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQl)
+    val graphQLRoute = new GraphQLRoute(httpHandler, webSocketHandler, graphQl)
     graphQLRoute.routes
   }
 }

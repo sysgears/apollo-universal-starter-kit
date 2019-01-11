@@ -66,7 +66,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                 graphQlExecutor
                   .execute(
                     queryAst = queryAst,
-                    userContext = UserContext(),
+                    userContext = UserContext(List.empty),
                     root = (),
                     operationName = graphQlMessage.operationName,
                     variables = graphQlMessage.variables.getOrElse(JsObject.empty)

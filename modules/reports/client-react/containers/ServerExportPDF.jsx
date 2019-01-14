@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { ApolloConsumer } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { Button } from '@module/look-client-react';
-import getReport from '../graphql/getReport.graphql';
+import DownloadReportButton from '../components/DownloadReportButton';
+import pdfReport from '../graphql/pdfReport.graphql';
+import excelReport from '../graphql/excelReport.graphql';
 
 function getObjectURLFromArray(array) {
   const buffer = new window.Uint8Array(array);
@@ -17,36 +17,33 @@ function openPDF(array) {
   window.open(url, '_blank');
 }
 
+function downloadFile(array) {
+  const a = document.createElement('a');
+  const url = getObjectURLFromArray(array);
+  const name = 'Report.xlsx';
+
+  document.body.appendChild(a);
+  a.style = 'display: none';
+  a.href = url;
+  a.download = name;
+  a.click();
+  window.URL.revokeObjectURL(url);
+}
+
 @translate('reports')
 class ServerExportPDF extends Component {
   static propTypes = {
     t: PropTypes.func
   };
 
-  state = {
-    isLoading: false
-  };
-
   render() {
     const { t } = this.props;
 
     return (
-      <ApolloConsumer>
-        {client => (
-          <Button
-            onClick={async () => {
-              this.setState({ isLoading: true });
-              const { data } = await client.query({
-                query: getReport
-              });
-              openPDF(data.getReport.data);
-              this.setState({ isLoading: false });
-            }}
-          >
-            {this.state.isLoading ? t('loading') : t('download')}
-          </Button>
-        )}
-      </ApolloConsumer>
+      <Fragment>
+        <DownloadReportButton format="excel" title={t('downloadExcel')} onDataLoad={downloadFile} query={excelReport} />
+        <DownloadReportButton format="pdf" title={t('downloadPDF')} onDataLoad={openPDF} query={pdfReport} />
+      </Fragment>
     );
   }
 }

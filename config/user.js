@@ -51,6 +51,9 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENTSECRET,
       callbackURL: '/auth/google/callback',
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+    },
+    firebase: {
+      enabled: true
     }
   }
 };

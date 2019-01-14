@@ -1,5 +1,6 @@
 import { isApiExternal } from '@module/core-common';
 
+import { AuthenticationError } from 'apollo-server-errors';
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
@@ -28,6 +29,8 @@ const getCurrentUser = async ({ req }) => {
     delete req.session.userId;
     delete req.session.authSalt;
     writeSession(req, req.session);
+
+    throw new AuthenticationError();
   }
   return null;
 };

@@ -29,6 +29,21 @@ export const omitNested = (obj: { [key: string]: any }, paths: string | string[]
 export const removeTypename = (obj: { [key: string]: any }) => omitNested(obj, '__typename');
 
 /**
+ * Error formation from graphQLErrors and error message
+ *
+ * @param graphQLErrors - The source array errors
+ * @param errorMsg - error message for form
+ */
+export const graphQLErrorsFormation = (
+  graphQLErrors: { [key: string]: [{ [key: string]: any }] },
+  errorMsg: string
+) => {
+  if (graphQLErrors.graphQLErrors.length === 1) {
+    return { ...graphQLErrors.graphQLErrors[0].extensions.exception.errors, errorMsg };
+  }
+};
+
+/**
  * Wraps the target object to trace and log all method calls
  *
  * @param {*} obj target object to trace

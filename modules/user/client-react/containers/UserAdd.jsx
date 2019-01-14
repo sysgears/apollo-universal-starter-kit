@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-
+import { graphQLErrorsFormation } from '@module/core-common';
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
 import settings from '../../../../settings';
@@ -29,7 +29,7 @@ class UserAdd extends React.Component {
     try {
       await addUser(userValues);
     } catch (e) {
-      throw { ...e.graphQLErrors[0].extensions.exception.errors, errorMsg: t('userAdd.errorMsg') };
+      throw graphQLErrorsFormation(e, t('userAdd.errorMsg'));
     }
 
     if (history) {

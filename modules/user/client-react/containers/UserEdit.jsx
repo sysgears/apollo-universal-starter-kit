@@ -2,7 +2,7 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-
+import { graphQLErrorsFormation } from '@module/core-common';
 import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
@@ -27,7 +27,7 @@ class UserEdit extends React.Component {
     try {
       await editUser({ id: user.id, ...userValues });
     } catch (e) {
-      throw { ...e.graphQLErrors[0].extensions.exception.errors, errorMsg: t('userEdit.errorMsg') };
+      throw graphQLErrorsFormation(e, t('userEdit.errorMsg'));
     }
 
     if (history) {

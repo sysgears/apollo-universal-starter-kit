@@ -58,7 +58,7 @@ extend type Query {
 
 type UserPayload {
   user: User
-  errors: [FieldError!]
+  #  errors: [FieldError!]
 }
 
 extend type Mutation {

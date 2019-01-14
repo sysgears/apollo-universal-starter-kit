@@ -43,7 +43,7 @@ const withUsersDeleting = Component =>
             return { errors: deleteUser.errors };
           }
         } catch (e) {
-          console.log(e.graphQLErrors);
+          console.error(e);
         }
       }
     })

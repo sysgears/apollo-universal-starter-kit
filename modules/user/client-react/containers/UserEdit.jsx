@@ -2,7 +2,6 @@ import React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { withFormErrorHandler } from '@module/forms-client-react';
 
 import UserEditView from '../components/UserEditView';
 
@@ -13,7 +12,7 @@ import UserFormatter from '../helpers/UserFormatter';
 
 class UserEdit extends React.Component {
   onSubmit = async values => {
-    const { user, editUser, t, handleFormErrors, history, navigation, location } = this.props;
+    const { user, editUser, t, history, navigation, location } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -25,7 +24,11 @@ class UserEdit extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    await handleFormErrors(() => editUser({ id: user.id, ...userValues }), t('userEdit.errorMsg'));
+    try {
+      await editUser({ id: user.id, ...userValues });
+    } catch (e) {
+      throw { ...e.graphQLErrors[0].extensions.exception.errors, errorMsg: t('userEdit.errorMsg') };
+    }
 
     if (history) {
       if (location && location.state && location.state.from === 'profile') {
@@ -46,7 +49,6 @@ class UserEdit extends React.Component {
 
 export default compose(
   translate('user'),
-  withFormErrorHandler,
   graphql(USER_QUERY, {
     options: props => {
       let id = 0;
@@ -61,7 +63,7 @@ export default compose(
       };
     },
     props({ data: { loading, user } }) {
-      const userPayload = user ? { user: user.user, errors: user.errors } : {};
+      const userPayload = user ? { user: user.user } : {};
       return {
         loading,
         ...userPayload

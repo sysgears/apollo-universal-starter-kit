@@ -16,6 +16,11 @@ import ClientModule from '@module/module-client-react';
 import { createApolloClient, createReduxStore } from '@module/core-common';
 import { styles } from '@module/look-client-react';
 
+// For Material UI style render
+import { SheetsRegistry } from 'jss';
+import JssProvider from 'react-jss/lib/JssProvider';
+import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
+
 let assetMap: { [key: string]: string };
 
 interface HtmlProps {
@@ -35,6 +40,18 @@ if (__SSR__) {
   }
 }
 
+// Create a sheetsRegistry instance for Material UI.
+const sheetsRegistry = new SheetsRegistry();
+
+// Create a sheetsManager instance for Material UI.
+const sheetsManager = new Map();
+
+// Create a theme instance for Material UI.
+const theme = createMuiTheme();
+
+// Create a new class name generator for Material UI.
+const generateClassName = createGenerateClassName();
+
 const Html = ({ content, state, css, helmet }: HtmlProps) => (
   <html lang="en" {...helmet.htmlAttributes.toComponent()}>
     <head>
@@ -49,13 +66,18 @@ const Html = ({ content, state, css, helmet }: HtmlProps) => (
       <link rel="manifest" href={`${assetMap['manifest.xjson']}`} />
       <link rel="mask-icon" href={`${assetMap['safari-pinned-tab.svg']}`} color="#5bbad5" />
       <link rel="shortcut icon" href={`${assetMap['favicon.ico']}`} />
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
       <meta name="msapplication-config" content={`${assetMap['browserconfig.xml']}`} />
       <meta name="theme-color" content="#ffffff" />
       {!__DEV__ && <link rel="stylesheet" type="text/css" href={`${assetMap['index.css']}`} />}
       {!!__DEV__ && (
         <style
           dangerouslySetInnerHTML={{
-            __html: styles._getCss() + clientModules.stylesInserts.map((style: any) => style._getCss()).join('')
+            __html:
+              styles._getCss() +
+              clientModules.stylesInserts.map((style: any) => style._getCss()).join('') +
+              sheetsRegistry.toString()
+            // __html: styles._getCss() + clientModules.stylesInserts.map((style: any) => style._getCss()).join('')
           }}
         />
       )}
@@ -99,11 +121,15 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {clientModules.getDataRoot(
-          <StaticRouter location={req.url} context={context}>
-            {clientModules.router}
-          </StaticRouter>
-        )}
+        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
+          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
+            {clientModules.getDataRoot(
+              <StaticRouter location={req.url} context={context}>
+                {clientModules.router}
+              </StaticRouter>
+            )}
+          </MuiThemeProvider>
+        </JssProvider>
       </ApolloProvider>
     </Provider>,
     req

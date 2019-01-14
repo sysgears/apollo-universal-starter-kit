@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '@module/look-client-react';
+import { MUIButton } from '@module/look-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -26,7 +26,7 @@ interface ButtonProps {
 }
 
 export const ReduxCounterButton = ({ onClick, text }: ButtonProps): any => (
-  <Button id="redux-button" color="primary" onClick={onClick}>
+  <MUIButton id="redux-button" color="primary" onClick={onClick}>
     {text}
-  </Button>
+  </MUIButton>
 );

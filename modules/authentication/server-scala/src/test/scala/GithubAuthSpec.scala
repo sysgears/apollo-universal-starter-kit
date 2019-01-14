@@ -4,8 +4,8 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import repositories.{GithubAuthRepository, UserRepository}
 import routes.GithubAuthController
 import services.ExternalApiService

@@ -12,8 +12,8 @@ import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import model.User
 import model.github.{GithubAuth, GithubOauth2Response}
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.{GithubAuthRepository, UserRepository}
 import services.ExternalApiService

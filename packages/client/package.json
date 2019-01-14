@@ -39,6 +39,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
+    "@material-ui/core": "^3.8.3",
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
     "@fortawesome/react-fontawesome": "0.0.18",

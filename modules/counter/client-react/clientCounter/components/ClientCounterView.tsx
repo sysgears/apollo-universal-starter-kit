@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import { ButtonTest } from '@module/look-client-react';
 import { Button } from '@module/look-client-react';
 
 const Section = styled.section`
@@ -26,7 +27,10 @@ interface ButtonProps {
 }
 
 export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button id="apollo-link-button" color="primary" onClick={onClick}>
+  // <Button id="apollo-link-button" color="primary" onClick={onClick}>
+  //   {text}
+  // </Button>
+  <ButtonTest id="apollo-link-button" color="primary" onClick={onClick}>
     {text}
-  </Button>
+  </ButtonTest>
 );

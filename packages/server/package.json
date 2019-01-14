@@ -75,6 +75,7 @@
     "body-parser": "^1.18.3",
     "dotenv": "^5.0.1",
     "error-stack-parser": "^2.0.1",
+    "excel4node": "^1.7.0",
     "express": "^4.16.2",
     "filesize": "^3.5.11",
     "graphql": "^0.13.0",

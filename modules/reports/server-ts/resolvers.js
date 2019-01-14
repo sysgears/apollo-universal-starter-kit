@@ -1,4 +1,5 @@
 import generateBufferPDF from './pdfReport/generateBufferPDF';
+import generateBufferExcel from './excelReport/generateBufferExcel';
 
 export default () => ({
   Query: {
@@ -8,8 +9,13 @@ export default () => ({
     async reports(obj, arg, { Report }) {
       return await Report.reports();
     },
-    getReport() {
-      return generateBufferPDF();
+    async pdfReport(obj, arg, { Report }) {
+      const reports = await Report.reports();
+      return generateBufferPDF(reports);
+    },
+    async excelReport(obj, arg, { Report }) {
+      const reports = await Report.reports();
+      return generateBufferExcel(reports);
     }
   },
   Mutation: {},

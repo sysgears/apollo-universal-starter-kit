@@ -8,6 +8,7 @@
     }
   },
   "btn": "Print report",
-  "download": "Download report",
+  "downloadPDF": "Download PDF report",
+  "downloadExcel": "Download Excel report",
   "loading": "Loading..."
 }

@@ -4,7 +4,6 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { FieldError } from '@module/validation-common-react';
 import { createTransaction } from '@module/database-server-ts';
 import { UserInputError, ApolloError } from 'apollo-server';
 
@@ -34,9 +33,7 @@ export default pubsub => ({
           }
         }
 
-        const e = new FieldError();
-        e.setError('user', t('user:accessDenied'));
-        return { user: null, errors: e.getErrors() };
+        throw new ApolloError(t('user:accessDenied'), 'ACCESS_DENIED');
       }
     ),
     currentUser(obj, args, { User, user }) {

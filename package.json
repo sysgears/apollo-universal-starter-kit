@@ -33,7 +33,9 @@
     "tslint": "tslint --fix -p tsconfig.json -c tslint.json",
     "heroku-postbuild": "lerna run heroku-postbuild --stream",
     "precommit": "lint-staged",
-    "postinstall": "opencollective postinstall"
+    "postinstall": "opencollective postinstall",
+    "compile-rules": "tsc -p ./tools/customRules",
+    "test-rules": "tslint -p ./tools/customRules -r ./tools/customRules/build/rules/ --test ./tools/customRules/test/rules/**/**/tslint.json"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [

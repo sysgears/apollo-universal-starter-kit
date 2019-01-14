@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "types" : ["node","glob"],
+        "declaration": true,
+        "lib": ["es6"],
+        "target": "es5",
+        "outDir": "./build",
+        "rootDir": ".",
+        "module": "commonjs",
+        "strict": true,
+        "pretty": true
+    },
+    "exclude": [
+        "./build",
+        "./test/rules"
+    ]
+}

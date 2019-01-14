@@ -137,14 +137,8 @@ class User {
     );
   }
 
-  async register({ username, email, password, role, isActive }) {
-    const passwordHash = await bcrypt.hash(password, 12);
-
-    if (role === undefined) {
-      role = 'user';
-    }
-
-    return returnId(knex('user')).insert({ username, email, role, password_hash: passwordHash, is_active: !!isActive });
+  register({ username, email, role = 'user', isActive }, passwordHash) {
+    return knex('user').insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
   }
 
   createFacebookAuth({ id, displayName, userId }) {
@@ -163,31 +157,22 @@ class User {
     return returnId(knex('auth_linkedin')).insert({ ln_id: id, display_name: displayName, user_id: userId });
   }
 
-  async editUser({ id, username, email, role, isActive, password }) {
-    let localAuthInput = { email };
-    if (password) {
-      const passwordHash = await bcrypt.hash(password, 12);
-      localAuthInput = { email, password_hash: passwordHash };
-    }
-
+  editUser({ id, username, email, role, isActive }, passwordHash) {
+    const localAuthInput = passwordHash ? { email, passwordHash } : { email };
     return knex('user')
-      .update({
-        username,
-        role,
-        is_active: isActive,
-        ...localAuthInput
-      })
+      .update(decamelizeKeys({ username, role, isActive, ...localAuthInput }))
       .where({ id });
   }
 
-  async editUserProfile({ id, profile }) {
-    const userProfile = await knex
-      .select('id')
-      .from('user_profile')
-      .where({ user_id: id })
-      .first();
+  async isUserProfileExists(userId) {
+    return !!(await knex('user_profile')
+      .count('id as count')
+      .where(decamelizeKeys({ userId }))
+      .first()).count;
+  }
 
-    if (userProfile) {
+  editUserProfile({ id, profile }, isExists) {
+    if (isExists) {
       return knex('user_profile')
         .update(decamelizeKeys(profile))
         .where({ user_id: id });

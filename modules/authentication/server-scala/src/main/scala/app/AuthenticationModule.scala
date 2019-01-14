@@ -3,8 +3,9 @@ package app
 import common.graphql.UserContext
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
-import graphql.schema.{AuthenticationSchema, TokenSchema}
+import graphql.schema.AuthenticationSchema
 import guice.AuthenticationBinding
+import jwt.graphql.schema.JwtSchema
 import repositories._
 import sangria.schema.Field
 import shapes.ServerModule
@@ -15,7 +16,7 @@ import scala.collection.mutable
 class AuthenticationModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val authenticationSchema: AuthenticationSchema = inject[AuthenticationSchema]
-  lazy val tokenSchema: TokenSchema = inject[TokenSchema]
+  lazy val tokenSchema: JwtSchema = inject[JwtSchema]
   lazy val facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer = inject[FacebookAuthSchemaInitializer]
   lazy val githubAuthSchemaInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]
   lazy val googleAuthSchemaInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
@@ -29,8 +30,12 @@ class AuthenticationModule extends ServerModule[UserContext, SchemaInitializer[_
     linkedinAuthSchemaInitializer,
     certificateAuthSchemaInitializer
   )
-  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(authenticationSchema.mutations ++ tokenSchema.mutations: _*)
-  override lazy val extensions: mutable.HashSet[GraphQLSchemaExtension[UserContext]] = mutable.HashSet(authenticationSchema.extension)
+  override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(authenticationSchema.queries: _*)
+  override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(authenticationSchema.mutations ++ tokenSchema.mutations: _*)
+  override lazy val extensions: mutable.HashSet[GraphQLSchemaExtension[UserContext]] =
+    mutable.HashSet(authenticationSchema.extension)
 
   bindings = new AuthenticationBinding
 }

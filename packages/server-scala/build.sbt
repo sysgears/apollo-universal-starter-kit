@@ -1,3 +1,7 @@
+import org.scalafmt.sbt.ScalafmtPlugin.autoImport.scalafmtOnCompile
+
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
+
 name := "global"
 
 version := "0.1"
@@ -13,7 +17,8 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/counter/server-scala"), id = "counter"),
   ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
   ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination"),
-  ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication")
+  ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication"),
+  ProjectRef(base = file("../../modules/post/server-scala"), id = "post")
 )
 
 resourceGenerators in Compile ++= Seq(
@@ -28,3 +33,6 @@ defaultLinuxInstallLocation in Docker := "/usr/local"
 dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 
 mainClass in Compile := Some("Main")
+
+scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

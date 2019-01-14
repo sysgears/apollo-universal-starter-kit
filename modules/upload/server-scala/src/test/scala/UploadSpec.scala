@@ -20,7 +20,9 @@ class UploadSpec extends UploadHelper {
   lazy val fileMetadataRepo: FileMetadataRepository = inject[FileMetadataRepository]
   val uploadFileMutation = "mutation uploadFiles($files: [FileUpload]!) {uploadFiles(files: $files)}"
   val uploadFileVariables = "{\"files\":[null,null]}".asJson.asJsObject
-  val uploadFileGraphQLMessage = ByteString(GraphQLMessage(uploadFileMutation, Some("uploadFiles"), Some(uploadFileVariables)).toJson.compactPrint)
+  val uploadFileGraphQLMessage = ByteString(
+    GraphQLMessage(uploadFileMutation, Some("uploadFiles"), Some(uploadFileVariables)).toJson.compactPrint
+  )
   val addFilesEntity = Multipart.FormData(
     Multipart.FormData.BodyPart.Strict(
       "operations",
@@ -61,10 +63,8 @@ class UploadSpec extends UploadHelper {
     "upload files" in {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
 
-        val uploadFilesResult = responseAs[String].parseJson
-          .asJsObject.fields("data")
-          .asJsObject.fields("uploadFiles")
-          .convertTo[Boolean]
+        val uploadFilesResult =
+          responseAs[String].parseJson.asJsObject.fields("data").asJsObject.fields("uploadFiles").convertTo[Boolean]
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
@@ -76,9 +76,10 @@ class UploadSpec extends UploadHelper {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
         Post(endpoint, filesQueryEntity) ~> routes ~> check {
 
-          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
-            .asJsObject.fields("data")
-            .asJsObject.fields("files")
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson.asJsObject
+            .fields("data")
+            .asJsObject
+            .fields("files")
             .convertTo[List[FileMetadata]]
 
           status shouldBe OK
@@ -92,9 +93,10 @@ class UploadSpec extends UploadHelper {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
         Post(endpoint, filesQueryEntity) ~> routes ~> check {
 
-          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
-            .asJsObject.fields("data")
-            .asJsObject.fields("files")
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson.asJsObject
+            .fields("data")
+            .asJsObject
+            .fields("files")
             .convertTo[List[FileMetadata]]
 
           status shouldBe OK
@@ -104,10 +106,8 @@ class UploadSpec extends UploadHelper {
 
           Post(endpoint, removeFileEntity(fileMetadata.id.get)) ~> routes ~> check {
 
-            val removeFileResult = responseAs[String].parseJson
-              .asJsObject.fields("data")
-              .asJsObject.fields("removeFile")
-              .convertTo[Boolean]
+            val removeFileResult =
+              responseAs[String].parseJson.asJsObject.fields("data").asJsObject.fields("removeFile").convertTo[Boolean]
 
             removeFileResult shouldBe true
             await(fileMetadataRepo.findOne(fileMetadata.id.get).run) shouldNot be(defined)

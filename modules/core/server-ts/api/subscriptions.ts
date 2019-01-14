@@ -26,9 +26,14 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
   );
 };
 
-const addGraphQLSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: ServerModule) => {
-  if (module.hot && module.hot.data) {
-    const prevServer = module.hot.data.subscriptionServer;
+const addGraphQLSubscriptions = (
+  httpServer: Server,
+  schema: GraphQLSchema,
+  modules: ServerModule,
+  entryModule?: NodeModule
+) => {
+  if (entryModule && entryModule.hot && entryModule.hot.data) {
+    const prevServer = entryModule.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {
       log.debug('Reloading the subscription server.');
       prevServer.wsServer.close(() => {

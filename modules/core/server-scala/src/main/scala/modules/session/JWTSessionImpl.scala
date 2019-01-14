@@ -10,7 +10,8 @@ import common.Logger
 
 import scala.concurrent.ExecutionContext
 
-class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext) extends JWTSession[SessionData]
+class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext)
+  extends JWTSession[SessionData]
   with Logger {
 
   override val sessionConfig: SessionConfig = SessionConfig.fromConfig()

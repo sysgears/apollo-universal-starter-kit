@@ -1,12 +1,10 @@
+addCompilerPlugin("org.psywerx.hairyfotr" %% "linter" % "0.1.17")
 
-lazy val mailer = (project in file(".") dependsOn(modules.map(_ % "test->test; compile->compile"): _*))
-  .enablePlugins(BuildInfoPlugin)
-  .settings(
-    buildInfoKeys := Seq[BuildInfoKey]("modules" -> modules.map(_.build)),
-    buildInfoPackage := s"mailerSubModules",
-    buildInfoObject := "ModulesInfo"
-  )
+lazy val mailer = project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*)
 
 lazy val modules = List(
   ProjectRef(base = file("../../core/server-scala"), id = "core")
 )
+
+scalafmtOnCompile := true
+scalafmtConfig := Some(file("../../.scalafmt.conf"))

@@ -7,7 +7,7 @@ import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@module/counter-common
 @Component({
   selector: 'client-counter-button',
   template: `
-    <button id="apollo-link-button" (click)="increaseCounter()">Click to increase apolloLinkState</button>
+    <btn id="apollo-link-button" (click)="increaseCounter()">Click to increase apolloLinkState</btn>
   `,
   styles: []
 })

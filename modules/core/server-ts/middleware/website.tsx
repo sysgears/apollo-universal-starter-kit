@@ -29,7 +29,9 @@ let clientModules: ClientModule;
 if (__SSR__) {
   clientModules = require('../../../../packages/client/src').default;
   if (module.hot) {
-    module.hot.accept(['../../../../packages/client/src'], () => {});
+    module.hot.accept(['../../../../packages/client/src'], () => {
+      clientModules = require('../../../../packages/client/src').default;
+    });
   }
 }
 

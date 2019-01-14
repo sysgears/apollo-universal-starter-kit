@@ -162,7 +162,8 @@ class UserSpec extends UserTestHelper {
         |}
       """.stripMargin.parseJson.asJsObject
 
-    val graphQLMessage = ByteString(GraphQLMessage(createUserQuery, None, Some(createUserVariables)).toJson.compactPrint)
+    val graphQLMessage =
+      ByteString(GraphQLMessage(createUserQuery, None, Some(createUserVariables)).toJson.compactPrint)
     val entity = HttpEntity(`application/json`, graphQLMessage)
 
     Post(endpoint, entity) ~> routes ~> check {
@@ -261,7 +262,8 @@ class UserSpec extends UserTestHelper {
         |}
       """.stripMargin.parseJson.asJsObject
 
-    val graphQLMessage = ByteString(GraphQLMessage(deleteUserQuery, None, Some(deleteUserVariables)).toJson.compactPrint)
+    val graphQLMessage =
+      ByteString(GraphQLMessage(deleteUserQuery, None, Some(deleteUserVariables)).toJson.compactPrint)
     val entity = HttpEntity(`application/json`, graphQLMessage)
 
     Post(endpoint, entity) ~> routes ~> check {

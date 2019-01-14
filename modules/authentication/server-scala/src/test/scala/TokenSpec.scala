@@ -53,10 +53,13 @@ class TokenSpec extends AuthenticationTestHelper {
            |}
       """.stripMargin.parseJson.asJsObject
 
-      Post(endpoint,
-        HttpEntity(`application/json`,
+      Post(
+        endpoint,
+        HttpEntity(
+          `application/json`,
           ByteString(GraphQLMessage(registerMutation, None, Some(registerVariables)).toJson.compactPrint)
-        )) ~> routes
+        )
+      ) ~> routes
     }
 
     "resend tokens [SUCCESS]" in {

@@ -42,7 +42,8 @@ class PostSpec extends PostHelper {
 
     "save a new post" in {
 
-      val mutationAddPost = "mutation {addPost(input: {title: \"New Post\", content: \"Content post\"}) {id title content}}"
+      val mutationAddPost =
+        "mutation {addPost(input: {title: \"New Post\", content: \"Content post\"}) {id title content}}"
 
       val entity = HttpEntity(`application/json`, graphQLMessage(mutationAddPost))
       Post(endpoint, entity) ~> routes ~> check {
@@ -54,7 +55,8 @@ class PostSpec extends PostHelper {
 
     "edit an existed post" in {
 
-      val mutationEditPost = "mutation { editPost(input: {id: 1, title: \"Updated post\", content: \"Updated content post\"}) {id title content}}"
+      val mutationEditPost =
+        "mutation { editPost(input: {id: 1, title: \"Updated post\", content: \"Updated content post\"}) {id title content}}"
 
       val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditPost))
       Post(endpoint, entity) ~> routes ~> check {
@@ -150,7 +152,8 @@ class PostSpec extends PostHelper {
 
     "edit an existed comment" in {
 
-      val mutationEditComment = "mutation { editComment(input: {id: 1, postId: 1, content: \"Updated comment\"}) {id content}}"
+      val mutationEditComment =
+        "mutation { editComment(input: {id: 1, postId: 1, content: \"Updated comment\"}) {id content}}"
 
       val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditComment))
       Post(endpoint, entity) ~> routes ~> check {
@@ -162,7 +165,8 @@ class PostSpec extends PostHelper {
 
     "not edit a not existed comment" in {
 
-      val mutationEditComment = "mutation { editComment(input: {id: 100, postId: 1, content: \"Updated comment\"}) {id content}}"
+      val mutationEditComment =
+        "mutation { editComment(input: {id: 100, postId: 1, content: \"Updated comment\"}) {id content}}"
 
       val entity = HttpEntity(`application/json`, graphQLMessage(mutationEditComment))
       Post(endpoint, entity) ~> routes ~> check {
@@ -184,7 +188,6 @@ class PostSpec extends PostHelper {
         result shouldEqual "{\"data\":{\"deleteComment\":{\"id\":1}}}"
       }
     }
-
 
     "not delete a not existed comment" in {
 

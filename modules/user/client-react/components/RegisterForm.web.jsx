@@ -68,9 +68,7 @@ const RegisterFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    onSubmit(values).catch(e => {
-      setErrors(e);
-    });
+    await onSubmit({ ...values, username: values.username.trim() }).catch(setErrors);
   },
   enableReinitialize: true,
   displayName: 'SignUpForm' // helps with React DevTools

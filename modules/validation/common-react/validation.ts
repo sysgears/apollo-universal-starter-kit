@@ -12,16 +12,6 @@ export const required = (value: any) => {
 };
 
 /**
- * Validates if the value does not contain spaces.
- *
- * @param value
- * @return {undefined | string}
- */
-export const noSpaces = (value: string) => {
-  return !value.includes(' ') ? undefined : i18n.t('validation:noSpaces');
-};
-
-/**
  * Validates if the value matches a particular value.
  * @param comparableField
  */

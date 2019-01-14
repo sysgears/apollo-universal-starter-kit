@@ -4,13 +4,13 @@ import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
 import { FieldAdapter as Field } from '@module/core-client-react';
 import { translate } from '@module/i18n-client-react';
-import { email, minLength, required, match, validate, noSpaces } from '@module/validation-common-react';
+import { email, minLength, required, match, validate } from '@module/validation-common-react';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '@module/look-client-react';
 
 import settings from '../../../../settings';
 
 const userFormSchema = {
-  username: [required, minLength(3), noSpaces],
+  username: [required, minLength(3)],
   email: [required, email]
 };
 
@@ -126,21 +126,18 @@ UserForm.propTypes = {
 };
 
 const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => {
-    const { username, email, role, isActive, profile } = values.initialValues;
+  mapPropsToValues: ({ initialValues: { username, email, role, isActive, profile, auth } }) => {
     return {
-      username: username,
-      email: email,
+      username,
+      email,
+      isActive,
+      auth,
       role: role || 'user',
-      isActive: isActive,
       password: '',
       passwordConfirmation: '',
       profile: {
         firstName: profile && profile.firstName,
         lastName: profile && profile.lastName
-      },
-      auth: {
-        ...values.initialValues.auth
       }
     };
   },
@@ -151,7 +148,7 @@ const UserFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    await onSubmit(values).catch(e => setErrors(e));
+    await onSubmit({ ...values, username: values.username.trim() }).catch(setErrors);
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: (values, props) =>

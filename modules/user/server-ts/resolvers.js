@@ -4,7 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { FieldError, noSpaces } from '@module/validation-common-react';
+import { FieldError } from '@module/validation-common-react';
 import { createTransaction } from '@module/database-server-ts';
 
 import settings from '../../../settings';
@@ -78,12 +78,12 @@ export default pubsub => ({
         try {
           const e = new FieldError();
 
-          const hasSpaces = noSpaces(input.username);
-          if (hasSpaces) {
-            e.setError('username', hasSpaces);
+          const username = input.username.trim();
+          if (!username) {
+            e.setError('username', t('user:usernameInvalid'));
           }
 
-          const userExists = await User.getUserByUsername(input.username);
+          const userExists = await User.getUserByUsername(username);
           if (userExists) {
             e.setError('username', t('user:usernameIsExisted'));
           }
@@ -124,7 +124,7 @@ export default pubsub => ({
                 from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Your account has been created',
-                html: `<p>Hi, ${user.username}!</p>
+                html: `<p>Hi, ${username}!</p>
                 <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>

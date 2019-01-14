@@ -8,11 +8,11 @@ import { translate } from '@module/i18n-client-react';
 
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '@module/look-client-react-native';
 import { placeholderColor, submit } from '@module/look-client-react-native/styles';
-import { email, minLength, required, match, validate, noSpaces } from '@module/validation-common-react';
+import { email, minLength, required, match, validate } from '@module/validation-common-react';
 import settings from '../../../../settings';
 
 const userFormSchema = {
-  username: [required, minLength(3), noSpaces],
+  username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(settings.user.auth.password.minLength)],
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
@@ -153,32 +153,29 @@ UserForm.propTypes = {
 };
 
 const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => {
-    const { username, email, role, isActive, profile } = values.initialValues;
+  mapPropsToValues: ({ initialValues: { username, email, role, isActive, profile, auth } }) => {
     return {
-      username: username,
-      email: email,
+      username,
+      email,
+      isActive,
+      auth,
       role: role || 'user',
-      isActive: isActive,
       password: '',
       passwordConfirmation: '',
       profile: {
         firstName: profile && profile.firstName,
         lastName: profile && profile.lastName
-      },
-      auth: {
-        ...values.initialValues.auth
       }
     };
   },
-  handleSubmit(
+  async handleSubmit(
     values,
     {
       setErrors,
       props: { onSubmit }
     }
   ) {
-    onSubmit(values).catch(e => setErrors(e));
+    await onSubmit({ ...values, username: values.username.trim() }).catch(setErrors);
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: values => validate(values, userFormSchema)

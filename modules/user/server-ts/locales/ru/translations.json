@@ -6,6 +6,7 @@
   "userIsNotExisted": "Такого пользователя не существует.",
   "userCannotDeleteYourself": "Вы не можете удалить себя",
   "userCouldNotDeleted": "Невозможно удалить пользователя. Побробуйте повторить попытку позже.",
+  "usernameInvalid": "Недействительное имя пользователя.",
   "auth": {
     "password": {
       "validPasswordEmail": "Пожалуйста, введите Ваш username или e-mail.",

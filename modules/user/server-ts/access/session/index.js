@@ -21,8 +21,15 @@ const grant = async (user, req) => {
 const getCurrentUser = async ({ req }) => {
   if (req && req.session.userId && req.session.authSalt) {
     const result = await User.getUser(req.session.userId);
-    return result && result.authSalt === req.session.authSalt ? result : null;
+    if (result && result.authSalt === req.session.authSalt) {
+      return result;
+    }
+
+    delete req.session.userId;
+    delete req.session.authSalt;
+    writeSession(req, req.session);
   }
+  return null;
 };
 
 const attachSession = req => {

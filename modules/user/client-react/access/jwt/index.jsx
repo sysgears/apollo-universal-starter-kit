@@ -29,7 +29,7 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
   await setItem('refreshToken', refreshToken);
 };
 
-const removeTokens = async () => {
+export const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
 };

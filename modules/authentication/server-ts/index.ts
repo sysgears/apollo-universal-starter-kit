@@ -1,9 +1,6 @@
 import ServerModule from '@module/module-server-ts';
 import access from './access';
-import github from './social/github';
-import google from './social/google';
-import facebook from './social/facebook';
-import linkedin from './social/linkedIn';
+import social from './social';
 
-export default new ServerModule(access, github, google, facebook, linkedin);
+export default new ServerModule(access, social);
 export { access };

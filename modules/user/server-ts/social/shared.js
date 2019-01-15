@@ -15,7 +15,7 @@ export async function onAuthenticationSuccess(req, res) {
 
 export const registerUser = async ({ id, username, displayName, emails: [{ value }] }) => {
   return User.register({
-    username: username ? username : displayName,
+    username: username || displayName,
     email: value,
     password: id,
     isActive: true

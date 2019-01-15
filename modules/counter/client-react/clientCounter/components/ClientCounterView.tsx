@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { MUIButton } from '@module/look-client-react';
+import { Button } from '@module/look-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -26,7 +26,7 @@ interface ButtonProps {
 }
 
 export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <MUIButton id="apollo-link-button" color="primary" onClick={onClick}>
+  <Button id="apollo-link-button" color="primary" onClick={onClick}>
     {text}
-  </MUIButton>
+  </Button>
 );

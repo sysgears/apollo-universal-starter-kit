@@ -1,42 +1,68 @@
 import React from 'react';
-// import { NavLink } from 'react-router-dom';
-import Grid from '@material-ui/core/Grid';
-// import {
-//   Container,
-//   Navbar,
-//   Nav,
-//   NavItem
-// } from 'reactstrap';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+import AppBar from '@material-ui/core/AppBar';
+import BottomNavigation from '@material-ui/core/BottomNavigation';
+import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { withStyles } from '@material-ui/core/styles';
 
-// import settings from '../../../../../settings';
+import settings from '../../../../../settings';
 
 const ref = { modules: null };
 
 export const onAppCreate = modules => (ref.modules = modules);
 
-const NavBar = () => (
-  <Grid container>{ref.modules.navItems}</Grid>
-  // <Navbar color="faded" light>
-  //   <Container>
-  //     <Nav>
-  //       <NavLink to="/" className="navbar-brand">
-  //         {settings.app.name}
-  //       </NavLink>
-  //       {ref.modules.navItems}
-  //     </Nav>
+const styles = {
+  appBar: {
+    position: 'relative'
+  }
+};
 
-  //     <Nav className="justify-content-end">
-  //       {ref.modules.navItemsRight}
-  //       {__DEV__ && (
-  //         <NavItem>
-  //           <a href="/graphiql" className="nav-link">
-  //             GraphiQL
-  //           </a>
-  //         </NavItem>
-  //       )}
-  //     </Nav>
-  //   </Container>
-  // </Navbar>
-);
+class NavBar extends React.Component {
+  state = {
+    value: 0
+  };
 
-export default NavBar;
+  handleChange = (event, value) => {
+    this.setState({ value });
+  };
+
+  render() {
+    const { value } = this.state;
+    const { classes } = this.props;
+
+    return (
+      <AppBar className={classes.appBar}>
+        <BottomNavigation value={value} onChange={this.handleChange} showLabels>
+          <BottomNavigationAction
+            label={
+              <NavLink to="/" className="nav-link">
+                {settings.app.name}
+              </NavLink>
+            }
+          />
+
+          {ref.modules.navItems}
+
+          {ref.modules.navItemsRight}
+
+          {__DEV__ && (
+            <BottomNavigationAction
+              label={
+                <a href="/graphiql" className="nav-link">
+                  GraphiQL
+                </a>
+              }
+            />
+          )}
+        </BottomNavigation>
+      </AppBar>
+    );
+  }
+}
+
+NavBar.propTypes = {
+  classes: PropTypes.object.isRequired
+};
+
+export default withStyles(styles)(NavBar);

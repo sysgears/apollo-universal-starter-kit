@@ -1,1 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500');
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.nav-link {
+  text-decoration: none;
+  font-size: 16px;
+}

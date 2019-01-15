@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { MUIButton } from '@module/look-client-react';
+import { Button } from '@module/look-client-react';
 import { TranslateFunction } from '@module/i18n-client-react';
 
 const Section = styled.section`
@@ -39,7 +39,7 @@ interface ButtonProps {
 }
 
 export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
-  <MUIButton id="graphql-button" color="primary" onClick={onClick}>
+  <Button id="graphql-button" color="primary" onClick={onClick}>
     {text}
-  </MUIButton>
+  </Button>
 );

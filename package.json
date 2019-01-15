@@ -35,7 +35,7 @@
     "precommit": "lint-staged",
     "postinstall": "opencollective postinstall",
     "compile-rules": "tsc -p ./tools/customRules",
-    "test-rules": "tslint -p ./tools/customRules -r ./tools/customRules/build/rules/ --test ./tools/customRules/test/rules/**/**/tslint.json"
+    "test-rules": "tslint -p ./tools/customRules -r ./tools/customRules/build/rules --test ./tools/customRules/test/rules/**/tslint.json"
   },
   "lint-staged": {
     "*.{js,jsx,json}": [

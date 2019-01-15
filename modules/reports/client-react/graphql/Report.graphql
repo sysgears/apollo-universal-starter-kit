@@ -1,5 +1,0 @@
-fragment ReportInfo on Report {
-  name
-  email
-  phone
-}

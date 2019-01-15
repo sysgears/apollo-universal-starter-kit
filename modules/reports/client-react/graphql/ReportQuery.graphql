@@ -1,7 +1,0 @@
-#import "./Report.graphql"
-
-query report($id: Int!) {
-  report(id: $id) {
-    ...ReportInfo
-  }
-}

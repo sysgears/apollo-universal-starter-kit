@@ -14,7 +14,7 @@ import spray.json._
 
 import scala.concurrent.duration._
 
-class TokenSpec extends AuthenticationTestHelper {
+class JwtSpec extends AuthenticationTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   val userRepo: UserRepository = inject[UserRepository]
@@ -24,8 +24,7 @@ class TokenSpec extends AuthenticationTestHelper {
   val testPassword = "12345678q"
   val testUsername = "testName"
 
-  "TokenSpec" must {
-
+  "Jwt module" must {
     def registrationStep: RouteTestResult = {
       val registerMutation =
         """
@@ -62,7 +61,7 @@ class TokenSpec extends AuthenticationTestHelper {
       ) ~> routes
     }
 
-    "resend tokens [SUCCESS]" in {
+    "refresh tokens [SUCCESS]" in {
       registrationStep ~> check()
 
       val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get
@@ -97,7 +96,7 @@ class TokenSpec extends AuthenticationTestHelper {
       }
     }
 
-    "resend tokens [FAIL]" in {
+    "refresh tokens [FAIL]" in {
       registrationStep ~> check()
 
       val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get

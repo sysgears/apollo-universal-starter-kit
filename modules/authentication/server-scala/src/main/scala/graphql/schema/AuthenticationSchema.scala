@@ -22,7 +22,7 @@ import sangria.schema.{
 }
 import sangria.macros._
 import common.implicits.RichDBIO._
-import modules.jwt.model.Tokens
+import jwt.model.Tokens
 
 import scala.concurrent.ExecutionContext
 

@@ -6,7 +6,6 @@ import auth from './auth';
 import confirmMiddleware from './confirm';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
-import resolversFirebase from './resolvers.firebase';
 import scopes from './scopes';
 import settings from '../../../settings';
 import User from './sql';
@@ -39,7 +38,7 @@ export { User };
 
 export default new ServerModule(access, auth, {
   schema: [schema],
-  createResolversFunc: settings.user.auth.firebase.enabled ? [resolversFirebase] : [resolvers],
+  createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
   middleware: [middleware],
   localization: [{ ns: 'user', resources }]

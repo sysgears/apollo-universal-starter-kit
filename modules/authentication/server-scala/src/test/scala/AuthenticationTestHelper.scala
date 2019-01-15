@@ -13,7 +13,9 @@ import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
 trait AuthenticationTestHelper extends TestHelper {
-  val modules = new ServerModule[UserContext, SchemaInitializer[_]](Seq(new CoreModule(), new MailModule(), new UserModule(), new AuthenticationModule()))
+  val modules = new ServerModule[UserContext, SchemaInitializer[_]](
+    Seq(new CoreModule(), new MailModule(), new UserModule(), new AuthenticationModule())
+  )
   Guice.createInjector(modules.foldBindings.bindings)
 
   val routes: Route = routesWithGraphQLSchema(modules.fold)

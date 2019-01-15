@@ -10,6 +10,7 @@ import net.codingwell.scalaguice.ScalaModule
 import pdi.jwt.JwtAlgorithm
 import pdi.jwt.algorithms.JwtHmacAlgorithm
 
+@deprecated
 class JwtBinding extends ScalaModule {
 
   override def configure() {

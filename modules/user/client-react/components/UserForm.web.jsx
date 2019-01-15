@@ -132,7 +132,7 @@ const UserFormWithFormik = withFormik({
       username: username,
       email: email,
       role: role || 'user',
-      isActive: isActive == null ? 0 : isActive,
+      isActive: isActive || 0,
       password: '',
       passwordConfirmation: '',
       profile: {

@@ -25,7 +25,7 @@ class Activate extends React.Component {
         activateUser(token, navigation);
       }
     } catch (error) {
-      console.log(error);
+      console.log('error', error);
     }
   };
 
@@ -44,13 +44,9 @@ export default graphql(ACTIVATE_USER, {
         } = await mutate({
           variables: { token }
         });
-        if (success) {
-          if (navigation) return navigation.navigate('Login');
-          if (history) return history.push('/login/');
-        } else {
-          if (navigation) return navigation.navigate('Counter');
-          if (history) return history.push('/');
-        }
+        const mobileActions = success ? navigation.navigate('Login') : navigation.navigate('Counter');
+        const webActions = success ? history.push('/login/') : history.push('/');
+        return navigation ? mobileActions : webActions;
       } catch (e) {
         console.log('e', e.graphQLErrors);
       }

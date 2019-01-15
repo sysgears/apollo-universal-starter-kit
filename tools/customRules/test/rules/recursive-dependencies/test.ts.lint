@@ -1,0 +1,3 @@
+import Values from 'dependency';
+import { values } from 'dependency1';
+import { values2 } from 'dependency2';

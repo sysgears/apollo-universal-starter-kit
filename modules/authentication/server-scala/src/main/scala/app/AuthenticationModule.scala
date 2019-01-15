@@ -3,8 +3,9 @@ package app
 import common.graphql.UserContext
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
-import graphql.schema.{AuthenticationSchema, TokenSchema}
+import graphql.schema.AuthenticationSchema
 import guice.AuthenticationBinding
+import jwt.graphql.schema.JwtSchema
 import repositories._
 import sangria.schema.Field
 import shapes.ServerModule
@@ -15,7 +16,7 @@ import scala.collection.mutable
 class AuthenticationModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   lazy val authenticationSchema: AuthenticationSchema = inject[AuthenticationSchema]
-  lazy val tokenSchema: TokenSchema = inject[TokenSchema]
+  lazy val tokenSchema: JwtSchema = inject[JwtSchema]
   lazy val facebookAuthSchemaInitializer: FacebookAuthSchemaInitializer = inject[FacebookAuthSchemaInitializer]
   lazy val githubAuthSchemaInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]
   lazy val googleAuthSchemaInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]

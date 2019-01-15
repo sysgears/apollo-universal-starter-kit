@@ -3,4 +3,5 @@ export { default as Button } from './Button';
 export { default as NavBar } from './NavBar';
 export { default as PageLayout } from './PageLayout';
 export { default as MenuItem } from './MenuItem';
+export { default as Table } from './Table';
 export { onAppCreate } from './NavBar';

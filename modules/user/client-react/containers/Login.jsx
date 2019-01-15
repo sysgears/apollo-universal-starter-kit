@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { withFormErrorHandler } from '@module/forms-client-react';
+import { transformGraphQLErrors } from '@module/core-common';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
@@ -11,9 +11,13 @@ import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
   onSubmit = async values => {
-    const { t, login, handleFormErrors, client, onLogin } = this.props;
+    const { t, login, client, onLogin } = this.props;
 
-    await handleFormErrors(() => login(values), t('login.errorMsg'));
+    try {
+      await login(values);
+    } catch (e) {
+      throw transformGraphQLErrors(e, t('login.errorMsg'));
+    }
 
     await access.doLogin(client);
     await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
@@ -30,7 +34,6 @@ class Login extends React.Component {
 const LoginWithApollo = compose(
   withApollo,
   translate('user'),
-  withFormErrorHandler,
   graphql(LOGIN, {
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {

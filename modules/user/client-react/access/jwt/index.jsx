@@ -57,7 +57,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
           next: result => {
             const promise = (async () => {
               if (operation.operationName === 'login') {
-                if (result.data.login.tokens && !result.data.login.errors) {
+                if (!!result.data && result.data.login.tokens) {
                   const {
                     data: {
                       login: {

@@ -2,8 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { withFormErrorHandler } from '@module/forms-client-react';
-
+import { transformGraphQLErrors } from '@module/core-common';
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
@@ -14,11 +13,14 @@ class ForgotPassword extends React.Component {
   };
 
   onSubmit = async values => {
-    const { forgotPassword, t, handleFormErrors } = this.props;
+    const { forgotPassword, t } = this.props;
 
     this.setState({ sent: true });
-
-    await handleFormErrors(() => forgotPassword(values), t('forgotPass.errorMsg'));
+    try {
+      await forgotPassword(values);
+    } catch (e) {
+      throw transformGraphQLErrors(e, t('forgotPass.errorMsg'));
+    }
   };
 
   render() {
@@ -30,7 +32,6 @@ class ForgotPassword extends React.Component {
 
 const ForgotPasswordWithApollo = compose(
   translate('user'),
-  withFormErrorHandler,
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {

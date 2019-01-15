@@ -1,6 +1,5 @@
-// import { isEmpty } from 'lodash';
-// import { UserInputError, ApolloError } from 'apollo-server-express';
-import { validate, FieldError } from '@module/validation-common-react';
+import { isEmpty } from 'lodash';
+import { validate } from '@module/validation-common-react';
 import { contactFormSchema } from './contactFormSchema';
 
 import log from '../../../packages/common/log';
@@ -16,12 +15,12 @@ interface ContactInput {
 export default () => ({
   Mutation: {
     async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
-      const errors = new FieldError(validate(input, contactFormSchema));
+      // TODO if import ApolloError that get error 'app is not defined'
+      const { ApolloError, UserInputError } = require('apollo-server-express');
 
-      // console.log(isEmpty)
-      // console.log(UserInputError, ApolloError)
-      if (errors.hasAny()) {
-        return { errors: errors.getErrors() };
+      const errors = validate(input, contactFormSchema);
+      if (!isEmpty(errors)) {
+        throw new UserInputError('Failed to get events due to validation errors', { errors });
       }
 
       try {
@@ -33,10 +32,8 @@ export default () => ({
         });
       } catch (e) {
         log.error(e);
-        return { errors: [{ field: 'serverError', message: t('contact:sendError') }] };
+        throw new ApolloError(t('contact:sendError'), 'CONTACT_DENIED');
       }
-
-      return { errors: null };
     }
   }
 });

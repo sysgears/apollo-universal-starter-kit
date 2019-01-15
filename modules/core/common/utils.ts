@@ -1,3 +1,4 @@
+import { GraphQLError } from 'graphql';
 import _ from 'lodash';
 
 import log from './log';
@@ -34,10 +35,7 @@ export const removeTypename = (obj: { [key: string]: any }) => omitNested(obj, '
  * @param graphQLErrors - The source array errors
  * @param errorMsg - error message
  */
-export const transformGraphQLErrors = (
-  graphQLErrors: { [key: string]: [{ [key: string]: any }] },
-  errorMsg: string
-) => {
+export const transformGraphQLErrors = (graphQLErrors: { [key: string]: [GraphQLError] }, errorMsg: string) => {
   if (graphQLErrors.graphQLErrors.length === 1) {
     return { ...graphQLErrors.graphQLErrors[0].extensions.exception.errors, errorMsg };
   }

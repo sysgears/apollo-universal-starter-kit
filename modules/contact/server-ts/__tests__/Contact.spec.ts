@@ -22,7 +22,9 @@ describe('Contact API works', () => {
         }
       }
     });
-
-    expect(data.contact).to.throw();
+    // expect(data.contact).to.throw();
+    expect(data.contact)
+      .to.have.property('errors')
+      .with.length(3);
   });
 });

@@ -1,15 +1,21 @@
 import React from 'react';
-import { Mutation, FetchResult, compose } from 'react-apollo';
-import { withFormErrorHandler, HandleFormErrorsFn } from '@module/forms-client-react';
+import { Mutation, FetchResult } from 'react-apollo';
+import { transformGraphQLErrors } from '@module/core-common';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
 
-class Contact extends React.Component<{ t: TranslateFunction; handleFormErrors: HandleFormErrorsFn }> {
+@translate('contact')
+class Contact extends React.Component<{ t: TranslateFunction }> {
   public onSubmit = (sendContact: any) => async (values: ContactForm) => {
-    const { t, handleFormErrors } = this.props;
-    await handleFormErrors(() => sendContact(values), t('serverError'));
+    const { t } = this.props;
+
+    try {
+      await sendContact(values);
+    } catch (e) {
+      throw transformGraphQLErrors(e, t('serverError'));
+    }
   };
 
   public render() {
@@ -29,7 +35,4 @@ class Contact extends React.Component<{ t: TranslateFunction; handleFormErrors: 
   }
 }
 
-export default compose(
-  translate('contact'),
-  withFormErrorHandler
-)(Contact);
+export default Contact;

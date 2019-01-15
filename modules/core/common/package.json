@@ -1,8 +1,5 @@
 {
   "name": "@module/core-common",
   "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "lodash": "^4.17.11"
-  }
+  "private": true
 }

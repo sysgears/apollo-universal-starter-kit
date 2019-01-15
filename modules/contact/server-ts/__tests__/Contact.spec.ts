@@ -23,8 +23,6 @@ describe('Contact API works', () => {
       }
     });
 
-    expect(data.contact)
-      .to.have.property('errors')
-      .with.length(3);
+    expect(data.contact).to.throw();
   });
 });

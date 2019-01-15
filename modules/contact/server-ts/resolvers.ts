@@ -1,5 +1,8 @@
+// import { isEmpty } from 'lodash';
+// import { UserInputError, ApolloError } from 'apollo-server-express';
 import { validate, FieldError } from '@module/validation-common-react';
 import { contactFormSchema } from './contactFormSchema';
+
 import log from '../../../packages/common/log';
 
 interface ContactInput {
@@ -15,6 +18,8 @@ export default () => ({
     async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
       const errors = new FieldError(validate(input, contactFormSchema));
 
+      // console.log(isEmpty)
+      // console.log(UserInputError, ApolloError)
       if (errors.hasAny()) {
         return { errors: errors.getErrors() };
       }

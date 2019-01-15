@@ -12,7 +12,12 @@ import settings from '../../../../../settings';
 
 const styles = {
   root: {
-    height: '100vh'
+    height: '100%',
+    backgroundColor: 'white'
+  },
+  main: {
+    height: 'calc(100vh - 105px)',
+    overflowY: 'auto'
   },
   footer: {
     position: 'absolute',
@@ -29,8 +34,8 @@ class PageLayout extends React.Component {
       <React.Fragment>
         <CssBaseline />
         <Grid container className={classes.root} direction="column">
-          {navBar !== false && <NavBar />}
-          <Grid container direction="column" id="content">
+          <Grid container>{navBar !== false && <NavBar />}</Grid>
+          <Grid container className={classes.main} wrap="nowrap" direction="column" id="content">
             {children}
           </Grid>
           <Grid container className={classes.footer} justify="center">

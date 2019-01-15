@@ -1,8 +1,9 @@
 import React from 'react';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
-import url from 'url';
 import { Provider } from 'react-redux';
+import url from 'url';
+
 import ClientModule from '@module/module-client-react-native';
 import log from '../../../packages/common/log';
 import createApolloClient from '../../../packages/common/createApolloClient';

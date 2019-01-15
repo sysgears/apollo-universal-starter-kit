@@ -3,25 +3,18 @@ import PropTypes from 'prop-types';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { translate } from '@module/i18n-client-react';
 
-class ActivateUser extends React.PureComponent {
-  static propTypes = {
-    t: PropTypes.func
-  };
+const ActivateUser = ({ t }) => {
+  return (
+    <View style={styles.container}>
+      <ActivityIndicator size="large" color="#0000ff" />
+      <Text style={styles.text}> {t('activateUser')} </Text>
+    </View>
+  );
+};
 
-  render() {
-    const { t } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-        <Text style={styles.text}>
-          {t('activateUser')}
-          ...
-        </Text>
-      </View>
-    );
-  }
-}
+ActivateUser.propTypes = {
+  t: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

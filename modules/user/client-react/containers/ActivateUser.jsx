@@ -5,24 +5,24 @@ import ActivateUser from '../components/ActivateUser';
 import ACTIVATE_USER from '../graphql/ActivateUser.graphql';
 
 class Activate extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.activate();
   }
 
   activate = () => {
     try {
-      const { history, navigation } = this.props;
+      const { history, navigation, activateUser } = this.props;
       if (history) {
-        const token = this.props.match.params.token;
-        this.props.activateUser(token, history);
+        const {
+          match: {
+            params: { token }
+          }
+        } = this.props;
+        activateUser(token, history);
       } else {
         const { url } = navigation.state.params;
         const [, token] = url.split('/confirmation/');
-        this.props.activateUser(token, navigation);
+        activateUser(token, navigation);
       }
     } catch (error) {
       console.log(error);
@@ -38,24 +38,18 @@ export default graphql(ACTIVATE_USER, {
     activateUser: async token => {
       try {
         const {
-          data: { activateUser }
+          data: {
+            activateUser: { success }
+          }
         } = await mutate({
           variables: { token }
         });
-        if (activateUser.success) {
-          if (navigation) {
-            return navigation.navigate('Login');
-          }
-          if (history) {
-            return history.push('/login/');
-          }
+        if (success) {
+          if (navigation) return navigation.navigate('Login');
+          if (history) return history.push('/login/');
         } else {
-          if (navigation) {
-            return navigation.navigate('Counter');
-          }
-          if (history) {
-            return history.push('/');
-          }
+          if (navigation) return navigation.navigate('Counter');
+          if (history) return history.push('/');
         }
       } catch (e) {
         console.log('e', e.graphQLErrors);

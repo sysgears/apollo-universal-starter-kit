@@ -5,9 +5,5 @@ mutation register($input: RegisterUserInput!) {
     user {
       ...UserInfo
     }
-    errors {
-      field
-      message
-    }
   }
 }

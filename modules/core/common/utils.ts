@@ -32,7 +32,7 @@ export const removeTypename = (obj: { [key: string]: any }) => omitNested(obj, '
  * Created an error object from graphQLErrors and new message error
  *
  * @param graphQLErrors - The source array errors
- * @param errorMsg - error message for form
+ * @param errorMsg - error message
  */
 export const transformGraphQLErrors = (
   graphQLErrors: { [key: string]: [{ [key: string]: any }] },

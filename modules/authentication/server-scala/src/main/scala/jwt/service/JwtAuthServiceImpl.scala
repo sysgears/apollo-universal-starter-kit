@@ -1,12 +1,12 @@
-package modules.jwt.service
+package jwt.service
 
 import com.google.inject.Inject
-import modules.jwt.config.JwtConfig
-import modules.jwt.decoder.JwtDecoder
-import modules.jwt.encoder.JwtEncoder
-import modules.jwt.errors.InvalidToken
-import modules.jwt.model.{JwtContent, Tokens}
-import modules.jwt.validator.JwtValidator
+import jwt.config.JwtConfig
+import jwt.decoder.JwtDecoder
+import jwt.encoder.JwtEncoder
+import jwt.errors.InvalidToken
+import jwt.model.{JwtContent, Tokens}
+import jwt.validator.JwtValidator
 import pdi.jwt.exceptions.JwtExpirationException
 import spray.json._
 
@@ -20,7 +20,6 @@ import scala.util.Try
   * @param jwtValidator JWT validator
   * @param jwtConfig    JWT configs provider
   */
-@deprecated
 class JwtAuthServiceImpl @Inject()(
     jwtEncoder: JwtEncoder,
     jwtDecoder: JwtDecoder,

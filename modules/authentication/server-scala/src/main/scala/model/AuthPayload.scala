@@ -1,7 +1,7 @@
 package model
 
 import common.FieldError
-import modules.jwt.model.Tokens
+import jwt.model.Tokens
 
 case class AuthPayload(
     user: Option[User] = None,

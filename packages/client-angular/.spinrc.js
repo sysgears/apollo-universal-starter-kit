@@ -8,6 +8,21 @@ const config = {
       defines: {
         __CLIENT__: true
       },
+      webpackConfig: {
+        module: {
+          rules: [
+            {
+              test: /\.scss$/,
+              use: [
+                'to-string-loader',
+                'style-loader', // creates style nodes from JS strings
+                'css-loader', // translates CSS into CommonJS
+                'sass-loader'
+              ]
+            }
+          ]
+        }
+      },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: ['tcp:localhost:8080'],
       enabled: true
@@ -21,7 +36,7 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'css', 'sass', 'less', 'ts', 'webpack', 'i18next', 'angular'],
+    stack: ['apollo', 'ts', 'webpack', 'i18next', 'angular'],
     cache: '../../.cache',
     ssr: false,
     webpackDll: true,

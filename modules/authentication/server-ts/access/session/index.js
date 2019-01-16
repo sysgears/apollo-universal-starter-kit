@@ -42,12 +42,15 @@ const createContextFunc = async ({ req, context }) => {
   }
 
   attachSession(req);
-  const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
 
-  return {
-    identity,
-    ...appendContext(identity)
-  };
+  if (getIdentity) {
+    const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
+
+    return {
+      identity,
+      ...appendContext(identity)
+    };
+  }
 };
 
 export default new AccessModule(

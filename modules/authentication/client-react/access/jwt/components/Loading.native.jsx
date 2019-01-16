@@ -1,13 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+
 import { View, Text } from 'react-native';
+import { translate } from '@module/i18n-client-react';
 import { LayoutCenter } from '@module/look-client-react-native';
 
-const Loading = () => (
+const Loading = ({ t }) => (
   <LayoutCenter>
     <View className="text-center">
-      <Text>App is loading...</Text>
+      <Text>{t('loading')}</Text>
     </View>
   </LayoutCenter>
 );
 
-export default Loading;
+Loading.propTypes = {
+  t: PropTypes.func
+};
+
+export default translate('auth')(Loading);

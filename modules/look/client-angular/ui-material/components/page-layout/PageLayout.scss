@@ -1,6 +1,10 @@
 .app-footer {
   margin-top: 10px;
-  line-height: 40px;
   height: 40px;
   justify-content: center;
+  align-items: center;
+}
+
+.page-layout {
+  min-height: 100vh;
 }

@@ -32,7 +32,7 @@ class NavBar extends React.Component {
     const { classes } = this.props;
 
     return (
-      <AppBar className={classes.appBar}>
+      <AppBar className={classes.appBar} color="default" position="static">
         <BottomNavigation value={value} onChange={this.handleChange} showLabels>
           <BottomNavigationAction
             label={

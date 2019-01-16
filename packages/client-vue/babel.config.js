@@ -1,6 +1,6 @@
 module.exports = {
   compact: false,
-  presets: ['vue', ['@babel/preset-env', { modules: false }]],
+  presets: ['babel-preset-vue', ['@babel/preset-env', { modules: false }]],
   plugins: [
     '@babel/plugin-transform-destructuring',
     '@babel/plugin-transform-regenerator',
@@ -8,8 +8,10 @@ module.exports = {
     '@babel/plugin-proposal-class-properties',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-object-rest-spread',
-    ['styled-components', { ssr: true }],
-    ['import', { libraryName: 'antd-mobile' }]
+    'syntax-jsx',
+    'transform-vue-jsx',
+    'jsx-event-modifiers',
+    'jsx-v-model'
   ],
   env: {
     production: {

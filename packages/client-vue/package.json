@@ -10,8 +10,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production spin build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-vue/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-vue/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
@@ -73,6 +73,7 @@
     "sourcemapped-stacktrace": "^1.1.8",
     "subscriptions-transport-ws": "^0.9.4",
     "vue": "^2.5.22",
+    "vue-router": "^3.0.2",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
@@ -84,6 +85,11 @@
     "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^8.3.0",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-jsx-event-modifiers": "^2.0.5",
+    "babel-plugin-jsx-v-model": "^2.0.3",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
     "babel-preset-vue": "^2.0.2",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",

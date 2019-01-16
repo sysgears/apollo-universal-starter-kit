@@ -21,10 +21,10 @@ const config = {
     }
   },
   options: {
-    stack: ['apollo', 'css', 'sass', 'less', 'ts', 'webpack', 'i18next', 'vue'],
+    stack: ['apollo', 'css', 'sass', 'less', 'ts', 'es6', 'webpack', 'i18next', 'vue'],
     cache: '../../.cache',
     ssr: false,
-    webpackDll: true,
+    webpackDll: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"'

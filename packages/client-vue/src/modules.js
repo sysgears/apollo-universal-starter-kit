@@ -1,48 +1,7 @@
-import { merge } from 'lodash';
-import CommonModule from '@module/module-common';
+import ClientModule from '@module/module-client-vue';
+import core from '@module/core-client-vue';
+import counter from '@module/counter-client-vue';
 
-console.log('============= Client-vue');
-
-class BaseModule extends CommonModule {
-  constructor(...modules) {
-    super(...modules);
-  }
-
-  get reducers() {
-    return merge({}, ...this.reducer);
-  }
-
-  get resolvers() {
-    return merge({}, ...this.resolver);
-  }
-
-  get connectionParams() {
-    return this.connectionParam;
-  }
-}
-
-class ClientModule extends BaseModule {
-  constructor(...modules) {
-    super(...modules);
-  }
-
-  get modules() {
-    return this.module.map(module => module);
-  }
-
-  // get routes(): Routes {
-  //   return this.route.map((component: Route) => component);
-  // }
-}
-
-const createApp = modules => {
-  console.log('============= modules : ', modules);
-};
-
-const core = new ClientModule({
-  onAppCreate: [createApp]
-});
-
-const modules = new ClientModule(core);
+const modules = new ClientModule(core, counter);
 
 export default modules;

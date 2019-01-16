@@ -36,29 +36,23 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
 
     try {
       // create credit card token
-      try {
-        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-        if (preparedCreditCard.error) {
-          this.setState({ submitting: false, error: t('stripeError') });
-          return;
-        }
-      } catch (e) {
-        this.setState({ submitting: false, error: t('creditCardError') });
-        return;
-      }
+      preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
 
-      const { data } = await updateCard({ variables: { input: preparedCreditCard } });
-      const { updateStripeSubscriptionCard } = data;
-
-      if (!updateStripeSubscriptionCard) {
-        this.setState({ submitting: false, error: t('serverError') });
-        return;
-      }
+      await updateCard({ variables: { input: preparedCreditCard } });
 
       this.setState({ submitting: false });
       history ? history.push('/profile') : navigation.navigate('Profile');
     } catch (e) {
-      this.setState({ submitting: false, error: t('serverError') });
+      this.setState({
+        submitting: false
+      });
+      if (e && e.type === 'validation_error') {
+        throw { errorMsg: t('creditCardError') };
+      }
+      if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
+        throw { errorMsg: t('stripeError') };
+      }
+      throw { errorMsg: t('serverError') };
     }
   };
 

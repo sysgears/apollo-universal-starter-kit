@@ -101,7 +101,7 @@ export default () => ({
         return true;
       } catch (e) {
         log.error(e);
-        return false;
+        throw e;
       }
     }),
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {

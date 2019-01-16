@@ -1,0 +1,9 @@
+{
+  "name": "@module/test",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "safe":"0.4.6",
+    "@module/butter":"1.0.0"
+  }
+}

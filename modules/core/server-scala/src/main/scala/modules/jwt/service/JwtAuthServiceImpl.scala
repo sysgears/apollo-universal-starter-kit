@@ -20,6 +20,7 @@ import scala.util.Try
   * @param jwtValidator JWT validator
   * @param jwtConfig    JWT configs provider
   */
+@deprecated
 class JwtAuthServiceImpl @Inject()(
     jwtEncoder: JwtEncoder,
     jwtDecoder: JwtDecoder,

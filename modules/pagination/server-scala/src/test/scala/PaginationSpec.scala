@@ -17,7 +17,8 @@ class PaginationSpec extends PaginationHelper {
   lazy val itemRepo: ItemRepository = inject[ItemRepository]
   val offset = 0
   val limit = 3
-  val query = s"query { getPaginatedList(input: { offset: $offset, limit:$limit } ) { totalCount, entities { description }, hasNextPage } }"
+  val query =
+    s"query { getPaginatedList(input: { offset: $offset, limit:$limit } ) { totalCount, entities { description }, hasNextPage } }"
   val graphQLMessage = ByteString(GraphQLMessage(query).toJson.compactPrint)
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)

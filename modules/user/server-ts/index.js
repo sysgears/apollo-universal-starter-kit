@@ -8,7 +8,8 @@ import schema from './schema.graphql';
 import resolvers from './resolvers';
 import scopes from './scopes';
 import settings from '../../../settings';
-import User from './sql';
+// import User from './sql';
+import User from './firebase';
 import resources from './locales';
 import serviceAccount from '../../../packages/server/firebase-admin-sdk-data.json';
 

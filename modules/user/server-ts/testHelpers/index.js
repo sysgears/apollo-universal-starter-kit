@@ -1,5 +1,5 @@
-import LOGIN from '@module/user-client-react/graphql/Login.graphql';
-import LOGOUT from '@module/authentication-client-react/access/session/graphql/Logout.graphql';
+import { LOGIN } from '@module/user-client-react';
+import { LOGOUT } from '@module/authentication-client-react';
 
 import { getApollo } from '@module/testing-server-ts';
 

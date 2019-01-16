@@ -16,9 +16,7 @@ class RegisterView extends React.PureComponent {
     Linking.addEventListener('url', this.handleUrl);
     if (Platform.OS === 'ios') {
       const url = await Linking.getInitialURL();
-      if (url.includes('/confirmation/')) {
-        this.redirectOnActivateUser(url);
-      }
+      this.handleUrl({ url });
     }
   }
 

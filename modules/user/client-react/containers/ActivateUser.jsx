@@ -18,11 +18,13 @@ class Activate extends React.Component {
             params: { token }
           }
         } = this.props;
-        activateUser(token, history);
+        activateUser(token);
       } else {
-        const { url } = navigation.state.params;
-        const [, token] = url.split('/confirmation/');
-        activateUser(token, navigation);
+        const {
+          state: { params }
+        } = navigation;
+        const [, token] = params.split('/confirmation/');
+        activateUser(token);
       }
     } catch (error) {
       console.log('error', error);
@@ -39,14 +41,15 @@ export default graphql(ACTIVATE_USER, {
       try {
         const {
           data: {
-            activateUser: { success }
+            activateUser: { user }
           }
         } = await mutate({
           variables: { token }
         });
-        const mobileActions = success ? navigation.navigate('Login') : navigation.navigate('Counter');
-        const webActions = success ? history.push('/login/') : history.push('/');
-        return navigation ? mobileActions : webActions;
+        const navigationScreen = user ? 'Login' : 'Counter';
+        const navigationUrl = user ? '/login' : '/';
+        navigation && navigation.navigate(navigationScreen);
+        history && history.push(navigationUrl);
       } catch (e) {
         console.log('e', e.graphQLErrors);
       }

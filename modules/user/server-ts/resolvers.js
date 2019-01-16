@@ -7,7 +7,6 @@ import { withFilter } from 'graphql-subscriptions';
 import { FieldError } from '@module/validation-common-react';
 import { createTransaction } from '@module/database-server-ts';
 
-import User from './sql';
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
@@ -245,20 +244,33 @@ export default pubsub => ({
         }
       }
     ),
-    activateUser: async (obj, token) => {
+    activateUser: async (obj, token, context) => {
       try {
         const decodedToken = Buffer.from(token.token, 'base64').toString();
+        const e = new FieldError();
         const {
           user: { id }
         } = jwt.verify(decodedToken, settings.user.secret);
-        await User.updateActive(id, true);
-        return {
-          success: true
-        };
+        const {
+          User,
+          req: { t }
+        } = context;
+        const isUpdated = await User.updateActive(id, true);
+        if (isUpdated) {
+          const user = await User.getUser(id);
+          pubsub.publish(USERS_SUBSCRIPTION, {
+            usersUpdated: {
+              mutation: 'UPDATED',
+              node: user
+            }
+          });
+          return { user };
+        } else {
+          e.setError('activate', t('user:userCouldNotActivated'));
+          e.throwIf();
+        }
       } catch (e) {
-        return {
-          success: false
-        };
+        return { errors: e };
       }
     }
   },

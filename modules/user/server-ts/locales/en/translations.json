@@ -7,6 +7,7 @@
   "userIsNotExisted": "User does not exist.",
   "userCannotDeleteYourself": "You can not delete your self.",
   "userCouldNotDeleted": "Could not delete user. Please try again later.",
+  "userCouldNotActivated": "Could not activate user. Please try again later",
   "auth": {
     "password": {
       "validPasswordEmail": "Please enter a valid username or e-mail.",

@@ -1,5 +1,12 @@
+#import "./User.graphql"
 mutation activateUser($token: String!) {
   activateUser(token: $token) {
-    success
+    user {
+      ...UserInfo
+    }
+    errors {
+      field
+      message
+    }
   }
 }

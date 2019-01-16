@@ -1,6 +1,5 @@
 import { isApiExternal } from '@module/core-common';
 
-import { AuthenticationError } from 'apollo-server-errors';
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
@@ -19,7 +18,7 @@ const grant = async (user, req) => {
   req.session = writeSession(req, session);
 };
 
-const getCurrentUser = async ({ req }) => {
+const getCurrentUser = async ({ req, res }) => {
   if (req && req.session.userId && req.session.authSalt) {
     const result = await User.getUser(req.session.userId);
     if (result && result.authSalt === req.session.authSalt) {
@@ -30,7 +29,7 @@ const getCurrentUser = async ({ req }) => {
     delete req.session.authSalt;
     writeSession(req, req.session);
 
-    throw new AuthenticationError();
+    res.status(401).send;
   }
   return null;
 };
@@ -51,9 +50,9 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
+const createContextFunc = async ({ req, res, connectionParams, webSocket, context }) => {
   attachSession(req);
-  const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
+  const user = context.user || (await getCurrentUser({ req, res, connectionParams, webSocket }));
   const auth = {
     isAuthenticated: !!user,
     scope: user ? scopes[user.role] : null

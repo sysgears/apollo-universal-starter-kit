@@ -63,8 +63,11 @@ describe('User API works', () => {
     });
 
     step('Cannot query other users profile', async () => {
-      const result = await apollo.query({ query: USER_QUERY, variables: { id: 1 } });
-      expect(result.data.user.user).to.be.null;
+      try {
+        await apollo.query({ query: USER_QUERY, variables: { id: 1 } });
+      } catch (e) {
+        expect(e);
+      }
     });
   });
 

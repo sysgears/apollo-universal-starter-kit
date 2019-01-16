@@ -8,6 +8,6 @@ import settings from '../../../../../../settings';
   styleUrls: ['./PageLayout.scss']
 })
 export class PageLayoutComponent {
-  public appName = settings.app.name;
-  public currentYear = new Date().getFullYear();
+  public appName: string = settings.app.name;
+  public currentYear: number = new Date().getFullYear();
 }

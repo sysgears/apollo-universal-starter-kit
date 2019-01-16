@@ -1,5 +1,5 @@
 import React from 'react';
-import { withFormik } from 'formik';
+import { FormikProps, withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { Form, RenderField, Button, Alert, Label } from '@module/look-client-react';
@@ -9,9 +9,8 @@ import { required, validate } from '@module/validation-common-react';
 interface SubscriptionCardFormViewProps {
   submitting: boolean;
   buttonName: string;
-  error: string | null;
   handleSubmit?: () => void;
-  onSubmit: (subscriptionInput: any, stripe: any) => void;
+  onSubmit: (subscriptionInput: any, stripe: any) => any;
   values?: {
     name: string;
   };
@@ -19,8 +18,8 @@ interface SubscriptionCardFormViewProps {
   t: TranslateFunction;
 }
 
-const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps) => {
-  const { handleSubmit, submitting, buttonName, error, values, t } = props;
+const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps & FormikProps<any>) => {
+  const { handleSubmit, submitting, buttonName, errors, values, t } = props;
 
   return (
     <Form layout="block" name="subscription" onSubmit={handleSubmit}>
@@ -34,7 +33,7 @@ const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps) => {
       />
       <Label>{t('creditCard.info')}</Label>
       <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
-      {error && <Alert color="error">{error}</Alert>}
+      {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
       <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
         {buttonName}
       </Button>
@@ -42,11 +41,11 @@ const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps) => {
   );
 };
 
-const SubscriptionFormWithFormik = withFormik({
+const SubscriptionFormWithFormik = withFormik<SubscriptionCardFormViewProps, any, any>({
   mapPropsToValues: () => ({ name: '' }),
-  async handleSubmit({ name }, { props }: { props: SubscriptionCardFormViewProps }) {
+  handleSubmit({ name }, { setErrors, props }) {
     const { stripe, onSubmit } = props;
-    onSubmit({ name }, stripe);
+    onSubmit({ name }, stripe).catch((e: { [key: string]: string }) => setErrors(e));
   },
   validate: values => validate(values, { name: [required] }),
   displayName: 'StripeSubscriptionForm', // helps with React DevTools,

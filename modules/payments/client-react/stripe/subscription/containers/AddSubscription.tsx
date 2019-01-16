@@ -24,8 +24,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   constructor(props: AddSubscriptionProps) {
     super(props);
     this.state = {
-      submitting: false,
-      error: null
+      submitting: false
     };
   }
 
@@ -36,27 +35,25 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
 
     try {
       // create credit card token
-      try {
-        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-        if (preparedCreditCard.error) {
-          this.setState({ submitting: false, error: t('stripeError') });
-          return;
-        }
-      } catch (e) {
-        this.setState({ submitting: false, error: t('creditCardError') });
-        return;
-      }
+      preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
 
-      const { data } = await addSubscription({ variables: { input: preparedCreditCard } });
-      const { addStripeSubscription } = data;
+      await addSubscription({ variables: { input: preparedCreditCard } });
 
       this.setState({
-        submitting: false,
-        error: addStripeSubscription.errors ? addStripeSubscription.errors.map((e: any) => e.message).join('\n') : null
+        submitting: false
       });
       history ? history.push('/subscriber-page') : navigation.goBack();
     } catch (e) {
-      this.setState({ submitting: false, error: t('serverError') });
+      this.setState({
+        submitting: false
+      });
+      if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
+        throw { errorMsg: t('stripeError') };
+      }
+      if (e && e.type === 'validation_error') {
+        throw { errorMsg: t('creditCardError') };
+      }
+      throw { errorMsg: t('serverError') };
     }
   };
 

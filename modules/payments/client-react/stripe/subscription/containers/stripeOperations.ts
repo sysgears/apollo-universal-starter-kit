@@ -1,3 +1,4 @@
+import { isEmpty } from 'lodash';
 import settings from '../../../../../../settings';
 import { CreditCardInput } from '../types';
 
@@ -28,7 +29,11 @@ export const createToken = (creditCardInput: CreditCardInput) => {
     body: Object.keys(card)
       .map(key => key + '=' + card[key])
       .join('&')
-  }).then(response => response.json());
+  })
+    .then(response => response.json())
+    .catch(e => {
+      throw e;
+    });
 };
 
 /**
@@ -49,18 +54,19 @@ export const createCreditCardToken = async (creditCardInput: CreditCardInput, st
 
   if (stripe) {
     const { token, error } = await stripe.createToken({ name });
-    stripeResponse = { id: token.id, card: token.card, error };
+    if (!isEmpty(error)) {
+      throw error;
+    }
+    stripeResponse = { id: token.id, card: token.card };
   } else {
     stripeResponse = await createToken(creditCardInput);
   }
 
-  return stripeResponse.error
-    ? { error: stripeResponse.error }
-    : {
-        token: stripeResponse.id,
-        expiryMonth: stripeResponse.card.exp_month,
-        expiryYear: stripeResponse.card.exp_year,
-        last4: stripeResponse.card.last4,
-        brand: stripeResponse.card.brand
-      };
+  return {
+    token: stripeResponse.id,
+    expiryMonth: stripeResponse.card.exp_month,
+    expiryYear: stripeResponse.card.exp_year,
+    last4: stripeResponse.card.last4,
+    brand: stripeResponse.card.brand
+  };
 };

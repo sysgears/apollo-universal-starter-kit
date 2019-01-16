@@ -14,7 +14,7 @@ const grant = async ({ id }, req) => {
 
 const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.session.id) {
-    return await getIdentity(req.session.id);
+    return getIdentity(req.session.id);
   }
 };
 

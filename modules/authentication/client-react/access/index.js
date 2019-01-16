@@ -6,6 +6,8 @@ import session from './session';
 
 import AccessModule from './AccessModule';
 
+import resources from './locales';
+
 const ref = React.createRef();
 
 const resetApolloCache = async client => {
@@ -53,5 +55,6 @@ AuthPageReloader.propTypes = {
 export default new AccessModule(jwt, session, {
   dataRootComponent: [AuthPageReloader],
   login: [login],
-  logout: [logout]
+  logout: [logout],
+  localization: [{ ns: 'auth', resources }]
 });

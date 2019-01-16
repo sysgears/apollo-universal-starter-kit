@@ -4,7 +4,6 @@ import { NavLink, withRouter } from 'react-router-dom';
 import { translate } from '@module/i18n-client-react';
 import { MenuItem } from '@module/look-client-react';
 import ClientModule from '@module/module-client-react';
-import authentication from '@module/authentication-client-react';
 
 import resolvers from './resolvers';
 import resources from './locales';
@@ -56,7 +55,7 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   </NavLink>
 ));
 
-export default new ClientModule(authentication, {
+export default new ClientModule({
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,

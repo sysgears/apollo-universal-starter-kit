@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 import { log } from '@module/core-common';
 import { ApolloError } from 'apollo-server-express';
-import { FieldError } from '@module/validation-common-react';
+// import { FieldError } from '@module/validation-common-react';
 
 import settings from '../../../../../settings';
 
@@ -105,19 +105,15 @@ export default () => ({
       }
     }),
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {
-      try {
-        const { user, stripeSubscription, StripeSubscription, req } = context;
-        const { stripeSubscriptionId, stripeCustomerId, stripeSourceId } = stripeSubscription;
+      const {
+        user,
+        stripeSubscription: { stripeSubscriptionId, stripeCustomerId, stripeSourceId },
+        StripeSubscription
+      } = context;
 
-        try {
-          await stripe.subscriptions.del(stripeSubscriptionId);
-          await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
-        } catch (err) {
-          log.error(err);
-          const e = new FieldError();
-          e.setError('cancelSubscription', req.t('stripeSubscription:cancelError'));
-          e.throwIf();
-        }
+      try {
+        await stripe.subscriptions.del(stripeSubscriptionId);
+        await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
 
         await StripeSubscription.editSubscription({
           userId: user.id,
@@ -132,8 +128,7 @@ export default () => ({
 
         return { active: false, errors: null };
       } catch (e) {
-        log.error(e);
-        return { active: true, errors: e };
+        throw e;
       }
     })
   },

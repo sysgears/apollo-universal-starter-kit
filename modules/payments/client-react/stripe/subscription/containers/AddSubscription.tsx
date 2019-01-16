@@ -47,11 +47,11 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
       this.setState({
         submitting: false
       });
-      if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
-        throw { errorMsg: t('stripeError') };
-      }
       if (e && e.type === 'validation_error') {
         throw { errorMsg: t('creditCardError') };
+      }
+      if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
+        throw { errorMsg: t('stripeError') };
       }
       throw { errorMsg: t('serverError') };
     }

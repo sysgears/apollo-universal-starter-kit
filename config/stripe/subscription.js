@@ -1,5 +1,5 @@
 export default {
-  enabled: true,
+  enabled: false,
   webhookUrl: '/stripe/webhook',
   publicKey: '', // Set to your Stripe publishable key for development mode
   // Default Stripe product object

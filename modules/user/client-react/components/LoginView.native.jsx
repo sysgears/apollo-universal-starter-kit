@@ -20,10 +20,11 @@ class LoginView extends React.PureComponent {
   }
 
   handleOpenURL = async ({ url }) => {
-    if (!url.match(/data=([^#]+)/)) return;
+    const dataRegExp = /data=([^#]+)/;
+    if (!url.match(dataRegExp)) return;
 
     // Extract stringified user string out of the URL
-    const [, data] = url.match(/data=([^#]+)/);
+    const [, data] = url.match(dataRegExp);
     const decodedData = JSON.parse(decodeURI(data));
     const { client } = this.props;
 

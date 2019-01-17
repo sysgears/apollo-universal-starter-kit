@@ -19,7 +19,7 @@ export class Rule extends Lint.Rules.AbstractRule {
     hasFix: false,
     typescriptOnly: true
   };
-  public static MODULE_STRUCTURE = [
+  public static MODULE_IMPLIMENTATION = [
     'client-react',
     'client-angular',
     'server-ts',
@@ -96,16 +96,15 @@ class RecursiveDependenciesWalker extends Lint.RuleWalker {
           console.log('dependency', dependency);
           if (dependency.includes('@module')) {
             const [, moduleName] = dependency.split('/');
-            const moduleFolders = Rule.MODULE_STRUCTURE
-            .filter((moduleFolder) => {
-              console.log('moduleName', moduleName);
-              console.log('moduleFolder', moduleName.includes(moduleFolder));
-              return moduleName.includes(moduleFolder);
-            })
-            .map((moduleFolder) => moduleName.replace(`-${moduleFolder}`, ''))
-            console.log('res', moduleFolders);
-            const relatedModulePath: string = moduleFolders.length === 1 ? 
-            this.getRelatedModulePath(packageJsonPath, moduleName, moduleFolders[0]) : '';
+            const moduleNames: Array<{[key: string]: string}> = Rule.MODULE_IMPLIMENTATION
+            .filter((moduleImplimentationName) => moduleName.includes(moduleImplimentationName))
+            .map((moduleImplimentationName) => ({
+              moduleImplimentationName,
+              moduleGroupName: moduleName.replace(`-${moduleImplimentationName}`, '')
+            }));
+            console.log('moduleNames', moduleNames);
+            const relatedModulePath: string = moduleNames.length === 1 ? 
+            this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
             if (relatedModulePath) {
               nestedResult = this.getDependencies(relatedModulePath, true);
             }
@@ -115,7 +114,9 @@ class RecursiveDependenciesWalker extends Lint.RuleWalker {
 
     }
 
-    return new Set([...Array.from(result), ...Array.from(nestedResult)]);
+    nestedResult.forEach(result.add, result);
+
+    return result;
   }
 
   private getRelatedModulePath(current: string, moduleName: string, moduleFolder: string): string {

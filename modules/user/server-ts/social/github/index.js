@@ -22,7 +22,7 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
       const [createdUserId] = await registerUser(profile);
       await createGithubAuth({ id, displayName, userId: createdUserId });
       user = await User.getUser(createdUserId);
-    } else if (!user.lnId) {
+    } else if (!user.ghId) {
       await createGithubAuth({ id, displayName, userId: user.id });
     }
 

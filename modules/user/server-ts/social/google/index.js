@@ -40,7 +40,7 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
       });
 
       user = await User.getUser(createdUserId);
-    } else if (!user.lnId) {
+    } else if (!user.googleId) {
       await createGoogleOAuth({ id, displayName, userId: user.id });
     }
 

@@ -21,7 +21,7 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
       const [createdUserId] = await registerUser(profile);
       await createFacebookAuth({ id, displayName, userId: createdUserId });
       user = await User.getUser(createdUserId);
-    } else if (!user.lnId) {
+    } else if (!user.fbId) {
       await createFacebookAuth({ id, displayName, userId: user.id });
     }
 

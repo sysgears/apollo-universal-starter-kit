@@ -57,7 +57,6 @@ export default () => ({
         if (userExists) {
           e.setError('username', t('user:auth.password.usernameIsExisted'));
         }
-
         const emailExists = await User.getUserByEmail(input.email);
         if (emailExists) {
           e.setError('email', t('user:auth.password.emailIsExisted'));
@@ -67,22 +66,24 @@ export default () => ({
 
         let userId = 0;
         if (!emailExists) {
-          let isActive = false;
-          if (!settings.user.auth.password.confirm) {
-            isActive = true;
-          }
+          const isActive = !settings.user.auth.password.confirm;
 
-          [userId] = await User.register({ ...input, isActive });
+          userId = await User.register({ ...input, isActive });
 
           // if user has previously logged with facebook auth
         } else {
           await User.updatePassword(emailExists.userId, input.password);
           userId = emailExists.userId;
         }
-
         const user = await User.getUser(userId);
 
-        if (mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && req) {
+        if (
+          mailer &&
+          settings.user.auth.password.sendConfirmationEmail &&
+          !emailExists &&
+          req &&
+          !settings.user.auth.firebase.enabled
+        ) {
           // async email
           jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
             const encodedToken = Buffer.from(emailToken).toString('base64');

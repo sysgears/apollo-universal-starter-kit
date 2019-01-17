@@ -1,5 +1,5 @@
 type User {
-  id: Int!
+  id: String!
   username: String!
   role: String!
   isActive: Boolean

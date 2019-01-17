@@ -7,12 +7,12 @@ export default () => ({
       return await Report.report();
     },
     async pdf(obj, arg, { Report }) {
-      const reports = await Report.reports();
-      return generatePDF(reports);
+      const report = await Report.report();
+      return generatePDF(report);
     },
     async excel(obj, arg, { Report }) {
-      const reports = await Report.reports();
-      return generateBufferExcel(reports);
+      const report = await Report.report();
+      return generateBufferExcel(report);
     }
   },
   Mutation: {},

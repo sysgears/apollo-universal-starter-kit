@@ -24,7 +24,7 @@ class DownloadExcel extends Component {
     const { data } = await client.query({
       query
     });
-    const url = getObjectURLFromArray(data.excelReport);
+    const url = getObjectURLFromArray(data.excel);
     downloadFile(url, fileName);
   }
 

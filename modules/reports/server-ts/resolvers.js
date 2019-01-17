@@ -3,17 +3,14 @@ import generateBufferExcel from './excelReport/generateBufferExcel';
 
 export default () => ({
   Query: {
-    report(obj, { id }, { Report }) {
-      return Report.report(id);
+    async report(obj, arg, { Report }) {
+      return await Report.report();
     },
-    async reports(obj, arg, { Report }) {
-      return await Report.reports();
-    },
-    async pdfReport(obj, arg, { Report }) {
+    async pdf(obj, arg, { Report }) {
       const reports = await Report.reports();
       return generatePDF(reports);
     },
-    async excelReport(obj, arg, { Report }) {
+    async excel(obj, arg, { Report }) {
       const reports = await Report.reports();
       return generateBufferExcel(reports);
     }

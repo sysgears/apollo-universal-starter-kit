@@ -7,12 +7,10 @@ type Report {
 }
 
 extend type Query {
-  # Report
-  report(id: Int!): Report
-  #Reporst
-  reports: [Report]
+  #Report
+  report: [Report]
   #pdfReport
-  pdfReport: [Int]
+  pdf: [Int]
   #excelReport
-  excelReport: [Int]
+  excel: [Int]
 }

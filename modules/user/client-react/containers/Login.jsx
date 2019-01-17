@@ -38,11 +38,10 @@ const LoginWithApollo = compose(
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
         const {
-          data: { login, error }
+          data: { login }
         } = await mutate({
           variables: { input: { usernameOrEmail, password } }
         });
-        console.log('error', error);
         return login;
       }
     })

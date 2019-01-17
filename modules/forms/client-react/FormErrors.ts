@@ -1,7 +1,7 @@
 import { GraphQLError } from 'graphql';
 
 export class FormErrors {
-  public _errors: { [key: string]: any };
+  private _errors: { [key: string]: any };
 
   constructor(errors: { [key: string]: [GraphQLError] }, errorMsg: string) {
     this._errors = {};

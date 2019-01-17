@@ -1,4 +1,4 @@
-import generateBufferPDF from './pdfReport/generateBufferPDF';
+import generatePDF from './pdfReport/generatePDF';
 import generateBufferExcel from './excelReport/generateBufferExcel';
 
 export default () => ({
@@ -11,7 +11,7 @@ export default () => ({
     },
     async pdfReport(obj, arg, { Report }) {
       const reports = await Report.reports();
-      return generateBufferPDF(reports);
+      return generatePDF(reports);
     },
     async excelReport(obj, arg, { Report }) {
       const reports = await Report.reports();

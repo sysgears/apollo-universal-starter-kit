@@ -1,0 +1,10 @@
+{
+    "name": "@module/test-module-2-client-react",
+    "version": "1.0.0",
+    "private": true,
+    "devDependencies": {
+      "bla":"0.4.6",
+      "chalk": "2.4.2"
+    }
+  }
+  

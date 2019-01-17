@@ -1,3 +1,0 @@
-import Values from 'dependency';
-import { values } from 'dependency1';
-import tyop from 'safe';

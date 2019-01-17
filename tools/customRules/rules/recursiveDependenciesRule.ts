@@ -8,11 +8,10 @@ import { findImports, ImportKind } from "tsutils";
 
 
 export class Rule extends Lint.Rules.AbstractRule {
-  public static FAILURE_STRING = 'Cant find this dependency in the tree of dependencies';
+  public static FAILURE_STRING = `Can't find this dependency in the tree of dependencies.`;
   public static metadata: Lint.IRuleMetadata = {
     ruleName: 'recursive-dependencies',
-    description: `Dependency should be listed in module packages.json or it should be inside one of the
-    imported modules`,
+    description: `Dependency should be listed in module packages.json or it should be inside one of the used @modules.`,
     optionsDescription: 'Not configurable.',
     options: null,
     optionExamples: [true],
@@ -20,6 +19,12 @@ export class Rule extends Lint.Rules.AbstractRule {
     hasFix: false,
     typescriptOnly: true
   };
+  public static MODULE_STRUCTURE = [
+    'client-react',
+    'client-angular',
+    'server-ts',
+    'common'
+  ];
 
   public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
     return this.applyWithWalker(
@@ -45,20 +50,23 @@ class RecursiveDependenciesWalker extends Lint.RuleWalker {
     let dependencies: Set<string> | undefined;
     for (const name of findImports(sourceFile, ImportKind.All)) {
       if (!ts.isExternalModuleNameRelative(name.text)) {
-        const packageNameParts = name.text.split(/\//g);
-        const moduleName = name.text[0] === '@' ? packageNameParts[0] : `${packageNameParts[0]}/${packageNameParts[1]}`;
+        console.log('moduleName', name.text);
         if (dependencies === undefined) {
           dependencies = this.getDependencies(sourceFile.fileName);
         }
-        return dependencies.has(moduleName);
+        if (!dependencies.has(name.text)){
+          this.addFailureAtNode(name, Rule.FAILURE_STRING);
+        }
       }
     }
   }
 
 
-  private getDependencies(fileName: string): Set<string> {
+  private getDependencies(providedPath: string, nestedModule: boolean = false): Set<string> {
     const result = new Set<string>();
-    const packageJsonPath = this.findPackageJson(path.resolve(path.dirname(fileName)));
+    let nestedResult = new Set<string>();
+    const dirPath: string = nestedModule ? providedPath : path.resolve(path.dirname(providedPath));
+    const packageJsonPath = this.findPackageJson(dirPath);
     if (packageJsonPath !== undefined) {
       try {
         // don't use require here to avoid caching
@@ -83,22 +91,39 @@ class RecursiveDependenciesWalker extends Lint.RuleWalker {
         // treat malformed package.json files as empty
       }
 
-      result.forEach((dependency) => {
-        console.log('dependency', dependency);
-        if (dependency.includes('@module')){
-            this.findRelatedModulePackageJson(packageJsonPath);
-        }
-      });
+      if (!nestedModule) {
+        result.forEach((dependency) => {
+          console.log('dependency', dependency);
+          if (dependency.includes('@module')) {
+            const [, moduleName] = dependency.split('/');
+            const moduleFolders = Rule.MODULE_STRUCTURE
+            .filter((moduleFolder) => {
+              console.log('moduleName', moduleName);
+              console.log('moduleFolder', moduleName.includes(moduleFolder));
+              return moduleName.includes(moduleFolder);
+            })
+            .map((moduleFolder) => moduleName.replace(`-${moduleFolder}`, ''))
+            console.log('res', moduleFolders);
+            const relatedModulePath: string = moduleFolders.length === 1 ? 
+            this.getRelatedModulePath(packageJsonPath, moduleName, moduleFolders[0]) : '';
+            if (relatedModulePath) {
+              nestedResult = this.getDependencies(relatedModulePath, true);
+            }
+          }
+        });
+      }
 
     }
 
-    return result;
+    return new Set([...Array.from(result), ...Array.from(nestedResult)]);
   }
 
-  private findRelatedModulePackageJson(current: string): void {
-    const rootDir = path.dirname(path.dirname(current));
-    const dir = fs.readdirSync(rootDir)
-    console.log('dir', dir);
+  private getRelatedModulePath(current: string, moduleName: string, moduleFolder: string): string {
+    const rootModulesDirPath: string = path.join(current, moduleFolder, '..', '..', '..', '..');
+    console.log('rootModulesDirPath', rootModulesDirPath);
+
+    const rootModulesDir: string[] = fs.readdirSync(rootModulesDirPath);
+    return fs.existsSync(rootModulesDirPath) ? `${rootModulesDirPath}/${moduleName}/${moduleFolder}` : '';
   }
 
   private addDependencies(result: Set<string>, dependencies: Dependencies) {
@@ -113,6 +138,7 @@ class RecursiveDependenciesWalker extends Lint.RuleWalker {
     let prev: string;
     do {
       const fileName = path.join(current, "package.json");
+      console.log('1111111111fileName',fileName )
       if (fs.existsSync(fileName)) {
         return fileName;
       }

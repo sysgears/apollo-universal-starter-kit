@@ -49,7 +49,7 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       resetForm();
       setStatus({ sent: true });
     } catch (e) {
-      setErrors(e);
+      setErrors(e.errors);
       setStatus({ sent: false });
     }
   },

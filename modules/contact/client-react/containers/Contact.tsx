@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mutation, FetchResult } from 'react-apollo';
-import { transformGraphQLErrors } from '@module/core-common';
+import { FormErrors } from '@module/forms-client-react';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
@@ -14,7 +14,7 @@ class Contact extends React.Component<{ t: TranslateFunction }> {
     try {
       await sendContact(values);
     } catch (e) {
-      throw transformGraphQLErrors(e, t('serverError'));
+      throw new FormErrors(e, t('serverError'));
     }
   };
 

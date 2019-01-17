@@ -1,7 +1,7 @@
 import React from 'react';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { transformGraphQLErrors } from '@module/core-common';
+import { FormErrors } from '@module/forms-client-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
@@ -16,7 +16,7 @@ class Login extends React.Component {
     try {
       await login(values);
     } catch (e) {
-      throw transformGraphQLErrors(e, t('login.errorMsg'));
+      throw new FormErrors(e, t('login.errorMsg'));
     }
 
     await access.doLogin(client);
@@ -38,10 +38,11 @@ const LoginWithApollo = compose(
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
         const {
-          data: { login }
+          data: { login, error }
         } = await mutate({
           variables: { input: { usernameOrEmail, password } }
         });
+        console.log('error', error);
         return login;
       }
     })

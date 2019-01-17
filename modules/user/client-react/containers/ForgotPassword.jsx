@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { transformGraphQLErrors } from '@module/core-common';
+import { FormErrors } from '@module/forms-client-react';
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
@@ -19,7 +19,7 @@ class ForgotPassword extends React.Component {
     try {
       await forgotPassword(values);
     } catch (e) {
-      throw transformGraphQLErrors(e, t('forgotPass.errorMsg'));
+      throw new FormErrors(e, t('forgotPass.errorMsg'));
     }
   };
 

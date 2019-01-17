@@ -155,7 +155,7 @@ const LoginFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      setErrors(e);
+      setErrors(e.errors);
     });
   },
   validate: values => validate(values, loginFormSchema),

@@ -58,7 +58,7 @@ const ResetPasswordFormWithFormik = withFormik({
   ) {
     await onSubmit(values)
       .then(() => resetForm())
-      .catch(e => setErrors(e));
+      .catch(e => setErrors(e.errors));
   },
   validate: values => validate(values, resetPasswordFormSchema),
   displayName: 'LoginForm' // helps with React DevTools

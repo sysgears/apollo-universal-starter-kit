@@ -1,6 +1,4 @@
-import { GraphQLError } from 'graphql';
 import _ from 'lodash';
-
 import log from './log';
 
 /**
@@ -28,18 +26,6 @@ export const omitNested = (obj: { [key: string]: any }, paths: string | string[]
  * @param obj - The source object
  */
 export const removeTypename = (obj: { [key: string]: any }) => omitNested(obj, '__typename');
-
-/**
- * Create an error object from graphQLErrors with errors fields for form and message error for alert form
- *
- * @param graphQLErrors - Array errors from graphQL,
- * @param errorMsg - Error message for alert form
- */
-export const transformGraphQLErrors = (graphQLErrors: { [key: string]: [GraphQLError] }, errorMsg: string) => {
-  if (graphQLErrors.graphQLErrors.length === 1) {
-    return { ...graphQLErrors.graphQLErrors[0].extensions.exception.errors, errorMsg };
-  }
-};
 
 /**
  * Wraps the target object to trace and log all method calls

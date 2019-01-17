@@ -1,8 +1,0 @@
-query reports {
-  reports {
-    id
-    name
-    phone
-    email
-  }
-}

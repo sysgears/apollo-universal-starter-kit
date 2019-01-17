@@ -17,16 +17,20 @@ class Upload extends React.Component {
 
   handleUploadFiles = async files => {
     const { uploadFiles } = this.props;
-    const result = await uploadFiles(files);
-
-    this.setState({ error: result && result.error ? result.error : null });
+    try {
+      await uploadFiles(files);
+    } catch (e) {
+      this.setState({ error: e });
+    }
   };
 
   handleRemoveFile = async id => {
     const { removeFile } = this.props;
-    const result = await removeFile(id);
-
-    this.setState({ error: result && result.error ? result.error : null });
+    try {
+      await removeFile(id);
+    } catch (e) {
+      this.setState({ error: e });
+    }
   };
 
   render() {
@@ -63,7 +67,7 @@ export default compose(
             refetchQueries: [{ query: FILES_QUERY }]
           });
         } catch (e) {
-          return { error: e.graphQLErrors[0].message };
+          throw { error: e.graphQLErrors[0].message };
         }
       }
     })
@@ -91,7 +95,7 @@ export default compose(
             }
           });
         } catch (e) {
-          return { error: e.graphQLErrors[0].message };
+          throw { error: e.graphQLErrors[0].message };
         }
       }
     })

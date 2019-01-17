@@ -1,4 +1,4 @@
 import value from 'dependency';
-                  ~~~~~~~~~~~~  [Can't find this dependency in the tree of dependencies.]
+                  ~~~~~~~~~~~~  [Can't find this dependency in the packages.json or in related module's package.json.]
 import { chalk } from 'chalk';
 import tyop from 'safe';

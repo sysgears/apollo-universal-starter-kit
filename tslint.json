@@ -42,6 +42,7 @@
         ]
       }
     ],
+    "recursive-dependencies": false,
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,

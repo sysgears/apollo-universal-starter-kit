@@ -56,8 +56,8 @@ class ReportPreview extends Component {
     reports: PropTypes.array,
     title: PropTypes.string.isRequired,
     button: PropTypes.element.isRequired,
-    onDownloadPdf: PropTypes.function.isRequired,
-    onDownloadExcel: PropTypes.function.isRequired
+    onDownloadPdf: PropTypes.func.isRequired,
+    onDownloadExcel: PropTypes.func.isRequired
   };
 
   render() {

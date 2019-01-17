@@ -19,8 +19,8 @@ import services.{MailService, MessageTemplateService}
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import common.implicits.RichTry._
-import modules.jwt.model.{JwtContent, Tokens}
-import modules.jwt.service.JwtAuthService
+import jwt.model.{JwtContent, Tokens}
+import jwt.service.JwtAuthService
 
 import scala.concurrent.{ExecutionContext, Future}
 

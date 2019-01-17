@@ -36,7 +36,7 @@ trait ModuleApp extends App with AppInitialization {
     val graphQlExecutor = executor(graphQL)
     val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
+    val graphQLRoute = new GraphQLRoute(httpHandler, webSocketHandler, graphQL)
     val routes = serverModule.routes + graphQLRoute.routes
 
     val corsSettings = CorsSettings.apply(system)

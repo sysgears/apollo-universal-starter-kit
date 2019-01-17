@@ -1,7 +1,8 @@
-#import "./Report.graphql"
-
 query reports {
   reports {
-    ...ReportInfo
+    id
+    name
+    phone
+    email
   }
 }

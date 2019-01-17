@@ -1,19 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 
-import { Button } from '@module/look-client-react';
 import WithExportPDF from '../containers/WithExportPDF';
 
-const ContactRow = ({ report }) => (
+const ContactRow = ({ values }) => (
   <tr>
-    {report.map((item, key) => (
+    {values.map((item, key) => (
       <td key={key}>{item}</td>
     ))}
   </tr>
 );
 
 ContactRow.propTypes = {
-  report: PropTypes.array
+  values: PropTypes.array
 };
 
 const ContactHeader = ({ headerItem }) => (
@@ -28,17 +27,17 @@ ContactHeader.propTypes = {
   headerItem: PropTypes.array
 };
 
-const ContactTable = ({ reports }) => {
+const ContactTable = ({ report }) => {
   let rows = [];
-  reports.forEach((report, key) => {
-    rows.push(<ContactRow report={Object.values(report)} key={key} />);
+  report.forEach((row, key) => {
+    rows.push(<ContactRow values={Object.values(row)} key={key} />);
   });
 
   return (
     <table className="table">
       <thead>
         <tr>
-          <ContactHeader headerItem={Object.keys(reports[0])} />
+          <ContactHeader headerItem={Object.keys(report[0])} />
         </tr>
       </thead>
       <tbody>{rows}</tbody>
@@ -47,30 +46,26 @@ const ContactTable = ({ reports }) => {
 };
 
 ContactTable.propTypes = {
-  reports: PropTypes.array,
+  report: PropTypes.array,
   title: PropTypes.string
 };
 
 class ReportPreview extends Component {
   static propTypes = {
-    reports: PropTypes.array,
+    report: PropTypes.array,
     title: PropTypes.string.isRequired,
-    button: PropTypes.element.isRequired,
-    onDownloadPdf: PropTypes.func.isRequired,
-    onDownloadExcel: PropTypes.func.isRequired
+    button: PropTypes.element.isRequired
   };
 
   render() {
-    const { reports, title, button, onDownloadPdf, onDownloadExcel } = this.props;
+    const { report, title, button } = this.props;
 
     return (
       <Fragment>
         <WithExportPDF button={button}>
           <h1>{title}</h1>
-          <ContactTable reports={reports} />
+          <ContactTable report={report} />
         </WithExportPDF>
-        <Button onClick={onDownloadPdf}>Donwload PDF</Button>
-        <Button onClick={onDownloadExcel}>Donwload Excel</Button>
       </Fragment>
     );
   }

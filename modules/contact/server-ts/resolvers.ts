@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import { validate } from '@module/validation-common-react';
 import { contactFormSchema } from '@module/contact-common';
-import { ApolloError, UserInputError } from 'apollo-server-express';
+import { ApolloError, UserInputError } from 'apollo-server-errors';
 import log from '../../../packages/common/log';
 
 interface ContactInput {

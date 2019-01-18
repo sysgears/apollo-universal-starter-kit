@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError } from 'apollo-server-errors';
 import access from '../../access';
 import User from '../../sql';
 import settings from '../../../../../settings';

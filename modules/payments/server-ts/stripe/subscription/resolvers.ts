@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 import { log } from '@module/core-common';
-import { ApolloError } from 'apollo-server-express';
+import { ApolloError } from 'apollo-server-errors';
 
 import settings from '../../../../../settings';
 

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { createTransaction } from '@module/database-server-ts';
-import { UserInputError, ApolloError } from 'apollo-server-express';
+import { UserInputError, ApolloError } from 'apollo-server-errors';
 
 import settings from '../../../settings';
 

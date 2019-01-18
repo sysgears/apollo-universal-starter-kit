@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import { validate } from '@module/validation-common-react';
-import { contactFormSchema } from './contactFormSchema';
-
+import { contactFormSchema } from '@module/contact-common';
+import { ApolloError, UserInputError } from 'apollo-server-express';
 import log from '../../../packages/common/log';
 
 interface ContactInput {
@@ -15,12 +15,9 @@ interface ContactInput {
 export default () => ({
   Mutation: {
     async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
-      // TODO if import ApolloError that get error 'app is not defined'
-      const { ApolloError, UserInputError } = require('apollo-server-express');
-
       const errors = validate(input, contactFormSchema);
       if (!isEmpty(errors)) {
-        throw new UserInputError(t('contact:validError'), { errors });
+        throw new UserInputError(t('contact:validateError'), { errors });
       }
 
       try {

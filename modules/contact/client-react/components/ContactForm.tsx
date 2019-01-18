@@ -1,7 +1,7 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
 
-import { contactFormSchema } from '@module/contact-server-ts';
+import { contactFormSchema } from '@module/contact-common';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { validate } from '@module/validation-common-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';

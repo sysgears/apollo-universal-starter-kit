@@ -3,7 +3,7 @@ import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
-import { contactFormSchema } from '@module/contact-server-ts';
+import { contactFormSchema } from '@module/contact-common';
 import { validate } from '@module/validation-common-react';
 import { TranslateFunction } from '@module/i18n-client-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';

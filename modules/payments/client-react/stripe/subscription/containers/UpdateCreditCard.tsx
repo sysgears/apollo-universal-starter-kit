@@ -3,7 +3,7 @@ import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { PLATFORM } from '@module/core-common';
-
+import { FormErrors } from '@module/forms-client-react';
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 
 import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
@@ -47,12 +47,12 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
         submitting: false
       });
       if (e && e.type === 'validation_error') {
-        throw { errorMsg: t('creditCardError') };
+        throw new FormErrors(e, t('creditCardError'));
       }
       if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
-        throw { errorMsg: t('stripeError') };
+        throw new FormErrors(e, t('stripeError'));
       }
-      throw { errorMsg: t('serverError') };
+      throw new FormErrors(e, t('serverError'));
     }
   };
 

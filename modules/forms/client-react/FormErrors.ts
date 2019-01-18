@@ -5,9 +5,11 @@ export class FormErrors {
 
   constructor(err: { [key: string]: [GraphQLError] }, errorMsg: string) {
     this._errors = {
-      ...err.graphQLErrors.reduce((result, { extensions: { exception: { errors } } }) => {
-        return { ...result, ...errors };
-      }, {}),
+      ...(err && err.graphQLErrors
+        ? err.graphQLErrors.reduce((result, { extensions: { exception: { errors } } }) => {
+            return { ...result, ...errors };
+          }, {})
+        : {}),
       errorMsg
     };
   }

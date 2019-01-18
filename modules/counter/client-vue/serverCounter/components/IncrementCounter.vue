@@ -1,12 +1,18 @@
 <template>
-  <button @click='increment()'>Increase Apollo Link State counter</button>
+  <LookButton variant='primary' size='md' v-on:click='increment()'>
+    Increase Apollo Link State counter
+  </LookButton>
 </template>
 
 <script>
 import { ADD_COUNTER, COUNTER_QUERY } from '@module/counter-common';
+import { Button as LookButton } from '@module/look-client-vue';
 
 export default {
   props: { counter: Object },
+  components: {
+    LookButton,
+  },
   methods: {
     increment: function() {
       this.$apollo.mutate({

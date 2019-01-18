@@ -24,8 +24,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   constructor(props: UpdateCreditCardProps) {
     super(props);
     this.state = {
-      submitting: false,
-      error: null
+      submitting: false
     };
   }
 
@@ -65,20 +64,10 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <UpdateCreditCardView
-                    error={this.state.error}
-                    submitting={this.state.submitting}
-                    onSubmit={this.onSubmit(updateCard)}
-                    t={t}
-                  />
+                  <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
                 </StripeProvider>
               ) : (
-                <UpdateCreditCardView
-                  error={this.state.error}
-                  submitting={this.state.submitting}
-                  onSubmit={this.onSubmit(updateCard)}
-                  t={t}
-                />
+                <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
               )}
             </Fragment>
           );

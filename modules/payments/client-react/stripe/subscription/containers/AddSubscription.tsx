@@ -59,7 +59,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
 
   public render() {
     const { t } = this.props;
-    const { error, submitting } = this.state;
+    const { submitting } = this.state;
 
     return (
       <Mutation
@@ -77,20 +77,10 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
               {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <AddSubscriptionView
-                    error={error}
-                    submitting={submitting}
-                    onSubmit={this.onSubmit(addSubscription)}
-                    t={t}
-                  />
+                  <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
                 </StripeProvider>
               ) : (
-                <AddSubscriptionView
-                  error={error}
-                  submitting={submitting}
-                  onSubmit={this.onSubmit(addSubscription)}
-                  t={t}
-                />
+                <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
               )}
             </Fragment>
           );

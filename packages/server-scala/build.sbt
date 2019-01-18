@@ -11,15 +11,15 @@ scalaVersion := "2.12.7"
 lazy val global = (project in file(".") dependsOn (modules.map(_ % "test->test; compile->compile"): _*) aggregate (modules: _*))
   .enablePlugins(DockerPlugin, JavaAppPackaging, AshScriptPlugin)
 
-lazy val modules = List(
-  ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload"),
-  ProjectRef(base = file("../../modules/user/server-scala"), id = "user"),
-  ProjectRef(base = file("../../modules/counter/server-scala"), id = "counter"),
-  ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
-  ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination"),
-  ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication"),
-  ProjectRef(base = file("../../modules/post/server-scala"), id = "post")
-)
+lazy val modules =
+  ProjectRef(base = file("../../modules/upload/server-scala"), id = "upload") ::
+  ProjectRef(base = file("../../modules/user/server-scala"), id = "user") ::
+  ProjectRef(base = file("../../modules/counter/server-scala"), id = "counter") ::
+  ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact") ::
+  ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination") ::
+  ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication") ::
+  ProjectRef(base = file("../../modules/post/server-scala"), id = "post") ::
+  Nil
 
 resourceGenerators in Compile ++= Seq(
   ResourceProcessor.concatDotEnvsTask.taskValue,
@@ -34,5 +34,5 @@ dockerExposedVolumes := Seq("/usr/local", "/usr/local/target")
 
 mainClass in Compile := Some("Main")
 
-scalafmtOnCompile := true
+scalafmtOnCompile := false
 scalafmtConfig := Some(file("../../.scalafmt.conf"))

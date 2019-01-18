@@ -1,15 +1,20 @@
 package common.routes.graphql
 
+import java.util.UUID
+
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
+import common.Logger
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import common.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import common.routes.graphql.jsonProtocols.OperationMessageType._
 import common.routes.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
+import modules.socket._
+import modules.socket.SocketConnection
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
@@ -28,8 +33,9 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   import spray.json.DefaultJsonProtocol._
 
   def handleMessages: Flow[Message, Message, NotUsed] = {
-    implicit val (queue, publisher) =
+    implicit val (queue: SourceQueueWithComplete[Message], publisher) =
       Source.queue[Message](16, OverflowStrategy.backpressure).toMat(Sink.asPublisher(false))(Keep.both).run()
+    implicit val socketConnection: SocketConnection = SocketConnection.apply
     val killSwitches = KillSwitches.shared(this.getClass.getSimpleName)
     val incoming = Flow[Message]
       .collect {
@@ -40,6 +46,9 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
               reply(OperationMessage(GQL_CONNECTION_ACK, None, None))
             case GQL_START =>
               handleGraphQlQuery(operation, killSwitches)
+            case GQL_STOP =>
+              socketConnection.cancel(operation.id.get) //TODO Unsafe
+              reply(OperationMessage(SUBSCRIPTION_END, operation.id, None))
           }
       }
       .to {
@@ -52,9 +61,10 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
-  private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)(
-      implicit queue: SourceQueueWithComplete[Message]
-  ): Unit = {
+
+  private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
+                                (implicit queue: SourceQueueWithComplete[Message],
+                                 socketConnection: SocketConnection): Unit = {
     import sangria.streaming.akkaStreams._
     operationMessage.payload.foreach {
       payload =>
@@ -66,7 +76,8 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                 graphQlExecutor
                   .execute(
                     queryAst = queryAst,
-                    userContext = UserContext(),
+                    userContext = UserContext(socketSubscription =
+                      Some(SocketSubscription(operationMessage.id.get, socketConnection))), //TODO Check ID
                     root = (),
                     operationName = graphQlMessage.operationName,
                     variables = graphQlMessage.variables.getOrElse(JsObject.empty)

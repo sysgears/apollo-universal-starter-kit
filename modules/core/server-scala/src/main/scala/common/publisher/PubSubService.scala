@@ -2,6 +2,7 @@ package common.publisher
 
 import akka.NotUsed
 import akka.stream.scaladsl.Source
+import common.graphql.UserContext
 import sangria.schema.Action
 
 trait PubSubService[T] {

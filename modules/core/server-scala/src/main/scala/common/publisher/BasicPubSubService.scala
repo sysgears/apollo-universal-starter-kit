@@ -1,15 +1,21 @@
 package common.publisher
 
 import akka.NotUsed
+import akka.actor.ActorRef
+import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Source
 import common.Logger
-import monix.execution.Scheduler
+import common.graphql.UserContext
+import monix.execution.Ack.Continue
+import monix.execution.{Ack, Scheduler}
+import monix.reactive.Observer
+import monix.reactive.observers.Subscriber
 import monix.reactive.subjects.PublishSubject
 import sangria.schema.Action
 
-abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Scheduler)
-  extends PubSubService[T]
-  with Logger {
+import scala.concurrent.Future
+
+abstract class BasicPubSubService[T <: Event[_]](implicit scheduler: Scheduler) extends PubSubService[T] with Logger {
 
   lazy val source = PublishSubject[T]
 
@@ -18,10 +24,20 @@ abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Schedul
     source.onNext(event)
   }
 
-  override def subscribe(eventNames: Seq[String], params: Seq[Param] = Nil): Source[Action[Nothing, T], NotUsed] = {
-    require(eventNames.nonEmpty)
+  override def subscribe(eventNames: Seq[String], params: Seq[Param] = Nil)(implicit userContext: UserContext): Source[Action[Nothing, T], NotUsed] = {
+
     Source
-      .fromPublisher(source.toReactivePublisher[T])
+      .actorRef[T](16, OverflowStrategy.dropHead)
+      .mapMaterializedValue {
+        actorRef =>
+          val subscriber = Subscriber(new CustomObserver[T](actorRef), scheduler)
+          val cancelable = source.subscribe(subscriber)
+          //TODO Check key for exist
+          //TODO if ID already exist - resubscribe!!!
+          userContext.socketSubscription.foreach(socketSubscription =>
+            socketSubscription.socketConnection.add(socketSubscription.id, cancelable))
+          NotUsed
+      }
       .filter {
         event =>
           eventNames.contains(event.name) && filter(event, params)
@@ -37,4 +53,14 @@ abstract class BasicPubSubService[T <: Event[_]](implicit val scheduler: Schedul
     * To filter subscription by specified params, override this method.
     */
   def filter(event: T, params: Seq[Param]) = true
+}
+
+class CustomObserver[T](actorRef: ActorRef)(implicit val scheduler: Scheduler) extends Observer[T] {
+  override def onNext(elem: T): Future[Ack] = {
+    actorRef.tell(elem, ActorRef.noSender)
+    Continue
+  }
+  //TODO Implement!!!
+  override def onError(ex: Throwable): Unit = ()
+  override def onComplete(): Unit = ()
 }

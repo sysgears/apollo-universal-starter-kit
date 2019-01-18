@@ -1,24 +1,17 @@
 import { GraphQLError } from 'graphql';
 
 export class FormErrors {
-  private _errors: { [key: string]: any };
+  public _errors: { [key: string]: any };
 
-  constructor(errors: { [key: string]: [GraphQLError] }, errorMsg: string) {
-    this._errors = {};
-    this.setErrors(errors.graphQLErrors, errorMsg);
+  constructor(err: { [key: string]: [GraphQLError] }, errorMsg: string) {
+    this._errors = {
+      ...err.graphQLErrors.reduce((result, { extensions: { exception: { errors } } }) => {
+        return { ...result, ...errors };
+      }, {}),
+      errorMsg
+    };
   }
-
   get errors() {
     return this._errors;
-  }
-
-  private setErrors(graphQLErrors: [GraphQLError], errorMsg: string) {
-    graphQLErrors.map(
-      ({
-        extensions: {
-          exception: { errors }
-        }
-      }) => (this._errors = { ...errors, errorMsg })
-    );
   }
 }

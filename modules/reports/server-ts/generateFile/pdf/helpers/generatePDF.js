@@ -16,7 +16,7 @@ function createPDF(reports) {
 
   pdf.addText('This is title of the report', 'header');
   pdf.addText('You can create table with data from database', 'subheader');
-  pdf.addTable(reports);
+  pdf.addTable(reports, Object.keys(reports[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
   pdf.addText('Here is example of ordered list', 'subheader');
   pdf.addList([5, 4, 3, 2, 1], 'ol');
   pdf.addText('And unordered list', 'subheader');

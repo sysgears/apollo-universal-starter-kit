@@ -20,9 +20,10 @@ class PDFGenerator {
     this.styles[name] = style;
   }
 
-  addTable(data) {
+  addTable(data, columnsWidth) {
     this.content.push({
       table: {
+        widths: columnsWidth,
         body: [Object.keys(data[0]), ...data.map(item => Object.values(item))]
       }
     });

@@ -12,8 +12,8 @@ import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import model.User
 import model.facebook.{FacebookAuth, FacebookOauth2Response}
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
 import repositories.{FacebookAuthRepository, UserRepository}
 import services.ExternalApiService

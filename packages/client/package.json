@@ -67,6 +67,7 @@
     "error-stack-parser": "^2.0.1",
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
+    "firebase": "^5.8.0",
     "formik": "^1.3.1",
     "graphql": "^0.13.0",
     "graphql-iso-date": "^3.5.0",

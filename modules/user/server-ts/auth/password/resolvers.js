@@ -2,10 +2,14 @@ import bcrypt from 'bcryptjs';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { FieldError } from '@module/validation-common-react';
+import { createTransaction } from '@module/database-server-ts';
 
 import access from '../../access';
-import User from '../../sql';
 import settings from '../../../../../settings';
+
+const createPasswordHash = password => {
+  return bcrypt.hash(password, 12) || false;
+};
 
 const validateUserPassword = async (user, password, t) => {
   const e = new FieldError();
@@ -20,11 +24,13 @@ const validateUserPassword = async (user, password, t) => {
     e.throwIf();
   }
 
-  const valid = await bcrypt.compare(password, user.passwordHash);
-  if (!valid) {
-    // bad password
-    e.setError('password', t('user:auth.password.validPassword'));
-    e.throwIf();
+  if (!settings.user.auth.firebase.enabled) {
+    const valid = await bcrypt.compare(password, user.passwordHash);
+    if (!valid) {
+      // bad password
+      e.setError('password', t('user:auth.password.validPassword'));
+      e.throwIf();
+    }
   }
 };
 
@@ -35,7 +41,7 @@ export default () => ({
       {
         input: { usernameOrEmail, password }
       },
-      { req }
+      { req, User }
     ) {
       try {
         const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
@@ -68,7 +74,19 @@ export default () => ({
         if (!emailExists) {
           const isActive = !settings.user.auth.password.confirm;
 
-          userId = await User.register({ ...input, isActive });
+          const passwordHash = await createPasswordHash(input.password);
+
+          const trx = await createTransaction();
+          let createdUserId;
+          try {
+            [createdUserId] = await User.register({ ...input, isActive }, passwordHash).transacting(trx);
+            await User.editUserProfile({ id: createdUserId, ...input, isActive }).transacting(trx);
+            if (settings.user.auth.certificate.enabled)
+              await User.editAuthCertificate({ id: createdUserId, ...input, isActive }).transacting(trx);
+            trx.commit();
+          } catch (e) {
+            trx.rollback();
+          }
 
           // if user has previously logged with facebook auth
         } else {

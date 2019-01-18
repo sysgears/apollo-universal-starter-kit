@@ -8,6 +8,9 @@ import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
 import { apiUrl } from '@module/core-common';
 import ClientModule from '@module/module-client-react';
+import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../packages/common/createApolloClient';
@@ -51,6 +54,18 @@ ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));
+
+// Initialize Firebase
+const {
+  user: {
+    auth: {
+      firebase: { enabled, ...config }
+    }
+  }
+} = settings;
+if (enabled) {
+  firebase.initializeApp(config);
+}
 
 export const onAppDispose = (_: any, data: any) => {
   data.store = ref.store;

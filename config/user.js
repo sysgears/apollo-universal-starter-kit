@@ -53,7 +53,12 @@ export default {
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
     },
     firebase: {
-      enabled: true
+      enabled: true,
+      apiKey: '',
+      authDomain: '',
+      projectId: '',
+      storageBucket: '',
+      messagingSenderId: ''
     }
   }
 };

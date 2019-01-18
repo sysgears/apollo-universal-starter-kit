@@ -25,6 +25,15 @@ class User {
       .get();
     return this.controlSnapshot(snapshot);
   }
+  async getUserByUsernameOrEmail(usernameOrEmail) {
+    // firebase auth supports only email autentification
+    const snapshot = await firebase
+      .firestore()
+      .collection('users')
+      .where('email', '==', usernameOrEmail)
+      .get();
+    return this.controlSnapshot(snapshot);
+  }
   async register({ username, email, role = 'user', isActive, password }) {
     const { uid, passwordHash } = await firebase.auth().createUser({
       email,

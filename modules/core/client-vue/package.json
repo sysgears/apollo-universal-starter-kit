@@ -6,6 +6,7 @@
     "@module/core-common": "^1.0.0",
     "@module/module-client-vue": "^1.0.0",
     "vue": "^2.5.22",
+    "vue-apollo": "^3.0.0-beta.27",
     "vue-router": "^3.0.2",
     "vuex": "^3.0.1",
     "error-stack-parser": "^2.0.1",

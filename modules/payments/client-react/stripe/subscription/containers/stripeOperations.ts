@@ -29,11 +29,7 @@ export const createToken = (creditCardInput: CreditCardInput) => {
     body: Object.keys(card)
       .map(key => key + '=' + card[key])
       .join('&')
-  })
-    .then(response => response.json())
-    .catch(e => {
-      throw e;
-    });
+  }).then(response => response.json());
 };
 
 /**

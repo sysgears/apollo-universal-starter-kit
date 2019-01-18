@@ -1,7 +1,7 @@
 export const INCREMENT = 'INCREMENT';
 
 export const state = {
-  count: 5
+  count: 1
 };
 
 /* eslint no-param-reassign: ['error', { 'props': false }] */

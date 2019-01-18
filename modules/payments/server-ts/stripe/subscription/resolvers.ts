@@ -2,13 +2,11 @@ import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 import { log } from '@module/core-common';
 import { ApolloError } from 'apollo-server-express';
-// import { FieldError } from '@module/validation-common-react';
 
 import settings from '../../../../../settings';
 
 const { plan } = settings.stripe.subscription;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const CODE_ERROR = 'STRIPE_DENIED';
 
 interface CreditCard {
   input: {
@@ -78,7 +76,7 @@ export default () => ({
         return { active: true };
       } catch (e) {
         log.error(e);
-        throw new ApolloError(e, CODE_ERROR);
+        throw new ApolloError(e, 'STRIPE_DENIED');
       }
     }),
     updateStripeSubscriptionCard: withAuth(['stripe:update:self'], async (obj: any, args: CreditCard, context: any) => {

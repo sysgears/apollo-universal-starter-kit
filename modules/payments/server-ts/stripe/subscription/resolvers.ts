@@ -99,7 +99,7 @@ export default () => ({
         return true;
       } catch (e) {
         log.error(e);
-        throw e;
+        throw new ApolloError(e, 'STRIPE_DENIED');
       }
     }),
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {
@@ -124,9 +124,10 @@ export default () => ({
           brand: null
         });
 
-        return { active: false, errors: null };
+        return { active: false };
       } catch (e) {
-        throw e;
+        log.error(e);
+        throw new ApolloError(e, 'STRIPE_DENIED');
       }
     })
   },

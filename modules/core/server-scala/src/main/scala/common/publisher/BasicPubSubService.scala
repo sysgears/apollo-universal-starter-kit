@@ -32,10 +32,8 @@ abstract class BasicPubSubService[T <: Event[_]](implicit scheduler: Scheduler) 
         actorRef =>
           val subscriber = Subscriber(new CustomObserver[T](actorRef), scheduler)
           val cancelable = source.subscribe(subscriber)
-          //TODO Check key for exist
-          //TODO if ID already exist - resubscribe!!!
-          userContext.socketSubscription.foreach(socketSubscription =>
-            socketSubscription.socketConnection.add(socketSubscription.id, cancelable))
+          userContext.socketSubscription.foreach(existSocketSubscription =>
+            existSocketSubscription.socketConnection.add(existSocketSubscription.id, cancelable))
           NotUsed
       }
       .filter {

@@ -1,12 +1,9 @@
 package common.routes.graphql
 
-import java.util.UUID
-
 import akka.NotUsed
 import akka.http.scaladsl.model.ws.{Message, TextMessage}
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source, SourceQueueWithComplete}
 import akka.stream.{ActorMaterializer, KillSwitches, OverflowStrategy, SharedKillSwitch}
-import common.Logger
 import common.graphql.UserContext
 import common.graphql.schema.GraphQL
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
@@ -45,10 +42,20 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
             case GQL_CONNECTION_INIT =>
               reply(OperationMessage(GQL_CONNECTION_ACK, None, None))
             case GQL_START =>
-              handleGraphQlQuery(operation, killSwitches)
+              operation.id match {
+                case Some(_) =>
+                  handleGraphQlQuery(operation, killSwitches)
+                case None =>
+                  reply(OperationMessage(GQL_ERROR, None, Some("Id is required".toJson)))
+              }
             case GQL_STOP =>
-              socketConnection.cancel(operation.id.get) //TODO Unsafe
-              reply(OperationMessage(SUBSCRIPTION_END, operation.id, None))
+              operation.id match {
+                case Some(id) =>
+                  socketConnection.cancel(id)
+                  reply(OperationMessage(SUBSCRIPTION_END, operation.id, None))
+                case None =>
+                  reply(OperationMessage(GQL_ERROR, None, Some("Id is required".toJson)))
+              }
           }
       }
       .to {
@@ -60,7 +67,6 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
       }
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
-
 
   private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
                                 (implicit queue: SourceQueueWithComplete[Message],
@@ -77,7 +83,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                   .execute(
                     queryAst = queryAst,
                     userContext = UserContext(socketSubscription =
-                      Some(SocketSubscription(operationMessage.id.get, socketConnection))), //TODO Check ID
+                      Some(SocketSubscription(operationMessage.id.get, socketConnection))),
                     root = (),
                     operationName = graphQlMessage.operationName,
                     variables = graphQlMessage.variables.getOrElse(JsObject.empty)

@@ -20,7 +20,7 @@ export default () => ({
 
       const errors = validate(input, contactFormSchema);
       if (!isEmpty(errors)) {
-        throw new UserInputError('Failed to get events due to validation errors', { errors });
+        throw new UserInputError(t('contact:validError'), { errors });
       }
 
       try {

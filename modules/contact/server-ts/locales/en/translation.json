@@ -1,3 +1,4 @@
 {
-  "sendError": "Error when sending email."
+  "sendError": "Error when sending email.",
+  "validError": "Failed when check valid form contact"
 }

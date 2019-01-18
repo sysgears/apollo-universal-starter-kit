@@ -8,7 +8,7 @@ const config = {
       dllBuildDir: 'build/android/dll',
       stack: ['react-native', 'android'],
       defines: {
-        __CLIENT__: false
+        __CLIENT__: true
       },
       enabled: false
     },
@@ -18,7 +18,7 @@ const config = {
       dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],
       defines: {
-        __CLIENT__: false
+        __CLIENT__: true
       },
       enabled: false
     },

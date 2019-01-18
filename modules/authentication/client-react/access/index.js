@@ -12,14 +12,18 @@ const ref = React.createRef();
 
 const resetApolloCache = async client => {
   await client.cache.reset();
+
+  // await client.clearStore();
+
+  console.log('client --->', client);
 };
 
 const login = async client => {
-  resetApolloCache(client);
+  await resetApolloCache(client);
 };
 
 const logout = async client => {
-  resetApolloCache(client);
+  await resetApolloCache(client);
   ref.current.reloadPage();
 };
 

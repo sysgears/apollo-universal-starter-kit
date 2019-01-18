@@ -24,7 +24,7 @@ describe('Contact API works', () => {
         }
       });
     } catch (e) {
-      expect(e);
+      expect(e.graphQLErrors).to.be.an('Array');
     }
   });
 });

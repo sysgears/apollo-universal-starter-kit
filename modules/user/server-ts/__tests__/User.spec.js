@@ -66,7 +66,7 @@ describe('User API works', () => {
       try {
         await apollo.query({ query: USER_QUERY, variables: { id: 1 } });
       } catch (e) {
-        expect(e);
+        expect(e.graphQLErrors).to.be.an('Array');
       }
     });
   });

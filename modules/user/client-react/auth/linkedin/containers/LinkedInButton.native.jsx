@@ -16,7 +16,6 @@ import {
 } from '@module/look-client-react-native/styles';
 
 import buildRedirectUrlForMobile from '../../../helpers';
-import access from '../../../access';
 
 const linkedInLogin = () => {
   const url = buildRedirectUrlForMobile('linkedin');
@@ -27,9 +26,9 @@ const linkedInLogin = () => {
   }
 };
 
-const LinkedInButton = withApollo(({ client, text }) => {
+const LinkedInButton = withApollo(({ text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(linkedInLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={linkedInLogin}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="linkedin-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -41,26 +40,19 @@ const LinkedInButton = withApollo(({ client, text }) => {
   );
 });
 
-const LinkedInLink = withApollo(({ client, text }) => {
+const LinkedInLink = withApollo(({ text }) => {
   return (
-    <TouchableOpacity onPress={() => access.doLogin(client).then(linkedInLogin)} style={styles.link}>
+    <TouchableOpacity onPress={linkedInLogin} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const LinkedInIcon = withApollo(({ client }) => {
-  return (
-    <View style={styles.iconWrapper}>
-      <FontAwesome
-        name="linkedin-square"
-        size={45}
-        style={{ color: '#3B5998' }}
-        onPress={() => access.doLogin(client).then(linkedInLogin)}
-      />
-    </View>
-  );
-});
+const LinkedInIcon = () => (
+  <View style={styles.iconWrapper}>
+    <FontAwesome name="linkedin-square" size={45} style={{ color: '#3B5998' }} onPress={linkedInLogin} />
+  </View>
+);
 
 class LinkedInComponent extends React.Component {
   render() {

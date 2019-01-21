@@ -16,7 +16,6 @@ import {
 } from '@module/look-client-react-native/styles';
 
 import buildRedirectUrlForMobile from '../../../helpers';
-import access from '../../../access';
 
 const facebookLogin = () => {
   const url = buildRedirectUrlForMobile('facebook');
@@ -27,9 +26,9 @@ const facebookLogin = () => {
   }
 };
 
-const FacebookButton = withApollo(({ client, text }) => {
+const FacebookButton = withApollo(({ text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(facebookLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={facebookLogin}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="facebook-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -41,26 +40,19 @@ const FacebookButton = withApollo(({ client, text }) => {
   );
 });
 
-const FacebookLink = withApollo(({ client, text }) => {
+const FacebookLink = withApollo(({ text }) => {
   return (
-    <TouchableOpacity onPress={() => access.doLogin(client).then(facebookLogin)} style={styles.link}>
+    <TouchableOpacity onPress={facebookLogin} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const FacebookIcon = withApollo(({ client }) => {
-  return (
-    <View style={styles.iconWrapper}>
-      <FontAwesome
-        name="facebook-square"
-        size={45}
-        style={{ color: '#3B5998' }}
-        onPress={() => access.doLogin(client).then(facebookLogin)}
-      />
-    </View>
-  );
-});
+const FacebookIcon = () => (
+  <View style={styles.iconWrapper}>
+    <FontAwesome name="facebook-square" size={45} style={{ color: '#3B5998' }} onPress={facebookLogin} />
+  </View>
+);
 
 class FacebookComponent extends React.Component {
   render() {

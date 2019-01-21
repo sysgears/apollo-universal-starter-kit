@@ -91,12 +91,17 @@ const JWTLink = getApolloClient =>
                   try {
                     if (operation.operationName !== 'refreshTokens') {
                       try {
-                        const data = await apolloClient.mutate({
+                        const { data } = await apolloClient.mutate({
                           mutation: REFRESH_TOKENS_MUTATION,
                           variables: { refreshToken: await getItem('refreshToken') }
                         });
-                        const { accessToken, refreshToken } = data.refreshTokens;
-                        await saveTokens({ accessToken, refreshToken });
+
+                        if (data && data.refreshTokens) {
+                          const { accessToken, refreshToken } = data.refreshTokens;
+                          await saveTokens({ accessToken, refreshToken });
+                        } else {
+                          await removeTokens();
+                        }
                       } catch (e) {
                         await removeTokens();
                         await apolloClient.cache.reset();

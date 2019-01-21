@@ -1,15 +1,15 @@
 package routes
 
+import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
+import common.implicits.RichTry._
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
 import com.google.inject.Inject
 import common.errors.{AlreadyExists, NotFound}
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
-import common.implicits.RichDBIO._
-import common.implicits.RichFuture._
-import common.implicits.RichTry._
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import repositories.UserRepository
 
 import scala.concurrent.{ExecutionContext, Future}

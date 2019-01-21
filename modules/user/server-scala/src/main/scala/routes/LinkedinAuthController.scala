@@ -11,58 +11,56 @@ import common.errors.AmbigousResult
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import model.User
-import model.facebook.{FacebookAuth, FacebookOauth2Response}
+import model.linkedin.{LinkedinAuth, LinkedinOauth2Response}
 import jwt.model.JwtContent
 import jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
-import repositories.{FacebookAuthRepository, UserRepository}
+import repositories.UserRepository
+import repositories.auth.LinkedinAuthRepository
 import services.ExternalApiService
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class FacebookAuthController @Inject()(
-    @Named("facebook") oauth2Service: OAuth20Service,
+class LinkedinAuthController @Inject()(
+    @Named("linkedin") oauth2Service: OAuth20Service,
     externalApiService: ExternalApiService,
     userRepository: UserRepository,
-    facebookAuthRepository: FacebookAuthRepository,
+    linkedinAuthRepository: LinkedinAuthRepository,
     jwtAuthService: JwtAuthService[JwtContent]
 )(implicit val executionContext: ExecutionContext) {
 
   val routes: Route =
-    (path("auth" / "facebook") & get) {
+    (path("auth" / "linkedin") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
-    } ~ (path("auth" / "facebook" / "callback") & get) {
+    } ~ (path("auth" / "linkedin" / "callback") & get) {
       parameters('state.?, 'code) {
         (state, code) =>
           onComplete {
             for {
-              facebookAuthInfo <- externalApiService.getUserInfo[FacebookOauth2Response](
-                code,
-                "https://graph.facebook.com/me?fields=id,name,email",
-                oauth2Service
-              )
-              user <- facebookAuthRepository.findOne(facebookAuthInfo.id).run.flatMap {
-                case Some(fUser) =>
-                  userRepository.findOne(fUser.userId).run failOnNone AmbigousResult(
-                    s"User with id: ${fUser.userId} stored in facebook auth table, but not in the user table"
+              linkedinAuthInfo <- externalApiService
+                .getUserInfo[LinkedinOauth2Response](code, "https://api.linkedin.com/v2/me", oauth2Service)
+              user <- linkedinAuthRepository.findOne(linkedinAuthInfo.id).run.flatMap {
+                case Some(lnUser) =>
+                  userRepository.findOne(lnUser.userId).run failOnNone AmbigousResult(
+                    s"User with id: ${lnUser.userId} stored in linkedin auth table, but not in the user table"
                   )
                 case None =>
                   for {
                     user <- userRepository
                       .save(
                         User(
-                          username = facebookAuthInfo.name,
-                          email = facebookAuthInfo.email,
-                          password = BCrypt.hashpw(facebookAuthInfo.id, BCrypt.gensalt),
+                          username = linkedinAuthInfo.name,
+                          email = linkedinAuthInfo.email,
+                          password = BCrypt.hashpw(linkedinAuthInfo.id, BCrypt.gensalt),
                           role = "user",
                           isActive = true
                         )
                       )
                       .run
-                    _ <- facebookAuthRepository
-                      .save(FacebookAuth(Some(facebookAuthInfo.id), facebookAuthInfo.name, user.id.get))
+                    _ <- linkedinAuthRepository
+                      .save(LinkedinAuth(Some(linkedinAuthInfo.id), linkedinAuthInfo.name, user.id.get))
                       .run
                   } yield user
               }

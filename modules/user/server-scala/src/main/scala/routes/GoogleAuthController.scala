@@ -11,55 +11,59 @@ import common.errors.AmbigousResult
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import model.User
-import model.github.{GithubAuth, GithubOauth2Response}
+import model.google.{GoogleAuth, GoogleOauth2Response}
 import jwt.model.JwtContent
 import jwt.service.JwtAuthService
 import org.mindrot.jbcrypt.BCrypt
-import repositories.{GithubAuthRepository, UserRepository}
+import repositories.UserRepository
+import repositories.auth.GoogleAuthRepository
 import services.ExternalApiService
 import spray.json._
 
 import scala.concurrent.ExecutionContext
 import scala.util.{Failure, Success}
 
-class GithubAuthController @Inject()(
-    @Named("github") oauth2Service: OAuth20Service,
+class GoogleAuthController @Inject()(
+    @Named("google") oauth2Service: OAuth20Service,
     externalApiService: ExternalApiService,
     userRepository: UserRepository,
-    githubAuthRepository: GithubAuthRepository,
+    googleAuthRepository: GoogleAuthRepository,
     jwtAuthService: JwtAuthService[JwtContent]
 )(implicit val executionContext: ExecutionContext) {
 
   val routes: Route =
-    (path("auth" / "github") & get) {
+    (path("auth" / "google") & get) {
       redirect(oauth2Service.getAuthorizationUrl, StatusCodes.Found)
-    } ~ (path("auth" / "github" / "callback") & get) {
+    } ~ (path("auth" / "google" / "callback") & get) {
       parameters('state.?, 'code) {
         (state, code) =>
           onComplete {
             for {
-              githubAuthInfo <- externalApiService
-                .getUserInfo[GithubOauth2Response](code, "https://api.github.com/user", oauth2Service)
-              user <- githubAuthRepository.findOne(githubAuthInfo.id).run.flatMap {
-                case Some(ghUser) =>
-                  userRepository.findOne(ghUser.userId).run failOnNone AmbigousResult(
-                    s"User with id: ${ghUser.userId} stored in github auth table, but not in the user table"
+              googleAuthInfo <- externalApiService.getUserInfo[GoogleOauth2Response](
+                code,
+                "https://content.googleapis.com/oauth2/v2/userinfo",
+                oauth2Service
+              )
+              user <- googleAuthRepository.findOne(googleAuthInfo.id).run.flatMap {
+                case Some(gUser) =>
+                  userRepository.findOne(gUser.userId).run failOnNone AmbigousResult(
+                    s"User with id: ${gUser.userId} stored in google auth table, but not in the user table"
                   )
                 case None =>
                   for {
                     user <- userRepository
                       .save(
                         User(
-                          username = githubAuthInfo.name,
-                          email = githubAuthInfo.email,
-                          password = BCrypt.hashpw(githubAuthInfo.id.toString + githubAuthInfo.name, BCrypt.gensalt),
+                          username = googleAuthInfo.name,
+                          email = googleAuthInfo.email,
+                          password = BCrypt.hashpw(googleAuthInfo.id, BCrypt.gensalt),
                           role = "user",
                           isActive = true
                         )
                       )
                       .run
-                    _ <- githubAuthRepository
-                      .save(GithubAuth(Some(githubAuthInfo.id), githubAuthInfo.name, user.id.get))
+                    _ <- googleAuthRepository
+                      .save(GoogleAuth(Some(googleAuthInfo.id), googleAuthInfo.name, user.id.get))
                       .run
                   } yield user
               }

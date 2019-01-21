@@ -1,6 +1,7 @@
 package graphql.schema
 
 import common.implicits.RichDBIO._
+import common.implicits.RichTry._
 import common.graphql.UserContext
 import common.{InputUnmarshallerGenerator, Logger}
 import config.AuthConfig
@@ -24,6 +25,7 @@ import sangria.schema.{
 }
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
+import services.UserAuthService
 
 import scala.concurrent.ExecutionContext
 
@@ -35,7 +37,8 @@ class UserSchema @Inject()(
     googleAuthRepository: GoogleAuthRepository,
     githubAuthRepository: GithubAuthRepository,
     linkedinAuthRepository: LinkedinAuthRepository,
-    certificateAuthRepository: CertificateAuthRepository
+    certificateAuthRepository: CertificateAuthRepository,
+    userAuthService: UserAuthService
 )(implicit executionContext: ExecutionContext)
   extends InputUnmarshallerGenerator
   with Logger {
@@ -240,18 +243,22 @@ class UserSchema @Inject()(
   )
 
   def queries: List[Field[UserContext, Unit]] = List(
-    //TODO implement stub's functionality
     Field(
       name = "currentUser",
       fieldType = OptionType(user),
       arguments = List.empty,
-      resolve = sc => None
+      resolve =
+        sc => userAuthService.identify(sc.ctx.requestHeaders).asFuture.flatMap(id => userResolver.user(id).map(_.user))
     ),
     Field(
       name = "user",
       fieldType = userPayload,
       arguments = List(Argument("id", IntType)),
-      resolve = sc => userResolver.user(sc.arg[Int]("id"))
+      resolve = sc =>
+        userAuthService.withAdminFilter(
+          headers = sc.ctx.requestHeaders,
+          operation = userResolver.user(sc.arg[Int]("id"))
+      )
     ),
     Field(
       name = "users",
@@ -260,7 +267,11 @@ class UserSchema @Inject()(
         Argument("orderBy", OptionInputType(orderByUserInput)),
         Argument("filter", OptionInputType(filterUserInput))
       ),
-      resolve = sc => userResolver.users(sc.argOpt[OrderByUserInput]("sc"), sc.argOpt[FilterUserInput]("filter"))
+      resolve = sc =>
+        userAuthService.withAdminFilter(
+          headers = sc.ctx.requestHeaders,
+          operation = userResolver.users(sc.argOpt[OrderByUserInput]("sc"), sc.argOpt[FilterUserInput]("filter"))
+      )
     )
   )
 
@@ -269,19 +280,31 @@ class UserSchema @Inject()(
       name = "addUser",
       fieldType = userPayload,
       arguments = List(Argument("input", addUserInput)),
-      resolve = sc => userResolver.addUser(sc.arg("input"))
+      resolve = sc =>
+        userAuthService.withAdminFilter(
+          headers = sc.ctx.requestHeaders,
+          operation = userResolver.addUser(sc.arg("input"))
+      )
     ),
     Field(
       name = "editUser",
       fieldType = userPayload,
       arguments = List(Argument("input", editUserInput)),
-      resolve = sc => userResolver.editUser(sc.arg("input"))
+      resolve = sc =>
+        userAuthService.withAdminFilter(
+          headers = sc.ctx.requestHeaders,
+          operation = userResolver.editUser(sc.arg("input"))
+      )
     ),
     Field(
       name = "deleteUser",
       fieldType = userPayload,
       arguments = List(Argument("id", IntType)),
-      resolve = sc => userResolver.deleteUser(sc.arg("id"))
+      resolve = sc =>
+        userAuthService.withAdminFilter(
+          headers = sc.ctx.requestHeaders,
+          operation = userResolver.deleteUser(sc.arg("id"))
+      )
     ),
     Field(
       name = "register",

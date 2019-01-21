@@ -18,7 +18,7 @@ const middleware = (app, { context }) => {
 
   app.get(
     '/auth/facebook/callback',
-    passport.authenticate('google', { session: false, failureRedirect: '/login' }),
+    passport.authenticate('facebook', { session: false, failureRedirect: '/login' }),
     context.social.facebook.onAuthenticationSuccess
   );
 };

@@ -64,7 +64,7 @@ AuthPageReloader.propTypes = {
   children: PropTypes.node
 };
 
-export default new AccessModule(jwt, session, {
+export default new AccessModule(session, jwt, {
   dataRootComponent: [AuthPageReloader],
   login: [login],
   logout: [logout],

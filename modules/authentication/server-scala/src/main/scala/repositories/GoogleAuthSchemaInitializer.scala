@@ -8,7 +8,8 @@ import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext
 
-class GoogleAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[GoogleAuthTable] {
+class GoogleAuthSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
+  extends SchemaInitializer[GoogleAuthTable] {
 
   override val name: String = GoogleAuthTable.name
   override val table = TableQuery[GoogleAuthTable]

@@ -1,6 +1,6 @@
 {
-  "title": "Page not found",
-  "meta": "Page not found example",
+  "title": "Page Not Found",
+  "meta": "A Not Found page example",
   "content": "Page not found",
-  "btnHome": "Go to Homepage"
+  "btnHome": "Go to the Home page"
 }

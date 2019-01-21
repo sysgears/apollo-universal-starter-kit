@@ -4,15 +4,14 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import repositories.{GithubAuthRepository, UserRepository}
 import routes.GithubAuthController
 import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
-
 
 class GithubAuthSpec extends AuthenticationTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
@@ -26,7 +25,10 @@ class GithubAuthSpec extends AuthenticationTestHelper {
   val oAuth2ServiceMock: OAuth20Service = stub[OAuth20Service]
   val responseMock: Response = stub[Response]
 
-  val authController = new GithubAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(executionContext)
+  val authController =
+    new GithubAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
+      executionContext
+    )
   val authRoutes: Route = authController.routes
 
   "GithubAuthController" must {
@@ -41,10 +43,13 @@ class GithubAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to profile page with tokens" in {
-      ((code: String) => oAuth2ServiceMock.getAccessToken(code)).when(*).returns(new OAuth2AccessToken("testAccessToken"))
-      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request)).when(*, *).returns()
-      (() => responseMock.getBody).when.returns(
-        """
+      ((code: String) => oAuth2ServiceMock.getAccessToken(code))
+        .when(*)
+        .returns(new OAuth2AccessToken("testAccessToken"))
+      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request))
+        .when(*, *)
+        .returns()
+      (() => responseMock.getBody).when.returns("""
           |{
           |   "id":1,
           |   "email":"test@test.com",
@@ -65,10 +70,13 @@ class GithubAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to profile page with tokens ih headers and in parameters" in {
-      ((code: String) => oAuth2ServiceMock.getAccessToken(code)).when(*).returns(new OAuth2AccessToken("testAccessToken"))
-      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request)).when(*, *).returns()
-      (() => responseMock.getBody).when.returns(
-        """
+      ((code: String) => oAuth2ServiceMock.getAccessToken(code))
+        .when(*)
+        .returns(new OAuth2AccessToken("testAccessToken"))
+      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request))
+        .when(*, *)
+        .returns()
+      (() => responseMock.getBody).when.returns("""
           |{
           |   "id":1,
           |   "email":"test@test.com",

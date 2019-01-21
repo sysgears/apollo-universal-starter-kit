@@ -40,6 +40,24 @@ browser. The application code is minified and optimized to ensure the best perfo
 
 Runs the app in development mode and watches the changes made to the code using hot code reload.
 
+### `yarn watch-client`
+
+Runs the client-side React application in development mode and watches the changes using hot code reload. 
+
+This command is especially useful if you're developing a Scala back-end application or your custom back-end app and you 
+don't need the Express application to run. Also note that the server-side rendering is _turned off_ if you run 
+`yarn watch-client`.
+
+### `yarn android`
+ 
+Runs the Expo Android project _and_ the Express back-end application in development mode. The command disables 
+building the project for the web (the React application) and iOS platforms.
+
+### `yarn ios`
+ 
+Runs the Expo iOS project _and_ the Express back-end application in development mode. The command disables building the 
+project for the web (the React application) and Android platforms.
+
 ### `yarn cli`
 
 Runs the Apollo Universal Starter Kit built-in command line interface (CLI). The CLI is currently used for scaffolding 

@@ -4,10 +4,10 @@
     "title": {
       "standard": "Standard pagination",
       "relay": "Relay pagination",
-      "scroll": "Load data on scroll"
+      "scroll": "Scroll-based pagination"
     },
     "btn": {
-      "more": "Load more.."
+      "more": "Load more..."
     },
     "column": {
       "title": "Name"

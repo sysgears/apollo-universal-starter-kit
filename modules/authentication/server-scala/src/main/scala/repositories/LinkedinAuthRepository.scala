@@ -9,8 +9,8 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class LinkedinAuthRepository @Inject()(override val driver: JdbcProfile)
-                                      (implicit executionContext: ExecutionContext) extends Repository[LinkedinAuth, String](driver) {
+class LinkedinAuthRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
+  extends Repository[LinkedinAuth, String](driver) {
   import driver.api._
 
   val pkType = implicitly[BaseTypedType[String]]

@@ -9,10 +9,10 @@ import sangria.macros.derive.{InputObjectTypeName, ObjectTypeName, deriveInputOb
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 
-class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnmarshallerGenerator
-  with Logger {
+class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnmarshallerGenerator with Logger {
 
-  implicit val contactInput: InputObjectType[Contact] = deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
+  implicit val contactInput: InputObjectType[Contact] =
+    deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
   implicit val contactInputUnmarshaller: FromInput[Contact] = inputUnmarshaller {
     input =>
       Contact(
@@ -22,7 +22,9 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnm
       )
   }
 
-  implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(ObjectTypeName("ContactPayload"))
+  implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(
+    ObjectTypeName("ContactPayload")
+  )
 
   def mutations: List[Field[UserContext, Unit]] = List(
     Field(

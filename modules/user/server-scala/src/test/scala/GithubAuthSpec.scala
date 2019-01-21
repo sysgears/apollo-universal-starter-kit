@@ -4,21 +4,22 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
-import repositories.{LinkedinAuthRepository, UserRepository}
-import routes.LinkedinAuthController
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
+import repositories.UserRepository
+import repositories.auth.GithubAuthRepository
+import routes.GithubAuthController
 import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class LinkedinAuthSpec extends AuthenticationTestHelper {
+class GithubAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 
   val userRepository: UserRepository = inject[UserRepository]
-  val authRepository: LinkedinAuthRepository = inject[LinkedinAuthRepository]
+  val authRepository: GithubAuthRepository = inject[GithubAuthRepository]
   val externalApiService: ExternalApiService = inject[ExternalApiService]
   val jwtAuthService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]
 
@@ -26,16 +27,16 @@ class LinkedinAuthSpec extends AuthenticationTestHelper {
   val responseMock: Response = stub[Response]
 
   val authController =
-    new LinkedinAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
+    new GithubAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
       executionContext
     )
   val authRoutes: Route = authController.routes
 
-  "LinkedinAuthController" must {
-    "redirect to linkedin auth page" in {
+  "GithubAuthController" must {
+    "redirect to github auth page" in {
       (() => oAuth2ServiceMock.getAuthorizationUrl).when.returns("localhostTest")
 
-      Get("/auth/linkedin") ~> authRoutes ~> check {
+      Get("/auth/github") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("localhostTest")
@@ -51,14 +52,14 @@ class LinkedinAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":"test",
-          |   "email-address":"test@test.com",
-          |   "formatted-name":"testName"
+          |   "id":1,
+          |   "email":"test@test.com",
+          |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/linkedin/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/profile")
@@ -78,14 +79,14 @@ class LinkedinAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":"test",
-          |   "email-address":"test@test.com",
-          |   "formatted-name":"testName"
+          |   "id":1,
+          |   "email":"test@test.com",
+          |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/linkedin/callback?state=test&code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?state=test&code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("test?data=")
@@ -99,7 +100,7 @@ class LinkedinAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to login page if an error was capture" in {
-      Get("/auth/linkedin/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/login")

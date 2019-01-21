@@ -1,20 +1,22 @@
+import common.implicits.RichDBIO._
+import spray.json._
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import common.implicits.RichDBIO._
 import common.routes.graphql.jsonProtocols.GraphQLMessage
 import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import repositories.UserRepository
-import spray.json._
+import spray.json.JsObject
 
 import scala.concurrent.duration._
 
-class JwtSpec extends AuthenticationTestHelper {
+class JwtAuthSpec extends UserTestHelper {
+
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
 
   val userRepo: UserRepository = inject[UserRepository]
@@ -24,7 +26,7 @@ class JwtSpec extends AuthenticationTestHelper {
   val testPassword = "12345678q"
   val testUsername = "testName"
 
-  "Jwt module" must {
+  "Jwt auth" must {
     def registrationStep: RouteTestResult = {
       val registerMutation =
         """
@@ -66,7 +68,7 @@ class JwtSpec extends AuthenticationTestHelper {
 
       val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get
 
-      val refreshToken = authService.createRefreshToken(JwtContent(1), user.password)
+      val refreshToken = authService.createRefreshToken(JwtContent(3), user.password)
 
       val mutation =
         """
@@ -101,7 +103,7 @@ class JwtSpec extends AuthenticationTestHelper {
 
       val user = await(userRepo.findByUsernameOrEmail(testEmail).run).get
 
-      val refreshToken = authService.createRefreshToken(JwtContent(1), user.password)
+      val refreshToken = authService.createRefreshToken(JwtContent(3), user.password)
 
       await(userRepo.update(user.copy(password = "qwerty")).run)
 

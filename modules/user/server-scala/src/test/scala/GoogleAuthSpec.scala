@@ -4,16 +4,17 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
-import repositories.{GoogleAuthRepository, UserRepository}
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
+import repositories.UserRepository
+import repositories.auth.GoogleAuthRepository
 import routes.GoogleAuthController
 import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class GoogleAuthSpec extends AuthenticationTestHelper {
+class GoogleAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 

@@ -6,19 +6,20 @@ import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Respon
 import com.github.scribejava.core.oauth.OAuth20Service
 import jwt.model.JwtContent
 import jwt.service.JwtAuthService
-import repositories.{GithubAuthRepository, UserRepository}
-import routes.GithubAuthController
+import repositories.UserRepository
+import repositories.auth.FacebookAuthRepository
+import routes.FacebookAuthController
 import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class GithubAuthSpec extends AuthenticationTestHelper {
+class FacebookAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 
   val userRepository: UserRepository = inject[UserRepository]
-  val authRepository: GithubAuthRepository = inject[GithubAuthRepository]
+  val authRepository: FacebookAuthRepository = inject[FacebookAuthRepository]
   val externalApiService: ExternalApiService = inject[ExternalApiService]
   val jwtAuthService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]
 
@@ -26,16 +27,16 @@ class GithubAuthSpec extends AuthenticationTestHelper {
   val responseMock: Response = stub[Response]
 
   val authController =
-    new GithubAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
+    new FacebookAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
       executionContext
     )
   val authRoutes: Route = authController.routes
 
-  "GithubAuthController" must {
-    "redirect to github auth page" in {
+  "FacebookAuthController" must {
+    "redirect to facebook auth page" in {
       (() => oAuth2ServiceMock.getAuthorizationUrl).when.returns("localhostTest")
 
-      Get("/auth/github") ~> authRoutes ~> check {
+      Get("/auth/facebook") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("localhostTest")
@@ -51,14 +52,14 @@ class GithubAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":1,
+          |   "id":"testId",
           |   "email":"test@test.com",
           |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/facebook/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/profile")
@@ -78,14 +79,14 @@ class GithubAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":1,
+          |   "id":"testId",
           |   "email":"test@test.com",
           |   "name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/github/callback?state=test&code=test") ~> authRoutes ~> check {
+      Get("/auth/facebook/callback?state=test&code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("test?data=")
@@ -99,7 +100,7 @@ class GithubAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to login page if an error was capture" in {
-      Get("/auth/github/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/facebook/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/login")

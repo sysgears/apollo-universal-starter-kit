@@ -6,19 +6,20 @@ import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Respon
 import com.github.scribejava.core.oauth.OAuth20Service
 import jwt.model.JwtContent
 import jwt.service.JwtAuthService
-import repositories.{FacebookAuthRepository, UserRepository}
-import routes.FacebookAuthController
+import repositories.UserRepository
+import repositories.auth.LinkedinAuthRepository
+import routes.LinkedinAuthController
 import services.ExternalApiService
 
 import scala.concurrent.ExecutionContext
 import scala.concurrent.duration._
 
-class FacebookAuthSpec extends AuthenticationTestHelper {
+class LinkedinAuthSpec extends UserTestHelper {
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)
   val executionContext: ExecutionContext = inject[ExecutionContext]
 
   val userRepository: UserRepository = inject[UserRepository]
-  val authRepository: FacebookAuthRepository = inject[FacebookAuthRepository]
+  val authRepository: LinkedinAuthRepository = inject[LinkedinAuthRepository]
   val externalApiService: ExternalApiService = inject[ExternalApiService]
   val jwtAuthService: JwtAuthService[JwtContent] = inject[JwtAuthService[JwtContent]]
 
@@ -26,16 +27,16 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
   val responseMock: Response = stub[Response]
 
   val authController =
-    new FacebookAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
+    new LinkedinAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
       executionContext
     )
   val authRoutes: Route = authController.routes
 
-  "FacebookAuthController" must {
-    "redirect to facebook auth page" in {
+  "LinkedinAuthController" must {
+    "redirect to linkedin auth page" in {
       (() => oAuth2ServiceMock.getAuthorizationUrl).when.returns("localhostTest")
 
-      Get("/auth/facebook") ~> authRoutes ~> check {
+      Get("/auth/linkedin") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("localhostTest")
@@ -51,14 +52,14 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":"testId",
-          |   "email":"test@test.com",
-          |   "name":"testName"
+          |   "id":"test",
+          |   "email-address":"test@test.com",
+          |   "formatted-name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/facebook/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/linkedin/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/profile")
@@ -78,14 +79,14 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
         .returns()
       (() => responseMock.getBody).when.returns("""
           |{
-          |   "id":"testId",
-          |   "email":"test@test.com",
-          |   "name":"testName"
+          |   "id":"test",
+          |   "email-address":"test@test.com",
+          |   "formatted-name":"testName"
           |}
         """.stripMargin)
       ((request: OAuthRequest) => oAuth2ServiceMock.execute(request)).when(*).returns(responseMock)
 
-      Get("/auth/facebook/callback?state=test&code=test") ~> authRoutes ~> check {
+      Get("/auth/linkedin/callback?state=test&code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("test?data=")
@@ -99,7 +100,7 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to login page if an error was capture" in {
-      Get("/auth/facebook/callback?code=test") ~> authRoutes ~> check {
+      Get("/auth/linkedin/callback?code=test") ~> authRoutes ~> check {
         status shouldBe StatusCodes.Found
         status.isRedirection() shouldBe true
         responseAs[String] should include("/login")

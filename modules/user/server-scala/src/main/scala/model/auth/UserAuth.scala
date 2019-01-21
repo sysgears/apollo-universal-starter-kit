@@ -1,5 +1,6 @@
-package model
+package model.auth
 
+import model.CertificateAuth
 import model.facebook.FacebookAuth
 import model.github.GithubAuth
 import model.google.GoogleAuth

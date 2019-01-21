@@ -1,4 +1,3 @@
-/* tslint:disable */
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
 import * as fs from "fs";
@@ -45,9 +44,7 @@ const MODULE_IMPLIMENTATION = [
   'common'
 ];
 
-// The walker takes care of all the work.
 class RecursiveDependenciesWalker extends Lint.AbstractWalker<null> {
-
   public walk(sourceFile: ts.SourceFile) {
     let dependencies: Set<string> | undefined;
     for (const name of findImports(sourceFile, ImportKind.All)) {
@@ -63,12 +60,17 @@ class RecursiveDependenciesWalker extends Lint.AbstractWalker<null> {
   }
 
 
-  private getDependencies(providedPath: string, nestedModule: boolean = false): Set<string> {
-    const result = new Set<string>();
-    let nestedResult = new Set<string>();
-    const dirPath: string = nestedModule ? providedPath : path.resolve(path.dirname(providedPath));
+  /**
+   * Get dependencies of the module and related module
+   * @param providedPath 
+   * @param relatedModule 
+   */
+  private getDependencies(providedPath: string, relatedModule: boolean = false): Set<string> {
+    const moduleDependencies = new Set<string>();
+    let relatedModuleDependencies = new Set<string>();
+    const dirPath: string = relatedModule ? providedPath : path.resolve(path.dirname(providedPath));
     const packageJsonPath = this.findPackageJson(dirPath);
-    if (packageJsonPath !== undefined) {
+    if (typeof packageJsonPath !== 'undefined') {
       try {
         // don't use require here to avoid caching
         // remove BOM from file content before parsing
@@ -77,26 +79,26 @@ class RecursiveDependenciesWalker extends Lint.AbstractWalker<null> {
         ) as PackageJson;
         console.log('content',content );
         if (content.name !== undefined && content.name.includes('@module')) {
-          result.add('module');
+          moduleDependencies.add('module');
         }
-        if (content.dependencies !== undefined) {
-          this.addDependencies(result, content.dependencies);
+        if (typeof content.dependencies !== 'undefined') {
+          this.addDependencies(moduleDependencies, content.dependencies);
         }
-        if (content.peerDependencies !== undefined) {
-          this.addDependencies(result, content.peerDependencies);
+        if (typeof content.peerDependencies !== 'undefined') {
+          this.addDependencies(moduleDependencies, content.peerDependencies);
         }
         if (content.devDependencies !== undefined) {
-          this.addDependencies(result, content.devDependencies);
+          this.addDependencies(moduleDependencies, content.devDependencies);
         }
         if (content.optionalDependencies !== undefined) {
-          this.addDependencies(result, content.optionalDependencies);
+          this.addDependencies(moduleDependencies, content.optionalDependencies);
         }
       } catch {
         // treat malformed package.json files as empty
       }
 
-      if (!nestedModule) {
-        result.forEach((dependency) => {
+      if (!relatedModule) {
+        moduleDependencies.forEach((dependency) => {
           if (dependency.includes('@module')) {
             const [, moduleName] = dependency.split('/');
             const moduleNames: Array<{[key: string]: string}> = MODULE_IMPLIMENTATION
@@ -108,32 +110,56 @@ class RecursiveDependenciesWalker extends Lint.AbstractWalker<null> {
             const relatedModulePath: string = moduleNames.length === 1 ? 
             this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
             if (relatedModulePath) {
-              nestedResult = this.getDependencies(relatedModulePath, true);
+              relatedModuleDependencies = this.getDependencies(relatedModulePath, true);
             }
           }
         });
       }
     }
 
-    nestedResult.forEach(result.add, result);
+    relatedModuleDependencies.forEach(moduleDependencies.add, moduleDependencies);
 
-    return result;
+    return moduleDependencies;
   }
 
-  private getRelatedModulePath(current: string, moduleName: string, moduleFolder: string): string {
-    const rootModulesDirPath: string = path.join(current, moduleFolder, '..', '..', '..', '..');
-    console.log('rootModulesDirPath', rootModulesDirPath);
-    return fs.existsSync(rootModulesDirPath) ? `${rootModulesDirPath}/${moduleName}/${moduleFolder}` : '';
+  /**
+   * Get path of the related module, which is specified in module package.json
+   * @param packageJsonPath 
+   * @param moduleGroupName 
+   * @param moduleImplimentationName 
+   */
+  private getRelatedModulePath(packageJsonPath: string, moduleGroupName: string, moduleImplimentationName: string): string {
+    const modulesRootPath: string = this.getModulesRootPath(packageJsonPath);
+    console.log('rootModulesDirPath', modulesRootPath);
+    return fs.existsSync(modulesRootPath) ? `${modulesRootPath}/${moduleGroupName}/${moduleImplimentationName}` : '';
   }
 
-  private addDependencies(result: Set<string>, dependencies: Dependencies) {
+  /**
+   * Get path of the modules folder, from path of where related module package.json situated
+   * /modules/modulesGroup/moduleImplimentation/package.json -> /modules
+   * @param packageJsonPath 
+   */
+  private getModulesRootPath(packageJsonPath: string){
+    return path.join(path.dirname(packageJsonPath), '..', '..');
+  }
+
+  /**
+   * Add dependency name from package.json to the set
+   * @param moduleDependencies 
+   * @param dependencies 
+   */
+  private addDependencies(moduleDependencies: Set<string>, dependencies: Dependencies) {
     for (const name in dependencies) {
       if (dependencies.hasOwnProperty(name)) {
-        result.add(name);
+        moduleDependencies.add(name);
       }
     }
   }
 
+  /**
+   * Look for module packages.json path 
+   * @param current 
+   */
   private findPackageJson(current: string): string | undefined {
     let prev: string;
     do {

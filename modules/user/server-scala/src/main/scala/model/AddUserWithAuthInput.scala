@@ -1,5 +1,7 @@
 package model
 
+import model.auth.AuthInput
+
 case class AddUserWithAuthInput(
     username: String,
     email: String,

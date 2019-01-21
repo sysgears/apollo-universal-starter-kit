@@ -1,4 +1,4 @@
-package jwt.graphql.resolvers
+package graphql.resolvers
 
 import com.google.inject.Inject
 import common.errors.NotFound

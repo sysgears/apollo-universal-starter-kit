@@ -1,9 +1,9 @@
-package jwt.graphql.schema
+package graphql.schema
 
-import common.graphql.UserContext
 import common.Logger
+import common.graphql.UserContext
+import graphql.resolvers.JwtResolver
 import javax.inject.Inject
-import jwt.graphql.resolvers.JwtResolver
 import jwt.model.Tokens
 import sangria.macros.derive.{ObjectTypeName, deriveObjectType}
 import sangria.schema.{Argument, Field, ObjectType, StringType}

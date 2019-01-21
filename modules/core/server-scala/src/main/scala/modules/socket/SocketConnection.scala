@@ -1,22 +1,24 @@
 package modules.socket
 
-import java.util.concurrent.ConcurrentHashMap
-
 import monix.execution.Cancelable
+
+import scala.collection.concurrent.TrieMap
 
 class SocketConnection {
 
-  //TODO Try to use monix.Atomic
-  private[this] val subscriptions: java.util.concurrent.ConcurrentHashMap[String, Cancelable]  = new ConcurrentHashMap[String, Cancelable]()
+  private[this] val subscriptions: TrieMap[String, Cancelable] = TrieMap.empty[String, Cancelable]
 
-  //TODO Resubscribe if id exist
+  /** Adds a new operationId/cancelable pair to subscriptions.
+    *  If the subscriptions already contains a
+    *  mapping for the operationId, it will be overridden by the new cancelable.
+    */
   def add(operationId: String, cancelable: Cancelable): Unit = {
-    this.subscriptions.put(operationId, cancelable)
+    this.subscriptions.update(operationId, cancelable)
   }
 
   //TODO Remove cancelable from subscription
   def cancel(operationId: String): Unit = {
-    this.subscriptions.get(operationId).cancel()
+    this.subscriptions.get(operationId).foreach(_.cancel())
   }
 
   def size: Int = {

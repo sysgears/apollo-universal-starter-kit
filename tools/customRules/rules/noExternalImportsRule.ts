@@ -45,6 +45,7 @@ const MODULE_IMPLIMENTATION = [
   'server-ts',
   'common'
 ];
+const MODULE_TAG = '@module';
 
 class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   public walk(sourceFile: ts.SourceFile) {
@@ -54,7 +55,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (dependencies === undefined) {
           dependencies = this.getDependencies(sourceFile.fileName);
         }
-        if (dependencies.has('module') && !dependencies.has(name.text)){
+        if (dependencies.has('is_module') && !dependencies.has(name.text)){
           this.addFailureAtNode(name, Rule.FAILURE_STRING);
         }
       }
@@ -77,7 +78,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
 
       if (!relatedModule) {
         moduleDependencies.forEach((dependency) => {
-          if (dependency.includes('@module')) {
+          if (dependency.includes(MODULE_TAG)) {
             const [, moduleName] = dependency.split('/');
             const moduleNames: Array<{[key: string]: string}> = MODULE_IMPLIMENTATION
             .filter((moduleImplimentationName) => moduleName.includes(moduleImplimentationName))
@@ -111,8 +112,8 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         const content = JSON.parse(
           fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""),
         ) as PackageJson;
-        if (content.name !== undefined && content.name.includes('@module')) {
-          moduleDependencies.add('module');
+        if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
+          moduleDependencies.add('is_module');
         }
         if (typeof content.dependencies !== 'undefined') {
           this.addDependencies(moduleDependencies, content.dependencies);

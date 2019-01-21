@@ -2,6 +2,8 @@ import PDFGenerator from './PDFGenerator';
 
 function createPDF(reports) {
   const pdf = new PDFGenerator();
+  const image = `${__dirname}/app.png`;
+
   pdf.addStyle('header', {
     fontSize: 18,
     bold: true,
@@ -21,6 +23,8 @@ function createPDF(reports) {
   pdf.addList([5, 4, 3, 2, 1], 'ol');
   pdf.addText('And unordered list', 'subheader');
   pdf.addList([1, 2, 3, 4, 5]);
+  pdf.addText('To add an image you have to provide path to an image, width and height', 'subheader');
+  pdf.addImage(image, 150, 150);
 
   return pdf.getDocument();
 }

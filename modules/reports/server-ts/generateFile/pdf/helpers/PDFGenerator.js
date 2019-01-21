@@ -35,6 +35,14 @@ class PDFGenerator {
     });
   }
 
+  addImage(image, width, height) {
+    this.content.push({
+      image,
+      width,
+      height
+    });
+  }
+
   getDocument() {
     return this.printer.createPdfKitDocument({
       content: this.content,

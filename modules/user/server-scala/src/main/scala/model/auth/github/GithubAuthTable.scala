@@ -1,7 +1,8 @@
-package model.github
+package model.auth.github
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable
+import model.github.GithubAuth
 import slick.jdbc.JdbcProfile
 
 object GithubAuthTable extends JdbcProfile {

@@ -1,4 +1,4 @@
-package repositories
+package repositories.auth
 
 import com.byteslounge.slickrepo.repository.Repository
 import javax.inject.Inject

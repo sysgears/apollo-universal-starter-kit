@@ -1,9 +1,9 @@
-package repositories
+package repositories.auth
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject
-import model.facebook.FacebookAuthTable
-import model.facebook.FacebookAuthTable.FacebookAuthTable
+import model.auth.facebook.FacebookAuthTable
+import model.auth.facebook.FacebookAuthTable.FacebookAuthTable
 import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext

@@ -1,9 +1,9 @@
-package repositories
+package repositories.auth
 
 import com.byteslounge.slickrepo.repository.Repository
 import javax.inject.Inject
+import model.auth.github.GithubAuthTable.GithubAuthTable
 import model.github.GithubAuth
-import model.github.GithubAuthTable.GithubAuthTable
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 

@@ -1,9 +1,9 @@
-package repositories
+package repositories.auth
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject
-import model.github.GithubAuthTable
-import model.github.GithubAuthTable.GithubAuthTable
+import model.auth.github.GithubAuthTable
+import model.auth.github.GithubAuthTable.GithubAuthTable
 import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext

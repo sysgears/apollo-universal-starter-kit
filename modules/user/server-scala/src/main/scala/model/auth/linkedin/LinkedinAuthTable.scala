@@ -1,7 +1,8 @@
-package model.linkedin
+package model.auth.linkedin
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable
+import model.linkedin.LinkedinAuth
 import slick.jdbc.JdbcProfile
 
 object LinkedinAuthTable extends JdbcProfile {

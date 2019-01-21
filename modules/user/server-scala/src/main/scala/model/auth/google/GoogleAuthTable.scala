@@ -1,7 +1,8 @@
-package model.google
+package model.auth.google
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable
+import model.google.GoogleAuth
 import slick.jdbc.JdbcProfile
 
 object GoogleAuthTable extends JdbcProfile {

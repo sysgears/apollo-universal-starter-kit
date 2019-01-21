@@ -1,7 +1,8 @@
-package model.facebook
+package model.auth.facebook
 
 import com.byteslounge.slickrepo.meta.Keyed
 import model.UserTable.UserTable
+import model.facebook.FacebookAuth
 import slick.jdbc.JdbcProfile
 
 object FacebookAuthTable extends JdbcProfile {

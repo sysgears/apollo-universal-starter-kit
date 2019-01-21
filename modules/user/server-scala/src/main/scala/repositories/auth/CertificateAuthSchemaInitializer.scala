@@ -1,4 +1,4 @@
-package repositories
+package repositories.auth
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject

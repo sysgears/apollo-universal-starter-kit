@@ -1,9 +1,9 @@
-package repositories
+package repositories.auth
 
 import common.slick.SchemaInitializer
 import javax.inject.Inject
-import model.linkedin.LinkedinAuthTable
-import model.linkedin.LinkedinAuthTable.LinkedinAuthTable
+import model.auth.linkedin.LinkedinAuthTable
+import model.auth.linkedin.LinkedinAuthTable.LinkedinAuthTable
 import slick.lifted.TableQuery
 
 import scala.concurrent.ExecutionContext

@@ -35,14 +35,7 @@ class LoginView extends React.PureComponent {
 
       await authentication.doLogin(client);
 
-      const { data } = await client.query({ query: CURRENT_USER_QUERY });
-
-      if (data.currentUser) {
-        await client.writeQuery({
-          query: CURRENT_USER_QUERY,
-          data: data
-        });
-      }
+      await client.query({ query: CURRENT_USER_QUERY });
     }
 
     if (Platform.OS === 'ios') {

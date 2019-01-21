@@ -9,8 +9,8 @@ import AccessModule from './AccessModule';
 const ref = React.createRef();
 
 const resetApolloCache = async client => {
-  // await client.cache.reset();
   await client.clearStore();
+  ref.current.reloadPage();
 };
 
 const login = async client => {
@@ -19,7 +19,6 @@ const login = async client => {
 
 const logout = async client => {
   await resetApolloCache(client);
-  ref.current.reloadPage();
 };
 
 class PageReloader extends React.Component {

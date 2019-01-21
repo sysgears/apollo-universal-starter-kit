@@ -16,7 +16,6 @@ import {
 } from '@module/look-client-react-native/styles';
 
 import buildRedirectUrlForMobile from '../../../helpers';
-import access from '../../../access';
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');
@@ -27,9 +26,9 @@ const googleLogin = () => {
   }
 };
 
-const GoogleButton = withApollo(({ client, text }) => {
+const GoogleButton = withApollo(({ text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => access.doLogin(client).then(googleLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={googleLogin}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="google-plus-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -49,18 +48,11 @@ const GoogleLink = withApollo(({ text }) => {
   );
 });
 
-const GoogleIcon = withApollo(({ client }) => {
-  return (
-    <View style={styles.iconWrapper}>
-      <FontAwesome
-        style={{ color: '#c43832' }}
-        onPress={() => access.doLogin(client).then(googleLogin)}
-        name="google-plus-square"
-        size={45}
-      />
-    </View>
-  );
-});
+const GoogleIcon = () => (
+  <View style={styles.iconWrapper}>
+    <FontAwesome style={{ color: '#c43832' }} onPress={googleLogin} name="google-plus-square" size={45} />
+  </View>
+);
 
 class GoogleComponent extends React.Component {
   render() {

@@ -3,6 +3,6 @@
   "include": [
     "../../**/typings.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx", "../../tools/customRules/rules/noExternalImportsRule.ts", "../../tools/customRules/rules/validModuleDependency.ts"
   ]
 }

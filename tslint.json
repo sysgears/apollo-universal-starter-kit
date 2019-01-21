@@ -42,7 +42,6 @@
         ]
       }
     ],
-    "recursive-dependencies": false,
     "no-any": false,
     "no-arg": true,
     "no-bitwise": true,
@@ -91,5 +90,7 @@
       "allow-pascal-case",
       "ban-keywords"
     ]
-  }
+  },
+  // custom rule
+  "no-external-imports": false
 }

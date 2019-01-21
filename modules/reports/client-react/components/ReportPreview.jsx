@@ -15,21 +15,21 @@ ContactRow.propTypes = {
   values: PropTypes.array
 };
 
-const ContactHeader = ({ headerItem }) => (
+const ContactHeader = ({ headerItems }) => (
   <Fragment>
-    {headerItem.map((item, key) => (
+    {headerItems.map((item, key) => (
       <th key={key}>{item.charAt(0).toUpperCase() + item.slice(1)}</th>
     ))}
   </Fragment>
 );
 
 ContactHeader.propTypes = {
-  headerItem: PropTypes.array
+  headerItems: PropTypes.array
 };
 
-const ContactTable = ({ report }) => {
+const ContactTable = ({ data }) => {
   let rows = [];
-  report.forEach((row, key) => {
+  data.forEach((row, key) => {
     rows.push(<ContactRow values={Object.values(row)} key={key} />);
   });
 
@@ -37,7 +37,7 @@ const ContactTable = ({ report }) => {
     <table className="table">
       <thead>
         <tr>
-          <ContactHeader headerItem={Object.keys(report[0])} />
+          <ContactHeader headerItems={Object.keys(data[0])} />
         </tr>
       </thead>
       <tbody>{rows}</tbody>
@@ -46,25 +46,25 @@ const ContactTable = ({ report }) => {
 };
 
 ContactTable.propTypes = {
-  report: PropTypes.array,
+  data: PropTypes.array,
   title: PropTypes.string
 };
 
 class ReportPreview extends Component {
   static propTypes = {
-    report: PropTypes.array,
+    data: PropTypes.array,
     title: PropTypes.string.isRequired,
     button: PropTypes.element.isRequired
   };
 
   render() {
-    const { report, title, button } = this.props;
+    const { data, title, button } = this.props;
 
     return (
       <Fragment>
         <WithExportPDF button={button}>
           <h1>{title}</h1>
-          <ContactTable report={report} />
+          <ContactTable data={data} />
         </WithExportPDF>
       </Fragment>
     );

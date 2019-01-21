@@ -48,7 +48,7 @@ class Report extends Component {
             if (error) return `Error! ${error.message}`;
 
             const report = data.report.map(report => removeTypename(report));
-            return <ReportPreview report={report} button={button} title="Report preview" />;
+            return <ReportPreview data={report} button={button} title="Report preview" />;
           }}
         </Query>
         <DownloadPDF query={pdfQuery} fileName="Report.pdf">

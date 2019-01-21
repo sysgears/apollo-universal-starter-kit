@@ -9,8 +9,6 @@ import authentication from '../access/index';
 
 import LoginForm from './LoginForm';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-
 class LoginView extends React.PureComponent {
   componentDidMount() {
     Linking.addEventListener('url', this.handleOpenURL);
@@ -34,8 +32,6 @@ class LoginView extends React.PureComponent {
       await setItem('refreshToken', decodedData.tokens.refreshToken);
 
       await authentication.doLogin(client);
-
-      await client.query({ query: CURRENT_USER_QUERY });
     }
 
     if (Platform.OS === 'ios') {

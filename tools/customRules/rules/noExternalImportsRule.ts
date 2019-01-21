@@ -11,7 +11,7 @@ export class Rule extends Lint.Rules.AbstractRule {
   public static metadata: Lint.IRuleMetadata = {
     ruleName: 'no-external-imports',
     description: `No exteral imports outside specific module.`,
-    descriptionDetails:`No exteral imports outside specific module. All module dependencies should be listed in module packages.json 
+    descriptionDetails:`No external imports outside specific module. All module dependencies should be listed in module packages.json 
     or it should be inside one of the used @modules.`,
     optionsDescription: 'Not configurable.',
     options: null,

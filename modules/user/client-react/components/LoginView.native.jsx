@@ -5,6 +5,7 @@ import { WebBrowser } from 'expo';
 import { translate } from '@module/i18n-client-react';
 import { placeholderColor } from '@module/look-client-react-native/styles';
 import { setItem } from '@module/core-common/clientStorage';
+import authentication from '../access/index';
 
 import LoginForm from './LoginForm';
 
@@ -16,8 +17,38 @@ class LoginView extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    Linking.removeListener('url');
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
+
+  handleOpenURL = async ({ url }) => {
+    const dataRegExp = /data=([^#]+)/;
+    if (!url.match(dataRegExp)) return;
+
+    // Extract stringified user string out of the URL
+    const [, data] = url.match(dataRegExp);
+    const decodedData = JSON.parse(decodeURI(data));
+    const { client } = this.props;
+
+    if (decodedData.tokens) {
+      await setItem('accessToken', decodedData.tokens.accessToken);
+      await setItem('refreshToken', decodedData.tokens.refreshToken);
+
+      await authentication.doLogin(client);
+
+      const { data } = await client.query({ query: CURRENT_USER_QUERY });
+
+      if (data.currentUser) {
+        await client.writeQuery({
+          query: CURRENT_USER_QUERY,
+          data: data
+        });
+      }
+    }
+
+    if (Platform.OS === 'ios') {
+      WebBrowser.dismissBrowser();
+    }
+  };
 
   handleOpenURL = async ({ url }) => {
     // Extract stringified user string out of the URL

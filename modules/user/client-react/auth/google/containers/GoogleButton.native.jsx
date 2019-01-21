@@ -41,9 +41,9 @@ const GoogleButton = withApollo(({ client, text }) => {
   );
 });
 
-const GoogleLink = withApollo(({ client, text }) => {
+const GoogleLink = withApollo(({ text }) => {
   return (
-    <TouchableOpacity onPress={() => access.doLogin(client).then(googleLogin)} style={styles.link}>
+    <TouchableOpacity onPress={googleLogin} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );

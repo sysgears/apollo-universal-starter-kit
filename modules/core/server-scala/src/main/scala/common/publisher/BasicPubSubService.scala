@@ -24,7 +24,9 @@ abstract class BasicPubSubService[T <: Event[_]](implicit scheduler: Scheduler) 
     source.onNext(event)
   }
 
-  override def subscribe(eventNames: Seq[String], params: Seq[Param] = Nil)(implicit userContext: UserContext): Source[Action[Nothing, T], NotUsed] = {
+  override def subscribe(eventNames: Seq[String], params: Seq[Param] = Nil)(
+      implicit userContext: UserContext
+  ): Source[Action[Nothing, T], NotUsed] = {
 
     Source
       .actorRef[T](16, OverflowStrategy.dropHead)
@@ -32,8 +34,10 @@ abstract class BasicPubSubService[T <: Event[_]](implicit scheduler: Scheduler) 
         actorRef =>
           val subscriber = Subscriber(new CustomObserver[T](actorRef), scheduler)
           val cancelable = source.subscribe(subscriber)
-          userContext.socketSubscription.foreach(existSocketSubscription =>
-            existSocketSubscription.socketConnection.add(existSocketSubscription.id, cancelable))
+          userContext.socketSubscription.foreach(
+            existSocketSubscription =>
+              existSocketSubscription.socketConnection.add(existSocketSubscription.id, cancelable)
+          )
           NotUsed
       }
       .filter {

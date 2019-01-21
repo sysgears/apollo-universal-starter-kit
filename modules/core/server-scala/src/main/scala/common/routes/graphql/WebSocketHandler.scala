@@ -68,9 +68,10 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
     Flow.fromSinkAndSource(incoming, Source.fromPublisher(publisher))
   }
 
-  private def handleGraphQlQuery(operationMessage: OperationMessage, killSwitches: SharedKillSwitch)
-                                (implicit queue: SourceQueueWithComplete[Message],
-                                 socketConnection: SocketConnection): Unit = {
+  private def handleGraphQlQuery(
+      operationMessage: OperationMessage,
+      killSwitches: SharedKillSwitch
+  )(implicit queue: SourceQueueWithComplete[Message], socketConnection: SocketConnection): Unit = {
     import sangria.streaming.akkaStreams._
     operationMessage.payload.foreach {
       payload =>
@@ -82,8 +83,9 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                 graphQlExecutor
                   .execute(
                     queryAst = queryAst,
-                    userContext = UserContext(socketSubscription =
-                      Some(SocketSubscription(operationMessage.id.get, socketConnection))),
+                    userContext = UserContext(
+                      socketSubscription = Some(SocketSubscription(operationMessage.id.get, socketConnection))
+                    ),
                     root = (),
                     operationName = graphQlMessage.operationName,
                     variables = graphQlMessage.variables.getOrElse(JsObject.empty)

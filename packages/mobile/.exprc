@@ -1,0 +1,3 @@
+{ 
+  "extraAdbReversePorts": [8080]
+}

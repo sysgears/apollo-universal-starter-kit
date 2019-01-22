@@ -85,6 +85,13 @@ class WebChat extends React.Component {
     this.setTextFromProp(text);
   }
 
+  componentDidMount() {
+    const {
+      scrollbars: { scrollTop, getScrollHeight }
+    } = this;
+    scrollTop(getScrollHeight());
+  }
+
   componentDidUpdate() {
     const {
       scrollbars: { scrollTop, getScrollTop, getScrollHeight }

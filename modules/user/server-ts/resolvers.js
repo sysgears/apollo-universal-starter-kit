@@ -193,7 +193,7 @@ export default pubsub => ({
 
           return { user };
         } catch (e) {
-          console.log(e);
+          throw e;
         }
       }
     ),

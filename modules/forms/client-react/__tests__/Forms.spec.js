@@ -35,11 +35,11 @@ describe('Class FormErrors works', () => {
   };
   const messageForAlertForm = 'Test message';
 
-  step('Get graphQLErrors', async () => {
+  step('Get graphQLErrors', () => {
     const errors = new FormErrors(graphQLErrors, messageForAlertForm).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'errorMsg');
   });
-  step('Get no graphQLErrors', async () => {
+  step('Get no graphQLErrors', () => {
     const errors = new FormErrors(noGraphQLErrors, messageForAlertForm).errors;
     expect(Object.keys(errors)).to.have.lengthOf(1);
   });

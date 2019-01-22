@@ -18,7 +18,12 @@ import jwt.model.{JwtContent, Tokens}
 import jwt.service.JwtAuthService
 import model._
 import model.auth.AuthPayload
+import model.facebook.FacebookAuth
+import model.github.GithubAuth
+import model.google.GoogleAuth
+import model.linkedin.LinkedinAuth
 import models.MailPayload
+import repositories.auth._
 import services.{MailService, MessageTemplateService}
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -26,6 +31,11 @@ import scala.concurrent.{ExecutionContext, Future}
 class UserResolver @Inject()(
     userRepository: UserRepository,
     userProfileRepository: UserProfileRepository,
+    facebookAuthRepo: FacebookAuthRepository,
+    googleAuthRepository: GoogleAuthRepository,
+    githubAuthRepository: GithubAuthRepository,
+    linkedinAuthRepository: LinkedinAuthRepository,
+    certificateAuthRepository: CertificateAuthRepository,
     jwtAuthService: JwtAuthService[JwtContent],
     mailService: MailService[Message, MailPayload],
     messageTemplateService: MessageTemplateService,
@@ -57,6 +67,28 @@ class UserResolver @Inject()(
               fullName = profile.firstName.flatMap(firstName => profile.lastName.map(firstName + _))
             )
           }.run
+      }
+      _ <- input.auth.fold(Future.successful()) {
+        auth =>
+          auth.facebook.map(
+            input => facebookAuthRepo.save(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.github.map(
+            input =>
+              githubAuthRepository
+                .save(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
+                .run
+          )
+          auth.google.map(
+            input =>
+              googleAuthRepository.save(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.linkedin.map(
+            input =>
+              linkedinAuthRepository.save(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.certificate.map(input => certificateAuthRepository.save(CertificateAuth(serial = input.serial)).run)
+          Future.successful()
       }
     } yield UserPayload(user = Some(user))
 

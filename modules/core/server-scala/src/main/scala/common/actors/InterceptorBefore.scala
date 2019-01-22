@@ -5,8 +5,7 @@ import common.implicits.RichList._
 import common.actors.Dispatcher.{Failure, InterceptorBeforeMessage, Success}
 import common.graphql.UserContext
 
-trait InterceptorBefore extends Actor
-  with ActorLogging {
+trait InterceptorBefore extends Actor with ActorLogging {
 
   final def continue: Right[Nothing, Unit] = Right()
 
@@ -18,7 +17,6 @@ trait InterceptorBefore extends Actor
 
   final override def receive: Receive = {
     case msg: InterceptorBeforeMessage =>
-
       handle(msg, msg.context) match {
         case Left(e) => sender ! Failure(e)
 

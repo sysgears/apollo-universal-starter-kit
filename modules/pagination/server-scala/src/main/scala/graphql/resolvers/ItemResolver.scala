@@ -20,16 +20,18 @@ object ItemResolver extends ActorNamed {
   *
   * @param itemRepo provides methods for operating an entity in a database
   */
-class ItemResolver @Inject()(itemRepo: ItemRepository)
-                            (implicit executionContext: ExecutionContext) extends Actor with ActorLogging {
+class ItemResolver @Inject()(itemRepo: ItemRepository)(implicit executionContext: ExecutionContext)
+  extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
     case paginationParams: PaginationParams => {
-      log.info(s"Received message: [ $paginationParams ]")
-        itemRepo.getPaginatedObjectsList(paginationParams)
-          .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))
-          .run
-          .pipeTo(sender)
-      }
+      log.debug(s"Received message: [ $paginationParams ]")
+      itemRepo
+        .getPaginatedObjectsList(paginationParams)
+        .map(res => ItemsPayload(hasNextPage = res.hasNextPage, entities = res.entities, totalCount = res.totalCount))
+        .run
+        .pipeTo(sender)
+    }
   }
 }

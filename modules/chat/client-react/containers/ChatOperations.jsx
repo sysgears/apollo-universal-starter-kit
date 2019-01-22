@@ -17,7 +17,9 @@ import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
-function AddMessage(prev, node) {
+const { limit } = chatConfig;
+
+const onAddMessage = (prev, node) => {
   // ignore if duplicate
   if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
     return prev;
@@ -48,9 +50,9 @@ function AddMessage(prev, node) {
       }
     }
   });
-}
+};
 
-function DeleteMessage(prev, id) {
+const onDeleteMessage = (prev, id) => {
   const index = prev.messages.edges.findIndex(x => x.node.id === id);
 
   // ignore if not found
@@ -77,9 +79,9 @@ function DeleteMessage(prev, id) {
       }
     }
   });
-}
+};
 
-function EditMessage(prev, node) {
+const onEditMessage = (prev, node) => {
   const newEdge = {
     cursor: node.id,
     node,
@@ -93,7 +95,25 @@ function EditMessage(prev, node) {
       }
     }
   });
-}
+};
+
+const getMsgsFromCache = cache =>
+  cache.readQuery({
+    query: MESSAGES_QUERY,
+    variables: { limit, after: 0 }
+  });
+
+const writeMsgsToCache = (cache, messages) =>
+  cache.writeQuery({
+    query: MESSAGES_QUERY,
+    variables: { limit, after: 0 },
+    data: {
+      messages: {
+        ...messages,
+        __typename: 'Messages'
+      }
+    }
+  });
 
 class ChatOperations extends React.Component {
   static propTypes = {
@@ -114,11 +134,11 @@ class ChatOperations extends React.Component {
     updateQuery(prev => {
       switch (mutation) {
         case 'CREATED':
-          return AddMessage(prev, node);
+          return onAddMessage(prev, node);
         case 'DELETED':
-          return DeleteMessage(prev, node.id);
+          return onDeleteMessage(prev, node.id);
         case 'UPDATED':
-          return EditMessage(prev, node);
+          return onEditMessage(prev, node);
         default:
           return prev;
       }
@@ -136,7 +156,7 @@ export default compose(
     options: () => {
       return {
         fetchPolicy: 'network-only',
-        variables: { limit: chatConfig.limit, after: 0 }
+        variables: { limit, after: 0 }
       };
     },
     props: ({ data }) => {
@@ -195,17 +215,10 @@ export default compose(
                 path: attachment ? attachment.uri : null
               }
             },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { addMessage }
-                  }
-                }
-              ) => {
-                return AddMessage(prev, addMessage);
-              }
+            update: (cache, { data: { addMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
+              const { messages } = onAddMessage(prevMessages, addMessage);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {
@@ -227,17 +240,10 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { deleteMessage }
-                  }
-                }
-              ) => {
-                return DeleteMessage(prev, deleteMessage.id);
-              }
+            update: (cache, { data: { deleteMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
+              const { messages } = onDeleteMessage(prevMessages, deleteMessage);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {
@@ -271,17 +277,10 @@ export default compose(
                 __typename: 'Message'
               }
             },
-            updateQueries: {
-              messages: (
-                prev,
-                {
-                  mutationResult: {
-                    data: { editMessage }
-                  }
-                }
-              ) => {
-                return EditMessage(prev, editMessage);
-              }
+            update: (cache, { data: { editMessage } }) => {
+              const prevMessages = getMsgsFromCache(cache);
+              const { messages } = onEditMessage(prevMessages, editMessage);
+              writeMsgsToCache(cache, messages);
             }
           });
         } catch (e) {

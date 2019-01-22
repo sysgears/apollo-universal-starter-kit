@@ -18,14 +18,15 @@ trait DotEnvParser extends Logger {
     * @param dotEnvFileName the actual name of the '.env' file. By default is ".env"
     * @return a Map of '.env' file content
     **/
-  def parse(directory: String = "", dotEnvFileName: String = ".env"): `.env` = Try {
-    new DotenvParser(new DotenvReader(directory, dotEnvFileName), true, true).parse.asScala
-  } match {
-    case Success(values) =>
-      log.info(s"Successfully parsed $dotEnvFileName file.")
-      `.env`(values.map(pair => (pair.component1, pair.component2)): _*)
-    case Failure(error) =>
-      log.error(s"Failed to parse .env file. Reason: $error")
-      `.env`.empty
-  }
+  def parse(directory: String = "", dotEnvFileName: String = ".env"): `.env` =
+    Try {
+      new DotenvParser(new DotenvReader(directory, dotEnvFileName), true, true).parse.asScala
+    } match {
+      case Success(values) =>
+        log.info(s"Successfully parsed $dotEnvFileName file.")
+        `.env`(values.map(pair => (pair.component1, pair.component2)): _*)
+      case Failure(error) =>
+        log.error(s"Failed to parse .env file. Reason: $error")
+        `.env`.empty
+    }
 }

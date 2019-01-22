@@ -9,7 +9,9 @@ import slick.jdbc.JdbcProfile
 
 import scala.concurrent.ExecutionContext
 
-class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext) extends Repository[Item, Int](driver) with Pagination {
+class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit executionContext: ExecutionContext)
+  extends Repository[Item, Int](driver)
+  with Pagination {
 
   import driver.api._
 
@@ -23,12 +25,11 @@ class ItemRepository @Inject()(override val driver: JdbcProfile)(implicit execut
     for {
       totalCount <- tableQuery.size.result
       paginatedResult <- paginatedQuery.result
-    } yield PaginatedResult(
-      totalCount = totalCount,
-      entities = paginatedResult.toList,
-      hasNextPage = (totalCount - (offset + limit)) > 0
-    )
+    } yield
+      PaginatedResult(
+        totalCount = totalCount,
+        entities = paginatedResult.toList,
+        hasNextPage = (totalCount - (offset + limit)) > 0
+      )
   }
 }
-
-

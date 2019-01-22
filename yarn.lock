@@ -22,6 +22,22 @@
     loader-utils "^1.1.0"
     lodash "^4.17.11"
 
+"@angular/animations@^7.1.4":
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/@angular/animations/-/animations-7.1.4.tgz#6c1ca6b8449bb0fa874343371961fccbe19791bc"
+  integrity sha512-877LZ83scksJtflVz97CUWlSsZnxduBxPD+ls5OTrTT/bq3muzHCm8rgTO7S8fBwwrEVXLorvMAlhDPpMg5Swg==
+  dependencies:
+    tslib "^1.9.0"
+
+"@angular/cdk@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/cdk/-/cdk-7.2.0.tgz#03bfbbcd5882fbdab71e6d5b5f36b612589724b4"
+  integrity sha512-ANGNIvyEdkMW6APl+6XDQC5VBS+mS/M+3UB/ROnj+7Om3xe2DSbEjqDXB/SpeJYUp6Qg/wQoWmyvd4y8HfjMwA==
+  dependencies:
+    tslib "^1.7.1"
+  optionalDependencies:
+    parse5 "^5.0.0"
+
 "@angular/common@^7.0.3":
   version "7.0.3"
   resolved "https://registry.yarnpkg.com/@angular/common/-/common-7.0.3.tgz#c0056185251649264f0d3ee5a5a446549a8a1d78"
@@ -42,6 +58,20 @@
   integrity sha512-x/OYYykVsi2vrKlYQJ37I8HYAI/s/CtL3Sd9bl87F6AnqLWnnKIxQaofT/ShfAfdP44LQoN5BNp5j+sjs8K4Kg==
   dependencies:
     tslib "^1.9.0"
+
+"@angular/forms@^7.1.4":
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/@angular/forms/-/forms-7.1.4.tgz#f3491264c27968d8da017fdc5b1178c46f4a4b83"
+  integrity sha512-YB2lDRe7aMsaO5ZlbeFZGH+uTQOcpotFDKCmTckpefRJ7id6TlUSBYdYRH80qOQfPJGpsnqQvLZkL24UMasKtQ==
+  dependencies:
+    tslib "^1.9.0"
+
+"@angular/material@^7.2.0":
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/@angular/material/-/material-7.2.0.tgz#35088eacf27645c9f01f054caf4011318db6e0f4"
+  integrity sha512-ZLgpZ6hVJABMu6lk+97esN9TmLvBjeAgTbszLBJHOeSKocUGaWeKsdiUweMCdNgWrYNMowIAVKGqwavmaj7XTQ==
+  dependencies:
+    tslib "^1.7.1"
 
 "@angular/platform-browser-dynamic@^7.0.3":
   version "7.0.3"
@@ -13773,6 +13803,11 @@ parse5@4.0.0, parse5@^4.0.0:
   resolved "https://registry.yarnpkg.com/parse5/-/parse5-4.0.0.tgz#6d78656e3da8d78b4ec0b906f7c08ef1dfe3f608"
   integrity sha512-VrZ7eOd3T1Fk4XWNXMgiGBK/z0MG48BWG2uQNU4I72fkQuKUTZpl+u9k+CxEG0twMVzSmXEEz12z5Fnw1jIQFA==
 
+parse5@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/parse5/-/parse5-5.1.0.tgz#c59341c9723f414c452975564c7c00a68d58acd2"
+  integrity sha512-fxNG2sQjHvlVAYmzBZS9YlDp6PTSSDwa98vkD4QgVDDCAo84z5X1t5XyJQ62ImdLXx5NdIIfihey6xpum9/gRQ==
+
 parseurl@~1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/parseurl/-/parseurl-1.3.2.tgz#fc289d4ed8993119460c156253262cdc8de65bf3"
@@ -17351,10 +17386,10 @@ spdy@^3.4.1:
     select-hose "^2.0.0"
     spdy-transport "^2.0.18"
 
-spinjs@^0.4.176:
-  version "0.4.176"
-  resolved "https://registry.yarnpkg.com/spinjs/-/spinjs-0.4.176.tgz#2d19a0f8f0e034028f858d4b8c2b01794ab499bd"
-  integrity sha512-U5zfxQRpIDGtCFIF/4bYWlQUFM2rADAlhCq2H7MXLKE4keaMY6VGSO6+Hr2njNTvAUs2STukFOobwGu155hWbg==
+spinjs@^0.4.182:
+  version "0.4.182"
+  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.182.tgz#07fbb757c1282c0bb6687ed73353f08e48411ce0"
+  integrity sha512-oa5OwBjJPGmS+pVgcPsawkdnnDevycBEa97eVHdUkJlR5w7zzcaEhzd7A9RVcHRNWYima7tY2lCyw/O1FKFuOw==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

@@ -24,10 +24,10 @@ import scala.concurrent.Future
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-class HttpHandler(graphQL: GraphQL,
-                  graphQlExecutor: Executor[UserContext, Unit])
-                 (implicit val scheduler: Scheduler,
-                  implicit val actorMaterializer: ActorMaterializer) extends RouteUtil {
+class HttpHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, Unit])(
+    implicit val scheduler: Scheduler,
+    implicit val actorMaterializer: ActorMaterializer
+) extends RouteUtil {
 
   def handleQuery(graphQlMessage: GraphQLMessage, userCtx: UserContext): Future[ToResponseMarshallable] =
     QueryParser.parse(graphQlMessage.query) match {
@@ -35,36 +35,39 @@ class HttpHandler(graphQL: GraphQL,
         queryAst.operationType(graphQlMessage.operationName) match {
           case Some(Subscription) =>
             import sangria.streaming.akkaStreams._
-            graphQlExecutor.prepare(
-              queryAst = queryAst,
-              userContext = userCtx,
-              root = (),
-              operationName = graphQlMessage.operationName,
-              variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-            ).map {
-              preparedQuery =>
-                ToResponseMarshallable(preparedQuery.execute()
-                  .map(r => ServerSentEvent(r.compactPrint))
-                  .recover {
+            graphQlExecutor
+              .prepare(
+                queryAst = queryAst,
+                userContext = userCtx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              )
+              .map {
+                preparedQuery =>
+                  ToResponseMarshallable(preparedQuery.execute().map(r => ServerSentEvent(r.compactPrint)).recover {
                     case NonFatal(error) =>
                       ServerSentEvent(error.getMessage)
-                  }
-                )
-            }.recover {
-              case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
-              case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
-            }
+                  })
+              }
+              .recover {
+                case error: QueryAnalysisError => ToResponseMarshallable(BadRequest -> error.resolveError)
+                case error: ErrorWithResolver => ToResponseMarshallable(InternalServerError -> error.resolveError)
+              }
           case _ =>
-            graphQlExecutor.execute(
-              queryAst = queryAst,
-              userContext = userCtx,
-              root = (),
-              operationName = graphQlMessage.operationName,
-              variables = graphQlMessage.variables.getOrElse(JsObject.empty)
-            ).map(response => ToResponseMarshallable(OK -> response)).recover {
-              case error: QueryAnalysisError => BadRequest -> error.resolveError
-              case error: ErrorWithResolver => InternalServerError -> error.resolveError
-            }
+            graphQlExecutor
+              .execute(
+                queryAst = queryAst,
+                userContext = userCtx,
+                root = (),
+                operationName = graphQlMessage.operationName,
+                variables = graphQlMessage.variables.getOrElse(JsObject.empty)
+              )
+              .map(response => ToResponseMarshallable(OK -> response))
+              .recover {
+                case error: QueryAnalysisError => BadRequest -> error.resolveError
+                case error: ErrorWithResolver => InternalServerError -> error.resolveError
+              }
         }
       case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
       case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
@@ -75,40 +78,53 @@ class HttpHandler(graphQL: GraphQL,
     val operations = graphQlMessages.map(_.operationName.getOrElse("")).filter(_ != "")
     QueryParser.parse(graphQlMessages.map(_.query).mkString(" ")) match {
       case Success(queryAst) =>
-        BatchExecutor.executeBatch(
-          schema = graphQL.schema,
-          queryAst = queryAst,
-          operationNames = operations,
-          variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
-            (o1, o2) => JsObject(o1.fields ++ o2.fields)
-          },
-          userContext = userCtx,
-          queryReducers = List(
-            QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-            QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
-          ),
-          middleware = List(
-            BatchExecutor.OperationNameExtension
+        BatchExecutor
+          .executeBatch(
+            schema = graphQL.schema,
+            queryAst = queryAst,
+            operationNames = operations,
+            variables = graphQlMessages.map(_.variables.getOrElse(JsObject.empty)).fold(JsObject.empty) {
+              (o1, o2) =>
+                JsObject(o1.fields ++ o2.fields)
+            },
+            userContext = userCtx,
+            queryReducers = List(
+              QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
+              QueryReducer.rejectComplexQueries[UserContext](
+                graphQL.maxQueryComplexity,
+                (_, _) => new Exception("maxQueryComplexity")
+              )
+            ),
+            middleware = List(
+              BatchExecutor.OperationNameExtension
+            )
           )
-        ).toListL.runAsync.map {
-          jsonResponse =>
-            var jsonResponseList = new ListBuffer[JsValue]()
-            operations.foreach {
-              operation =>
-                jsonResponse.find {
-                  jsonElement =>
-                    jsonElement
-                      .asJsObject.fields("extensions")
-                      .asJsObject.fields("batch")
-                      .asJsObject.fields("operationName")
-                      .convertTo[String] == operation
-                }.foreach(jsonResponseList += _)
-            }
-            ToResponseMarshallable(OK -> jsonResponseList.toList.toJson)
-        }.recover {
-          case error: QueryAnalysisError => BadRequest -> error.resolveError
-          case error: ErrorWithResolver => InternalServerError -> error.resolveError
-        }
+          .toListL
+          .runAsync
+          .map {
+            jsonResponse =>
+              var jsonResponseList = new ListBuffer[JsValue]()
+              operations.foreach {
+                operation =>
+                  jsonResponse
+                    .find {
+                      jsonElement =>
+                        jsonElement.asJsObject
+                          .fields("extensions")
+                          .asJsObject
+                          .fields("batch")
+                          .asJsObject
+                          .fields("operationName")
+                          .convertTo[String] == operation
+                    }
+                    .foreach(jsonResponseList += _)
+              }
+              ToResponseMarshallable(OK -> jsonResponseList.toList.toJson)
+          }
+          .recover {
+            case error: QueryAnalysisError => BadRequest -> error.resolveError
+            case error: ErrorWithResolver => InternalServerError -> error.resolveError
+          }
       case Failure(e: SyntaxError) => Future[ToResponseMarshallable](BadRequest, syntaxError(e))
       case Failure(_) => Future[ToResponseMarshallable](InternalServerError)
     }

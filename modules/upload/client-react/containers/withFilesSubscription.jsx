@@ -4,7 +4,7 @@ import { Subscription } from 'react-apollo';
 import FILES_SUBSCRIPTION from '../graphql/FilesSubscription.graphql';
 
 export default Component => {
-  return class WithMessagesSubscription extends React.Component {
+  return class WithFilesSubscription extends React.Component {
     render() {
       return (
         <Subscription subscription={FILES_SUBSCRIPTION}>

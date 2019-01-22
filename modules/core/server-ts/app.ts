@@ -5,7 +5,7 @@ import { isApiExternal } from '@module/core-common';
 import ServerModule from '@module/module-server-ts';
 
 import graphiqlMiddleware from './middleware/graphiql';
-import websiteMiddleware from './middleware/website';
+import websiteMiddleware from './middleware/server-entry-vue';
 import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 

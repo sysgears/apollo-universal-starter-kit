@@ -87,7 +87,8 @@ class UserSchema @Inject()(
         role = input("role").asInstanceOf[String],
         password = input("password").asInstanceOf[String],
         isActive = input.get("isActive").flatMap(_.asInstanceOf[Option[Boolean]]),
-        profile = input.get("profile").flatMap(_.asInstanceOf[Option[ProfileInput]])
+        profile = input.get("profile").flatMap(_.asInstanceOf[Option[ProfileInput]]),
+        auth = input.get("auth").flatMap(_.asInstanceOf[Option[AuthInput]])
       )
   }
 
@@ -104,7 +105,8 @@ class UserSchema @Inject()(
         isActive = input.get("isActive").flatMap(_.asInstanceOf[Option[Boolean]]),
         email = input("email").asInstanceOf[String],
         password = input.get("password").flatMap(_.asInstanceOf[Option[String]]),
-        profile = input.get("profile").flatMap(_.asInstanceOf[Option[ProfileInput]])
+        profile = input.get("profile").flatMap(_.asInstanceOf[Option[ProfileInput]]),
+        auth = input.get("auth").flatMap(_.asInstanceOf[Option[AuthInput]])
       )
   }
 
@@ -237,9 +239,6 @@ class UserSchema @Inject()(
   )
   implicit val authLinkedInInput: InputObjectType[AuthLinkedInInput] = deriveInputObjectType(
     InputObjectTypeName("AuthLinkedInInput")
-  )
-  implicit val addUserWithAuthInput: InputObjectType[AddUserWithAuthInput] = deriveInputObjectType(
-    InputObjectTypeName("AddUserWithAuthInput")
   )
 
   def queries: List[Field[UserContext, Unit]] = List(

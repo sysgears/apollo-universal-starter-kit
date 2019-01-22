@@ -1,6 +1,6 @@
 module.exports = {
   compact: false,
-  presets: ['babel-preset-vue', ['@babel/preset-env', { modules: false }]],
+  presets: ['babel-preset-vue', '@babel/preset-env'],
   plugins: [
     '@babel/plugin-transform-destructuring',
     '@babel/plugin-transform-regenerator',

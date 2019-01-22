@@ -1,6 +1,6 @@
 module.exports = {
   compact: false,
-  presets: ['@babel/preset-react', 'babel-preset-vue', '@babel/runtime'[('@babel/preset-env', { modules: false })]],
+  presets: ['@babel/preset-react', 'babel-preset-vue', '@babel/preset-env'],
   plugins: [
     '@babel/plugin-proposal-object-rest-spread',
     '@babel/plugin-transform-destructuring',
@@ -12,7 +12,6 @@ module.exports = {
     'jsx-event-modifiers',
     'jsx-v-model',
     '@babel/plugin-proposal-class-properties',
-    '@babel/plugin-proposal-object-rest-spread',
     ['styled-components', { ssr: true }],
     ['import', { libraryName: 'antd-mobile' }]
   ],

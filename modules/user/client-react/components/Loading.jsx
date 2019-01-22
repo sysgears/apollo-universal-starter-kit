@@ -14,4 +14,4 @@ Loading.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('auth')(Loading);
+export default translate('user')(Loading);

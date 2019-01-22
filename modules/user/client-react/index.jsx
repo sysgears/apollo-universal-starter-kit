@@ -7,7 +7,7 @@ import ClientModule from '@module/module-client-react';
 
 import resolvers from './resolvers';
 import resources from './locales';
-import ProfileView from './components/ProfileView';
+import DataRootComponent from './containers/DataRootComponent';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
@@ -15,6 +15,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
+import ProfileView from './components/ProfileView';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
@@ -41,7 +42,6 @@ const LogoutLink = withRouter(
 );
 
 export * from './containers/Auth';
-export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
 export { default as LOGIN } from './graphql/Login.graphql';
 
 const NavLinkUsersWithI18n = translate('user')(({ t }) => (
@@ -102,6 +102,7 @@ export default new ClientModule({
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
+  dataRootComponent: [DataRootComponent],
   // eslint-disable-next-line react/display-name
   rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
 });

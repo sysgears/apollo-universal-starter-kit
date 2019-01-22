@@ -1,4 +1,5 @@
 {
+  "loading": "App is loading...",
   "navLink": {
     "users": "Users",
     "signIn": "Sign In",

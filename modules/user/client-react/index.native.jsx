@@ -7,6 +7,7 @@ import ClientModule from '@module/module-client-react-native';
 
 import resolvers from './resolvers';
 import resources from './locales';
+import DataRootComponent from './containers/DataRootComponent';
 import UserScreenNavigator from './containers/UserScreenNavigator';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
@@ -244,5 +245,6 @@ export default new ClientModule({
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
+  dataRootComponent: [DataRootComponent],
   onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

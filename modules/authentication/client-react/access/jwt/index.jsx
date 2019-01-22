@@ -1,11 +1,6 @@
 import { ApolloLink, Observable } from 'apollo-link';
-import React from 'react';
-import { withApollo } from 'react-apollo';
-import PropTypes from 'prop-types';
 
 import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
-import { CURRENT_USER_QUERY } from '@module/user-client-react';
-import Loading from './components/Loading';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 
@@ -41,17 +36,6 @@ const JWTLink = new ApolloLink((operation, forward) => {
     let sub, retrySub;
     const queue = [];
     (async () => {
-      // Optimisation: imitate server response with empty user if no JWT token present in local storage
-      if (
-        !settings.auth.session.enabled &&
-        operation.operationName === 'currentUser' &&
-        !(await getItem('refreshToken'))
-      ) {
-        observer.next({ data: { currentUser: null } });
-        observer.complete();
-        return;
-      }
-
       await setJWTContext(operation);
       try {
         sub = forward(operation).subscribe({
@@ -130,61 +114,8 @@ const JWTLink = new ApolloLink((operation, forward) => {
   });
 });
 
-// TODO: shouldn't be needed at all when React Apollo will allow rendering
-// all queries as loading: true during SSR
-class DataRootComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-    apolloClient = this.props.client;
-    this.state = { ready: settings.auth.session.enabled };
-  }
-
-  async componentDidMount() {
-    if (!this.state.ready && (await getItem('refreshToken'))) {
-      const { client } = this.props;
-      let result;
-      try {
-        result = client.readQuery({ query: CURRENT_USER_QUERY });
-      } catch (e) {
-        // We have no current user in the cache, we need to load it to properly draw UI
-      }
-      if (!result || !result.currentUser) {
-        // If we don't have current user but have refresh token, this means our Apollo Cache
-        // might be invalid: we received this Apollo Cache from server in __APOLLO_STATE__
-        // as generated during server-sider rendering. Server had no idea about our client-side
-        // access token and refresh token. In this case we need to trigger our JWT link
-        // by sending network request
-        const {
-          data: { currentUser }
-        } = await client.query({
-          query: CURRENT_USER_QUERY,
-          fetchPolicy: 'network-only'
-        });
-        if (currentUser) {
-          // If we have received current user, then we had invalid Apollo Cache previously
-          // and we should discard it
-          await client.clearStore();
-          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser } });
-        }
-      }
-    }
-    this.setState({ ready: true });
-  }
-
-  render() {
-    return this.state.ready ? this.props.children : <Loading />;
-  }
-}
-
-DataRootComponent.propTypes = {
-  client: PropTypes.object,
-  children: PropTypes.node
-};
-
 export default (settings.auth.jwt.enabled
   ? new AccessModule({
-      dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],
       logout: [removeTokens]
     })

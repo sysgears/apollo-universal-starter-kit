@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Query } from 'react-apollo';
-import { PageLayout, Button } from '@module/look-client-react';
+import { PageLayout } from '@module/look-client-react';
 import { translate } from '@module/i18n-client-react';
 import { removeTypename } from '@module/core-common';
 
 import settings from '../../../../settings';
 import ReportPreview from '../components/ReportPreview';
+import Button from '../components/Button';
 import ReportQuery from '../graphql/ReportQuery.graphql';
 import excelQuery from '../graphql/Excel.graphql';
 import pdfQuery from '../graphql/PDF.graphql';

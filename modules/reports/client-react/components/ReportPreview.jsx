@@ -61,12 +61,10 @@ class ReportPreview extends Component {
     const { data, title, button } = this.props;
 
     return (
-      <Fragment>
-        <WithExportPDF button={button}>
-          <h1>{title}</h1>
-          <ContactTable data={data} />
-        </WithExportPDF>
-      </Fragment>
+      <WithExportPDF button={button}>
+        <h1>{title}</h1>
+        <ContactTable data={data} />
+      </WithExportPDF>
     );
   }
 }

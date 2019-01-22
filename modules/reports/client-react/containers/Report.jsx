@@ -11,8 +11,7 @@ import ReportPreview from '../components/ReportPreview';
 import ReportQuery from '../graphql/ReportQuery.graphql';
 import excelQuery from '../graphql/Excel.graphql';
 import pdfQuery from '../graphql/PDF.graphql';
-import DownloadPDF from '../download/pdf/';
-import DownloadExcel from '../download/excel';
+import DownloadDocument from '../download/';
 
 @translate('report')
 class Report extends Component {
@@ -51,12 +50,12 @@ class Report extends Component {
             return <ReportPreview data={report} button={button} title="Report preview" />;
           }}
         </Query>
-        <DownloadPDF query={pdfQuery} fileName="Report.pdf">
+        <DownloadDocument query={pdfQuery} fileName="Report.pdf" queryProp="pdf">
           {t('downloadPDF')}
-        </DownloadPDF>
-        <DownloadExcel query={excelQuery} fileName="Report.xlsx">
+        </DownloadDocument>
+        <DownloadDocument query={excelQuery} fileName="Report.xlsx" queryProp="excel">
           {t('downloadExcel')}
-        </DownloadExcel>
+        </DownloadDocument>
       </PageLayout>
     );
   }

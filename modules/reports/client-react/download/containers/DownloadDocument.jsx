@@ -3,39 +3,39 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { Button } from '@module/look-client-react';
-import { downloadFile, getObjectURLFromArray } from '../../../helpers';
+import { downloadFile, getObjectURLFromArray } from '../../helpers';
 
-class DownloadExcel extends Component {
+class DownloadDocument extends Component {
   static propTypes = {
-    t: PropTypes.func,
     client: PropTypes.object.isRequired,
-    fileName: PropTypes.string,
+    fileName: PropTypes.string.isRequired,
     query: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired
+    children: PropTypes.node.isRequired,
+    queryProp: PropTypes.string.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.donwloadPDF = this.donwloadPDF.bind(this);
+    this.donwload = this.donwload.bind(this);
   }
 
-  async donwloadPDF() {
-    const { client, query, fileName = 'Report.xlsx' } = this.props;
+  async donwload() {
+    const { client, query, fileName, queryProp } = this.props;
     const { data } = await client.query({
       query
     });
-    const url = getObjectURLFromArray(data.excel);
+    const url = getObjectURLFromArray(data[queryProp]);
     downloadFile(url, fileName);
   }
 
   render() {
     const { children } = this.props;
     return (
-      <Button style={{ marginLeft: '10px' }} onClick={this.donwloadPDF}>
+      <Button style={{ marginLeft: '10px' }} onClick={this.donwload}>
         {children}
       </Button>
     );
   }
 }
 
-export default withApollo(DownloadExcel);
+export default withApollo(DownloadDocument);

@@ -143,6 +143,7 @@ export default class extends React.Component {
           meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}
         />
         <LayoutCenter>
+          <h1 className="text-center">{t('title')}</h1>
           <div style={{ backgroundColor: '#eee' }}>
             <WebChat
               {...chatConfig.giftedChat}

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
@@ -9,6 +10,11 @@ import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserAdd extends React.Component {
+  propTypes = {
+    addUser: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
+  };
+
   constructor(props) {
     super(props);
   }

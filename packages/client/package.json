@@ -53,7 +53,7 @@
     "@module/reports-client-react": "^1.0.0",
     "@module/validation-common-react": "^1.0.0",
     "antd": "^3.10.0",
-    "apollo-cache-inmemory": "1.2.9",
+    "apollo-cache-inmemory": "1.4.2",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
@@ -141,11 +141,11 @@
     "rimraf": "^2.6.2"
   },
   "optionalDependencies": {
-    "@expo/vector-icons": "^6.2.1",
+    "@expo/vector-icons": "^9.0.0",
     "antd-mobile-rn": "^2.2.1",
-    "expo": "^31.0.2",
+    "expo": "^32.0.0",
     "native-base": "^2.3.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.4.3",

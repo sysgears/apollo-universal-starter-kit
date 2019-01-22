@@ -1,12 +1,6 @@
 {
-  "navLink": "Reports",
-  "title": "Reports PDF",
-  "list": {
-    "title": {
-      "front": "Report front",
-      "server": "Report server"
-    }
-  },
+  "navLink": "Report",
+  "title": "Report",
   "btn": "Print report",
   "downloadPDF": "Download PDF report",
   "downloadExcel": "Download Excel report",

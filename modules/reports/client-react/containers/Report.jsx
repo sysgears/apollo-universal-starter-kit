@@ -43,11 +43,11 @@ class Report extends Component {
         {this.renderMetaData()}
         <Query query={ReportQuery}>
           {({ loading, error, data }) => {
-            if (loading) return 'Loading...';
-            if (error) return `Error! ${error.message}`;
+            if (loading) return t('loading');
+            if (error) throw new Error(error);
 
             const report = data.report.map(report => removeTypename(report));
-            return <ReportPreview data={report} button={button} title="Report preview" />;
+            return <ReportPreview data={report} button={button} title={t('title')} />;
           }}
         </Query>
         <DownloadDocument query={pdfQuery} fileName="Report.pdf" queryProp="pdf">

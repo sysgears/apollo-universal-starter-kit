@@ -145,7 +145,7 @@
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.5.0",
     "tslint-plugin-prettier": "^2.0.0",
-    "typescript": "^2.9.2",
+    "typescript": "^3.2.4",
     "url-loader": "^1.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
@@ -170,9 +170,10 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.178"
+    "spinjs": "^0.4.182"
   },
   "resolutions": {
+    "immutability-helper": "2.8.1",
     "react": "16.5.0",
     "graphql": "0.13.2",
     "iterall": "^1.2.2",

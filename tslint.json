@@ -14,7 +14,7 @@
   "linterOptions": {
     "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
-  "rulesDirectory": "./tools/customRules/build/rules",
+  "rulesDirectory": "tools/customRules/build/rules",
   "rules": {
     "prettier": [true, {
       "printWidth": 120,
@@ -89,8 +89,8 @@
       "allow-leading-underscore",
       "allow-pascal-case",
       "ban-keywords"
-    ]
-  },
-  // custom rule
+    ],
+      // custom rule
   "no-external-imports": false
+  }
 }

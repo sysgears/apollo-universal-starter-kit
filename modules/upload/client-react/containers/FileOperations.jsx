@@ -9,15 +9,13 @@ export default class FileOperations extends React.Component {
   handleUploadFiles = async files => {
     const { uploadFiles } = this.props;
     const result = await uploadFiles(files);
-
-    this.setState({ error: result && result.error ? result.error : null });
+    this.setState({ error: (result && result.error) || null });
   };
 
   handleRemoveFile = async id => {
     const { removeFile } = this.props;
     const result = await removeFile(id);
-
-    this.setState({ error: result && result.error ? result.error : null });
+    this.setState({ error: (result && result.error) || null });
   };
 
   render() {

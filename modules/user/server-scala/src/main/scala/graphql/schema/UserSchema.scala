@@ -25,7 +25,7 @@ import sangria.schema.{
 }
 import sangria.macros.derive._
 import sangria.marshalling.FromInput
-import services.UserAuthService
+import services.{UserAccessService, UserAuthService}
 
 import scala.concurrent.ExecutionContext
 
@@ -38,7 +38,8 @@ class UserSchema @Inject()(
     githubAuthRepository: GithubAuthRepository,
     linkedinAuthRepository: LinkedinAuthRepository,
     certificateAuthRepository: CertificateAuthRepository,
-    userAuthService: UserAuthService
+    userAuthService: UserAuthService,
+    userAccessService: UserAccessService
 )(implicit executionContext: ExecutionContext)
   extends InputUnmarshallerGenerator
   with Logger {
@@ -254,7 +255,7 @@ class UserSchema @Inject()(
       fieldType = userPayload,
       arguments = List(Argument("id", IntType)),
       resolve = sc =>
-        userAuthService.withAdminFilter(
+        userAccessService.withAdminFilter(
           headers = sc.ctx.requestHeaders,
           operation = userResolver.user(sc.arg[Int]("id"))
       )
@@ -267,7 +268,7 @@ class UserSchema @Inject()(
         Argument("filter", OptionInputType(filterUserInput))
       ),
       resolve = sc =>
-        userAuthService.withAdminFilter(
+        userAccessService.withAdminFilter(
           headers = sc.ctx.requestHeaders,
           operation = userResolver.users(sc.argOpt[OrderByUserInput]("sc"), sc.argOpt[FilterUserInput]("filter"))
       )
@@ -280,7 +281,7 @@ class UserSchema @Inject()(
       fieldType = userPayload,
       arguments = List(Argument("input", addUserInput)),
       resolve = sc =>
-        userAuthService.withAdminFilter(
+        userAccessService.withAdminFilter(
           headers = sc.ctx.requestHeaders,
           operation = userResolver.addUser(sc.arg("input"))
       )
@@ -290,7 +291,7 @@ class UserSchema @Inject()(
       fieldType = userPayload,
       arguments = List(Argument("input", editUserInput)),
       resolve = sc =>
-        userAuthService.withAdminFilter(
+        userAccessService.withAdminFilter(
           headers = sc.ctx.requestHeaders,
           operation = userResolver.editUser(sc.arg("input"))
       )
@@ -300,7 +301,7 @@ class UserSchema @Inject()(
       fieldType = userPayload,
       arguments = List(Argument("id", IntType)),
       resolve = sc =>
-        userAuthService.withAdminFilter(
+        userAccessService.withAdminFilter(
           headers = sc.ctx.requestHeaders,
           operation = userResolver.deleteUser(sc.arg("id"))
       )

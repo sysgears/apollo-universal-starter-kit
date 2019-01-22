@@ -11,13 +11,15 @@ export default class Composer extends React.Component {
   }
 
   render() {
+    const { multiline, textInputStyle, composerHeight, textInputAutoFocus, text, placeholder } = this.props;
     return (
       <Input
-        type={this.props.multiline ? 'textarea' : 'input'}
-        style={{ ...styles.textInput, ...this.props.textInputStyle, height: this.props.composerHeight }}
-        placeholder={this.props.placeholder}
+        type={multiline ? 'textarea' : 'input'}
+        style={{ ...styles.textInput, ...textInputStyle, height: composerHeight }}
+        placeholder={placeholder}
         onChange={text => this.onChangeText(text)}
-        value={this.props.text}
+        value={text}
+        autoFocus={textInputAutoFocus}
       />
     );
   }

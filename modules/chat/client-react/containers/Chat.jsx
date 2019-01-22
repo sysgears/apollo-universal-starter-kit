@@ -159,6 +159,7 @@ export default class extends React.Component {
               user={{ _id: id, name: username }}
               renderChatFooter={this.renderChatFooter}
               renderCustomView={this.renderCustomView}
+              textInputAutoFocus
               onLongPress={(e, currentMessage) =>
                 this.onLongPress(e, currentMessage, id, deleteMessage, this.setEditState)
               }

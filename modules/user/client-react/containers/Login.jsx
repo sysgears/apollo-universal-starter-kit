@@ -16,7 +16,7 @@ class Login extends React.Component {
     try {
       await login(values);
     } catch (e) {
-      throw new FormErrors(e, t('login.errorMsg'));
+      throw new FormErrors(t('login.errorMsg'), e);
     }
 
     await access.doLogin(client);

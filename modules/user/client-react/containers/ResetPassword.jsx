@@ -13,7 +13,7 @@ class ResetPassword extends React.Component {
     try {
       await resetPassword({ ...values, token: this.props.match.params.token });
     } catch (e) {
-      throw new FormErrors(e, t('resetPass.errorMsg'));
+      throw new FormErrors(t('resetPass.errorMsg'), e);
     }
 
     history.push('/login');

@@ -19,7 +19,7 @@ class ForgotPassword extends React.Component {
     try {
       await forgotPassword(values);
     } catch (e) {
-      throw new FormErrors(e, t('forgotPass.errorMsg'));
+      throw new FormErrors(t('forgotPass.errorMsg'), e);
     }
   };
 

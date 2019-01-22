@@ -14,7 +14,7 @@ class Contact extends React.Component<{ t: TranslateFunction }> {
     try {
       await sendContact(values);
     } catch (e) {
-      throw new FormErrors(e, t('serverError'));
+      throw new FormErrors(t('serverError'), e);
     }
   };
 

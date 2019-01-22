@@ -29,7 +29,7 @@ class UserAdd extends React.Component {
     try {
       await addUser(userValues);
     } catch (e) {
-      throw new FormErrors(e, t('userAdd.errorMsg'));
+      throw new FormErrors(t('userAdd.errorMsg'), e);
     }
 
     if (history) {

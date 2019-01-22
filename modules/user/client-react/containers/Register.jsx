@@ -17,7 +17,7 @@ class Register extends React.Component {
     try {
       await register(values);
     } catch (e) {
-      throw new FormErrors(e, t('reg.errorMsg'));
+      throw new FormErrors(t('reg.errorMsg'), e);
     }
 
     if (history) {

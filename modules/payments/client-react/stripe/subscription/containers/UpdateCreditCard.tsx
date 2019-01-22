@@ -46,12 +46,12 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
         submitting: false
       });
       if (e && e.type === 'validation_error') {
-        throw new FormErrors(e, t('creditCardError'));
+        throw new FormErrors(t('creditCardError'));
       }
       if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
-        throw new FormErrors(e, t('stripeError'));
+        throw new FormErrors(t('stripeError'), e);
       }
-      throw new FormErrors(e, t('serverError'));
+      throw new FormErrors(t('serverError'), e);
     }
   };
 

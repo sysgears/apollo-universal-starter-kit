@@ -27,7 +27,7 @@ class UserEdit extends React.Component {
     try {
       await editUser({ id: user.id, ...userValues });
     } catch (e) {
-      throw new FormErrors(e, t('userEdit.errorMsg'));
+      throw new FormErrors(t('userEdit.errorMsg'), e);
     }
 
     if (history) {

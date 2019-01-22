@@ -33,6 +33,7 @@ interface PackageJson {
   devDependencies?: Dependencies;
   peerDependencies?: Dependencies;
   optionalDependencies?: Dependencies;
+  [key: string]: any
 }
 
 interface Dependencies extends Object {
@@ -45,6 +46,13 @@ const MODULE_IMPLIMENTATION = [
   'server-ts',
   'common'
 ];
+const DEPENDENCIES_VARIANTS = [
+  'dependencies',
+  'devDependencies',
+  'peerDependencies',
+  'optionalDependencies'
+]
+
 const MODULE_TAG = '@module';
 
 class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
@@ -115,18 +123,11 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
           moduleDependencies.add('is_module');
         }
-        if (typeof content.dependencies !== 'undefined') {
-          this.addDependencies(moduleDependencies, content.dependencies);
-        }
-        if (typeof content.peerDependencies !== 'undefined') {
-          this.addDependencies(moduleDependencies, content.peerDependencies);
-        }
-        if (content.devDependencies !== undefined) {
-          this.addDependencies(moduleDependencies, content.devDependencies);
-        }
-        if (content.optionalDependencies !== undefined) {
-          this.addDependencies(moduleDependencies, content.optionalDependencies);
-        }
+        DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string)=>{
+          if (typeof content[dependencyVariant] !== 'undefined') {
+            this.addDependencies(moduleDependencies, content[dependencyVariant]);
+          }
+        });
   }
 
   /**

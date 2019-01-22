@@ -5,10 +5,9 @@ import { WebBrowser } from 'expo';
 import { translate } from '@module/i18n-client-react';
 import { placeholderColor } from '@module/look-client-react-native/styles';
 import { setItem } from '@module/core-common/clientStorage';
+import authentication from '@module/authentication-client-react';
 
 import LoginForm from './LoginForm';
-
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
@@ -32,14 +31,7 @@ class LoginView extends React.PureComponent {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
 
-      const { data } = await client.query({ query: CURRENT_USER_QUERY });
-
-      if (data.currentUser) {
-        await client.writeQuery({
-          query: CURRENT_USER_QUERY,
-          data: data
-        });
-      }
+      await authentication.doLogin(client);
     }
 
     if (Platform.OS === 'ios') {

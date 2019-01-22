@@ -14,7 +14,6 @@ import {
   btnTextContainer,
   btnText
 } from '@module/look-client-react-native/styles';
-import authentication from '@module/authentication-client-react';
 
 import buildRedirectUrlForMobile from '../../../helpers';
 
@@ -27,9 +26,9 @@ const githubLogin = () => {
   }
 };
 
-const GitHubButton = withApollo(({ client, text }) => {
+const GitHubButton = withApollo(({ text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => authentication.doLogin(client).then(githubLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={githubLogin}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="github-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -41,26 +40,19 @@ const GitHubButton = withApollo(({ client, text }) => {
   );
 });
 
-const GitHubLink = withApollo(({ client, text }) => {
+const GitHubLink = withApollo(({ text }) => {
   return (
-    <TouchableOpacity onPress={() => authentication.doLogin(client).then(githubLogin)} style={styles.link}>
+    <TouchableOpacity onPress={githubLogin} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const GitHubIcon = withApollo(({ client }) => {
-  return (
-    <View style={styles.iconWrapper}>
-      <FontAwesome
-        name="github-square"
-        size={45}
-        style={{ color: '#464646' }}
-        onPress={() => authentication.doLogin(client).then(githubLogin)}
-      />
-    </View>
-  );
-});
+const GitHubIcon = () => (
+  <View style={styles.iconWrapper}>
+    <FontAwesome name="github-square" size={45} style={{ color: '#464646' }} onPress={githubLogin} />
+  </View>
+);
 
 class GitHubComponent extends React.Component {
   render() {

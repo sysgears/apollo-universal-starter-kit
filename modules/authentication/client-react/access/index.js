@@ -10,17 +10,17 @@ import resources from './locales';
 
 const ref = React.createRef();
 
-const resetApolloCache = async client => {
-  await client.cache.reset();
+const resetApolloCacheAndRerenderApp = async client => {
+  await client.clearStore();
+  ref.current.reloadPage();
 };
 
 const login = async client => {
-  await resetApolloCache(client);
+  await resetApolloCacheAndRerenderApp(client);
 };
 
 const logout = async client => {
-  await resetApolloCache(client);
-  ref.current.reloadPage();
+  await resetApolloCacheAndRerenderApp(client);
 };
 
 class PageReloader extends React.Component {

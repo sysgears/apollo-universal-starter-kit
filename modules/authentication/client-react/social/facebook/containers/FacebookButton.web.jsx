@@ -3,7 +3,6 @@ import { withApollo } from 'react-apollo';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@module/look-client-react';
-import authentication from '@module/authentication-client-react';
 
 import './FacebookButton.css';
 
@@ -11,14 +10,9 @@ const facebookLogin = () => {
   window.location = '/auth/facebook';
 };
 
-const FacebookButton = withApollo(({ client, text }) => {
+const FacebookButton = withApollo(({ text }) => {
   return (
-    <Button
-      type="button"
-      size="lg"
-      onClick={() => authentication.doLogin(client).then(facebookLogin)}
-      className="facebookBtn"
-    >
+    <Button type="button" size="lg" onClick={facebookLogin} className="facebookBtn">
       <div className="iconContainer">
         <FontAwesomeIcon icon={faFacebookSquare} className="facebookIcon" />
         <div className="separator" />
@@ -30,23 +24,21 @@ const FacebookButton = withApollo(({ client, text }) => {
   );
 });
 
-const FacebookLink = withApollo(({ client, text }) => {
+const FacebookLink = withApollo(({ text }) => {
   return (
-    <Button color="link" onClick={() => authentication.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={facebookLogin} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
 });
 
-const FacebookIcon = withApollo(({ client }) => {
-  return (
-    <FontAwesomeIcon
-      icon={faFacebookSquare}
-      style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
-      onClick={() => authentication.doLogin(client).then(facebookLogin)}
-    />
-  );
-});
+const FacebookIcon = () => (
+  <FontAwesomeIcon
+    icon={faFacebookSquare}
+    style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
+    onClick={facebookLogin}
+  />
+);
 
 const FacebookComponent = ({ text, type }) => {
   switch (type) {

@@ -14,7 +14,6 @@ import {
   btnTextContainer,
   btnText
 } from '@module/look-client-react-native/styles';
-import authentication from '@module/authentication-client-react';
 
 import buildRedirectUrlForMobile from '../../../helpers';
 
@@ -27,9 +26,9 @@ const googleLogin = () => {
   }
 };
 
-const GoogleButton = withApollo(({ client, text }) => {
+const GoogleButton = withApollo(({ text }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => authentication.doLogin(client).then(googleLogin)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={googleLogin}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="google-plus-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -41,26 +40,19 @@ const GoogleButton = withApollo(({ client, text }) => {
   );
 });
 
-const GoogleLink = withApollo(({ client, text }) => {
+const GoogleLink = withApollo(({ text }) => {
   return (
-    <TouchableOpacity onPress={() => authentication.doLogin(client).then(googleLogin)} style={styles.link}>
+    <TouchableOpacity onPress={googleLogin} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const GoogleIcon = withApollo(({ client }) => {
-  return (
-    <View style={styles.iconWrapper}>
-      <FontAwesome
-        style={{ color: '#c43832' }}
-        onPress={() => authentication.doLogin(client).then(googleLogin)}
-        name="google-plus-square"
-        size={45}
-      />
-    </View>
-  );
-});
+const GoogleIcon = () => (
+  <View style={styles.iconWrapper}>
+    <FontAwesome style={{ color: '#c43832' }} onPress={googleLogin} name="google-plus-square" size={45} />
+  </View>
+);
 
 class GoogleComponent extends React.Component {
   render() {

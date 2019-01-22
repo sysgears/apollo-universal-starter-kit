@@ -23,7 +23,7 @@ const config = {
   options: {
     stack: ['apollo', 'css', 'sass', 'less', 'ts', 'es6', 'webpack', 'i18next', 'vue'],
     cache: '../../.cache',
-    ssr: false,
+    ssr: true,
     webpackDll: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',

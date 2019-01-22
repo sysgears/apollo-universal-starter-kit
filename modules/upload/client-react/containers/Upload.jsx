@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 
@@ -8,6 +9,11 @@ import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
 class Upload extends React.Component {
+  propTypes = {
+    uploadFiles: PropTypes.func,
+    removeFile: PropTypes.func
+  };
+
   constructor(props) {
     super(props);
     this.state = {

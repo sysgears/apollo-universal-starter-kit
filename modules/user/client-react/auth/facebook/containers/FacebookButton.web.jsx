@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -51,6 +52,11 @@ const FacebookComponent = ({ text, type }) => {
     default:
       return <FacebookButton text={text} />;
   }
+};
+
+FacebookComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default FacebookComponent;

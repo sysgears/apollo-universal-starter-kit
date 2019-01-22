@@ -98,8 +98,10 @@ const styles = StyleSheet.create({
 });
 
 LoginView.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
   t: PropTypes.func,
+  onSubmit: PropTypes.func,
+  client: PropTypes.object,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };

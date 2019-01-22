@@ -12,6 +12,8 @@ class UserAddView extends React.PureComponent {
   static propTypes = {
     user: PropTypes.object,
     errors: PropTypes.array,
+    loading: PropTypes.bool,
+    addUser: PropTypes.func.isRequired,
     history: PropTypes.object,
     t: PropTypes.func,
     onSubmit: PropTypes.func

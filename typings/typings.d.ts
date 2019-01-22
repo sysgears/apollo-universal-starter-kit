@@ -21,3 +21,7 @@ declare module 'mocha-steps' {
   const step: Mocha.TestFunction;
   const xstep: Mocha.TestFunction;
 }
+
+declare module '@module/core-client-vue' {
+  const createApp: function,
+}

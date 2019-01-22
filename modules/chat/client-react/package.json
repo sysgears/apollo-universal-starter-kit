@@ -1,5 +1,8 @@
 {
   "name": "@module/chat-client-react",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@module/core-client-react": "^1.0.0"
+  }
 }

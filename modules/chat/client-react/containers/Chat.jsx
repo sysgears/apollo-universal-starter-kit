@@ -13,7 +13,7 @@ import ChatFooter from '../components/ChatFooter';
 
 export default class extends React.Component {
   static propTypes = {
-    // loading: PropTypes.bool.isRequired,
+    loading: PropTypes.bool.isRequired,
     t: PropTypes.func,
     messages: PropTypes.object,
     addMessage: PropTypes.func,
@@ -22,8 +22,6 @@ export default class extends React.Component {
     // loadData: PropTypes.func.isRequired,
     currentUser: PropTypes.object,
     uuid: PropTypes.string
-    // pickImage: PropTypes.func,
-    // images: PropTypes.bool
   };
 
   state = {
@@ -130,12 +128,35 @@ export default class extends React.Component {
   };
 
   render() {
-    const { currentUser, deleteMessage, uuid, messages, t } = this.props;
+    const { currentUser, deleteMessage, uuid, messages, t, loading } = this.props;
 
     this.allowDataLoad = true;
     const { message } = this.state;
     const edges = messages ? messages.edges : [];
     const { id = uuid, username = null } = currentUser ? currentUser : {};
+
+    const content = loading ? (
+      <div className="text-center">{t('loading')}</div>
+    ) : (
+      <WebChat
+        {...chatConfig.giftedChat}
+        ref={gc => (this.gc = gc)}
+        text={message}
+        onInputTextChanged={text => this.setMessageState(text)}
+        placeholder={t('input.text')}
+        messages={edges}
+        //renderSend={this.renderSend}
+        onSend={this.onSend}
+        //loadEarlier={messages.totalCount > messages.edges.length}
+        //onLoadEarlier={this.onLoadEarlier}
+        user={{ _id: id, name: username }}
+        renderChatFooter={this.renderChatFooter}
+        renderCustomView={this.renderCustomView}
+        textInputAutoFocus
+        onLongPress={(e, currentMessage) => this.onLongPress(e, currentMessage, id, deleteMessage, this.setEditState)}
+      />
+    );
+
     return (
       <PageLayout>
         <Helmet
@@ -144,28 +165,8 @@ export default class extends React.Component {
         />
         <LayoutCenter>
           <h1 className="text-center">{t('title')}</h1>
-          <div style={{ backgroundColor: '#eee' }}>
-            <WebChat
-              {...chatConfig.giftedChat}
-              ref={gc => (this.gc = gc)}
-              text={message}
-              onInputTextChanged={text => this.setMessageState(text)}
-              placeholder={t('input.text')}
-              messages={edges}
-              //renderSend={this.renderSend}
-              onSend={this.onSend}
-              //loadEarlier={messages.totalCount > messages.edges.length}
-              //onLoadEarlier={this.onLoadEarlier}
-              user={{ _id: id, name: username }}
-              renderChatFooter={this.renderChatFooter}
-              renderCustomView={this.renderCustomView}
-              textInputAutoFocus
-              onLongPress={(e, currentMessage) =>
-                this.onLongPress(e, currentMessage, id, deleteMessage, this.setEditState)
-              }
-            />
-            {this.renderActionSheet()}
-          </div>
+          {content}
+          {this.renderActionSheet()}
         </LayoutCenter>
       </PageLayout>
     );

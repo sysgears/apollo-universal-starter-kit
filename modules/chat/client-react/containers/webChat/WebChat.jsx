@@ -79,17 +79,17 @@ class WebChat extends React.Component {
     this.setTextFromProp(text);
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps = {}) {
-    const { messages, text } = nextProps;
-    this.setMessages(messages || []);
-    this.setTextFromProp(text);
-  }
-
   componentDidMount() {
     const {
       scrollbars: { scrollTop, getScrollHeight }
     } = this;
     scrollTop(getScrollHeight());
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps = {}) {
+    const { messages, text } = nextProps;
+    this.setMessages(messages || []);
+    this.setTextFromProp(text);
   }
 
   componentDidUpdate() {

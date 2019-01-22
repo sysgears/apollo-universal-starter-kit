@@ -78,7 +78,7 @@ describe('Class FormErrors works', () => {
     {
       type: 'FAILED_PASSWORD',
       message: 'Failed valid user password',
-      errors: { usernameOrEmail: 'Please enter a valid password.' }
+      errors: { test: 'Please enter a valid password.' }
     }
   ];
   const messageForAlertForm = 'Test message';

@@ -19,7 +19,7 @@ describe('User API works', () => {
     expect(result.data).to.deep.equal({ currentUser: null });
   });
 
-  step('Siging in as ordinary user works', async () => {
+  step('Signing in as ordinary user works', async () => {
     await login('user', 'user1234');
     const result = await apollo.query({ query: CURRENT_USER_QUERY });
     expect(result.data.currentUser.username).to.equal('user');

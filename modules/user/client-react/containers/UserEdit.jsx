@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
@@ -11,6 +12,12 @@ import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserEdit extends React.Component {
+  propTypes = {
+    user: PropTypes.object.isRequired,
+    editUser: PropTypes.func.isRequired,
+    t: PropTypes.func.isRequired
+  };
+
   onSubmit = async values => {
     const { user, editUser, t } = this.props;
 

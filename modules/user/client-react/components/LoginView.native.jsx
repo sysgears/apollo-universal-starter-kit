@@ -5,10 +5,9 @@ import { WebBrowser } from 'expo';
 import { translate } from '@module/i18n-client-react';
 import { placeholderColor } from '@module/look-client-react-native/styles';
 import { setItem } from '@module/core-common/clientStorage';
+import authentication from '../access/index';
 
 import LoginForm from './LoginForm';
-
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
@@ -16,19 +15,24 @@ class LoginView extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    Linking.removeListener('url');
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
   handleOpenURL = async ({ url }) => {
+    const dataRegExp = /data=([^#]+)/;
+    if (!url.match(dataRegExp)) return;
+
     // Extract stringified user string out of the URL
-    const [, data] = url.match(/data=([^#]+)/);
+    const [, data] = url.match(dataRegExp);
     const decodedData = JSON.parse(decodeURI(data));
     const { client } = this.props;
+
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
+
+      await authentication.doLogin(client);
     }
-    await client.query({ query: CURRENT_USER_QUERY });
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
@@ -109,6 +113,7 @@ const styles = StyleSheet.create({
 
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
+  client: PropTypes.object.isRequired,
   t: PropTypes.func,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])

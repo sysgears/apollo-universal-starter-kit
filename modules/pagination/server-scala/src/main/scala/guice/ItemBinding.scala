@@ -24,7 +24,8 @@ class ItemBinding extends ScalaModule with GuiceActorRefProvider {
   }
 
   @Provides
-  def itemRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[Item, Int] = new ItemRepository(driver)
+  def itemRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[Item, Int] =
+    new ItemRepository(driver)
 
   @Provides
   @Named(ItemResolver.name)

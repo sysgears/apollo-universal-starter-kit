@@ -36,7 +36,7 @@ trait ModuleApp extends App with AppInitialization {
     val graphQlExecutor = executor(graphQL)
     val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
+    val graphQLRoute = new GraphQLRoute(httpHandler, webSocketHandler, graphQL)
     val routes = serverModule.routes + graphQLRoute.routes
 
     val corsSettings = CorsSettings.apply(system)
@@ -54,7 +54,8 @@ trait ModuleApp extends App with AppInitialization {
     schema = graphQL.schema,
     queryReducers = List(
       QueryReducer.rejectMaxDepth[UserContext](graphQL.maxQueryDepth),
-      QueryReducer.rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+      QueryReducer
+        .rejectComplexQueries[UserContext](graphQL.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
     )
   )
 }

@@ -8,12 +8,14 @@ import model.{Item, ItemTable}
 import scala.concurrent.ExecutionContext
 
 /** @inheritdoc*/
-class ItemSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext) extends SchemaInitializer[ItemTable] {
+class ItemSchemaInitializer @Inject()(implicit val executionContext: ExecutionContext)
+  extends SchemaInitializer[ItemTable] {
 
   import driver.api._
 
   /** @inheritdoc*/
   override val name: String = ItemTable.name
+
   /** @inheritdoc*/
   override val table = TableQuery[ItemTable]
 

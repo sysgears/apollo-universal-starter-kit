@@ -10,7 +10,9 @@ import common.Logger
 
 import scala.concurrent.ExecutionContext
 
-class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext) extends JWTSession[SessionData]
+@deprecated("use 'SessionService' from default authentication module")
+class JWTSessionImpl @Inject()(implicit val executionContext: ExecutionContext)
+  extends JWTSession[SessionData]
   with Logger {
 
   override val sessionConfig: SessionConfig = SessionConfig.fromConfig()

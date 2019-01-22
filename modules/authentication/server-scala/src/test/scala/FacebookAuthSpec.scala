@@ -4,8 +4,8 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import com.github.scribejava.core.model.{OAuth2AccessToken, OAuthRequest, Response}
 import com.github.scribejava.core.oauth.OAuth20Service
-import modules.jwt.model.JwtContent
-import modules.jwt.service.JwtAuthService
+import jwt.model.JwtContent
+import jwt.service.JwtAuthService
 import repositories.{FacebookAuthRepository, UserRepository}
 import routes.FacebookAuthController
 import services.ExternalApiService
@@ -25,7 +25,10 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
   val oAuth2ServiceMock: OAuth20Service = stub[OAuth20Service]
   val responseMock: Response = stub[Response]
 
-  val authController = new FacebookAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(executionContext)
+  val authController =
+    new FacebookAuthController(oAuth2ServiceMock, externalApiService, userRepository, authRepository, jwtAuthService)(
+      executionContext
+    )
   val authRoutes: Route = authController.routes
 
   "FacebookAuthController" must {
@@ -40,10 +43,13 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to profile page with tokens" in {
-      ((code: String) => oAuth2ServiceMock.getAccessToken(code)).when(*).returns(new OAuth2AccessToken("testAccessToken"))
-      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request)).when(*, *).returns()
-      (() => responseMock.getBody).when.returns(
-        """
+      ((code: String) => oAuth2ServiceMock.getAccessToken(code))
+        .when(*)
+        .returns(new OAuth2AccessToken("testAccessToken"))
+      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request))
+        .when(*, *)
+        .returns()
+      (() => responseMock.getBody).when.returns("""
           |{
           |   "id":"testId",
           |   "email":"test@test.com",
@@ -64,10 +70,13 @@ class FacebookAuthSpec extends AuthenticationTestHelper {
     }
 
     "redirect to profile page with tokens ih headers and in parameters" in {
-      ((code: String) => oAuth2ServiceMock.getAccessToken(code)).when(*).returns(new OAuth2AccessToken("testAccessToken"))
-      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request)).when(*, *).returns()
-      (() => responseMock.getBody).when.returns(
-        """
+      ((code: String) => oAuth2ServiceMock.getAccessToken(code))
+        .when(*)
+        .returns(new OAuth2AccessToken("testAccessToken"))
+      ((token: OAuth2AccessToken, request: OAuthRequest) => oAuth2ServiceMock.signRequest(token, request))
+        .when(*, *)
+        .returns()
+      (() => responseMock.getBody).when.returns("""
           |{
           |   "id":"testId",
           |   "email":"test@test.com",

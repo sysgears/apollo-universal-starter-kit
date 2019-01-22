@@ -14,6 +14,8 @@
     "clean": "lerna run clean --stream",
     "start": "lerna run --scope=server start --stream",
     "watch": "spin watch",
+    "android": "spin -e android -d web -d ios watch",
+    "ios": "spin -e ios -d web -d android watch",
     "watch-client": "cross-env DISABLE_SSR=true lerna run --scope=client watch --stream",
     "cli": "node tools/cli",
     "stripe:setup": "lerna run --scope=server stripe:setup",
@@ -161,7 +163,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.176"
+    "spinjs": "^0.4.182"
   },
   "resolutions": {
     "react": "16.5.0",

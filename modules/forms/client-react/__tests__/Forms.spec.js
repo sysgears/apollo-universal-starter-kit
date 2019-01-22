@@ -74,11 +74,13 @@ describe('Class FormErrors works', () => {
     ]
   };
 
-  const clientError = {
-    type: 'FAILED_PASSWORD',
-    message: 'Failed valid user password',
-    errors: { usernameOrEmail: 'Please enter a valid password.' }
-  };
+  const clientError = [
+    {
+      type: 'FAILED_PASSWORD',
+      message: 'Failed valid user password',
+      errors: { usernameOrEmail: 'Please enter a valid password.' }
+    }
+  ];
   const messageForAlertForm = 'Test message';
 
   step('Class FormErrors works with one graphQLError', () => {

@@ -116,6 +116,28 @@ class UserResolver @Inject()(
             )
           }.run
       }
+      _ <- input.auth.fold(Future.successful()) {
+        auth =>
+          auth.facebook.map(
+            input => facebookAuthRepo.update(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.github.map(
+            input =>
+              githubAuthRepository
+                .update(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
+                .run
+          )
+          auth.google.map(
+            input =>
+              googleAuthRepository.update(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.linkedin.map(
+            input =>
+              linkedinAuthRepository.update(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get)).run
+          )
+          auth.certificate.map(input => certificateAuthRepository.update(CertificateAuth(serial = input.serial)).run)
+          Future.successful()
+      }
     } yield UserPayload(user = Some(editedUser))
 
   def deleteUser(id: Int): Future[UserPayload] =

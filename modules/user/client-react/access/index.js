@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 
 import jwt from './jwt';
 import session from './session';
@@ -26,9 +28,20 @@ class PageReloader extends React.Component {
     super(props);
     this.props = props;
   }
-
   state = {
     key: 1
+  };
+
+  componentDidMount() {
+    firebase.auth().onAuthStateChanged(this.firebaseSession);
+  }
+
+  firebaseSession = user => {
+    if (user) {
+      console.log('user', user);
+    } else {
+      console.log('empty user');
+    }
   };
 
   reloadPage() {

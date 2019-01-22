@@ -3,6 +3,10 @@ input LoginUserInput {
   password: String!
 }
 
+input FirebaseLoginUserInput {
+  email: String!
+}
+
 type Tokens {
   accessToken: String
   refreshToken: String
@@ -37,6 +41,8 @@ type ResetPayload {
 extend type Mutation {
   # Login user
   login(input: LoginUserInput!): AuthPayload!
+  # Login via firebase
+  firebaseLogin(input: FirebaseLoginUserInput): AuthPayload!
   # Forgot password
   forgotPassword(input: ForgotPasswordInput!): String
   # Reset password

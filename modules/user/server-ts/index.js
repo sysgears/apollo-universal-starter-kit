@@ -30,8 +30,7 @@ const middleware = app => {
 
 // if (settings.user.auth.firebase.enabled) {
 //   const firebasApp = firebase.initializeApp({
-//     credential: firebase.credential.cert(serviceAccount),
-//     databaseURL: process.env.DB_FIREBASE
+//     credential: firebase.credential.cert(serviceAccount)
 //   });
 //   firebasApp.firestore().settings({ timestampsInSnapshots: true });
 // }

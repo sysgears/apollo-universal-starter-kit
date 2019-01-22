@@ -4,14 +4,14 @@
         "declaration": true,
         "lib": ["es6"],
         "target": "es5",
-        "outDir": "./build",
-        "rootDir": ".",
+        "outDir": "./buildRules",
+        "rootDir": "./rules",
         "module": "commonjs",
         "strict": true,
         "pretty": true
     },
     "exclude": [
-        "./build",
+        "./buildRules",
         "./test/rules"
     ]
 }

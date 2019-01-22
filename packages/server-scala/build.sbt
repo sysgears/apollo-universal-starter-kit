@@ -18,7 +18,8 @@ lazy val modules = List(
   ProjectRef(base = file("../../modules/contact/server-scala"), id = "contact"),
   ProjectRef(base = file("../../modules/pagination/server-scala"), id = "pagination"),
   ProjectRef(base = file("../../modules/authentication/server-scala"), id = "authentication"),
-  ProjectRef(base = file("../../modules/post/server-scala"), id = "post")
+  ProjectRef(base = file("../../modules/post/server-scala"), id = "post"),
+  ProjectRef(base = file("../../modules/chat/server-scala"), id = "chat")
 )
 
 resourceGenerators in Compile ++= Seq(

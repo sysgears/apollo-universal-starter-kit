@@ -157,8 +157,7 @@
     "webpack-node-externals": "^1.7.2",
     "webpack-sources": "^1.1.0",
     "webpack-virtual-modules": "^0.1.10",
-    "whatwg-fetch": "^2.0.4",
-    "tsutils":"3.7.0"
+    "whatwg-fetch": "^2.0.4"
   },
   "optionalDependencies": {
     "dotenv": "^6.0.0",

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedin';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -50,6 +51,11 @@ const LinkedInComponent = ({ text, type }) => {
     default:
       return <LinkedInButton text={text} />;
   }
+};
+
+LinkedInComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default LinkedInComponent;

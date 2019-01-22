@@ -163,7 +163,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.181"
+    "spinjs": "^0.4.182"
   },
   "resolutions": {
     "react": "16.5.0",

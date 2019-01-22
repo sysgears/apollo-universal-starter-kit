@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 
@@ -7,11 +8,17 @@ import ResetPasswordView from '../components/ResetPasswordView';
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 class ResetPassword extends React.Component {
+  static propTypes = {
+    resetPassword: PropTypes.func,
+    t: PropTypes.func,
+    history: PropTypes.object,
+    match: PropTypes.object
+  };
   onSubmit = async values => {
-    const { t, resetPassword, history } = this.props;
+    const { t, resetPassword, history, match } = this.props;
 
     try {
-      await resetPassword({ ...values, token: this.props.match.params.token });
+      await resetPassword({ ...values, token: match.params.token });
     } catch (e) {
       throw new FormErrors(t('resetPass.errorMsg'), e);
     }

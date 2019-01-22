@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 import { FormErrors } from '@module/forms-client-react';
@@ -10,6 +11,13 @@ import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
+  static propTypes = {
+    login: PropTypes.func,
+    onLogin: PropTypes.func,
+    t: PropTypes.func,
+    client: PropTypes.object
+  };
+
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
 

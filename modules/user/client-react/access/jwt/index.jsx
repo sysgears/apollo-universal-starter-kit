@@ -85,7 +85,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
                 try {
                   if (operation.operationName !== 'refreshTokens') {
                     try {
-                      const data = await apolloClient.mutate({
+                      const { data } = await apolloClient.mutate({
                         mutation: REFRESH_TOKENS_MUTATION,
                         variables: { refreshToken: await getItem('refreshToken') }
                       });

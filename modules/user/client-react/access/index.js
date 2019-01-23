@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-// import { mutate } from 'react-apollo';
 import { getItem, removeItem } from '@module/core-common/clientStorage';
 
 import jwt from './jwt';
@@ -29,11 +28,6 @@ const logout = async client => {
 
 const firebaseLogin = async email => {
   console.log('email', email);
-  // const test = await mutate({
-  //   mutation: LOGOUT
-  //   // variables: { input: { email } }
-  // });
-  // console.log(test);
 };
 
 const firebaseSession = async user => {

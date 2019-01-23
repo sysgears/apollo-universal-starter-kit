@@ -5,6 +5,6 @@ export default class Report {
     return knex
       .select('id', 'name', 'phone', 'email')
       .from('report')
-      .orderBy('id', 'desc');
+      .orderBy('id', 'asc');
   }
 }

@@ -1,30 +1,23 @@
-interface ObjectError {
-  [key: string]: any;
-}
-
-interface GraphQLErrors {
-  extensions: {
-    exception: { errors: ObjectError };
-  };
-}
+import { isApolloError, ApolloError } from 'apollo-client';
+import { GraphQLError } from 'graphql';
 
 export class FormErrors {
-  public _errors: ObjectError;
+  public _errors: { [key: string]: any };
 
-  constructor(errorMsg: string, err?: ObjectError) {
+  constructor(errorMsg: string, err?: ApolloError) {
     if (!!err) {
       if (err && err.networkError) {
         throw err.networkError;
-      } else if (err && err.graphQLErrors) {
+      } else if (isApolloError(err)) {
         this._errors = {
           ...err.graphQLErrors.reduce(
             (
-              result: ObjectError,
+              result: GraphQLError,
               {
                 extensions: {
                   exception: { errors }
                 }
-              }: GraphQLErrors
+              }: GraphQLError
             ) => ({ ...result, ...errors }),
             {}
           ),

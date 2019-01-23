@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 
@@ -32,6 +33,11 @@ function handleUpdateData(cache, files) {
 }
 
 class Upload extends React.Component {
+  propTypes = {
+    filesUpdated: PropTypes.object,
+    updateQuery: PropTypes.func.isRequired
+  };
+
   componentDidUpdate() {
     const { filesUpdated, updateQuery } = this.props;
     if (filesUpdated) {

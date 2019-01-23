@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-client';
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
@@ -89,14 +90,14 @@ describe('Class FormError works', () => {
   const messageForAlertForm = 'Test message';
 
   step('Class FormError works with networkError', () => {
-    expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
+    expect(() => new FormError(messageForAlertForm, new ApolloError(apolloErrorWithNetworkError))).to.throw();
   });
   step('Class FormError works with one graphQLError', () => {
-    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLError).errors;
+    const errors = new FormError(messageForAlertForm, new ApolloError(apolloErrorWithGraphQLError)).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'errorMsg');
   });
   step('Class FormError works with two graphQLErrors', () => {
-    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLErrors).errors;
+    const errors = new FormError(messageForAlertForm, new ApolloError(apolloErrorWithGraphQLErrors)).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'email', 'errorMsg');
   });
   step('Class FormError works with client error', () => {

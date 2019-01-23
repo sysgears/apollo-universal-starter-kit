@@ -8,7 +8,7 @@ export default () => ({
   Mutation: {
     async refreshTokens(obj, { refreshToken: inputRefreshToken }, { getIdentity, getHash }) {
       const decodedToken = jwt.decode(inputRefreshToken);
-      const isValidToken = !decodedToken || !decodedToken.id;
+      const isValidToken = decodedToken && decodedToken.id;
 
       if (!isValidToken) {
         throw new AuthenticationError(MESSAGE_INVALID_REFRESH);
@@ -19,7 +19,8 @@ export default () => ({
       }
 
       const identity = await getIdentity(decodedToken.id);
-      const refreshSecret = settings.auth.secret + getHash ? getHash(decodedToken.id) : '';
+      const hash = getHash ? await getHash(decodedToken.id) : '';
+      const refreshSecret = settings.auth.secret + hash;
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);

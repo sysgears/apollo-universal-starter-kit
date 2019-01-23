@@ -1,6 +1,10 @@
-import { ApolloLink, Observable } from 'apollo-link';
+import { ApolloLink, Observable, execute, makePromise } from 'apollo-link';
 
 import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
+import { apiUrl } from '@module/core-common';
+
+import { BatchHttpLink } from 'apollo-link-batch-http';
+
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 
@@ -13,13 +17,29 @@ const setJWTContext = async operation => {
     ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
       ? { Authorization: `Bearer ${accessToken}` }
       : {};
+
   operation.setContext(context => ({
     ...context,
     headers
   }));
 };
 
-let apolloClient;
+const onRefreshToken = async operation => {
+  const link = new BatchHttpLink({
+    uri: apiUrl,
+    credentials: 'include'
+  });
+
+  const context = await operation.getContext();
+
+  const config = {
+    query: REFRESH_TOKENS_MUTATION,
+    variables: { refreshToken: await getItem('refreshToken') },
+    context: { ...context, headers: {} }
+  };
+
+  return makePromise(execute(link, config));
+};
 
 const saveTokens = async ({ accessToken, refreshToken }) => {
   await setItem('accessToken', accessToken);
@@ -70,12 +90,14 @@ const JWTLink = new ApolloLink((operation, forward) => {
                 try {
                   if (operation.operationName !== 'refreshTokens') {
                     try {
-                      const data = await apolloClient.mutate({
-                        mutation: REFRESH_TOKENS_MUTATION,
-                        variables: { refreshToken: await getItem('refreshToken') }
-                      });
-                      const { accessToken, refreshToken } = data.refreshTokens;
-                      await saveTokens({ accessToken, refreshToken });
+                      const { data } = await onRefreshToken(operation);
+
+                      if (data && data.refreshTokens) {
+                        const { accessToken, refreshToken } = data.refreshTokens;
+                        await saveTokens({ accessToken, refreshToken });
+                      } else {
+                        await removeTokens();
+                      }
                     } catch (e) {
                       await removeTokens();
                     }

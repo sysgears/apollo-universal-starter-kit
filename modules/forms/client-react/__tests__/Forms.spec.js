@@ -1,9 +1,9 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import { FormErrors } from '../FormErrors';
+import { FormError } from '../FormError';
 
-describe('Class FormErrors works', () => {
+describe('Class FormError works', () => {
   const apolloErrorWithNetworkError = {
     graphQLErrors: undefined,
     networkError: new Error('Test networkError'),
@@ -88,18 +88,18 @@ describe('Class FormErrors works', () => {
 
   const messageForAlertForm = 'Test message';
 
-  step('Class FormErrors works with networkError', () => {
-    expect(() => new FormErrors(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
+  step('Class FormError works with networkError', () => {
+    expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
   });
-  step('Class FormErrors works with one graphQLError', () => {
-    const errors = new FormErrors(messageForAlertForm, apolloErrorWithGraphQLError).errors;
+  step('Class FormError works with one graphQLError', () => {
+    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLError).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'errorMsg');
   });
-  step('Class FormErrors works with two graphQLErrors', () => {
-    const errors = new FormErrors(messageForAlertForm, apolloErrorWithGraphQLErrors).errors;
+  step('Class FormError works with two graphQLErrors', () => {
+    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLErrors).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'email', 'errorMsg');
   });
-  step('Class FormErrors works with client error', () => {
-    expect(() => new FormErrors(messageForAlertForm, clientError)).to.throw();
+  step('Class FormError works with client error', () => {
+    expect(() => new FormError(messageForAlertForm, clientError)).to.throw();
   });
 });

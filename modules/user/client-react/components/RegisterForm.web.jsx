@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { FieldAdapter as Field } from '@module/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 
 import { match, email, minLength, required, validate } from '@module/validation-common-react';
@@ -70,7 +70,7 @@ const RegisterFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      if (e && e.errors) {
+      if (isFormError(e)) {
         setErrors(e.errors);
       } else {
         throw e;

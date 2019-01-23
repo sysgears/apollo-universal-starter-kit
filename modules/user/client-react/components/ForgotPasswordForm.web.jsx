@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { FieldAdapter as Field } from '@module/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 import { Form, RenderField, Button, Alert } from '@module/look-client-react';
 import { required, email, validate } from '@module/validation-common-react';
@@ -54,7 +54,7 @@ const ForgotPasswordFormWithFormik = withFormik({
     await onSubmit(values)
       .then(() => resetForm())
       .catch(e => {
-        if (e && e.errors) {
+        if (isFormError(e)) {
           setErrors(e.errors);
         } else {
           throw e;

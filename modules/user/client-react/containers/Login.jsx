@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
@@ -24,7 +24,7 @@ class Login extends React.Component {
     try {
       await login(values);
     } catch (e) {
-      throw new FormErrors(t('login.errorMsg'), e);
+      throw new FormError(t('login.errorMsg'), e);
     }
 
     await access.doLogin(client);

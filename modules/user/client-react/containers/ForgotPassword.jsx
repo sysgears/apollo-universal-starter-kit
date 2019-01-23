@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@module/i18n-client-react';
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
@@ -25,7 +25,7 @@ class ForgotPassword extends React.Component {
     try {
       await forgotPassword(values);
     } catch (e) {
-      throw new FormErrors(t('forgotPass.errorMsg'), e);
+      throw new FormError(t('forgotPass.errorMsg'), e);
     }
   };
 

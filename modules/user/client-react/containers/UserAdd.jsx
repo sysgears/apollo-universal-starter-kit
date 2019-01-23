@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
 import settings from '../../../../settings';
@@ -37,7 +37,7 @@ class UserAdd extends React.Component {
     try {
       await addUser(userValues);
     } catch (e) {
-      throw new FormErrors(t('userAdd.errorMsg'), e);
+      throw new FormError(t('userAdd.errorMsg'), e);
     }
 
     if (history) {

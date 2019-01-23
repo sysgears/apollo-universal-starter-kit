@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
-import { FieldAdapter as Field } from '@module/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 import { required, minLength, validate } from '@module/validation-common-react';
 import { Form, RenderField, Alert, Button } from '@module/look-client-react';
@@ -133,7 +133,7 @@ const LoginFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      if (e && e.errors) {
+      if (isFormError(e)) {
         setErrors(e.errors);
       } else {
         throw e;

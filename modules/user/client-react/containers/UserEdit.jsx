@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
@@ -37,7 +37,7 @@ class UserEdit extends React.Component {
     try {
       await editUser({ id: user.id, ...userValues });
     } catch (e) {
-      throw new FormErrors(t('userEdit.errorMsg'), e);
+      throw new FormError(t('userEdit.errorMsg'), e);
     }
 
     if (history) {

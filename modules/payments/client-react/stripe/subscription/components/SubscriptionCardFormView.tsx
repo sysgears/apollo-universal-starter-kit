@@ -3,7 +3,7 @@ import { FormikProps, withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { Form, RenderField, Button, Alert, Label } from '@module/look-client-react';
-import { FieldAdapter as Field } from '@module/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { required, validate } from '@module/validation-common-react';
 
 interface SubscriptionCardFormViewProps {
@@ -46,7 +46,7 @@ const SubscriptionFormWithFormik = withFormik<SubscriptionCardFormViewProps, any
   handleSubmit({ name }, { setErrors, props }) {
     const { stripe, onSubmit } = props;
     onSubmit({ name }, stripe).catch((e: { [key: string]: any }) => {
-      if (e && e.errors) {
+      if (isFormError(e)) {
         setErrors(e.errors);
       } else {
         throw e;

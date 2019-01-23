@@ -6,7 +6,7 @@ import { translate } from '@module/i18n-client-react';
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
@@ -25,7 +25,7 @@ class Register extends React.Component {
     try {
       await register(values);
     } catch (e) {
-      throw new FormErrors(t('reg.errorMsg'), e);
+      throw new FormError(t('reg.errorMsg'), e);
     }
 
     if (history) {

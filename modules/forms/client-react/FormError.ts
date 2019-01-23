@@ -1,7 +1,10 @@
 import { isApolloError, ApolloError } from 'apollo-client';
 import { GraphQLError } from 'graphql';
 
-export class FormErrors {
+// export declare function isFormError(err: { [key: string]: any }): err is FormError;
+export const isFormError = (err: { [key: string]: any }) => err instanceof FormError;
+
+export class FormError {
   public _errors: { [key: string]: any };
 
   constructor(errorMsg: string, err?: ApolloError) {

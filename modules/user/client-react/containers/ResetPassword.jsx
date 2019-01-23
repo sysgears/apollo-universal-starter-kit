@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
 
-import { FormErrors } from '@module/forms-client-react';
+import { FormError } from '@module/forms-client-react';
 import ResetPasswordView from '../components/ResetPasswordView';
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
@@ -20,7 +20,7 @@ class ResetPassword extends React.Component {
     try {
       await resetPassword({ ...values, token: match.params.token });
     } catch (e) {
-      throw new FormErrors(t('resetPass.errorMsg'), e);
+      throw new FormError(t('resetPass.errorMsg'), e);
     }
 
     history.push('/login');

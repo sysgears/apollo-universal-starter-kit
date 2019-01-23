@@ -1,7 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import UploadView from '../components/UploadView';
 
 export default class FileOperations extends React.Component {
+  static propTypes = {
+    uploadFiles: PropTypes.func,
+    removeFile: PropTypes.func
+  };
+
   state = {
     error: null
   };

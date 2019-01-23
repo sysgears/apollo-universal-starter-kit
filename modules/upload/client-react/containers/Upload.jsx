@@ -33,7 +33,7 @@ function handleUpdateData(cache, files) {
 }
 
 class Upload extends React.Component {
-  propTypes = {
+  static propTypes = {
     filesUpdated: PropTypes.object,
     updateQuery: PropTypes.func.isRequired
   };

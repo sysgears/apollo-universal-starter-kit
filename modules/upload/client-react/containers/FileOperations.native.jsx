@@ -33,7 +33,10 @@ const withActionSheetProvider = Component => {
 
 class FileOperations extends React.Component {
   static propTypes = {
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    removeFile: PropTypes.func.isRequired,
+    uploadFiles: PropTypes.func.isRequired,
+    showActionSheetWithOptions: PropTypes.func.isRequired
   };
 
   state = {

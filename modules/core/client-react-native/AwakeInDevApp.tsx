@@ -33,7 +33,7 @@ export default (modules: ClientModule) => {
 
     public render() {
       if (!this.state.isReady) {
-        return <Expo.AppLoading />;
+        return <Expo.AppLoading startAsync={null} onError={null} onFinish={null} />;
       }
 
       return React.createElement(

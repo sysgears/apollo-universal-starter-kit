@@ -119,6 +119,8 @@ class ChatOperations extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     messages: PropTypes.object,
+    messagesUpdated: PropTypes.object,
+    updateQuery: PropTypes.func,
     loadData: PropTypes.func.isRequired
   };
 

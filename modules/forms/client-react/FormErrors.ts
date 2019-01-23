@@ -1,13 +1,33 @@
-export class FormErrors {
-  public _errors: { [key: string]: any };
+interface ObjectError {
+  [key: string]: any;
+}
 
-  constructor(errorMsg: string, err?: { [key: string]: [any] }) {
+interface GraphQLErrors {
+  extensions: {
+    exception: { errors: ObjectError };
+  };
+}
+
+export class FormErrors {
+  public _errors: ObjectError;
+
+  constructor(errorMsg: string, err?: ObjectError) {
     if (!!err) {
-      if (err && err.graphQLErrors) {
+      if (err && err.networkError) {
+        throw err.networkError;
+      } else if (err && err.graphQLErrors) {
         this._errors = {
-          ...err.graphQLErrors.reduce((result, { extensions: { exception: { errors } } }) => {
-            return { ...result, ...errors };
-          }, {}),
+          ...err.graphQLErrors.reduce(
+            (
+              result: ObjectError,
+              {
+                extensions: {
+                  exception: { errors }
+                }
+              }: GraphQLErrors
+            ) => ({ ...result, ...errors }),
+            {}
+          ),
           errorMsg
         };
       } else {

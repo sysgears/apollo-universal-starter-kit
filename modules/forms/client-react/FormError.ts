@@ -1,4 +1,4 @@
-import { isApolloError } from 'apollo-client';
+import { isApolloError, ApolloError } from 'apollo-client';
 import { GraphQLError } from 'graphql';
 
 export const isFormError = (err: any) => err instanceof FormError;
@@ -9,7 +9,7 @@ export class FormError {
   constructor(errorMsg: string, err?: any) {
     if (!!err) {
       if (err && err.networkError) {
-        throw err.networkError;
+        throw new ApolloError(err);
       } else if (isApolloError(err)) {
         this._errors = {
           ...err.graphQLErrors.reduce(

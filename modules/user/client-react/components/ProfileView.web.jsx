@@ -49,13 +49,12 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
               <CardTitle>{t('profile.card.group.role')}:</CardTitle>
               <CardText>{currentUser.role}</CardText>
             </CardGroup>
-            {currentUser.profile &&
-              currentUser.profile.fullName && (
-                <CardGroup>
-                  <CardTitle>{t('profile.card.group.full')}:</CardTitle>
-                  <CardText>{currentUser.profile.fullName}</CardText>
-                </CardGroup>
-              )}
+            {currentUser.profile && currentUser.profile.fullName && (
+              <CardGroup>
+                <CardTitle>{t('profile.card.group.full')}:</CardTitle>
+                <CardText>{currentUser.profile.fullName}</CardText>
+              </CardGroup>
+            )}
             {/* Credit card info (Stripe subscription module)*/}
             {settings.stripe.subscription.enabled &&
               settings.stripe.subscription.publicKey &&

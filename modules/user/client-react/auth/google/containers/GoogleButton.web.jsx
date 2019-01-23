@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -50,6 +51,11 @@ const GoogleComponent = ({ type, text }) => {
     default:
       return <GoogleButton text={text} />;
   }
+};
+
+GoogleComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default GoogleComponent;

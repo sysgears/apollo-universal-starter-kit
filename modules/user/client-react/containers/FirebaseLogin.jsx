@@ -8,7 +8,7 @@ import LoginView from '../components/LoginView';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-import FEREBASELOGIN from '../graphql/FirebaseLogin.graphql';
+import FEREBASE_LOGIN from '../graphql/FirebaseLogin.graphql';
 
 class Login extends React.Component {
   render() {
@@ -18,7 +18,7 @@ class Login extends React.Component {
 
 const LoginWithApollo = compose(
   withApollo,
-  graphql(FEREBASELOGIN, {
+  graphql(FEREBASE_LOGIN, {
     props: ({ ownProps: { client, onLogin }, mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
         let firebaseAuth = {};
@@ -37,16 +37,13 @@ const LoginWithApollo = compose(
           }
         }
         const {
-          data: { firebaseLogin }
+          data: {
+            firebaseLogin: { tokens, user, errors }
+          }
         } = await mutate({
           variables: { input: { email: usernameOrEmail } }
         });
-        console.log(firebaseLogin);
-        const login = {
-          tokens: firebaseLogin.tokens,
-          user: firebaseLogin.user,
-          errors: firebaseLogin.errors
-        };
+        const login = { tokens, user, errors };
         if (!login.errors) {
           await access.doLogin(client);
           await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });

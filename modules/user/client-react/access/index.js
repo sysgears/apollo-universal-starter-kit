@@ -2,11 +2,15 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+// import { mutate } from 'react-apollo';
+import { getItem, removeItem } from '@module/core-common/clientStorage';
 
 import jwt from './jwt';
 import session from './session';
 
 import AccessModule from './AccessModule';
+
+// import FIREBASE_LOGIN from '../graphql/FirebaseLogin.graphql';
 
 const ref = React.createRef();
 
@@ -23,6 +27,29 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
+const firebaseLogin = async email => {
+  console.log('email', email);
+  // const test = await mutate({
+  //   mutation: LOGOUT
+  //   // variables: { input: { email } }
+  // });
+  // console.log(test);
+};
+
+const firebaseSession = async user => {
+  const token = await getItem('refreshToken');
+  if (user) {
+    if (!token) {
+      firebaseLogin(user.email);
+    }
+  } else {
+    if (token) {
+      await removeItem('refreshToken');
+      await removeItem('accessToken');
+    }
+  }
+};
+
 class PageReloader extends React.Component {
   constructor(props) {
     super(props);
@@ -33,16 +60,8 @@ class PageReloader extends React.Component {
   };
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(this.firebaseSession);
+    firebase.auth().onAuthStateChanged(firebaseSession);
   }
-
-  firebaseSession = user => {
-    if (user) {
-      console.log('user', user);
-    } else {
-      console.log('empty user');
-    }
-  };
 
   reloadPage() {
     this.setState({ key: this.state.key + 1 });

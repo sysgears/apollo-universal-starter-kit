@@ -60,9 +60,11 @@ export default () => ({
       { req, User }
     ) {
       try {
-        const user = await User.getUserByUsernameOrEmail(email);
+        const user = await User.getUserByEmail(email);
+        console.log('user---------------------->', user);
 
         const tokens = await access.grantAccess(user, req);
+        console.log('tokens ----------------------->', tokens);
         return { user, tokens };
       } catch (e) {
         return { errors: e };

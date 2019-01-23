@@ -178,7 +178,13 @@ const UserFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    onSubmit(values).catch(e => setErrors(e.errors));
+    onSubmit(values).catch(e => {
+      if (e && e.errors) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+    });
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: values => validate(values, userFormSchema)

@@ -45,7 +45,13 @@ const SubscriptionFormWithFormik = withFormik<SubscriptionCardFormViewProps, any
   mapPropsToValues: () => ({ name: '' }),
   handleSubmit({ name }, { setErrors, props }) {
     const { stripe, onSubmit } = props;
-    onSubmit({ name }, stripe).catch((e: { [key: string]: any }) => setErrors(e.errors));
+    onSubmit({ name }, stripe).catch((e: { [key: string]: any }) => {
+      if (e && e.errors) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+    });
   },
   validate: values => validate(values, { name: [required] }),
   displayName: 'StripeSubscriptionForm', // helps with React DevTools,

@@ -132,7 +132,13 @@ const LoginFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    onSubmit(values).catch(e => setErrors(e.errors));
+    onSubmit(values).catch(e => {
+      if (e && e.errors) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+    });
   },
   validate: values => validate(values, loginFormSchema),
   displayName: 'LoginForm' // helps with React DevTools

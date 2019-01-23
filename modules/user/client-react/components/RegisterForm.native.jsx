@@ -87,7 +87,11 @@ const RegisterFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      setErrors(e.errors);
+      if (e && e.errors) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
     });
   },
   enableReinitialize: true,

@@ -75,7 +75,13 @@ const ForgotPasswordFormWithFormik = withFormik({
       .then(() => {
         resetForm();
       })
-      .catch(e => setErrors(e.errors));
+      .catch(e => {
+        if (e && e.errors) {
+          setErrors(e.errors);
+        } else {
+          throw e;
+        }
+      });
   },
   validate: values => validate(values, forgotPasswordFormSchema),
   displayName: 'ForgotPasswordForm' // helps with React DevTools

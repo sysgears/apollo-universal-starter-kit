@@ -14,6 +14,7 @@ export default class extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     t: PropTypes.func,
+    error: PropTypes.string,
     messages: PropTypes.object,
     addMessage: PropTypes.func,
     deleteMessage: PropTypes.func,

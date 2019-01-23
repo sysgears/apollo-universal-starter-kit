@@ -113,6 +113,7 @@ const styles = StyleSheet.create({
 
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
+  client: PropTypes.object.isRequired,
   t: PropTypes.func,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])

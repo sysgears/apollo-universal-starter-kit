@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
@@ -51,6 +52,11 @@ const GithubComponent = ({ text, type }) => {
     default:
       return <GitHubButton text={text} />;
   }
+};
+
+GithubComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default GithubComponent;

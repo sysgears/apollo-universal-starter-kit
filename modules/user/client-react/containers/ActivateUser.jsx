@@ -1,5 +1,6 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
+import PropTypes from 'prop-types';
 
 import ActivateUser from '../components/ActivateUser';
 import ACTIVATE_USER from '../graphql/ActivateUser.graphql';
@@ -35,6 +36,13 @@ class Activate extends React.Component {
     return <ActivateUser {...this.props} />;
   }
 }
+Activate.propTypes = {
+  history: PropTypes.object,
+  navigation: PropTypes.object,
+  activateUser: PropTypes.func,
+  match: PropTypes.object
+};
+
 export default graphql(ACTIVATE_USER, {
   props: ({ ownProps: { history, navigation }, mutate }) => ({
     activateUser: async token => {

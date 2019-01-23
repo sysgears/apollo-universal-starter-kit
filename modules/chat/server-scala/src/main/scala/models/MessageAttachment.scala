@@ -5,15 +5,16 @@ import java.sql.Timestamp
 import akka.http.scaladsl.model.DateTime
 import com.byteslounge.slickrepo.meta.Entity
 
-case class DbMessage(
+case class MessageAttachment(
     id: Option[Int],
-    text: String,
-    userId: Int,
-    uuid: String,
-    quotedId: Int,
+    messageId: Int,
+    name: String,
+    contentType: String,
+    size: Int,
+    path: String,
     createdAt: Timestamp = new Timestamp(DateTime.now.clicks),
     updatedAt: Timestamp = new Timestamp(DateTime.now.clicks)
-) extends Entity[DbMessage, Int] {
+) extends Entity[MessageAttachment, Int] {
 
-  override def withId(id: Int): DbMessage = this.copy(id = Some(id))
+  override def withId(id: Int): MessageAttachment = this.copy(id = Some(id))
 }

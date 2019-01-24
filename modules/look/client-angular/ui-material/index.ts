@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule, MatToolbarModule, MATERIAL_SANITY_CHECKS } from '@angular/material';
 
-import { ButtonComponent, PageLayoutComponent, NavbarComponent } from './components';
+import { ButtonComponent, ButtonRaisedComponent, PageLayoutComponent, NavbarComponent } from './components';
+import { RouterModule } from '@angular/router';
 
 export { default as styles } from './styles/styles.scss';
 
 @NgModule({
-  imports: [CommonModule, BrowserAnimationsModule, MatButtonModule, MatToolbarModule],
-  declarations: [ButtonComponent, PageLayoutComponent, NavbarComponent],
-  exports: [ButtonComponent, PageLayoutComponent, NavbarComponent],
+  imports: [CommonModule, BrowserAnimationsModule, MatButtonModule, MatToolbarModule, RouterModule],
+  declarations: [ButtonComponent, ButtonRaisedComponent, PageLayoutComponent, NavbarComponent],
+  exports: [ButtonComponent, ButtonRaisedComponent, PageLayoutComponent, NavbarComponent],
   // Workaround for a dynamic loaded styles https://github.com/angular/material2/issues/4125#issuecomment-347139081
   providers: [{ provide: MATERIAL_SANITY_CHECKS, useValue: false }]
 })

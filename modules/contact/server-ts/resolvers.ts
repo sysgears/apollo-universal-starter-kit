@@ -1,5 +1,7 @@
-import { validate, FieldError } from '@module/validation-common-react';
-import { contactFormSchema } from './contactFormSchema';
+import { isEmpty } from 'lodash';
+import { validate } from '@module/validation-common-react';
+import { contactFormSchema } from '@module/contact-common';
+import { UserInputError } from 'apollo-server-errors';
 import log from '../../../packages/common/log';
 
 interface ContactInput {
@@ -13,10 +15,9 @@ interface ContactInput {
 export default () => ({
   Mutation: {
     async contact(obj: any, { input }: ContactInput, { mailer, req: { t } }: any) {
-      const errors = new FieldError(validate(input, contactFormSchema));
-
-      if (errors.hasAny()) {
-        return { errors: errors.getErrors() };
+      const errors = validate(input, contactFormSchema);
+      if (!isEmpty(errors)) {
+        throw new UserInputError(t('contact:validateError'), { errors });
       }
 
       try {
@@ -28,10 +29,8 @@ export default () => ({
         });
       } catch (e) {
         log.error(e);
-        return { errors: [{ field: 'serverError', message: t('contact:sendError') }] };
+        throw new Error(t('contact:sendError'));
       }
-
-      return { errors: null };
     }
   }
 });

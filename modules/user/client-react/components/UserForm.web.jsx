@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 import { email, minLength, required, match, validate } from '@module/validation-common-react';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '@module/look-client-react';
@@ -26,7 +26,7 @@ const updateUserFormSchema = {
   passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
 };
 
-const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
+const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
 
   return (
@@ -100,7 +100,7 @@ const UserForm = ({ values, handleSubmit, error, setFieldValue, t, shouldDisplay
         label={t('userEdit.form.field.passConf')}
         value={passwordConfirmation}
       />
-      {error && <Alert color="error">{error}</Alert>}
+      {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
       <Button color="primary" type="submit">
         {t('userEdit.form.btnSubmit')}
       </Button>
@@ -117,7 +117,6 @@ UserForm.propTypes = {
   isValid: PropTypes.bool,
   shouldDisplayRole: PropTypes.bool,
   shouldDisplayActive: PropTypes.bool,
-  error: PropTypes.string,
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,
@@ -151,7 +150,13 @@ const UserFormWithFormik = withFormik({
       props: { onSubmit }
     }
   ) {
-    await onSubmit(values).catch(e => setErrors(e));
+    await onSubmit(values).catch(e => {
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+    });
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: (values, props) =>

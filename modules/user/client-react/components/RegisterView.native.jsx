@@ -1,35 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
-import { translate } from '@module/i18n-client-react';
 
 import RegisterForm from '../components/RegisterForm';
 
 class RegisterView extends React.PureComponent {
   static propTypes = {
-    register: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
-
-  onSubmit = async values => {
-    const { register, t } = this.props;
-    const { errors } = await register(values);
-
-    if (errors && errors.length) {
-      throw errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('reg.form.title') }
-      );
-    }
+    onSubmit: PropTypes.func
   };
 
   render() {
+    const { onSubmit } = this.props;
     return (
       <View style={styles.container}>
-        <RegisterForm onSubmit={this.onSubmit} />
+        <RegisterForm onSubmit={onSubmit} />
       </View>
     );
   }
@@ -43,4 +27,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(RegisterView);
+export default RegisterView;

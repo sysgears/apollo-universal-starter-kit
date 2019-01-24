@@ -8,7 +8,6 @@ import { withLoadedUser } from '../containers/Auth';
 
 class UserAddView extends React.PureComponent {
   static propTypes = {
-    addUser: PropTypes.func.isRequired,
     t: PropTypes.func,
     onSubmit: PropTypes.func
   };

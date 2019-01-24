@@ -9,7 +9,7 @@ import settings from '../../../../settings';
 
 interface ContactViewProps {
   t: TranslateFunction;
-  onSubmit: (values: IContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+  onSubmit: (values: IContactForm) => void;
 }
 
 const ContactView = (props: ContactViewProps) => {

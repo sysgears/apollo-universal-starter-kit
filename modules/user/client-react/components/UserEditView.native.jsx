@@ -12,7 +12,6 @@ class UserEditView extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     currentUser: PropTypes.object,
-    editUser: PropTypes.func.isRequired,
     t: PropTypes.func,
     onSubmit: PropTypes.func
   };

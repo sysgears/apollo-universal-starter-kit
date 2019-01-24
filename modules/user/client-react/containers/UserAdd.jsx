@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
 import { translate } from '@module/i18n-client-react';
-
+import { FormError } from '@module/forms-client-react';
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
 import settings from '../../../../settings';
@@ -12,7 +12,9 @@ import UserFormatter from '../helpers/UserFormatter';
 class UserAdd extends React.Component {
   propTypes = {
     addUser: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    navigation: PropTypes.object,
+    history: PropTypes.object
   };
 
   constructor(props) {
@@ -20,7 +22,7 @@ class UserAdd extends React.Component {
   }
 
   onSubmit = async values => {
-    const { addUser, t } = this.props;
+    const { addUser, t, history, navigation } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -32,16 +34,17 @@ class UserAdd extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const result = await addUser(userValues);
+    try {
+      await addUser(userValues);
+    } catch (e) {
+      throw new FormError(t('userAdd.errorMsg'), e);
+    }
 
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('userEdit.errorMsg') }
-      );
+    if (history) {
+      return history.push('/users/');
+    }
+    if (navigation) {
+      return navigation.goBack();
     }
   };
 
@@ -53,28 +56,12 @@ class UserAdd extends React.Component {
 export default compose(
   translate('user'),
   graphql(ADD_USER, {
-    props: ({ ownProps: { history, navigation }, mutate }) => ({
+    props: ({ mutate }) => ({
       addUser: async input => {
-        try {
-          const {
-            data: { addUser }
-          } = await mutate({
-            variables: { input }
-          });
-
-          if (addUser.errors) {
-            return { errors: addUser.errors };
-          }
-
-          if (history) {
-            return history.push('/users/');
-          }
-          if (navigation) {
-            return navigation.goBack();
-          }
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        const { data: addUser } = await mutate({
+          variables: { input }
+        });
+        return addUser;
       }
     })
   })

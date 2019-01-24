@@ -2,9 +2,9 @@ import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
-import { contactFormSchema } from '@module/contact-server-ts';
-import { validate, FieldError } from '@module/validation-common-react';
+import { isFormError } from '@module/forms-client-react';
+import { contactFormSchema } from '@module/contact-common';
+import { validate } from '@module/validation-common-react';
 import { TranslateFunction } from '@module/i18n-client-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
 import {
@@ -103,15 +103,17 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
     Keyboard.dismiss();
-
-    const errors = new FieldError((await onSubmit(values)).errors);
-
-    if (errors.hasAny()) {
-      setStatus({ showModal: !!errors.errors.serverError });
-      setErrors(errors.errors);
-    } else {
+    try {
+      await onSubmit(values);
       resetForm();
-      setStatus({ showModal: true });
+      setStatus({ sent: true });
+    } catch (e) {
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+      setStatus({ sent: false });
     }
   },
   validate: values => validate(values, contactFormSchema),

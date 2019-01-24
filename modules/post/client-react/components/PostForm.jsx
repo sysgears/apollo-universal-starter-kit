@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { translate } from '@module/i18n-client-react';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { FieldAdapter as Field } from '@module/forms-client-react';
 import { required, validate } from '@module/validation-common-react';
 import { FormView, RenderField, Button, primary } from '@module/look-client-react-native';
 import { placeholderColor, submit } from '@module/look-client-react-native/styles';

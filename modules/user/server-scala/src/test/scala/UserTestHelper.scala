@@ -1,22 +1,32 @@
 import akka.http.scaladsl.server.Route
-import app.UserModule
+import app.{AuthenticationModule, MailModule, UserModule}
 import com.google.inject.Guice
-import core.guice.bindings.CoreBinding
-import net.codingwell.scalaguice.ScalaModule
-import repositories.UserSchemaInitializer
-
-import scala.collection.JavaConverters._
+import common.graphql.UserContext
+import common.slick.SchemaInitializer
+import core.app.CoreModule
+import repositories._
+import repositories.auth.{
+  FacebookAuthSchemaInitializer, GithubAuthSchemaInitializer, GoogleAuthSchemaInitializer, LinkedinAuthSchemaInitializer
+}
+import shapes.ServerModule
 
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration.Duration
 
 trait UserTestHelper extends TestHelper {
 
-  val bindings: Seq[ScalaModule] = Seq(new CoreBinding)
-  Guice.createInjector(bindings.asJava)
+  val modules = new ServerModule[UserContext, SchemaInitializer[_]](
+    Seq(new CoreModule(), new MailModule(), new UserModule(), new AuthenticationModule())
+  )
+  Guice.createInjector(modules.foldBindings.bindings)
+
+  val routes: Route = routesWithGraphQLSchema(modules.fold)
 
   val userInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
-  val routes: Route = routesWithGraphQLSchema(new UserModule())
+  val googleAuthInitializer: GoogleAuthSchemaInitializer = inject[GoogleAuthSchemaInitializer]
+  val githubAuthInitializer: GithubAuthSchemaInitializer = inject[GithubAuthSchemaInitializer]
+  val facebookAuthInitializer: FacebookAuthSchemaInitializer = inject[FacebookAuthSchemaInitializer]
+  val linkedinAuthInitializer: LinkedinAuthSchemaInitializer = inject[LinkedinAuthSchemaInitializer]
 
   before {
     clean()
@@ -33,9 +43,17 @@ trait UserTestHelper extends TestHelper {
 
   private def initDb(): Unit = {
     await(userInitializer.createAndSeed())
+    await(googleAuthInitializer.create())
+    await(githubAuthInitializer.create())
+    await(facebookAuthInitializer.create())
+    await(linkedinAuthInitializer.create())
   }
 
   private def dropDb(): Unit = {
+    await(linkedinAuthInitializer.drop())
+    await(facebookAuthInitializer.drop())
+    await(githubAuthInitializer.drop())
+    await(googleAuthInitializer.drop())
     await(userInitializer.drop())
   }
 

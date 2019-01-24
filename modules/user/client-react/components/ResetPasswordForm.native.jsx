@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 
 import { RenderField, Button, primary } from '@module/look-client-react-native';
@@ -68,7 +68,13 @@ const ResetPasswordFormWithFormik = withFormik({
   ) {
     await onSubmit(values)
       .then(() => resetForm())
-      .catch(e => setErrors(e));
+      .catch(e => {
+        if (isFormError(e)) {
+          setErrors(e.errors);
+        } else {
+          throw e;
+        }
+      });
   },
   validate: values => validate(values, resetPasswordFormSchema),
   displayName: 'LoginForm' // helps with React DevTools

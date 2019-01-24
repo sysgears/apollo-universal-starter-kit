@@ -1,6 +1,5 @@
 type StripeSubscription {
   active: Boolean!
-  errors: [FieldError!]
 }
 
 type StripeSubscriptionCard {

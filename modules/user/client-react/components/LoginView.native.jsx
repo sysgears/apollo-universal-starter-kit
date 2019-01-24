@@ -39,20 +39,6 @@ class LoginView extends React.PureComponent {
     }
   };
 
-  onSubmit = login => async values => {
-    const { errors } = await login(values);
-
-    if (errors && errors.length) {
-      throw errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: this.props.t('login.errorMsg') }
-      );
-    }
-  };
-
   renderAvailableLogins = () => (
     <View style={styles.examplesArea}>
       <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
@@ -62,12 +48,12 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
-    const { login, navigation } = this.props;
+    const { navigation, onSubmit } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.examplesContainer}>{this.renderAvailableLogins()}</View>
         <View style={styles.loginContainer}>
-          <LoginForm onSubmit={this.onSubmit(login)} navigation={navigation} />
+          <LoginForm onSubmit={onSubmit} navigation={navigation} />
         </View>
       </View>
     );
@@ -113,8 +99,9 @@ const styles = StyleSheet.create({
 
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
-  client: PropTypes.object.isRequired,
   t: PropTypes.func,
+  onSubmit: PropTypes.func,
+  client: PropTypes.object,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };

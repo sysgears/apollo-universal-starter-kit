@@ -3,7 +3,8 @@ import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { PLATFORM } from '@module/core-common';
-
+import { FormError } from '@module/forms-client-react';
+import { isApolloError } from 'apollo-client';
 import settings from '../../../../../../settings';
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';
@@ -24,8 +25,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   constructor(props: AddSubscriptionProps) {
     super(props);
     this.state = {
-      submitting: false,
-      error: null
+      submitting: false
     };
   }
 
@@ -36,33 +36,33 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
 
     try {
       // create credit card token
-      try {
-        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-        if (preparedCreditCard.error) {
-          this.setState({ submitting: false, error: t('stripeError') });
-          return;
-        }
-      } catch (e) {
-        this.setState({ submitting: false, error: t('creditCardError') });
-        return;
-      }
+      preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
 
-      const { data } = await addSubscription({ variables: { input: preparedCreditCard } });
-      const { addStripeSubscription } = data;
+      await addSubscription({ variables: { input: preparedCreditCard } });
 
       this.setState({
-        submitting: false,
-        error: addStripeSubscription.errors ? addStripeSubscription.errors.map((e: any) => e.message).join('\n') : null
+        submitting: false
       });
       history ? history.push('/subscriber-page') : navigation.goBack();
     } catch (e) {
-      this.setState({ submitting: false, error: t('serverError') });
+      this.setState({
+        submitting: false
+      });
+      if (isApolloError(e)) {
+        if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
+          throw new FormError(t('stripeError'), e);
+        } else {
+          throw new FormError(t('serverError'), e);
+        }
+      } else {
+        throw new FormError(t('creditCardError'));
+      }
     }
   };
 
   public render() {
     const { t } = this.props;
-    const { error, submitting } = this.state;
+    const { submitting } = this.state;
 
     return (
       <Mutation
@@ -80,20 +80,10 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
               {/* Stripe elements should render only for web*/}
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <AddSubscriptionView
-                    error={error}
-                    submitting={submitting}
-                    onSubmit={this.onSubmit(addSubscription)}
-                    t={t}
-                  />
+                  <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
                 </StripeProvider>
               ) : (
-                <AddSubscriptionView
-                  error={error}
-                  submitting={submitting}
-                  onSubmit={this.onSubmit(addSubscription)}
-                  t={t}
-                />
+                <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
               )}
             </Fragment>
           );

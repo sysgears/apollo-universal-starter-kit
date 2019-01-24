@@ -27,15 +27,11 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
     // Sets state only when there is an error to prevent warning about
     // force update the component after it was unmounted
     try {
-      const { data } = await cancelSubscription();
-      if (data.cancelStripeSubscription.errors) {
-        this.setState({
-          submitting: false,
-          error: data.cancelStripeSubscription.errors
-            ? data.cancelStripeSubscription.errors.map((e: any) => e.message).join('\n')
-            : null
-        });
-      }
+      await cancelSubscription();
+
+      this.setState({
+        submitting: false
+      });
     } catch (e) {
       this.setState({ submitting: false, error: this.props.t('serverError') });
     }

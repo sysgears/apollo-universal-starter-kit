@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-
+import { ApolloError } from 'apollo-client';
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
@@ -26,7 +26,7 @@ class Upload extends React.Component {
     try {
       await uploadFiles(files);
     } catch (e) {
-      this.setState({ error: e });
+      this.setState({ error: e.message });
     }
   };
 
@@ -35,7 +35,7 @@ class Upload extends React.Component {
     try {
       await removeFile(id);
     } catch (e) {
-      this.setState({ error: e });
+      this.setState({ error: e.message });
     }
   };
 
@@ -73,7 +73,7 @@ export default compose(
             refetchQueries: [{ query: FILES_QUERY }]
           });
         } catch (e) {
-          throw { error: e.graphQLErrors[0].message };
+          throw new ApolloError(e);
         }
       }
     })
@@ -101,7 +101,7 @@ export default compose(
             }
           });
         } catch (e) {
-          throw { error: e.graphQLErrors[0].message };
+          throw new ApolloError(e);
         }
       }
     })

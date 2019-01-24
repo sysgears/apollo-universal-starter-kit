@@ -9,8 +9,4 @@ type Report {
 extend type Query {
   #Report
   report: [Report]
-  #pdfReport
-  pdf: [Int]
-  #excelReport
-  excel: [Int]
 }

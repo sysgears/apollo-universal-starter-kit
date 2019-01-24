@@ -19,12 +19,13 @@ class UserAccessService @Inject()(
 )(implicit executionContext: ExecutionContext) {
 
   def withAdminFilter[T](headers: List[HttpHeader], operation: Future[T]): Future[T] =
-    if (authConfig.turnOffAdminFilter) {
+    if (authConfig.turnOffAdminFilter) operation
+    else {
       for {
         id <- userAuthService.identify(headers).asFuture
         user <- userRepository.findOne(id).run failOnNone NotFound(s"User with id = $id")
         trustedOperation <- if (user.role == "admin") operation
         else Future.failed(Forbidden(s"User with id = $id does not have admin rights"))
       } yield trustedOperation
-    } else operation
+    }
 }

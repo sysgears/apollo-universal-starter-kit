@@ -70,25 +70,28 @@ class UserResolver @Inject()(
       }
       _ <- input.auth.fold(Future.successful()) {
         auth =>
-          auth.facebook.map(
-            input => facebookAuthRepo.save(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.github.map(
-            input =>
-              githubAuthRepository
-                .save(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
-                .run
-          )
-          auth.google.map(
-            input =>
-              googleAuthRepository.save(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.linkedin.map(
-            input =>
-              linkedinAuthRepository.save(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.certificate.map(input => certificateAuthRepository.save(CertificateAuth(serial = input.serial)).run)
-          Future.successful()
+          for {
+            _ <- auth.facebook.fold(Future.successful[Any]())(
+              input => facebookAuthRepo.save(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
+            )
+            _ <- auth.github.fold(Future.successful[Any]())(
+              input =>
+                githubAuthRepository
+                  .save(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
+                  .run
+            )
+            _ <- auth.google.fold(Future.successful[Any]())(
+              input =>
+                googleAuthRepository.save(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get)).run
+            )
+            _ <- auth.linkedin.fold(Future.successful[Any]())(
+              input =>
+                linkedinAuthRepository.save(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get)).run
+            )
+            _ <- auth.certificate.fold(Future.successful[Any]())(
+              input => certificateAuthRepository.save(CertificateAuth(user.id, serial = input.serial)).run
+            )
+          } yield ()
       }
     } yield UserPayload(user = Some(user))
 
@@ -118,25 +121,33 @@ class UserResolver @Inject()(
       }
       _ <- input.auth.fold(Future.successful()) {
         auth =>
-          auth.facebook.map(
-            input => facebookAuthRepo.update(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.github.map(
-            input =>
-              githubAuthRepository
-                .update(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
-                .run
-          )
-          auth.google.map(
-            input =>
-              googleAuthRepository.update(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.linkedin.map(
-            input =>
-              linkedinAuthRepository.update(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get)).run
-          )
-          auth.certificate.map(input => certificateAuthRepository.update(CertificateAuth(serial = input.serial)).run)
-          Future.successful()
+          for {
+            _ <- auth.facebook.fold(Future.successful[Any]())(
+              input =>
+                facebookAuthRepo.update(FacebookAuth(input.fbId, input.displayName.getOrElse(""), user.id.get)).run
+            )
+            _ <- auth.github.fold(Future.successful[Any]())(
+              input =>
+                githubAuthRepository
+                  .update(GithubAuth(input.ghId.map(_.toInt), input.displayName.getOrElse(""), user.id.get))
+                  .run
+            )
+            _ <- auth.google.fold(Future.successful[Any]())(
+              input =>
+                googleAuthRepository
+                  .update(GoogleAuth(input.googleId, input.displayName.getOrElse(""), user.id.get))
+                  .run
+            )
+            _ <- auth.linkedin.fold(Future.successful[Any]())(
+              input =>
+                linkedinAuthRepository
+                  .update(LinkedinAuth(input.lnId, input.displayName.getOrElse(""), user.id.get))
+                  .run
+            )
+            _ <- auth.certificate.fold(Future.successful[Any]())(
+              input => certificateAuthRepository.update(CertificateAuth(user.id, serial = input.serial)).run
+            )
+          } yield ()
       }
     } yield UserPayload(user = Some(editedUser))
 

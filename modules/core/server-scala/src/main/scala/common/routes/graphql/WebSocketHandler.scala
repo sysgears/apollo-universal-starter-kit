@@ -11,7 +11,7 @@ import common.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
 import common.routes.graphql.jsonProtocols.OperationMessageType._
 import common.routes.graphql.jsonProtocols.{GraphQLMessage, OperationMessage}
 import modules.socket._
-import modules.socket.SocketConnection
+import modules.socket.GraphQLSubscriptions
 import monix.execution.Scheduler
 import sangria.ast.OperationType.Subscription
 import sangria.execution.ExecutionScheme.Stream
@@ -32,7 +32,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   def handleMessages: Flow[Message, Message, NotUsed] = {
     implicit val (queue: SourceQueueWithComplete[Message], publisher) =
       Source.queue[Message](16, OverflowStrategy.backpressure).toMat(Sink.asPublisher(false))(Keep.both).run()
-    implicit val socketConnection: SocketConnection = SocketConnection.apply
+    implicit val graphQlSubs: GraphQLSubscriptions = GraphQLSubscriptions()
     val killSwitches = KillSwitches.shared(this.getClass.getSimpleName)
     val incoming = Flow[Message]
       .collect {
@@ -51,7 +51,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
             case GQL_STOP =>
               operation.id match {
                 case Some(id) =>
-                  socketConnection.cancel(id)
+                  graphQlSubs.cancel(id)
                   reply(OperationMessage(SUBSCRIPTION_END, operation.id, None))
                 case None =>
                   reply(OperationMessage(GQL_ERROR, None, Some("Id is required".toJson)))
@@ -61,6 +61,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
       .to {
         Sink.onComplete {
           _ =>
+            graphQlSubs.cancelAll()
             killSwitches.shutdown
             queue.complete
         }
@@ -71,7 +72,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
   private def handleGraphQlQuery(
       operationMessage: OperationMessage,
       killSwitches: SharedKillSwitch
-  )(implicit queue: SourceQueueWithComplete[Message], socketConnection: SocketConnection): Unit = {
+  )(implicit queue: SourceQueueWithComplete[Message], graphQlSubs: GraphQLSubscriptions): Unit = {
     import sangria.streaming.akkaStreams._
     operationMessage.payload.foreach {
       payload =>
@@ -84,7 +85,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                   .execute(
                     queryAst = queryAst,
                     userContext = UserContext(
-                      socketSubscription = Some(SocketSubscription(operationMessage.id.get, socketConnection))
+                      maybeWebSocketContext = Some(WebSocketContext(operationMessage.id.get, graphQlSubs))
                     ),
                     root = (),
                     operationName = graphQlMessage.operationName,

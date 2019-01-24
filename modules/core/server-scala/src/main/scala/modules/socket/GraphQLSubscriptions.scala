@@ -4,7 +4,7 @@ import monix.execution.Cancelable
 
 import scala.collection.concurrent.TrieMap
 
-class SocketConnection {
+case class GraphQLSubscriptions() {
 
   private[this] val subscriptions: TrieMap[String, Cancelable] = TrieMap.empty[String, Cancelable]
 
@@ -17,14 +17,14 @@ class SocketConnection {
   }
 
   def cancel(id: String): Unit = {
-    this.subscriptions.get(id).foreach(_.cancel())
+    this.subscriptions.get(id).foreach(_.cancel)
+  }
+
+  def cancelAll(): Unit = {
+    this.subscriptions.foreach(_._2.cancel)
   }
 
   def size: Int = {
     this.subscriptions.size
   }
-}
-
-object SocketConnection {
-  def apply: SocketConnection = new SocketConnection()
 }

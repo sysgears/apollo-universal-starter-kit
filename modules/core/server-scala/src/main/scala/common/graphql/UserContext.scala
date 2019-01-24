@@ -5,7 +5,7 @@ import akka.http.scaladsl.model.Multipart.FormData
 import akka.http.scaladsl.model.headers.HttpCookie
 import akka.stream.scaladsl.Source
 import modules.session.SessionData
-import modules.socket.SocketSubscription
+import modules.socket.WebSocketContext
 
 import scala.collection.mutable.ListBuffer
 
@@ -15,5 +15,5 @@ case class UserContext(
     newCookies: ListBuffer[HttpCookie] = ListBuffer.empty,
     filesData: Source[FormData.BodyPart, Any] = Source.empty,
     var session: Option[SessionData] = None,
-    socketSubscription: Option[SocketSubscription] = None
+    maybeWebSocketContext: Option[WebSocketContext] = None
 )

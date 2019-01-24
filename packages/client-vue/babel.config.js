@@ -1,21 +1,17 @@
 module.exports = {
   compact: false,
-  presets: [
-    '@babel/preset-typescript',
-    '@babel/preset-react',
-    'babel-preset-vue',
-    ['@babel/preset-env', { modules: 'commonjs' }]
-  ],
+  presets: ['babel-preset-vue', ['@babel/preset-env', { modules: false }]],
   plugins: [
-    '@babel/plugin-transform-modules-commonjs',
     '@babel/plugin-transform-destructuring',
     '@babel/plugin-transform-regenerator',
     '@babel/plugin-transform-runtime',
     '@babel/plugin-proposal-class-properties',
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     '@babel/plugin-proposal-object-rest-spread',
-    ['styled-components', { ssr: true }],
-    ['import', { libraryName: 'antd-mobile' }]
+    'syntax-jsx',
+    'transform-vue-jsx',
+    'jsx-event-modifiers',
+    'jsx-v-model'
   ],
   env: {
     production: {

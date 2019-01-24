@@ -1,7 +1,9 @@
-<mat-toolbar color="primary">
-  <div>
-    <a routerLink="/" className="navbar-brand"> {{ appName }} </a>
+<mat-toolbar color="primary" class="main-toolbar">
+  <div class="toolbar-content-start">
+    <a routerLink="/" class="navbar-brand"> {{ appName }} </a>
   </div>
 
-  <div className="justify-content-end"></div>
+  <div class="toolbar-content-end">
+    <a mat-button routerLink="/" routerLinkActive="active">Counter</a>
+  </div>
 </mat-toolbar>

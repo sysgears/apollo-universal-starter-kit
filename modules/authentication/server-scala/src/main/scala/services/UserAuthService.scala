@@ -16,7 +16,7 @@ class UserAuthService @Inject()(jwtAuthService: JwtAuthService[JwtContent], sess
         jwtAuthService.decodeAccessToken(token.value).map(_.id)
     }
     val idFromSession =
-      sessionService.readSession(headers).flatMap(_.userId).map(Success(_)).getOrElse(Failure(Unauthenticated()))
+      sessionService.readSession(headers).flatMap(_.userId).map(Success(_)).getOrElse(Failure(Unauthenticated("Unauthenticated.")))
 
     idFromToken getOrElse idFromSession
   }

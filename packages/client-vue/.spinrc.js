@@ -10,7 +10,7 @@ const config = {
       },
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: [ 'tcp:localhost:8080' ],
-      enabled: true
+      enabled: false
     },
     test: {
       stack: [ 'server' ],

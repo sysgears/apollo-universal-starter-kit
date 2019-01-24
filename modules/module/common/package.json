@@ -1,7 +1,7 @@
 {
   "name": "@gqlapp/module-common",
   "version": "0.0.1",
-  "private": true,
+  "prefab": "modules/module/common",
   "dependencies": {
     "fractal-objects": "^0.10.0"
   }

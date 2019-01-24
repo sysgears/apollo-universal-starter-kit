@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
-import { translate } from '@module/i18n-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 
-import { match, email, minLength, required, validate } from '@module/validation-common-react';
-import { Form, RenderField, Button, Alert } from '@module/look-client-react';
+import { match, email, minLength, required, validate } from '@gqlapp/validation-common-react';
+import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
 
 import settings from '../../../../settings';
 

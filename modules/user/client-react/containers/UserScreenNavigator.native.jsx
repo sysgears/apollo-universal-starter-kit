@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { compose } from 'react-apollo';
-import { DrawerComponent } from '@module/look-client-react-native';
+import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
 import { withUser } from './Auth';
 

@@ -1,6 +1,6 @@
 {
-  "name": "@module/module-common",
-  "version": "1.0.0",
+  "name": "@gqlapp/module-common",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
     "fractal-objects": "^0.10.0"

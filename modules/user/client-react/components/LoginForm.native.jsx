@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { withFormik } from 'formik';
-import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
-import { translate } from '@module/i18n-client-react';
-import { RenderField, Button, primary, FormView } from '@module/look-client-react-native';
-import { placeholderColor, submit } from '@module/look-client-react-native/styles';
-import { required, minLength, validate } from '@module/validation-common-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-react-native';
+import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { required, minLength, validate } from '@gqlapp/validation-common-react';
 
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';

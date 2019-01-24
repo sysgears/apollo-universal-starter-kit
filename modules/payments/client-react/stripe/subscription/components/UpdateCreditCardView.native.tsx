@@ -1,6 +1,6 @@
 import React from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { CreditCardInput } from '../types';

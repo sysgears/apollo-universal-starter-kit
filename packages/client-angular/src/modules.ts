@@ -1,7 +1,7 @@
-import core from '@module/core-client-angular';
-import counter from '@module/counter-client-angular';
-import look from '@module/look-client-angular';
-import ClientModule from '@module/module-client-angular';
+import core from '@gqlapp/core-client-angular';
+import counter from '@gqlapp/counter-client-angular';
+import look from '@gqlapp/look-client-angular';
+import ClientModule from '@gqlapp/module-client-angular';
 
 const modules = new ClientModule(core, look, counter);
 

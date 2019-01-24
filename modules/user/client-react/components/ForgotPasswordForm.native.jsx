@@ -4,11 +4,11 @@ import { withFormik } from 'formik';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
-import { RenderField, Button, primary } from '@module/look-client-react-native';
-import { placeholderColor, submit } from '@module/look-client-react-native/styles';
-import { required, email, validate } from '@module/validation-common-react';
-import { translate } from '@module/i18n-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { RenderField, Button, primary } from '@gqlapp/look-client-react-native';
+import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { required, email, validate } from '@gqlapp/validation-common-react';
+import { translate } from '@gqlapp/i18n-client-react';
 
 const forgotPasswordFormSchema = {
   email: [required, email]

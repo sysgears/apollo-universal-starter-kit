@@ -1,5 +1,5 @@
 import { merge } from 'lodash';
-import ServerModule, { ServerModuleShape } from '@module/module-server-ts';
+import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
 
 // TODO: Change type of user variable from any to User type, after converting the User DAO into Typescript
 interface AccessModuleShape extends ServerModuleShape {

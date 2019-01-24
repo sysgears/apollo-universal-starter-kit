@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
-import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText } from '@module/look-client-react';
+import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
 
 import LoginForm from './LoginForm';
 import settings from '../../../../settings';

@@ -1,11 +1,11 @@
 import Stripe from 'stripe';
 import { TranslationFunction } from 'i18next';
-import { mailer } from '@module/mailer-server-ts';
+import { mailer } from '@gqlapp/mailer-server-ts';
 
 import StripeSubscriptionDAO from './sql';
 import settings from '../../../../../settings';
 
-const { User } = require('@module/user-server-ts');
+const { User } = require('@gqlapp/user-server-ts');
 const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 

@@ -1,10 +1,10 @@
 import React from 'react';
 
-import ClientModule from '@module/module-client-react';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
+import ClientModule from '@gqlapp/module-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 import { Route, NavLink } from 'react-router-dom';
-import { MenuItem } from '@module/look-client-react';
+import { MenuItem } from '@gqlapp/look-client-react';
 import $Module$ from './containers/$Module$';
 import resources from './locales';
 

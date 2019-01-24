@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
 import { withNavigation } from 'react-navigation';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '@module/look-client-react-native';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '@gqlapp/look-client-react-native';
 
 interface CardInfoViewProps {
   loading: boolean;

@@ -26,7 +26,7 @@ object DbMessageTable extends JdbcProfile {
 
     def updatedAt = column[Timestamp]("UPDATED_AT")
 
-    override def * = (id.?, text, userId, uuid, quotedId, createdAt, updatedAt).mapTo[DbMessage]
+    override def * = (id.?, text, userId.?, uuid, quotedId.?, createdAt, updatedAt).mapTo[DbMessage]
   }
 
 }

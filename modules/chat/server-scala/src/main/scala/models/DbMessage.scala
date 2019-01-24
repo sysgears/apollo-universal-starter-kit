@@ -6,11 +6,11 @@ import akka.http.scaladsl.model.DateTime
 import com.byteslounge.slickrepo.meta.Entity
 
 case class DbMessage(
-    id: Option[Int],
+    id: Option[Int] = None,
     text: String,
-    userId: Int,
+    userId: Option[Int] = None,
     uuid: String,
-    quotedId: Int,
+    quotedId: Option[Int] = None,
     createdAt: Timestamp = new Timestamp(DateTime.now.clicks),
     updatedAt: Timestamp = new Timestamp(DateTime.now.clicks)
 ) extends Entity[DbMessage, Int] {

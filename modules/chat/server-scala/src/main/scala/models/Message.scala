@@ -9,7 +9,7 @@ case class Message(
     text: String,
     userId: Option[Int] = None,
     uuid: String,
-    username: String,
+    username: Option[String],
     fileName: Option[String],
     path: Option[String],
     createdAt: Timestamp = new Timestamp(DateTime.now.clicks),

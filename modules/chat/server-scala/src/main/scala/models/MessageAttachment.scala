@@ -6,7 +6,7 @@ import akka.http.scaladsl.model.DateTime
 import com.byteslounge.slickrepo.meta.Entity
 
 case class MessageAttachment(
-    id: Option[Int],
+    id: Option[Int] = None,
     messageId: Int,
     name: String,
     contentType: String,

@@ -1,8 +1,6 @@
 {
-  "navLink": "Report",
   "title": "Report",
-  "btn": "Print report",
-  "downloadPDF": "Download PDF report",
-  "downloadExcel": "Download Excel report",
+  "navLink": "Report",
+  "meta": "A page example with a report",
   "loading": "Loading..."
 }

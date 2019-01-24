@@ -3,15 +3,15 @@ import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
 import { Button } from '@module/look-client-react';
-import { downloadFile, getObjectURLFromArray } from '../../helpers';
+import { translate } from '@module/i18n-client-react';
+import query from '../../graphql/Excel.graphql';
+import { downloadFile, getObjectURLFromArray } from '../../common';
 
-class DownloadDocument extends Component {
+@translate('ExcelReport')
+class DownloadReport extends Component {
   static propTypes = {
     client: PropTypes.object.isRequired,
-    fileName: PropTypes.string.isRequired,
-    query: PropTypes.object.isRequired,
-    children: PropTypes.node.isRequired,
-    queryProp: PropTypes.string.isRequired
+    t: PropTypes.func
   };
 
   constructor(props) {
@@ -20,22 +20,22 @@ class DownloadDocument extends Component {
   }
 
   async donwload() {
-    const { client, query, fileName, queryProp } = this.props;
+    const { client } = this.props;
     const { data } = await client.query({
       query
     });
-    const url = getObjectURLFromArray(data[queryProp]);
-    downloadFile(url, fileName);
+    const url = getObjectURLFromArray(data.excel);
+    downloadFile(url, 'Report.xlsx');
   }
 
   render() {
-    const { children } = this.props;
+    const { t } = this.props;
     return (
       <Button style={{ marginLeft: '10px' }} onClick={this.donwload}>
-        {children}
+        {t('downloadExcel')}
       </Button>
     );
   }
 }
 
-export default withApollo(DownloadDocument);
+export default withApollo(DownloadReport);

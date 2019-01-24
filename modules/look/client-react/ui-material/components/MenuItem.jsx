@@ -1,16 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import { Route } from 'react-router-dom';
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
 
-class MenuItem extends React.Component {
-  static propTypes = {
-    children: PropTypes.node
-  };
-
-  render() {
-    const { children, ...props } = this.props;
-    return <BottomNavigationAction label={children} {...props} />;
+const styles = {
+  activeLinkBock: {
+    borderBottom: '2px solid #3f51b5'
   }
-}
+};
 
-export default MenuItem;
+const MenuItem = ({ classes, children, ...props }) => (
+  <Route>
+    {({ match }) => {
+      return (
+        <Grid item className={match.path === props.to ? classes.activeLinkBock : ''}>
+          {children}
+        </Grid>
+      );
+    }}
+  </Route>
+);
+
+MenuItem.propTypes = {
+  children: PropTypes.node,
+  classes: PropTypes.object,
+  to: PropTypes.string
+};
+
+export default withStyles(styles)(MenuItem);

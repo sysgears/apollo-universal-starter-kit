@@ -5,8 +5,6 @@ import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
 
 import NavBar from './NavBar';
-// import NavBar from '../../ui-antd/components/NavBar';
-// import NavBar from '../../ui-bootstrap/components/NavBar';
 
 import settings from '../../../../../settings';
 
@@ -15,7 +13,7 @@ const styles = {
     backgroundColor: 'white'
   },
   main: {
-    minHeight: 'calc(100vh - 94px)'
+    minHeight: 'calc(100vh - 83px)'
   },
   footer: {
     margin: '10px 0'

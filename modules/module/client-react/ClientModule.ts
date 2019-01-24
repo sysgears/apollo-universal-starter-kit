@@ -25,7 +25,8 @@ class ClientModule extends BaseModule {
   get navItems() {
     return this.navItem.map((component: React.ReactElement<any>, idx: number, items: Array<React.ReactElement<any>>) =>
       React.cloneElement(component, {
-        key: component.key || idx + items.length
+        key: component.key || idx + items.length,
+        to: component.key || ''
       })
     );
   }

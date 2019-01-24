@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
 import settings from '../../../../../settings';
@@ -14,52 +12,40 @@ export const onAppCreate = modules => (ref.modules = modules);
 
 const styles = {
   appBar: {
-    position: 'relative'
+    margin: 0,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)'
+  },
+  appBarItemWrapper: {
+    margin: 0
   }
 };
 
-class NavBar extends React.Component {
-  state = {
-    value: 0
-  };
+const NavBar = ({ classes }) => (
+  <Grid className={classes.appBar} container justify="space-between">
+    <Grid item>
+      <Grid className={classes.appBarItemWrapper} container spacing={24}>
+        <Grid item>
+          <NavLink to="/" activeClassName="active">
+            {settings.app.name}
+          </NavLink>
+        </Grid>
+        {ref.modules.navItems}
+      </Grid>
+    </Grid>
 
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
+    <Grid item>
+      <Grid className={classes.appBarItemWrapper} container spacing={24}>
+        {ref.modules.navItemsRight}
 
-  render() {
-    const { value } = this.state;
-    const { classes } = this.props;
-
-    return (
-      <AppBar className={classes.appBar} color="default" position="static">
-        <BottomNavigation value={value} onChange={this.handleChange} showLabels>
-          <BottomNavigationAction
-            label={
-              <NavLink to="/" className="nav-link">
-                {settings.app.name}
-              </NavLink>
-            }
-          />
-
-          {ref.modules.navItems}
-
-          {ref.modules.navItemsRight}
-
-          {__DEV__ && (
-            <BottomNavigationAction
-              label={
-                <a href="/graphiql" className="nav-link">
-                  GraphiQL
-                </a>
-              }
-            />
-          )}
-        </BottomNavigation>
-      </AppBar>
-    );
-  }
-}
+        {__DEV__ && (
+          <Grid item>
+            <a href="/graphiql">GraphiQL</a>
+          </Grid>
+        )}
+      </Grid>
+    </Grid>
+  </Grid>
+);
 
 NavBar.propTypes = {
   classes: PropTypes.object.isRequired

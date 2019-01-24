@@ -53,13 +53,13 @@ export default {
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
     },
     firebase: {
-      enabled: true,
-      apiKey: 'AIzaSyCJMm1hZD_Ktz5YK3nEurLRqUhbmB95pHk',
-      authDomain: 'apollo-universal-starter-dc4c1.firebaseapp.com',
-      databaseURL: 'https://apollo-universal-starter-dc4c1.firebaseio.com',
-      projectId: 'apollo-universal-starter-dc4c1',
-      storageBucket: 'apollo-universal-starter-dc4c1.appspot.com',
-      messagingSenderId: '773474340535'
+      enabled: false,
+      apiKey: '',
+      authDomain: '',
+      databaseURL: '',
+      projectId: '',
+      storageBucket: '',
+      messagingSenderId: ''
     }
   }
 };

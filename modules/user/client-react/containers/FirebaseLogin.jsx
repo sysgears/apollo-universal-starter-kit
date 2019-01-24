@@ -35,12 +35,14 @@ const LoginWithApollo = compose(
             firebaseAuth.errors.push({ field: 'usernameOrEmail', message: firebaseAuth.error.message });
           }
         }
+        const idToken = firebase.auth().currentUser.getIdToken();
+        console.log(idToken);
         const {
           data: {
             firebaseLogin: { tokens, user, errors }
           }
         } = await mutate({
-          variables: { input: { email: usernameOrEmail, uid: firebaseAuth.user.uid } }
+          variables: { input: { email: usernameOrEmail, uid: firebaseAuth.user.uid, idToken: idToken.i } }
         });
         if (!errors) {
           await access.doLogin(client);

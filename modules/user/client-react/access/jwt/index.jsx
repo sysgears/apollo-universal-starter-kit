@@ -12,8 +12,7 @@ import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 const setJWTContext = async operation => {
-  console.log(operation);
-  const accessToken = await getItem('accessToken');
+  const accessToken = settings.user.auth.firebase.enabled ? await getItem('idToken') : await getItem('accessToken');
   const headers =
     ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
       ? { Authorization: `Bearer ${accessToken}` }
@@ -26,7 +25,11 @@ const setJWTContext = async operation => {
 
 let apolloClient;
 
-const saveTokens = async ({ accessToken, refreshToken }) => {
+const saveTokens = async ({ accessToken, refreshToken, idToken }) => {
+  if (idToken) {
+    await setItem('idToken', idToken);
+    return;
+  }
   await setItem('accessToken', accessToken);
   await setItem('refreshToken', refreshToken);
 };
@@ -34,6 +37,7 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
+  await removeItem('idToken');
 };
 
 const JWTLink = new ApolloLink((operation, forward) => {
@@ -43,6 +47,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
     (async () => {
       // Optimisation: imitate server response with empty user if no JWT token present in local storage
       if (
+        !settings.user.auth.firebase.enabled &&
         !settings.user.auth.access.session.enabled &&
         operation.operationName === 'currentUser' &&
         !(await getItem('refreshToken'))
@@ -56,28 +61,28 @@ const JWTLink = new ApolloLink((operation, forward) => {
         sub = forward(operation).subscribe({
           next: result => {
             const promise = (async () => {
-              if (operation.operationName === 'firebaseLogin') {
-                if (
-                  // (result.data.login.tokens && !result.data.login.errors) ||
-                  result.data.firebaseLogin.tokens &&
-                  !result.data.firebaseLogin.errors
-                ) {
-                  // const {
-                  //   data: {
-                  //     login: {
-                  //       tokens: { accessToken, refreshToken }
-                  //     }
-                  //   }
-                  // } = result;
-                  console.log(result);
+              if (operation.operationName === 'login') {
+                if (result.data.login.tokens && !result.data.login.errors) {
                   const {
                     data: {
-                      firebaseLogin: {
+                      login: {
                         tokens: { accessToken, refreshToken }
                       }
                     }
                   } = result;
                   await saveTokens({ accessToken, refreshToken });
+                } else {
+                  await removeTokens();
+                }
+              }
+              if (operation.operationName === 'firebaselogin') {
+                if (result.data.firebaseLogin.tokens && !result.data.firebaseLogin.errors) {
+                  const {
+                    data: {
+                      firebaseLogin: { idToken }
+                    }
+                  } = result;
+                  await saveTokens({ idToken });
                 } else {
                   await removeTokens();
                 }
@@ -96,15 +101,28 @@ const JWTLink = new ApolloLink((operation, forward) => {
               if (networkError.response && networkError.response.status >= 400 && networkError.response.status < 500) {
                 try {
                   if (operation.operationName !== 'refreshTokens') {
-                    try {
-                      const { data } = await apolloClient.mutate({
-                        mutation: REFRESH_TOKENS_MUTATION,
-                        variables: { refreshToken: await getItem('refreshToken') }
-                      });
-                      const { accessToken, refreshToken } = data.refreshTokens;
-                      await saveTokens({ accessToken, refreshToken });
-                    } catch (e) {
-                      await removeTokens();
+                    if (settings.user.auth.firebase.enabled) {
+                      try {
+                        const { data } = await apolloClient.mutate({
+                          mutation: REFRESH_TOKENS_MUTATION,
+                          variables: { refreshToken: await getItem('idToken') }
+                        });
+                        const { idToken } = data.refreshTokens;
+                        await saveTokens({ idToken });
+                      } catch (e) {
+                        await removeTokens();
+                      }
+                    } else {
+                      try {
+                        const { data } = await apolloClient.mutate({
+                          mutation: REFRESH_TOKENS_MUTATION,
+                          variables: { refreshToken: await getItem('refreshToken') }
+                        });
+                        const { accessToken, refreshToken } = data.refreshTokens;
+                        await saveTokens({ accessToken, refreshToken });
+                      } catch (e) {
+                        await removeTokens();
+                      }
                     }
                   } else {
                     await removeTokens();
@@ -152,7 +170,7 @@ class DataRootComponent extends React.Component {
   }
 
   async componentDidMount() {
-    if (!this.state.ready && (await getItem('refreshToken'))) {
+    if (!settings.user.auth.firebase.enabled && !this.state.ready && (await getItem('refreshToken'))) {
       const { client } = this.props;
       let result;
       try {

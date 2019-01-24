@@ -4,7 +4,7 @@ import { pick } from 'lodash';
 
 import settings from '../../../../../settings';
 
-const createTokens = async user => {
+const createToken = async user => {
   const { uid } = user;
   let tokenUser = pick(user, ['id', 'username', 'role']);
 
@@ -19,4 +19,4 @@ const createTokens = async user => {
   return Promise.all([createToken, createRefreshToken]);
 };
 
-export default createTokens;
+export default createToken;

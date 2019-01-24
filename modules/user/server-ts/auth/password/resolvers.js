@@ -55,13 +55,14 @@ export default () => ({
     async firebaseLogin(
       obj,
       {
-        input: { email, uid }
+        input: { email, uid, token }
       },
       { req, User }
     ) {
       try {
         const user = await User.getUserByEmail(email);
         user.uid = uid;
+        user.token = token;
 
         const tokens = await access.grantAccess(user, req);
         return { user, tokens };

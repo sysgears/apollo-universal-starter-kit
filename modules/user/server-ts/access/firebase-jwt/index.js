@@ -1,18 +1,16 @@
-import jwt from 'jsonwebtoken';
+import firebase from 'firebase-admin';
+import 'firebase/auth';
+// import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import createTokens from './createTokens';
+// import createTokens from './createToken';
 import resolvers from './resolvers';
 import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 
-const grant = async user => {
-  const [accessToken, refreshToken] = await createTokens(user);
-  return {
-    accessToken,
-    refreshToken
-  };
+const grant = async ({ token }) => {
+  return token;
 };
 
 const getCurrentUser = async ({ req }) => {
@@ -20,9 +18,8 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const {
-      claims: { user }
-    } = await jwt.verify(token);
+    const { uid } = await firebase.auth().verifyIdToken(token);
+    const user = await firebase.auth().getUser(uid);
     return user;
   }
 };

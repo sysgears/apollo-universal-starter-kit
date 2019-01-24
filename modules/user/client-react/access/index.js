@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getItem, removeItem } from '@module/core-common/clientStorage';
+import { getItem, removeItem, setItem } from '@module/core-common/clientStorage';
 
 import jwt from './jwt';
 import session from './session';
 
 import AccessModule from './AccessModule';
-
-// import FIREBASE_LOGIN from '../graphql/FirebaseLogin.graphql';
+import settings from '../../../../settings';
 
 const ref = React.createRef();
 
@@ -26,20 +25,17 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
-const firebaseLogin = async email => {
-  console.log('email', email);
-};
-
-const firebaseSession = async user => {
-  const token = await getItem('refreshToken');
+const firebaseJwtController = async user => {
+  const token = await getItem('idToken');
   if (user) {
     if (!token) {
-      firebaseLogin(user.email);
+      const newToken = await user.getIdToken();
+      console.log(newToken);
+      await setItem('idToken', newToken);
     }
   } else {
     if (token) {
-      await removeItem('refreshToken');
-      await removeItem('accessToken');
+      await removeItem('idToken');
     }
   }
 };
@@ -54,7 +50,9 @@ class PageReloader extends React.Component {
   };
 
   componentDidMount() {
-    firebase.auth().onAuthStateChanged(firebaseSession);
+    if (settings.user.auth.firebase.enabled) {
+      firebase.auth().onAuthStateChanged(firebaseJwtController);
+    }
   }
 
   reloadPage() {

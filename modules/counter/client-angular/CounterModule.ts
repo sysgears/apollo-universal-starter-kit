@@ -1,4 +1,4 @@
-import ClientModule, { ClientModuleShape } from '@module/module-client-angular';
+import ClientModule, { ClientModuleShape } from '@gqlapp/module-client-angular';
 
 export interface CounterModuleShape extends ClientModuleShape {
   counterModule?: any[];

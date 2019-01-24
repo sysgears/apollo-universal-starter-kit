@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { translate } from '@module/i18n-client-react';
-import { PageLayout } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { PageLayout } from '@gqlapp/look-client-react';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';

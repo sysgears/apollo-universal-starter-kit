@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
-import { translate } from '@module/i18n-client-react';
-import { FormError } from '@module/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { FormError } from '@gqlapp/forms-client-react';
 import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';

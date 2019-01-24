@@ -1,5 +1,5 @@
 {
-  "name": "@module/contact-server-ts",
-  "version": "1.0.0",
+  "name": "@gqlapp/contact-server-ts",
+  "version": "0.0.1",
   "private": true
 }

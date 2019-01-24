@@ -3,7 +3,7 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
+import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
 import Loading from './components/Loading';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';

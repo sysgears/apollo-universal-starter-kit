@@ -1,8 +1,8 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLSchema } from 'graphql';
 import { Server } from 'http';
-import ServerModule from '@module/module-server-ts';
-import { log } from '@module/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
+import { log } from '@gqlapp/core-common';
 
 let subscriptionServer: SubscriptionServer;
 

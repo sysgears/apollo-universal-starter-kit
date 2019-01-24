@@ -1,6 +1,6 @@
 import { wrapPubSub } from 'apollo-logger';
 import { PubSub } from 'graphql-subscriptions';
-import { log } from '@module/core-common';
+import { log } from '@gqlapp/core-common';
 
 import settings from '../../../../settings';
 

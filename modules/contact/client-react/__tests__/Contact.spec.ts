@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import { Renderer, click, blur, find, change, updateContent, wait } from '@module/testing-client-react';
+import { Renderer, click, blur, find, change, updateContent, wait } from '@gqlapp/testing-client-react';
 
 /**
  * *NOTICE*

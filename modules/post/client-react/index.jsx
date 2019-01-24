@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { translate } from '@module/i18n-client-react';
-import { MenuItem } from '@module/look-client-react';
-import ClientModule from '@module/module-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { MenuItem } from '@gqlapp/look-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';

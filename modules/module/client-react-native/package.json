@@ -1,8 +1,8 @@
 {
-  "name": "@module/module-client-react-native",
-  "version": "1.0.0",
+  "name": "@gqlapp/module-client-react-native",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@module/module-common": "^1.0.0"
+    "@gqlapp/module-common": "^0.0.1"
   }
 }

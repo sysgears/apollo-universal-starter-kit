@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { log } from '@module/core-common';
+import { log } from '@gqlapp/core-common';
 
 import { encryptSession, decryptSession } from './crypto';
 

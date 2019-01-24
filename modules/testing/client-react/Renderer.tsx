@@ -11,8 +11,8 @@ import { graphql, print, getOperationAST, DocumentNode, GraphQLSchema } from 'gr
 import { Provider } from 'react-redux';
 import { ApolloClient } from 'apollo-client';
 
-import { createApolloClient } from '@module/core-common';
-import ClientModule from '@module/module-client-react';
+import { createApolloClient } from '@gqlapp/core-common';
+import ClientModule from '@gqlapp/module-client-react';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 (global as any).document = dom.window.document;

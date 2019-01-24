@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, ScrollView, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { translate } from '@module/i18n-client-react';
-import { Loading } from '@module/look-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Loading } from '@gqlapp/look-client-react-native';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';

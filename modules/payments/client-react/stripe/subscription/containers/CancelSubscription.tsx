@@ -1,6 +1,6 @@
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
 

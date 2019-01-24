@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { translate } from '@module/i18n-client-react';
 import { Form, RenderField, Row, Col, Label, Button } from '@module/look-client-react';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { FieldAdapter as Field } from '@module/forms-client-react';
 import { required, validate } from '@module/validation-common-react';
 
 const commentFormSchema = {

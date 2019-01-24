@@ -4,7 +4,7 @@ import { withFormik } from 'formik';
 import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { RenderField, Button, primary } from '@module/look-client-react-native';
 import { placeholderColor, submit } from '@module/look-client-react-native/styles';
 import { required, email, validate } from '@module/validation-common-react';
@@ -75,7 +75,13 @@ const ForgotPasswordFormWithFormik = withFormik({
       .then(() => {
         resetForm();
       })
-      .catch(e => setErrors(e));
+      .catch(e => {
+        if (isFormError(e)) {
+          setErrors(e.errors);
+        } else {
+          throw e;
+        }
+      });
   },
   validate: values => validate(values, forgotPasswordFormSchema),
   displayName: 'ForgotPasswordForm' // helps with React DevTools

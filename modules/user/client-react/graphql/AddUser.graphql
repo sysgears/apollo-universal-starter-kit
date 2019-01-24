@@ -5,9 +5,5 @@ mutation addUser($input: AddUserInput!) {
     user {
       ...UserInfo
     }
-    errors {
-      field
-      message
-    }
   }
 }

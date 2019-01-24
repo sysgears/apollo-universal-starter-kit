@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@module/i18n-client-react';
-import { ApolloError } from 'apollo-client';
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
@@ -67,42 +66,40 @@ export default compose(
   graphql(UPLOAD_FILES, {
     props: ({ mutate }) => ({
       uploadFiles: async files => {
-        try {
-          await mutate({
-            variables: { files },
-            refetchQueries: [{ query: FILES_QUERY }]
-          });
-        } catch (e) {
-          throw new ApolloError(e);
-        }
+        const {
+          data: { uploadFiles }
+        } = await mutate({
+          variables: { files },
+          refetchQueries: [{ query: FILES_QUERY }]
+        });
+        return uploadFiles;
       }
     })
   }),
   graphql(REMOVE_FILE, {
     props: ({ mutate }) => ({
       removeFile: async id => {
-        try {
-          await mutate({
-            variables: { id },
-            optimisticResponse: {
-              __typename: 'Mutation',
-              removeFile: {
-                removeFile: true,
-                __typename: 'File'
-              }
-            },
-            update: store => {
-              const cachedFiles = store.readQuery({ query: FILES_QUERY });
-
-              store.writeQuery({
-                query: FILES_QUERY,
-                data: { files: cachedFiles.files.filter(file => file.id !== id) }
-              });
+        const {
+          data: { removeFile }
+        } = await mutate({
+          variables: { id },
+          optimisticResponse: {
+            __typename: 'Mutation',
+            removeFile: {
+              removeFile: true,
+              __typename: 'File'
             }
-          });
-        } catch (e) {
-          throw new ApolloError(e);
-        }
+          },
+          update: store => {
+            const cachedFiles = store.readQuery({ query: FILES_QUERY });
+
+            store.writeQuery({
+              query: FILES_QUERY,
+              data: { files: cachedFiles.files.filter(file => file.id !== id) }
+            });
+          }
+        });
+        return removeFile;
       }
     })
   }),

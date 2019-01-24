@@ -3,8 +3,6 @@ import schema from './schema.graphql';
 import createResolvers from './resolvers';
 import resources from './locales';
 
-export * from './contactFormSchema';
-
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],

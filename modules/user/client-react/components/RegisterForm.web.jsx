@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
+
 import { match, email, minLength, required, validate } from '@module/validation-common-react';
 import { Form, RenderField, Button, Alert } from '@module/look-client-react';
 
@@ -15,7 +16,7 @@ const registerFormSchema = {
   passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
 };
 
-const RegisterForm = ({ values, handleSubmit, submitting, error, t }) => {
+const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {
   return (
     <Form name="register" onSubmit={handleSubmit}>
       <Field
@@ -41,7 +42,7 @@ const RegisterForm = ({ values, handleSubmit, submitting, error, t }) => {
         value={values.passwordConfirmation}
       />
       <div className="text-center">
-        {error && <Alert color="error">{error}</Alert>}
+        {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
         <Button color="primary" type="submit" disabled={submitting}>
           {t('reg.form.btnSubmit')}
         </Button>
@@ -53,7 +54,7 @@ const RegisterForm = ({ values, handleSubmit, submitting, error, t }) => {
 RegisterForm.propTypes = {
   handleSubmit: PropTypes.func,
   submitting: PropTypes.bool,
-  error: PropTypes.string,
+  errors: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func
 };
@@ -69,7 +70,11 @@ const RegisterFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      setErrors(e);
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
     });
   },
   enableReinitialize: true,

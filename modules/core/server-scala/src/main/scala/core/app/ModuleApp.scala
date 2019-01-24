@@ -13,7 +13,6 @@ import common.graphql.schema.{GraphQL, GraphQLSchema}
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
-import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import sangria.execution.{Executor, QueryReducer}
 import shapes.ServerModule

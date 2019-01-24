@@ -1,16 +1,16 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-
-import { contactFormSchema } from '@module/contact-server-ts';
+import { isFormError } from '@module/forms-client-react';
+import { contactFormSchema } from '@module/contact-common';
 import { TranslateFunction } from '@module/i18n-client-react';
-import { validate, FieldError } from '@module/validation-common-react';
+import { validate } from '@module/validation-common-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
 import { Form, RenderField, Button, Alert } from '@module/look-client-react';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {
   t: TranslateFunction;
-  onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+  onSubmit: (values: ContactForm) => void;
 }
 
 const ContactForm = ({
@@ -19,7 +19,7 @@ const ContactForm = ({
   t,
   status,
   errors
-}: FormikProps<ContactForm> & ContactFormProps & { errors: { serverError: string } }) => (
+}: FormikProps<ContactForm> & ContactFormProps & { errors: { errorMsg: string } }) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
     <Field name="name" component={RenderField} type="text" label={t('form.field.name')} value={values.name} />
@@ -32,7 +32,7 @@ const ContactForm = ({
       value={values.content}
     />
     <div className="text-center">
-      {errors && errors.serverError && <Alert color="error">{errors.serverError}</Alert>}
+      {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
       <Button color="primary" type="submit">
         {t('form.btnSubmit')}
       </Button>
@@ -44,14 +44,17 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   enableReinitialize: true,
   mapPropsToValues: () => ({ content: '', email: '', name: '' }),
   async handleSubmit(values, { resetForm, setErrors, setStatus, props: { onSubmit } }) {
-    const errors = new FieldError((await onSubmit(values)).errors);
-
-    if (errors.hasAny()) {
-      setStatus({ sent: false });
-      setErrors(errors.errors);
-    } else {
+    try {
+      await onSubmit(values);
       resetForm();
       setStatus({ sent: true });
+    } catch (e) {
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
+      setStatus({ sent: false });
     }
   },
   validate: values => validate(values, contactFormSchema),

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { FieldAdapter as Field } from '@module/core-client-react';
+import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
 import { translate } from '@module/i18n-client-react';
 
 import { RenderField, Button, primary, FormView } from '@module/look-client-react-native';
@@ -87,7 +87,11 @@ const RegisterFormWithFormik = withFormik({
     }
   ) {
     onSubmit(values).catch(e => {
-      setErrors(e);
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
     });
   },
   enableReinitialize: true,

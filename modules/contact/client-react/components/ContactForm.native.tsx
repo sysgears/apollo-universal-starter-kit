@@ -2,7 +2,7 @@ import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-
+import { isFormError } from '@module/forms-client-react';
 import { contactFormSchema } from '@module/contact-common';
 import { validate } from '@module/validation-common-react';
 import { TranslateFunction } from '@module/i18n-client-react';
@@ -108,7 +108,11 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       resetForm();
       setStatus({ sent: true });
     } catch (e) {
-      setErrors(e.errors);
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
       setStatus({ sent: false });
     }
   },

@@ -1,6 +1,6 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-
+import { isFormError } from '@module/forms-client-react';
 import { contactFormSchema } from '@module/contact-common';
 import { TranslateFunction } from '@module/i18n-client-react';
 import { validate } from '@module/validation-common-react';
@@ -49,7 +49,11 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       resetForm();
       setStatus({ sent: true });
     } catch (e) {
-      setErrors(e.errors);
+      if (isFormError(e)) {
+        setErrors(e.errors);
+      } else {
+        throw e;
+      }
       setStatus({ sent: false });
     }
   },

@@ -1,7 +1,7 @@
 import { isEmpty } from 'lodash';
 import { validate } from '@module/validation-common-react';
 import { contactFormSchema } from '@module/contact-common';
-import { ApolloError, UserInputError } from 'apollo-server-errors';
+import { UserInputError } from 'apollo-server-errors';
 import log from '../../../packages/common/log';
 
 interface ContactInput {
@@ -29,7 +29,7 @@ export default () => ({
         });
       } catch (e) {
         log.error(e);
-        throw new ApolloError(t('contact:sendError'), 'CONTACT_DENIED');
+        throw new Error(t('contact:sendError'));
       }
     }
   }

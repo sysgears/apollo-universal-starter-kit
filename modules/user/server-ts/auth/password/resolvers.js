@@ -1,12 +1,10 @@
 import bcrypt from 'bcryptjs';
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
-import { ApolloError } from 'apollo-server-errors';
+import { UserInputError } from 'apollo-server-errors';
 import access from '../../access';
 import User from '../../sql';
 import settings from '../../../../../settings';
-
-const CODE_ERROR = 'FAILED_PASSWORD';
 
 const validateUserPassword = async (user, password, t) => {
   if (!user) {
@@ -37,7 +35,7 @@ export default () => ({
       const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
       const errors = await validateUserPassword(user, password, req.t);
-      if (!isEmpty(errors)) throw new ApolloError('Failed valid user password', CODE_ERROR, { errors });
+      if (!isEmpty(errors)) throw new UserInputError('Failed valid user password', { errors });
 
       const tokens = await access.grantAccess(user, req);
 
@@ -56,7 +54,7 @@ export default () => ({
         errors.email = t('user:auth.password.emailIsExisted');
       }
 
-      if (!isEmpty(errors)) throw new ApolloError('Failed reset password', CODE_ERROR, { errors });
+      if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
 
       let userId = 0;
       if (!emailExists) {
@@ -143,13 +141,13 @@ export default () => ({
         errors.password = t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength });
       }
 
-      if (!isEmpty(errors)) throw new ApolloError('Failed reset password', CODE_ERROR, { errors });
+      if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
 
       const token = Buffer.from(reset.token, 'base64').toString();
       const { email, password } = jwt.verify(token, settings.user.secret);
       const user = await User.getUserByEmail(email);
       if (user.passwordHash !== password) {
-        throw new ApolloError(t('user:auth.password.invalidToken'), CODE_ERROR);
+        throw new Error(t('user:auth.password.invalidToken'));
       }
       if (user) {
         await User.updatePassword(user.id, reset.password);

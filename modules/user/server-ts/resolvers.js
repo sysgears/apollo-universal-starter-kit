@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { createTransaction } from '@module/database-server-ts';
-import { UserInputError, ApolloError } from 'apollo-server-errors';
+import { UserInputError } from 'apollo-server-errors';
 
 import settings from '../../../settings';
 
@@ -33,7 +33,7 @@ export default pubsub => ({
           }
         }
 
-        throw new ApolloError(t('user:accessDenied'), 'ACCESS_DENIED');
+        throw new Error(t('user:accessDenied'));
       }
     ),
     currentUser(obj, args, { User, user }) {
@@ -211,11 +211,11 @@ export default pubsub => ({
 
         const user = await User.getUser(id);
         if (!user) {
-          throw new ApolloError(t('user:userIsNotExisted'), 'FAILED_DELETE_USER');
+          throw new Error(t('user:userIsNotExisted'));
         }
 
         if (isSelf()) {
-          throw new ApolloError(t('user:userCannotDeleteYourself'), 'FAILED_DELETE_USER');
+          throw new Error(t('user:userCannotDeleteYourself'));
         }
 
         const isDeleted = !isSelf() && isAdmin() ? await User.deleteUser(id) : false;
@@ -229,7 +229,7 @@ export default pubsub => ({
           });
           return { user };
         } else {
-          throw new ApolloError(t('user:userCouldNotDeleted'), 'FAILED_DELETE_USER');
+          throw new Error(t('user:userCouldNotDeleted'));
         }
       }
     )

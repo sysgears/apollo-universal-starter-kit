@@ -61,17 +61,15 @@ describe('Class FormError works', () => {
 
   const apolloErrorWithNetworkError = new ApolloError({ networkError: new Error('Test networkError') });
 
-  const apolloErrorWithGraphQLError = {
+  const apolloErrorWithGraphQLError = new ApolloError({
     graphQLErrors: [passwordGraphQLError],
-    networkError: null,
-    message: 'GraphQL error: Failed password'
-  };
+    errorMessage: 'GraphQL error: Failed password'
+  });
 
-  const apolloErrorWithGraphQLErrors = {
+  const apolloErrorWithGraphQLErrors = new ApolloError({
     graphQLErrors: [passwordGraphQLError, emailGraphQLError],
-    networkError: null,
-    message: 'GraphQL error: Failed password and email'
-  };
+    errorMessage: 'GraphQL error: Failed password and email'
+  });
 
   const clientError = new Error('Test client Error');
 
@@ -81,11 +79,11 @@ describe('Class FormError works', () => {
     expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
   });
   step('Class FormError works with one graphQLError', () => {
-    const errors = new FormError(messageForAlertForm, new ApolloError(apolloErrorWithGraphQLError)).errors;
+    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLError).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'errorMsg');
   });
   step('Class FormError works with two graphQLErrors', () => {
-    const errors = new FormError(messageForAlertForm, new ApolloError(apolloErrorWithGraphQLErrors)).errors;
+    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLErrors).errors;
     expect(errors).to.have.all.keys('usernameOrEmail', 'email', 'errorMsg');
   });
   step('Class FormError works with client error', () => {

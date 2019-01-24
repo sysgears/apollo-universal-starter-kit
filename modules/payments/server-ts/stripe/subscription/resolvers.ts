@@ -1,7 +1,7 @@
 import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 import { log } from '@module/core-common';
-
+import { ApolloError } from 'apollo-server-errors';
 import settings from '../../../../../settings';
 
 const { plan } = settings.stripe.subscription;
@@ -75,7 +75,10 @@ export default () => ({
         return { active: true };
       } catch (e) {
         log.error(e);
-        throw e;
+        if (e.code === 'resource_missing') {
+          throw new ApolloError(e.message, e.code);
+        }
+        throw new Error(e.message);
       }
     }),
     updateStripeSubscriptionCard: withAuth(['stripe:update:self'], async (obj: any, args: CreditCard, context: any) => {
@@ -98,7 +101,10 @@ export default () => ({
         return true;
       } catch (e) {
         log.error(e);
-        throw e;
+        if (e.code === 'resource_missing') {
+          throw new ApolloError(e.message, e.code);
+        }
+        throw new Error(e.message);
       }
     }),
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {
@@ -126,7 +132,10 @@ export default () => ({
         return { active: false };
       } catch (e) {
         log.error(e);
-        throw e;
+        if (e.code === 'resource_missing') {
+          throw new ApolloError(e.message, e.code);
+        }
+        throw new Error(e.message);
       }
     })
   },

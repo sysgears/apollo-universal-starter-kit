@@ -4,6 +4,7 @@ import { StripeProvider } from 'react-stripe-elements';
 import { translate, TranslateFunction } from '@module/i18n-client-react';
 import { PLATFORM } from '@module/core-common';
 import { FormError } from '@module/forms-client-react';
+import { isApolloError } from 'apollo-client';
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 
 import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
@@ -45,13 +46,15 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
       this.setState({
         submitting: false
       });
-      if (e && e.type === 'validation_error') {
+      if (isApolloError(e)) {
+        if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
+          throw new FormError(t('stripeError'), e);
+        } else {
+          throw new FormError(t('serverError'), e);
+        }
+      } else {
         throw new FormError(t('creditCardError'));
       }
-      if (e && e.graphQLErrors[0].message.indexOf('No such customer') !== -1) {
-        throw new FormError(t('stripeError'), e);
-      }
-      throw new FormError(t('serverError'), e);
     }
   };
 

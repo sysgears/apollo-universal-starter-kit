@@ -59,11 +59,7 @@ describe('Class FormError works', () => {
     }
   );
 
-  const apolloErrorWithNetworkError = {
-    graphQLErrors: undefined,
-    networkError: new Error('Test networkError'),
-    message: 'NetworkError error: Test networkError'
-  };
+  const apolloErrorWithNetworkError = new ApolloError({ networkError: new Error('Test networkError') });
 
   const apolloErrorWithGraphQLError = {
     graphQLErrors: [passwordGraphQLError],
@@ -82,7 +78,7 @@ describe('Class FormError works', () => {
   const messageForAlertForm = 'Test message';
 
   step('Class FormError works with networkError', () => {
-    expect(() => new FormError(messageForAlertForm, new ApolloError(apolloErrorWithNetworkError))).to.throw();
+    expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
   });
   step('Class FormError works with one graphQLError', () => {
     const errors = new FormError(messageForAlertForm, new ApolloError(apolloErrorWithGraphQLError)).errors;

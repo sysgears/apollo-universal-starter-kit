@@ -1,4 +1,5 @@
-import jwt from './jwt';
+// import jwt from './jwt';
+import jwt from './firebase-jwt';
 import session from './session';
 
 import AccessModule from './AccessModule';

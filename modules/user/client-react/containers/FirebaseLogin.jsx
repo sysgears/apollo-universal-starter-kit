@@ -3,7 +3,6 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-
 import LoginView from '../components/LoginView';
 import access from '../access';
 
@@ -41,17 +40,16 @@ const LoginWithApollo = compose(
             firebaseLogin: { tokens, user, errors }
           }
         } = await mutate({
-          variables: { input: { email: usernameOrEmail } }
+          variables: { input: { email: usernameOrEmail, uid: firebaseAuth.user.uid } }
         });
-        const login = { tokens, user, errors };
-        if (!login.errors) {
+        if (!errors) {
           await access.doLogin(client);
-          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
+          await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: user } });
           if (onLogin) {
             onLogin();
           }
         }
-        return login;
+        return { tokens, user, errors };
       }
     })
   })

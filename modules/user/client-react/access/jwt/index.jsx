@@ -12,6 +12,7 @@ import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 const setJWTContext = async operation => {
+  console.log(operation);
   const accessToken = await getItem('accessToken');
   const headers =
     ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
@@ -50,17 +51,28 @@ const JWTLink = new ApolloLink((operation, forward) => {
         observer.complete();
         return;
       }
-
       await setJWTContext(operation);
       try {
         sub = forward(operation).subscribe({
           next: result => {
             const promise = (async () => {
-              if (operation.operationName === 'login') {
-                if (result.data.login.tokens && !result.data.login.errors) {
+              if (operation.operationName === 'firebaseLogin') {
+                if (
+                  // (result.data.login.tokens && !result.data.login.errors) ||
+                  result.data.firebaseLogin.tokens &&
+                  !result.data.firebaseLogin.errors
+                ) {
+                  // const {
+                  //   data: {
+                  //     login: {
+                  //       tokens: { accessToken, refreshToken }
+                  //     }
+                  //   }
+                  // } = result;
+                  console.log(result);
                   const {
                     data: {
-                      login: {
+                      firebaseLogin: {
                         tokens: { accessToken, refreshToken }
                       }
                     }

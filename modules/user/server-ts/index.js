@@ -1,5 +1,5 @@
 import ServerModule from '@module/module-server-ts';
-// import firebase from 'firebase-admin';
+import firebase from 'firebase-admin';
 
 import access from './access';
 import auth from './auth';
@@ -11,7 +11,7 @@ import settings from '../../../settings';
 import User from './sql';
 // import User from './firebase';
 import resources from './locales';
-// import serviceAccount from '../../../packages/server/firebase-admin-sdk-data.json';
+import serviceAccount from '../../../packages/server/firebase-admin-sdk-data.json';
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,
@@ -28,12 +28,12 @@ const middleware = app => {
   }
 };
 
-// if (settings.user.auth.firebase.enabled) {
-//   const firebasApp = firebase.initializeApp({
-//     credential: firebase.credential.cert(serviceAccount)
-//   });
-//   firebasApp.firestore().settings({ timestampsInSnapshots: true });
-// }
+if (settings.user.auth.firebase.enabled) {
+  const firebasApp = firebase.initializeApp({
+    credential: firebase.credential.cert(serviceAccount)
+  });
+  firebasApp.firestore().settings({ timestampsInSnapshots: true });
+}
 
 export { User };
 

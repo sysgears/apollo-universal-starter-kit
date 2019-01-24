@@ -4,7 +4,7 @@ export default {
   auth: {
     access: {
       session: {
-        enabled: true
+        enabled: false
       },
       jwt: {
         enabled: true,
@@ -54,11 +54,12 @@ export default {
     },
     firebase: {
       enabled: true,
-      apiKey: '',
-      authDomain: '',
-      projectId: '',
-      storageBucket: '',
-      messagingSenderId: ''
+      apiKey: 'AIzaSyCJMm1hZD_Ktz5YK3nEurLRqUhbmB95pHk',
+      authDomain: 'apollo-universal-starter-dc4c1.firebaseapp.com',
+      databaseURL: 'https://apollo-universal-starter-dc4c1.firebaseio.com',
+      projectId: 'apollo-universal-starter-dc4c1',
+      storageBucket: 'apollo-universal-starter-dc4c1.appspot.com',
+      messagingSenderId: '773474340535'
     }
   }
 };

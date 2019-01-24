@@ -55,16 +55,15 @@ export default () => ({
     async firebaseLogin(
       obj,
       {
-        input: { email }
+        input: { email, uid }
       },
       { req, User }
     ) {
       try {
         const user = await User.getUserByEmail(email);
-        console.log('user---------------------->', user);
+        user.uid = uid;
 
         const tokens = await access.grantAccess(user, req);
-        console.log('tokens ----------------------->', tokens);
         return { user, tokens };
       } catch (e) {
         return { errors: e };

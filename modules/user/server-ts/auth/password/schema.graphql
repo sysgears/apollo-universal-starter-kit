@@ -5,6 +5,7 @@ input LoginUserInput {
 
 input FirebaseLoginUserInput {
   email: String!
+  uid: String!
 }
 
 type Tokens {

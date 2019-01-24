@@ -8,8 +8,7 @@ import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 
 const grant = async user => {
-  const refreshSecret = settings.user.secret + user.passwordHash;
-  const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
+  const [accessToken, refreshToken] = await createTokens(user);
   return {
     accessToken,
     refreshToken
@@ -21,7 +20,9 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.user.secret);
+    const {
+      claims: { user }
+    } = await jwt.verify(token);
     return user;
   }
 };

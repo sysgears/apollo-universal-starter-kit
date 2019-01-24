@@ -13,8 +13,8 @@ import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 import Register from './containers/Register';
-import Login from './containers/Login';
-// import FirebaseLogin from './containers/FirebaseLogin';
+// import Login from './containers/Login';
+import FirebaseLogin from './containers/FirebaseLogin';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
@@ -68,8 +68,8 @@ export default new ClientModule(access, {
       redirectOnLoggedIn
       redirect="/"
       component={withRouter(({ history }) => (
-        <Login onLogin={() => history.push('/profile')} />
-        // <FirebaseLogin onLogin={() => history.push('/profile')} />
+        // <Login onLogin={() => history.push('/profile')} />
+        <FirebaseLogin onLogin={() => history.push('/profile')} />
       ))}
     />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,

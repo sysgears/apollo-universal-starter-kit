@@ -4,10 +4,10 @@ import { GraphQLError } from 'graphql';
 export const isFormError = (err: any) => err instanceof FormError;
 
 export class FormError {
-  public _errors: { [key: string]: any };
+  private readonly _errors: { [key: string]: any };
 
   constructor(errorMsg: string, err?: any) {
-    if (!!err) {
+    if (err) {
       if (isApolloError(err)) {
         if (err.networkError) {
           throw err;

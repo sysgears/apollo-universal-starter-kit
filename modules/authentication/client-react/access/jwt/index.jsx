@@ -4,6 +4,7 @@ import { apiUrl } from '@gqlapp/core-common';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 
 import AccessModule from '../AccessModule';
+import authentication from '../index';
 import settings from '../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -22,18 +23,15 @@ const setJWTContext = async operation => {
   }));
 };
 
-const onRefreshToken = async operation => {
+const refreshTokens = async () => {
   const link = new BatchHttpLink({
     uri: apiUrl,
     credentials: 'include'
   });
 
-  const context = await operation.getContext();
-
   const config = {
     query: REFRESH_TOKENS_MUTATION,
-    variables: { refreshToken: await getItem('refreshToken') },
-    context: { ...context, headers: {} }
+    variables: { refreshToken: await getItem('refreshToken') }
   };
 
   return makePromise(execute(link, config));
@@ -47,6 +45,13 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
+};
+
+const doLogout = async operation => {
+  const { cache } = operation.getContext();
+  await removeTokens();
+  await cache.reset();
+  await authentication.doLogout();
 };
 
 const JWTLink = new ApolloLink((operation, forward) => {
@@ -86,28 +91,20 @@ const JWTLink = new ApolloLink((operation, forward) => {
             (async () => {
               if (networkError.response && networkError.response.status >= 400 && networkError.response.status < 500) {
                 try {
-                  if (operation.operationName !== 'refreshTokens') {
-                    try {
-                      const { data } = await onRefreshToken(operation);
+                  const { data } = await refreshTokens();
 
-                      if (data && data.refreshTokens) {
-                        const { accessToken, refreshToken } = data.refreshTokens;
-                        await saveTokens({ accessToken, refreshToken });
-                      } else {
-                        await removeTokens();
-                      }
-                    } catch (e) {
-                      await removeTokens();
-                    }
+                  if (data && data.refreshTokens) {
+                    const { accessToken, refreshToken } = data.refreshTokens;
+                    await saveTokens({ accessToken, refreshToken });
                   } else {
-                    await removeTokens();
+                    await doLogout(operation);
                   }
                   // Retry current operation
                   await setJWTContext(operation);
                   retrySub = forward(operation).subscribe(observer);
                 } catch (e) {
                   // We have received error during refresh - drop tokens and return original request result
-                  await removeTokens();
+                  await doLogout(operation);
                   observer.error(networkError);
                 }
               } else {

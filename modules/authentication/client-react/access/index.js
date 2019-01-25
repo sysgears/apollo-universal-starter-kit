@@ -9,7 +9,7 @@ import AccessModule from './AccessModule';
 const ref = React.createRef();
 
 const resetApolloCacheAndRerenderApp = async client => {
-  await client.clearStore();
+  if (client) await client.clearStore();
   ref.current.reloadPage();
 };
 

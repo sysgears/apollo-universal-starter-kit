@@ -20,7 +20,7 @@ class AccessModule extends ClientModule {
     }
   }
 
-  public async doLogout(client: ApolloClient<any>) {
+  public async doLogout(client?: ApolloClient<any>) {
     for (const logout of this.logout) {
       await logout(client);
     }

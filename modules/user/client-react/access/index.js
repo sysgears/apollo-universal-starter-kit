@@ -30,7 +30,6 @@ const firebaseJwtController = async user => {
   if (user) {
     if (!token) {
       const newToken = await user.getIdToken();
-      console.log(newToken);
       await setItem('idToken', newToken);
     }
   } else {

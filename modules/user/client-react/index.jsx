@@ -1,6 +1,8 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { translate } from '@module/i18n-client-react';
 import { MenuItem } from '@module/look-client-react';
 import ClientModule from '@module/module-client-react';
@@ -34,6 +36,7 @@ const LogoutLink = withRouter(
         e.preventDefault();
         (async () => {
           await logout();
+          await firebase.auth().signOut();
           history.push('/');
         })();
       }}

@@ -1,16 +1,8 @@
 #import "./User.graphql"
-mutation firebaseLogin($input: FirebaseLoginUserInput!) {
-  firebaseLogin(input: $input) {
-    tokens {
-      accessToken
-      refreshToken
-    }
+mutation firebaseLogin($email: String!, $errorCode: String!) {
+  firebaseLogin(email: $email, errorCode: $errorCode) {
     user {
       ...UserInfo
-    }
-    errors {
-      field
-      message
     }
   }
 }

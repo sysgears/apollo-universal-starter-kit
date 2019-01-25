@@ -39,23 +39,23 @@ export default () => ({
 
       return { user, tokens };
     },
-    async firebaseLogin(
-      obj,
-      {
-        input: { email, uid, token }
-      },
-      { req, User }
-    ) {
-      try {
-        const user = await User.getUserByEmail(email);
-        user.uid = uid;
-        user.token = token;
-
-        const tokens = await access.grantAccess(user, req);
-        return { user, tokens };
-      } catch (e) {
-        return { errors: e };
+    async firebaseLogin(obj, { email, errorCode }, { req, User }) {
+      let errors = {};
+      if (errorCode) {
+        if (errorCode === 'auth/wrong-password') {
+          errors = { password: req.t('user:auth.password.validPassword') };
+        }
+        if (errorCode === 'auth/user-not-found') {
+          errors = { usernameOrEmail: req.t('user:auth.password.validPasswordEmail') };
+        }
+        if (errorCode === 'auth/too-many-requests') {
+          errors = { usernameOrEmail: req.t('user:auth.tooManyRequests') };
+        }
+        if (!isEmpty(errors)) throw new UserInputError(errorCode, { errors });
       }
+      const user = await User.getUserByEmail(email);
+
+      return { user };
     },
     async register(obj, { input }, { mailer, User, req }) {
       const { t } = req;

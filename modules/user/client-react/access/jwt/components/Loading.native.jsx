@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { LayoutCenter } from '@module/look-client-react-native';
+import { LayoutCenter } from '@gqlapp/look-client-react-native';
 
 const Loading = () => (
   <LayoutCenter>

@@ -4,8 +4,8 @@ import { graphql, compose, withApollo } from 'react-apollo';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
-import { translate } from '@module/i18n-client-react';
-import { FormError } from '@module/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { FormError } from '@gqlapp/forms-client-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';

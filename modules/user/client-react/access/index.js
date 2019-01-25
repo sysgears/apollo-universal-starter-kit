@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { getItem, removeItem, setItem } from '@module/core-common/clientStorage';
+import { getItem, removeItem, setItem } from '@gqlapp/core-common/clientStorage';
 
 import jwt from './jwt';
 import session from './session';

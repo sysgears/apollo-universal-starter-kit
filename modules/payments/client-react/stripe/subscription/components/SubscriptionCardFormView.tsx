@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { CardElement, injectStripe } from 'react-stripe-elements';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { Form, RenderField, Button, Alert, Label } from '@module/look-client-react';
-import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
-import { required, validate } from '@module/validation-common-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Form, RenderField, Button, Alert, Label } from '@gqlapp/look-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { required, validate } from '@gqlapp/validation-common-react';
 
 interface SubscriptionCardFormViewProps {
   submitting: boolean;

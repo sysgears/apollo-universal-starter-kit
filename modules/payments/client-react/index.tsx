@@ -1,4 +1,4 @@
-import ClientModule from '@module/module-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 import stripe from './stripe';
 

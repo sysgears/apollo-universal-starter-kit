@@ -1,11 +1,11 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-import { isFormError } from '@module/forms-client-react';
-import { contactFormSchema } from '@module/contact-common';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { validate } from '@module/validation-common-react';
+import { isFormError } from '@gqlapp/forms-client-react';
+import { contactFormSchema } from '@gqlapp/contact-common';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { validate } from '@gqlapp/validation-common-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
-import { Form, RenderField, Button, Alert } from '@module/look-client-react';
+import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {

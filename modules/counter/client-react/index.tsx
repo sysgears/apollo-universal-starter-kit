@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 
 import Counter from './containers/Counter';
 import counters from './counters';
-import ClientModule from '@module/module-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 import resources from './locales';
 
 export default new ClientModule(counters, {

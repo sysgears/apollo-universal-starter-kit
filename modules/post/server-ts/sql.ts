@@ -1,4 +1,4 @@
-import { knex, returnId, orderedFor } from '@module/database-server-ts';
+import { knex, returnId, orderedFor } from '@gqlapp/database-server-ts';
 
 export interface Post {
   title: string;

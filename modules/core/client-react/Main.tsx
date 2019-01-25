@@ -6,11 +6,11 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
-import { apiUrl } from '@module/core-common';
-import ClientModule from '@module/module-client-react';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import { apiUrl } from '@gqlapp/core-common';
+import ClientModule from '@gqlapp/module-client-react';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../packages/common/createApolloClient';

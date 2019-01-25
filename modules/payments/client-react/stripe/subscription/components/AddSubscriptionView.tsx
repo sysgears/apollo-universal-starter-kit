@@ -1,9 +1,9 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { PageLayout, LayoutCenter, Table, Row, Col } from '@module/look-client-react';
-import { clientOnly } from '@module/core-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { PageLayout, LayoutCenter, Table, Row, Col } from '@gqlapp/look-client-react';
+import { clientOnly } from '@gqlapp/core-client-react';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../settings';

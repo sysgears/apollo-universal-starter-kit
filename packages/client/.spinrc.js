@@ -42,7 +42,7 @@ const config = {
 };
 
 if (process.env.DISABLE_SSR !== undefined) {
-  config.options.ssr = process.env.DISABLE_SSR;
+  config.options.ssr = process.env.DISABLE_SSR === false || process.env.DISABLE_SSR === 'false';
 }
 
 config.options.devProxy = config.options.ssr;

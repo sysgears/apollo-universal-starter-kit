@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Query } from 'react-apollo';
-import { translate } from '@module/i18n-client-react';
-import { removeTypename } from '@module/core-common';
+import { translate } from '@gqlapp/i18n-client-react';
+import { removeTypename } from '@gqlapp/core-common';
 
 import settings from '../../../../../../settings';
 import ReportPreview from '../components/ReportPreview';

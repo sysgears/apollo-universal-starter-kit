@@ -1,9 +1,9 @@
 {
-  "name": "@module/core-server-ts",
-  "version": "1.0.0",
+  "name": "@gqlapp/core-server-ts",
+  "version": "0.0.1",
   "private": true,
   "dependencies": {
-    "@module/core-common": "^1.0.0"
+    "@gqlapp/core-common": "^0.0.1"
   }
 }
 

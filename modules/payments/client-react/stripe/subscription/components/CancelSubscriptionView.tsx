@@ -1,6 +1,6 @@
 import React from 'react';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { Button, Alert, CardGroup, CardTitle, CardText } from '@module/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Button, Alert, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
 
 interface CancelSubscriptionViewProps {
   onClick: () => void;

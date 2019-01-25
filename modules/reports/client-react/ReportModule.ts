@@ -1,5 +1,5 @@
 import React from 'react';
-import ClientModule, { ClientModuleShape } from '@module/module-client-react';
+import ClientModule, { ClientModuleShape } from '@gqlapp/module-client-react';
 
 export interface ReportModuleShape extends ClientModuleShape {
   reportComponent?: Array<React.ReactElement<any>>;

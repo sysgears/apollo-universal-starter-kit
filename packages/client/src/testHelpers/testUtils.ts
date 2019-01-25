@@ -1,2 +1,2 @@
 // Reexport for backward-compatibility purposes
-export * from '@module/testing-client-react';
+export * from '@gqlapp/testing-client-react';

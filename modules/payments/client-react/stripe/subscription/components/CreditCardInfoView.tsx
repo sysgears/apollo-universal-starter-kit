@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { Button, CardGroup, CardTitle, CardText } from '@module/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Button, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
 
 interface CardInfoViewProps {
   loading: boolean;

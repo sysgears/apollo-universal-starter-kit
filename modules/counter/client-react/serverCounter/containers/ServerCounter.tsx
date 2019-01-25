@@ -2,9 +2,9 @@ import React from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { translate, TranslateFunction } from '@module/i18n-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
-import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 interface ButtonProps {
   counterAmount: number;

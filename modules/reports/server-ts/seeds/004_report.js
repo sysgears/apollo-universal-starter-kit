@@ -1,4 +1,4 @@
-import { returnId, truncateTables } from '@module/database-server-ts';
+import { returnId, truncateTables } from '@gqlapp/database-server-ts';
 
 const CONTACTS = [
   { name: 'Tom Jackson', phone: '555-444-333', email: 'tom@gmail.com' },

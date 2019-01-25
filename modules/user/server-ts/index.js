@@ -1,4 +1,4 @@
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 
 import access from './access';
 import auth from './auth';

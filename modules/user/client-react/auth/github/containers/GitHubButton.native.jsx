@@ -13,7 +13,7 @@ import {
   btnIconContainer,
   btnTextContainer,
   btnText
-} from '@module/look-client-react-native/styles';
+} from '@gqlapp/look-client-react-native/styles';
 
 import buildRedirectUrlForMobile from '../../../helpers';
 

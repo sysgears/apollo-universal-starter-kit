@@ -1,10 +1,10 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import ClientModule from '@module/module-client-react-native';
-import commonI18n from '@module/i18n-common-react';
+import ClientModule from '@gqlapp/module-client-react-native';
+import commonI18n from '@gqlapp/i18n-common-react';
 
-import { LanguagePicker, Root } from '@module/look-client-react-native';
+import { LanguagePicker, Root } from '@gqlapp/look-client-react-native';
 import resources from './locales';
 import settings from '../../../settings';
 

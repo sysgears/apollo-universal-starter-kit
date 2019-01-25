@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
-import { translate } from '@module/i18n-client-react';
-
+import { translate } from '@gqlapp/i18n-client-react';
+import { FormError } from '@gqlapp/forms-client-react';
 import UserEditView from '../components/UserEditView';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
@@ -15,11 +15,14 @@ class UserEdit extends React.Component {
   propTypes = {
     user: PropTypes.object.isRequired,
     editUser: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired
+    t: PropTypes.func.isRequired,
+    navigation: PropTypes.object,
+    history: PropTypes.object,
+    location: PropTypes.object
   };
 
   onSubmit = async values => {
-    const { user, editUser, t } = this.props;
+    const { user, editUser, t, history, navigation, location } = this.props;
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
@@ -31,16 +34,21 @@ class UserEdit extends React.Component {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
-    const result = editUser({ id: user.id, ...userValues });
+    try {
+      await editUser({ id: user.id, ...userValues });
+    } catch (e) {
+      throw new FormError(t('userEdit.errorMsg'), e);
+    }
 
-    if (result && result.errors) {
-      throw result.errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: t('userEdit.errorMsg') }
-      );
+    if (history) {
+      if (location && location.state && location.state.from === 'profile') {
+        return history.push('/profile');
+      }
+      return history.push('/users');
+    }
+
+    if (navigation) {
+      return navigation.goBack();
     }
   };
 
@@ -65,7 +73,7 @@ export default compose(
       };
     },
     props({ data: { loading, user } }) {
-      const userPayload = user ? { user: user.user, errors: user.errors } : {};
+      const userPayload = user ? { user: user.user } : {};
       return {
         loading,
         ...userPayload
@@ -73,30 +81,15 @@ export default compose(
     }
   }),
   graphql(EDIT_USER, {
-    props: ({ ownProps: { history, navigation, location }, mutate }) => ({
+    props: ({ mutate }) => ({
       editUser: async input => {
-        try {
-          const {
-            data: { editUser }
-          } = await mutate({
-            variables: { input }
-          });
-          if (editUser.errors) {
-            return { errors: editUser.errors };
-          }
-          if (history) {
-            if (location && location.state && location.state.from === 'profile') {
-              return history.push('/profile');
-            }
-            return history.push('/users');
-          }
+        const {
+          data: { editUser }
+        } = await mutate({
+          variables: { input }
+        });
 
-          if (navigation) {
-            return navigation.goBack();
-          }
-        } catch (e) {
-          console.log(e.graphQLErrors);
-        }
+        return editUser;
       }
     })
   })

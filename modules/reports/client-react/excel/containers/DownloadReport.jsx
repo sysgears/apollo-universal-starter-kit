@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { Button } from '@module/look-client-react';
-import { translate } from '@module/i18n-client-react';
+import { Button } from '@gqlapp/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import query from '../../graphql/Excel.graphql';
 import { downloadFile, getObjectURLFromArray } from '../../common';
 

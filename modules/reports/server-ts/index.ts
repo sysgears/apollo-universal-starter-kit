@@ -1,4 +1,4 @@
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 
 import Report from './sql';
 import schema from './schema.graphql';

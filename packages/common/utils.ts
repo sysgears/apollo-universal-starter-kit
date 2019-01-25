@@ -1,2 +1,2 @@
 // Reexport for backward-compatibility purposes
-export * from '@module/core-common';
+export * from '@gqlapp/core-common';

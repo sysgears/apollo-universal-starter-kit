@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 // Components and helpers
-import { Renderer, updateContent, waitForElementRender } from '@module/testing-client-react';
+import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
 
 const mocks = {
   Query: () => ({

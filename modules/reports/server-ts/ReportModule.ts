@@ -1,4 +1,4 @@
-import ServerModule, { ServerModuleShape } from '@module/module-server-ts';
+import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
 
 interface ReportModuleShape extends ServerModuleShape {}
 

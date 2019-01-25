@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { FieldAdapter as Field } from '@module/core-client-react';
-import { translate } from '@module/i18n-client-react';
-import { Form, RenderField, Button, Alert } from '@module/look-client-react';
-import { required, email, validate } from '@module/validation-common-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
+import { required, email, validate } from '@gqlapp/validation-common-react';
 
 const forgotPasswordFormSchema = {
   email: [required, email]
 };
 
-const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
+const ForgotPasswordForm = ({ handleSubmit, errors, sent, values, t }) => {
   return (
     <Form name="forgotPassword" onSubmit={handleSubmit}>
       {sent && <Alert color="success">{t('forgotPass.form.submitMsg')}</Alert>}
@@ -22,7 +22,7 @@ const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
         value={values.email}
       />
       <div className="text-center">
-        {error && <Alert color="error">{error}</Alert>}
+        {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
         <Button color="primary" type="submit">
           {t('forgotPass.form.btnSubmit')}
         </Button>
@@ -34,7 +34,7 @@ const ForgotPasswordForm = ({ handleSubmit, error, sent, values, t }) => {
 ForgotPasswordForm.propTypes = {
   handleSubmit: PropTypes.func,
   onSubmit: PropTypes.func,
-  error: PropTypes.string,
+  errors: PropTypes.object,
   sent: PropTypes.bool,
   values: PropTypes.object,
   t: PropTypes.func
@@ -53,7 +53,13 @@ const ForgotPasswordFormWithFormik = withFormik({
   ) {
     await onSubmit(values)
       .then(() => resetForm())
-      .catch(e => setErrors(e));
+      .catch(e => {
+        if (isFormError(e)) {
+          setErrors(e.errors);
+        } else {
+          throw e;
+        }
+      });
   },
   validate: values => validate(values, forgotPasswordFormSchema),
   displayName: 'ForgotPasswordForm' // helps with React DevTools

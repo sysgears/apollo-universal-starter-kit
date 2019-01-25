@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from '@module/i18n-client-react';
-import { LayoutCenter } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { LayoutCenter } from '@gqlapp/look-client-react';
 
 const ActivateUser = ({ t }) => {
   return (

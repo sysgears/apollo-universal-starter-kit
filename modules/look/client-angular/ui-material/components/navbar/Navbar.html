@@ -1,9 +1,18 @@
 <mat-toolbar color="primary" class="main-toolbar">
   <div class="toolbar-content-start">
     <a routerLink="/" class="navbar-brand"> {{ appName }} </a>
+    <ng-template ngFor let-item="$implicit" [ngForOf]="navItems">
+      <a mat-button [routerLink]="item.link" routerLinkActive="active">{{
+        item.name
+      }}</a>
+    </ng-template>
   </div>
 
   <div class="toolbar-content-end">
-    <a mat-button routerLink="/" routerLinkActive="active">Counter</a>
+    <ng-template ngFor let-item="$implicit" [ngForOf]="navItemsRight">
+      <a mat-button [routerLink]="item.link" routerLinkActive="active">{{
+        item.name
+      }}</a>
+    </ng-template>
   </div>
 </mat-toolbar>

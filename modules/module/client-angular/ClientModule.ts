@@ -4,8 +4,13 @@ import { Route, Routes } from '@angular/router';
 export interface ClientModuleShape extends BaseModuleShape {
   module?: any;
   route?: Routes;
-  navItem?: any[];
-  navItemRight?: any[];
+  navItem?: NavigationItem[];
+  navItemRight?: NavigationItem[];
+}
+
+export interface NavigationItem {
+  name: string;
+  link: string;
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -23,12 +28,12 @@ class ClientModule extends BaseModule {
     return this.route.map((component: Route) => component);
   }
 
-  get navItems(): any[] {
-    return this.route.map((component: any) => component);
+  get navItems(): NavigationItem[] {
+    return this.navItem && this.navItem.map((item: NavigationItem) => item);
   }
 
-  get navItemsRight(): any[] {
-    return this.route.map((component: any) => component);
+  get navItemsRight(): NavigationItem[] {
+    return this.navItemRight && this.navItemRight.map((item: NavigationItem) => item);
   }
 }
 

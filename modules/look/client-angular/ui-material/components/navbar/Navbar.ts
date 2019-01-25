@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
+import ClientModule, { NavigationItem } from '@module/module-client-angular';
+
 import settings from '../../../../../../settings';
+
+const ref: any = { modules: null };
+
+export const onAppCreate = (modules: ClientModule) => (ref.modules = modules);
 
 @Component({
   selector: 'navbar',
@@ -8,4 +14,6 @@ import settings from '../../../../../../settings';
 })
 export class NavbarComponent {
   public appName: string = settings.app.name;
+  public navItems: NavigationItem[] = ref.modules && ref.modules.navItems;
+  public navItemsRight: NavigationItem[] = ref.modules && ref.modules.navItemsRight;
 }

@@ -7,6 +7,7 @@ import { ButtonComponent, ButtonRaisedComponent, PageLayoutComponent, NavbarComp
 import { RouterModule } from '@angular/router';
 
 export { default as styles } from './styles/styles.scss';
+export { onAppCreate } from './components';
 
 @NgModule({
   imports: [CommonModule, BrowserAnimationsModule, MatButtonModule, MatToolbarModule, RouterModule],

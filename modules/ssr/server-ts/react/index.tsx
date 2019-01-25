@@ -100,10 +100,14 @@ const renderDocument = (documentProps: DocumentProps) => `
   <!doctype html>\n${renderToStaticMarkup(<Document {...documentProps} />)}
 `;
 
-const respondWithDocument = (res: any, App: any, client: any) => {
+const respondWithDocument = (req: any, res: any, App: any, client: any) => {
   updateAssetMap();
-  res.send(renderDocument(getDocumentProps(App, client)));
-  res.end();
+
+  if (!res.getHeader('Content-Type')) {
+    res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  }
+
+  res.end(req.method === 'HEAD' ? null : renderDocument(getDocumentProps(App, client)));
 };
 
 const renderApp = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
@@ -111,7 +115,7 @@ const renderApp = async (req: any, res: any, schema: GraphQLSchema, modules: Ser
   await getDataFromTree(App);
   res.status(!!context.pageNotFound ? 404 : 200);
 
-  return context.url ? redirectOnMovedPage(res, context) : respondWithDocument(res, App, client);
+  return context.url ? redirectOnMovedPage(res, context) : respondWithDocument(req, res, App, client);
 };
 
 export default renderApp;

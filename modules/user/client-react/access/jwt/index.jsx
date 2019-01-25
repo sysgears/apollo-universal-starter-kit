@@ -75,18 +75,6 @@ const JWTLink = new ApolloLink((operation, forward) => {
                   await removeTokens();
                 }
               }
-              if (operation.operationName === 'firebaselogin') {
-                if (result.data.firebaseLogin.tokens && !result.data.firebaseLogin.errors) {
-                  const {
-                    data: {
-                      firebaseLogin: { idToken }
-                    }
-                  } = result;
-                  await saveTokens({ idToken });
-                } else {
-                  await removeTokens();
-                }
-              }
               observer.next(result);
             })();
             queue.push(promise);
@@ -101,28 +89,15 @@ const JWTLink = new ApolloLink((operation, forward) => {
               if (networkError.response && networkError.response.status >= 400 && networkError.response.status < 500) {
                 try {
                   if (operation.operationName !== 'refreshTokens') {
-                    if (settings.user.auth.firebase.enabled) {
-                      try {
-                        const { data } = await apolloClient.mutate({
-                          mutation: REFRESH_TOKENS_MUTATION,
-                          variables: { refreshToken: await getItem('idToken') }
-                        });
-                        const { idToken } = data.refreshTokens;
-                        await saveTokens({ idToken });
-                      } catch (e) {
-                        await removeTokens();
-                      }
-                    } else {
-                      try {
-                        const { data } = await apolloClient.mutate({
-                          mutation: REFRESH_TOKENS_MUTATION,
-                          variables: { refreshToken: await getItem('refreshToken') }
-                        });
-                        const { accessToken, refreshToken } = data.refreshTokens;
-                        await saveTokens({ accessToken, refreshToken });
-                      } catch (e) {
-                        await removeTokens();
-                      }
+                    try {
+                      const { data } = await apolloClient.mutate({
+                        mutation: REFRESH_TOKENS_MUTATION,
+                        variables: { refreshToken: await getItem('refreshToken') }
+                      });
+                      const { accessToken, refreshToken } = data.refreshTokens;
+                      await saveTokens({ accessToken, refreshToken });
+                    } catch (e) {
+                      await removeTokens();
                     }
                   } else {
                     await removeTokens();

@@ -33,7 +33,7 @@ extend type Mutation {
   # Login user
   login(input: LoginUserInput!): AuthPayload!
   # Login via firebase
-  firebaseLogin(email: String!, errorCode: String!): AuthPayload!
+  firebaseLogin(email: String!, errorCode: String): AuthPayload!
   # Forgot password
   forgotPassword(input: ForgotPasswordInput!): String
   # Reset password

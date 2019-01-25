@@ -47,11 +47,14 @@ const LoginWithApollo = compose(
   graphql(FEREBASE_LOGIN, {
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
+        // Mutate for check isActive status before firebase auth
+        await mutate({
+          variables: { email: usernameOrEmail }
+        });
         let firebaseAuth = {};
         try {
           firebaseAuth = await firebase.auth().signInWithEmailAndPassword(usernameOrEmail, password);
         } catch (e) {
-          console.log(e);
           const {
             data: {
               firebaseLogin: { user }

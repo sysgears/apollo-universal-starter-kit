@@ -11,7 +11,7 @@
 
 <script>
 import { mapState, mapMutations } from 'vuex';
-import { Button as LookButton } from '@module/look-client-vue';
+import { Button as LookButton } from '@gqlapp/look-client-vue';
 import CounterSection from '../../containers/CounterSection.vue';
 import { INCREMENT } from '../reducers';
 

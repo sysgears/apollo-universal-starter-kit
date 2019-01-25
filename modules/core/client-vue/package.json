@@ -1,10 +1,10 @@
 {
-  "name": "@module/core-client-vue",
+  "name": "@gqlapp/core-client-vue",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@module/core-common": "^1.0.0",
-    "@module/module-client-vue": "^1.0.0",
+    "@gqlapp/core-common": "^0.0.1",
+    "@gqlapp/module-client-vue": "^1.0.0",
     "vue": "^2.5.22",
     "vue-apollo": "^3.0.0-beta.27",
     "vue-router": "^3.0.2",

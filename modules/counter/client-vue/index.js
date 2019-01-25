@@ -1,4 +1,4 @@
-import ClientModule from '@module/module-client-vue';
+import ClientModule from '@gqlapp/module-client-vue';
 import counters from './counters';
 import Counter from './containers/Counter.vue';
 

@@ -5,8 +5,8 @@
 </template>
 
 <script>
-import { ADD_COUNTER, COUNTER_QUERY } from '@module/counter-common';
-import { Button as LookButton } from '@module/look-client-vue';
+import { ADD_COUNTER, COUNTER_QUERY } from '@gqlapp/counter-common';
+import { Button as LookButton } from '@gqlapp/look-client-vue';
 
 export default {
   props: { counter: Object },

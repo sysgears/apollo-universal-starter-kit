@@ -1,4 +1,4 @@
-import { resolvers } from '@module/counter-common';
+import { resolvers } from '@gqlapp/counter-common';
 import ServerCounter from './containers/ServerCounter.vue';
 import CounterModule from '../CounterModule';
 

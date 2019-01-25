@@ -1,5 +1,5 @@
-import ClientModule from '@module/module-client-vue';
-import { createApolloClient, apiUrl, log } from '@module/core-common';
+import ClientModule from '@gqlapp/module-client-vue';
+import { createApolloClient, apiUrl, log } from '@gqlapp/core-common';
 import createApp from './createApp';
 
 log.info(`Connecting to GraphQL back-end at: ${apiUrl}`);

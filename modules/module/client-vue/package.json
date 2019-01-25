@@ -1,8 +1,8 @@
 {
-  "name": "@module/module-client-vue",
+  "name": "@gqlapp/module-client-vue",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@module/module-common": "^1.0.0"
+    "@gqlapp/module-common": "^0.0.1"
   }
 }

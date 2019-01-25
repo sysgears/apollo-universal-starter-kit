@@ -9,7 +9,7 @@
 <script>
 import Vue from 'vue';
 import counters from '../counters';
-import { PageLayout } from '@module/look-client-vue';
+import { PageLayout } from '@gqlapp/look-client-vue';
 
 export default {
   name: 'CounterContainer',

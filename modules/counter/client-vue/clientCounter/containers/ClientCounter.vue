@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { COUNTER_QUERY_CLIENT } from '@module/counter-common';
+import { COUNTER_QUERY_CLIENT } from '@gqlapp/counter-common';
 import IncrementCounter from '../components/IncrementCounter.vue';
 import CounterSection from '../../containers/CounterSection.vue';
 

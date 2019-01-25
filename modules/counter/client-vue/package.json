@@ -1,9 +1,9 @@
 {
-  "name": "@module/counter-client-vue",
+  "name": "@gqlapp/counter-client-vue",
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@module/counter-common": "^1.0.0",
-    "@module/module-client-vue": "^1.0.0"
+    "@gqlapp/counter-common": "^0.0.1",
+    "@gqlapp/module-client-vue": "^1.0.0"
   }
 }

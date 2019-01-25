@@ -1,4 +1,4 @@
-import { access } from '@module/authentication-server-ts';
+import { access } from '@gqlapp/authentication-server-ts';
 import User from '../sql';
 
 export async function onAuthenticationSuccess(req, res) {

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
-import { translate } from '@module/i18n-client-react';
-import { placeholderColor } from '@module/look-client-react-native/styles';
-import { setItem } from '@module/core-common/clientStorage';
-import authentication from '@module/authentication-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { placeholderColor } from '@gqlapp/look-client-react-native/styles';
+import { setItem } from '@gqlapp/core-common/clientStorage';
+import authentication from '@gqlapp/authentication-client-react';
 
 import LoginForm from './LoginForm';
 

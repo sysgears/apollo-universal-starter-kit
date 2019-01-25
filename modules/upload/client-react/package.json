@@ -1,5 +1,5 @@
 {
-  "name": "@module/upload-client-react",
-  "version": "1.0.0",
+  "name": "@gqlapp/upload-client-react",
+  "version": "0.0.1",
   "private": true
 }

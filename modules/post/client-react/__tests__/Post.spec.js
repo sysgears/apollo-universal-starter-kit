@@ -11,7 +11,7 @@ import {
   wait,
   waitForElementRender,
   Renderer
-} from '@module/testing-client-react';
+} from '@gqlapp/testing-client-react';
 
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';

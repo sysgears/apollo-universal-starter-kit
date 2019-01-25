@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
-import { validate } from '@module/validation-common-react';
-import { contactFormSchema } from '@module/contact-common';
+import { validate } from '@gqlapp/validation-common-react';
+import { contactFormSchema } from '@gqlapp/contact-common';
 import { UserInputError } from 'apollo-server-errors';
 import log from '../../../packages/common/log';
 

@@ -1,12 +1,12 @@
 // React
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 // Apollo
 import { graphql, compose } from 'react-apollo';
 
 // Components
-import { FormError } from '@module/forms-client-react';
+import { FormError } from '@gqlapp/forms-client-react';
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';

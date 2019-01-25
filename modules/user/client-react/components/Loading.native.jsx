@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { View, Text } from 'react-native';
-import { translate } from '@module/i18n-client-react';
-import { LayoutCenter } from '@module/look-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { LayoutCenter } from '@gqlapp/look-client-react-native';
 
 const Loading = ({ t }) => (
   <LayoutCenter>

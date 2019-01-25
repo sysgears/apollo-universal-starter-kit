@@ -1,7 +1,7 @@
 import React from 'react';
 import { Mutation, FetchResult } from 'react-apollo';
-import { FormError } from '@module/forms-client-react';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
+import { FormError } from '@gqlapp/forms-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';

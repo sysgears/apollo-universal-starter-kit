@@ -1,8 +1,8 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 import stripeLocal from 'stripe-local';
-import ServerModule from '@module/module-server-ts';
-import { log } from '@module/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
+import { log } from '@gqlapp/core-common';
 
 import settings from '../../../../../settings';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
-import { translate } from '@module/i18n-client-react';
-import { MenuItem } from '@module/look-client-react';
-import ClientModule from '@module/module-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { MenuItem } from '@gqlapp/look-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 import resolvers from './resolvers';
 import resources from './locales';

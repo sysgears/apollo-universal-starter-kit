@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '@module/look-client-react';
+import { Button } from '@gqlapp/look-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;

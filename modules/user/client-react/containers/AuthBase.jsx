@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo, graphql } from 'react-apollo';
 
-import authentication from '@module/authentication-client-react';
+import authentication from '@gqlapp/authentication-client-react';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 

@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
-import { access } from '@module/authentication-server-ts';
+import { access } from '@gqlapp/authentication-server-ts';
 import User from '../../sql';
 import settings from '../../../../../settings';
 

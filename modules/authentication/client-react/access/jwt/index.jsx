@@ -1,8 +1,6 @@
 import { ApolloLink, Observable, execute, makePromise } from 'apollo-link';
-
-import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
-import { apiUrl } from '@module/core-common';
-
+import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
+import { apiUrl } from '@gqlapp/core-common';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 
 import AccessModule from '../AccessModule';

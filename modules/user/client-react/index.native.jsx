@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createStackNavigator } from 'react-navigation';
-import { translate } from '@module/i18n-client-react';
-import { HeaderTitle, IconButton } from '@module/look-client-react-native';
-import ClientModule from '@module/module-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
 
 import resolvers from './resolvers';
 import resources from './locales';

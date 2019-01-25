@@ -1,4 +1,4 @@
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 import github from './github';
 import google from './google';
 import facebook from './facebook';

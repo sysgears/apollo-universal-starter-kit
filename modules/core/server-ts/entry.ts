@@ -1,4 +1,4 @@
-import { log } from '@module/core-common';
+import { log } from '@gqlapp/core-common';
 export { createServer, serverPromise } from './server';
 
 process.on('uncaughtException', ex => {

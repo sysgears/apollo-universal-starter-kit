@@ -4,7 +4,7 @@ import { PubSub } from 'graphql-subscriptions';
 import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
-import CommonModule, { CommonModuleShape } from '@module/module-common';
+import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
 interface CreateContextFuncProps {
   req: Request;

@@ -1,4 +1,4 @@
-import { AuthModule } from '@module/authentication-server-ts';
+import { AuthModule } from '@gqlapp/authentication-server-ts';
 import facebook, { facebookData } from './facebook';
 import github, { githubData } from './github';
 import google, { googleData } from './google';

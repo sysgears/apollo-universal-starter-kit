@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import UploadView from '../components/UploadView';
 import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';

@@ -1,6 +1,6 @@
 /*tslint:disable:variable-name*/
-import { knex, orderedFor, returnId } from '@module/database-server-ts';
-import { UploadedFile } from '@module/upload-server-ts';
+import { knex, orderedFor, returnId } from '@gqlapp/database-server-ts';
+import { UploadedFile } from '@gqlapp/upload-server-ts';
 
 export interface Identifier {
   id: number;

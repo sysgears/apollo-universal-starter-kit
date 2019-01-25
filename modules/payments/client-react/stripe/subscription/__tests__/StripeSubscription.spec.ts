@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import settings from '../../../../../../settings';
-import { Renderer, updateContent, waitForElementRender } from '@module/testing-client-react';
+import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
 
 const { enabled, publicKey } = settings.stripe.subscription;
 

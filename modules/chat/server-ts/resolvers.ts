@@ -1,8 +1,8 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
-import ServerModule from '@module/module-server-ts';
-import { FileSystemStorage, UploadFileStream } from '@module/upload-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
+import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
 
 import settings from '../../../settings';
 import ChatDAO, { Message, Identifier } from './sql';

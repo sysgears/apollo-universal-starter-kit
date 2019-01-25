@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 import { camelize, decamelizeKeys, camelizeKeys } from 'humps';
-import { log } from '@module/core-common';
+import { log } from '@gqlapp/core-common';
 
 import knex from './connector';
 

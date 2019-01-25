@@ -1,6 +1,6 @@
 import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
-import { removeTypename, log } from '@module/core-common';
+import { removeTypename, log } from '@gqlapp/core-common';
 import USERS_STATE_QUERY from '../graphql/UsersStateQuery.client.graphql';
 import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import USERS_QUERY from '../graphql/UsersQuery.graphql';

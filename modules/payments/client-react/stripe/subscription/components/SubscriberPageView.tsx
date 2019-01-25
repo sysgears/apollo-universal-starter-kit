@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { LayoutCenter } from '@module/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { LayoutCenter } from '@gqlapp/look-client-react';
 
 import settings from '../../../../../../settings';
 

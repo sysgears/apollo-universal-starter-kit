@@ -1,5 +1,5 @@
 {
-  "name": "@module/post-client-react",
-  "version": "1.0.0",
+  "name": "@gqlapp/post-client-react",
+  "version": "0.0.1",
   "private": true
 }

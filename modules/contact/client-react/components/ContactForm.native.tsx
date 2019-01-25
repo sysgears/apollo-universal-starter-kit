@@ -2,10 +2,10 @@ import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { isFormError } from '@module/forms-client-react';
-import { contactFormSchema } from '@module/contact-common';
-import { validate } from '@module/validation-common-react';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { isFormError } from '@gqlapp/forms-client-react';
+import { contactFormSchema } from '@gqlapp/contact-common';
+import { validate } from '@gqlapp/validation-common-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import Field from '../../../../packages/client/src/utils/FieldAdapter';
 import {
   RenderField,

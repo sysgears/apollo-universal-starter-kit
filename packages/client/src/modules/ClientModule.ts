@@ -1,3 +1,3 @@
 // Reexport for backward-compatibility purposes
-export { default } from '@module/module-client-react';
-export * from '@module/module-client-react';
+export { default } from '@gqlapp/module-client-react';
+export * from '@gqlapp/module-client-react';

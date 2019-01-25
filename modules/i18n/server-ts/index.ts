@@ -1,10 +1,10 @@
 import { Express } from 'express';
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 import i18n from 'i18next';
 import i18nMiddleware from 'i18next-express-middleware';
 
 import settings from '../../../settings';
-import commonI18n from '@module/i18n-common-react';
+import commonI18n from '@gqlapp/i18n-common-react';
 
 const beforeware = (app: Express) => {
   if (settings.i18n.enabled) {

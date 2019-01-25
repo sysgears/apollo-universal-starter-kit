@@ -1,8 +1,8 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 
-import { TranslateFunction } from '@module/i18n-client-react';
-import { LayoutCenter, PageLayout } from '@module/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { LayoutCenter, PageLayout } from '@gqlapp/look-client-react';
 import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';
 import settings from '../../../../settings';

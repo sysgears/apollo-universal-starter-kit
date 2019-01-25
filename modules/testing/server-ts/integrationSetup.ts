@@ -4,9 +4,9 @@ import chaiHttp from 'chai-http';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 
-import { serverPromise } from '@module/core-server-ts';
-import { createApolloClient } from '@module/core-common';
-import { populateTestDb } from '@module/database-server-ts';
+import { serverPromise } from '@gqlapp/core-server-ts';
+import { createApolloClient } from '@gqlapp/core-common';
+import { populateTestDb } from '@gqlapp/database-server-ts';
 
 chai.use(chaiHttp);
 chai.should();

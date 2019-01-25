@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
-import { translate } from '@module/i18n-client-react';
-import { itemAction, itemTitle } from '@module/look-client-react-native/styles';
-import { Select } from '@module/look-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { itemAction, itemTitle } from '@gqlapp/look-client-react-native/styles';
+import { Select } from '@gqlapp/look-client-react-native';
 import PaginationDemoView from '../components/PaginationDemoView.native';
 import withDataProvider from '../containers/DataProvider';
 

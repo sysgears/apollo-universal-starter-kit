@@ -1,4 +1,4 @@
-import { isApiExternal } from '@module/core-common';
+import { isApiExternal } from '@gqlapp/core-common';
 
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';

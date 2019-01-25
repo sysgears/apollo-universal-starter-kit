@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '@module/look-client-react';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { Button } from '@gqlapp/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;

@@ -1,8 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Button } from '@module/look-client-react';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { Button } from '@gqlapp/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface CancelSubscriptionViewProps {
   onClick: () => void;

@@ -1,7 +1,6 @@
 import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
-import { removeTypename } from '@module/core-common';
-
+import { removeTypename, log } from '@gqlapp/core-common';
 import USERS_STATE_QUERY from '../graphql/UsersStateQuery.client.graphql';
 import UPDATE_ORDER_BY from '../graphql/UpdateOrderBy.client.graphql';
 import USERS_QUERY from '../graphql/UsersQuery.graphql';
@@ -43,7 +42,7 @@ const withUsersDeleting = Component =>
             return { errors: deleteUser.errors };
           }
         } catch (e) {
-          console.log(e.graphQLErrors);
+          log.error(e);
         }
       }
     })

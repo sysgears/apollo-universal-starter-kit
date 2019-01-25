@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
-import { Button, primary } from '@module/look-client-react-native';
+import { Button, primary } from '@gqlapp/look-client-react-native';
 import { FontAwesome } from '@expo/vector-icons';
 
 interface SubscriptionCardFormViewProps {

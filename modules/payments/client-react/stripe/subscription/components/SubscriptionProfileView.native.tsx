@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { Card, CardSubtitleText } from '@module/look-client-react-native';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Card, CardSubtitleText } from '@gqlapp/look-client-react-native';
 
 import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';

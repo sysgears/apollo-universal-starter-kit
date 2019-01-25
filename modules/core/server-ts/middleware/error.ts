@@ -1,6 +1,6 @@
 import path from 'path';
 import fs from 'fs';
-import { isApiExternal, log } from '@module/core-common';
+import { isApiExternal, log } from '@gqlapp/core-common';
 
 let assetMap: { [key: string]: string };
 

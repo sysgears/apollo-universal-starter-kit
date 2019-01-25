@@ -4,7 +4,7 @@ export default {
   auth: {
     access: {
       session: {
-        enabled: false
+        enabled: true
       },
       jwt: {
         enabled: true,

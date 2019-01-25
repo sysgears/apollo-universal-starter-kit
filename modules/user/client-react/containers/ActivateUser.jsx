@@ -24,6 +24,9 @@ class Activate extends React.Component {
         const {
           state: { params }
         } = navigation;
+        if (params.match('/reset-password/')) {
+          return navigation.navigate('ResetPassword');
+        }
         const [, token] = params.split('/confirmation/');
         activateUser(token);
       }

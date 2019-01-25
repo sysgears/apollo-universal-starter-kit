@@ -1,4 +1,4 @@
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 
 import Post from './sql';
 import schema from './schema.graphql';

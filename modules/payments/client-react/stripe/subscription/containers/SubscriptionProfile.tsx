@@ -1,5 +1,5 @@
 import React from 'react';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 
 import SubscriptionProfileView from '../components/SubscriptionProfileView';
 import { withStripeSubscription } from './withStripeSubscription';

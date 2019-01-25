@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { CreditCardInput } from '../types';

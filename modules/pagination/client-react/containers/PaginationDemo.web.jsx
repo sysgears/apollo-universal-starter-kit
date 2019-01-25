@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { PageLayout, Select, Option } from '@module/look-client-react';
-import { translate } from '@module/i18n-client-react';
+import { PageLayout, Select, Option } from '@gqlapp/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import settings from '../../../../settings';
 
 import PaginationDemoView from '../components/PaginationDemoView.web';

@@ -129,6 +129,9 @@
     },
     "btnBack": "Back"
   },
+  "userAdd": {
+    "errorMsg": "Add user failed!"
+  },
 
   "users": {
     "title": "Users",

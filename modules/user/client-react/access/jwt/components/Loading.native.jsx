@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutCenter } from '@module/look-client-react-native';
+import { LayoutCenter } from '@gqlapp/look-client-react-native';
 
 export default (
   <LayoutCenter>

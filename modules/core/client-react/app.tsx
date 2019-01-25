@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { hydrate, render } from 'react-dom';
-import ClientModule from '@module/module-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line

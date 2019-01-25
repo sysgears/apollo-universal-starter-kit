@@ -2,13 +2,17 @@ import PdfPrinter from 'pdfmake';
 import fonts from './fonts/Roboto/';
 
 class PDFGenerator {
+  private printer: any;
+  private content: object[];
+  private styles: object;
+
   constructor() {
     this.printer = new PdfPrinter(fonts);
     this.content = [];
     this.styles = {};
   }
 
-  addText(text, style, alignment) {
+  public addText(text: string, style?: string, alignment?: string) {
     this.content.push({
       text,
       style,
@@ -16,11 +20,11 @@ class PDFGenerator {
     });
   }
 
-  addStyle(name, style) {
+  public addStyle(name: string, style: object) {
     this.styles[name] = style;
   }
 
-  addTable(data, columnsWidth) {
+  public addTable(data: object[], columnsWidth: object) {
     this.content.push({
       table: {
         widths: columnsWidth,
@@ -29,13 +33,13 @@ class PDFGenerator {
     });
   }
 
-  addList(data, type = 'ul') {
+  public addList(data: any[], type = 'ul') {
     this.content.push({
       [type]: data
     });
   }
 
-  addImage(image, width, height) {
+  public addImage(image: string, width: number, height: number) {
     this.content.push({
       image,
       width,
@@ -43,7 +47,7 @@ class PDFGenerator {
     });
   }
 
-  getDocument() {
+  public getDocument() {
     return this.printer.createPdfKitDocument({
       content: this.content,
       styles: this.styles

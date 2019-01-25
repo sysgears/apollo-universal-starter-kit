@@ -1,4 +1,4 @@
-import xl from 'excel4node';
+import * as xl from 'excel4node';
 
 const wb = new xl.Workbook();
 const options = {
@@ -13,7 +13,7 @@ const style = wb.createStyle({
   }
 });
 
-export default function generateBufferExcel(reports) {
+export default function generateBufferExcel(reports: object[]) {
   const ws = wb.addWorksheet('Report', options);
   const titles = Object.keys(reports[0]);
 

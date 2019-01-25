@@ -1,6 +1,6 @@
 import PDFGenerator from './PDFGenerator';
 
-function createPDF(reports) {
+function createPDF(reports: object[]) {
   const pdf = new PDFGenerator();
   const image = `${__dirname}/app.png`;
 
@@ -29,11 +29,11 @@ function createPDF(reports) {
   return pdf.getDocument();
 }
 
-export default function generatePDF(reports) {
+export default function generatePDF(reports: object[]) {
   const doc = createPDF(reports);
-  const chunks = [];
+  const chunks: Uint8Array[] = [];
 
-  doc.on('data', chunk => {
+  doc.on('data', (chunk: Uint8Array) => {
     chunks.push(chunk);
   });
 

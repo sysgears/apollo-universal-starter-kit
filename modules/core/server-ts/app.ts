@@ -5,7 +5,7 @@ import { isApiExternal } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
 
 import graphiqlMiddleware from './middleware/graphiql';
-import websiteMiddleware from './middleware/website';
+import ssrMiddleware from '@gqlapp/ssr-server-ts';
 import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 
@@ -27,7 +27,7 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   }
 
   app.get('/graphiql', (req, res, next) => graphiqlMiddleware(req, res, next));
-  app.use(websiteMiddleware(schema, modules));
+  app.use(ssrMiddleware(schema, modules));
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {

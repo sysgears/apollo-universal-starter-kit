@@ -8,10 +8,11 @@ case class Message(
     id: Option[Int] = None,
     text: String,
     userId: Option[Int] = None,
-    uuid: String,
+    createdAt: Timestamp = new Timestamp(DateTime.now.clicks),
     username: Option[String],
+    uuid: String,
+    quotedId: Option[Int],
     fileName: Option[String],
     path: Option[String],
-    createdAt: Timestamp = new Timestamp(DateTime.now.clicks),
-    quotedId: Option[Int]
+    quotedMessage: QuotedMessage
 )

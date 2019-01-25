@@ -1,6 +1,6 @@
 import { NavigationRouteConfig } from 'react-navigation';
 
-import BaseModule, { BaseModuleShape } from '@module/module-client-react';
+import BaseModule, { BaseModuleShape } from '@gqlapp/module-client-react';
 
 import { merge } from 'lodash';
 

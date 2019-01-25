@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { log } from '@module/core-common';
+import { log } from '@gqlapp/core-common';
 
 import { encryptSession, decryptSession } from './crypto';
 
@@ -17,9 +17,6 @@ export const readSession = req => {
     }
   } else {
     session = decryptSession(req.universalCookies.get('session', { doNotParse: true }));
-    if (req.headers.session) {
-      session = decryptSession(req.headers.session);
-    }
   }
   if (__DEV__) {
     log.debug('read session', session);

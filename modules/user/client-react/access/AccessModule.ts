@@ -1,6 +1,6 @@
 import { ApolloClient } from 'apollo-client';
 
-import ClientModule, { ClientModuleShape } from '@module/module-client-react';
+import ClientModule, { ClientModuleShape } from '@gqlapp/module-client-react';
 
 export interface AccessModuleShape extends ClientModuleShape {
   login?: Array<(client: ApolloClient<any>) => Promise<void>>;

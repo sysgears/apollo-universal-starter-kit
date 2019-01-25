@@ -1,5 +1,5 @@
 {
-  "name": "@module/counter-common",
-  "version": "1.0.0",
+  "name": "@gqlapp/counter-common",
+  "version": "0.0.1",
   "private": true
 }

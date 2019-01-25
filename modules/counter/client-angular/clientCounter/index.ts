@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { resolvers } from '@module/counter-common';
-import { LookModule } from '@module/look-client-angular';
+import { resolvers } from '@gqlapp/counter-common';
+import { LookModule } from '@gqlapp/look-client-angular';
 import CounterModule from '../CounterModule';
 import { ClientCounterButtonComponent, ClientCounterViewComponent } from './components/ClientCounterView';
 

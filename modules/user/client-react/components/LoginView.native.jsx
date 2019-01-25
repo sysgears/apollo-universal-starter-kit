@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
-import { translate } from '@module/i18n-client-react';
-import { placeholderColor } from '@module/look-client-react-native/styles';
-import { setItem } from '@module/core-common/clientStorage';
+import { translate } from '@gqlapp/i18n-client-react';
+import { placeholderColor } from '@gqlapp/look-client-react-native/styles';
+import { setItem } from '@gqlapp/core-common/clientStorage';
+import authentication from '../access/index';
 
 import LoginForm from './LoginForm';
-
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
 class LoginView extends React.PureComponent {
   componentDidMount() {
@@ -16,36 +15,27 @@ class LoginView extends React.PureComponent {
   }
 
   componentWillUnmount() {
-    Linking.removeListener('url');
+    Linking.removeEventListener('url', this.handleOpenURL);
   }
 
   handleOpenURL = async ({ url }) => {
+    const dataRegExp = /data=([^#]+)/;
+    if (!url.match(dataRegExp)) return;
+
     // Extract stringified user string out of the URL
-    const [, data] = url.match(/data=([^#]+)/);
+    const [, data] = url.match(dataRegExp);
     const decodedData = JSON.parse(decodeURI(data));
     const { client } = this.props;
+
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
       await setItem('refreshToken', decodedData.tokens.refreshToken);
+
+      await authentication.doLogin(client);
     }
-    await client.query({ query: CURRENT_USER_QUERY });
 
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
-    }
-  };
-
-  onSubmit = login => async values => {
-    const { errors } = await login(values);
-
-    if (errors && errors.length) {
-      throw errors.reduce(
-        (res, error) => {
-          res[error.field] = error.message;
-          return res;
-        },
-        { _error: this.props.t('login.errorMsg') }
-      );
     }
   };
 
@@ -58,12 +48,12 @@ class LoginView extends React.PureComponent {
   );
 
   render() {
-    const { login, navigation } = this.props;
+    const { navigation, onSubmit } = this.props;
     return (
       <View style={styles.container}>
         <View style={styles.examplesContainer}>{this.renderAvailableLogins()}</View>
         <View style={styles.loginContainer}>
-          <LoginForm onSubmit={this.onSubmit(login)} navigation={navigation} />
+          <LoginForm onSubmit={onSubmit} navigation={navigation} />
         </View>
       </View>
     );
@@ -110,6 +100,8 @@ const styles = StyleSheet.create({
 LoginView.propTypes = {
   login: PropTypes.func.isRequired,
   t: PropTypes.func,
+  onSubmit: PropTypes.func,
+  client: PropTypes.object,
   error: PropTypes.string,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object])
 };

@@ -1,4 +1,4 @@
-import { knex } from '@module/database-server-ts';
+import { knex } from '@gqlapp/database-server-ts';
 
 interface File {
   name: string;

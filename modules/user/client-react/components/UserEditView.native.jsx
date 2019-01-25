@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View } from 'react-native';
-import { translate } from '@module/i18n-client-react';
-import { Loading } from '@module/look-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Loading } from '@gqlapp/look-client-react-native';
 
 import UserForm from './UserForm';
 import { withLoadedUser } from '../containers/Auth';
@@ -12,7 +12,6 @@ class UserEditView extends React.PureComponent {
     loading: PropTypes.bool.isRequired,
     user: PropTypes.object,
     currentUser: PropTypes.object,
-    editUser: PropTypes.func.isRequired,
     t: PropTypes.func,
     onSubmit: PropTypes.func
   };

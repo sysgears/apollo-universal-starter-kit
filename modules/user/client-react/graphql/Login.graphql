@@ -8,9 +8,5 @@ mutation login($input: LoginUserInput!) {
     user {
       ...UserInfo
     }
-    errors {
-      field
-      message
-    }
   }
 }

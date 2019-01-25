@@ -1,5 +1,5 @@
 {
-  "name": "@module/user-client-react",
-  "version": "1.0.0",
+  "name": "@gqlapp/user-client-react",
+  "version": "0.0.1",
   "private": true
 }

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View, ScrollView, FlatList, StyleSheet, Text } from 'react-native';
-import { Pagination } from '@module/look-client-react-native';
-import { translate } from '@module/i18n-client-react';
+import { Pagination } from '@gqlapp/look-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
 
 class PaginationDemoView extends React.Component {
   render() {

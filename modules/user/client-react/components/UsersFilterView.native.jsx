@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { debounce } from 'lodash';
 import { FontAwesome } from '@expo/vector-icons';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import {
   Select,
   SearchBar,
@@ -14,8 +14,8 @@ import {
   danger,
   Modal,
   Button
-} from '@module/look-client-react-native';
-import { itemAction, itemContainer, itemTitle } from '@module/look-client-react-native/styles';
+} from '@gqlapp/look-client-react-native';
+import { itemAction, itemContainer, itemTitle } from '@gqlapp/look-client-react-native/styles';
 
 class UsersFilterView extends React.PureComponent {
   static propTypes = {

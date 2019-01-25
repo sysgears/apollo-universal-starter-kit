@@ -1,5 +1,5 @@
 import { camelizeKeys, decamelizeKeys } from 'humps';
-import { knex, returnId } from '@module/database-server-ts';
+import { knex, returnId } from '@gqlapp/database-server-ts';
 
 export interface Subscription {
   userId: number;

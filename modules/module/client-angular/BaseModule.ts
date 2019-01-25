@@ -4,7 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@module/module-common';
+import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
 export interface BaseModuleShape extends CommonModuleShape {
   createLink?: Array<(getApolloClient: () => ApolloClient<any>) => ApolloLink>;

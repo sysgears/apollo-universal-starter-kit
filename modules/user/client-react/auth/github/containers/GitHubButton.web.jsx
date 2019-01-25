@@ -1,19 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { Button } from '@module/look-client-react';
+import { Button } from '@gqlapp/look-client-react';
 
-import access from '../../../access';
 import './GitHubButton.css';
 
 const githubLogin = () => {
   window.location = '/auth/github';
 };
 
-const GitHubButton = withApollo(({ client, text }) => {
+const GitHubButton = withApollo(({ text }) => {
   return (
-    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(githubLogin)} className="githubBtn">
+    <Button type="button" size="lg" onClick={githubLogin} className="githubBtn">
       <div className="iconContainer">
         <FontAwesomeIcon icon={faGithubSquare} className="githubIcon" />
         <div className="separator" />
@@ -25,23 +25,21 @@ const GitHubButton = withApollo(({ client, text }) => {
   );
 });
 
-const GitHubLink = withApollo(({ client, text }) => {
+const GitHubLink = withApollo(({ text }) => {
   return (
-    <Button color="link" onClick={() => access.doLogin(client).then(githubLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={githubLogin} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
 });
 
-const GitHubIcon = withApollo(({ client }) => {
-  return (
-    <FontAwesomeIcon
-      icon={faGithubSquare}
-      style={{ marginTop: 10, color: '#5f5e5e', fontSize: 40 }}
-      onClick={() => access.doLogin(client).then(githubLogin)}
-    />
-  );
-});
+const GitHubIcon = () => (
+  <FontAwesomeIcon
+    icon={faGithubSquare}
+    style={{ marginTop: 10, color: '#5f5e5e', fontSize: 40 }}
+    onClick={githubLogin}
+  />
+);
 
 const GithubComponent = ({ text, type }) => {
   switch (type) {
@@ -54,6 +52,11 @@ const GithubComponent = ({ text, type }) => {
     default:
       return <GitHubButton text={text} />;
   }
+};
+
+GithubComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default GithubComponent;

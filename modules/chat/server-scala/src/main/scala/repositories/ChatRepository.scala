@@ -34,37 +34,38 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
 
   def getQuotedMessages(messageIds: Set[Int]): DBIO[List[Message]] = ???
 
-  def addMessageWithAttachment(message: AddMessageInput): DBIO[Message] = executeTransactionally {
-    for {
-      messageId <- tableQuery += DbMessage(
-        text = message.text,
-        userId = message.userId,
-        uuid = message.uuid,
-        quotedId = message.quotedId
-      )
-      _ = if (message.attachment.isDefined) DBIO.successful()
-      else DBIO.failed(NotFound(s"Message not contains attachment."))
-      attachment = message.attachment.get
-      _ <- attachmentTableQuery += MessageAttachment(
-        messageId = messageId,
-        name = attachment.name,
-        contentType = attachment.fileType,
-        size = attachment.size,
-        path = attachment.path
-      )
-      username <- userTableQuery.filter(_.id === message.userId.getOrElse(0)).result
-      dbMessage <- tableQuery.filter(_.id === messageId).result
-    } yield
-      Message(
-        Some(messageId),
-        dbMessage.head.text,
-        dbMessage.head.userId,
-        dbMessage.head.uuid,
-        Some(username.head.username),
-        Some(attachment.name),
-        Some(attachment.path),
-        dbMessage.head.createdAt,
-        dbMessage.head.quotedId
-      )
-  }
+  def addMessageWithAttachment(message: AddMessageInput): DBIO[Message] = ???
+//    executeTransactionally {
+//    for {
+//      messageId <- tableQuery += DbMessage(
+//        text = message.text,
+//        userId = message.userId,
+//        uuid = message.uuid,
+//        quotedId = message.quotedId
+//      )
+//      _ = if (message.attachmentFile.isDefined) DBIO.successful()
+//      else DBIO.failed(NotFound(s"Message not contains attachment."))
+//      attachment = message.attachmentFile.get
+//      _ <- attachmentTableQuery += MessageAttachment(
+//        messageId = messageId,
+//        name = attachment.name,
+//        contentType = attachment.fileType,
+//        size = attachment.size,
+//        path = attachment.path
+//      )
+//      username <- userTableQuery.filter(_.id === message.userId.getOrElse(0)).result
+//      dbMessage <- tableQuery.filter(_.id === messageId).result
+//    } yield
+//      Message(
+//        Some(messageId),
+//        dbMessage.head.text,
+//        dbMessage.head.userId,
+//        dbMessage.head.uuid,
+//        Some(username.head.username),
+//        Some(attachment.name),
+//        Some(attachment.path),
+//        dbMessage.head.createdAt,
+//        dbMessage.head.quotedId
+//      )
+//  }
 }

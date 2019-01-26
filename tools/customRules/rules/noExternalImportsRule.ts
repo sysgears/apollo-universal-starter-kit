@@ -7,11 +7,11 @@ import { findImports, ImportKind } from "tsutils";
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static FAILURE_STRING = `Can't find this dependency in the packages.json or in ` +
-  `related module's package.json.`;
+    `related module's package.json.`;
   public static metadata: Lint.IRuleMetadata = {
     ruleName: 'no-external-imports',
     description: `No exteral imports outside specific module.`,
-    descriptionDetails:`No external imports outside specific module. All module dependencies should be listed in module packages.json 
+    descriptionDetails: `No external imports outside specific module. All module dependencies should be listed in module packages.json 
     or it should be inside one of the used @modules.`,
     optionsDescription: 'Not configurable.',
     options: null,
@@ -63,7 +63,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (dependencies === undefined) {
           dependencies = this.getDependencies(sourceFile.fileName);
         }
-        if (dependencies.has('is_module') && !dependencies.has(name.text)){
+        if (dependencies.has('is_module') && !dependencies.has(name.text)) {
           this.addFailureAtNode(name, Rule.FAILURE_STRING);
         }
       }
@@ -88,14 +88,14 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         moduleDependencies.forEach((dependency) => {
           if (dependency.includes(MODULE_TAG)) {
             const [, moduleName] = dependency.split('/');
-            const moduleNames: Array<{[key: string]: string}> = MODULE_IMPLIMENTATION
-            .filter((moduleImplimentationName) => moduleName.includes(moduleImplimentationName))
-            .map((moduleImplimentationName) => ({
-              moduleImplimentationName,
-              moduleGroupName: moduleName.replace(`-${moduleImplimentationName}`, '')
-            }));
-            const relatedModulePath: string = moduleNames.length === 1 ? 
-            this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
+            const moduleNames: Array<{ [key: string]: string }> = MODULE_IMPLIMENTATION
+              .filter((moduleImplimentationName) => moduleName.includes(moduleImplimentationName))
+              .map((moduleImplimentationName) => ({
+                moduleImplimentationName,
+                moduleGroupName: moduleName.replace(`-${moduleImplimentationName}`, '')
+              }));
+            const relatedModulePath: string = moduleNames.length === 1 ?
+              this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
             if (relatedModulePath) {
               relatedModuleDependencies = this.getDependencies(relatedModulePath, true);
             }
@@ -114,20 +114,23 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * @param packageJsonPath 
    * @param moduleDependencies 
    */
-  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>){
-        // don't use require here to avoid caching
-        // remove BOM from file content before parsing
-        const content = JSON.parse(
-          fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""),
-        ) as PackageJson;
-        if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
-          moduleDependencies.add('is_module');
+  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>) {
+    // don't use require here to avoid caching
+    // remove BOM from file content before parsing
+    try {
+      const content = JSON.parse(
+        fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""),
+      ) as PackageJson;
+      if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
+        moduleDependencies.add('is_module');
+      }
+      DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string) => {
+        if (typeof content[dependencyVariant] !== 'undefined') {
+          this.addDependencies(moduleDependencies, content[dependencyVariant]);
         }
-        DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string)=>{
-          if (typeof content[dependencyVariant] !== 'undefined') {
-            this.addDependencies(moduleDependencies, content[dependencyVariant]);
-          }
-        });
+      });
+    } catch (e) { }
+
   }
 
   /**
@@ -146,7 +149,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * /modules/modulesGroup/moduleImplimentation/package.json -> /modules
    * @param packageJsonPath 
    */
-  private getModulesRootPath(packageJsonPath: string){
+  private getModulesRootPath(packageJsonPath: string) {
     return path.join(path.dirname(packageJsonPath), '..', '..');
   }
 

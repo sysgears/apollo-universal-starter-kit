@@ -1,5 +1,5 @@
 {
-    "name": "@module/test-module-2-client-react",
+    "name": "test-module-2-client-react",
     "version": "1.0.0",
     "private": true,
     "devDependencies": {

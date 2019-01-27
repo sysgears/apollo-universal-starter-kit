@@ -11,7 +11,9 @@ const getCurrentUser = async ({ req }) => {
   const serial = parts && parts.length === 2 && parts[1];
   if (serial) {
     const user = await User.getUserWithSerial(serial)
-    return user;
+    if (user) {
+      return user;
+    }
   }
 };
 

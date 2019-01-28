@@ -1,7 +1,7 @@
-import PDFGenerator from './PDFGenerator';
+import PDFBuilder from './PDFBuilder';
 
 function createPDF(reports: object[]) {
-  const pdf = new PDFGenerator();
+  const pdf = new PDFBuilder();
   const image = `${__dirname}/app.png`;
 
   pdf.addStyle('header', {
@@ -29,7 +29,7 @@ function createPDF(reports: object[]) {
   return pdf.getDocument();
 }
 
-export default function generatePDF(reports: object[]) {
+export default function generator(reports: object[]) {
   const doc = createPDF(reports);
   const chunks: Uint8Array[] = [];
 

@@ -1,7 +1,7 @@
 import PdfPrinter from 'pdfmake';
 import fonts from './fonts/Roboto/';
 
-class PDFGenerator {
+export default class PDFBuilder {
   private printer: any;
   private content: object[];
   private styles: object;
@@ -54,5 +54,3 @@ class PDFGenerator {
     });
   }
 }
-
-export default PDFGenerator;

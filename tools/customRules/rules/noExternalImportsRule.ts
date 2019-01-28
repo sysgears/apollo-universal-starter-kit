@@ -55,7 +55,7 @@ const DEPENDENCIES_VARIANTS = [
   'optionalDependencies'
 ]
 
-type SubModuleDependencies = { [key:string]: string };
+type SubModuleDependencies = { [key: string]: string };
 
 const MODULE_TAG = '@module';
 
@@ -95,46 +95,48 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
     return moduleDependencies;
   }
 
-  checkDependenciesInNodeModules(currentFolderPath: string, 
+  checkDependenciesInNodeModules(currentFolderPath: string,
     nodeModuleDependencies: Set<string>,
-    subModuleDependencies: SubModuleDependencies, 
-    packageJsonDependencies: Set<string>){
+    subModuleDependencies: SubModuleDependencies,
+    packageJsonDependencies: Set<string>) {
     const nodeModulesPath = this.findFilesystemEntity(currentFolderPath, 'test_node_modules');
     if (typeof nodeModulesPath !== 'undefined') {
-      const localPackageJsonDependencies = new Set<string>();
-      const localSubModuleDependencies: SubModuleDependencies = {};
 
-      const nodeModulesFolders = fs.readdirSync(nodeModulesPath)
-      for (const moduleFolder of nodeModulesFolders){
-        const stat = fs.lstatSync(path.join(nodeModulesPath, moduleFolder))
-        if (packageJsonDependencies.has(moduleFolder)){
-          if (stat.isDirectory()){
-            nodeModuleDependencies.add(moduleFolder)
-            continue;
-          }
-          if (stat.isSymbolicLink()){
-            this.getDependenciesFromPackageJson(
-              path.join(nodeModulesPath, moduleFolder, 'package.json'),
-              localPackageJsonDependencies,
-              localSubModuleDependencies)
-            continue;
-          }
-        }
-        if (subModuleDependencies[moduleFolder]){
-          if (stat.isDirectory()){
-            const stat1 = fs.readdirSync(path.join(nodeModulesPath, moduleFolder))
-          }
-          if (stat.isSymbolicLink()){
+      this.collectNodeModulesDependencies(nodeModulesPath, nodeModuleDependencies, subModuleDependencies, packageJsonDependencies);
 
-          }
+    }
+  }
+
+  private collectNodeModulesDependencies(currentPath: string, nodeModuleDependencies: Set<string>,
+    subModuleDependencies: SubModuleDependencies,
+    packageJsonDependencies: Set<string>, nested: boolean = false) {
+    const localPackageJsonDependencies = new Set<string>();
+    const localSubModuleDependencies: SubModuleDependencies = {};
+    const nodeModulesFolders = fs.readdirSync(currentPath)
+    for (const moduleFolder of nodeModulesFolders) {
+      const stat = fs.lstatSync(path.join(currentPath, moduleFolder))
+      if (packageJsonDependencies.has(moduleFolder)) {
+        if (stat.isDirectory()) {
+          nodeModuleDependencies.add(moduleFolder)
+          continue;
         }
-        console.log('Name', moduleFolder);
-        console.log('isFolder', stat.isDirectory());
-        console.log('Link', stat.isSymbolicLink());
+        if (stat.isSymbolicLink()) {
+          this.getDependenciesFromPackageJson(
+            path.join(currentPath, moduleFolder, 'package.json'),
+            nodeModuleDependencies,
+            localSubModuleDependencies)
+          continue;
+        }
       }
-
-
-      console.log('nodeModulesFolders', nodeModulesFolders);
+      if (subModuleDependencies[moduleFolder]) {
+        if (stat.isDirectory()) {
+          this.collectNodeModulesDependencies(path.join(currentPath, moduleFolder),
+            nodeModuleDependencies, subModuleDependencies, packageJsonDependencies)
+        }
+      }
+      console.log('Name', moduleFolder);
+      console.log('isFolder', stat.isDirectory());
+      console.log('Link', stat.isSymbolicLink());
     }
   }
 
@@ -162,12 +164,12 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   /**
    * Add dependency name from package.json to the set and object
    */
-  private addDependencies(moduleDependencies: Set<string>, 
-    moduleSubDependencies: SubModuleDependencies, 
+  private addDependencies(moduleDependencies: Set<string>,
+    moduleSubDependencies: SubModuleDependencies,
     dependencies: Dependencies) {
     for (const name in dependencies) {
       if (dependencies.hasOwnProperty(name)) {
-        if (name.indexOf('@') === 0){
+        if (name.indexOf('@') === 0) {
           const moduleParts = name.split('/')
           moduleSubDependencies[moduleParts[0]] = moduleParts[1];
         }
@@ -181,16 +183,16 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * @param current 
    */
   private findFilesystemEntity(current: string, name: string): string | undefined {
-      let prev: string;
-      do {
-        const fileName = path.join(current, name);
-        if (fs.existsSync(fileName)) {
-          return fileName;
-        }
-        prev = current;
-        current = path.dirname(current);
-      } while (prev !== current);
-      return undefined;
+    let prev: string;
+    do {
+      const fileName = path.join(current, name);
+      if (fs.existsSync(fileName)) {
+        return fileName;
+      }
+      prev = current;
+      current = path.dirname(current);
+    } while (prev !== current);
+    return undefined;
   }
 
 }

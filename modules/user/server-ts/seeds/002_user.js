@@ -2,7 +2,7 @@ import bcrypt from 'bcryptjs';
 import { returnId, truncateTables } from '@gqlapp/database-server-ts';
 import firebase from 'firebase-admin';
 
-import serviceAccount from '../../../../packages/server/firebase-admin-sdk-data.json';
+import { admin } from '../../../../config/firebase';
 import settings from '../../../../settings';
 
 export async function seed(knex, Promise) {
@@ -15,13 +15,20 @@ export async function seed(knex, Promise) {
     'auth_linkedin'
   ]);
 
-  await returnId(knex('user')).insert({
+  const id = await returnId(knex('user')).insert({
     username: 'admin',
     email: 'admin@example.com',
     password_hash: await bcrypt.hash('admin123', 12),
     role: 'admin',
     is_active: true
   });
+
+  await returnId(
+    knex('auth_certificate').insert({
+      serial: 'admin-123',
+      user_id: id[0]
+    })
+  );
 
   await returnId(knex('user')).insert({
     username: 'user',
@@ -33,7 +40,7 @@ export async function seed(knex, Promise) {
   if (settings.user.auth.firebase.enabled) {
     if (settings.user.auth.firebase.enabled) {
       firebase.initializeApp({
-        credential: firebase.credential.cert(serviceAccount)
+        credential: firebase.credential.cert(admin)
       });
     }
     try {

@@ -17,6 +17,7 @@ import createApolloClient from '../../../packages/common/createApolloClient';
 import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
 import log from '../../../packages/common/log';
 import settings from '../../../settings';
+import { clientData } from '../../../config/firebase';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
@@ -56,15 +57,8 @@ logPageView(window.location);
 history.listen(location => logPageView(location));
 
 // Initialize Firebase
-const {
-  user: {
-    auth: {
-      firebase: { enabled, ...config }
-    }
-  }
-} = settings;
-if (enabled) {
-  firebase.initializeApp(config);
+if (settings.user.auth.firebase.enabled) {
+  firebase.initializeApp(clientData);
 }
 
 export const onAppDispose = (_: any, data: any) => {

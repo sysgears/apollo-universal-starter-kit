@@ -3,6 +3,9 @@ export default {
   secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
   auth: {
     access: {
+      serial: {
+        enabled: false
+      },
       session: {
         enabled: true
       },
@@ -11,6 +14,11 @@ export default {
         tokenExpiresIn: '1m',
         refreshTokenExpiresIn: '7d'
       }
+    },
+    firebase: {
+      enabled: false,
+      jwt: false,
+      session: false
     },
     password: {
       confirm: true,
@@ -51,15 +59,6 @@ export default {
       clientSecret: process.env.GOOGLE_CLIENTSECRET,
       callbackURL: '/auth/google/callback',
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
-    },
-    firebase: {
-      enabled: false,
-      apiKey: '',
-      authDomain: '',
-      databaseURL: '',
-      projectId: '',
-      storageBucket: '',
-      messagingSenderId: ''
     }
   }
 };

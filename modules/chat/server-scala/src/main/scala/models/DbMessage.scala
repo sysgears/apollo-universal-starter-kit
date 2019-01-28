@@ -9,7 +9,7 @@ case class DbMessage(
     id: Option[Int] = None,
     text: String,
     userId: Option[Int] = None,
-    uuid: String,
+    uuid: Option[String],
     quotedId: Option[Int] = None,
     createdAt: Timestamp = new Timestamp(DateTime.now.clicks),
     updatedAt: Timestamp = new Timestamp(DateTime.now.clicks)

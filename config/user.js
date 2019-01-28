@@ -4,7 +4,7 @@ export default {
   auth: {
     access: {
       serial: {
-        enabled: true
+        enabled: false
       },
       session: {
         enabled: true

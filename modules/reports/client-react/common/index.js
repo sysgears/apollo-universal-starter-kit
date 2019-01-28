@@ -1,10 +1,10 @@
-export const getObjectURLFromArray = (array: number[]) => {
+export const getObjectURLFromArray = array => {
   const buffer = new window.Uint8Array(array);
   const blob = new window.Blob([buffer]);
   return window.URL.createObjectURL(blob);
 };
 
-export const downloadFile = (url: string, name: string) => {
+export const downloadFile = (url, name) => {
   const a = document.createElement('a');
 
   document.body.appendChild(a);

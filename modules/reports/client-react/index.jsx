@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
-import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 
@@ -8,7 +8,7 @@ import reports from './reports';
 import Report from './containers/Report';
 import resources from './locales';
 
-const NavLinkWithI18n = translate('report')(({ t }: { t: TranslateFunction }) => (
+const NavLinkWithI18n = translate('report')(({ t }) => (
   <NavLink to="/report" className="nav-link" activeClassName="active">
     {t('navLink')}
   </NavLink>

@@ -8,11 +8,11 @@ import validation from '@gqlapp/validation-common-react';
 import ClientModule from '@gqlapp/module-client-react';
 import defaultRouter from '@gqlapp/router-client-react';
 import payments from '@gqlapp/payments-client-react';
-import reports from '@gqlapp/reports-client-react';
 import '@gqlapp/favicon-common';
 
 const post = require('@gqlapp/post-client-react').default;
 const pageNotFound = require('@gqlapp/page-not-found-client-react').default;
+const reports = require('@gqlapp/reports-client-react').default;
 const upload = require('@gqlapp/upload-client-react').default;
 const pagination = require('@gqlapp/pagination-client-react').default;
 const user = require('@gqlapp/user-client-react').default;

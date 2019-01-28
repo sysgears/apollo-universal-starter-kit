@@ -8,8 +8,6 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 const Table = ({ ...props }) => {
-  // console.log('props --->', props);
-
   return (
     <Paper>
       <MUITable>

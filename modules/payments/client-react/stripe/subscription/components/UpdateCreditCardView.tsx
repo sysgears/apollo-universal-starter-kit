@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { LayoutCenter } from '@module/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { LayoutCenter } from '@gqlapp/look-client-react';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import settings from '../../../../../../settings';
@@ -12,7 +12,6 @@ interface UpdateCardViewProps {
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
   t: TranslateFunction;
   submitting: boolean;
-  error: string | null;
 }
 
 export default (props: UpdateCardViewProps) => {

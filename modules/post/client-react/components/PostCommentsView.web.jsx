@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { translate } from '@module/i18n-client-react';
-import { Table, Button } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Table, Button } from '@gqlapp/look-client-react';
 
 import PostCommentForm from './PostCommentForm';
 

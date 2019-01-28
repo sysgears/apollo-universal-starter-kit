@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { translate } from '@module/i18n-client-react';
-import { Table, Button } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Table, Button } from '@gqlapp/look-client-react';
 
 class UsersView extends React.PureComponent {
   static propTypes = {

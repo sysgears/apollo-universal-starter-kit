@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
-import { translate } from '@module/i18n-client-react';
-import { withUser } from '@module/user-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { withUser } from '@gqlapp/user-client-react';
 
 import chatConfig from '../../../../config/chat';
 import withUuid from './withUuid';
@@ -119,6 +119,8 @@ class ChatOperations extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     messages: PropTypes.object,
+    messagesUpdated: PropTypes.object,
+    updateQuery: PropTypes.func,
     loadData: PropTypes.func.isRequired
   };
 

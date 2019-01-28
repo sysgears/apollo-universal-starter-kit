@@ -4,14 +4,14 @@ import common.graphql.UserContext
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider
-import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import org.scalamock.scalatest.MockFactory
 import org.scalatest._
 import sangria.execution.{Executor, QueryReducer}
 import shapes.ServerModule
 
-trait TestHelper extends WordSpec
+trait TestHelper
+  extends WordSpec
   with ScalatestRouteTest
   with BeforeAndAfter
   with BeforeAndAfterEach
@@ -30,12 +30,13 @@ trait TestHelper extends WordSpec
       schema = graphQl.schema,
       queryReducers = List(
         QueryReducer.rejectMaxDepth[UserContext](graphQl.maxQueryDepth),
-        QueryReducer.rejectComplexQueries[UserContext](graphQl.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
+        QueryReducer
+          .rejectComplexQueries[UserContext](graphQl.maxQueryComplexity, (_, _) => new Exception("maxQueryComplexity"))
       )
     )
     val httpHandler = new HttpHandler(graphQl, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQl, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQl)
+    val graphQLRoute = new GraphQLRoute(httpHandler, webSocketHandler, graphQl)
     graphQLRoute.routes
   }
 }

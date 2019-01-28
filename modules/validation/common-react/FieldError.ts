@@ -1,7 +1,7 @@
-export type Errors = Array<{ field: string; message: string }> | { [key: string]: string };
+export type Errors = Array<{ field: string; message: string }> | { [key: string]: any };
 
 export class FieldError {
-  public errors: { [key: string]: string };
+  public errors: { [key: string]: any };
 
   constructor(errors?: Errors) {
     this.errors = {};

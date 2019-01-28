@@ -13,7 +13,6 @@ import common.graphql.schema.{GraphQL, GraphQLSchema}
 import common.routes.graphql.{GraphQLRoute, HttpHandler, WebSocketHandler}
 import common.slick.SchemaInitializer
 import core.guice.injection.InjectorProvider._
-import modules.session.JWTSessionImpl
 import monix.execution.Scheduler
 import sangria.execution.{Executor, QueryReducer}
 import shapes.ServerModule
@@ -36,7 +35,7 @@ trait ModuleApp extends App with AppInitialization {
     val graphQlExecutor = executor(graphQL)
     val httpHandler = new HttpHandler(graphQL, graphQlExecutor)
     val webSocketHandler = new WebSocketHandler(graphQL, graphQlExecutor)
-    val graphQLRoute = new GraphQLRoute(httpHandler, inject[JWTSessionImpl], webSocketHandler, graphQL)
+    val graphQLRoute = new GraphQLRoute(httpHandler, webSocketHandler, graphQL)
     val routes = serverModule.routes + graphQLRoute.routes
 
     val corsSettings = CorsSettings.apply(system)

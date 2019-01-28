@@ -1,6 +1,6 @@
 {
-  "name": "@module/payments-server-ts",
-  "version": "1.0.0",
+  "name": "@gqlapp/payments-server-ts",
+  "version": "0.1.0",
   "private": true
 }
 

@@ -2,11 +2,11 @@ import React from 'react';
 import { View } from 'react-native';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
-import { translate } from '@module/i18n-client-react';
-import { FieldAdapter as Field } from '@module/core-client-react';
-import { required, validate } from '@module/validation-common-react';
-import { FormView, RenderField, Button, primary } from '@module/look-client-react-native';
-import { placeholderColor, submit } from '@module/look-client-react-native/styles';
+import { translate } from '@gqlapp/i18n-client-react';
+import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { required, validate } from '@gqlapp/validation-common-react';
+import { FormView, RenderField, Button, primary } from '@gqlapp/look-client-react-native';
+import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 
 const postFormSchema = {
   title: [required],

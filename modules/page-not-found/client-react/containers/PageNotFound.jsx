@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom';
 import Helmet from 'react-helmet';
 import styled from 'styled-components';
 
-import { translate } from '@module/i18n-client-react';
-import { PageLayout, Button } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { PageLayout, Button } from '@gqlapp/look-client-react';
 import settings from '../../../../settings';
 
 const Section = styled.section`

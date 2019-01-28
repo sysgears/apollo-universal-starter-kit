@@ -62,10 +62,12 @@ class CounterSpec extends CounterSpecHelper {
 
       val batchQueries = Array(
         GraphQLMessage(
-          "mutation Increment1 { addServerCounter(amount: 1) { amount } }", Some("Increment1")
+          "mutation Increment1 { addServerCounter(amount: 1) { amount } }",
+          Some("Increment1")
         ),
         GraphQLMessage(
-          "mutation Increment2 { addServerCounter(amount: 1) { amount } }", Some("Increment2")
+          "mutation Increment2 { addServerCounter(amount: 1) { amount } }",
+          Some("Increment2")
         )
       )
       val batchEntity = HttpEntity(`application/json`, batchQueries.toJson.compactPrint)

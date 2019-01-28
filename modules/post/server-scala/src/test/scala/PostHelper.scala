@@ -36,19 +36,15 @@ trait PostHelper extends TestHelper {
   }
 
   protected def seedPostDatabase = {
-    val posts = List.range(1, 6).map(num =>
-      model.Post(id = Some(num),
-        title = s"Post title #[$num]",
-        content = s"Test post content. $num")
-    )
+    val posts = List
+      .range(1, 6)
+      .map(num => model.Post(id = Some(num), title = s"Post title #[$num]", content = s"Test post content. $num"))
     posts.map(post => await(postRepo.save(post).run))
   }
 
   protected def seedCommentDatabase = {
-    val comments = List.range(1, 11).map(num =>
-      model.Comment(id = Some(num),
-        content = s"Test comment. $num",
-        postId = 1))
+    val comments =
+      List.range(1, 11).map(num => model.Comment(id = Some(num), content = s"Test comment. $num", postId = 1))
     comments.map(comment => await(commentRepo.save(comment).run))
   }
 

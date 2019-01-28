@@ -1,3 +1,3 @@
 // Reexport for backward-compatibility purposes
-export { default } from '@module/module-server-ts';
-export * from '@module/module-server-ts';
+export { default } from '@gqlapp/module-server-ts';
+export * from '@gqlapp/module-server-ts';

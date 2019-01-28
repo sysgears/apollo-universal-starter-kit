@@ -11,8 +11,7 @@ object CounterResolver extends ActorNamed {
   final val name = "CounterResolver"
 }
 
-class CounterResolver @Inject()(@Named(CounterActor.name) counterActor: ActorRef) extends Actor
-  with ActorLogging {
+class CounterResolver @Inject()(@Named(CounterActor.name) counterActor: ActorRef) extends Actor with ActorLogging {
 
   override def receive: Receive = {
     case amount: Int => counterActor.forward(IncrementAndGet(amount))

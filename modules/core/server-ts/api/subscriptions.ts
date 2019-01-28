@@ -1,8 +1,8 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLSchema } from 'graphql';
 import { Server } from 'http';
-import ServerModule from '@module/module-server-ts';
-import { log } from '@module/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
+import { log } from '@gqlapp/core-common';
 
 let subscriptionServer: SubscriptionServer;
 
@@ -26,9 +26,14 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
   );
 };
 
-const addGraphQLSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: ServerModule) => {
-  if (module.hot && module.hot.data) {
-    const prevServer = module.hot.data.subscriptionServer;
+const addGraphQLSubscriptions = (
+  httpServer: Server,
+  schema: GraphQLSchema,
+  modules: ServerModule,
+  entryModule?: NodeModule
+) => {
+  if (entryModule && entryModule.hot && entryModule.hot.data) {
+    const prevServer = entryModule.hot.data.subscriptionServer;
     if (prevServer && prevServer.wsServer) {
       log.debug('Reloading the subscription server.');
       prevServer.wsServer.close(() => {

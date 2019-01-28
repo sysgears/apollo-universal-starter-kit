@@ -2,11 +2,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
-import { StripeSubscriptionProfile } from '@module/payments-client-react';
+import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import PropTypes from 'prop-types';
-import { translate } from '@module/i18n-client-react';
-import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '@module/look-client-react-native';
-import { linkText } from '@module/look-client-react-native/styles';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '@gqlapp/look-client-react-native';
+import { linkText } from '@gqlapp/look-client-react-native/styles';
 
 import settings from '../../../../settings';
 

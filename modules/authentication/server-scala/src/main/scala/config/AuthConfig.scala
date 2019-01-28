@@ -6,6 +6,8 @@ import com.typesafe.config.Config
 @Singleton
 class AuthConfig @Inject()(config: Config) {
   val skipConfirmation: Boolean = config.getBoolean("skipConfirmation")
+  val turnOffAdminFilter: Boolean = config.getBoolean("turnOffAdminFilter")
+  val secret: String = config.getString("secret")
   val passwordMinLength: Int = config.getInt("password.minLength")
 
   object google {

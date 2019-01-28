@@ -2,8 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import counters from './counters';
-import ClientModule from '@module/module-client-angular';
-import { LookModule } from '@module/look-client-angular';
+import ClientModule from '@gqlapp/module-client-angular';
+import { LookModule } from '@gqlapp/look-client-angular';
 import { CounterComponent } from './containers/Counter';
 
 @NgModule({

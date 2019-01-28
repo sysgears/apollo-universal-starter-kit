@@ -1,8 +1,8 @@
 import React from 'react';
 import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
 
-import ClientModule from '@module/module-client-react-native';
-import { translate } from '@module/i18n-client-react';
+import ClientModule from '@gqlapp/module-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
 import Chat from './containers/ChatOperations';
 import resources from './locales';

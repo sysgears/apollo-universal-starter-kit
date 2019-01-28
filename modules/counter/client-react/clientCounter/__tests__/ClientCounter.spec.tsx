@@ -5,7 +5,7 @@ import { step } from 'mocha-steps';
 import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
 import { click, find, wait, render } from '../../../../../packages/client/src/testHelpers/testUtils';
 import ClientCounter from '../containers/ClientCounter';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 
 chai.should();
 
@@ -62,7 +62,7 @@ describe('Client counter example UI works', () => {
     app = render(renderer.withApollo(<ApolloLinkStateCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
-    content.textContent.should.has.string(`Current apolloLinkStateCount, is ${COUNTER_APOLLO_LINK_VALUE}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_LINK_VALUE}.`);
   });
 
   step('Clicking on increase counter button increases counter', async () => {

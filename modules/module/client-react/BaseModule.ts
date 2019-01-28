@@ -5,7 +5,7 @@ import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { Reducer } from 'redux';
 import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@module/module-common';
+import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
 export interface BaseModuleShape extends CommonModuleShape {
   link?: ApolloLink[];

@@ -1,5 +1,5 @@
 {
-  "name": "@module/pagination-client-react",
-  "version": "1.0.0",
+  "name": "@gqlapp/pagination-client-react",
+  "version": "0.1.0",
   "private": true
 }

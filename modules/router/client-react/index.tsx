@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
-import ClientModule from '@module/module-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 const ref: { modules: ClientModule } = { modules: null };
 

@@ -6,7 +6,7 @@ import { render } from 'react-testing-library';
 import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
 import { click, find } from '../../../../../packages/client/src/testHelpers/testUtils';
 import ReduxCounter from '../containers/ReduxCounter';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 
 chai.should();
 
@@ -30,12 +30,12 @@ describe('Redux counter example UI works', () => {
     app = render(renderer.withApollo(<ReduxCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
-    content.textContent.should.has.string(`Current reduxCount, is ${COUNTER_REDUX_VALUE}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_REDUX_VALUE}.`);
   });
 
   step('Clicking on increase counter button shows optimistic response', () => {
     const reduxButton = find(container, '#redux-button');
     click(reduxButton);
-    content.textContent.should.has.string(`Current reduxCount, is ${COUNTER_REDUX_VALUE + 1}.`);
+    content.textContent.should.has.string(`The current counter value is ${COUNTER_REDUX_VALUE + 1}.`);
   });
 });

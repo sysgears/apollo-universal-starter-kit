@@ -1,3 +1,4 @@
+import { log } from '@gqlapp/core-common';
 import crypto from 'crypto';
 import settings from '../../../../../settings';
 
@@ -27,15 +28,19 @@ export const encryptSession = session => {
 export const decryptSession = session => {
   let result;
   if (session) {
-    const [iv64, enc64, encMac64] = session.split('.');
-    const [iv, enc, encMac] = [iv64, enc64, encMac64].map(it => it && Buffer.from(it, 'base64'));
-    const mac = hmac(enc, _macKey);
-    if (!encMac.equals(mac)) {
-      return undefined;
+    try {
+      const [iv64, enc64, encMac64] = session.split('.');
+      const [iv, enc, encMac] = [iv64, enc64, encMac64].map(it => it && Buffer.from(it, 'base64'));
+      const mac = hmac(enc, _macKey);
+      if (!encMac.equals(mac)) {
+        return undefined;
+      }
+      const cipher = crypto.createDecipheriv('aes-256-cbc', _encKey, iv);
+      const dec = Buffer.concat([cipher.update(enc), cipher.final()]).toString('utf-8');
+      return JSON.parse(dec);
+    } catch (e) {
+      log.error('Failed to read session cookie:', e);
     }
-    const cipher = crypto.createDecipheriv('aes-256-cbc', _encKey, iv);
-    const dec = Buffer.concat([cipher.update(enc), cipher.final()]).toString('utf-8');
-    return JSON.parse(dec);
   }
 
   return result;

@@ -1,29 +1,22 @@
 package guice
 
-import akka.actor.{Actor, ActorRef, ActorSystem}
 import com.github.scribejava.apis.{FacebookApi, GitHubApi, GoogleApi20, LinkedInApi20}
 import com.github.scribejava.core.builder.ServiceBuilder
 import com.github.scribejava.core.oauth.OAuth20Service
 import com.google.inject.Provides
-import com.google.inject.name.Names
 import config.AuthConfig
 import core.guice.injection.GuiceActorRefProvider
-import graphql.resolvers.{AuthenticationResolver, TokenResolver}
 import javax.inject.Named
+import jwt.guice.modules.JwtBinding
 import net.codingwell.scalaguice.ScalaModule
 import services.{ExternalApiService, ExternalApiServiceImpl}
 
 class AuthenticationBinding extends ScalaModule with GuiceActorRefProvider {
 
   override def configure() = {
+    install(new JwtBinding)
     bind[ExternalApiService].to[ExternalApiServiceImpl]
-    bind[Actor].annotatedWith(Names.named(TokenResolver.name)).to[TokenResolver]
-    bind[Actor].annotatedWith(Names.named(AuthenticationResolver.name)).to[AuthenticationResolver]
   }
-
-  @Provides
-  @Named(AuthenticationResolver.name)
-  def userResolver(implicit actorSystem: ActorSystem): ActorRef = provideActorRef(AuthenticationResolver)
 
   @Provides
   @Named("google")

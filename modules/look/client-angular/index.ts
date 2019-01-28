@@ -1,4 +1,4 @@
-import ClientModule from '@module/module-client-angular';
+import ClientModule from '@gqlapp/module-client-angular';
 import { MaterialModule, onAppCreate } from './ui-material';
 
 export { styles } from './ui-material';

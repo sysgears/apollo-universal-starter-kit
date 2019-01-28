@@ -18,8 +18,10 @@ object FileActor extends ActorNamed {
   final val name = "FileActor"
 }
 
-class FileActor @Inject()(fileMetadataRepository: Repository[FileMetadata, Int])
-                         (implicit val executionContext: ExecutionContext) extends Actor with ActorLogging {
+class FileActor @Inject()(fileMetadataRepository: Repository[FileMetadata, Int])(
+    implicit val executionContext: ExecutionContext
+) extends Actor
+  with ActorLogging {
 
   override def receive: Receive = {
     case saveFileMetadata: SaveFileMetadata =>

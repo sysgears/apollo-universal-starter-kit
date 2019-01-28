@@ -1,8 +1,8 @@
 import React from 'react';
 import { createDrawerNavigator, NavigationContainer } from 'react-navigation';
 
-import ClientModule from '@module/module-client-react-native';
-import { DrawerComponent } from '@module/look-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
+import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
 const ref: { navigator: NavigationContainer } = { navigator: null };
 

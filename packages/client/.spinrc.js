@@ -25,7 +25,7 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
-    ssr: !process.env.DISABLE_SSR,
+    ssr: true,
     webpackDll: true,
     reactHotLoader: false,
     defines: {
@@ -40,6 +40,10 @@ const config = {
     }
   }
 };
+
+if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
+  config.options.ssr = false;
+}
 
 config.options.devProxy = config.options.ssr;
 

@@ -1,0 +1,10 @@
+# Database counter
+type Counter {
+    # Current amount
+    amount: Int!
+}
+
+type Query {
+    # Counter
+    serverCounter: Counter
+}

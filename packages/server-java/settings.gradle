@@ -1,0 +1,3 @@
+include ':app', ':counter'
+
+project(':counter').projectDir = new File('../../modules/counter/server-java')

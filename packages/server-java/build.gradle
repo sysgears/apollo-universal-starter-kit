@@ -1,0 +1,41 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.2.RELEASE"
+	}
+}
+
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	
+	sourceCompatibility = JavaVersion.VERSION_11
+	
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+
+	jar {
+		enabled=true
+	}
+
+	dependencies {
+		compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.2.RELEASE'
+		compile group: 'com.graphql-java', name: 'graphql-spring-boot-starter', version: '5.0.2'
+		compile group: 'com.graphql-java', name: 'graphiql-spring-boot-starter', version: '5.0.2'
+		compile group: 'com.graphql-java', name: 'graphql-java-tools', version: '5.2.4'
+	}
+}
+
+project(':app') {
+	//REQUIRED
+	dependencies { compile project(':counter') }
+}
+

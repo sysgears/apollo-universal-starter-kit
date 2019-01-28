@@ -18,7 +18,7 @@ class ChatBinding extends ScalaModule with GuiceActorRefProvider {
   }
 
   @Provides
-  def chatRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): Repository[DbMessage, Int] =
+  def chatRepository(driver: JdbcProfile)(implicit executionContext: ExecutionContext): ChatRepository =
     new ChatRepository(driver)
 
 }

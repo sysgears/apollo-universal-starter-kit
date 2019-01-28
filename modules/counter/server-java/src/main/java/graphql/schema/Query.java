@@ -13,8 +13,6 @@ public class Query implements GraphQLQueryResolver {
     private CounterRepository counterRepository;
 
     public Counter getServerCounter() {
-        Counter counter = new Counter();
-        counter.setAmount(1); //TODO Temporary
-        return counter;
+        return counterRepository.findById(1).get(); //TODO Unsafe
     }
 }

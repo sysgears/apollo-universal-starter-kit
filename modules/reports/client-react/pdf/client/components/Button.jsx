@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Button as RSButton } from 'reactstrap';
 
-class Button extends React.Component {
+export default class Button extends React.Component {
   render() {
     const { children, ...props } = this.props;
     return <RSButton {...props}>{children}</RSButton>;
@@ -12,5 +12,3 @@ class Button extends React.Component {
 Button.propTypes = {
   children: PropTypes.node
 };
-
-export default Button;

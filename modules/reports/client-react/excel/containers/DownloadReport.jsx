@@ -7,7 +7,6 @@ import { translate } from '@gqlapp/i18n-client-react';
 import query from '../../graphql/Excel.graphql';
 import { downloadFile, getObjectURLFromArray } from '../../common';
 
-@translate('ExcelReport')
 class DownloadReport extends Component {
   static propTypes = {
     client: PropTypes.object.isRequired,
@@ -38,4 +37,4 @@ class DownloadReport extends Component {
   }
 }
 
-export default withApollo(DownloadReport);
+export default translate('ExcelReport')(withApollo(DownloadReport));

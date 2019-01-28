@@ -10,7 +10,6 @@ import ReportPreview from '../components/ReportPreview';
 import Button from '../components/Button';
 import ReportQuery from '../../../graphql/ReportQuery.graphql';
 
-@translate('PrintReport')
 class Report extends Component {
   static propTypes = {
     t: PropTypes.func
@@ -49,4 +48,4 @@ class Report extends Component {
   }
 }
 
-export default Report;
+export default translate('PrintReport')(Report);

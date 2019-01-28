@@ -50,7 +50,7 @@ ContactTable.propTypes = {
   title: PropTypes.string
 };
 
-class ReportPreview extends Component {
+export default class ReportPreview extends Component {
   static propTypes = {
     data: PropTypes.array,
     title: PropTypes.string.isRequired,
@@ -68,5 +68,3 @@ class ReportPreview extends Component {
     );
   }
 }
-
-export default ReportPreview;

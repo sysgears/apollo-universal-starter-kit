@@ -3,7 +3,7 @@ import ReactToPrint from 'react-to-print';
 
 import PropTypes from 'prop-types';
 
-class ExportPDF extends Component {
+export default class ExportPDF extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     button: PropTypes.element.isRequired
@@ -20,5 +20,3 @@ class ExportPDF extends Component {
     );
   }
 }
-
-export default ExportPDF;

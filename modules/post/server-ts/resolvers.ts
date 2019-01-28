@@ -1,5 +1,7 @@
 import { PubSub, withFilter } from 'graphql-subscriptions';
 import { createBatchResolver } from 'graphql-resolve-batch';
+import settings from '../../../settings';
+
 // interfaces
 import { Post, Comment, Identifier } from './sql';
 
@@ -36,6 +38,8 @@ const COMMENT_SUBSCRIPTION = 'comment_subscription';
 export default (pubsub: PubSub) => ({
   Query: {
     async posts(obj: any, { limit, after }: PostsParams, context: any) {
+      const { itemsNumber } = settings.pagination.web;
+      const currentPage = after / itemsNumber;
       const edgesArray: Edges[] = [];
       const posts = await context.Post.postsPagination(limit, after);
       const total = (await context.Post.getTotal()).count;
@@ -54,7 +58,8 @@ export default (pubsub: PubSub) => ({
         edges: edgesArray,
         pageInfo: {
           endCursor,
-          hasNextPage
+          hasNextPage,
+          currentPage
         }
       };
     },

@@ -23,7 +23,6 @@ class PostList extends React.PureComponent {
   };
 
   handlePageChange = (pagination, pageNumber) => {
-    console.log('11111111111111 --->', 11111111111111);
     const {
       posts: {
         pageInfo: { endCursor }
@@ -71,6 +70,7 @@ class PostList extends React.PureComponent {
           total={posts.totalCount}
           loadMoreText={t('list.btn.more')}
           defaultPageSize={itemsNumber}
+          currentPage={posts.pageInfo.currentPage}
         />
       </Fragment>
     );

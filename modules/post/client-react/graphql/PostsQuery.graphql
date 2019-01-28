@@ -12,6 +12,7 @@ query posts($limit: Int!, $after: Int) {
     pageInfo {
       endCursor
       hasNextPage
+      currentPage
     }
   }
 }

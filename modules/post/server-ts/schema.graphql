@@ -22,6 +22,7 @@ type PostEdges {
 type PostPageInfo {
   endCursor: Int
   hasNextPage: Boolean
+  currentPage: Int
 }
 
 # Posts relay-style pagination query

@@ -24,10 +24,14 @@ class TablePaginationActions extends React.Component {
   // };
 
   handleBackButtonClick = event => {
-    this.props.onChangePage(event, this.props.page - 1);
+    console.log('handleBackButtonClick page --->', this.props.page);
+
+    this.props.onChangePage(event, this.props.page + 1);
   };
 
   handleNextButtonClick = event => {
+    console.log('handleNextButtonClick page --->', this.props.page);
+
     this.props.onChangePage(event, this.props.page + 1);
   };
 
@@ -40,6 +44,9 @@ class TablePaginationActions extends React.Component {
 
   render() {
     const { classes, count, page, rowsPerPage } = this.props;
+
+    console.log('this.props.page --->', this.props.page);
+    console.log('Math.ceil(count / rowsPerPage) --->', Math.ceil(count / rowsPerPage));
 
     return (
       <div className={classes.root}>
@@ -55,7 +62,7 @@ class TablePaginationActions extends React.Component {
         </IconButton>
         <IconButton
           onClick={this.handleNextButtonClick}
-          disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+          disabled={page >= Math.ceil(count / rowsPerPage)}
           aria-label="Next Page"
         >
           <KeyboardArrowRight />
@@ -86,24 +93,25 @@ const TablePaginationActionsWrapped = withStyles(actionsStyles, {
 })(TablePaginationActions);
 
 export default class Pagination extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      page: 0
-    };
+  state = {
+    page: 0
+  };
+  componentDidMount() {
+    console.log('componentDidMount --->', 'componentDidMount');
   }
 
   handleChangePage = (event, page) => {
-    this.setState({ page });
-    this.props.handlePageChange(this.props.pagination, page);
+    console.log('Pagination page --->', page);
+    this.setState({ page }, this.props.handlePageChange(this.props.pagination, page + 1));
   };
 
-  handleChangeRowsPerPage = event => {
-    this.setState({ rowsPerPage: event.target.value });
-  };
+  // handleChangeRowsPerPage = event => {
+  //   this.setState({ rowsPerPage: event.target.value });
+  // };
 
   render() {
     const { page } = this.state;
+    console.log('STATE page --->', page);
     const {
       itemsPerPage,
       handlePageChange,
@@ -133,12 +141,14 @@ export default class Pagination extends React.Component {
           <TablePagination
             component="div"
             rowsPerPageOptions={[]}
-            // colSpan={3}
             count={total}
             rowsPerPage={defaultPageSize}
             page={page}
-            onChangePage={this.handlePageChange}
-            onChangeRowsPerPage={this.handleChangeRowsPerPage}
+            onChangePage={this.handleChangePage}
+            // SelectProps={{
+            //   native: true
+            // }}
+            // onChangeRowsPerPage={this.handleChangeRowsPerPage}
             ActionsComponent={TablePaginationActionsWrapped}
           />
         )}

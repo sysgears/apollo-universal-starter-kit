@@ -23,6 +23,7 @@ class PostList extends React.PureComponent {
   };
 
   handlePageChange = (pagination, pageNumber) => {
+    console.log('11111111111111 --->', 11111111111111);
     const {
       posts: {
         pageInfo: { endCursor }

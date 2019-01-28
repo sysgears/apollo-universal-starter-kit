@@ -29,6 +29,10 @@ export default class Pagination extends React.Component {
     this.setState({ pageNumber: pageNumber }, handlePageChange(pagination, pageNumber));
   };
 
+  componentDidMount() {
+    console.log('componentDidMount --->', 'componentDidMount');
+  }
+
   showPreviousPage = e => {
     e.preventDefault();
     const { handlePageChange, pagination } = this.props;

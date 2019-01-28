@@ -3,6 +3,9 @@ export default {
   secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
   auth: {
     access: {
+      serial: {
+        enabled: true
+      },
       session: {
         enabled: true
       },

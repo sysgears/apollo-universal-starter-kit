@@ -40,6 +40,8 @@ interface Dependencies extends Object {
   [name: string]: any;
 }
 
+type FindFilesystemEntity = (current: string) => string | undefined;
+
 const MODULE_IMPLIMENTATION = [
   'client-react',
   'client-angular',
@@ -53,6 +55,8 @@ const DEPENDENCIES_VARIANTS = [
   'optionalDependencies'
 ]
 
+type SubModuleDependencies = { [key:string]: string };
+
 const MODULE_TAG = '@module';
 
 class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
@@ -63,7 +67,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (dependencies === undefined) {
           dependencies = this.getDependencies(sourceFile.fileName);
         }
-        if (dependencies.has('is_module') && !dependencies.has(name.text)) {
+        if (!dependencies.has(name.text)) {
           this.addFailureAtNode(name, Rule.FAILURE_STRING);
         }
       }
@@ -78,35 +82,60 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    */
   private getDependencies(providedPath: string, relatedModule: boolean = false): Set<string> {
     const moduleDependencies = new Set<string>();
-    let relatedModuleDependencies = new Set<string>();
+    const nodeModuleDependencies = new Set<string>();
+    const subModuleDependencies: SubModuleDependencies = {};
     const dirPath: string = relatedModule ? providedPath : path.resolve(path.dirname(providedPath));
-    const packageJsonPath = this.findPackageJson(dirPath);
+    const packageJsonPath = this.findFilesystemEntity(dirPath, 'package.json');
     if (typeof packageJsonPath !== 'undefined') {
-      this.getDependenciesFromPackageJson(packageJsonPath, moduleDependencies)
-
-      if (!relatedModule) {
-        moduleDependencies.forEach((dependency) => {
-          if (dependency.includes(MODULE_TAG)) {
-            const [, moduleName] = dependency.split('/');
-            const moduleNames: Array<{ [key: string]: string }> = MODULE_IMPLIMENTATION
-              .filter((moduleImplimentationName) => moduleName.includes(moduleImplimentationName))
-              .map((moduleImplimentationName) => ({
-                moduleImplimentationName,
-                moduleGroupName: moduleName.replace(`-${moduleImplimentationName}`, '')
-              }));
-            const relatedModulePath: string = moduleNames.length === 1 ?
-              this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
-            if (relatedModulePath) {
-              relatedModuleDependencies = this.getDependencies(relatedModulePath, true);
-            }
-          }
-        });
-      }
+      this.getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies)
     }
+    this.checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, subModuleDependencies, moduleDependencies);
 
-    relatedModuleDependencies.forEach(moduleDependencies.add, moduleDependencies);
 
     return moduleDependencies;
+  }
+
+  checkDependenciesInNodeModules(currentFolderPath: string, 
+    nodeModuleDependencies: Set<string>,
+    subModuleDependencies: SubModuleDependencies, 
+    packageJsonDependencies: Set<string>){
+    const nodeModulesPath = this.findFilesystemEntity(currentFolderPath, 'test_node_modules');
+    if (typeof nodeModulesPath !== 'undefined') {
+      const localPackageJsonDependencies = new Set<string>();
+      const localSubModuleDependencies: SubModuleDependencies = {};
+
+      const nodeModulesFolders = fs.readdirSync(nodeModulesPath)
+      for (const moduleFolder of nodeModulesFolders){
+        const stat = fs.lstatSync(path.join(nodeModulesPath, moduleFolder))
+        if (packageJsonDependencies.has(moduleFolder)){
+          if (stat.isDirectory()){
+            nodeModuleDependencies.add(moduleFolder)
+            continue;
+          }
+          if (stat.isSymbolicLink()){
+            this.getDependenciesFromPackageJson(
+              path.join(nodeModulesPath, moduleFolder, 'package.json'),
+              localPackageJsonDependencies,
+              localSubModuleDependencies)
+            continue;
+          }
+        }
+        if (subModuleDependencies[moduleFolder]){
+          if (stat.isDirectory()){
+            const stat1 = fs.readdirSync(path.join(nodeModulesPath, moduleFolder))
+          }
+          if (stat.isSymbolicLink()){
+
+          }
+        }
+        console.log('Name', moduleFolder);
+        console.log('isFolder', stat.isDirectory());
+        console.log('Link', stat.isSymbolicLink());
+      }
+
+
+      console.log('nodeModulesFolders', nodeModulesFolders);
+    }
   }
 
   /**
@@ -114,19 +143,16 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * @param packageJsonPath 
    * @param moduleDependencies 
    */
-  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>) {
+  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>, subModuleDependencies: SubModuleDependencies) {
     // don't use require here to avoid caching
     // remove BOM from file content before parsing
     try {
       const content = JSON.parse(
         fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""),
       ) as PackageJson;
-      if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
-        moduleDependencies.add('is_module');
-      }
       DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string) => {
         if (typeof content[dependencyVariant] !== 'undefined') {
-          this.addDependencies(moduleDependencies, content[dependencyVariant]);
+          this.addDependencies(moduleDependencies, subModuleDependencies, content[dependencyVariant]);
         }
       });
     } catch (e) { }
@@ -134,53 +160,37 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   }
 
   /**
-   * Get path of the related module, which is specified in module package.json
-   * @param packageJsonPath 
-   * @param moduleGroupName 
-   * @param moduleImplimentationName 
+   * Add dependency name from package.json to the set and object
    */
-  private getRelatedModulePath(packageJsonPath: string, moduleGroupName: string, moduleImplimentationName: string): string {
-    const modulesRootPath: string = this.getModulesRootPath(packageJsonPath);
-    return fs.existsSync(modulesRootPath) ? `${modulesRootPath}/${moduleGroupName}/${moduleImplimentationName}` : '';
-  }
-
-  /**
-   * Get path of the modules folder, from path of where related module package.json situated
-   * /modules/modulesGroup/moduleImplimentation/package.json -> /modules
-   * @param packageJsonPath 
-   */
-  private getModulesRootPath(packageJsonPath: string) {
-    return path.join(path.dirname(packageJsonPath), '..', '..');
-  }
-
-  /**
-   * Add dependency name from package.json to the set
-   * @param moduleDependencies 
-   * @param dependencies 
-   */
-  private addDependencies(moduleDependencies: Set<string>, dependencies: Dependencies) {
+  private addDependencies(moduleDependencies: Set<string>, 
+    moduleSubDependencies: SubModuleDependencies, 
+    dependencies: Dependencies) {
     for (const name in dependencies) {
       if (dependencies.hasOwnProperty(name)) {
+        if (name.indexOf('@') === 0){
+          const moduleParts = name.split('/')
+          moduleSubDependencies[moduleParts[0]] = moduleParts[1];
+        }
         moduleDependencies.add(name);
       }
     }
   }
 
   /**
-   * Look for module packages.json path 
+   * Look for findFilesystemEntity
    * @param current 
    */
-  private findPackageJson(current: string): string | undefined {
-    let prev: string;
-    do {
-      const fileName = path.join(current, "package.json");
-      if (fs.existsSync(fileName)) {
-        return fileName;
-      }
-      prev = current;
-      current = path.dirname(current);
-    } while (prev !== current);
-    return undefined;
+  private findFilesystemEntity(current: string, name: string): string | undefined {
+      let prev: string;
+      do {
+        const fileName = path.join(current, name);
+        if (fs.existsSync(fileName)) {
+          return fileName;
+        }
+        prev = current;
+        current = path.dirname(current);
+      } while (prev !== current);
+      return undefined;
   }
 
 }

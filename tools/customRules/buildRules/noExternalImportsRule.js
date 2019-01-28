@@ -48,6 +48,12 @@ var MODULE_IMPLIMENTATION = [
     'server-ts',
     'common'
 ];
+var DEPENDENCIES_VARIANTS = [
+    'dependencies',
+    'devDependencies',
+    'peerDependencies',
+    'optionalDependencies'
+];
 var MODULE_TAG = '@module';
 var NoExternalImportsWalker = /** @class */ (function (_super) {
     __extends(NoExternalImportsWalker, _super);
@@ -62,7 +68,7 @@ var NoExternalImportsWalker = /** @class */ (function (_super) {
                 if (dependencies === undefined) {
                     dependencies = this.getDependencies(sourceFile.fileName);
                 }
-                if (dependencies.has('is_module') && !dependencies.has(name.text)) {
+                if (!dependencies.has(name.text)) {
                     this.addFailureAtNode(name, Rule.FAILURE_STRING);
                 }
             }
@@ -74,35 +80,29 @@ var NoExternalImportsWalker = /** @class */ (function (_super) {
      * @param relatedModule
      */
     NoExternalImportsWalker.prototype.getDependencies = function (providedPath, relatedModule) {
-        var _this = this;
         if (relatedModule === void 0) { relatedModule = false; }
         var moduleDependencies = new Set();
-        var relatedModuleDependencies = new Set();
+        var nodeModuleDependencies = new Set();
         var dirPath = relatedModule ? providedPath : path.resolve(path.dirname(providedPath));
-        var packageJsonPath = this.findPackageJson(dirPath);
+        var packageJsonPath = this.findFilesystemEntity(dirPath, 'package.json');
         if (typeof packageJsonPath !== 'undefined') {
             this.getDependenciesFromPackageJson(packageJsonPath, moduleDependencies);
-            if (!relatedModule) {
-                moduleDependencies.forEach(function (dependency) {
-                    if (dependency.includes(MODULE_TAG)) {
-                        var _a = dependency.split('/'), moduleName_1 = _a[1];
-                        var moduleNames = MODULE_IMPLIMENTATION
-                            .filter(function (moduleImplimentationName) { return moduleName_1.includes(moduleImplimentationName); })
-                            .map(function (moduleImplimentationName) { return ({
-                            moduleImplimentationName: moduleImplimentationName,
-                            moduleGroupName: moduleName_1.replace("-" + moduleImplimentationName, '')
-                        }); });
-                        var relatedModulePath = moduleNames.length === 1 ?
-                            _this.getRelatedModulePath(packageJsonPath, moduleNames[0].moduleGroupName, moduleNames[0].moduleImplimentationName) : '';
-                        if (relatedModulePath) {
-                            relatedModuleDependencies = _this.getDependencies(relatedModulePath, true);
-                        }
-                    }
-                });
-            }
         }
-        relatedModuleDependencies.forEach(moduleDependencies.add, moduleDependencies);
+        this.checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, moduleDependencies);
         return moduleDependencies;
+    };
+    NoExternalImportsWalker.prototype.checkDependenciesInNodeModules = function (currentFolderPath, nodeModuleDependencies, packageJsonDependencies) {
+        var nodeModulesPath = this.findFilesystemEntity(currentFolderPath, 'test_node_modules');
+        if (typeof nodeModulesPath !== 'undefined') {
+            var nodeModulesFolders = fs.readdirSync(nodeModulesPath);
+            nodeModulesFolders.forEach(function (element) {
+                var stat = fs.lstatSync(path.join(nodeModulesPath, element));
+                console.log('Name', element);
+                console.log('isFolder', stat.isDirectory());
+                console.log('Link', stat.isSymbolicLink());
+            });
+            console.log('nodeModulesFolders', nodeModulesFolders);
+        }
     };
     /**
      *  Parse package.json and get all needed dependencies
@@ -110,42 +110,18 @@ var NoExternalImportsWalker = /** @class */ (function (_super) {
      * @param moduleDependencies
      */
     NoExternalImportsWalker.prototype.getDependenciesFromPackageJson = function (packageJsonPath, moduleDependencies) {
+        var _this = this;
         // don't use require here to avoid caching
         // remove BOM from file content before parsing
-        var content = JSON.parse(fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""));
-        if (content.name !== undefined && content.name.includes(MODULE_TAG)) {
-            moduleDependencies.add('is_module');
+        try {
+            var content_1 = JSON.parse(fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""));
+            DEPENDENCIES_VARIANTS.forEach(function (dependencyVariant) {
+                if (typeof content_1[dependencyVariant] !== 'undefined') {
+                    _this.addDependencies(moduleDependencies, content_1[dependencyVariant]);
+                }
+            });
         }
-        if (typeof content.dependencies !== 'undefined') {
-            this.addDependencies(moduleDependencies, content.dependencies);
-        }
-        if (typeof content.peerDependencies !== 'undefined') {
-            this.addDependencies(moduleDependencies, content.peerDependencies);
-        }
-        if (content.devDependencies !== undefined) {
-            this.addDependencies(moduleDependencies, content.devDependencies);
-        }
-        if (content.optionalDependencies !== undefined) {
-            this.addDependencies(moduleDependencies, content.optionalDependencies);
-        }
-    };
-    /**
-     * Get path of the related module, which is specified in module package.json
-     * @param packageJsonPath
-     * @param moduleGroupName
-     * @param moduleImplimentationName
-     */
-    NoExternalImportsWalker.prototype.getRelatedModulePath = function (packageJsonPath, moduleGroupName, moduleImplimentationName) {
-        var modulesRootPath = this.getModulesRootPath(packageJsonPath);
-        return fs.existsSync(modulesRootPath) ? modulesRootPath + "/" + moduleGroupName + "/" + moduleImplimentationName : '';
-    };
-    /**
-     * Get path of the modules folder, from path of where related module package.json situated
-     * /modules/modulesGroup/moduleImplimentation/package.json -> /modules
-     * @param packageJsonPath
-     */
-    NoExternalImportsWalker.prototype.getModulesRootPath = function (packageJsonPath) {
-        return path.join(path.dirname(packageJsonPath), '..', '..');
+        catch (e) { }
     };
     /**
      * Add dependency name from package.json to the set
@@ -160,13 +136,13 @@ var NoExternalImportsWalker = /** @class */ (function (_super) {
         }
     };
     /**
-     * Look for module packages.json path
+     * Look for findFilesystemEntity
      * @param current
      */
-    NoExternalImportsWalker.prototype.findPackageJson = function (current) {
+    NoExternalImportsWalker.prototype.findFilesystemEntity = function (current, name) {
         var prev;
         do {
-            var fileName = path.join(current, "package.json");
+            var fileName = path.join(current, name);
             if (fs.existsSync(fileName)) {
                 return fileName;
             }

@@ -1,6 +1,7 @@
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
 import ServerModule from '@gqlapp/module-server-ts';
+import SsrModule from './SsrModule';
 import reactRenderer from './react';
 
 const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async (
@@ -8,13 +9,9 @@ const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async
   res: any,
   next: (e?: Error) => void
 ) => {
-  if (!__SSR__) {
-    next();
-  }
-
   try {
-    if (!req.path.includes('.')) {
-      return await reactRenderer(req, res, schema, modules);
+    if (!req.path.includes('.') && __SSR__) {
+      return reactRenderer(req, res, schema, modules);
     } else if (!__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {
@@ -25,4 +22,10 @@ const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async
   }
 };
 
-export default renderServerSide;
+const middleware = (app: any, { schema, modules }: any) => {
+  app.use(renderServerSide(schema, modules));
+};
+
+export default new SsrModule({
+  ssr: middleware
+});

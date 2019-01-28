@@ -10,6 +10,7 @@ import upload from '@gqlapp/upload-server-ts';
 import subscription from '@gqlapp/payments-server-ts';
 import mailer from '@gqlapp/mailer-server-ts';
 import graphqlTypes from '@gqlapp/graphql-types-server-ts';
+import ssr from '@gqlapp/ssr-server-ts';
 import '@gqlapp/debug-server-ts';
 
 import ServerModule from '@gqlapp/module-server-ts';
@@ -29,7 +30,8 @@ const modules: ServerModule = new ServerModule(
   mailer,
   chat,
   graphqlTypes,
-  core
+  core,
+  ssr
 );
 
 export default modules;

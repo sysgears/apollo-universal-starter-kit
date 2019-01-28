@@ -18,20 +18,22 @@ const actionsStyles = theme => ({
 });
 
 const TablePaginationActions = ({ classes, count, page, rowsPerPage, onChangePage }) => {
-  const handleFirstPageButtonClick = event => {
-    onChangePage(event, 0);
+  const maxPage = Math.ceil(count / rowsPerPage) - 1;
+
+  const handleFirstPageButtonClick = () => {
+    onChangePage(0);
   };
 
-  const handleBackButtonClick = event => {
-    onChangePage(event, page - 1);
+  const handleBackButtonClick = () => {
+    onChangePage(page - 1);
   };
 
-  const handleNextButtonClick = event => {
-    onChangePage(event, page + 1);
+  const handleNextButtonClick = () => {
+    onChangePage(page + 1);
   };
 
-  const handleLastPageButtonClick = event => {
-    onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  const handleLastPageButtonClick = () => {
+    onChangePage(Math.max(0, maxPage));
   };
 
   return (
@@ -42,18 +44,10 @@ const TablePaginationActions = ({ classes, count, page, rowsPerPage, onChangePag
       <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="Previous Page">
         <KeyboardArrowLeft />
       </IconButton>
-      <IconButton
-        onClick={handleNextButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="Next Page"
-      >
+      <IconButton onClick={handleNextButtonClick} disabled={page >= maxPage} aria-label="Next Page">
         <KeyboardArrowRight />
       </IconButton>
-      <IconButton
-        onClick={handleLastPageButtonClick}
-        disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-        aria-label="Last Page"
-      >
+      <IconButton onClick={handleLastPageButtonClick} disabled={page >= maxPage} aria-label="Last Page">
         <LastPageIcon />
       </IconButton>
     </div>
@@ -83,7 +77,7 @@ const Pagination = ({
   defaultPageSize,
   currentPage
 }) => {
-  const handleChangePage = (event, page) => {
+  const handleChangePage = page => {
     handlePageChange(pagination, page + 1);
   };
 

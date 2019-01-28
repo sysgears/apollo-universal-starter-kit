@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import ClientModule, { NavigationItem } from '@module/module-client-angular';
+import ClientModule, { NavigationItem } from '@gqlapp/module-client-angular';
 
 import settings from '../../../../../../settings';
 

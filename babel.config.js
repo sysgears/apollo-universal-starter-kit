@@ -1,11 +1,6 @@
 module.exports = {
   compact: false,
-  presets: [
-    '@babel/preset-typescript',
-    '@babel/preset-react',
-    'babel-preset-vue',
-    ['@babel/preset-env', { modules: 'commonjs' }]
-  ],
+  presets: ['@babel/preset-typescript', '@babel/preset-react', ['@babel/preset-env', { modules: 'commonjs' }]],
   plugins: [
     '@babel/plugin-transform-modules-commonjs',
     '@babel/plugin-transform-destructuring',

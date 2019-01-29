@@ -58,7 +58,7 @@ class PostCommentsView extends React.PureComponent {
         key: 'actions',
         width: 120,
         render: (text, record) => (
-          <div style={{ width: 120 }}>
+          <div>
             <Button
               color="primary"
               size="sm"

@@ -1,5 +1,6 @@
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
+import { Express } from 'express';
 import ServerModule from '@gqlapp/module-server-ts';
 import SsrModule from './SsrModule';
 import reactRenderer from './react';
@@ -22,7 +23,7 @@ const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async
   }
 };
 
-const middleware = (app: any, { schema, modules }: any) => {
+const middleware = (app: Express, { schema, modules }: any) => {
   app.use(renderServerSide(schema, modules));
 };
 

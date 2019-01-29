@@ -1,13 +1,14 @@
 import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
+import { Express } from 'express';
 
 interface SsrModuleShape extends ServerModuleShape {
-  ssr: () => void;
+  ssr: (app: Express, { schema, modules }: any) => void;
 }
 
 interface SsrModule extends SsrModuleShape {}
 
 class SsrModule extends ServerModule {
-  constructor(...modules: ServerModuleShape[]) {
+  constructor(...modules: SsrModuleShape[]) {
     super(...modules);
   }
 }

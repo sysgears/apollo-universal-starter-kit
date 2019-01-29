@@ -61,13 +61,15 @@ const MODULE_TAG = '@module';
 
 class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   public walk(sourceFile: ts.SourceFile) {
-    let dependencies: Set<string> | undefined;
+    const moduleDependencies = new Set<string>();
+    const nodeModuleDependencies = new Set<string>();
     for (const name of findImports(sourceFile, ImportKind.ImportDeclaration)) {
       if (!ts.isExternalModuleNameRelative(name.text)) {
-        if (dependencies === undefined) {
-          dependencies = this.getDependencies(sourceFile.fileName);
+        if (!moduleDependencies.size && !nodeModuleDependencies.size) {
+          this.getDependencies(sourceFile.fileName, moduleDependencies, nodeModuleDependencies);
         }
-        if (!dependencies.has(name.text)) {
+        console.log('des', nodeModuleDependencies)
+        if (!nodeModuleDependencies.has(name.text)) {
           this.addFailureAtNode(name, Rule.FAILURE_STRING);
         }
       }
@@ -80,19 +82,14 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * @param providedPath 
    * @param relatedModule 
    */
-  private getDependencies(providedPath: string, relatedModule: boolean = false): Set<string> {
-    const moduleDependencies = new Set<string>();
-    const nodeModuleDependencies = new Set<string>();
+  private getDependencies(providedPath: string, moduleDependencies: Set<string>, nodeModuleDependencies: Set<string>): void {
     const subModuleDependencies: SubModuleDependencies = {};
-    const dirPath: string = relatedModule ? providedPath : path.resolve(path.dirname(providedPath));
+    const dirPath: string = path.resolve(path.dirname(providedPath));
     const packageJsonPath = this.findFilesystemEntity(dirPath, 'package.json');
     if (typeof packageJsonPath !== 'undefined') {
       this.getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies)
     }
     this.checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, subModuleDependencies, moduleDependencies);
-
-
-    return moduleDependencies;
   }
 
   checkDependenciesInNodeModules(currentFolderPath: string,
@@ -110,8 +107,6 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   private collectNodeModulesDependencies(currentPath: string, nodeModuleDependencies: Set<string>,
     subModuleDependencies: SubModuleDependencies,
     packageJsonDependencies: Set<string>, nested: boolean = false) {
-    const localPackageJsonDependencies = new Set<string>();
-    const localSubModuleDependencies: SubModuleDependencies = {};
     const nodeModulesFolders = fs.readdirSync(currentPath)
     for (const moduleFolder of nodeModulesFolders) {
       const stat = fs.lstatSync(path.join(currentPath, moduleFolder))
@@ -123,8 +118,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (stat.isSymbolicLink()) {
           this.getDependenciesFromPackageJson(
             path.join(currentPath, moduleFolder, 'package.json'),
-            nodeModuleDependencies,
-            localSubModuleDependencies)
+            nodeModuleDependencies)
           continue;
         }
       }
@@ -132,6 +126,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
         if (stat.isDirectory()) {
           this.collectNodeModulesDependencies(path.join(currentPath, moduleFolder),
             nodeModuleDependencies, subModuleDependencies, packageJsonDependencies)
+            continue;
         }
       }
       console.log('Name', moduleFolder);
@@ -145,7 +140,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * @param packageJsonPath 
    * @param moduleDependencies 
    */
-  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>, subModuleDependencies: SubModuleDependencies) {
+  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>, subModuleDependencies?: SubModuleDependencies) {
     // don't use require here to avoid caching
     // remove BOM from file content before parsing
     try {
@@ -154,7 +149,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
       ) as PackageJson;
       DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string) => {
         if (typeof content[dependencyVariant] !== 'undefined') {
-          this.addDependencies(moduleDependencies, subModuleDependencies, content[dependencyVariant]);
+          this.addDependencies(moduleDependencies, content[dependencyVariant], subModuleDependencies);
         }
       });
     } catch (e) { }
@@ -165,11 +160,12 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
    * Add dependency name from package.json to the set and object
    */
   private addDependencies(moduleDependencies: Set<string>,
-    moduleSubDependencies: SubModuleDependencies,
-    dependencies: Dependencies) {
+    dependencies: Dependencies,
+    moduleSubDependencies?: SubModuleDependencies,
+) {
     for (const name in dependencies) {
       if (dependencies.hasOwnProperty(name)) {
-        if (name.indexOf('@') === 0) {
+        if (moduleSubDependencies && name.indexOf('@') === 0) {
           const moduleParts = name.split('/')
           moduleSubDependencies[moduleParts[0]] = moduleParts[1];
         }

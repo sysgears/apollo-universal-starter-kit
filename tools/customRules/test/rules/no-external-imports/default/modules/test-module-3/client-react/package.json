@@ -1,0 +1,9 @@
+{
+    "name": "@modules/test-module-3-client-react",
+    "version": "1.0.0",
+    "private": true,
+    "devDependencies": {
+      "@types/humps": "^1.1.2"
+    }
+  }
+  

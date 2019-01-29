@@ -13,9 +13,7 @@ var rule = require('../../../lib/rules/no-external-imports'),
 RuleTester.setDefaultConfig({
   parserOptions: {
     ecmaVersion: 6,
-    ecmaFeatures: {
-      jsx: true
-    }
+    sourceType: 'module'
   }
 });
 
@@ -25,18 +23,15 @@ RuleTester.setDefaultConfig({
 
 var ruleTester = new RuleTester();
 ruleTester.run('no-external-imports', rule, {
-  valid: [
-    {
-      code: '<button className="btn"></button>'
-    }
-  ],
+  valid: ["import $ from 'jquery';", "import { filter } from 'lodash/fp'"],
+
   invalid: [
     {
-      code: '<button></button>',
+      code: "import _ from 'lodash';",
       errors: [
         {
-          message: 'Buttons must be styled with a btn class at least.',
-          type: 'JSXOpeningElement'
+          message: 'Prefer importing single functions over a full FP library',
+          type: 'ImportDeclaration'
         }
       ]
     }

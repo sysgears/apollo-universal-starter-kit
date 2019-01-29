@@ -35,21 +35,16 @@ module.exports = {
     //----------------------------------------------------------------------
 
     return {
-      JSXOpeningElement: function(node) {
-        const nodeType = node.name.name;
-        if (nodeType !== 'button') {
-          return;
-        }
-        const legalClassNameAttributes = node.attributes.filter(attr => {
-          const isClassName = attr.type === 'JSXAttribute' && attr.name.name === 'className';
-          return isClassName && (attr.value.type !== 'Literal' || attr.value.value.includes('btn'));
+      ImportDeclaration: function(node) {
+        node.specifiers.forEach(function(specifier) {
+          if (
+            specifier.type === 'ImportDefaultSpecifier' &&
+            specifier.local.type === 'Identifier' &&
+            specifier.local.name === '_'
+          ) {
+            context.report(node, 'Prefer importing single functions over a full FP library');
+          }
         });
-        if (!legalClassNameAttributes.length) {
-          context.report({
-            node: node,
-            message: 'Buttons must be styled with a btn class at least.'
-          });
-        }
       }
     };
   }

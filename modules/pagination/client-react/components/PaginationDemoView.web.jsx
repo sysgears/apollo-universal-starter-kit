@@ -26,6 +26,7 @@ const PaginationDemoView = ({ items, handlePageChange, pagination, t }) => {
         total={items.totalCount}
         loadMoreText={t('list.btn.more')}
         defaultPageSize={items.limit}
+        currentPage={items.pageInfo.currentPage}
       />
     </div>
   );

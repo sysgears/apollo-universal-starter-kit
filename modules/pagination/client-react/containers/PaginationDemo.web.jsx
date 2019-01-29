@@ -54,7 +54,7 @@ class PaginationDemo extends React.Component {
     return (
       <PageLayout>
         {this.renderMetaData()}
-        <Select onChange={this.onPaginationTypeChange} className="pagination-select">
+        <Select onChange={this.onPaginationTypeChange} className="pagination-select" defaultValue="standard">
           <Option value="standard">{t('list.title.standard')}</Option>
           <Option value="relay">{t('list.title.relay')}</Option>
         </Select>

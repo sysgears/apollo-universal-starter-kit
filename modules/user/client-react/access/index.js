@@ -5,11 +5,11 @@ import 'firebase/auth';
 import { withApollo } from 'react-apollo';
 import { getItem, removeItem, setItem } from '@gqlapp/core-common/clientStorage';
 
-import jwt from './jwt';
-import session from './session';
+import { jwt, session } from './modules';
 
 import AccessModule from './AccessModule';
 import settings from '../../../../settings';
+import { clientData } from '../../../../config/firebase';
 
 const ref = React.createRef();
 
@@ -25,6 +25,11 @@ const login = async client => {
 const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
+
+// Initialize Firebase
+if (settings.user.auth.firebase.enabled) {
+  firebase.initializeApp(clientData);
+}
 
 const firebaseJwtController = client => {
   firebase.auth().onAuthStateChanged(async user => {

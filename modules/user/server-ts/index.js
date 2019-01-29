@@ -28,10 +28,9 @@ const middleware = app => {
 };
 
 if (settings.user.auth.firebase.enabled) {
-  const firebasApp = firebase.initializeApp({
+  firebase.initializeApp({
     credential: firebase.credential.cert(admin)
   });
-  firebasApp.firestore().settings({ timestampsInSnapshots: true });
 }
 
 export { User };

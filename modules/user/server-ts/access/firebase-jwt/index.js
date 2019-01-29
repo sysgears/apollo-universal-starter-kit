@@ -2,8 +2,6 @@ import firebase from 'firebase-admin';
 import 'firebase/auth';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import resolvers from './resolvers';
-import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 import User from '../../sql';
@@ -32,11 +30,11 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.access.jwt.enabled
+  settings.user.auth.firebase.jwt
     ? {
         grant: [grant],
-        schema: [schema],
-        createResolversFunc: [resolvers],
+        schema: [],
+        createResolversFunc: [],
         createContextFunc: [createContextFunc]
       }
     : {}

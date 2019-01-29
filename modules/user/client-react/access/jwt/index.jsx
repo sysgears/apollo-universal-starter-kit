@@ -186,7 +186,7 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default (settings.user.auth.access.jwt.enabled
+export default (!settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],

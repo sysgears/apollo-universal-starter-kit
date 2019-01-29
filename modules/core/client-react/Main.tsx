@@ -6,9 +6,6 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
-import * as firebase from 'firebase/app';
-import 'firebase/auth';
-import 'firebase/firestore';
 import { apiUrl } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
 
@@ -17,7 +14,6 @@ import createApolloClient from '../../../packages/common/createApolloClient';
 import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
 import log from '../../../packages/common/log';
 import settings from '../../../settings';
-import { clientData } from '../../../config/firebase';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
@@ -55,11 +51,6 @@ ReactGA.initialize(settings.analytics.ga.trackingId);
 logPageView(window.location);
 
 history.listen(location => logPageView(location));
-
-// Initialize Firebase
-if (settings.user.auth.firebase.enabled) {
-  firebase.initializeApp(clientData);
-}
 
 export const onAppDispose = (_: any, data: any) => {
   data.store = ref.store;

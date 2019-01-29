@@ -4,11 +4,10 @@ case class Message(
     id: Int,
     text: String,
     userId: Option[Int] = None,
-    createdAt: Option[String],
-    username: Option[String],
-    uuid: Option[String],
-    quotedId: Option[Int],
-    fileName: Option[String],
-    path: Option[String],
-    quotedMessage: Option[QuotedMessage]
+    createdAt: Option[String] = None,
+    username: Option[String] = None,
+    uuid: Option[String] = None,
+    quotedId: Option[Int] = None,
+    fileName: Option[String] = None,
+    path: Option[String] = None
 )

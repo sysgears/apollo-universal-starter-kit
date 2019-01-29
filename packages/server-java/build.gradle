@@ -27,23 +27,28 @@ subprojects {
 	}
 
 	dependencies {
+		//SpringBoot
 		implementation group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.2.RELEASE'
-		implementation group: 'com.h2database', name: 'h2', version: '1.4.197'
 		implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.2.RELEASE'
+
+		//GraphQL
 		implementation group: 'com.graphql-java', name: 'graphql-spring-boot-starter', version: '5.0.2'
 		implementation group: 'com.graphql-java', name: 'graphiql-spring-boot-starter', version: '5.0.2'
 		implementation group: 'com.graphql-java', name: 'graphql-java-tools', version: '5.2.4'
-
-		// https://projectlombok.org
-		compileOnly 'org.projectlombok:lombok:1.18.4'
-		annotationProcessor 'org.projectlombok:lombok:1.18.4'
-
 		testImplementation group: 'com.graphql-java', name: 'graphql-spring-boot-starter-test', version: '5.0.2'
+
+		//H2 DataBase
+		implementation group: 'com.h2database', name: 'h2', version: '1.4.197'
+		// https://projectlombok.org
+		compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+		annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
 	}
 }
 
 project(':app') {
 	//REQUIRED
-	dependencies { implementation project(':counter') }
+	dependencies {
+		implementation project(':counter')
+	}
 }
 

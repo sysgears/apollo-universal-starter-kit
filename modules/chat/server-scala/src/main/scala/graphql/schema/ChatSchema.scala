@@ -52,7 +52,16 @@ class ChatSchema @Inject()(
       )
 
     implicit val QuotedMessage: ObjectType[Unit, QuotedMessage] = deriveObjectType(ObjectTypeName("QuotedMessage"))
-    implicit val Message: ObjectType[Unit, Message] = deriveObjectType(ObjectTypeName("Message"))
+    implicit val Message: ObjectType[Unit, Message] = deriveObjectType(
+      ObjectTypeName("Message"),
+      AddFields(
+        Field(
+          name = "quotedMessage",
+          OptionType(QuotedMessage),
+          resolve = sc => chatResolver.findQuotedMessage(sc.args.arg[Int]("id"))
+        )
+      )
+    )
     implicit val MessageEdges: ObjectType[Unit, MessageEdges] = deriveObjectType(ObjectTypeName("MessageEdges"))
     implicit val MessagePageInfo: ObjectType[Unit, MessagePageInfo] = deriveObjectType(
       ObjectTypeName("MessagePageInfo")

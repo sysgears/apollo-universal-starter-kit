@@ -1,24 +1,19 @@
 import http from 'http';
 import { serverPort, log } from '@gqlapp/core-common';
-import ServerModule from '@gqlapp/module-server-ts';
+import addGraphQLSubscriptions, { onAppDispose } from './api/subscriptions';
 import { createSchema } from './api/schema';
-
-import addGraphQLSubscriptions from './api/subscriptions';
-
-import { createServerApp } from './app';
-
-import { onAppDispose } from './api/subscriptions';
+import { createServerApp, Modules } from './app';
 
 let server: http.Server;
 
-const ref: { modules: ServerModule; resolve: (server: http.Server) => void } = {
+const ref: { modules: Modules; resolve: (server: http.Server) => void } = {
   modules: null,
   resolve: null
 };
 
 export const serverPromise: Promise<http.Server> = new Promise(resolve => (ref.resolve = resolve));
 
-export const createServer = (modules: ServerModule, entryModule: NodeModule) => {
+export const createServer = (modules: Modules, entryModule: NodeModule) => {
   try {
     ref.modules = modules;
 

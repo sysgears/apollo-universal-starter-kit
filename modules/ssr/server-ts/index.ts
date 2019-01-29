@@ -27,6 +27,8 @@ const middleware = (app: Express, { schema, modules }: any) => {
   app.use(renderServerSide(schema, modules));
 };
 
+export { default as SsrModule } from './SsrModule';
+
 export default new SsrModule({
   ssr: middleware
 });

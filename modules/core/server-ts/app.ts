@@ -2,13 +2,15 @@ import express from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
 import { isApiExternal } from '@gqlapp/core-common';
-import ServerModule from '@gqlapp/module-server-ts';
+import { SsrModule } from '@gqlapp/ssr-server-ts';
 
 import graphiqlMiddleware from './middleware/graphiql';
 import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 
-export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
+export interface Modules extends SsrModule {}
+
+export const createServerApp = (schema: GraphQLSchema, modules: Modules) => {
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');

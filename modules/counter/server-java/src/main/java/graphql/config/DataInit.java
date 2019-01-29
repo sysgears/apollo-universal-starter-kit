@@ -14,6 +14,8 @@ public class DataInit implements ApplicationRunner {
 
     Logger logger = LogManager.getLogger(DataInit.class);
 
+    public static final Integer COUNTER_ID = 1;
+
     private CounterRepository counterRepository;
 
     @Autowired
@@ -27,7 +29,7 @@ public class DataInit implements ApplicationRunner {
 
         if (count == 0) {
             logger.info("Init DB. Table [COUNTER]");
-            counterRepository.save(Counter.builder().amount(1).build());
+            counterRepository.save(Counter.builder().amount(1).id(COUNTER_ID).build());
         }
     }
 }

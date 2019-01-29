@@ -8,3 +8,13 @@ type Query {
     # Counter
     serverCounter: Counter
 }
+
+type Mutation {
+    # Increase counter value, returns current counter amount
+    addServerCounter(amount: Int!): Counter
+}
+
+#type Subscription {
+#    # Subscription fired when anyone increases counter
+#    counterUpdated: Counter
+#}

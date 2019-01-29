@@ -17,7 +17,7 @@ public class Query implements GraphQLQueryResolver {
     @Autowired
     private CounterRepository counterRepository;
 
-    public Counter getServerCounter() {
+    public Counter serverCounter() {
         logger.info("Get amount");
         return counterRepository.findById(1).get(); //TODO Unsafe
     }

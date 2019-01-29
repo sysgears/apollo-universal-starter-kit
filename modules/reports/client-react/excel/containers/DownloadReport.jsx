@@ -13,24 +13,30 @@ class DownloadReport extends Component {
     t: PropTypes.func
   };
 
+  state = {
+    isLoading: false
+  };
+
   constructor(props) {
     super(props);
     this.donwload = this.donwload.bind(this);
   }
 
   async donwload() {
+    this.setState({ isLoading: true });
     const { client } = this.props;
     const { data } = await client.query({
       query
     });
     const url = getObjectURLFromArray(data.excel);
     downloadFile(url, 'Report.xlsx');
+    this.setState({ isLoading: false });
   }
 
   render() {
     const { t } = this.props;
     return (
-      <Button style={{ marginLeft: '10px' }} onClick={this.donwload}>
+      <Button disabled={this.state.isLoading} style={{ marginLeft: '10px' }} onClick={this.donwload}>
         {t('downloadExcel')}
       </Button>
     );

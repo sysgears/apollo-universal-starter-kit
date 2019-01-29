@@ -9,4 +9,7 @@ export { default as Select } from './Select';
 export { default as Option } from './Option';
 export { default as Form } from './Form';
 export { default as RenderField } from './RenderField';
+export { default as Label } from './Label';
+export { default as Row } from './Row';
+export { default as Col } from './Col';
 export { onAppCreate } from './NavBar';

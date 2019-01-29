@@ -14,6 +14,8 @@
     "clean": "lerna run clean --stream",
     "start": "lerna run --scope=server start --stream",
     "watch": "spin watch",
+    "watch:vue": "spin -d client -e vue watch",
+    "watch:angular": "spin -d client -e angular watch",
     "android": "spin -e android -d web -d ios watch",
     "ios": "spin -e ios -d web -d android watch",
     "watch-client": "cross-env DISABLE_SSR=true lerna run --scope=client watch --stream",
@@ -170,7 +172,7 @@
   },
   "dependencies": {
     "opencollective": "^1.0.3",
-    "spinjs": "^0.4.184"
+    "spinjs": "^0.4.185"
   },
   "resolutions": {
     "immutability-helper": "2.8.1",

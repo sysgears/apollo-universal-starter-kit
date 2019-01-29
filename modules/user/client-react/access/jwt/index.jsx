@@ -12,7 +12,7 @@ import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import CURRENT_USER_QUERY from '../../graphql/CurrentUserQuery.graphql';
 
 const setJWTContext = async operation => {
-  const accessToken = settings.user.auth.firebase.jwt ? await getItem('idToken') : await getItem('accessToken');
+  const accessToken = await getItem('accessToken');
   const headers =
     ['login', 'refreshTokens'].indexOf(operation.operationName) < 0 && accessToken
       ? { Authorization: `Bearer ${accessToken}` }
@@ -25,11 +25,7 @@ const setJWTContext = async operation => {
 
 let apolloClient;
 
-const saveTokens = async ({ accessToken, refreshToken, idToken }) => {
-  if (idToken) {
-    await setItem('idToken', idToken);
-    return;
-  }
+const saveTokens = async ({ accessToken, refreshToken }) => {
   await setItem('accessToken', accessToken);
   await setItem('refreshToken', refreshToken);
 };
@@ -37,7 +33,6 @@ const saveTokens = async ({ accessToken, refreshToken, idToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
-  await removeItem('idToken');
 };
 
 const JWTLink = new ApolloLink((operation, forward) => {
@@ -47,7 +42,6 @@ const JWTLink = new ApolloLink((operation, forward) => {
     (async () => {
       // Optimisation: imitate server response with empty user if no JWT token present in local storage
       if (
-        !settings.user.auth.firebase.jwt &&
         !settings.user.auth.access.session.enabled &&
         operation.operationName === 'currentUser' &&
         !(await getItem('refreshToken'))
@@ -145,7 +139,7 @@ class DataRootComponent extends React.Component {
   }
 
   async componentDidMount() {
-    if (!settings.user.auth.firebase.jwt && !this.state.ready && (await getItem('refreshToken'))) {
+    if (!this.state.ready && (await getItem('refreshToken'))) {
       const { client } = this.props;
       let result;
       try {
@@ -186,7 +180,7 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default (!settings.user.auth.access.jwt.enabled
+export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],

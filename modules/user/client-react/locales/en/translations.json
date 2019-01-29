@@ -38,6 +38,10 @@
         "usernameOrEmail": "Username or Email",
         "pass": "Password"
       },
+      "firebase": {
+        "email": "Email",
+        "pass": "Password"
+      },
       "btnSubmit": "Login"
     },
     "btn": {

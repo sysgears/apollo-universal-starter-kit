@@ -7,7 +7,7 @@ import 'firebase/firestore';
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
 
-import LoginView from '../components/LoginView';
+import LoginView from '../components/FirebaseLoginView';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
@@ -23,6 +23,7 @@ class Login extends React.Component {
 
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
+    console.log('123213213');
     try {
       await login(values);
     } catch (e) {
@@ -46,21 +47,21 @@ const LoginWithApollo = compose(
   translate('user'),
   graphql(FEREBASE_LOGIN, {
     props: ({ mutate }) => ({
-      login: async ({ usernameOrEmail, password }) => {
+      login: async ({ email, password }) => {
         // Mutate for check isActive status before firebase auth
         await mutate({
-          variables: { email: usernameOrEmail }
+          variables: { email }
         });
         let firebaseAuth = {};
         try {
-          firebaseAuth = await firebase.auth().signInWithEmailAndPassword(usernameOrEmail, password);
+          firebaseAuth = await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (e) {
           const {
             data: {
               firebaseLogin: { user }
             }
           } = await mutate({
-            variables: { email: usernameOrEmail, errorCode: e.code }
+            variables: { email, errorCode: e.code }
           });
           return user;
         }

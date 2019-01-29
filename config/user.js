@@ -7,17 +7,17 @@ export default {
         enabled: false
       },
       session: {
-        enabled: true
+        enabled: false
       },
       jwt: {
-        enabled: true,
+        enabled: false,
         tokenExpiresIn: '1m',
         refreshTokenExpiresIn: '7d'
       }
     },
     firebase: {
-      enabled: false,
-      jwt: false,
+      enabled: true,
+      jwt: true,
       session: false
     },
     password: {

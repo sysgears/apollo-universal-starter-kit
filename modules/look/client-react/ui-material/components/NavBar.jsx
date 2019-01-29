@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { NavLink } from 'react-router-dom';
+import { Route, NavLink } from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -17,6 +17,9 @@ const styles = {
   },
   appBarItemWrapper: {
     margin: 0
+  },
+  activeLinkBock: {
+    borderBottom: '2px solid #3f51b5'
   }
 };
 
@@ -24,11 +27,15 @@ const NavBar = ({ classes }) => (
   <Grid className={classes.appBar} container justify="space-between">
     <Grid item>
       <Grid className={classes.appBarItemWrapper} container spacing={24}>
-        <Grid item>
-          <NavLink to="/" activeClassName="active">
-            {settings.app.name}
-          </NavLink>
-        </Grid>
+        <Route>
+          {({ match }) => {
+            return (
+              <Grid item className={match.path === '/' ? classes.activeLinkBock : ''}>
+                <NavLink to="/">{settings.app.name}</NavLink>
+              </Grid>
+            );
+          }}
+        </Route>
         {ref.modules.navItems}
       </Grid>
     </Grid>

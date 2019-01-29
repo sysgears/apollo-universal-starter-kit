@@ -5,6 +5,7 @@ import akka.stream.OverflowStrategy
 import akka.stream.scaladsl.Source
 import common.Logger
 import common.graphql.UserContext
+import modules.socket.WebSocketMessageContext
 import monix.execution.Scheduler
 import monix.reactive.subjects.PublishSubject
 import sangria.schema.Action
@@ -25,13 +26,13 @@ abstract class BasicPubSubService[T <: Event[_]](implicit scheduler: Scheduler) 
       .actorRef[T](16, OverflowStrategy.dropHead)
       .mapMaterializedValue {
         actorRef =>
-          userContext.maybeWebSocketContext.foreach {
-            wsContext =>
-              val graphQlSubs = wsContext.graphQlSubs
-              graphQlSubs.cancel(id = wsContext.graphQlOperationId)
+          userContext.webSocketMessageContext.foreach {
+            wsc: WebSocketMessageContext =>
+              val graphQlSubs = wsc.graphQlSubs
+              graphQlSubs.cancel(id = wsc.graphQlOperationId)
 
               val cancelable = source.subscribe(new ActorRefObserver[T](actorRef))
-              graphQlSubs.add(wsContext.graphQlOperationId, cancelable)
+              graphQlSubs.add(wsc.graphQlOperationId, cancelable)
           }
           NotUsed
       }

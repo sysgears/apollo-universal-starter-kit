@@ -85,7 +85,7 @@ class WebSocketHandler(graphQL: GraphQL, graphQlExecutor: Executor[UserContext, 
                   .execute(
                     queryAst = queryAst,
                     userContext = UserContext(
-                      maybeWebSocketContext = Some(WebSocketContext(operationMessage.id.get, graphQlSubs))
+                      webSocketMessageContext = Some(WebSocketMessageContext(operationMessage.id.get, graphQlSubs))
                     ),
                     root = (),
                     operationName = graphQlMessage.operationName,

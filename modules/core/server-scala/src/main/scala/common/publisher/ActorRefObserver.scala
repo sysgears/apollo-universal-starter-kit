@@ -15,11 +15,11 @@ class ActorRefObserver[T](actorRef: ActorRef) extends Observer[T] with Logger {
     Continue
   }
 
-  override def onError(ex: Throwable): Unit = {
+  override def onError(ex: Throwable): Unit = { //todo: check functionality of this method
     log.debug(s"Error has occurred. Reason: ${ex.getCause}")
   }
 
-  override def onComplete(): Unit = {
+  override def onComplete(): Unit = { //todo: check functionality of this method
     log.debug(s"Event stream has closed.")
   }
 }

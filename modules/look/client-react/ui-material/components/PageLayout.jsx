@@ -13,7 +13,7 @@ const styles = {
     backgroundColor: 'white'
   },
   main: {
-    minHeight: 'calc(100vh - 83px)'
+    minHeight: 'calc(100vh - 103px)'
   },
   footer: {
     margin: '10px 0'
@@ -29,8 +29,12 @@ class PageLayout extends React.Component {
         <CssBaseline />
         <Grid container className={classes.root} direction="column">
           {navBar !== false && <NavBar />}
-          <Grid className={classes.main} id="content">
-            {children}
+          <Grid item className={classes.main} id="content">
+            <Grid container justify="center">
+              <Grid item md={11} lg={11} sm={11} xl={11} xs={11}>
+                {children}
+              </Grid>
+            </Grid>
           </Grid>
           <Grid container className={classes.footer} justify="center">
             {new Date().getFullYear()}. {settings.app.name}.

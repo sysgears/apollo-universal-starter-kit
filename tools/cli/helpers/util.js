@@ -3,17 +3,36 @@ const fs = require('fs');
 const DomainSchema = require('@domain-schema/core').default;
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
-const { BASE_PATH } = require('../config');
+const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config');
+
+/**
+ * Provides a package name for the particular module based on the command option --old .
+ *
+ * @param packageName - The application package ([client|server])
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
+ */
+const getModulePackageName = (packageName, old) => {
+  return `${packageName}${old ? '' : packageName === 'server' ? '-ts' : '-react'}`;
+};
+
+/**
+ * Provides a path to the module templates.
+ *
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - path to the templates
+ */
+const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
 
 /**
  * Copies the templates to the destination directory.
  *
  * @param destinationPath - The destination path for a new module.
  * @param templatesPath - The path to the templates for a new module.
- * @param location - The location for a new module [client|server|both].
+ * @param modulePackageName - The application package ([client|server])
  */
-function copyFiles(destinationPath, templatesPath, location) {
-  shell.cp('-R', `${templatesPath}/${location}/*`, destinationPath);
+function copyFiles(destinationPath, templatesPath, modulePackageName) {
+  shell.cp('-R', `${templatesPath}/${modulePackageName}/*`, destinationPath);
 }
 
 /**
@@ -49,19 +68,41 @@ function renameFiles(destinationPath, moduleName) {
 }
 
 /**
- * Gets the computed path of the module or modules dir path.
+ * Gets the computed path of the new module.
  *
- * @param location - The location for a new module [client|server|both].
- * @param moduleName - The name of a new module.
- * @returns {string} - Return the computed path
+ * @param packageName - The application package ([client|server])
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @param moduleName - The name of a new module
+ * @returns {string} - Returns the computed path
  */
-function computeModulesPath(location, options, moduleName = '') {
-  return options.old || (moduleName === '' && location.split('-')[0] === 'server')
-    ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/modules/${moduleName}`
-    : moduleName === ''
-      ? `${BASE_PATH}/packages/${location.split('-')[0]}/src/`
-      : `${BASE_PATH}/modules/${moduleName}/${location}`;
-}
+const computeModulePath = (packageName, old, moduleName) => {
+  return old
+    ? `${BASE_PATH}/packages/${packageName}/src/modules/${moduleName}`
+    : `${BASE_PATH}/modules/${moduleName}/${packageName}`;
+};
+
+/**
+ * Finds and returns a file found in a specific path by regexp.
+ *
+ * @param path - The path where the file is supposed to be located in
+ * @param matcher - The regexp for finding the file
+ * @returns {string} - Returns the found file name, otherwise `undefined`
+ */
+const findFileInPath = (path, matcher) => fs.readdirSync(path).find(_ => _.match(matcher));
+
+/**
+ * Gets the path of the modules entry point.
+ *
+ * @param packageName - The application package ([client|server])
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - Returns the computed path
+ */
+const getModulesEntryPoint = (packageName, old) => {
+  const src = `${BASE_PATH}/packages/${packageName}/src`;
+  const oldSrc = `${src}/modules`;
+
+  return old ? `${oldSrc}/${findFileInPath(oldSrc, /index\..+/)}` : `${src}/${findFileInPath(src, /modules\..+/)}`;
+};
 
 /**
  * Gets the computed path of the root module path.
@@ -76,57 +117,46 @@ function computeRootModulesPath(moduleName) {
 /**
  * Gets the computed package path for the module.
  *
- * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server|both].
+ * @param moduleName - The name of a new module
+ * @param packageName - The application package ([client|server])
+ * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Return the computed path
  */
-function computeModulePackageName(location, options, moduleName) {
-  return options.old
-    ? `./${moduleName}`
-    : `@module/${decamelize(moduleName, {
-        separator: '-'
-      })}-${location}`;
+function computeModulePackageName(moduleName, packageName, old) {
+  return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName)}-${packageName}`;
 }
 
 /**
  * Gets the computed package path for the module.
  *
- * @param moduleName - The name of a new module.
+ * @param packageName - The application package ([client|server])
  * @returns {string} - Return the computed path
  */
-function computePackagePath(location) {
-  return `${BASE_PATH}/packages/${location.split('-')[0]}/package.json`;
+function computePackagePath(packageName) {
+  return `${BASE_PATH}/packages/${packageName}/package.json`;
 }
 
 /**
- * Add symlink
+ * Adds a symlink.
  *
- * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server].
+ * @param packageName - The application package ([client|server])
+ * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
-function addSymlink(location, moduleName) {
-  shell.ln(
-    '-s',
-    `${BASE_PATH}/modules/${moduleName}/${location}`,
-    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
-      separator: '-'
-    })}-${location}`
+function addSymlink(packageName, modulePackageName) {
+  fs.symlinkSync(
+    `${BASE_PATH}/modules/${packageName}/${modulePackageName}`,
+    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`
   );
 }
 
 /**
  * Remove symlink
  *
- * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server].
+ * @param packageName - The application package ([client|server])
+ * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
-function removeSymlink(location, moduleName) {
-  shell.rm(
-    `${BASE_PATH}/modules/${moduleName}/${location}`,
-    `${BASE_PATH}/node_modules/@module/${decamelize(moduleName, {
-      separator: '-'
-    })}-${location}`
-  );
+function removeSymlink(packageName, modulePackageName) {
+  fs.unlinkSync(`${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`);
 }
 
 /**
@@ -219,9 +249,13 @@ function deleteFromFileWithExports(pathToFileWithExports, exportName) {
 }
 
 module.exports = {
+  getModulePackageName,
+  getTemplatesPath,
   renameFiles,
   copyFiles,
-  computeModulesPath,
+  computeModulePath,
+  findFileInPath,
+  getModulesEntryPoint,
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,

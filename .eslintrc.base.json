@@ -25,7 +25,7 @@
       {
         "printWidth": 120,
         "singleQuote": true,
-        "parser": "babylon"
+        "parser": "babel"
       }
     ]
   },

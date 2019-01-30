@@ -4,8 +4,8 @@ import akka.http.scaladsl.model.StatusCodes.OK
 import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.Counter
 import spray.json._
 
@@ -62,10 +62,12 @@ class CounterSpec extends CounterSpecHelper {
 
       val batchQueries = Array(
         GraphQLMessage(
-          "mutation Increment1 { addServerCounter(amount: 1) { amount } }", Some("Increment1")
+          "mutation Increment1 { addServerCounter(amount: 1) { amount } }",
+          Some("Increment1")
         ),
         GraphQLMessage(
-          "mutation Increment2 { addServerCounter(amount: 1) { amount } }", Some("Increment2")
+          "mutation Increment2 { addServerCounter(amount: 1) { amount } }",
+          Some("Increment2")
         )
       )
       val batchEntity = HttpEntity(`application/json`, batchQueries.toJson.compactPrint)

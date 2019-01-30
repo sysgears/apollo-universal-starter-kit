@@ -4,8 +4,8 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
 import common.implicits.RichDBIO._
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import model.Item
 import repositories.ItemRepository
 import spray.json._
@@ -17,7 +17,8 @@ class PaginationSpec extends PaginationHelper {
   lazy val itemRepo: ItemRepository = inject[ItemRepository]
   val offset = 0
   val limit = 3
-  val query = s"query { getPaginatedList(input: { offset: $offset, limit:$limit } ) { totalCount, entities { description }, hasNextPage } }"
+  val query =
+    s"query { getPaginatedList(input: { offset: $offset, limit:$limit } ) { totalCount, entities { description }, hasNextPage } }"
   val graphQLMessage = ByteString(GraphQLMessage(query).toJson.compactPrint)
 
   implicit val timeout: RouteTestTimeout = RouteTestTimeout(10.seconds.dilated)

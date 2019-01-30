@@ -3,9 +3,8 @@ package actor
 import actor.MailActor.SendMail
 import akka.actor.{Actor, ActorLogging}
 import com.github.jurajburian.mailer.{Mailer, Message}
-import common.ActorNamed
+import common.{ActorNamed, FieldError}
 import models.MailPayload
-import modules.common.FieldError
 
 import scala.util.{Failure, Success, Try}
 

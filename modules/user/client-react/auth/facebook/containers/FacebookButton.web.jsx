@@ -1,19 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 import faFacebookSquare from '@fortawesome/fontawesome-free-brands/faFacebookSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import { Button } from '@module/look-client-react';
+import { Button } from '@gqlapp/look-client-react';
 
-import access from '../../../access';
 import './FacebookButton.css';
 
 const facebookLogin = () => {
   window.location = '/auth/facebook';
 };
 
-const FacebookButton = withApollo(({ client, text }) => {
+const FacebookButton = withApollo(({ text }) => {
   return (
-    <Button type="button" size="lg" onClick={() => access.doLogin(client).then(facebookLogin)} className="facebookBtn">
+    <Button type="button" size="lg" onClick={facebookLogin} className="facebookBtn">
       <div className="iconContainer">
         <FontAwesomeIcon icon={faFacebookSquare} className="facebookIcon" />
         <div className="separator" />
@@ -25,23 +25,21 @@ const FacebookButton = withApollo(({ client, text }) => {
   );
 });
 
-const FacebookLink = withApollo(({ client, text }) => {
+const FacebookLink = withApollo(({ text }) => {
   return (
-    <Button color="link" onClick={() => access.doLogin(client).then(facebookLogin)} style={{ marginTop: 10 }}>
+    <Button color="link" onClick={facebookLogin} style={{ marginTop: 10 }}>
       {text}
     </Button>
   );
 });
 
-const FacebookIcon = withApollo(({ client }) => {
-  return (
-    <FontAwesomeIcon
-      icon={faFacebookSquare}
-      style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
-      onClick={() => access.doLogin(client).then(facebookLogin)}
-    />
-  );
-});
+const FacebookIcon = () => (
+  <FontAwesomeIcon
+    icon={faFacebookSquare}
+    style={{ marginTop: 10, color: '#17427e', fontSize: 40 }}
+    onClick={facebookLogin}
+  />
+);
 
 const FacebookComponent = ({ text, type }) => {
   switch (type) {
@@ -54,6 +52,11 @@ const FacebookComponent = ({ text, type }) => {
     default:
       return <FacebookButton text={text} />;
   }
+};
+
+FacebookComponent.propTypes = {
+  text: PropTypes.string,
+  type: PropTypes.string.isRequired
 };
 
 export default FacebookComponent;

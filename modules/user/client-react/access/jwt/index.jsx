@@ -3,7 +3,7 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
+import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
 import Loading from './components/Loading';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
@@ -57,7 +57,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
           next: result => {
             const promise = (async () => {
               if (operation.operationName === 'login') {
-                if (result.data.login.tokens && !result.data.login.errors) {
+                if (!!result.data && result.data.login.tokens) {
                   const {
                     data: {
                       login: {
@@ -81,17 +81,22 @@ const JWTLink = new ApolloLink((operation, forward) => {
           },
           error: networkError => {
             (async () => {
-              if (networkError.response && networkError.response.status === 401) {
+              if (networkError.response && networkError.response.status >= 400 && networkError.response.status < 500) {
                 try {
-                  const {
-                    data: {
-                      refreshTokens: { accessToken, refreshToken }
+                  if (operation.operationName !== 'refreshTokens') {
+                    try {
+                      const data = await apolloClient.mutate({
+                        mutation: REFRESH_TOKENS_MUTATION,
+                        variables: { refreshToken: await getItem('refreshToken') }
+                      });
+                      const { accessToken, refreshToken } = data.refreshTokens;
+                      await saveTokens({ accessToken, refreshToken });
+                    } catch (e) {
+                      await removeTokens();
                     }
-                  } = await apolloClient.mutate({
-                    mutation: REFRESH_TOKENS_MUTATION,
-                    variables: { refreshToken: await getItem('refreshToken') }
-                  });
-                  await saveTokens({ accessToken, refreshToken });
+                  } else {
+                    await removeTokens();
+                  }
                   // Retry current operation
                   await setJWTContext(operation);
                   retrySub = forward(operation).subscribe(observer);

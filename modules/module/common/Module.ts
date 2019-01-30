@@ -1,7 +1,7 @@
 import { foldTo } from 'fractal-objects';
 
 export interface ModuleShape {
-  onAppCreate?: Array<(modules: Module) => void>;
+  onAppCreate?: Array<(modules: Module, entryModule: NodeModule) => void>;
 }
 interface Module extends ModuleShape {}
 class Module {
@@ -9,9 +9,9 @@ class Module {
     foldTo(this, modules);
   }
 
-  public triggerOnAppCreate() {
+  public createApp(entryModule: NodeModule) {
     if (this.onAppCreate) {
-      this.onAppCreate.forEach(callback => callback(this));
+      this.onAppCreate.forEach(callback => callback(this, entryModule));
     }
   }
 }

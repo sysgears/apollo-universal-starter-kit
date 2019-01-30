@@ -1,5 +1,5 @@
 {
-  "name": "@module/module-client-angular",
-  "version": "1.0.0",
+  "name": "@gqlapp/module-client-angular",
+  "version": "0.1.0",
   "private": true
 }

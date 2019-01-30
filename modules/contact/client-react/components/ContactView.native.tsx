@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { TranslateFunction } from '@module/i18n-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';
 

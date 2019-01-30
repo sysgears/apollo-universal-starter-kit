@@ -3,7 +3,7 @@ const url = require('url');
 const config = {
   builders: {
     android: {
-      entry: './src/entry.ts',
+      entry: './src/index.ts',
       buildDir: 'build/android',
       dllBuildDir: 'build/android/dll',
       stack: ['react-native', 'android'],
@@ -13,7 +13,7 @@ const config = {
       enabled: false
     },
     ios: {
-      entry: './src/entry.ts',
+      entry: './src/index.ts',
       buildDir: 'build/ios',
       dllBuildDir: 'build/ios/dll',
       stack: ['react-native', 'ios'],
@@ -40,7 +40,9 @@ const config = {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',
       __WEBSITE_URL__: '"http://localhost:8080"',
-      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
+      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY
+        ? `"${process.env.STRIPE_PUBLIC_KEY}"`
+        : undefined
     }
   }
 };

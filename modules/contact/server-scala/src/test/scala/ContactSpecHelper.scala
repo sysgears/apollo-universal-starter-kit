@@ -1,21 +1,19 @@
 import akka.http.scaladsl.server.Route
-import akka.http.scaladsl.testkit.ScalatestRouteTest
-import core.controllers.graphql.GraphQLController
-import core.guice.injection.Injecting
-import org.scalatest.{BeforeAndAfter, BeforeAndAfterAll, Matchers, WordSpec}
+import app.ContactModule
+import com.google.inject.Guice
+import core.guice.bindings.CoreBinding
+import guice.{ContactBinding, MailBinding}
+import net.codingwell.scalaguice.ScalaModule
+import scala.collection.JavaConverters._
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, Future}
 
-trait ContactSpecHelper extends WordSpec
-  with ScalatestRouteTest
-  with BeforeAndAfter
-  with BeforeAndAfterAll
-  with Injecting
-  with Matchers {
+trait ContactSpecHelper extends TestHelper {
 
-  val endpoint: String = "/graphql"
-  val routes: Route = inject[GraphQLController].routes
+  val bindings: Seq[ScalaModule] = Seq(new ContactBinding, new CoreBinding, new MailBinding)
+  Guice.createInjector(bindings.asJava)
+  val routes: Route = routesWithGraphQLSchema(new ContactModule())
 
   before {
     clean()

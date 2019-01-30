@@ -1,5 +1,5 @@
 package models
 
-import modules.common.FieldError
+import common.FieldError
 
 case class ContactPayload(errors: Option[List[FieldError]] = None)

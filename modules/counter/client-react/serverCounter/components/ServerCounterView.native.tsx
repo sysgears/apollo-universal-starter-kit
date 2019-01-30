@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TextStyle } from 'react-native';
 
 import { Button, Loading, primary } from '../../../../../packages/client/src/modules/common/components/native';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface ViewProps {
   t: TranslateFunction;

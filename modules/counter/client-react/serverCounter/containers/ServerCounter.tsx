@@ -2,9 +2,9 @@ import React from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { translate, TranslateFunction } from '@module/i18n-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
-import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 interface ButtonProps {
   counterAmount: number;
@@ -18,24 +18,25 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
       const addServerCounter = (amount: number) => () =>
         mutate({
           variables: { amount },
-          updateQueries: {
-            serverCounterQuery: (prev: any, { mutationResult }: any) => {
-              const newAmount = mutationResult.data.addServerCounter.amount;
-              return update(prev, {
-                serverCounter: {
-                  amount: {
-                    $set: newAmount
-                  }
-                }
-              });
-            }
-          },
           optimisticResponse: {
             __typename: 'Mutation',
             addServerCounter: {
               __typename: 'Counter',
               amount: counter.amount + 1
             }
+          },
+          update: (cache: any, { data }: any) => {
+            const newAmount = data.addServerCounter.amount;
+
+            cache.writeQuery({
+              query: COUNTER_QUERY,
+              data: {
+                serverCounter: {
+                  amount: newAmount,
+                  __typename: 'Counter'
+                }
+              }
+            });
           }
         });
 

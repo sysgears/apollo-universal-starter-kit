@@ -7,8 +7,8 @@ import akka.http.scaladsl.testkit.RouteTestTimeout
 import akka.testkit.TestDuration
 import akka.util.ByteString
 import common.implicits.RichDBIO._
-import core.controllers.graphql.jsonProtocols.GraphQLMessage
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLMessage
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
 import models.FileMetadata
 import org.apache.commons.io.FileUtils
 import repositories.FileMetadataRepository
@@ -18,8 +18,11 @@ import scala.concurrent.duration._
 
 class UploadSpec extends UploadHelper {
   lazy val fileMetadataRepo: FileMetadataRepository = inject[FileMetadataRepository]
-  val uploadFileMutation = "mutation { uploadFiles(files: [\"null\",\"null\"])}"
-  val uploadFileGraphQLMessage = ByteString(GraphQLMessage(uploadFileMutation).toJson.compactPrint)
+  val uploadFileMutation = "mutation uploadFiles($files: [FileUpload]!) {uploadFiles(files: $files)}"
+  val uploadFileVariables = "{\"files\":[null,null]}".asJson.asJsObject
+  val uploadFileGraphQLMessage = ByteString(
+    GraphQLMessage(uploadFileMutation, Some("uploadFiles"), Some(uploadFileVariables)).toJson.compactPrint
+  )
   val addFilesEntity = Multipart.FormData(
     Multipart.FormData.BodyPart.Strict(
       "operations",
@@ -41,7 +44,7 @@ class UploadSpec extends UploadHelper {
     )
   )
 
-  val filesQuery = "query { files { id, name, contentType, size, path } }"
+  val filesQuery = "query { files { id, name, type, size, path } }"
   val filesQueryGraphQLMessage = ByteString(GraphQLMessage(filesQuery).toJson.compactPrint)
   val filesQueryEntity = HttpEntity(`application/json`, filesQueryGraphQLMessage)
 
@@ -60,10 +63,8 @@ class UploadSpec extends UploadHelper {
     "upload files" in {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
 
-        val uploadFilesResult = responseAs[String].parseJson
-          .asJsObject.fields("data")
-          .asJsObject.fields("uploadFiles")
-          .convertTo[Boolean]
+        val uploadFilesResult =
+          responseAs[String].parseJson.asJsObject.fields("data").asJsObject.fields("uploadFiles").convertTo[Boolean]
 
         status shouldBe OK
         contentType.mediaType shouldBe `application/json`
@@ -75,9 +76,10 @@ class UploadSpec extends UploadHelper {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
         Post(endpoint, filesQueryEntity) ~> routes ~> check {
 
-          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
-            .asJsObject.fields("data")
-            .asJsObject.fields("files")
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson.asJsObject
+            .fields("data")
+            .asJsObject
+            .fields("files")
             .convertTo[List[FileMetadata]]
 
           status shouldBe OK
@@ -91,9 +93,10 @@ class UploadSpec extends UploadHelper {
       Post(endpoint, addFilesEntity) ~> routes ~> check {
         Post(endpoint, filesQueryEntity) ~> routes ~> check {
 
-          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson
-            .asJsObject.fields("data")
-            .asJsObject.fields("files")
+          val filesMetadata: List[FileMetadata] = responseAs[String].parseJson.asJsObject
+            .fields("data")
+            .asJsObject
+            .fields("files")
             .convertTo[List[FileMetadata]]
 
           status shouldBe OK
@@ -103,10 +106,8 @@ class UploadSpec extends UploadHelper {
 
           Post(endpoint, removeFileEntity(fileMetadata.id.get)) ~> routes ~> check {
 
-            val removeFileResult = responseAs[String].parseJson
-              .asJsObject.fields("data")
-              .asJsObject.fields("removeFile")
-              .convertTo[Boolean]
+            val removeFileResult =
+              responseAs[String].parseJson.asJsObject.fields("data").asJsObject.fields("removeFile").convertTo[Boolean]
 
             removeFileResult shouldBe true
             await(fileMetadataRepo.findOne(fileMetadata.id.get).run) shouldNot be(defined)

@@ -1,19 +1,18 @@
 package graphql.schema
 
 import com.google.inject.Inject
+import common.graphql.UserContext
 import common.{InputUnmarshallerGenerator, Logger}
-import core.graphql.{GraphQLSchema, UserContext}
 import graphql.resolvers.ContactResolver
 import models.{Contact, ContactPayload}
 import sangria.macros.derive.{InputObjectTypeName, ObjectTypeName, deriveInputObjectType, deriveObjectType}
 import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, ObjectType}
 
-class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLSchema
-  with InputUnmarshallerGenerator
-  with Logger {
+class ContactSchema @Inject()(contactResolver: ContactResolver) extends InputUnmarshallerGenerator with Logger {
 
-  implicit val contactInput: InputObjectType[Contact] = deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
+  implicit val contactInput: InputObjectType[Contact] =
+    deriveInputObjectType[Contact](InputObjectTypeName("ContactInput"))
   implicit val contactInputUnmarshaller: FromInput[Contact] = inputUnmarshaller {
     input =>
       Contact(
@@ -23,9 +22,11 @@ class ContactSchema @Inject()(contactResolver: ContactResolver) extends GraphQLS
       )
   }
 
-  implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(ObjectTypeName("ContactPayload"))
+  implicit val contactPayload: ObjectType[UserContext, ContactPayload] = deriveObjectType(
+    ObjectTypeName("ContactPayload")
+  )
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
       name = "contact",
       fieldType = contactPayload,

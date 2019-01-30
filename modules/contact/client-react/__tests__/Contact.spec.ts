@@ -2,7 +2,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import { Renderer, click, blur, find, change, updateContent, wait } from '@module/testing-client-react';
+import { Renderer, click, blur, find, change, updateContent, wait } from '@gqlapp/testing-client-react';
 
 /**
  * *NOTICE*
@@ -32,11 +32,11 @@ describe('Contact UI works', () => {
 
     change(nameInput, { target: { name: 'name', value: 'na' } });
     blur(nameInput);
-    await wait(() => expect(content.textContent).to.include('Must be 3 characters or more'));
+    await wait(() => expect(content.textContent).to.include('Must be 3 or more characters'));
 
     change(nameInput, { target: { name: 'name', value: 'name' } });
     await wait(() => {
-      expect(content.textContent).to.not.include('Must be 3 characters or more');
+      expect(content.textContent).to.not.include('Must be 3 or more characters');
       expect(content.textContent).to.not.include('Required');
     });
   });
@@ -62,11 +62,11 @@ describe('Contact UI works', () => {
 
     change(contentInput, { target: { name: 'content', value: 'Text' } });
     blur(contentInput);
-    await wait(() => expect(content.textContent).to.include('Must be 10 characters or more'));
+    await wait(() => expect(content.textContent).to.include('Must be 10 or more characters'));
 
     change(contentInput, { target: { name: 'content', value: 'Some text for test' } });
     await wait(() => {
-      expect(content.textContent).to.not.include('Must be 10 characters or more');
+      expect(content.textContent).to.not.include('Must be 10 or more characters');
       expect(content.textContent).to.not.include('Required');
     });
   });
@@ -83,15 +83,15 @@ describe('Contact UI works', () => {
     await wait(() => expect(content.textContent).to.not.include('Thank you for contacting us!'));
   });
 
-  step('Form is submited with valid data', async () => {
+  step('Form is submitted with valid data', async () => {
     change(nameInput, { target: { name: 'name', value: 'admin' } });
     change(emailInput, { target: { name: 'email', value: 'admin@example.com' } });
     change(contentInput, { target: { name: 'content', value: 'Some text for test' } });
     click(submitButton);
     await wait(() => {
-      expect(content.textContent).to.not.include('Must be 3 characters or more');
+      expect(content.textContent).to.not.include('Must be 3 or more characters');
       expect(content.textContent).to.not.include('Invalid email address');
-      expect(content.textContent).to.not.include('Must be 10 characters or more');
+      expect(content.textContent).to.not.include('Must be 10 or more characters');
       expect(content.textContent).to.not.include('Required');
     });
   });

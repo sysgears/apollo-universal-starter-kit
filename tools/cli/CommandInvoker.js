@@ -1,5 +1,3 @@
-const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, CRUD_TEMPLATES } = require('./config');
-
 /**
  * Class CommandInvoker. Takes all CLI operations and calls certain CLI operation depends of variables.
  */
@@ -25,14 +23,14 @@ class CommandInvoker {
    * @param location - The location for a new module [client|server|both].
    * @param args - The function for deleting existing module.
    */
-  static runCommand(func, options, location, ...args) {
-    // client
-    if (location === 'client' || location === 'both') {
-      func(...args, options, options.old ? 'client' : 'client-react');
-    }
-    // server
-    if (location === 'server' || location === 'both') {
-      func(...args, options, options.old ? 'server' : 'server-ts');
+  static runCommand(func, { location, ...args }) {
+    const runFunc = packageName => func({ ...args, packageName });
+
+    if (location === 'both') {
+      runFunc('client');
+      runFunc('server');
+    } else {
+      runFunc(location);
     }
   }
 
@@ -40,41 +38,34 @@ class CommandInvoker {
    * Runs operation (function) for creating a new module.
    */
   runAddModule(args, options, logger) {
-    const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(
-      this.addModule,
-      options,
-      location,
-      logger,
-      options.old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES,
-      moduleName
-    );
+    runOperation(this.addModule, args, options, logger);
   }
 
   /**
    * Runs operation (function) for creating a new CRUD module.
    */
   runAddCrud(args, options, logger) {
-    const { moduleName, tablePrefix = '' } = args;
-    // server - is only available location for addCrud, client in development
-    CommandInvoker.runCommand(this.addCrud, options, 'server', logger, CRUD_TEMPLATES, moduleName, tablePrefix);
+    runOperation(this.addCrud, args, options, logger);
   }
 
   /**
    * Runs operation (function) for deleting existing module.
    */
   runDeleteModule(args, options, logger) {
-    const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(this.deleteModule, options, location, logger, moduleName);
+    runOperation(this.deleteModule, args, options, logger);
   }
 
   /**
    * Runs operation (function) for updating existing module schema.
    */
   runUpdateSchema(args, options, logger) {
-    const { moduleName, location = 'both' } = args;
-    CommandInvoker.runCommand(this.updateSchema, location, logger, moduleName);
+    runOperation(this.updateSchema, args, logger);
   }
+}
+
+function runOperation(operation, args, options, logger) {
+  const { moduleName, location = 'both' } = args;
+  CommandInvoker.runCommand(operation, { location, logger, moduleName, old: !!options.old });
 }
 
 module.exports = CommandInvoker;

@@ -3,12 +3,12 @@ import { Apollo, Query, QueryRef } from 'apollo-angular';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 @Component({
   selector: 'server-counter-button',
   template: `
-    <button id="graphql-button" color="primary" (click)="increaseCounter()">Click to increase counter</button>
+    <btn id="graphql-button" color="primary" (click)="increaseCounter()">Click to increase counter</btn>
   `,
   styles: []
 })

@@ -1,4 +1,4 @@
-import knex from '../../../packages/server/src/sql/connector';
+import { knex } from '@gqlapp/database-server-ts';
 
 export default class $Module$ {
   public $module$s() {

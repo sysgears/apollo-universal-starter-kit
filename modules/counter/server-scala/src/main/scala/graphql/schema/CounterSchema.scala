@@ -4,9 +4,9 @@ import akka.actor.ActorSystem
 import akka.stream.ActorMaterializer
 import common.Logger
 import common.graphql.DispatcherResolver._
-import core.graphql.{GraphQLSchema, UserContext}
-import core.services.publisher.PubSubService
-import core.services.publisher.RichPubSubService._
+import common.graphql.UserContext
+import common.publisher.{Event, PubSubService}
+import common.publisher.RichPubSubService._
 import graphql.resolvers.CounterResolver
 import javax.inject.Inject
 import models.Counter
@@ -17,32 +17,44 @@ import services.count.CounterActor.GetAmount
 
 import scala.concurrent.ExecutionContext
 
-class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter],
-                              materializer: ActorMaterializer,
-                              actorSystem: ActorSystem,
-                              executionContext: ExecutionContext) extends GraphQLSchema
-  with Logger {
+class CounterSchema @Inject()(
+    implicit val counterPubSubService: PubSubService[Event[Counter]],
+    materializer: ActorMaterializer,
+    actorSystem: ActorSystem,
+    executionContext: ExecutionContext
+) extends Logger {
 
   object Types {
     implicit val counter: ObjectType[Unit, Counter] = deriveObjectType(ObjectTypeName("Counter"), ExcludeFields("id"))
   }
 
-  override def queries: List[Field[UserContext, Unit]] = List(
+  object Names {
+
+    final val SERVER_COUNTER = "serverCounter"
+
+    final val ADD_SERVER_COUNTER = "addServerCounter"
+
+    final val COUNTER_UPDATED = "counterUpdated"
+  }
+
+  import Names._
+
+  def queries: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "serverCounter",
+      name = SERVER_COUNTER,
       fieldType = Types.counter,
-      resolve = sc => resolveWithDispatcher[Counter](
-        input = GetAmount,
-        userContext = sc.ctx,
-        onException = _ => Counter(amount = 0),
-        namedResolverActor = CounterResolver
+      resolve = sc =>
+        resolveWithDispatcher[Counter](
+          input = GetAmount,
+          userContext = sc.ctx,
+          namedResolverActor = CounterResolver
       )
     )
   )
 
-  override def mutations: List[Field[UserContext, Unit]] = List(
+  def mutations: List[Field[UserContext, Unit]] = List(
     Field(
-      name = "addServerCounter",
+      name = ADD_SERVER_COUNTER,
       fieldType = Types.counter,
       arguments = Argument(name = "amount", argumentType = IntType) :: Nil,
       resolve = sc => {
@@ -50,18 +62,19 @@ class CounterSchema @Inject()(implicit val pubsubService: PubSubService[Counter]
         resolveWithDispatcher[Counter](
           input = amount,
           userContext = sc.ctx,
-          onException = _ => Counter(amount = 0),
           namedResolverActor = CounterResolver
-        ).pub
+        ).pub(ADD_SERVER_COUNTER)
       }
     )
   )
 
-  override def subscriptions: List[Field[UserContext, Unit]] = List(
+  def subscriptions: List[Field[UserContext, Unit]] = List(
     Field.subs(
-      name = "counterUpdated",
+      name = COUNTER_UPDATED,
       fieldType = Types.counter,
-      resolve = _ => pubsubService.subscribe
+      resolve = _ => {
+        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty).map(action => action.map(_.element))
+      }
     )
   )
 }

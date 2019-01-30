@@ -1,12 +1,12 @@
 import akka.http.scaladsl.model.HttpEntity
 import akka.http.scaladsl.model.MediaTypes.`application/json`
 import akka.http.scaladsl.testkit.WSProbe
-import core.controllers.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
-import core.controllers.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.GraphQLResponseJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageJsonProtocol._
-import core.controllers.graphql.jsonProtocols.OperationMessageType._
-import core.controllers.graphql.jsonProtocols.{GraphQLMessage, GraphQLResponse, OperationMessage}
+import common.routes.graphql.jsonProtocols.GraphQLMessage.graphQlWebsocketProtocol
+import common.routes.graphql.jsonProtocols.GraphQLMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.GraphQLResponseJsonProtocol._
+import common.routes.graphql.jsonProtocols.OperationMessageJsonProtocol._
+import common.routes.graphql.jsonProtocols.OperationMessageType._
+import common.routes.graphql.jsonProtocols.{GraphQLMessage, GraphQLResponse, OperationMessage}
 import spray.json._
 
 class WebSocketSpec extends CounterSpecHelper {
@@ -24,17 +24,24 @@ class WebSocketSpec extends CounterSpecHelper {
           wsClient.sendMessage(init)
           wsClient.expectMessage(ack)
 
-          wsClient.sendMessage(start(Some(GraphQLMessage("subscription counterUpdated { counterUpdated { amount } }").toJson)))
+          wsClient.sendMessage(
+            start(Some(GraphQLMessage("subscription counterUpdated { counterUpdated { amount } }").toJson))
+          )
           wsClient.expectNoMessage()
 
-          val addServerCounterMutation = GraphQLMessage("mutation addServerCounter { addServerCounter(amount: 1) { amount } }").toJson
+          val addServerCounterMutation =
+            GraphQLMessage("mutation addServerCounter { addServerCounter(amount: 1) { amount } }").toJson
           val addServerCounterMutationEntity = HttpEntity(`application/json`, addServerCounterMutation.compactPrint)
 
           Post(endpoint, addServerCounterMutationEntity) ~> routes
-          wsClient.expectMessage(data(Some(GraphQLResponse("{ \"counterUpdated\": { \"amount\": 1 } }".parseJson).toJson)))
+          wsClient.expectMessage(
+            data(Some(GraphQLResponse("{ \"counterUpdated\": { \"amount\": 1 } }".parseJson).toJson))
+          )
 
           Post(endpoint, addServerCounterMutationEntity) ~> routes
-          wsClient.expectMessage(data(Some(GraphQLResponse("{ \"counterUpdated\": { \"amount\": 2 } }".parseJson).toJson)))
+          wsClient.expectMessage(
+            data(Some(GraphQLResponse("{ \"counterUpdated\": { \"amount\": 2 } }".parseJson).toJson))
+          )
 
           wsClient.sendCompletion()
           wsClient.expectCompletion()
@@ -49,8 +56,16 @@ class WebSocketSpec extends CounterSpecHelper {
           wsClient.sendMessage(init)
           wsClient.expectMessage(ack)
 
-          wsClient.sendMessage(start(Some(GraphQLMessage("subscriptionS counterUpdated { counterUpdated { amount } }").toJson)))
-          wsClient.expectMessage(error(Some("{ \"syntaxError\":\"Syntax error while parsing GraphQL query. Invalid input \\\"subscriptionS\\\", expected ExecutableDefinition or TypeSystemDefinition (line 1, column 1):\\nsubscriptionS counterUpdated { counterUpdated { amount } }\\n^\", \"locations\":[ { \"line\":1, \"column\":1 } ] }".parseJson)))
+          wsClient.sendMessage(
+            start(Some(GraphQLMessage("subscriptionS counterUpdated { counterUpdated { amount } }").toJson))
+          )
+          wsClient.expectMessage(
+            error(
+              Some(
+                "{ \"syntaxError\":\"Syntax error while parsing GraphQL query. Invalid input \\\"subscriptionS\\\", expected ExecutableDefinition or TypeSystemDefinition (line 1, column 1):\\nsubscriptionS counterUpdated { counterUpdated { amount } }\\n^\", \"locations\":[ { \"line\":1, \"column\":1 } ] }".parseJson
+              )
+            )
+          )
 
           wsClient.sendCompletion()
           wsClient.expectCompletion()
@@ -65,7 +80,9 @@ class WebSocketSpec extends CounterSpecHelper {
           wsClient.sendMessage(init)
           wsClient.expectMessage(ack)
 
-          wsClient.sendMessage(start(Some(GraphQLMessage("mutation addServerCounter { addServerCounter(amount: 1) { amount } }").toJson)))
+          wsClient.sendMessage(
+            start(Some(GraphQLMessage("mutation addServerCounter { addServerCounter(amount: 1) { amount } }").toJson))
+          )
           wsClient.expectMessage(error(Some("\"Unsupported type: Some(Mutation)\"".parseJson)))
 
           wsClient.sendCompletion()
@@ -80,9 +97,9 @@ class WebSocketSpec extends CounterSpecHelper {
   private val data = createOperationMessage(GQL_DATA)(websocketMessageId)(_)
   private val error = createOperationMessage(GQL_ERROR)(websocketMessageId)(_)
 
-  private def createOperationMessage(operationType: OperationMessageType)
-                                    (id: Option[String] = None)
-                                    (payload: Option[JsValue] = None) = {
+  private def createOperationMessage(
+      operationType: OperationMessageType
+  )(id: Option[String] = None)(payload: Option[JsValue] = None) = {
     OperationMessage(operationType, id, payload).toJson.compactPrint
   }
 

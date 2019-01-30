@@ -181,6 +181,7 @@ class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   private findFilesystemEntity(current: string, name: string): string | undefined {
     let prev: string;
     do {
+      // ddddd/package.json
       const fileName = path.join(current, name);
       if (fs.existsSync(fileName)) {
         return fileName;

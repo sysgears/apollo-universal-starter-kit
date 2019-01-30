@@ -1,36 +1,21 @@
 import { merge } from 'lodash';
-import { ApolloLink } from 'apollo-link';
-import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
-import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import { GraphQLModule, GraphQLModuleShape } from '@gqlapp/module-common';
 
-export interface BaseModuleShape extends CommonModuleShape {
-  link?: ApolloLink[];
-  createNetLink?: () => ApolloLink;
-  connectionParam?: ConnectionParamsOptions[];
+export interface BaseModuleShape extends GraphQLModuleShape {
+  // TODO: Add proper type
   reducer?: Array<{ [key: string]: any }>;
-  resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
-  data?: { [key: string]: any };
 }
 
 interface BaseModule extends BaseModuleShape {}
 
-class BaseModule extends CommonModule {
+class BaseModule extends GraphQLModule {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
   }
 
   get reducers() {
     return merge({}, ...this.reducer);
-  }
-
-  get resolvers() {
-    return merge({}, ...this.resolver);
-  }
-
-  get connectionParams() {
-    return this.connectionParam;
   }
 }
 

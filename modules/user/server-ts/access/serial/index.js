@@ -10,7 +10,7 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const serial = parts && parts.length === 2 && parts[1];
   if (serial) {
-    const user = await User.getUserWithSerial(serial)
+    const user = await User.getUserWithSerial(serial);
     if (user) {
       return user;
     }
@@ -32,4 +32,3 @@ export default new AccessModule(
       }
     : {}
 );
-

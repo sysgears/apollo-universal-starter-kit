@@ -9,14 +9,11 @@ import Menu from '@material-ui/core/Menu';
 
 const styles = theme => ({
   root: {
-    width: '100%',
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper
   },
   paddingNone: {
     padding: '0'
-  },
-  text: {}
+  }
 });
 
 class LanguagePicker extends React.Component {

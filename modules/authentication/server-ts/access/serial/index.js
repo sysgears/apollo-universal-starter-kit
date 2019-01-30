@@ -4,8 +4,7 @@ import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
 const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.headers['authorization']) {
-    // eslint-disable-next-line
-    const [, serial, ...rest] = req.headers['authorization'].split(' ');
+    const [, serial] = req.headers['authorization'].split(' ');
 
     if (serial) {
       return getIdentity(null, serial);

@@ -2,7 +2,6 @@ import express, { Express } from 'express';
 import path from 'path';
 import { SharedOptions } from '@gqlapp/module-server-ts';
 
-import graphiqlMiddleware from './middleware/graphiql';
 import errorMiddleware from './middleware/error';
 
 export const createServerApp = (sharedOptions: SharedOptions) => {
@@ -13,8 +12,6 @@ export const createServerApp = (sharedOptions: SharedOptions) => {
   app.enable('trust proxy');
   modules.beforeware.forEach(applyBeforeware => applyBeforeware(app, sharedOptions));
   modules.middleware.forEach(applyMiddleware => applyMiddleware(app, sharedOptions));
-
-  app.get('/graphiql', graphiqlMiddleware);
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {

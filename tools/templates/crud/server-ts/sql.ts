@@ -1,5 +1,5 @@
 import { $Module$Schema } from './schema';
-import Crud from '../../../packages/server/src/sql/crud';
+import { Crud } from '@gqlapp/database-server-ts';
 
 export default class $Module$ extends Crud {
   public schema: any;

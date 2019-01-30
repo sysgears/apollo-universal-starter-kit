@@ -407,7 +407,7 @@ export function deleteRelationAdapter(options) {
   };
 }
 
-export default class Crud {
+export class Crud {
   getTableName() {
     return decamelize(this.schema.__.tableName ? this.schema.__.tableName : this.schema.name);
   }

@@ -1,10 +1,10 @@
-const shell = require('shelljs');
+//const shell = require('shelljs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
 const addModule = require('./addModule');
-const addMigration = require('./subCommands/addMigration');
-const { computeModulesPath, updateFileWithExports, runPrettier } = require('../helpers/util');
-const { BASE_PATH } = require('../config');
+//const addMigration = require('./subCommands/addMigration');
+//const { computeModulesPath, updateFileWithExports, runPrettier } = require('../helpers/util');
+//const { BASE_PATH } = require('../config');
 
 /**
  * Adds CRUD module in server and adds a new module to the Feature connector.
@@ -15,17 +15,23 @@ const { BASE_PATH } = require('../config');
  * @param tablePrefix
  * @param location - The location for a new module [client|server|both].
  */
-function addCrud(logger, templatesPath, moduleName, tablePrefix, options, location) {
+function addCrud({ logger, packageName, moduleName, old }) {
+  //function addCrud(logger, templatesPath, moduleName, tablePrefix, options, location) {
+  console.log('packageName:', packageName);
+  console.log('moduleName:', moduleName);
+  console.log('old:', old);
+
   // add module in server, client
-  addModule(logger, templatesPath, moduleName, options, location, false);
+  addModule({ logger, packageName, moduleName, old, crud: true });
 
   // pascalize
   const Module = pascalize(moduleName);
 
-  if (location === 'server-ts') {
+  if (packageName === 'server') {
+    console.log('Module:', Module);
     // add migration and seed for new module
-    addMigration(logger, templatesPath, moduleName);
-
+    //addMigration(logger, templatesPath, moduleName);
+    /*
     if (tablePrefix) {
       shell.cd(computeModulesPath(location, moduleName));
       shell.sed('-i', /tablePrefix: ''/g, `tablePrefix: '${tablePrefix}'`, 'schema.js');
@@ -41,10 +47,10 @@ function addCrud(logger, templatesPath, moduleName, tablePrefix, options, locati
       importString: `import { ${schema} } from '../${moduleName}/schema';\n`
     };
     updateFileWithExports(options);
-    runPrettier(options.pathToFileWithExports);
+    runPrettier(options.pathToFileWithExports);*/
   }
 
-  logger.info(chalk.green(`✔ Module for ${location} successfully created!`));
+  logger.info(chalk.green(`✔ Module for ${packageName} successfully created!`));
 }
 
 module.exports = addCrud;

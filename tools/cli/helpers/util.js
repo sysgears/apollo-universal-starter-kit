@@ -3,7 +3,7 @@ const fs = require('fs');
 const DomainSchema = require('@domain-schema/core').default;
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
-const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config');
+const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, CRUD_TEMPLATES, BASE_PATH } = require('../config');
 
 /**
  * Provides a package name for the particular module based on the command option --old .
@@ -19,10 +19,11 @@ const getModulePackageName = (packageName, old) => {
 /**
  * Provides a path to the module templates.
  *
+ * @param crud - The flag that describes if the command invoked for crud template structure or not
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - path to the templates
  */
-const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
+const getTemplatesPath = (crud, old) => (crud ? CRUD_TEMPLATES : old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
 
 /**
  * Copies the templates to the destination directory.

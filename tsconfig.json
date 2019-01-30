@@ -21,7 +21,8 @@
   "include": [
     "**/typings.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.vue"
   ],
   "exclude": [
     "node_modules"

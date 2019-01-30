@@ -16,7 +16,7 @@ const langPicker =
     ? new ClientModule({
         navItemRight: [
           <MenuItem key="languagePicker" className="menu-center">
-            {/* <LanguagePicker i18n={i18next} /> */}
+            <LanguagePicker i18n={i18next} />
           </MenuItem>
         ]
       })

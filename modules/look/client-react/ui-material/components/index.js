@@ -18,4 +18,5 @@ export { default as CardTitle } from './CardTitle';
 export { default as CardText } from './CardText';
 export { default as FormItem } from './FormItem';
 export { default as Input } from './Input';
+export { default as LanguagePicker } from './LanguagePicker';
 export { onAppCreate } from './NavBar';

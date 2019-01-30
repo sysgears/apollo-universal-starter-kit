@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { FormControl, Select as MUISelect } from '@material-ui/core';
+import { Select as MUISelect } from '@material-ui/core';
 
 import { withStyles } from '@material-ui/core/styles';
 
-const styles = theme => ({
-  formControl: {
-    margin: theme.spacing.unit
+const styles = {
+  select: {
+    minWidth: '120px'
   }
-});
+};
 
 class Select extends React.Component {
   state = {
@@ -23,11 +23,9 @@ class Select extends React.Component {
   render() {
     const { classes, children } = this.props;
     return (
-      <FormControl className={classes.formControl}>
-        <MUISelect value={this.state.value} onChange={this.handleChange}>
-          {children}
-        </MUISelect>
-      </FormControl>
+      <MUISelect className={classes.select} value={this.state.value} onChange={this.handleChange}>
+        {children}
+      </MUISelect>
     );
   }
 }

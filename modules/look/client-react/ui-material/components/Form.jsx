@@ -1,13 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
-const Form = ({ children, ...props }) => {
-  return <form {...props}>{children}</form>;
+const styles = {
+  form: {
+    display: 'flex',
+    alignItems: 'center'
+  }
+};
+
+const Form = ({ children, classes, ...props }) => {
+  return (
+    <form className={props.layout === 'inline' ? classes.form : ''} {...props}>
+      {children}
+    </form>
+  );
 };
 
 Form.propTypes = {
   children: PropTypes.node,
-  type: PropTypes.string
+  type: PropTypes.string,
+  classes: PropTypes.object.isRequired,
+  layout: PropTypes.string
 };
 
-export default Form;
+export default withStyles(styles)(Form);

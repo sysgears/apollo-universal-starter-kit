@@ -16,4 +16,6 @@ export { default as Card } from './Card';
 export { default as CardGroup } from './CardGroup';
 export { default as CardTitle } from './CardTitle';
 export { default as CardText } from './CardText';
+export { default as FormItem } from './FormItem';
+export { default as Input } from './Input';
 export { onAppCreate } from './NavBar';

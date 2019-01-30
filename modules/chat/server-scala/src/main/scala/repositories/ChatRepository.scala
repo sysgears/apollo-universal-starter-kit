@@ -2,11 +2,11 @@ package repositories
 
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
-import common.errors.NotFound
+import common.errors.{AmbigousResult, NotFound}
 import model.UserTable.UserTable
 import models.DbMessageTable.DbMessageTable
 import models.MessageAttachmentTable.MessageAttachmentTable
-import models.{DbMessage, Message, MessageAttachment, QuotedMessage}
+import models._
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 
@@ -88,7 +88,30 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       )
   }
 
-  def messagesPaginated(limit: Int, after: Int): DBIO[List[Message]] = ???
+  def messagesPaginated(limit: Int, after: Int): DBIO[Messages] =
+    for {
+      totalCount <- tableQuery.size.result
+      _ <- if (after > totalCount)
+        DBIO.failed(AmbigousResult(s"Wrong pagination parameter [after=$after], because [totalCount=$totalCount]"))
+      else DBIO.successful()
+      dbMessageSeq <- tableQuery.drop(after).take(limit).result
+      maybeMessagesList <- DBIO.sequence(dbMessageSeq.map(dbMessage => findMessage(dbMessage.id.get)))
+      messages = maybeMessagesList.flatten.toList
+      messageEdges = messages.map(message => {
+        val cursor = messages.indexOf(message) + after + 1
+        MessageEdges(message, cursor)
+      })
+      endCursor = after + messages.size
+      hasNextPage = (totalCount - (after + limit)) > 0
+    } yield
+      Messages(
+        totalCount,
+        messageEdges,
+        MessagePageInfo(
+          endCursor,
+          hasNextPage
+        )
+      )
 
   def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = ???
 

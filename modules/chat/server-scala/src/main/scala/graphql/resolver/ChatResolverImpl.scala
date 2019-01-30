@@ -25,7 +25,10 @@ class ChatResolverImpl @Inject()(chatRepository: ChatRepository)
 
   override def deleteMessage(id: Int): Future[Option[Message]] = ???
 
-  override def messages(limit: Int, after: Int): Future[Option[Messages]] = ???
+  override def messages(limit: Int, after: Int): Future[Messages] =
+    for {
+      paginatedResult <- chatRepository.messagesPaginated(limit, after).run
+    } yield paginatedResult
 
   override def message(id: Int): Future[Option[Message]] =
     for {

@@ -112,10 +112,10 @@ class ChatSchema @Inject()(
   def queries: List[Field[UserContext, Unit]] = List(
     Field(
       name = "messages",
-      fieldType = OptionType(Types.Messages),
+      fieldType = Types.Messages,
       arguments = List(
         Argument(name = "limit", argumentType = IntType),
-        Argument(name = "after", argumentType = IntType),
+        Argument(name = "after", argumentType = IntType)
       ),
       resolve = sc =>
         chatResolver.messages(

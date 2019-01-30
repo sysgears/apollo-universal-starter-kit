@@ -23,7 +23,6 @@ class Login extends React.Component {
 
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
-    console.log('123213213');
     try {
       await login(values);
     } catch (e) {
@@ -50,22 +49,29 @@ const LoginWithApollo = compose(
       login: async ({ email, password }) => {
         // Mutate for check isActive status before firebase auth
         await mutate({
-          variables: { email }
+          variables: { input: { email } }
         });
         let firebaseAuth = {};
+        let result;
         try {
           firebaseAuth = await firebase.auth().signInWithEmailAndPassword(email, password);
         } catch (e) {
+          firebaseAuth.code = e.code;
+        } finally {
+          let token = '';
+          if (firebaseAuth.user) {
+            token = await firebase.auth().currentUser.getIdToken(true);
+          }
           const {
             data: {
               firebaseLogin: { user }
             }
           } = await mutate({
-            variables: { email, errorCode: e.code }
+            variables: { input: { email, errorCode: firebaseAuth.code, token } }
           });
-          return user;
+          result = user;
         }
-        return firebaseAuth.user;
+        return result;
       }
     })
   })

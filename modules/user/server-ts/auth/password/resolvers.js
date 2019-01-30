@@ -44,24 +44,32 @@ export default () => ({
 
       return { user, tokens };
     },
-    async firebaseLogin(obj, { email, errorCode }, { req, User }) {
+    async firebaseLogin(
+      obj,
+      {
+        input: { email, errorCode, token }
+      },
+      { req, User }
+    ) {
       let errors = {};
       if (errorCode) {
         if (errorCode === 'auth/wrong-password') {
           errors = { password: req.t('user:auth.password.validPassword') };
         }
         if (errorCode === 'auth/user-not-found') {
-          errors = { usernameOrEmail: req.t('user:auth.password.validPasswordEmail') };
+          errors = { email: req.t('user:auth.password.validPasswordEmail') };
         }
         if (errorCode === 'auth/too-many-requests') {
-          errors = { usernameOrEmail: req.t('user:auth.tooManyRequests') };
+          errors = { email: req.t('user:auth.tooManyRequests') };
         }
       }
       const user = await User.getUserByEmail(email);
       if (user && settings.user.auth.password.confirm && !user.isActive) {
-        errors = { usernameOrEmail: req.t('user:auth.password.emailConfirmation') };
+        errors = { email: req.t('user:auth.password.emailConfirmation') };
       }
       if (!isEmpty(errors)) throw new UserInputError(errorCode, { errors });
+
+      await access.grantAccess(token, req);
 
       return { user };
     },

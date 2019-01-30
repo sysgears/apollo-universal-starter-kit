@@ -1,5 +1,3 @@
-import { isApiExternal } from '@gqlapp/core-common';
-
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
@@ -8,39 +6,27 @@ import scopes from '../../scopes';
 import User from '../../sql';
 import settings from '../../../../../settings';
 
-const grant = async (user, req) => {
-  const session = {
-    ...req.session,
-    userId: user.id
-  };
-
-  req.session = writeSession(req, session);
+const grant = async (token, req) => {
+  req.session = await writeSession(req, token);
 };
 
 const getCurrentUser = async ({ req }) => {
-  if (req && req.session.userId) {
-    return await User.getUser(req.session.userId);
+  if (req && req.session) {
+    return await User.getUserByEmail(req.session);
   }
 };
 
-const attachSession = req => {
+const attachSession = async req => {
   if (req) {
-    req.session = readSession(req);
+    req.session = await readSession(req);
     if (!req.session) {
-      req.session = createSession(req);
-    } else {
-      if (!isApiExternal && req.path === __API_URL__) {
-        if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
-          req.session = createSession(req);
-          throw new Error('CSRF token validation failed');
-        }
-      }
+      req.session = await createSession(req);
     }
   }
 };
 
 const createContextFunc = async ({ req, connectionParams, webSocket, context }) => {
-  attachSession(req);
+  await attachSession(req);
   const user = context.user || (await getCurrentUser({ req, connectionParams, webSocket }));
   const auth = {
     isAuthenticated: !!user,
@@ -55,7 +41,7 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.access.session.enabled
+  settings.user.auth.firebase.session
     ? {
         grant: [grant],
         schema: [schema],

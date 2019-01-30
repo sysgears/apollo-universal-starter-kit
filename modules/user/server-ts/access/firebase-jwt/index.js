@@ -6,7 +6,7 @@ import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
 import User from '../../sql';
 
-const grant = async ({ token }) => {
+const grant = async token => {
   return token;
 };
 

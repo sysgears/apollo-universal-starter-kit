@@ -103,7 +103,7 @@ export default pubsub => ({
                 email: input.email
               });
             } catch (e) {
-              console.log(e);
+              throw e;
             }
           }
           [createdUserId] = await User.register(input, passwordHash).transacting(trx);
@@ -182,7 +182,9 @@ export default pubsub => ({
           try {
             const { email } = await User.getUser(input.id);
             const { uid } = await firebase.auth().getUserByEmail(email);
-            await firebase.auth().updateUser(uid, { email: input.email, password: input.password });
+            input.password
+              ? await firebase.auth().updateUser(uid, { email: input.email, password: input.password })
+              : await firebase.auth().updateUser(uid, { email: input.email });
           } catch (e) {
             throw e;
           }

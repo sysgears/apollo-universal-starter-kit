@@ -1,17 +1,16 @@
 export const INCREMENT = 'INCREMENT';
 
-export const state = {
+export const defaultState = {
   count: 1
 };
 
-/* eslint no-param-reassign: ['error', { 'props': false }] */
 export const mutations = {
-  [INCREMENT](state) {
+  [INCREMENT](state: any) {
     state.count++;
   }
 };
 
 export default {
-  state,
+  state: defaultState,
   mutations
 };

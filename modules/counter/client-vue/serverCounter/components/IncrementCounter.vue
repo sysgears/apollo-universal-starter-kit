@@ -1,25 +1,32 @@
 <template>
-  <LookButton variant='primary' size='md' v-on:click='increment()'>
-    Increase Apollo Link State counter
-  </LookButton>
+  <Button variant='primary' size='md' v-on:click='increment()'>
+    Increase server counter
+  </Button>
 </template>
 
-<script>
+<script lang='ts'>
 import { ADD_COUNTER, COUNTER_QUERY } from '@gqlapp/counter-common';
-import { Button as LookButton } from '@gqlapp/look-client-vue';
+import { Button } from '@gqlapp/look-client-vue';
 
 export default {
   props: { counter: Object },
   components: {
-    LookButton,
+    Button
   },
   methods: {
-    increment: function() {
+    increment() {
       this.$apollo.mutate({
         mutation: ADD_COUNTER,
         variables: { amount: 1 },
-        update(RoutingCache, { data : { addServerCounter : { amount }}}) {
-          RoutingCache.writeQuery({
+        update(
+          cache,
+          {
+            data: {
+              addServerCounter: { amount }
+            }
+          }
+        ) {
+          cache.writeQuery({
             query: COUNTER_QUERY,
             data: {
               serverCounter: {
@@ -33,14 +40,11 @@ export default {
           __typename: 'Mutation',
           addServerCounter: {
             __typename: 'Counter',
-            amount: this.counter.amount + 1
+            amount: (this as any).counter.amount + 1
           }
-        },
-        error(error) {
-          console.error(`Error: ${error}`)
-        },
+        }
       });
     }
-  },
+  }
 };
 </script>

@@ -1,10 +1,11 @@
 import ClientModule from '@gqlapp/module-client-vue';
 import { createApolloClient, apiUrl, log } from '@gqlapp/core-common';
+
 import createApp from './createApp';
 
 log.info(`Connecting to GraphQL back-end at: ${apiUrl}`);
 
-const onAppCreate = ({ createNetLink, link, connectionParams, resolvers, reducers, routes }) => {
+const onAppCreate = ({ createNetLink, link, connectionParams, resolvers, reducers, routes }: ClientModule) => {
   const client = createApolloClient({
     apiUrl,
     createNetLink,
@@ -13,9 +14,7 @@ const onAppCreate = ({ createNetLink, link, connectionParams, resolvers, reducer
     clientResolvers: resolvers
   });
 
-  const stores = Object.keys(reducers).reduce((store, value) => ({ ...store, [value]: reducers[value] }), {});
-
-  const { app } = createApp({ stores, routes, client });
+  const { app } = createApp(reducers, routes, client);
 
   app.$mount('#root');
 };

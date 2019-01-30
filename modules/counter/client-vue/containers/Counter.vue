@@ -6,18 +6,18 @@
   </page-layout>
 </template>
 
-<script>
-import Vue from 'vue';
-import counters from '../counters';
+<script lang='ts'>
 import { PageLayout } from '@gqlapp/look-client-vue';
+
+import counters from '../counters';
 
 export default {
   name: 'CounterContainer',
   components: {
-    PageLayout,
+    PageLayout
   },
   data: () => ({
-    counters: counters.counterComponent.map(component => component)
-  }),
+    counters: counters.counterComponent
+  })
 };
 </script>

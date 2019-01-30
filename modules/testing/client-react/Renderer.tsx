@@ -111,7 +111,7 @@ class MockLink extends ApolloLink {
     }
   }
 
-  public _getSubscriptions(query: DocumentNode, variables: any) {
+  public _getSubscriptions(query: DocumentNode, variables?: any) {
     if (!query) {
       return this.subscriptionQueries;
     }
@@ -182,7 +182,7 @@ export class Renderer {
     );
   }
 
-  public getSubscriptions(query: DocumentNode, variables: any) {
+  public getSubscriptions(query: DocumentNode, variables?: any) {
     return this.mockLink._getSubscriptions(query, variables);
   }
 

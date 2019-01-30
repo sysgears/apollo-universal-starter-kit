@@ -1,10 +1,10 @@
 import React from 'react';
+import ClientModule from '@gqlapp/module-client-react';
 
 import resources from './locales';
 import DownloadReport from './containers/DownloadReport';
-import ReportModule from '../../ReportModule';
 
-export default new ReportModule({
+export default new ClientModule({
   localization: [{ ns: 'PdfReport', resources }],
   reportComponent: [<DownloadReport />]
 });

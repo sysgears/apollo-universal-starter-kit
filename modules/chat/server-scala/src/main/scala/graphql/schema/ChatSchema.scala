@@ -58,7 +58,7 @@ class ChatSchema @Inject()(
         Field(
           name = "quotedMessage",
           OptionType(QuotedMessage),
-          resolve = sc => chatResolver.findQuotedMessage(sc.args.arg[Int]("id"))
+          resolve = sc => chatResolver.findQuotedMessage(sc.value.quotedId)
         )
       )
     )

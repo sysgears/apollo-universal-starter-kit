@@ -18,5 +18,5 @@ trait ChatResolver {
 
   def message(id: Int): Future[Option[Message]]
 
-  def findQuotedMessage(id: Int): Future[Option[QuotedMessage]]
+  def findQuotedMessage(id: Option[Int]): Future[Option[QuotedMessage]]
 }

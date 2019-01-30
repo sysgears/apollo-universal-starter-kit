@@ -5,7 +5,9 @@ import akka.stream.scaladsl.Source
 import com.google.inject.Inject
 import common.Logger
 import common.actors.ActorMessageDelivering
+import common.errors.NotFound
 import common.implicits.RichDBIO._
+import common.implicits.RichFuture._
 import models._
 import repositories.ChatRepository
 
@@ -30,9 +32,12 @@ class ChatResolverImpl @Inject()(chatRepository: ChatRepository)
       maybeMessage <- chatRepository.findMessage(id).run
     } yield maybeMessage
 
-  override def findQuotedMessage(id: Int): Future[Option[QuotedMessage]] =
+  override def findQuotedMessage(id: Option[Int]): Future[Option[QuotedMessage]] = {
     for {
-      maybeQuotedMessage <- chatRepository.findQuotedMessage(id).run
-      _ = println(maybeQuotedMessage)
+      maybeId <- Future(id) failOnNone NotFound("ID isn`t defined")
+      maybeQuotedMessage <- chatRepository.findQuotedMessage(maybeId).run
     } yield maybeQuotedMessage
+  }.recover {
+    case _: NotFound => None
+  }
 }

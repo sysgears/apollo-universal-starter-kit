@@ -1,6 +1,6 @@
 import PDFBuilder from './PDFBuilder';
 
-function createPDF(reports: object[]) {
+function createPDF(reports: object[], t: any) {
   const pdf = new PDFBuilder();
   const image = `${__dirname}/app.png`;
 
@@ -16,21 +16,21 @@ function createPDF(reports: object[]) {
     margin: [0, 10, 0, 5]
   });
 
-  pdf.addText('This is title of the report', 'header');
-  pdf.addText('You can create table with data from database', 'subheader');
+  pdf.addText(t('PdfReport:title'), 'header');
+  pdf.addText(t('PdfReport:database'), 'subheader');
   pdf.addTable(reports, Object.keys(reports[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
-  pdf.addText('Here is example of ordered list', 'subheader');
+  pdf.addText(t('PdfReport:orderedList'), 'subheader');
   pdf.addList([5, 4, 3, 2, 1], 'ol');
-  pdf.addText('And unordered list', 'subheader');
+  pdf.addText(t('PdfReport:unorderedList'), 'subheader');
   pdf.addList([1, 2, 3, 4, 5]);
-  pdf.addText('To add an image you have to provide path to an image, width and height', 'subheader');
+  pdf.addText(t('PdfReport:image'), 'subheader');
   pdf.addImage(image, 150, 150);
 
   return pdf.getDocument();
 }
 
-export default function generator(reports: object[]) {
-  const doc = createPDF(reports);
+export default function generator(reports: object[], t: any) {
+  const doc = createPDF(reports, t);
   const chunks: Uint8Array[] = [];
 
   doc.on('data', (chunk: Uint8Array) => {

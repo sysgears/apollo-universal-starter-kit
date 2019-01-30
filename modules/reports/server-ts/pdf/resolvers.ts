@@ -2,9 +2,10 @@ import generator from './helpers/generator';
 
 export default () => ({
   Query: {
-    async pdf(obj: any, arg: any, { Report }: any) {
+    async pdf(obj: any, arg: any, { Report, req }: any) {
       const report = await Report.report();
-      return generator(report);
+      const { t } = req;
+      return generator(report, t);
     }
   }
 });

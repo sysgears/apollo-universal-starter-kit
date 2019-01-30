@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-import { PLATFORM } from '@module/core-common';
+import { PLATFORM } from '@gqlapp/core-common';
 
 import PostList from '../components/PostList';
 

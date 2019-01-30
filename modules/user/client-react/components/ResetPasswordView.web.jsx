@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { PageLayout } from '@module/look-client-react';
+import { PageLayout } from '@gqlapp/look-client-react';
 
 import ResetPasswordForm from '../components/ResetPasswordForm';
 

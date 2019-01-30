@@ -21,3 +21,8 @@ declare module 'mocha-steps' {
   const step: Mocha.TestFunction;
   const xstep: Mocha.TestFunction;
 }
+
+declare module "*.vue" {
+  import Vue from "vue";
+  export default Vue;
+}

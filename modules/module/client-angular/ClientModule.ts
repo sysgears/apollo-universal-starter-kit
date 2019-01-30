@@ -1,5 +1,6 @@
-import BaseModule, { BaseModuleShape } from './BaseModule';
 import { Route, Routes } from '@angular/router';
+
+import BaseModule, { BaseModuleShape } from './BaseModule';
 
 export interface ClientModuleShape extends BaseModuleShape {
   module?: any;

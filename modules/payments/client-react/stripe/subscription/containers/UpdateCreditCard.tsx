@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
-import { PLATFORM } from '@module/core-common';
-import { FormError } from '@module/forms-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { PLATFORM } from '@gqlapp/core-common';
+import { FormError } from '@gqlapp/forms-client-react';
 import { isApolloError } from 'apollo-client';
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 

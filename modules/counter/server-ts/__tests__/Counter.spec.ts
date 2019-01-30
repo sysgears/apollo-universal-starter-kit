@@ -3,7 +3,7 @@ import { step } from 'mocha-steps';
 
 import { getServer, getApollo } from '../../../../packages/server/src/testHelpers/integrationSetup';
 
-import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@module/counter-common';
+import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 describe('Counter example API works', () => {
   let server: any;

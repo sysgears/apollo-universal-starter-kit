@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
-import { translate } from '@module/i18n-client-react';
-import { Button, HeaderTitle, IconButton, primary } from '@module/look-client-react-native';
-import ClientModule from '@module/module-client-react-native';
+import { translate } from '@gqlapp/i18n-client-react';
+import { Button, HeaderTitle, IconButton, primary } from '@gqlapp/look-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
 
 import Post from './containers/Post';
 import PostEdit from './containers/PostEdit';

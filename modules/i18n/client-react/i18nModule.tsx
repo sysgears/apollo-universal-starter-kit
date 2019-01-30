@@ -1,10 +1,10 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
-import ClientModule from '@module/module-client-react';
-import commonI18n from '@module/i18n-common-react';
+import ClientModule from '@gqlapp/module-client-react';
+import commonI18n from '@gqlapp/i18n-common-react';
 
-import { MenuItem, LanguagePicker } from '@module/look-client-react';
+import { MenuItem, LanguagePicker } from '@gqlapp/look-client-react';
 import settings from '../../../settings';
 
 const I18nProvider = ({ i18n, children }: any) => {
@@ -43,7 +43,7 @@ class RootComponent extends React.Component<Props> {
 
 export default (settings.i18n.enabled
   ? new ClientModule(commonI18n, langPicker, {
-      data: { i18n: true },
+      context: { i18n: true },
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [req => <RootComponent req={req} />]
     })

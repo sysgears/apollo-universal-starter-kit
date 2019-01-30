@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { translate } from '@module/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import {
   Button,
   Card,
@@ -14,7 +14,7 @@ import {
   ListItem,
   Loading,
   primary
-} from '@module/look-client-react-native';
+} from '@gqlapp/look-client-react-native';
 
 const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
   return (

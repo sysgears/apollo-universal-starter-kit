@@ -4,7 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import url from 'url';
 
-import ClientModule from '@module/module-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
 import log from '../../../packages/common/log';
 import createApolloClient from '../../../packages/common/createApolloClient';
 

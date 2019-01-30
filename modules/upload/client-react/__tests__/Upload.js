@@ -1,7 +1,7 @@
 // General imports
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
-import { Renderer, updateContent } from '@module/testing-client-react';
+import { Renderer, updateContent } from '@gqlapp/testing-client-react';
 
 describe('Upload UI works', () => {
   const renderer = new Renderer({});

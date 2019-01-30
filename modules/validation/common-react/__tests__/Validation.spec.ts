@@ -2,8 +2,8 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 import i18next from 'i18next';
-import CommonModule from '@module/module-common';
-import i18n from '@module/i18n-common-react';
+import CommonModule from '@gqlapp/module-common';
+import i18n from '@gqlapp/i18n-common-react';
 import validation from '..';
 
 import {

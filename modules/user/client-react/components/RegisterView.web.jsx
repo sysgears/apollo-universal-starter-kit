@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { translate } from '@module/i18n-client-react';
-import { LayoutCenter, PageLayout } from '@module/look-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { LayoutCenter, PageLayout } from '@gqlapp/look-client-react';
 
 import RegisterForm from '../components/RegisterForm';
 

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { NavLink, Link } from 'react-router-dom';
-import { isFormError, FieldAdapter as Field } from '@module/forms-client-react';
-import { translate } from '@module/i18n-client-react';
-import { required, minLength, validate } from '@module/validation-common-react';
-import { Form, RenderField, Alert, Button } from '@module/look-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { required, minLength, validate } from '@gqlapp/validation-common-react';
+import { Form, RenderField, Alert, Button } from '@gqlapp/look-client-react';
 
 import FacebookButton from '../auth/facebook';
 import GoogleButton from '../auth/google';

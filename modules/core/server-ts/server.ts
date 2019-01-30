@@ -2,18 +2,19 @@ import http from 'http';
 import { serverPort, log } from '@gqlapp/core-common';
 import addGraphQLSubscriptions, { onAppDispose } from './api/subscriptions';
 import { createSchema } from './api/schema';
-import { createServerApp, Modules } from './app';
+import { createServerApp } from './app';
+import ServerModule from '@gqlapp/module-server-ts';
 
 let server: http.Server;
 
-const ref: { modules: Modules; resolve: (server: http.Server) => void } = {
+const ref: { modules: ServerModule; resolve: (server: http.Server) => void } = {
   modules: null,
   resolve: null
 };
 
 export const serverPromise: Promise<http.Server> = new Promise(resolve => (ref.resolve = resolve));
 
-export const createServer = (modules: Modules, entryModule: NodeModule) => {
+export const createServer = (modules: ServerModule, entryModule: NodeModule) => {
   try {
     ref.modules = modules;
 
@@ -34,7 +35,7 @@ export const createServer = (modules: Modules, entryModule: NodeModule) => {
 
       const schema = createSchema(modules);
 
-      server.on('request', createServerApp(schema, modules));
+      server.on('request', createServerApp({ schema, modules }));
       addGraphQLSubscriptions(server, schema, modules);
 
       server.listen(serverPort, () => {
@@ -48,7 +49,7 @@ export const createServer = (modules: Modules, entryModule: NodeModule) => {
     } else {
       const schema = createSchema(ref.modules);
       server.removeAllListeners('request');
-      server.on('request', createServerApp(schema, ref.modules));
+      server.on('request', createServerApp({ schema, modules: ref.modules }));
       addGraphQLSubscriptions(server, schema, ref.modules, entryModule);
     }
   } catch (e) {

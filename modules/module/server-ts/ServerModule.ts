@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import { GraphQLSchema } from 'graphql';
 
 interface CreateContextFuncProps {
   req: Request;
@@ -12,6 +13,11 @@ interface CreateContextFuncProps {
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
   context: { [key: string]: any };
+}
+
+export interface SharedOptions {
+  schema: GraphQLSchema;
+  modules: ServerModule;
 }
 
 export interface ServerModuleShape extends CommonModuleShape {

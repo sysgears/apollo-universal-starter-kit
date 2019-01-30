@@ -1,15 +1,16 @@
 import path from 'path';
-import { GraphQLSchema } from 'graphql';
-import { Express } from 'express';
-import ServerModule from '@gqlapp/module-server-ts';
+import { Express, Request, Response } from 'express';
+import { SharedOptions } from '@gqlapp/module-server-ts';
 import SsrModule from './SsrModule';
 import reactRenderer from './react';
 
-const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async (
-  req: any,
-  res: any,
+const renderServerSide = (sharedOptions: SharedOptions) => async (
+  req: Request,
+  res: Response,
   next: (e?: Error) => void
 ) => {
+  const { schema, modules } = sharedOptions;
+
   try {
     if (!req.path.includes('.') && __SSR__) {
       return reactRenderer(req, res, schema, modules);
@@ -23,12 +24,10 @@ const renderServerSide = (schema: GraphQLSchema, modules: ServerModule) => async
   }
 };
 
-const middleware = (app: Express, { schema, modules }: any) => {
-  app.use(renderServerSide(schema, modules));
+const middleware = (app: Express, sharedOptions: SharedOptions) => {
+  app.use(renderServerSide(sharedOptions));
 };
 
-export { default as SsrModule } from './SsrModule';
-
 export default new SsrModule({
-  ssr: middleware
+  middleware: [middleware]
 });

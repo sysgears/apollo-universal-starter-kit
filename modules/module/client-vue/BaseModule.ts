@@ -1,10 +1,10 @@
 import { merge } from 'lodash';
-import { ActionReducerMap } from '@ngrx/store';
 
 import { GraphQLModule, GraphQLModuleShape } from '@gqlapp/module-common';
 
 export interface BaseModuleShape extends GraphQLModuleShape {
-  reducer?: Array<ActionReducerMap<any, any>>;
+  // TODO: Add proper type
+  reducer?: Array<{ [key: string]: any }>;
 }
 
 interface BaseModule extends BaseModuleShape {}

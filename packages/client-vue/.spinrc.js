@@ -1,37 +1,32 @@
-const url = require('url');
-
 const config = {
   builders: {
     web: {
       entry: './src/index.ts',
-      stack: ['web'],
+      stack: [ 'web' ],
       openBrowser: true,
-      dllExcludes: ['bootstrap'],
+      dllExcludes: [ 'bootstrap' ],
       defines: {
         __CLIENT__: true
       },
       // Wait for backend to start prior to letting webpack load frontend page
-      waitOn: [`tcp:${process.env.SERVER_HOST || 'localhost:8080'}`],
-      enabled: true
+      waitOn: [ 'tcp:localhost:8080' ],
+      enabled: false
     },
     test: {
-      stack: ['server'],
-      roles: ['test'],
+      stack: [ 'server' ],
+      roles: [ 'test' ],
       defines: {
         __TEST__: true
       }
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
+    stack: ['apollo', 'css', 'sass', 'less', 'styled-components', 'ts', 'es6', 'webpack', 'i18next', 'vue'],
     cache: '../../.cache',
-    ssr: true,
-    webpackDll: true,
-    reactHotLoader: false,
+    ssr: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __API_URL__: '"/graphql"',
-      'process.env.STRIPE_PUBLIC_KEY': !!process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
+      __API_URL__: '"/graphql"'
     },
     webpackConfig: {
       devServer: {
@@ -40,10 +35,6 @@ const config = {
     }
   }
 };
-
-if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
-  config.options.ssr = false;
-}
 
 config.options.devProxy = config.options.ssr;
 

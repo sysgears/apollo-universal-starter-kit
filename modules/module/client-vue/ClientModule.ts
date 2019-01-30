@@ -1,10 +1,9 @@
-import { Route, Routes } from '@angular/router';
+import { RouteConfig } from 'vue-router';
 
 import BaseModule, { BaseModuleShape } from './BaseModule';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  module?: any;
-  route?: Routes;
+  route?: RouteConfig[];
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -14,12 +13,8 @@ class ClientModule extends BaseModule {
     super(...modules);
   }
 
-  get modules(): any {
-    return this.module.map((module: any) => module);
-  }
-
-  get routes(): Routes {
-    return this.route.map((component: Route) => component);
+  get routes(): RouteConfig[] {
+    return this.route;
   }
 }
 

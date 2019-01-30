@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
 
 import WithExportPDF from '../containers/WithExportPDF';
 
-const ContactRow = ({ values }) => (
+const ContactRow = ({ values }: { values: string[] }) => (
   <tr>
     {values.map((item, key) => (
       <td key={key}>{item}</td>
@@ -11,24 +10,16 @@ const ContactRow = ({ values }) => (
   </tr>
 );
 
-ContactRow.propTypes = {
-  values: PropTypes.array
-};
-
-const ContactHeader = ({ headerItems }) => (
+const ContactHeader = ({ headerItems }: { headerItems: string[] }) => (
   <Fragment>
-    {headerItems.map((item, key) => (
+    {headerItems.map((item: string, key: number) => (
       <th key={key}>{item.charAt(0).toUpperCase() + item.slice(1)}</th>
     ))}
   </Fragment>
 );
 
-ContactHeader.propTypes = {
-  headerItems: PropTypes.array
-};
-
-const ContactTable = ({ data }) => {
-  let rows = [];
+const ContactTable = ({ data }: { data: object[] }) => {
+  const rows: any[] = [];
   data.forEach((row, key) => {
     rows.push(<ContactRow values={Object.values(row)} key={key} />);
   });
@@ -45,19 +36,14 @@ const ContactTable = ({ data }) => {
   );
 };
 
-ContactTable.propTypes = {
-  data: PropTypes.array,
-  title: PropTypes.string
-};
+interface ReportPreviewProps {
+  data: object[];
+  title: string;
+  button: any;
+}
 
-export default class ReportPreview extends Component {
-  static propTypes = {
-    data: PropTypes.array,
-    title: PropTypes.string.isRequired,
-    button: PropTypes.element.isRequired
-  };
-
-  render() {
+export default class ReportPreview extends Component<ReportPreviewProps> {
+  public render() {
     const { data, title, button } = this.props;
 
     return (

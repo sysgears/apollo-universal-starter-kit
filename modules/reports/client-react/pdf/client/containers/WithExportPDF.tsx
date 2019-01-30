@@ -1,15 +1,15 @@
 import React, { Fragment, Component } from 'react';
 import ReactToPrint from 'react-to-print';
 
-import PropTypes from 'prop-types';
+interface ExportPDFProps {
+  children: any;
+  button: any;
+}
 
-export default class ExportPDF extends Component {
-  static propTypes = {
-    children: PropTypes.node.isRequired,
-    button: PropTypes.element.isRequired
-  };
+export default class ExportPDF extends Component<ExportPDFProps> {
+  private ref: any;
 
-  render() {
+  public render() {
     const { children, button } = this.props;
 
     return (

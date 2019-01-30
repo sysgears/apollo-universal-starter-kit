@@ -1,10 +1,10 @@
 import React from 'react';
-import ClientModule from '@gqlapp/module-client-react';
 
 import resources from './locales';
 import PrintReport from './containers/PrintReport';
+import ReportModule from '../../ReportModule';
 
-export default new ClientModule({
+export default new ReportModule({
   localization: [{ ns: 'PrintReport', resources }],
   reportComponent: [<PrintReport />]
 });

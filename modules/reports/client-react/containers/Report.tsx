@@ -1,13 +1,16 @@
 import React from 'react';
 import Helmet from 'react-helmet';
-import PropTypes from 'prop-types';
 
 import { PageLayout } from '@gqlapp/look-client-react';
-import { translate } from '@gqlapp/i18n-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import settings from '../../../../settings';
 import reports from '../reports';
 
-const Report = ({ t }) => (
+interface ReportProps {
+  t: TranslateFunction;
+}
+
+const Report = ({ t }: ReportProps) => (
   <PageLayout>
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
@@ -18,12 +21,10 @@ const Report = ({ t }) => (
         }
       ]}
     />
-    {reports.reportComponent.map((component, idx, items) => React.cloneElement(component, { key: idx + items.length }))}
+    {reports.reportComponent.map((component: any, idx: number, items: any) =>
+      React.cloneElement(component, { key: idx + items.length })
+    )}
   </PageLayout>
 );
-
-Report.propTypes = {
-  t: PropTypes.func
-};
 
 export default translate('report')(Report);

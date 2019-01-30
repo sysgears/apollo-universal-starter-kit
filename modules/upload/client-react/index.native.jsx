@@ -11,7 +11,7 @@ import resources from './locales';
 const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
 
 export default new ClientModule({
-  data: { upload: true },
+  context: { upload: true },
   drawerItem: [
     {
       Upload: {

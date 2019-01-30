@@ -16,7 +16,14 @@ const appendContext = identity => ({
   }
 });
 
-const getIdentity = async id => await User.getUser(id);
+const getIdentity = (id, serial = '') => {
+  if (!id && serial) {
+    return User.getUserWithSerial(serial);
+  }
+
+  return User.getUser(id);
+};
+
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
 const createContextFunc = () => ({

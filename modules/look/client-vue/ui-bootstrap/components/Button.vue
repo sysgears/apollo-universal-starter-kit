@@ -4,7 +4,7 @@
   </b-button>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: 'Button',
   props: {
@@ -12,7 +12,7 @@ export default {
     variant: String,
   },
   methods: {
-    click(e) {
+    click(e: any) {
       this.$emit('click', e);
     }
   }

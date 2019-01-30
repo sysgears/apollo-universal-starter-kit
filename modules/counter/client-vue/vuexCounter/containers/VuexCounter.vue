@@ -3,29 +3,30 @@
     <p>
       Current count, is {{ count }}. This is being stored client-side with Vuex.
     </p>
-    <LookButton variant='primary' size='md' v-on:click='increment()'>
-      Click to increase count
-    </LookButton>
+    <Button variant='primary' size='md' v-on:click='increment()'>
+      Increate Vuex counter
+    </Button>
   </CounterSection>
 </template>
 
-<script>
+<script lang='ts'>
 import { mapState, mapMutations } from 'vuex';
-import { Button as LookButton } from '@gqlapp/look-client-vue';
+import { Button } from '@gqlapp/look-client-vue';
+
 import CounterSection from '../../containers/CounterSection.vue';
 import { INCREMENT } from '../reducers';
 
 export default {
   name: 'VuexCounter',
   components: {
-    LookButton,
-    CounterSection,
+    Button,
+    CounterSection
   },
   computed: mapState({
     count: ({ counter }) => counter.count
   }),
   methods: mapMutations({
     increment: INCREMENT
-  }),
+  })
 };
 </script>

@@ -7,8 +7,9 @@
   </CounterSection>
 </template>
 
-<script>
+<script lang='ts'>
 import { COUNTER_QUERY, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
+
 import IncrementCounter from '../components/IncrementCounter.vue';
 import CounterSection from '../../containers/CounterSection.vue';
 
@@ -20,7 +21,7 @@ export default {
   },
   data: () => ({
     serverCounter: {
-      amount: 0,
+      amount: 0
     }
   }),
   apollo: {
@@ -28,13 +29,19 @@ export default {
       query: COUNTER_QUERY,
       subscribeToMore: {
         document: COUNTER_SUBSCRIPTION,
-        updateQuery(prevStore, { subscriptionData: { data : { counterUpdated: { amount }}}}) {
+        updateQuery(
+          prevStore: any,
+          {
+            subscriptionData: {
+              data: {
+                counterUpdated: { amount }
+              }
+            }
+          }
+        ) {
           this.serverCounter.amount = amount;
-        },
-      },
-      error(error) {
-        console.error(`Error: ${error}`);
-      },
+        }
+      }
     }
   }
 };

@@ -7,8 +7,9 @@
   </CounterSection>
 </template>
 
-<script>
+<script lang='ts'>
 import { COUNTER_QUERY_CLIENT } from '@gqlapp/counter-common';
+
 import IncrementCounter from '../components/IncrementCounter.vue';
 import CounterSection from '../../containers/CounterSection.vue';
 
@@ -16,17 +17,17 @@ export default {
   name: 'ClientCounter',
   components: {
     IncrementCounter,
-    CounterSection,
+    CounterSection
   },
   data: () => ({
     clientCounter: {
-      amount: 0,
-    },
+      amount: 0
+    }
   }),
   apollo: {
     clientCounter: {
-      query: COUNTER_QUERY_CLIENT,
-    },
-  },
+      query: COUNTER_QUERY_CLIENT
+    }
+  }
 };
 </script>

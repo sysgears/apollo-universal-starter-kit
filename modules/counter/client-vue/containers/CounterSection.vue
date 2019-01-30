@@ -4,9 +4,9 @@
   </section>
 </template>
 
-<script>
+<script lang='ts'>
 export default {
-  name: 'Section',
+  name: 'Section'
 };
 </script>
 

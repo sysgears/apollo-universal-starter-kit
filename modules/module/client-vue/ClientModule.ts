@@ -1,8 +1,9 @@
+import { RouteConfig } from 'vue-router';
+
 import BaseModule, { BaseModuleShape } from './BaseModule';
 
 export interface ClientModuleShape extends BaseModuleShape {
-  // TODO: Add proper type
-  route?: [];
+  route?: RouteConfig[];
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -12,8 +13,8 @@ class ClientModule extends BaseModule {
     super(...modules);
   }
 
-  get routes(): any {
-    return this.route.map((component: any) => component);
+  get routes(): RouteConfig[] {
+    return this.route;
   }
 }
 

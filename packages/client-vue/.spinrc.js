@@ -1,7 +1,7 @@
 const config = {
   builders: {
     web: {
-      entry: './src/index.js',
+      entry: './src/index.ts',
       stack: [ 'web' ],
       openBrowser: true,
       dllExcludes: [ 'bootstrap' ],

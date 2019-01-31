@@ -12,5 +12,6 @@ export const downloadFile = (url, name) => {
   a.href = url;
   a.download = name;
   a.click();
+  a.remove();
   window.URL.revokeObjectURL(url);
 };

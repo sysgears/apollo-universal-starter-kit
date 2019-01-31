@@ -10,7 +10,7 @@ import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserAdd extends React.Component {
-  propTypes = {
+  static propTypes = {
     addUser: PropTypes.func.isRequired,
     t: PropTypes.func.isRequired,
     navigation: PropTypes.object,

@@ -20,4 +20,5 @@ export { default as FormItem } from './FormItem';
 export { default as Input } from './Input';
 export { default as LanguagePicker } from './LanguagePicker';
 export { default as RenderSelect } from './RenderSelect';
+export { default as RenderCheckBox } from './RenderCheckBox';
 export { onAppCreate } from './NavBar';

@@ -10,13 +10,15 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
 import { mapState, mapMutations } from 'vuex';
+
 import { Button } from '@gqlapp/look-client-vue';
 
 import CounterSection from '../../containers/CounterSection.vue';
 import { INCREMENT } from '../reducers';
 
-export default {
+export default Vue.extend({
   name: 'VuexCounter',
   components: {
     Button,
@@ -28,5 +30,5 @@ export default {
   methods: mapMutations({
     increment: INCREMENT
   })
-};
+});
 </script>

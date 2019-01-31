@@ -7,11 +7,13 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
+
 import { PageLayout } from '@gqlapp/look-client-vue';
 
 import counters from '../counters';
 
-export default {
+export default Vue.extend({
   name: 'CounterContainer',
   components: {
     PageLayout
@@ -19,5 +21,5 @@ export default {
   data: () => ({
     counters: counters.counterComponent
   })
-};
+});
 </script>

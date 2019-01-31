@@ -94,13 +94,11 @@ const createApp = (modules: ClientModule) => {
   bootloader(main);
 };
 
-if (__DEV__) {
-  if (module.hot) {
-    module.hot.accept('backend_reload', () => {
-      log.debug('Reloading front-end');
-      window.location.reload();
-    });
-  }
+if (__DEV__ && module.hot) {
+  module.hot.accept('backend_reload', () => {
+    log.debug('Reloading front-end');
+    window.location.reload();
+  });
 }
 
 export default new ClientModule({

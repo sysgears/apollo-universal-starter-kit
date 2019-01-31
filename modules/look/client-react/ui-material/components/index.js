@@ -21,4 +21,5 @@ export { default as Input } from './Input';
 export { default as LanguagePicker } from './LanguagePicker';
 export { default as RenderSelect } from './RenderSelect';
 export { default as RenderCheckBox } from './RenderCheckBox';
+export { default as Alert } from './Alert';
 export { onAppCreate } from './NavBar';

@@ -21,7 +21,10 @@ class ChatResolverImpl @Inject()(chatRepository: ChatRepository)
 
   override def addMessage(input: AddMessageInput, parts: Source[FormData.BodyPart, Any]): Future[Message] = ???
 
-  override def editMessage(input: EditMessageInput): Future[Message] = ???
+  override def editMessage(input: EditMessageInput): Future[Message] =
+    for {
+      updatedMessage <- chatRepository.editMessage(input.id, input.text, input.userId).run
+    } yield updatedMessage
 
   override def deleteMessage(id: Int): Future[Option[Message]] = ???
 

@@ -113,7 +113,24 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
         )
       )
 
-  def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = ???
+  def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = executeTransactionally {
+    for {
+      dbMessageSeq <- tableQuery
+        .filter(
+          message =>
+            message.id === id &&
+              (if (userId.isDefined) message.id === userId.get
+               else true)
+        )
+        .result
+      dbMessage <- if (dbMessageSeq.size == 1) DBIO.successful(dbMessageSeq.head)
+      else DBIO.failed(NotFound(s"Not found message with [id=$id], [userId=$userId]"))
+      _ <- update(dbMessage.copy(text = text))
+      message <- findMessage(id)
+      result <- if (message.isDefined) DBIO.successful(message.get)
+      else DBIO.failed(AmbigousResult(s"Could not update message with [id=$id]"))
+    } yield result
+  }
 
   def deleteMessage(id: Int): DBIO[Message] = ???
 

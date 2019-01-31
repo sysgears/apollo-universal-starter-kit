@@ -29,7 +29,6 @@ class PageReloader extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
-    this.subscription = null;
   }
 
   state = {

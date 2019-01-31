@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
 
-import LoginForm from './FirebaseLoginForm';
+import LoginForm from './LoginForm';
 import settings from '../../../../settings';
 
 const LoginView = ({ onSubmit, t }) => {

@@ -15,6 +15,9 @@ const pageNotFound = require('@gqlapp/page-not-found-client-react').default;
 const upload = require('@gqlapp/upload-client-react').default;
 const pagination = require('@gqlapp/pagination-client-react').default;
 const user = require('@gqlapp/user-client-react').default;
+const firebase = require('@gqlapp/firebase-client-react').default;
+
+import settings from '../../../settings';
 
 const modules = new ClientModule(
   look,
@@ -27,7 +30,7 @@ const modules = new ClientModule(
   pagination,
   chat,
   payments,
-  user,
+  settings.user.auth.firebase.enabled ? firebase : user,
   i18n,
   pageNotFound,
   core

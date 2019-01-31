@@ -1,5 +1,4 @@
 import ServerModule from '@gqlapp/module-server-ts';
-import firebase from 'firebase-admin';
 
 import access from './access';
 import auth from './auth';
@@ -10,7 +9,6 @@ import scopes from './scopes';
 import settings from '../../../settings';
 import User from './sql';
 import resources from './locales';
-import { admin } from '../../../config/firebase';
 
 const createContextFunc = async ({ context: { user } }) => ({
   User,
@@ -26,12 +24,6 @@ const middleware = app => {
     app.get('/confirmation/:token', confirmMiddleware);
   }
 };
-
-if (settings.user.auth.firebase.enabled) {
-  firebase.initializeApp({
-    credential: firebase.credential.cert(admin)
-  });
-}
 
 export { User };
 

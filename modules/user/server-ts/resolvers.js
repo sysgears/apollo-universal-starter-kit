@@ -3,7 +3,6 @@ import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
-import firebase from 'firebase-admin';
 import { withFilter } from 'graphql-subscriptions';
 import { createTransaction } from '@gqlapp/database-server-ts';
 import { UserInputError } from 'apollo-server-errors';
@@ -96,16 +95,6 @@ export default pubsub => ({
         const trx = await createTransaction();
         let createdUserId;
         try {
-          if (settings.user.auth.firebase.enabled) {
-            try {
-              await firebase.auth().createUser({
-                password: input.password,
-                email: input.email
-              });
-            } catch (e) {
-              throw e;
-            }
-          }
           [createdUserId] = await User.register(input, passwordHash).transacting(trx);
           await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
           if (settings.user.auth.certificate.enabled)
@@ -177,19 +166,6 @@ export default pubsub => ({
 
         const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
-        // Firebase update user
-        if (settings.user.auth.firebase.enabled) {
-          try {
-            const { email } = await User.getUser(input.id);
-            const { uid } = await firebase.auth().getUserByEmail(email);
-            input.password
-              ? await firebase.auth().updateUser(uid, { email: input.email, password: input.password })
-              : await firebase.auth().updateUser(uid, { email: input.email });
-          } catch (e) {
-            throw e;
-          }
-        }
-
         const isProfileExists = await User.isUserProfileExists(input.id);
         const passwordHash = await createPasswordHash(input.password);
         const trx = await createTransaction();
@@ -235,17 +211,6 @@ export default pubsub => ({
 
         if (isSelf()) {
           throw new Error(t('user:userCannotDeleteYourself'));
-        }
-
-        // Firebase update user
-        if (settings.user.auth.firebase.enabled) {
-          try {
-            const { email } = await User.getUser(id);
-            const { uid } = await firebase.auth().getUserByEmail(email);
-            await firebase.auth().deleteUser(uid);
-          } catch (e) {
-            throw new Error(t('user:userCouldNotDeleted'));
-          }
         }
 
         const isDeleted = !isSelf() && isAdmin() ? await User.deleteUser(id) : false;

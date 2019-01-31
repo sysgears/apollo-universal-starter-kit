@@ -1,0 +1,39 @@
+.githubBtn {
+  min-width: 320px;
+  margin-top: 10px;
+  background-color: #464646;
+  border-color: #464646;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.githubBtn:hover {
+   background-color: #5f5e5e;
+    border-color: #5f5e5e;
+}
+
+.iconContainer { 
+  display: flex;
+  flex: 1 1 10%;
+  justify-content: flex-start;
+   align-items: center; 
+}
+
+.separator { 
+  height: 28px;
+  width: 1px;
+  background-color: #fff !important;
+  margin-left: 10px;
+}
+
+.btnText { 
+  display: flex;
+  justify-content: flex-start; 
+  flex: 5
+}
+
+.githubIcon { 
+  color: #fff;
+  font-size: 30px;
+}

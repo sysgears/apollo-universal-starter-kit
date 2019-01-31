@@ -7,7 +7,7 @@ import 'firebase/firestore';
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
 
-import LoginView from '../components/FirebaseLoginView';
+import LoginView from '../components/LoginView';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';

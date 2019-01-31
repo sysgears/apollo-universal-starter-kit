@@ -1,0 +1,8 @@
+#import "./User.graphql"
+mutation firebaseLogin($input: FirebaseLoginInput!) {
+  firebaseLogin(input: $input) {
+    user {
+      ...UserInfo
+    }
+  }
+}

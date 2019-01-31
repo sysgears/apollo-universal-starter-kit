@@ -1,8 +1,6 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
-import firebase from 'firebase/app';
-import 'firebase/auth';
 import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
@@ -16,13 +14,10 @@ import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 import Register from './containers/Register';
 import Login from './containers/Login';
-import FirebaseLogin from './containers/FirebaseLogin';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
-
-import settings from '../../../settings';
 
 const ProfileName = withLoadedUser(({ currentUser }) =>
   currentUser ? currentUser.fullName || currentUser.username : null
@@ -36,7 +31,6 @@ const LogoutLink = withRouter(
         e.preventDefault();
         (async () => {
           await logout();
-          await firebase.auth().signOut();
           history.push('/');
         })();
       }}
@@ -72,13 +66,9 @@ export default new ClientModule(access, {
       path="/login"
       redirectOnLoggedIn
       redirect="/"
-      component={withRouter(({ history }) =>
-        settings.user.auth.firebase.enabled ? (
-          <FirebaseLogin onLogin={() => history.push('/profile')} />
-        ) : (
-          <Login onLogin={() => history.push('/profile')} />
-        )
-      )}
+      component={withRouter(({ history }) => (
+        <Login onLogin={() => history.push('/profile')} />
+      ))}
     />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />

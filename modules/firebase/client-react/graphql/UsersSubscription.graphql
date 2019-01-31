@@ -1,0 +1,10 @@
+#import "./User.graphql"
+
+subscription onUsersUpdated($filter: FilterUserInput) {
+  usersUpdated(filter: $filter) {
+    mutation
+    node {
+      ...UserInfo
+    }
+  }
+}

@@ -15,6 +15,9 @@ import '@gqlapp/debug-server-ts';
 import ServerModule from '@gqlapp/module-server-ts';
 
 const user = require('@gqlapp/user-server-ts').default;
+const firebase = require('@gqlapp/firebase-server-ts').default;
+
+import settings from '../../../settings';
 
 const modules: ServerModule = new ServerModule(
   cookies,
@@ -23,7 +26,7 @@ const modules: ServerModule = new ServerModule(
   counter,
   post,
   upload,
-  user,
+  settings.user.auth.firebase.enabled ? firebase : user,
   subscription,
   contact,
   mailer,

@@ -1,0 +1,7 @@
+#import "./User.graphql"
+
+query currentUser {
+  currentUser {
+    ...UserInfo
+  }
+}

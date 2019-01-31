@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import firebase from 'firebase/app';
-import 'firebase/auth';
-import { withApollo } from 'react-apollo';
-import { getItem, removeItem, setItem } from '@gqlapp/core-common/clientStorage';
 
-import { jwt, session } from './modules';
+import jwt from './jwt';
+import session from './session';
 
 import AccessModule from './AccessModule';
-import settings from '../../../../settings';
-import { clientData } from '../../../../config/firebase';
 
 const ref = React.createRef();
 
@@ -26,28 +21,6 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
-// Initialize Firebase
-if (settings.user.auth.firebase.enabled) {
-  firebase.initializeApp(clientData);
-}
-
-const firebaseJwtController = client => {
-  firebase.auth().onAuthStateChanged(async user => {
-    const token = await getItem('idToken');
-    if (user) {
-      if (!token) {
-        const newToken = await user.getIdToken();
-        await setItem('idToken', newToken);
-        await resetApolloCacheAndRerenderApp(client);
-      }
-    } else {
-      if (token) {
-        await removeItem('idToken');
-      }
-    }
-  });
-};
-
 class PageReloader extends React.Component {
   constructor(props) {
     super(props);
@@ -56,13 +29,6 @@ class PageReloader extends React.Component {
   state = {
     key: 1
   };
-
-  componentDidMount() {
-    const { client } = this.props;
-    if (settings.user.auth.firebase.jwt) {
-      firebaseJwtController(client);
-    }
-  }
 
   reloadPage() {
     this.setState({ key: this.state.key + 1 });
@@ -74,23 +40,17 @@ class PageReloader extends React.Component {
 }
 
 PageReloader.propTypes = {
-  children: PropTypes.node,
-  client: PropTypes.object
+  children: PropTypes.node
 };
 
-const AuthPageReloader = ({ children, client }) => (
-  <PageReloader client={client} ref={ref}>
-    {children}
-  </PageReloader>
-);
+const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
 
 AuthPageReloader.propTypes = {
-  children: PropTypes.node,
-  client: PropTypes.object
+  children: PropTypes.node
 };
 
 export default new AccessModule(jwt, session, {
-  dataRootComponent: [withApollo(AuthPageReloader)],
+  dataRootComponent: [AuthPageReloader],
   login: [login],
   logout: [logout]
 });

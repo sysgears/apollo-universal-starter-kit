@@ -1,11 +1,14 @@
-import path from 'path';
+const normal = require.resolve('roboto-npm-webfont/full/fonts/Roboto-Regular.ttf');
+const bold = require.resolve('roboto-npm-webfont/full/fonts/Roboto-Medium.ttf');
+const italics = require.resolve('roboto-npm-webfont/full/fonts/Roboto-Italic.ttf');
+const bolditalics = require.resolve('roboto-npm-webfont/full/fonts/Roboto-MediumItalic.ttf');
 
 const fonts = {
   Roboto: {
-    normal: path.join(__dirname, './Roboto-Regular.ttf'),
-    bold: path.join(__dirname, './Roboto-Medium.ttf'),
-    italics: path.join(__dirname, './Roboto-Italic.ttf'),
-    bolditalics: path.join(__dirname, './Roboto-MediumItalic.ttf')
+    normal,
+    bold,
+    italics,
+    bolditalics
   }
 };
 

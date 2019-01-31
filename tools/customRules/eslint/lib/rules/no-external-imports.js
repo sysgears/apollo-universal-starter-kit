@@ -4,152 +4,138 @@
  */
 
 'use strict';
+
 var path = require('path');
 var fs = require('fs');
-var minimatch = require('minimatch');
-var { isArray, isEmpty } = require('lodash');
-var readPkgUp = require('read-pkg-up');
 
-function hasKeys(obj = {}) {
-  return Object.keys(obj).length > 0;
+const DEPENDENCIES_VARIANTS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
+
+function getDependencies(providedPath, moduleDependencies, nodeModuleDependencies) {
+  const subModuleDependencies = {};
+  const dirPath = path.resolve(path.dirname(providedPath));
+  const packageJsonPath = findFilesystemEntity(dirPath, 'package.json');
+  if (typeof packageJsonPath !== 'undefined') {
+    getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies);
+  }
+  checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, subModuleDependencies, moduleDependencies);
 }
 
-function extractDepFields(pkg) {
-  return {
-    dependencies: pkg.dependencies || {},
-    devDependencies: pkg.devDependencies || {},
-    optionalDependencies: pkg.optionalDependencies || {},
-    peerDependencies: pkg.peerDependencies || {}
-  };
+function checkDependenciesInNodeModules(
+  currentFolderPath,
+  nodeModuleDependencies,
+  subModuleDependencies,
+  packageJsonDependencies
+) {
+  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
+  if (typeof nodeModulesPath !== 'undefined') {
+    collectNodeModulesDependencies(
+      nodeModulesPath,
+      nodeModuleDependencies,
+      subModuleDependencies,
+      packageJsonDependencies
+    );
+  }
 }
 
-function getDependencies(context, packageDir) {
-  let paths = [];
-  try {
-    const packageContent = {
-      dependencies: {},
-      devDependencies: {},
-      optionalDependencies: {},
-      peerDependencies: {}
-    };
+function findFilesystemEntity(current, name) {
+  let prev;
+  do {
+    // ddddd/package.json
+    const fileName = path.join(current, name);
+    if (fs.existsSync(fileName)) {
+      return fileName;
+    }
+    prev = current;
+    current = path.dirname(current);
+  } while (prev !== current);
+  return undefined;
+}
 
-    if (!isEmpty(packageDir)) {
-      if (!isArray(packageDir)) {
-        paths = [path.resolve(packageDir)];
-      } else {
-        paths = packageDir.map(dir => path.resolve(dir));
+function addDependencies(moduleDependencies, dependencies, moduleSubDependencies) {
+  for (const name in dependencies) {
+    if (dependencies.hasOwnProperty(name)) {
+      if (moduleSubDependencies && name.indexOf('@') === 0) {
+        const moduleParts = name.split('/');
+        moduleSubDependencies[moduleParts[0]] = moduleParts[1];
+      }
+      moduleDependencies.add(name);
+    }
+  }
+}
+
+function getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies) {
+  // don't use require here to avoid caching
+  // remove BOM from file content before parsing
+  const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8').replace(/^\uFEFF/, ''));
+  DEPENDENCIES_VARIANTS.forEach(dependencyVariant => {
+    if (typeof content[dependencyVariant] !== 'undefined') {
+      addDependencies(moduleDependencies, content[dependencyVariant], subModuleDependencies);
+    }
+  });
+}
+
+function collectNodeModulesDependencies(
+  currentPath,
+  nodeModuleDependencies,
+  subModuleDependencies,
+  packageJsonDependencies
+  // nested = false
+) {
+  const nodeModulesFolders = fs.readdirSync(currentPath);
+  for (const moduleFolder of nodeModulesFolders) {
+    const stat = fs.lstatSync(path.join(currentPath, moduleFolder));
+    let inSubModuleDirectory = false,
+      computedNodeModulesName;
+    for (let item of packageJsonDependencies) {
+      if (moduleFolder === item.split('/')[1]) {
+        inSubModuleDirectory = true;
+        computedNodeModulesName = item;
       }
     }
-
-    if (!isEmpty(paths)) {
-      // use rule config to find package.json
-      paths.forEach(dir => {
-        const _packageContent = extractDepFields(JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8')));
-        Object.keys(packageContent).forEach(depsKey =>
-          Object.assign(packageContent[depsKey], _packageContent[depsKey])
+    if (packageJsonDependencies.has(moduleFolder) || inSubModuleDirectory) {
+      if (stat.isDirectory() && !inSubModuleDirectory) {
+        nodeModuleDependencies.add(moduleFolder);
+        continue;
+      }
+      if (inSubModuleDirectory) {
+        nodeModuleDependencies.add(computedNodeModulesName);
+        continue;
+      }
+      if (stat.isSymbolicLink()) {
+        getDependenciesFromPackageJson(path.join(currentPath, moduleFolder, 'package.json'), nodeModuleDependencies);
+        continue;
+      }
+    }
+    if (subModuleDependencies[moduleFolder]) {
+      if (stat.isDirectory()) {
+        collectNodeModulesDependencies(
+          path.join(currentPath, moduleFolder),
+          nodeModuleDependencies,
+          subModuleDependencies,
+          packageJsonDependencies
         );
-      });
-    } else {
-      // use closest package.json
-      Object.assign(
-        packageContent,
-        extractDepFields(readPkgUp.sync({ cwd: context.getFilename(), normalize: false }).pkg)
-      );
+        continue;
+      }
     }
-
-    if (
-      ![
-        packageContent.dependencies,
-        packageContent.devDependencies,
-        packageContent.optionalDependencies,
-        packageContent.peerDependencies
-      ].some(hasKeys)
-    ) {
-      return null;
-    }
-
-    return packageContent;
-  } catch (e) {
-    if (!isEmpty(paths) && e.code === 'ENOENT') {
-      context.report({
-        message: 'The package.json file could not be found.',
-        loc: { line: 0, column: 0 }
-      });
-    }
-    if (e.name === 'JSONError' || e instanceof SyntaxError) {
-      context.report({
-        message: 'The package.json file could not be parsed: ' + e.message,
-        loc: { line: 0, column: 0 }
-      });
-    }
-
-    return null;
+    // for(const item of nodeModuleDependencies) {
+    //   console.log(item)
+    // }
   }
 }
 
-function reportIfMissing(context, deps, depsOptions, node, name) {
-  if (node.importKind === 'type') {
-    return;
-  }
-
-  // if (importType(name, context) !== 'external') {
-  //   return;
-  // }
-  //
-  // const resolved = resolve(name, context);
-  // if (!resolved) {
-  //   return;
-  // }
-
-  const splitName = name.split('/');
-  const packageName = splitName[0][0] === '@' ? splitName.slice(0, 2).join('/') : splitName[0];
-  const isInDeps = deps.dependencies[packageName] !== undefined;
-  const isInDevDeps = deps.devDependencies[packageName] !== undefined;
-  const isInOptDeps = deps.optionalDependencies[packageName] !== undefined;
-  const isInPeerDeps = deps.peerDependencies[packageName] !== undefined;
-
-  if (
-    isInDeps ||
-    (depsOptions.allowDevDeps && isInDevDeps) ||
-    (depsOptions.allowPeerDeps && isInPeerDeps) ||
-    (depsOptions.allowOptDeps && isInOptDeps)
-  ) {
-    return;
-  }
-
-  if (isInDevDeps && !depsOptions.allowDevDeps) {
-    context.report(node, devDepErrorMessage(packageName));
-    return;
-  }
-
-  if (isInOptDeps && !depsOptions.allowOptDeps) {
-    context.report(node, optDepErrorMessage(packageName));
-    return;
-  }
-
-  context.report(node, missingErrorMessage(packageName));
-}
-
-function devDepErrorMessage(packageName) {
-  return `'${packageName}' should be listed in the project's dependencies, not devDependencies.`;
-}
-
-function optDepErrorMessage(packageName) {
-  return `'${packageName}' should be listed in the project's dependencies, ` + `not optionalDependencies.`;
-}
 function missingErrorMessage(packageName) {
-  return (
-    `'${packageName}' should be listed in the project's dependencies. ` + `Run 'npm i -S ${packageName}' to add it`
-  );
+  return `Can't find '${packageName}' in the packages.json or in related module's package.json.`;
 }
 
-function testConfig(config, filename) {
-  // Simplest configuration first, either a boolean or nothing.
-  if (typeof config === 'boolean' || typeof config === 'undefined') {
-    return config;
+function reportIfMissing(context, node) {
+  const moduleDependencies = new Set();
+  const nodeModuleDependencies = new Set();
+  // const nodeModuleDependenciesSymbolicLink = new Set();
+  getDependencies(context.getFilename(), moduleDependencies, nodeModuleDependencies);
+  if (!nodeModuleDependencies.has(node.source.value)) {
+    // console.log('nodeModuleDependencies12312321', node.source.value, nodeModuleDependencies)
+    context.report(node, missingErrorMessage(node.source.value));
   }
-  // Array of globs.
-  return config.some(c => minimatch(filename, c) || minimatch(filename, path.join(process.cwd(), c)));
 }
 //------------------------------------------------------------------------------
 // Rule Definition
@@ -169,15 +155,6 @@ module.exports = {
   },
 
   create: function(context) {
-    // variables should be defined here
-    const options = context.options[0] || {};
-    const filename = context.getFilename();
-    const deps = getDependencies(context, options.packageDir) || extractDepFields({});
-    const depsOptions = {
-      allowDevDeps: testConfig(options.devDependencies, filename) !== false,
-      allowOptDeps: testConfig(options.optionalDependencies, filename) !== false,
-      allowPeerDeps: testConfig(options.peerDependencies, filename) !== false
-    };
     //----------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------
@@ -187,22 +164,10 @@ module.exports = {
     //----------------------------------------------------------------------
     // Public
     //----------------------------------------------------------------------
-
     return {
       ImportDeclaration: function(node) {
-        reportIfMissing(context, deps, depsOptions, node, node.source.value);
+        reportIfMissing(context, node);
       }
-      // ImportDeclaration: function(node) {
-      //   node.specifiers.forEach(function(specifier) {
-      //     if (
-      //       specifier.type === 'ImportDefaultSpecifier' &&
-      //       specifier.local.type === 'Identifier' &&
-      //       specifier.local.name === '_'
-      //     ) {
-      //       context.report(node, 'Prefer importing single functions over a full FP library');
-      //     }
-      //   });
-      // }
     };
   }
 };

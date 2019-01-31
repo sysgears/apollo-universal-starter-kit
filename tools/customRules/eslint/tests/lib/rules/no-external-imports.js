@@ -17,20 +17,36 @@ var rule = require('../../../lib/rules/no-external-imports'),
 // });
 var path = require('path');
 
-function testFilePath(relativePath) {
-  return path.join(__dirname, '../files/no-external-imports/default/modules/test-module-1/client-react', relativePath);
-}
+// function testFilePath() {
+//   return path.join(
+//     __dirname,
+//     '../../../../rules/no-external-imports/default/modules/test-module-1/client-react',
+//     'foo.js'
+//   );
+// }
 
-// const packagetestModule2 = path.join(
-//   __dirname,
-//   '../../files/no-external-imports/default/modules/test-module-2/client-react'
-// );
+const packagetestModule1 = path.join(
+  __dirname,
+  '../../../../rules/no-external-imports/default/modules/test-module-1/client-react',
+  'foo.js'
+);
 
-const FILENAME = testFilePath('foo.js');
+const packagetestModule2 = path.join(
+  __dirname,
+  '../../../../rules/no-external-imports/default/modules/test-module-2/client-react',
+  'foo.js'
+);
+const packagetestModule3 = path.join(
+  __dirname,
+  '../../../../rules/no-external-imports/default/modules/test-module-3/client-react',
+  'foo.js'
+);
+
+// const FILENAME = testFilePath();
 function test(t) {
   return Object.assign(
     {
-      filename: FILENAME
+      filename: packagetestModule1
     },
     t,
     {
@@ -51,16 +67,25 @@ function test(t) {
 
 var ruleTester = new RuleTester();
 ruleTester.run('no-external-imports', rule, {
-  valid: [test({ code: 'import "lodash.cond"' })],
+  valid: [
+    test({ code: 'import { chalk } from "chalk"; import { tyop } from "safe"' }),
+    test({
+      code: 'import Module from "@modules/test-module-3-client-react"',
+      filename: packagetestModule2
+    }),
+    test({
+      code: 'import { Type } from "@types/humps"',
+      filename: packagetestModule3
+    })
+  ],
 
   invalid: [
     test({
-      code: 'import "not-a-dependency"',
+      code: 'import value from "dependency"',
       errors: [
         {
           ruleId: 'no-extraneous-dependencies',
-          message:
-            "'not-a-dependency' should be listed in the project's dependencies. Run 'npm i -S not-a-dependency' to add it"
+          message: "Can't find 'dependency' in the packages.json or in related module's package.json."
         }
       ]
     })

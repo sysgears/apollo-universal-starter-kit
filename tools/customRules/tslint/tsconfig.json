@@ -12,6 +12,6 @@
     },
     "exclude": [
         "./buildRules",
-        "./test/rules"
+      "../rules"
     ]
 }

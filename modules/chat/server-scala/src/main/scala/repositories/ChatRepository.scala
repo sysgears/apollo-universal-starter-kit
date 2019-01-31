@@ -112,6 +112,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
           hasNextPage
         )
       )
+  }
 
   def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = executeTransactionally {
     for {
@@ -132,6 +133,26 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
     } yield result
   }
 
-  def deleteMessage(id: Int): DBIO[Message] = ???
+  def deleteMessage(id: Int): DBIO[Option[Message]] = executeTransactionally {
+    for {
+      maybeMessage <- findMessage(id)
+      maybeDbMessage <- findOne(id)
+      deleteDbMessage <- if (maybeDbMessage.isDefined) delete(maybeDbMessage.get)
+      else DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been deleted"))
+      maybeAttachment <- findAttachment(id)
+      deleteAttachment <- if (maybeAttachment.isDefined) attachmentTableQuery.filter(_.messageId === id).delete
+      else DBIO.successful()
+      maybeDeleteMessage <- findOne(id)
+      maybeDeleteAttachment <- findAttachment(id)
+      _ <- if (maybeDeleteAttachment.isDefined || maybeDeleteMessage.isDefined)
+        DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been full deleted"))
+      else DBIO.successful()
+    } yield maybeMessage
+  }
 
+  def findAttachment(messageId: Int): DBIO[Option[MessageAttachment]] =
+    for {
+      attachmentSeq <- attachmentTableQuery.filter(_.messageId === messageId).result
+      attachment = attachmentSeq.headOption
+    } yield attachment
 }

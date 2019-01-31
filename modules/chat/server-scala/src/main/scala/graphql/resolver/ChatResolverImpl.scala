@@ -1,7 +1,10 @@
 package graphql.resolver
 
+import java.nio.file.{Files, Path, Paths}
+
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.scaladsl.Source
+import graphql.resolver.PublicResources._
 import com.google.inject.Inject
 import common.Logger
 import common.actors.ActorMessageDelivering
@@ -26,7 +29,10 @@ class ChatResolverImpl @Inject()(chatRepository: ChatRepository)
       updatedMessage <- chatRepository.editMessage(input.id, input.text, input.userId).run
     } yield updatedMessage
 
-  override def deleteMessage(id: Int): Future[Option[Message]] = ???
+  override def deleteMessage(id: Int): Future[Option[Message]] =
+    for {
+      deleteResult <- chatRepository.deleteMessage(id).run
+    } yield deleteResult
 
   override def messages(limit: Int, after: Int): Future[Messages] =
     for {
@@ -46,4 +52,11 @@ class ChatResolverImpl @Inject()(chatRepository: ChatRepository)
   }.recover {
     case _: NotFound => None
   }
+
+  def deleteFile(path: String): Boolean = Files.deleteIfExists(resourcesDirPath.resolve(path))
+}
+
+object PublicResources {
+  val resourcesDirPath: Path = Paths.get(getClass.getResource("/").getPath)
+  val publicDirPath: Path = resourcesDirPath.resolve("public")
 }

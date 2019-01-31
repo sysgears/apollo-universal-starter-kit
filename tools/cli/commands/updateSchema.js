@@ -4,32 +4,31 @@ const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
-const { BASE_PATH } = require('../config');
-const { generateField, runPrettier } = require('../helpers/util');
-const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
+const { getModulePackageName, computeModulePath, generateField, runPrettier } = require('../helpers/util');
+const schemas = require('../../../modules/core/server-ts/common/generatedSchemas');
 
 /**
+ * Update module schema.
  *
- * @param logger
- * @param moduleName
- * @returns {*|void}
+ * @param logger - The Logger.
+ * @param moduleName - The name of a new module.
+ * @param packageName - The location for a new module [client|server|both].
  */
-function updateModule(logger, moduleName, location) {
-  logger.info(`Updating ${moduleName} Schema…`);
-  console.log('location:', location);
+function updateModule({ logger, packageName, moduleName, old }) {
+  if (packageName === 'server') {
+    logger.info(`Updating ${moduleName} Schema…`);
 
-  // pascalize
-  const Module = pascalize(moduleName);
+    // pascalize
+    const Module = pascalize(moduleName);
+    //const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
+    const modulePackageName = getModulePackageName(packageName, old);
+    const destinationPath = computeModulePath(modulePackageName, old, moduleName);
 
-  const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
+    if (fs.existsSync(destinationPath)) {
+      // get module schema
+      const schema = schemas.default[`${Module}Schema`];
 
-  if (fs.existsSync(modulePath)) {
-    // get module schema
-    const schema = schemas.default[`${Module}Schema`];
-
-    // get schema file
-    const pathSchema = `${BASE_PATH}/packages/server/src/modules/${moduleName}/`;
-    if (fs.existsSync(pathSchema)) {
+      // schema file
       const file = `schema.graphql`;
 
       // regenerate input fields
@@ -87,7 +86,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         }
       }
 
-      shell.cd(pathSchema);
+      shell.cd(destinationPath);
       // override Module type in schema.graphql file
       const replaceType = `### schema type definitions([^()]+)### end schema type definitions`;
       shell
@@ -127,7 +126,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
-      logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
+      logger.info(chalk.green(`✔ Schema in ${destinationPath}${file} successfully updated!`));
 
       const resolverFile = `resolvers.ts`;
       let hasBatchResolvers = false;
@@ -164,12 +163,10 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         .to(resolverFile);
       runPrettier(resolverFile);
 
-      logger.info(chalk.green(`✔ Resolver in ${pathSchema}${resolverFile} successfully updated!`));
+      logger.info(chalk.green(`✔ Resolver in ${destinationPath}${resolverFile} successfully updated!`));
     } else {
-      logger.error(chalk.red(`✘ Schema path ${pathSchema} not found!`));
+      logger.info(chalk.red(`✘ Module ${moduleName} in path ${destinationPath} not found!`));
     }
-  } else {
-    logger.info(chalk.red(`✘ Module ${moduleName} in path ${modulePath} not found!`));
   }
 }
 

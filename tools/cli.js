@@ -40,7 +40,6 @@ prog
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
   .option('-o, --old', 'Old Structure')
-  .option('-m', 'Delete migration and seeds')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
   // Update schema
   .command('updateschema', 'Update Module Schema')

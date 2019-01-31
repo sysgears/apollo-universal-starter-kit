@@ -59,7 +59,7 @@ class CommandInvoker {
    * Runs operation (function) for updating existing module schema.
    */
   runUpdateSchema(args, options, logger) {
-    runOperation(this.updateSchema, args, logger);
+    runOperation(this.updateSchema, args, options, logger);
   }
 }
 

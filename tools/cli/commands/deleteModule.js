@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const {
   getModulePackageName,
   computeModulePath,
@@ -8,6 +9,8 @@ const {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
+  deleteFromFileWithExports,
   removeSymlink,
   runPrettier
 } = require('../helpers/util');
@@ -120,20 +123,20 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
 
   removeSymlink(moduleName, modulePackageName);
 
+  const Module = pascalize(moduleName);
+  //const modulesPath = computeModulesPath(location);
+  //const moduleCommonPath = `${modulesPath}/common`;
+  //const generatedSchemaPath = `${moduleCommonPath}/${generatedSchemasFile}`;
   /*
-  // delete migrations and seeds if server location and option -m specified
-  if (location === 'server-ts' && options.m) {
-    deleteMigrations(logger, moduleName);
-  }
-
   if (fs.existsSync(generatedContainerPath)) {
     const graphqlQuery = `${Module}Query`;
     deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
-  }
+  }*/
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, old);
   if (fs.existsSync(generatedSchemaPath)) {
     const schema = `${Module}Schema`;
     deleteFromFileWithExports(generatedSchemaPath, schema);
-  }*/
+  }
 }
 
 module.exports = deleteModule;

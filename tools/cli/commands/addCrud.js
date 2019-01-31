@@ -1,22 +1,22 @@
-//const shell = require('shelljs');
 const chalk = require('chalk');
-const { pascalize } = require('humps');
+const { pascalize, decamelize } = require('humps');
 const addModule = require('./addModule');
-//const addMigration = require('./subCommands/addMigration');
-//const { computeModulesPath, updateFileWithExports, runPrettier } = require('../helpers/util');
-//const { BASE_PATH } = require('../config');
+const {
+  getModulePackageName,
+  computeGeneratedSchemasPath,
+  updateFileWithExports,
+  runPrettier
+} = require('../helpers/util');
 
 /**
  * Adds CRUD module in server and adds a new module to the Feature connector.
  *
  * @param logger - The Logger.
- * @param templatesPath - The path to the templates for a new module.
  * @param moduleName - The name of a new module.
  * @param tablePrefix
- * @param location - The location for a new module [client|server|both].
+ * @param packageName - The location for a new module [client|server|both].
  */
 function addCrud({ logger, packageName, moduleName, old }) {
-  //function addCrud(logger, templatesPath, moduleName, tablePrefix, options, location) {
   console.log('packageName:', packageName);
   console.log('moduleName:', moduleName);
   console.log('old:', old);
@@ -26,28 +26,27 @@ function addCrud({ logger, packageName, moduleName, old }) {
 
   // pascalize
   const Module = pascalize(moduleName);
+  const modulePackageName = getModulePackageName(packageName, old);
 
   if (packageName === 'server') {
-    console.log('Module:', Module);
-    // add migration and seed for new module
-    //addMigration(logger, templatesPath, moduleName);
     /*
     if (tablePrefix) {
       shell.cd(computeModulesPath(location, moduleName));
       shell.sed('-i', /tablePrefix: ''/g, `tablePrefix: '${tablePrefix}'`, 'schema.js');
 
       logger.info(chalk.green(`✔ Inserted db table prefix!`));
-    }
+    }*/
 
-    const generatedSchemasFile = 'generatedSchemas.js';
     const schema = `${Module}Schema`;
     const options = {
-      pathToFileWithExports: `${BASE_PATH}/packages/${location}/src/modules/common/${generatedSchemasFile}`,
+      pathToFileWithExports: computeGeneratedSchemasPath(packageName, old),
       exportName: schema,
-      importString: `import { ${schema} } from '../${moduleName}/schema';\n`
+      importString: `import { ${schema} } from '@gqlapp/${decamelize(moduleName, {
+        separator: '-'
+      })}-${modulePackageName}/schema';\n`
     };
     updateFileWithExports(options);
-    runPrettier(options.pathToFileWithExports);*/
+    runPrettier(options.pathToFileWithExports);
   }
 
   logger.info(chalk.green(`✔ Module for ${packageName} successfully created!`));

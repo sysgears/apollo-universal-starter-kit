@@ -49,6 +49,12 @@ function renameFiles(destinationPath, moduleName) {
   shell.cd(destinationPath);
 
   // rename files
+  const timestamp = new Date().getTime();
+  shell.ls('-Rl', '.').forEach(entry => {
+    if (entry.isFile()) {
+      shell.mv(entry.name, entry.name.replace('T_Module', `${timestamp}_Module`));
+    }
+  });
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
       shell.mv(entry.name, entry.name.replace('Module', Module));
@@ -124,7 +130,7 @@ function computeRootModulesPath(moduleName) {
  * @returns {string} - Return the computed path
  */
 function computeModulePackageName(moduleName, packageName, old) {
-  return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName)}-${packageName}`;
+  return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName, { separator: '-' })}-${packageName}`;
 }
 
 /**
@@ -138,6 +144,18 @@ function computePackagePath(packageName) {
 }
 
 /**
+ * Gets the computed path for generated schemas.
+ *
+ * @param packageName - The application package ([client|server])
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - Return the computed path
+ */
+function computeGeneratedSchemasPath(packageName, old) {
+  const modulePackageName = getModulePackageName(packageName, old);
+  return `${BASE_PATH}/modules/core/${modulePackageName}/common/generatedSchemas.js`;
+}
+
+/**
  * Adds a symlink.
  *
  * @param packageName - The application package ([client|server])
@@ -146,7 +164,7 @@ function computePackagePath(packageName) {
 function addSymlink(packageName, modulePackageName) {
   fs.symlinkSync(
     `${BASE_PATH}/modules/${packageName}/${modulePackageName}`,
-    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`
+    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName, { separator: '-' })}-${modulePackageName}`
   );
 }
 
@@ -157,7 +175,9 @@ function addSymlink(packageName, modulePackageName) {
  * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
 function removeSymlink(packageName, modulePackageName) {
-  fs.unlinkSync(`${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`);
+  fs.unlinkSync(
+    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName, { separator: '-' })}-${modulePackageName}`
+  );
 }
 
 /**
@@ -260,6 +280,7 @@ module.exports = {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
   addSymlink,
   removeSymlink,
   runPrettier,

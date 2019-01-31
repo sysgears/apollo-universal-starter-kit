@@ -16,17 +16,17 @@ object DbMessageTable extends JdbcProfile {
 
     def text = column[String]("TEXT")
 
-    def userId = column[Int]("USER_ID")
+    def userId = column[Option[Int]]("USER_ID")
 
-    def uuid = column[String]("UUID")
+    def uuid = column[Option[String]]("UUID")
 
-    def quotedId = column[Int]("QUOTED_ID")
+    def quotedId = column[Option[Int]]("QUOTED_ID")
 
     def createdAt = column[Timestamp]("CREATED_AT")
 
     def updatedAt = column[Timestamp]("UPDATED_AT")
 
-    override def * = (id.?, text, userId.?, uuid.?, quotedId.?, createdAt, updatedAt).mapTo[DbMessage]
+    override def * = (id.?, text, userId, uuid, quotedId, createdAt, updatedAt).mapTo[DbMessage]
   }
 
 }

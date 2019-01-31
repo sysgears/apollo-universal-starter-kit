@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 import { decamelize, decamelizeKeys, camelize, camelizeKeys, pascalize } from 'humps';
-import { log } from '@gqlapp/core-common';
 import knexnest from 'knexnest';
 import parseFields from 'graphql-parse-fields';
 import moment from 'moment';
@@ -41,7 +40,7 @@ export function createWithIdGenAdapter(options) {
       await builder;
       return values.id;
     } catch (e) {
-      log.error(`Error in ${T}.create()`, e);
+      console.error(`Error in ${T}.create()`, e);
       throw e;
     }
   };
@@ -67,7 +66,7 @@ export function createWithIdAdapter(options) {
       await builder;
       return values[idField];
     } catch (e) {
-      log.error(`Error in ${T}.createWithId()`, e);
+      console.error(`Error in ${T}.createWithId()`, e);
       throw e;
     }
   };
@@ -85,7 +84,7 @@ export function createWithoutIdAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${T}.createWithId()`, e);
+      console.error(`Error in ${T}.createWithId()`, e);
       throw e;
     }
   };
@@ -103,7 +102,7 @@ export function getAllAdapter(options) {
       ret = camelizeKeys(ret);
       return ret;
     } catch (e) {
-      log.error(`Error in ${options.name}`, e);
+      console.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -133,7 +132,7 @@ export function getByIdAdapter(options) {
       ret = camelizeKeys(ret[0]);
       return ret;
     } catch (e) {
-      log.error(`Error in ${options.name}`, e);
+      console.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -160,7 +159,7 @@ export function listAdapter(options) {
       ret = camelizeKeys(ret);
       return ret;
     } catch (e) {
-      log.error(`Error in ${options.name}`, e);
+      console.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -196,7 +195,7 @@ export function pagingAdapter(options) {
         pages: Math.trunc(ret.count / args.limit) + (ret.count % args.limit === 0 ? 0 : 1)
       };
     } catch (e) {
-      log.error(`Error in ${options.name}`, e);
+      console.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -227,7 +226,7 @@ export function updateAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${T}.update()`, e);
+      console.error(`Error in ${T}.update()`, e);
       throw e;
     }
   };
@@ -252,7 +251,7 @@ export function updateMultiConditionAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${T}.updateMultiCondition()`, e);
+      console.error(`Error in ${T}.updateMultiCondition()`, e);
       throw e;
     }
   };
@@ -279,7 +278,7 @@ export function deleteAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${T}.delete()`, e);
+      console.error(`Error in ${T}.delete()`, e);
       throw e;
     }
   };
@@ -299,7 +298,7 @@ export function deleteMultiConditionAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${T}.deleteMultiCondition()`, e);
+      console.error(`Error in ${T}.deleteMultiCondition()`, e);
       throw e;
     }
   };
@@ -332,7 +331,10 @@ export function getManyRelationAdapter(options) {
       ret = orderedFor(ret, args.ids, camelize(options.collectionField), false);
       return ret;
     } catch (e) {
-      log.error(`Error in ${options.table}.getManyRelationAdapter(${options.elemField},${options.collectionField})`, e);
+      console.error(
+        `Error in ${options.table}.getManyRelationAdapter(${options.elemField},${options.collectionField})`,
+        e
+      );
       throw e;
     }
   };
@@ -353,7 +355,7 @@ export function createRelationAdapter(options) {
 
       return await builder;
     } catch (e) {
-      log.error(`Error in ${table}.createRelationAdapter(${elemField},${collectionField})`, e);
+      console.error(`Error in ${table}.createRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };
@@ -377,7 +379,7 @@ export function updateRelationAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${table}.updateRelationAdapter(${elemField},${collectionField})`, e);
+      console.error(`Error in ${table}.updateRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };
@@ -401,7 +403,7 @@ export function deleteRelationAdapter(options) {
 
       return builder;
     } catch (e) {
-      log.error(`Error in ${table}.deleteRelationAdapter(${elemField},${collectionField})`, e);
+      console.error(`Error in ${table}.deleteRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };
@@ -962,7 +964,7 @@ export class Crud {
         e.throwIf();
       }
     } catch (e) {
-      log.error(`Error in ${this.getFullTableName()}.updateMany()`, e);
+      console.error(`Error in ${this.getFullTableName()}.updateMany()`, e);
       return { errors: e };
     }
   }

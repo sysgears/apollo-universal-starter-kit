@@ -33,7 +33,7 @@ const ContactForm = ({
     />
     <div className="text-center">
       {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
-      <Button color="primary" type="submit">
+      <Button color="primary" type="submit" size="">
         {t('form.btnSubmit')}
       </Button>
     </div>

@@ -10,23 +10,21 @@ const styles = {
   }
 };
 
-const RenderField = ({ input, label, type, meta: { touched, error }, placeholder, classes }) => {
-  return (
-    <Grid item className={classes.wrapperField}>
-      <TextField
-        error={!!touched && !!error}
-        fullWidth
-        className={classes.textField}
-        label={touched && error ? error : label}
-        placeholder={placeholder || label}
-        type={type}
-        margin="normal"
-        variant="outlined"
-        {...input}
-      />
-    </Grid>
-  );
-};
+const RenderField = ({ input, label, type, meta: { touched, error }, placeholder, classes }) => (
+  <Grid item className={classes.wrapperField}>
+    <TextField
+      error={!!touched && !!error}
+      fullWidth
+      className={classes.textField}
+      label={touched && error ? error : label}
+      placeholder={placeholder || label}
+      type={type}
+      margin="normal"
+      variant="outlined"
+      {...input}
+    />
+  </Grid>
+);
 
 RenderField.propTypes = {
   input: PropTypes.object,

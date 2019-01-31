@@ -9,19 +9,17 @@ const styles = theme => ({
   }
 });
 
-const FormItem = ({ children, label, classes, ...props }) => {
-  return (
-    <FormControl {...props} className={classes.formControl}>
-      {label && (
-        <InputLabel>
-          {label}
-          :&nbsp;
-        </InputLabel>
-      )}
-      {children}
-    </FormControl>
-  );
-};
+const FormItem = ({ children, label, classes, ...props }) => (
+  <FormControl {...props} className={classes.formControl}>
+    {label && (
+      <InputLabel>
+        {label}
+        :&nbsp;
+      </InputLabel>
+    )}
+    {children}
+  </FormControl>
+);
 
 FormItem.propTypes = {
   children: PropTypes.node,

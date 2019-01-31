@@ -12,13 +12,11 @@ const styles = {
   }
 };
 
-const Label = ({ children, classes, ...props }) => {
-  return (
-    <FormLabel className={classes.label} {...props}>
-      {children}
-    </FormLabel>
-  );
-};
+const Label = ({ children, classes, ...props }) => (
+  <FormLabel className={classes.label} {...props}>
+    {children}
+  </FormLabel>
+);
 
 Label.propTypes = {
   children: PropTypes.node,

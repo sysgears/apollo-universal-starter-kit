@@ -34,7 +34,7 @@ const SubscriptionCardFormView = (props: SubscriptionCardFormViewProps & FormikP
       <Label>{t('creditCard.info')}</Label>
       <CardElement className="form-control" style={{ base: { lineHeight: '30px' } }} />
       {errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}
-      <Button color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
+      <Button size="" color="primary" type="submit" disabled={submitting} style={{ marginTop: 15 }}>
         {buttonName}
       </Button>
     </Form>

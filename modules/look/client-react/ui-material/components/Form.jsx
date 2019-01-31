@@ -9,13 +9,11 @@ const styles = {
   }
 };
 
-const Form = ({ children, classes, ...props }) => {
-  return (
-    <form className={props.layout === 'inline' ? classes.form : ''} {...props}>
-      {children}
-    </form>
-  );
-};
+const Form = ({ children, classes, ...props }) => (
+  <form className={props.layout === 'inline' ? classes.form : ''} {...props}>
+    {children}
+  </form>
+);
 
 Form.propTypes = {
   children: PropTypes.node,

@@ -1,0 +1,8 @@
+{
+  "name": "@gqlapp/core-client-react-native",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0"
+  }
+}

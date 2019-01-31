@@ -1,0 +1,9 @@
+{
+  "name": "@gqlapp/i18n-client-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0"
+  }
+}

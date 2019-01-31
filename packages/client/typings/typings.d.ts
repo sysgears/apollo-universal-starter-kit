@@ -1,6 +1,5 @@
 declare var __TEST__: boolean;
 declare var __SERVER__: boolean;
-declare var __SERVER_PORT__: number;
 declare var __CLIENT__: boolean;
 declare var __SSR__: boolean;
 declare var __API_URL__: string;
@@ -14,5 +13,4 @@ interface Window {
 // packages without types
 declare module 'react-native-credit-card-input';
 declare module 'sourcemapped-stacktrace';
-declare module 'stripe-local';
-declare module 'universal-cookie-express';
+declare module 'minilog';

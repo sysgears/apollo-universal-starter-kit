@@ -4,32 +4,31 @@ const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
-const { BASE_PATH } = require('../config');
-const { generateField, runPrettier } = require('../helpers/util');
-const schemas = require('../../../packages/server/src/modules/common/generatedSchemas');
+const { getModulePackageName, computeModulePath, generateField, runPrettier } = require('../helpers/util');
+const schemas = require('../../../modules/core/server-ts/common/generatedSchemas');
 
 /**
+ * Update module schema.
  *
- * @param logger
- * @param moduleName
- * @returns {*|void}
+ * @param logger - The Logger.
+ * @param moduleName - The name of a new module.
+ * @param packageName - The location for a new module [client|server|both].
  */
-function updateModule(logger, moduleName, location) {
+function updateModule({ logger, packageName, moduleName, old }) {
   logger.info(`Updating ${moduleName} Schema…`);
-  console.log('location:', location);
 
   // pascalize
   const Module = pascalize(moduleName);
+  //const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
+  const modulePackageName = getModulePackageName(packageName, old);
+  const destinationPath = computeModulePath(modulePackageName, old, moduleName);
 
-  const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
+  if (fs.existsSync(destinationPath)) {
+    if (packageName === 'server') {
+      // get module schema
+      const schema = schemas.default[`${Module}Schema`];
 
-  if (fs.existsSync(modulePath)) {
-    // get module schema
-    const schema = schemas.default[`${Module}Schema`];
-
-    // get schema file
-    const pathSchema = `${BASE_PATH}/packages/server/src/modules/${moduleName}/`;
-    if (fs.existsSync(pathSchema)) {
+      // schema file
       const file = `schema.graphql`;
 
       // regenerate input fields
@@ -67,7 +66,7 @@ function updateModule(logger, moduleName, location) {
         } else if (value.type.constructor === Array && value.type[0].isSchema) {
           inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
           inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
-
+          inputFilter += `  ${key}: ${pascalize(value.type[0].name)}FilterInput\n`;
           manyInput += `
 
 input ${pascalize(key)}CreateManyInput {
@@ -87,7 +86,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         }
       }
 
-      shell.cd(pathSchema);
+      shell.cd(destinationPath);
       // override Module type in schema.graphql file
       const replaceType = `### schema type definitions([^()]+)### end schema type definitions`;
       shell
@@ -127,7 +126,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
-      logger.info(chalk.green(`✔ Schema in ${pathSchema}${file} successfully updated!`));
+      logger.info(chalk.green(`✔ Schema in ${destinationPath}${file} successfully updated!`));
 
       const resolverFile = `resolvers.ts`;
       let hasBatchResolvers = false;
@@ -137,8 +136,9 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         const value = schema.values[key];
         if (value.type.constructor === Array) {
           hasBatchResolvers = true;
+          const remoteField = value.remoteField ? camelize(value.remoteField) : camelize(schema.name);
           replace += `    ${key}: createBatchResolver((sources, args, ctx, info) => {
-      return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${camelize(schema.name)}', ctx.${
+      return ctx.${schema.name}.getByIds(sources.map(({ id }) => id), '${remoteField}', ctx.${
             value.type[0].name
           }, info);
     }),
@@ -161,121 +161,125 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
             )
         )
         .to(resolverFile);
+      runPrettier(resolverFile);
 
-      logger.info(chalk.green(`✔ Resolver in ${pathSchema}${resolverFile} successfully updated!`));
-    } else {
-      logger.error(chalk.red(`✘ Schema path ${pathSchema} not found!`));
+      logger.info(chalk.green(`✔ Resolver in ${destinationPath}${resolverFile} successfully updated!`));
     }
 
-    // get fragment file
-    const pathFragment = `${BASE_PATH}/packages/client/src/modules/${moduleName}/graphql/`;
-    if (fs.existsSync(pathFragment)) {
-      const fragmentGraphqlFile = `${Module}.graphql`;
+    if (packageName === 'client') {
+      const schema = schemas.default[`${Module}Schema`];
 
-      // regenerate graphql fragment
-      let fragmentGraphql = '';
-      for (const key of schema.keys()) {
-        fragmentGraphql += regenerateGraphqlFragment(schema.values[key], key);
+      // get fragment file
+      const pathFragment = `${destinationPath}/graphql/`;
+
+      if (fs.existsSync(pathFragment)) {
+        const fragmentGraphqlFile = `${Module}.graphql`;
+
+        // regenerate graphql fragment
+        let fragmentGraphql = '';
+        for (const key of schema.keys()) {
+          fragmentGraphql += regenerateGraphqlFragment(schema.values[key], key);
+        }
+
+        shell.cd(pathFragment);
+        // override graphql fragment file
+        const replaceFragment = `${Module} {(.|\n)*\n}`;
+        fragmentGraphql = shell
+          .cat(fragmentGraphqlFile)
+          .replace(RegExp(replaceFragment, 'g'), `${Module} {\n${fragmentGraphql}}`);
+        try {
+          fs.writeFileSync(pathFragment + fragmentGraphqlFile, fragmentGraphql);
+        } catch (err) {
+          return logger.error(chalk.red(`✘ Failed to write a ${pathFragment}${fragmentGraphqlFile} file!`));
+        }
+        logger.info(chalk.green(`✔ Fragment in ${pathFragment}${fragmentGraphqlFile} successfully updated!`));
+      } else {
+        logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
       }
 
-      shell.cd(pathFragment);
-      // override graphql fragment file
-      const replaceFragment = `${Module} {(.|\n)*\n}`;
-      fragmentGraphql = shell
-        .cat(fragmentGraphqlFile)
-        .replace(RegExp(replaceFragment, 'g'), `${Module} {\n${fragmentGraphql}}`);
-      try {
-        fs.writeFileSync(pathFragment + fragmentGraphqlFile, fragmentGraphql);
-      } catch (err) {
-        return logger.error(chalk.red(`✘ Failed to write a ${pathFragment}${fragmentGraphqlFile} file!`));
-      }
-      logger.info(chalk.green(`✔ Fragment in ${pathFragment}${fragmentGraphqlFile} successfully updated!`));
-    } else {
-      logger.error(chalk.red(`✘ Fragment path ${pathFragment} not found!`));
-    }
+      // get state client file
+      const pathStateClient = `${destinationPath}/graphql/`;
+      if (fs.existsSync(pathStateClient)) {
+        const file = `${Module}State.client.graphql`;
 
-    // get state client file
-    const pathStateClient = `${BASE_PATH}/packages/client/src/modules/${moduleName}/graphql/`;
-    if (fs.existsSync(pathStateClient)) {
-      const file = `${Module}State.client.graphql`;
-
-      // regenerate graphql fragment
-      let graphql = '    searchText\n';
-      for (const key of schema.keys()) {
-        const value = schema.values[key];
-        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
-        if (value.type.isSchema) {
-          const id = value.noIdSuffix ? '' : 'Id';
-          graphql += `    ${key}${id}\n`;
-        } else {
-          if (hasTypeOf(Date)) {
-            graphql += `    ${key}_lte\n`;
-            graphql += `    ${key}_gte\n`;
-          } else if (hasTypeOf(String)) {
-            graphql += `    ${key}_contains\n`;
+        // regenerate graphql fragment
+        let graphql = '    searchText\n';
+        for (const key of schema.keys()) {
+          const value = schema.values[key];
+          const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+          if (value.type.isSchema) {
+            const id = value.noIdSuffix ? '' : 'Id';
+            graphql += `    ${key}${id}\n`;
           } else {
-            graphql += `    ${key}\n`;
+            if (hasTypeOf(Date)) {
+              graphql += `    ${key}_lte\n`;
+              graphql += `    ${key}_gte\n`;
+            } else if (hasTypeOf(String)) {
+              graphql += `    ${key}_contains\n`;
+            } else {
+              graphql += `    ${key}\n`;
+            }
           }
         }
+        graphql += `  }\n`;
+
+        shell.cd(pathStateClient);
+        // override graphql fragment file
+        const replaceStateClient = `filter {(.|\n)*\n}\n`;
+        shell.ShellString(shell.cat(file).replace(RegExp(replaceStateClient, 'g'), `filter {\n${graphql}}\n`)).to(file);
+
+        logger.info(chalk.green(`✔ State Client in ${pathStateClient}${file} successfully updated!`));
+      } else {
+        logger.error(chalk.red(`✘ State Client path ${pathStateClient} not found!`));
       }
-      graphql += `  }\n`;
 
-      shell.cd(pathStateClient);
-      // override graphql fragment file
-      const replaceStateClient = `filter {(.|\n)*\n}\n`;
-      shell.ShellString(shell.cat(file).replace(RegExp(replaceStateClient, 'g'), `filter {\n${graphql}}\n`)).to(file);
+      // get state resolver file
+      const pathStateResolver = `${destinationPath}/resolvers/`;
+      if (fs.existsSync(pathStateResolver)) {
+        const file = `index.js`;
 
-      logger.info(chalk.green(`✔ State Client in ${pathStateClient}${file} successfully updated!`));
-    } else {
-      logger.error(chalk.red(`✘ State Client path ${pathStateClient} not found!`));
-    }
-
-    // get state resolver file
-    const pathStateResolver = `${BASE_PATH}/packages/client/src/modules/${moduleName}/resolvers/`;
-    if (fs.existsSync(pathStateResolver)) {
-      const file = `index.js`;
-
-      // regenerate resolver defaults
-      let defaults = `const defaultFilters = {\n`;
-      defaults += `searchText: '',\n`;
-      for (const key of schema.keys()) {
-        const value = schema.values[key];
-        const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
-        if (value.type.isSchema) {
-          const id = value.noIdSuffix ? '' : 'Id';
-          defaults += `${key}${id}: '',\n`;
-        } else {
-          if (hasTypeOf(Date)) {
-            defaults += `${key}_lte: '',\n`;
-            defaults += `${key}_gte: '',\n`;
-          } else if (hasTypeOf(String)) {
-            defaults += `${key}_contains: '',\n`;
+        // regenerate resolver defaults
+        let defaults = `const defaultFilters = {\n`;
+        defaults += `searchText: '',\n`;
+        for (const key of schema.keys()) {
+          const value = schema.values[key];
+          const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+          if (value.type.isSchema) {
+            const id = value.noIdSuffix ? '' : 'Id';
+            defaults += `${key}${id}: '',\n`;
           } else {
-            defaults += `${key}: '',\n`;
+            if (hasTypeOf(Date)) {
+              defaults += `${key}_lte: '',\n`;
+              defaults += `${key}_gte: '',\n`;
+            } else if (hasTypeOf(String)) {
+              defaults += `${key}_contains: '',\n`;
+            } else {
+              defaults += `${key}: '',\n`;
+            }
           }
         }
+
+        defaults += `};`;
+
+        shell.cd(pathStateResolver);
+        // override state resolver file
+        const replaceStateResolverDefaults = `// filter data([^*]+)// end filter data`;
+        shell
+          .ShellString(
+            shell
+              .cat(file)
+              .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}\n// end filter data`)
+          )
+          .to(file);
+        runPrettier(file);
+
+        logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}${file} successfully updated!`));
+      } else {
+        logger.error(chalk.red(`✘ State Resolver path ${pathStateResolver} not found!`));
       }
-
-      defaults += `};`;
-
-      shell.cd(pathStateResolver);
-      // override state resolver file
-      const replaceStateResolverDefaults = `// filter data([^*]+)// end filter data`;
-      shell
-        .ShellString(
-          shell
-            .cat(file)
-            .replace(RegExp(replaceStateResolverDefaults, 'g'), `// filter data\n${defaults}\n// end filter data`)
-        )
-        .to(file);
-      runPrettier(file);
-
-      logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}${file} successfully updated!`));
-    } else {
-      logger.error(chalk.red(`✘ State Resolver path ${pathStateResolver} not found!`));
     }
   } else {
-    logger.info(chalk.red(`✘ Module ${moduleName} in path ${modulePath} not found!`));
+    logger.info(chalk.red(`✘ Module ${moduleName} in path ${destinationPath} not found!`));
   }
 }
 

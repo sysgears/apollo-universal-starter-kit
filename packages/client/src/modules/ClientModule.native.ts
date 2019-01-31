@@ -1,23 +1,3 @@
-import { NavigationRouteConfig } from 'react-navigation';
-
-import BaseModule, { BaseModuleShape } from './BaseModule';
-
-import { merge } from 'lodash';
-
-export interface ClientModuleShape extends BaseModuleShape {
-  drawerItem?: NavigationRouteConfig[];
-}
-
-interface ClientModule extends ClientModuleShape {}
-
-class ClientModule extends BaseModule {
-  constructor(...modules: ClientModuleShape[]) {
-    super(...modules);
-  }
-
-  get drawerItems() {
-    return merge({}, ...this.drawerItem);
-  }
-}
-
-export default ClientModule;
+// Reexport for backward-compatibility purposes
+export { default } from '@gqlapp/module-client-react-native';
+export * from '@gqlapp/module-client-react-native';

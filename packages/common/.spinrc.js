@@ -4,6 +4,8 @@ const config = {
       stack: ['server'],
       roles: ['test'],
       defines: {
+        __DEV__: false,
+        __API_URL__: '"/graphql"',
         __TEST__: true
       }
     }

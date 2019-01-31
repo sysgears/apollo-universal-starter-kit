@@ -1,0 +1,8 @@
+{
+  "name": "@gqlapp/testing-client-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-client-react": "^0.1.0"
+  }
+}

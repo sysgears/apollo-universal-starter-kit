@@ -1,0 +1,96 @@
+<<<<<<< HEAD:packages/client/src/modules/common/components/web/ui-bootstrap/styles/styles.scss
+@import 'bootstrap';
+@import "bootstrap-switch";
+@import "datepicker";
+@import 'fontawesome';
+=======
+@import '~bootstrap/scss/bootstrap';
+>>>>>>> add-delete-crud-cli-server-database:modules/look/client-react/ui-bootstrap/styles/styles.scss
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.active {
+  color: #000;
+}
+
+.lang-section {
+  button {
+    cursor: pointer;
+    &.active {
+      border: 1px solid #000;
+    }
+  }
+}
+
+.menu-center {
+  display: flex;
+  align-items: center;
+}
+
+.pagination {
+  .page-item:focus,
+  .page-link:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.pagination-select {
+  width: 30%;
+  margin-bottom: 20px;
+}
+
+.editable-cell {
+  .editable-cell-text-wrapper, .editable-cell-input-wrapper {
+    & > div {
+      display: inline-block;
+    }
+    &:hover {
+      cursor: pointer;
+      color: #007bff;
+      .editable-cell-icon {
+        display: block;
+      }
+    }
+    .editable-cell-icon {
+      float: right;
+      color: lightgray;
+      display: none;
+      &:hover {
+        cursor: pointer;
+        color: #007bff;
+      }
+    }
+    .editable-cell-icon-check{
+      color: lightgray;
+      float: right;
+      position: relative;
+      top: 10px;
+      &:hover {
+        cursor: pointer;
+        color: #007bff;
+      }
+    }
+
+    .form-control{
+      display: inline-block;
+      width: 90%;
+    }
+  }
+}
+
+.bootstrap-advanced-search-form{
+  padding: 15px;
+  background-color: #d3d3d34a;
+  border-top: 1px solid #d3d3d3ba;
+}
+
+.bootstrap-cell-delete-button{
+  display: inline-block;
+  margin-left: 5px;
+}

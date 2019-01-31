@@ -22,6 +22,7 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
+  .option('-o, --old', 'Old Structure')
   .action((args, options, logger) => commandInvoker.runAddModule(args, options, logger))
   // Add CRUD module
   .command('addcrud', 'Create a new Module with CRUD')
@@ -38,7 +39,7 @@ prog
   .command('deletemodule', 'Delete a Module')
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
-  .option('-m', 'Delete migration and seeds')
+  .option('-o, --old', 'Old Structure')
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
   // Update schema
   .command('updateschema', 'Update Module Schema')

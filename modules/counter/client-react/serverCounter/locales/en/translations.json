@@ -1,0 +1,5 @@
+{
+    "text":
+    "The current counter value is {{ amount }}. It's stored in the database and uses Apollo subscription for real-time updates.",
+    "btnLabel": "Increase server counter"
+}

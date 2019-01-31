@@ -1,7 +1,0 @@
-fragment StripeSubscription on StripeSubscription {
-  active
-  errors {
-    field
-    message
-  }
-}

@@ -2,79 +2,140 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const { pascalize } = require('humps');
-const deleteMigrations = require('./subCommands/deleteMigrations');
-const { computeModulesPath, runPrettier, deleteFromFileWithExports } = require('../helpers/util');
+const {
+  getModulePackageName,
+  computeModulePath,
+  getModulesEntryPoint,
+  computeRootModulesPath,
+  computePackagePath,
+  computeModulePackageName,
+  computeGeneratedSchemasPath,
+  deleteFromFileWithExports,
+  removeSymlink,
+  runPrettier
+} = require('../helpers/util');
 
 /**
  * Removes the module from client, server or both locations and removes the module from the module list.
  *
- * @param logger - The Logger.
- * @param moduleName - The name of a new module.
- * @param location - The location for a new module [client|server|both].
+ * @param logger - The Logger
+ * @param packageName - Name of the package the module adding to ([client|server])
+ * @param moduleName - The name of a new module
+ * @param old - The flag that describes if the command invoked for a new structure or not
  */
-function deleteModule(logger, moduleName, options, location) {
-  logger.info(`Deleting ${location} files…`);
-
-  // pascalize
-  const Module = pascalize(moduleName);
-  const modulePath = computeModulesPath(location, moduleName);
-  const modulesPath = computeModulesPath(location);
-  const moduleCommonPath = `${modulesPath}/common`;
-  const generatedContainerFile = 'generatedContainers.js';
-  const generatedContainerPath = `${moduleCommonPath}/${generatedContainerFile}`;
-  const generatedSchemasFile = 'generatedSchemas.js';
-  const generatedSchemaPath = `${moduleCommonPath}/${generatedSchemasFile}`;
+function deleteModule({ logger, packageName, moduleName, old }) {
+  const modulePackageName = getModulePackageName(packageName, old);
+  const modulePath = computeModulePath(modulePackageName, old, moduleName);
+  const params = { logger, moduleName, modulePath, packageName, modulePackageName, old };
 
   if (fs.existsSync(modulePath)) {
-    // remove module directory
-    shell.rm('-rf', modulePath);
+    deleteTemplates(params);
+    removeFromModules(params);
+    if (!old) removeDependency(params);
 
-    const modulesPath = computeModulesPath(location);
-
-    // get index file path
-    const indexFullFileName = fs.readdirSync(modulesPath).find(name => name.search(/index/) >= 0);
-    const indexPath = modulesPath + indexFullFileName;
-    let indexContent;
-
-    try {
-      indexContent = fs.readFileSync(indexPath);
-    } catch (e) {
-      logger.error(chalk.red(`Failed to read ${indexPath} file`));
-      process.exit();
-    }
-
-    // extract application modules
-    const appModuleRegExp = /Module\(([^()]+)\)/g;
-    const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
-    const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
-
-    const contentWithoutDeletedModule = indexContent
-      .toString()
-      // remove module from modules list
-      .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
-      // remove module import
-      .replace(RegExp(`import ${moduleName} from './${moduleName}';\n`, 'g'), '');
-
-    fs.writeFileSync(indexPath, contentWithoutDeletedModule);
-    runPrettier(indexPath);
-
-    // delete migrations and seeds if server location and option -m specified
-    if (location === 'server' && options.m) {
-      deleteMigrations(logger, moduleName);
-    }
-
-    if (fs.existsSync(generatedContainerPath)) {
-      const graphqlQuery = `${Module}Query`;
-      deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
-    }
-    if (fs.existsSync(generatedSchemaPath)) {
-      const schema = `${Module}Schema`;
-      deleteFromFileWithExports(generatedSchemaPath, schema);
-    }
-
-    logger.info(chalk.green(`✔ Module for ${location} successfully deleted!`));
+    logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
   } else {
-    logger.info(chalk.red(`✘ Module ${location} location for ${modulePath} not found!`));
+    logger.info(chalk.red(`✘ Module ${moduleName} for package ${packageName} not found!`));
+  }
+}
+
+////////// DELETE MODULE STEPS //////////
+
+/**
+ * Removes templates from the module.
+ */
+function deleteTemplates({ logger, moduleName, modulePath, modulePackageName, old }) {
+  logger.info(`Deleting ${modulePackageName} files…`);
+  // remove module directory
+  shell.rm('-rf', modulePath);
+
+  // in new module structure remove root dir if no submodules exist
+  if (!old) {
+    const rootModulePath = computeRootModulesPath(moduleName);
+    if (!shell.ls(rootModulePath).length) {
+      shell.rm('-rf', rootModulePath);
+    }
+  }
+  logger.info(chalk.green(`✔ The ${modulePackageName} files of the module ${moduleName} have been deleted!`));
+}
+
+/**
+ * Removes module from modules entry file.
+ */
+function removeFromModules({ logger, moduleName, packageName, modulePackageName, old }) {
+  // Gets modules entry point file path
+  const modulesEntry = getModulesEntryPoint(packageName, old);
+
+  let indexContent;
+
+  try {
+    indexContent = fs.readFileSync(modulesEntry);
+  } catch (e) {
+    logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
+    process.exit();
+  }
+
+  // Extract application modules
+  const appModuleRegExp = /Module\(([^()]+)\)/g;
+  const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
+  const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
+
+  const contentWithoutDeletedModule = indexContent
+    .toString()
+    // Remove module from modules list
+    .replace(appModuleRegExp, `Module(${appModulesWithoutDeleted.toString().trim()})`)
+    // Remove module import
+    .replace(
+      RegExp(`import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n`, 'g'),
+      ''
+    );
+
+  fs.writeFileSync(modulesEntry, contentWithoutDeletedModule);
+  runPrettier(modulesEntry);
+}
+
+/**
+ * Removes the module from the dependencies list.
+ */
+function removeDependency({ moduleName, packageName, modulePackageName, old }) {
+  // Get package content
+  const packagePath = computePackagePath(packageName);
+  const packageContent = `` + fs.readFileSync(packagePath);
+
+  // Extract dependencies
+  const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+  const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+
+  // Remove package
+  const dependenciesWithoutDeleted = dependencies
+    .split(',')
+    .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
+
+  // Remove module from package list
+  shell
+    .ShellString(
+      packageContent.replace(
+        RegExp(dependenciesRegExp, 'g'),
+        `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+      )
+    )
+    .to(packagePath);
+
+  removeSymlink(moduleName, modulePackageName);
+
+  const Module = pascalize(moduleName);
+  //const modulesPath = computeModulesPath(location);
+  //const moduleCommonPath = `${modulesPath}/common`;
+  //const generatedSchemaPath = `${moduleCommonPath}/${generatedSchemasFile}`;
+  /*
+  if (fs.existsSync(generatedContainerPath)) {
+    const graphqlQuery = `${Module}Query`;
+    deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
+  }*/
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, old);
+  if (fs.existsSync(generatedSchemaPath)) {
+    const schema = `${Module}Schema`;
+    deleteFromFileWithExports(generatedSchemaPath, schema);
   }
 }
 

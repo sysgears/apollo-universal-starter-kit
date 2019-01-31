@@ -1,0 +1,9 @@
+{
+  "name": "@gqlapp/module-server-ts",
+  "version": "0.1.0",
+  "prefab": "modules/module/server-ts",
+  "dependencies": {
+    "@gqlapp/module-common": "^0.1.0"
+  }
+}
+

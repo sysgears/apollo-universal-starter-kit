@@ -45,7 +45,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
   //        quotedMessage =
   //  )
 
-  def findMessage(id: Int): DBIO[Option[Message]] = {
+  def findMessage(id: Int): DBIO[Option[Message]] = executeTransactionally {
     val query = ((tableQuery joinLeft userTableQuery) on (_.userId === _.id) joinLeft attachmentTableQuery) on (_._1.id === _.messageId)
     for {
       dbMessageSeq <- query.filter(_._1._1.id === id).result
@@ -68,7 +68,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       )
   }
 
-  def findQuotedMessage(id: Int): DBIO[Option[QuotedMessage]] = {
+  def findQuotedMessage(id: Int): DBIO[Option[QuotedMessage]] = executeTransactionally {
     val query = ((tableQuery joinLeft userTableQuery) on (_.userId === _.id) joinLeft attachmentTableQuery) on (_._1.id === _.messageId)
     for {
       dbMessageSeq <- query.filter(_._1._1.id === id).result
@@ -88,7 +88,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       )
   }
 
-  def messagesPaginated(limit: Int, after: Int): DBIO[Messages] =
+  def messagesPaginated(limit: Int, after: Int): DBIO[Messages] = executeTransactionally {
     for {
       totalCount <- tableQuery.size.result
       _ <- if (after > totalCount)

@@ -26,6 +26,7 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
             type="text"
             value={values.content}
             placeholder={t('comment.label.field')}
+            label={t('comment.label.field')}
           />
         </Col>
         <Col xs={2} md={2}>

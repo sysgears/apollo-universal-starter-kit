@@ -1,6 +1,14 @@
+import { TranslationFunction } from 'i18next';
 import PDFBuilder from './PDFBuilder';
 
-function createPDF(reports: object[], t: any) {
+interface Report {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+}
+
+function createPDF(reports: Report[], t: TranslationFunction) {
   const pdf = new PDFBuilder();
   const image = `${__dirname}/app.png`;
 
@@ -29,7 +37,7 @@ function createPDF(reports: object[], t: any) {
   return pdf.getDocument();
 }
 
-export default function generator(reports: object[], t: any) {
+export default function generator(reports: Report[], t: TranslationFunction) {
   const doc = createPDF(reports, t);
   const chunks: Uint8Array[] = [];
 

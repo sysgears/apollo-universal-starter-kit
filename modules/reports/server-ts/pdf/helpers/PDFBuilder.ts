@@ -1,10 +1,18 @@
 import PdfPrinter from 'pdfmake';
 import fonts from './fonts/Roboto/';
 
+interface StyleShape {
+  fontSize?: number;
+  bold?: boolean;
+  italics?: boolean;
+  alignment?: string;
+  margin?: number[];
+}
+
 export default class PDFBuilder {
   private printer: any;
   private content: object[];
-  private styles: object;
+  private styles: { [name: string]: StyleShape };
 
   constructor() {
     this.printer = new PdfPrinter(fonts);
@@ -20,11 +28,11 @@ export default class PDFBuilder {
     });
   }
 
-  public addStyle(name: string, style: object) {
+  public addStyle(name: string, style: StyleShape) {
     this.styles[name] = style;
   }
 
-  public addTable(data: object[], columnsWidth: object) {
+  public addTable(data: object[], columnsWidth: string[]) {
     this.content.push({
       table: {
         widths: columnsWidth,
@@ -33,7 +41,7 @@ export default class PDFBuilder {
     });
   }
 
-  public addList(data: any[], type = 'ul') {
+  public addList(data: Array<string | number>, type = 'ul') {
     this.content.push({
       [type]: data
     });

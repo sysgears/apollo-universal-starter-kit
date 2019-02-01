@@ -54,7 +54,7 @@ class ChatResolverImpl @Inject()(
                       messageId = 0,
                       name = part.filename.get,
                       contentType = part.entity.contentType.toString,
-                      size = ioResult.count,
+                      size = ioResult.count.toInt,
                       path = s"public/$hashedFilename"
                     )
                   )

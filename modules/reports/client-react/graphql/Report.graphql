@@ -1,0 +1,6 @@
+fragment ReportInfo on Report {
+  id
+  name
+  phone
+  email
+}

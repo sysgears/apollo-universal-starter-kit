@@ -144,15 +144,16 @@ function computePackagePath(packageName) {
 }
 
 /**
- * Gets the computed path for generated schemas.
+ * Gets the computed path for generated module list.
  *
  * @param packageName - The application package ([client|server])
+ * @param fileName - File name of generated module
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Return the computed path
  */
-function computeGeneratedSchemasPath(packageName, old) {
+function computeGeneratedSchemasPath(packageName, fileName, old) {
   const modulePackageName = getModulePackageName(packageName, old);
-  return `${BASE_PATH}/modules/core/${modulePackageName}/common/generatedSchemas.js`;
+  return `${BASE_PATH}/modules/core/${modulePackageName}/common/${fileName}`;
 }
 
 /**

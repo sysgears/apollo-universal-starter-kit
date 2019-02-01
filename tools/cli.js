@@ -33,7 +33,6 @@ prog
     ['both', 'server', 'client'],
     'both'
   )
-  .argument('[tablePrefix]', 'DB table prefix.')
   .action((args, options, logger) => commandInvoker.runAddCrud(args, options, logger))
   // Delete module
   .command('deletemodule', 'Delete a Module')

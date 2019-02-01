@@ -12,11 +12,10 @@ import './init';
 const addResourcesI18n = (i18n: I18N, resources: Array<{ ns: string; resources: Resource }>) => {
   for (const localization of resources) {
     for (const lang of Object.keys(localization.resources)) {
-      i18n.addResourceBundle(
-        (i18n.options.whitelist as string[]).filter((lng: string) => lng.indexOf(lang) > -1)[0] || lang,
-        localization.ns,
-        localization.resources[lang]
-      );
+      const resource = (i18n.options.whitelist as string[]).filter((lng: string) => lng.includes(lang));
+      if (resource.length) {
+        i18n.addResourceBundle(resource[0], localization.ns, localization.resources[lang]);
+      }
     }
   }
 };

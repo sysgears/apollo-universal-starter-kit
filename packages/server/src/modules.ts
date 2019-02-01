@@ -11,6 +11,7 @@ import subscription from '@gqlapp/payments-server-ts';
 import mailer from '@gqlapp/mailer-server-ts';
 import graphql from '@gqlapp/graphql-server-ts';
 import ssr from '@gqlapp/ssr-server-ts';
+import reports from '@gqlapp/reports-server-ts';
 import '@gqlapp/debug-server-ts';
 
 import ServerModule from '@gqlapp/module-server-ts';
@@ -29,6 +30,7 @@ const modules: ServerModule = new ServerModule(
   contact,
   mailer,
   chat,
+  reports,
   graphql,
   core,
   ssr

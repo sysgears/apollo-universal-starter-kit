@@ -8,12 +8,14 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
+
 import { COUNTER_QUERY, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 import IncrementCounter from '../components/IncrementCounter.vue';
 import CounterSection from '../../containers/CounterSection.vue';
 
-export default {
+export default Vue.extend({
   name: 'ServerCounter',
   components: {
     IncrementCounter,
@@ -37,12 +39,12 @@ export default {
                 counterUpdated: { amount }
               }
             }
-          }
+          }: any
         ) {
           this.serverCounter.amount = amount;
         }
       }
     }
   }
-};
+});
 </script>

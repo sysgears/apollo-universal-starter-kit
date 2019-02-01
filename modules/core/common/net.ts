@@ -1,7 +1,8 @@
 import url from 'url';
 import { PLATFORM } from './utils';
 
-export const serverPort = PLATFORM === 'server' && (process.env.PORT || __SERVER_PORT__);
+export const serverPort =
+  PLATFORM === 'server' && (process.env.PORT || (typeof __SERVER_PORT__ !== 'undefined' ? __SERVER_PORT__ : 8080));
 export const isApiExternal = !!url.parse(__API_URL__).protocol;
 
 const clientApiUrl =

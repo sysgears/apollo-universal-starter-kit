@@ -11,6 +11,7 @@ var fs = require('fs');
 const DEPENDENCIES_VARIANTS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
 function getDependencies(providedPath, moduleDependencies, nodeModuleDependencies) {
+  // console.log('getDependencies')
   const subModuleDependencies = {};
   const dirPath = path.resolve(path.dirname(providedPath));
   const packageJsonPath = findFilesystemEntity(dirPath, 'package.json');
@@ -26,6 +27,7 @@ function checkDependenciesInNodeModules(
   subModuleDependencies,
   packageJsonDependencies
 ) {
+  // console.log('checkDependenciesInNodeModules')
   const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
   if (typeof nodeModulesPath !== 'undefined') {
     collectNodeModulesDependencies(
@@ -38,6 +40,7 @@ function checkDependenciesInNodeModules(
 }
 
 function findFilesystemEntity(current, name) {
+  // console.log('findFilesystemEntity')
   let prev;
   do {
     // ddddd/package.json
@@ -52,6 +55,7 @@ function findFilesystemEntity(current, name) {
 }
 
 function addDependencies(moduleDependencies, dependencies, moduleSubDependencies) {
+  // console.log('addDependencies')
   for (const name in dependencies) {
     if (dependencies.hasOwnProperty(name)) {
       if (moduleSubDependencies && name.indexOf('@') === 0) {
@@ -61,13 +65,14 @@ function addDependencies(moduleDependencies, dependencies, moduleSubDependencies
       moduleDependencies.add(name);
     }
   }
+  // console.log('addDependencies', moduleDependencies)
 }
-
 function getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies) {
+  // console.log('getDependenciesFromPackageJson')
   // don't use require here to avoid caching
   // remove BOM from file content before parsing
   const content = JSON.parse(fs.readFileSync(packageJsonPath, 'utf8').replace(/^\uFEFF/, ''));
-  DEPENDENCIES_VARIANTS.forEach(dependencyVariant => {
+  DEPENDENCIES_VARIANTS.forEach(async dependencyVariant => {
     if (typeof content[dependencyVariant] !== 'undefined') {
       addDependencies(moduleDependencies, content[dependencyVariant], subModuleDependencies);
     }
@@ -81,15 +86,16 @@ function collectNodeModulesDependencies(
   packageJsonDependencies
   // nested = false
 ) {
+  // console.log('collectNodeModulesDependencies')
   const nodeModulesFolders = fs.readdirSync(currentPath);
   for (const moduleFolder of nodeModulesFolders) {
     const stat = fs.lstatSync(path.join(currentPath, moduleFolder));
     let inSubModuleDirectory = false,
-      computedNodeModulesName;
+      computedModulesName;
     for (let item of packageJsonDependencies) {
       if (moduleFolder === item.split('/')[1]) {
         inSubModuleDirectory = true;
-        computedNodeModulesName = item;
+        computedModulesName = item;
       }
     }
     if (packageJsonDependencies.has(moduleFolder) || inSubModuleDirectory) {
@@ -98,11 +104,11 @@ function collectNodeModulesDependencies(
         continue;
       }
       if (inSubModuleDirectory) {
-        nodeModuleDependencies.add(computedNodeModulesName);
-        continue;
+        nodeModuleDependencies.add(computedModulesName);
       }
+
       if (stat.isSymbolicLink()) {
-        getDependenciesFromPackageJson(path.join(currentPath, moduleFolder, 'package.json'), nodeModuleDependencies);
+        getDependenciesFromPackageJson(path.join(currentPath, moduleFolder, 'package.json'), packageJsonDependencies);
         continue;
       }
     }
@@ -114,12 +120,8 @@ function collectNodeModulesDependencies(
           subModuleDependencies,
           packageJsonDependencies
         );
-        continue;
       }
     }
-    // for(const item of nodeModuleDependencies) {
-    //   console.log(item)
-    // }
   }
 }
 
@@ -127,13 +129,8 @@ function missingErrorMessage(packageName) {
   return `Can't find '${packageName}' in the packages.json or in related module's package.json.`;
 }
 
-function reportIfMissing(context, node) {
-  const moduleDependencies = new Set();
-  const nodeModuleDependencies = new Set();
-  // const nodeModuleDependenciesSymbolicLink = new Set();
-  getDependencies(context.getFilename(), moduleDependencies, nodeModuleDependencies);
-  if (!nodeModuleDependencies.has(node.source.value)) {
-    // console.log('nodeModuleDependencies12312321', node.source.value, nodeModuleDependencies)
+function reportIfMissing(context, node, moduleDependencies) {
+  if (!moduleDependencies.has(node.source.value)) {
     context.report(node, missingErrorMessage(node.source.value));
   }
 }
@@ -158,7 +155,9 @@ module.exports = {
     //----------------------------------------------------------------------
     // Helpers
     //----------------------------------------------------------------------
-
+    const moduleDependencies = new Set();
+    const nodeModuleDependencies = new Set();
+    getDependencies(context.getFilename(), moduleDependencies, nodeModuleDependencies);
     // any helper functions should go here or else delete this section
 
     //----------------------------------------------------------------------
@@ -166,7 +165,7 @@ module.exports = {
     //----------------------------------------------------------------------
     return {
       ImportDeclaration: function(node) {
-        reportIfMissing(context, node);
+        reportIfMissing(context, node, moduleDependencies);
       }
     };
   }

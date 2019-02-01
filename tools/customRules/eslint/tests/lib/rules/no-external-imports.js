@@ -68,7 +68,7 @@ function test(t) {
 var ruleTester = new RuleTester();
 ruleTester.run('no-external-imports', rule, {
   valid: [
-    test({ code: 'import { chalk } from "chalk"; import { tyop } from "safe"' }),
+    test({ code: 'import { chalk } from "chalk"' }),
     test({
       code: 'import Module from "@modules/test-module-3-client-react"',
       filename: packagetestModule2

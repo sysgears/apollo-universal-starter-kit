@@ -1,3 +1,5 @@
+import { log } from '@gqlapp/core-common';
+
 import knex from './connector';
 
 import paging from './paging';
@@ -127,7 +129,7 @@ export default function selectAdapter(options) {
       }
       return rows;
     } catch (e) {
-      console.error(`Error in ${opts.name}.selectAdapter()`, e);
+      log.error(`Error in ${opts.name}.selectAdapter()`, e);
       throw e;
     }
   };

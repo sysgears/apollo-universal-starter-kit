@@ -29,17 +29,10 @@ function addCrud({ logger, packageName, moduleName, old }) {
   const modulePackageName = getModulePackageName(packageName, old);
 
   if (packageName === 'server') {
-    /*
-    if (tablePrefix) {
-      shell.cd(computeModulesPath(location, moduleName));
-      shell.sed('-i', /tablePrefix: ''/g, `tablePrefix: '${tablePrefix}'`, 'schema.js');
-
-      logger.info(chalk.green(`✔ Inserted db table prefix!`));
-    }*/
-
     const schema = `${Module}Schema`;
+    const fileName = 'generatedSchemas.js';
     const options = {
-      pathToFileWithExports: computeGeneratedSchemasPath(packageName, old),
+      pathToFileWithExports: computeGeneratedSchemasPath(packageName, fileName, old),
       exportName: schema,
       importString: `import { ${schema} } from '@gqlapp/${decamelize(moduleName, {
         separator: '-'

@@ -124,15 +124,8 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
   removeSymlink(moduleName, modulePackageName);
 
   const Module = pascalize(moduleName);
-  //const modulesPath = computeModulesPath(location);
-  //const moduleCommonPath = `${modulesPath}/common`;
-  //const generatedSchemaPath = `${moduleCommonPath}/${generatedSchemasFile}`;
-  /*
-  if (fs.existsSync(generatedContainerPath)) {
-    const graphqlQuery = `${Module}Query`;
-    deleteFromFileWithExports(generatedContainerPath, graphqlQuery);
-  }*/
-  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, old);
+  const fileName = 'generatedSchemas.js';
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, fileName, old);
   if (fs.existsSync(generatedSchemaPath)) {
     const schema = `${Module}Schema`;
     deleteFromFileWithExports(generatedSchemaPath, schema);

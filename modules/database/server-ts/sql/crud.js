@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
 import { decamelize, decamelizeKeys, camelize, camelizeKeys, pascalize } from 'humps';
+import { log } from '@gqlapp/core-common';
 import knexnest from 'knexnest';
 import parseFields from 'graphql-parse-fields';
 import moment from 'moment';
-
 import { FieldError } from '@gqlapp/validation-common-react';
+
 import knex from './connector';
 import { selectBy, orderedFor } from './helpers';
 import selectAdapter from './select';
@@ -40,7 +41,7 @@ export function createWithIdGenAdapter(options) {
       await builder;
       return values.id;
     } catch (e) {
-      console.error(`Error in ${T}.create()`, e);
+      log.error(`Error in ${T}.create()`, e);
       throw e;
     }
   };
@@ -66,7 +67,7 @@ export function createWithIdAdapter(options) {
       await builder;
       return values[idField];
     } catch (e) {
-      console.error(`Error in ${T}.createWithId()`, e);
+      log.error(`Error in ${T}.createWithId()`, e);
       throw e;
     }
   };
@@ -84,7 +85,7 @@ export function createWithoutIdAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${T}.createWithId()`, e);
+      log.error(`Error in ${T}.createWithId()`, e);
       throw e;
     }
   };
@@ -102,7 +103,7 @@ export function getAllAdapter(options) {
       ret = camelizeKeys(ret);
       return ret;
     } catch (e) {
-      console.error(`Error in ${options.name}`, e);
+      log.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -132,7 +133,7 @@ export function getByIdAdapter(options) {
       ret = camelizeKeys(ret[0]);
       return ret;
     } catch (e) {
-      console.error(`Error in ${options.name}`, e);
+      log.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -159,7 +160,7 @@ export function listAdapter(options) {
       ret = camelizeKeys(ret);
       return ret;
     } catch (e) {
-      console.error(`Error in ${options.name}`, e);
+      log.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -195,7 +196,7 @@ export function pagingAdapter(options) {
         pages: Math.trunc(ret.count / args.limit) + (ret.count % args.limit === 0 ? 0 : 1)
       };
     } catch (e) {
-      console.error(`Error in ${options.name}`, e);
+      log.error(`Error in ${options.name}`, e);
       throw e;
     }
   };
@@ -226,7 +227,7 @@ export function updateAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${T}.update()`, e);
+      log.error(`Error in ${T}.update()`, e);
       throw e;
     }
   };
@@ -251,7 +252,7 @@ export function updateMultiConditionAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${T}.updateMultiCondition()`, e);
+      log.error(`Error in ${T}.updateMultiCondition()`, e);
       throw e;
     }
   };
@@ -278,7 +279,7 @@ export function deleteAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${T}.delete()`, e);
+      log.error(`Error in ${T}.delete()`, e);
       throw e;
     }
   };
@@ -298,7 +299,7 @@ export function deleteMultiConditionAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${T}.deleteMultiCondition()`, e);
+      log.error(`Error in ${T}.deleteMultiCondition()`, e);
       throw e;
     }
   };
@@ -331,10 +332,7 @@ export function getManyRelationAdapter(options) {
       ret = orderedFor(ret, args.ids, camelize(options.collectionField), false);
       return ret;
     } catch (e) {
-      console.error(
-        `Error in ${options.table}.getManyRelationAdapter(${options.elemField},${options.collectionField})`,
-        e
-      );
+      log.error(`Error in ${options.table}.getManyRelationAdapter(${options.elemField},${options.collectionField})`, e);
       throw e;
     }
   };
@@ -355,7 +353,7 @@ export function createRelationAdapter(options) {
 
       return await builder;
     } catch (e) {
-      console.error(`Error in ${table}.createRelationAdapter(${elemField},${collectionField})`, e);
+      log.error(`Error in ${table}.createRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };
@@ -379,7 +377,7 @@ export function updateRelationAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${table}.updateRelationAdapter(${elemField},${collectionField})`, e);
+      log.error(`Error in ${table}.updateRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };
@@ -403,7 +401,7 @@ export function deleteRelationAdapter(options) {
 
       return builder;
     } catch (e) {
-      console.error(`Error in ${table}.deleteRelationAdapter(${elemField},${collectionField})`, e);
+      log.error(`Error in ${table}.deleteRelationAdapter(${elemField},${collectionField})`, e);
       throw e;
     }
   };

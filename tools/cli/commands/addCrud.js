@@ -35,7 +35,9 @@ function addCrud({ logger, packageName, moduleName, old }) {
       ? `import { ${exportName} } from '@gqlapp/${decamelize(moduleName, {
           separator: '-'
         })}-${modulePackageName}/schema';\n`
-      : `import ${exportName} from '../${moduleName}/containers/${exportName}';\n`;
+      : `import ${exportName} from '@gqlapp/${decamelize(moduleName, {
+          separator: '-'
+        })}-${modulePackageName}/containers/${exportName}';\n`;
 
   const options = {
     pathToFileWithExports: computeGeneratedSchemasPath(packageName, fileName, old),

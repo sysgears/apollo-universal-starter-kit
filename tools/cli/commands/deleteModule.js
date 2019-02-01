@@ -124,11 +124,11 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
   removeSymlink(moduleName, modulePackageName);
 
   const Module = pascalize(moduleName);
-  const fileName = 'generatedSchemas.js';
+  const fileName = packageName === 'server' ? 'generatedSchemas.js' : 'generatedContainers.js';
   const generatedSchemaPath = computeGeneratedSchemasPath(packageName, fileName, old);
   if (fs.existsSync(generatedSchemaPath)) {
-    const schema = `${Module}Schema`;
-    deleteFromFileWithExports(generatedSchemaPath, schema);
+    const moduleName = packageName === 'server' ? `${Module}Schema` : `${Module}Query`;
+    deleteFromFileWithExports(generatedSchemaPath, moduleName);
   }
 }
 

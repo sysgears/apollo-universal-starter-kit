@@ -29,7 +29,7 @@ function addCrud({ logger, packageName, moduleName, old }) {
   const modulePackageName = getModulePackageName(packageName, old);
 
   const exportName = packageName === 'server' ? `${Module}Schema` : `${Module}Query`;
-  const fileName = packageName === 'server' ? 'generatedSchemas.js' : 'generatedSchemas.js';
+  const fileName = packageName === 'server' ? 'generatedSchemas.js' : 'generatedContainers.js';
   const importString =
     packageName === 'server'
       ? `import { ${exportName} } from '@gqlapp/${decamelize(moduleName, {

@@ -28,7 +28,7 @@ class Report extends Component<{ t: TranslateFunction }> {
 
   public render() {
     const { t } = this.props;
-    const button = <Button size="">{t('print')}</Button>;
+    const button = <Button>{t('print')}</Button>;
 
     return (
       <Query query={ReportQuery}>

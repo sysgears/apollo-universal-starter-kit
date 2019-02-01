@@ -34,9 +34,7 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
             </CardText>
             <CardText>
               <Link to="/update-credit-card">
-                <Button size="" color="primary">
-                  {t('update.btn')}
-                </Button>
+                <Button color="primary">{t('update.btn')}</Button>
               </Link>
             </CardText>
           </CardGroup>

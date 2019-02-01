@@ -14,7 +14,7 @@ export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) 
     <CardGroup>
       <CardTitle>{t('cancel.title')}</CardTitle>
       <CardText>
-        <Button size="" color="danger" onClick={onClick} disabled={submitting}>
+        <Button color="danger" onClick={onClick} disabled={submitting}>
           {t('cancel.btn')}
         </Button>
         {error && <Alert color="error">{error}</Alert>}

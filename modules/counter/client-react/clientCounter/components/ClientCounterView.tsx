@@ -26,7 +26,7 @@ interface ButtonProps {
 }
 
 export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button id="apollo-link-button" color="primary" size="" onClick={onClick}>
+  <Button id="apollo-link-button" color="primary" onClick={onClick}>
     {text}
   </Button>
 );

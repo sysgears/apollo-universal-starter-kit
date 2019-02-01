@@ -18,4 +18,8 @@ Button.propTypes = {
   size: PropTypes.string
 };
 
+Button.defaultProps = {
+  size: ''
+};
+
 export default Button;

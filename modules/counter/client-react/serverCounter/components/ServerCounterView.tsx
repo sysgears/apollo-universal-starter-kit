@@ -39,7 +39,7 @@ interface ButtonProps {
 }
 
 export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button size="" id="graphql-button" color="primary" onClick={onClick}>
+  <Button id="graphql-button" color="primary" onClick={onClick}>
     {text}
   </Button>
 );

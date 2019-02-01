@@ -2,7 +2,7 @@ import path from 'path';
 import { Express, Request, Response } from 'express';
 import { SharedOptions } from '@gqlapp/module-server-ts';
 import SsrModule from './SsrModule';
-import reactRenderer from './react';
+const reactRenderer = require('./react').default;
 
 const renderServerSide = (sharedOptions: SharedOptions) => async (
   req: Request,

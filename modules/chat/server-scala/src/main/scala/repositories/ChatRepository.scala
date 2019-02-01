@@ -147,6 +147,12 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       _ <- if (maybeDeleteAttachment.isDefined || maybeDeleteMessage.isDefined)
         DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been full deleted"))
       else DBIO.successful()
+      isDeleteFile = if (maybeAttachment.isDefined) {
+        Files.deleteIfExists(resourcesDirPath.resolve(maybeAttachment.get.path))
+        true
+      } else true
+      _ <- if (isDeleteFile) DBIO.successful()
+      else DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
     } yield maybeMessage
   }
 
@@ -155,4 +161,10 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       attachmentSeq <- attachmentTableQuery.filter(_.messageId === messageId).result
       attachment = attachmentSeq.headOption
     } yield attachment
+}
+
+object PublicResources {
+  val resourcesDirPath: Path = Paths.get(getClass.getResource("/").getPath)
+  val publicDirPath: Path = resourcesDirPath.resolve("public")
+
 }

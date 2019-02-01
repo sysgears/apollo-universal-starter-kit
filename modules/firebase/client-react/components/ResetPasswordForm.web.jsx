@@ -70,4 +70,4 @@ const ResetPasswordFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default translate('user')(ResetPasswordFormWithFormik(ResetPasswordForm));
+export default translate('firebase')(ResetPasswordFormWithFormik(ResetPasswordForm));

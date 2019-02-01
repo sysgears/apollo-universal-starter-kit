@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <div v-for='(counter,i) in counters' :key=i>
+    <div v-for='counter in counters' :key=counter.name>
       <component v-bind:is=counter></component>
     </div>
   </page-layout>

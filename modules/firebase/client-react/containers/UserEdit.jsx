@@ -58,7 +58,7 @@ class UserEdit extends React.Component {
 }
 
 export default compose(
-  translate('user'),
+  translate('firebase'),
   graphql(USER_QUERY, {
     options: props => {
       let id = 0;

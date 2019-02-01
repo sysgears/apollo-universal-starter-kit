@@ -81,4 +81,4 @@ const RegisterFormWithFormik = withFormik({
   displayName: 'SignUpForm' // helps with React DevTools
 });
 
-export default translate('user')(RegisterFormWithFormik(RegisterForm));
+export default translate('firebase')(RegisterFormWithFormik(RegisterForm));

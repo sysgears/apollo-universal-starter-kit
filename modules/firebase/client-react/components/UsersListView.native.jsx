@@ -132,4 +132,4 @@ UsersListView.propTypes = {
   loading: PropTypes.bool
 };
 
-export default translate('user')(UsersListView);
+export default translate('firebase')(UsersListView);

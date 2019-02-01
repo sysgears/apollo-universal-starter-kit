@@ -131,4 +131,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));
+export default translate('firebase')(ForgotPasswordFormWithFormik(ForgotPasswordForm));

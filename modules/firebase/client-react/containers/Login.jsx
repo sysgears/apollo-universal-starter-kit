@@ -11,7 +11,7 @@ import LoginView from '../components/LoginView';
 import access from '../access';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
-import FEREBASE_LOGIN from '../graphql/FirebaseLogin.graphql';
+import LOGIN from '../graphql/Login.graphql';
 
 class Login extends React.Component {
   static propTypes = {
@@ -43,8 +43,8 @@ class Login extends React.Component {
 
 const LoginWithApollo = compose(
   withApollo,
-  translate('user'),
-  graphql(FEREBASE_LOGIN, {
+  translate('firebase'),
+  graphql(LOGIN, {
     props: ({ mutate }) => ({
       login: async ({ email, password }) => {
         // Mutate for check isActive status before firebase auth
@@ -64,7 +64,7 @@ const LoginWithApollo = compose(
           }
           const {
             data: {
-              firebaseLogin: { user }
+              login: { user }
             }
           } = await mutate({
             variables: { input: { email, errorCode: firebaseAuth.code, token } }

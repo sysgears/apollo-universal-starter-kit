@@ -85,4 +85,4 @@ ProfileView.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('user')(ProfileView);
+export default translate('firebase')(ProfileView);

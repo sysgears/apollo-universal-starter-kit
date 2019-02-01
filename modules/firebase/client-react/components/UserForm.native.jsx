@@ -203,4 +203,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(UserFormWithFormik(UserForm));
+export default translate('firebase')(UserFormWithFormik(UserForm));

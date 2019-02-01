@@ -88,4 +88,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(ResetPasswordFormWithFormik(ResetPasswordForm));
+export default translate('firebase')(ResetPasswordFormWithFormik(ResetPasswordForm));

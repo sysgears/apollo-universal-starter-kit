@@ -41,7 +41,7 @@ class Register extends React.Component {
 }
 
 const RegisterWithApollo = compose(
-  translate('user'),
+  translate('firebase'),
 
   graphql(REGISTER, {
     props: ({ mutate }) => ({

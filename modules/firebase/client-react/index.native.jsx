@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { createStackNavigator } from 'react-navigation';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
@@ -17,6 +19,11 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
+
+import { clientData } from '../../../config/firebase';
+
+// Initialize Firebase
+firebase.initializeApp(clientData);
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -135,7 +142,7 @@ ProfileScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-const HeaderTitleWithI18n = translate('user')(HeaderTitle);
+const HeaderTitleWithI18n = translate('firebase')(HeaderTitle);
 
 export * from './containers/Auth';
 

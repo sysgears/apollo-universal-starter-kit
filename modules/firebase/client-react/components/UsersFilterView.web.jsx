@@ -54,4 +54,4 @@ UsersFilterView.propTypes = {
   t: PropTypes.func
 };
 
-export default translate('user')(UsersFilterView);
+export default translate('firebase')(UsersFilterView);

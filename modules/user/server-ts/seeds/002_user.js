@@ -1,9 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { returnId, truncateTables } from '@gqlapp/database-server-ts';
-import firebase from 'firebase-admin';
-
-import { admin } from '../../../../config/firebase';
-import settings from '../../../../settings';
 
 export async function seed(knex, Promise) {
   await truncateTables(knex, Promise, [
@@ -37,33 +33,4 @@ export async function seed(knex, Promise) {
     role: 'user',
     is_active: true
   });
-  if (settings.user.auth.firebase.enabled) {
-    if (settings.user.auth.firebase.enabled) {
-      firebase.initializeApp({
-        credential: firebase.credential.cert(admin)
-      });
-    }
-    try {
-      await firebase.auth().createUser({
-        email: 'admin@example.com',
-        emailVerified: true,
-        password: 'admin123',
-        displayName: 'admin',
-        disabled: false
-      });
-    } catch (e) {
-      console.log('Firebase user exsist', e);
-    }
-    try {
-      await firebase.auth().createUser({
-        email: 'user@example.com',
-        emailVerified: true,
-        password: 'user1234',
-        displayName: 'user',
-        disabled: false
-      });
-    } catch (e) {
-      console.log('Firebase user exsist', e);
-    }
-  }
 }

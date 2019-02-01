@@ -163,4 +163,4 @@ const UserFormWithFormik = withFormik({
     validate(values, isEmpty(props.initialValues) ? createUserFormSchema : updateUserFormSchema)
 });
 
-export default translate('user')(UserFormWithFormik(UserForm));
+export default translate('firebase')(UserFormWithFormik(UserForm));

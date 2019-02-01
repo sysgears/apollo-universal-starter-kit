@@ -20,6 +20,10 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
+import { clientData } from '../../../config/firebase';
+
+// Initialize Firebase
+firebase.initializeApp(clientData);
 
 const ProfileName = withLoadedUser(({ currentUser }) =>
   currentUser ? currentUser.fullName || currentUser.username : null
@@ -46,12 +50,12 @@ const LogoutLink = withRouter(
 
 export * from './containers/Auth';
 
-const NavLinkUsersWithI18n = translate('user')(({ t }) => (
+const NavLinkUsersWithI18n = translate('firebase')(({ t }) => (
   <NavLink to="/users" className="nav-link" activeClassName="active">
     {t('navLink.users')}
   </NavLink>
 ));
-const NavLinkLoginWithI18n = translate('user')(({ t }) => (
+const NavLinkLoginWithI18n = translate('firebase')(({ t }) => (
   <NavLink to="/login" className="nav-link" activeClassName="active">
     {t('navLink.signIn')}
   </NavLink>

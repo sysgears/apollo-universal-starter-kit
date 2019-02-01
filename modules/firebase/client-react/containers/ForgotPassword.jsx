@@ -37,7 +37,7 @@ class ForgotPassword extends React.Component {
 }
 
 const ForgotPasswordWithApollo = compose(
-  translate('user'),
+  translate('firebase'),
   graphql(FORGOT_PASSWORD, {
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {

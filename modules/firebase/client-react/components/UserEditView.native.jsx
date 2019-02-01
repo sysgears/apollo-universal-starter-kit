@@ -44,4 +44,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withLoadedUser(translate('user')(UserEditView));
+export default withLoadedUser(translate('firebase')(UserEditView));

@@ -65,4 +65,4 @@ const ForgotPasswordFormWithFormik = withFormik({
   displayName: 'ForgotPasswordForm' // helps with React DevTools
 });
 
-export default translate('user')(ForgotPasswordFormWithFormik(ForgotPasswordForm));
+export default translate('firebase')(ForgotPasswordFormWithFormik(ForgotPasswordForm));

@@ -10,7 +10,6 @@ import session from './session';
 
 import AccessModule from './AccessModule';
 import settings from '../../../../settings';
-import { clientData } from '../../../../config/firebase';
 
 const ref = React.createRef();
 
@@ -26,11 +25,6 @@ const login = async client => {
 const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
-
-// Initialize Firebase
-if (settings.user.auth.firebase.enabled) {
-  firebase.initializeApp(clientData);
-}
 
 const firebaseJwtController = client => {
   firebase.auth().onAuthStateChanged(async user => {

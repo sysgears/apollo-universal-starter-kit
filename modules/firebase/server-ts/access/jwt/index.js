@@ -1,19 +1,13 @@
-import jwt from 'jsonwebtoken';
+import firebase from 'firebase-admin';
+import 'firebase/auth';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import createTokens from './createTokens';
-import resolvers from './resolvers';
-import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
+import User from '../../firestore';
 
-const grant = async user => {
-  const refreshSecret = settings.user.secret + user.passwordHash;
-  const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
-  return {
-    accessToken,
-    refreshToken
-  };
+const grant = async token => {
+  return token;
 };
 
 const getCurrentUser = async ({ req }) => {
@@ -21,8 +15,9 @@ const getCurrentUser = async ({ req }) => {
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const { user } = jwt.verify(token, settings.user.secret);
-    return user;
+    const { email } = await firebase.auth().verifyIdToken(token);
+    const { id, role } = await User.getUserByEmail(email);
+    return { email, id, role };
   }
 };
 
@@ -35,11 +30,11 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.access.jwt.enabled
+  settings.user.auth.firebase.jwt
     ? {
         grant: [grant],
-        schema: [schema],
-        createResolversFunc: [resolvers],
+        schema: [],
+        createResolversFunc: [],
         createContextFunc: [createContextFunc]
       }
     : {}

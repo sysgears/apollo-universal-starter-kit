@@ -1,16 +1,5 @@
-input LoginUserInput {
-  usernameOrEmail: String!
-  password: String!
-}
-
-type Tokens {
-  accessToken: String
-  refreshToken: String
-}
-
 type AuthPayload {
   user: User
-  tokens: Tokens
 }
 
 input RegisterUserInput {
@@ -29,7 +18,7 @@ input ResetPasswordInput {
   passwordConfirmation: String!
 }
 
-input FirebaseLoginInput {
+input LoginUserInput {
   email: String!
   errorCode: String
   token: String
@@ -38,8 +27,6 @@ input FirebaseLoginInput {
 extend type Mutation {
   # Login user
   login(input: LoginUserInput!): AuthPayload!
-  # Login via firebase
-  firebaseLogin(input: FirebaseLoginInput!): AuthPayload!
   # Forgot password
   forgotPassword(input: ForgotPasswordInput!): String
   # Reset password

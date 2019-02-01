@@ -54,7 +54,7 @@ class UserAdd extends React.Component {
 }
 
 export default compose(
-  translate('user'),
+  translate('firebase'),
   graphql(ADD_USER, {
     props: ({ mutate }) => ({
       addUser: async input => {

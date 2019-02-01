@@ -62,4 +62,4 @@ class UserAddView extends React.PureComponent {
   }
 }
 
-export default translate('user')(UserAddView);
+export default translate('firebase')(UserAddView);

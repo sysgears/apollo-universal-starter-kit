@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default withLoadedUser(translate('user')(UserAddView));
+export default withLoadedUser(translate('firebase')(UserAddView));

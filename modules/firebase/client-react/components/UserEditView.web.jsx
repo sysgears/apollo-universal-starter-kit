@@ -73,4 +73,4 @@ class UserEditView extends React.PureComponent {
   }
 }
 
-export default translate('user')(UserEditView);
+export default translate('firebase')(UserEditView);

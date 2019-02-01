@@ -1,6 +1,6 @@
 #import "./User.graphql"
 
-query user($id: Int!) {
+query user($id: String!) {
   user(id: $id) {
     user {
       ...UserInfo

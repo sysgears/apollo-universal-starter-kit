@@ -40,4 +40,4 @@ class RegisterView extends React.PureComponent {
   }
 }
 
-export default translate('user')(RegisterView);
+export default translate('firebase')(RegisterView);

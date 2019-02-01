@@ -33,6 +33,6 @@ LogoutView.propTypes = {
 };
 
 export default compose(
-  translate('user'),
+  translate('firebase'),
   withLogout
 )(LogoutView);

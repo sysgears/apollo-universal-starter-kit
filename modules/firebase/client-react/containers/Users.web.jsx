@@ -75,4 +75,4 @@ export default compose(
   withOrderByUpdating,
   withFilterUpdating,
   withSubscription
-)(translate('user')(Users));
+)(translate('firebase')(Users));

@@ -232,4 +232,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(UsersFilterView);
+export default translate('firebase')(UsersFilterView);

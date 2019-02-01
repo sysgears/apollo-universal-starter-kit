@@ -111,4 +111,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default translate('user')(RegisterFormWithFormik(RegisterForm));
+export default translate('firebase')(RegisterFormWithFormik(RegisterForm));

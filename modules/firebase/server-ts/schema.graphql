@@ -1,11 +1,9 @@
 type User {
-  id: Int!
+  id: String!
   username: String!
   role: String!
   isActive: Boolean
   email: String!
-  profile: UserProfile
-  auth: UserAuth
 }
 
 type UserProfile {
@@ -51,7 +49,7 @@ extend type Query {
   # Get all users ordered by: OrderByUserInput add filtered by: FilterUserInput
   users(orderBy: OrderByUserInput, filter: FilterUserInput): [User]
   # Get user by id
-  user(id: Int!): UserPayload
+  user(id: String!): UserPayload
   # Get current user
   currentUser: User
 }
@@ -66,7 +64,7 @@ extend type Mutation {
   # Edit a user
   editUser(input: EditUserInput!): UserPayload!
   # Delete a user
-  deleteUser(id: Int!): UserPayload!
+  deleteUser(id: String!): UserPayload!
 }
 
 # Input for ordering users
@@ -127,20 +125,16 @@ input AddUserInput {
   password: String!
   role: String!
   isActive: Boolean
-  profile: ProfileInput
-  auth: AuthInput
 }
 
 # Input for editUser Mutation
 input EditUserInput {
-  id: Int!
+  id: String!
   username: String!
   role: String!
   isActive: Boolean
   email: String!
   password: String
-  profile: ProfileInput
-  auth: AuthInput
 }
 
 input ProfileInput {

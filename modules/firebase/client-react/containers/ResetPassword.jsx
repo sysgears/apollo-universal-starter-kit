@@ -32,7 +32,7 @@ class ResetPassword extends React.Component {
 }
 
 const ResetPasswordWithApollo = compose(
-  translate('user'),
+  translate('firebase'),
 
   graphql(RESET_PASSWORD, {
     props: ({ mutate }) => ({

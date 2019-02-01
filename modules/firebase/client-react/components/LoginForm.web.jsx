@@ -83,4 +83,4 @@ const LoginFormWithFormik = withFormik({
   displayName: 'LoginForm' // helps with React DevTools
 });
 
-export default translate('user')(LoginFormWithFormik(LoginForm));
+export default translate('firebase')(LoginFormWithFormik(LoginForm));

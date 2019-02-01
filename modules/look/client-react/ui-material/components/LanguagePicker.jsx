@@ -37,8 +37,11 @@ class LanguagePicker extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
+    const { classes, i18n } = this.props;
     const { anchorEl, options, selected } = this.state;
+    const languages = Object.keys(i18n.store.data);
+
+    if (i18n.language && languages.length <= 1) return null;
 
     return (
       <div className={classes.root}>

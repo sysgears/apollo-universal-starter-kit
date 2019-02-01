@@ -17,12 +17,7 @@ class DownloadReport extends Component<DownloadReportProps> {
     isLoading: false
   };
 
-  constructor(props: DownloadReportProps) {
-    super(props);
-    this.donwload = this.donwload.bind(this);
-  }
-
-  public async donwload() {
+  public donwload = async () => {
     this.setState({ isLoading: true });
     const { client } = this.props;
     const { data } = await client.query({
@@ -31,7 +26,7 @@ class DownloadReport extends Component<DownloadReportProps> {
     const url = getObjectURLFromArray(data.excel);
     downloadFile(url, 'Report.xlsx');
     this.setState({ isLoading: false });
-  }
+  };
 
   public render() {
     const { t } = this.props;

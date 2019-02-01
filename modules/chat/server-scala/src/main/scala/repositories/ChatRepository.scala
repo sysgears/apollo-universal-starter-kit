@@ -1,11 +1,14 @@
 package repositories
 
+import java.nio.file.{Files, Path, Paths}
+
 import com.byteslounge.slickrepo.repository.Repository
 import com.google.inject.Inject
 import common.errors.{AmbigousResult, NotFound}
 import model.UserTable.UserTable
 import models.DbMessageTable.DbMessageTable
 import models.MessageAttachmentTable.MessageAttachmentTable
+import repositories.PublicResources._
 import models._
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
@@ -25,25 +28,22 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
 
   val emptyStr = ""
 
-  def saveMessage(message: DbMessage, attachment: Option[MessageAttachment]): DBIO[Message] = ???
-
-  //    for {
-  //    messageId <- messageTableQuery += message
-  //    savedMessage <- messageTableQuery.filter(_.id === messageId).result.head
-  //    attachmentId <- if (attachment.isDefined) attachment.get else DBIO.successful()
-  //    savedAttachment <- attachmentTableQuery.filter(_.id === attachmentId)
-  //  } yield Message(
-  //    id = savedMessage.id.get,
-  //    text = savedMessage.text,
-  //    userId = savedMessage.userId,
-  //    created = savedMessage.createdAt,
-  //    username = "",
-  //    uuid = savedMessage.uuid
-  //      quotedId = savedMessage.quotedId,
-  //    fileName =
-  //      path =
-  //        quotedMessage =
-  //  )
+  def saveMessage(message: DbMessage, attachment: Option[MessageAttachment] = None): DBIO[Message] =
+    executeTransactionally {
+      for {
+        savedDbMessage <- save(message)
+        messageId <- if (savedDbMessage.id.isDefined) DBIO.successful(savedDbMessage.id.get)
+        else DBIO.failed(AmbigousResult(s"Message [message=$message] has not been saved"))
+        _ <- attachment match {
+          case Some(value) => {
+            attachmentTableQuery += value.copy(messageId = messageId)
+          }
+        }
+        maybeMessage <- findMessage(messageId)
+        result <- if (maybeMessage.isDefined) DBIO.successful(maybeMessage.get)
+        else DBIO.failed(NotFound(s"Not found message with [id = $messageId]"))
+      } yield result
+    }
 
   def findMessage(id: Int): DBIO[Option[Message]] = executeTransactionally {
     val query = ((tableQuery joinLeft userTableQuery) on (_.userId === _.id) joinLeft attachmentTableQuery) on (_._1.id === _.messageId)

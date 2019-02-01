@@ -9620,7 +9620,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.1"
     object-path "^0.11.4"
 
-graphql@^0.13.0:
+graphql@0.13.2, graphql@^0.13.0:
   version "0.13.2"
   resolved "https://registry.npmjs.org/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   integrity sha512-QZ5BL8ZO/B20VA8APauGBg3GyEgZ19eduvpLWoq5x7gMmWnHoy8rlQWPLmWgFvo1yNgjSEFMesmS4R6pPr7xog==
@@ -10247,7 +10247,7 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
 
-immutability-helper@^2.6.2:
+immutability-helper@2.8.1, immutability-helper@^2.6.2:
   version "2.8.1"
   resolved "https://registry.npmjs.org/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
@@ -11103,7 +11103,7 @@ items@2.x.x:
   resolved "https://registry.npmjs.org/items/-/items-2.1.2.tgz#0849354595805d586dac98e7e6e85556ea838558"
   integrity sha512-kezcEqgB97BGeZZYtX/MA8AG410ptURstvnz5RAgyFZ8wQFPMxHY8GpTq+/ZHKT3frSlIthUq7EvLt9xn3TvXg==
 
-iterall@^1.1.3, iterall@^1.2.1:
+iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
   version "1.2.2"
   resolved "https://registry.npmjs.org/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
   integrity sha512-yynBb1g+RFUPY64fTrFv7nsjRrENBQJaX2UL+2Szc9REFrSNm1rpSXHGzhmAy7a9uv3vlvgBlXnf9RqmPH1/DA==
@@ -16619,6 +16619,7 @@ react-native-view-shot@2.5.0:
 
 "react-native@https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz":
   version "0.57.1"
+  uid "78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   resolved "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz#78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   dependencies:
     absolute-path "^0.0.0"
@@ -17623,11 +17624,6 @@ rn-topview@^0.1.6:
   resolved "https://registry.npmjs.org/rn-topview/-/rn-topview-0.1.6.tgz#b1b1216caf730f8547cd23c9b918ad0288454b11"
   integrity sha512-Dq9/Acbj5R9w9hK05+CiZ2Y4ZPE+6ih3EodBc+Kde9oYWeG/IDPxWuRygyAQDyXnnieRyRqrzCbuQ6L8ib31IA==
 
-roboto-fontface@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/roboto-fontface/-/roboto-fontface-0.10.0.tgz#7eee40cfa18b1f7e4e605eaf1a2740afb6fd71b0"
-  integrity sha512-OlwfYEgA2RdboZohpldlvJ1xngOins5d7ejqnIBWr9KaMxsnBqotpptRXTyfNRLnFpqzX6sTDt+X+a+6udnU8g==
-
 roboto-npm-webfont@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/roboto-npm-webfont/-/roboto-npm-webfont-1.0.1.tgz#d0b67d8e4b461e48242d2214809757136fee248a"
@@ -18310,10 +18306,10 @@ spdy@^4.0.0:
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
 
-spinjs@^0.4.185:
-  version "0.4.185"
-  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.185.tgz#30cb57787b675b5c053b9e69dbfec2a256df6979"
-  integrity sha512-yaeIxZsENS9j1qn3xzQvLpgWhx/+rKwO+8BM5NsDkwMLWCYmLs0ZKCGcieGMLIiVO0VcGv4xnEoPFbyrV6S9+A==
+spinjs@^0.4.187:
+  version "0.4.187"
+  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.187.tgz#527ac2cc4a4e61ea0496b3dd8e075661f4d2c9ba"
+  integrity sha512-+PytXjERzp13absh3td8yphJo6By4jS5tmhCfTUDK/x6CIfZ/iKDw+pQ9WjQybzqPqg9PlpTK4viUxSY3j64SQ==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -19557,7 +19553,7 @@ unzip-response@^2.0.1:
   resolved "https://registry.npmjs.org/unzip-response/-/unzip-response-2.0.1.tgz#d2f0f737d16b0615e72a6935ed04214572d56f97"
   integrity sha1-0vD3N9FrBhXnKmk17QQhRXLVb5c=
 
-upath@^1.0.5:
+upath@^1.0.5, upath@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
   integrity sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==
@@ -19932,7 +19928,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0:
+watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
   version "1.6.0"
   resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:

@@ -1,7 +1,7 @@
 import update from 'immutability-helper';
+import { mergeFilter } from '@gqlapp/core-client-react';
 
-import { mergeFilter } from '../../../utils/crud';
-import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+import { $Module$Schema } from '../../server-ts/schema';
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 
 const TYPE_$MODULE$_STATE = '$Module$State';

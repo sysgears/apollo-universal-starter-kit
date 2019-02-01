@@ -2,11 +2,11 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
+import { ListView } from '@gqlapp/look-client-react';
+import { removeTypename, removeEmpty } from '@gqlapp/core-common';
+import { updateEntry, deleteEntry } from '@gqlapp/core-client-react';
 
-import { removeTypename, removeEmpty } from '../../../../../common/utils';
-import { ListView } from '../../common/components/crud';
-import { updateEntry, deleteEntry } from '../../../utils/crud';
-import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+import { $Module$Schema } from '../../server-ts/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 import UPDATE_LIMIT from '../graphql/UpdateLimit.client.graphql';

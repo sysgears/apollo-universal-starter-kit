@@ -1,8 +1,8 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
-import { EditView } from '../../common/components/crud';
-import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+import { EditView } from '@gqlapp/look-client-react';
+import { $Module$Schema } from '../../server-ts/schema';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
 import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';
@@ -36,7 +36,9 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       createEntry: async data => {
         try {
-          const { data: { create$Module$ } } = await mutate({
+          const {
+            data: { create$Module$ }
+          } = await mutate({
             variables: { data }
           });
 
@@ -60,7 +62,9 @@ export default compose(
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       updateEntry: async (data, where) => {
         try {
-          const { data: { update$Module$ } } = await mutate({
+          const {
+            data: { update$Module$ }
+          } = await mutate({
             variables: { data, where }
           });
 

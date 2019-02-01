@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ClientModule from '@gqlapp/module-client-react-native';
 import { Button } from 'react-native';
 import { createStackNavigator } from 'react-navigation';
 import { Ionicons } from '@expo/vector-icons';
-import { createTabBarIconWrapper } from '../common/components/native';
+import { createTabBarIconWrapper } from '@gqlapp/look-client-react';
+
 import $Module$List from './containers/$Module$List';
 import $Module$Edit from './containers/$Module$Edit';
 import resolvers from './resolvers';
-import ClientModule from '../ClientModule.native';
 
 class $Module$ListScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

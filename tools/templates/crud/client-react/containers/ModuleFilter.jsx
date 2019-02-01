@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
+import { FilterView } from '@gqlapp/look-client-react';
+import { removeTypename } from '@gqlapp/core-common';
 
-import { removeTypename } from '../../../../../common/utils';
-import { FilterView } from '../../common/components/crud';
-import { $Module$Schema } from '../../../../../server/src/modules/$module$/schema';
+import { $Module$Schema } from '../../server-ts/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 import UPDATE_FILTER from '../graphql/UpdateFilter.client.graphql';
@@ -16,7 +16,11 @@ class $Module$Filter extends React.Component {
 
 export default compose(
   graphql($MODULE$_STATE_QUERY, {
-    props({ data: { $module$State: { filter } } }) {
+    props({
+      data: {
+        $module$State: { filter }
+      }
+    }) {
       return removeTypename(filter);
     }
   }),

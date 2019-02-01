@@ -1,6 +1,9 @@
-# GraphQL queries
-query queryNameQuery {
-  queryName {
-    typename
+#import "./$Module$.graphql"
+
+query $module$($where: $Module$WhereUniqueInput!) {
+  $module$(where: $where) {
+    node {
+      ...$Module$Info
+    }
   }
 }

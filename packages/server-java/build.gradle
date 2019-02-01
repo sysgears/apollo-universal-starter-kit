@@ -32,10 +32,12 @@ subprojects {
 		implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.2.RELEASE'
 
 		//GraphQL
-		implementation group: 'com.graphql-java', name: 'graphql-spring-boot-starter', version: '5.0.2'
-		implementation group: 'com.graphql-java', name: 'graphiql-spring-boot-starter', version: '5.0.2'
-		implementation group: 'com.graphql-java', name: 'graphql-java-tools', version: '5.2.4'
-		testImplementation group: 'com.graphql-java', name: 'graphql-spring-boot-starter-test', version: '5.0.2'
+		implementation group: 'com.graphql-java-kickstart', name: 'graphql-java-tools', version: '5.4.1'
+		implementation group: 'com.graphql-java-kickstart', name: 'graphql-spring-boot-starter', version: '5.4.1'
+		implementation group: 'com.graphql-java-kickstart', name: 'graphiql-spring-boot-autoconfigure', version: '5.4.1'
+		testImplementation group: 'com.graphql-java-kickstart', name: 'graphql-spring-boot-starter-test', version: '5.4.1'
+
+		implementation group: 'io.reactivex.rxjava2', name: 'rxjava', version: '2.2.6'
 
 		//H2 DataBase
 		implementation group: 'com.h2database', name: 'h2', version: '1.4.197'

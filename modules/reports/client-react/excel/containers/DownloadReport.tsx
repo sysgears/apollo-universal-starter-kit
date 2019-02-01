@@ -31,7 +31,12 @@ class DownloadReport extends Component<DownloadReportProps> {
   public render() {
     const { t } = this.props;
     return (
-      <Button disabled={this.state.isLoading} style={{ marginLeft: '10px' }} onClick={this.donwload}>
+      <Button
+        className="no-print"
+        disabled={this.state.isLoading}
+        style={{ marginLeft: '10px' }}
+        onClick={this.donwload}
+      >
         {t('downloadExcel')}
       </Button>
     );

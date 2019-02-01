@@ -96,7 +96,6 @@
     "react-router-dom": "^4.2.2",
     "react-router-redux": "^5.0.0-alpha.8",
     "react-stripe-elements": "^1.2.1",
-    "react-to-print": "^2.0.0-alpha-6",
     "react-transition-group": "^2.3.0-beta.0",
     "reactstrap": "^5.0.0-beta",
     "redux": "^4.0.0",

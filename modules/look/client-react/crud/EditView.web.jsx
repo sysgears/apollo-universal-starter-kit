@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-import { PageLayout } from '../web';
+import { PageLayout } from '@gqlapp/look-client-react';
 import FormView from './FormView';
-import settings from '../../../../../../../settings';
+import settings from '../../../../settings';
 
 class EditView extends React.PureComponent {
   static propTypes = {

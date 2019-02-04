@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import DomainValidator from '@domain-schema/validation';
 
-import { onSubmit, mapFormPropsToValues } from '../../../../utils/crud';
-import { createFormFields } from '../../util';
-import { FormView, Button } from '../native';
+import { createFormFields, onSubmit, mapFormPropsToValues } from '@gqlapp/core-client-react';
+import { FormView, Button } from '@gqlapp/look-client-react-native';
 
 const Form = ({ schema, data: { node }, updateEntry, createEntry }) => {
   return (

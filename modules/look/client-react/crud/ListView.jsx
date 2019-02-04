@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, FlatList, Text, View } from 'react-native';
-import { SwipeAction } from '../native';
+import { SwipeAction } from '@gqlapp/look-client-react-native';
 
 class ListView extends React.PureComponent {
   static propTypes = {

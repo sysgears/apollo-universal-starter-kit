@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { DebounceInput } from 'react-debounce-input';
+import { Form, FormItem, Input, Row, Col, Button, Icon, createFormFields } from '@gqlapp/look-client-react';
+import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-client-react';
 
-import { hasRole } from '../../../user/containers/Auth';
-import { Form, FormItem, Input, Row, Col, Button, Icon } from '../web';
-import { createFormFields } from '../../util';
-import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
+const { hasRole } = require('@gqlapp/user-client-react');
 
 const formItemLayout = {
   labelCol: {
@@ -52,8 +51,8 @@ class FilterView extends React.PureComponent {
       customFields === null
         ? false
         : customFields && customFields.role
-          ? !!hasRole(customFields.role, currentUser)
-          : true;
+        ? !!hasRole(customFields.role, currentUser)
+        : true;
 
     if (!showFilter) {
       return null;

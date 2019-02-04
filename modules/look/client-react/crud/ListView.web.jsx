@@ -6,10 +6,22 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '../web';
-import { createColumnFields, createFormFields } from '../../util';
-import { mapFormPropsToValues, pickInputFields } from '../../../../utils/crud';
-import { hasRole } from '../../../user/containers/Auth';
+import {
+  Table,
+  Button,
+  Popconfirm,
+  Row,
+  Col,
+  Form,
+  FormItem,
+  Alert,
+  Spin,
+  createColumnFields,
+  createFormFields
+} from '@gqlapp/look-client-react';
+import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-client-react';
+
+const { hasRole } = require('@gqlapp/user-client-react');
 
 function dragDirection(dragIndex, hoverIndex, initialClientOffset, clientOffset, sourceClientOffset) {
   const hoverMiddleY = (initialClientOffset.y - sourceClientOffset.y) / 2;
@@ -304,15 +316,15 @@ class ListView extends React.Component {
       customBatchFields === null
         ? false
         : customBatchActions && customBatchActions.role
-          ? !!hasRole(customBatchActions.role, currentUser)
-          : true;
+        ? !!hasRole(customBatchActions.role, currentUser)
+        : true;
 
     const showCustomActions =
       customActions === null
         ? false
         : customActions && customActions.role
-          ? !!hasRole(customActions.role, currentUser)
-          : true;
+        ? !!hasRole(customActions.role, currentUser)
+        : true;
 
     const rowSelection = showBatchFields
       ? {

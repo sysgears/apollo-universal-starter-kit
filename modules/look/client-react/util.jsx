@@ -1,7 +1,7 @@
 import React from 'react';
 import { pick, capitalize, startCase } from 'lodash';
-import Field from '../../utils/FieldAdapter';
-import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatePicker } from './components/native';
+import { RenderField, RenderSwitch, RenderSelectQuery, RenderDatePicker } from '@gqlapp/look-client-react';
+import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
 export const createFormFields = (schema, values, setFieldValue, setFieldTouched) => {
   let fields = [];

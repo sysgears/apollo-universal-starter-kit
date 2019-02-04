@@ -6,10 +6,9 @@ import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
 import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
+import { mapFormPropsToValues } from '@gqlapp/core-client-react';
+import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
-import { hasRole } from '../user/containers/Auth';
-import Field from '../../utils/FieldAdapter';
-import { mapFormPropsToValues } from '../../utils/crud';
 import {
   RenderField,
   RenderNumber,
@@ -29,7 +28,9 @@ import {
   Input,
   DatePicker,
   RenderCellSelectQuery
-} from './components/web';
+} from '@gqlapp/look-client-react';
+
+const { hasRole } = require('@gqlapp/user-client-react');
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -152,8 +153,8 @@ export const createColumnFields = ({
                 return customFields[key] && customFields[key]['render']
                   ? customFields[key]['render'](text, record)
                   : customFields[key] && customFields[key]['render']
-                    ? customFields[key]['render'](text, record)
-                    : text;
+                  ? customFields[key]['render'](text, record)
+                  : text;
               },
               title
             )
@@ -179,8 +180,8 @@ export const createColumnFields = ({
     customActions === null
       ? false
       : customActions && customActions.role
-        ? !!hasRole(customActions.role, currentUser)
-        : true;
+      ? !!hasRole(customActions.role, currentUser)
+      : true;
 
   if (showColumnActions) {
     columns.push({
@@ -434,24 +435,22 @@ const createFormFieldsArray = (
                   prefix: `${prefix}${key}[${index}].`,
                   formType
                 })}
-                {!value.hasOne &&
-                  formType !== 'batch' && (
-                    <FormItem {...tailFormItemLayout}>
-                      <Button color="primary" size="sm" onClick={() => remove(index)}>
-                        Delete
-                      </Button>
-                    </FormItem>
-                  )}
+                {!value.hasOne && formType !== 'batch' && (
+                  <FormItem {...tailFormItemLayout}>
+                    <Button color="primary" size="sm" onClick={() => remove(index)}>
+                      Delete
+                    </Button>
+                  </FormItem>
+                )}
               </div>
             ))}
-            {!value.hasOne &&
-              formType !== 'batch' && (
-                <FormItem {...tailFormItemLayout}>
-                  <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
-                    Add field
-                  </Button>
-                </FormItem>
-              )}
+            {!value.hasOne && formType !== 'batch' && (
+              <FormItem {...tailFormItemLayout}>
+                <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
+                  Add field
+                </Button>
+              </FormItem>
+            )}
           </FormItem>
         );
       }}

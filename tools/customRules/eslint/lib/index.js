@@ -6,9 +6,10 @@
 
 //------------------------------------------------------------------------------
 // Requirements
-//------------------------------------------------------------------------------
-import requireIndex from 'requireindex';
+const requireIndex = require('requireindex');
 
+//in package json: "eslint-plugin-custom-rules": "file:./tools/customRules/eslint",
+//in eslint.base: "custom-rules/no-external-imports": 0,
 //------------------------------------------------------------------------------
 // Plugin Definition
 //------------------------------------------------------------------------------

@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-custom-rules",
-  "version": "0.0.0",
+  "version": "0.0.2",
   "description": "For custom rules",
   "keywords": [
     "eslint",
@@ -13,7 +13,7 @@
     "test": "mocha tests --recursive"
   },
   "dependencies": {
-    "requireindex": "~1.1.0",
+    "requireindex": "^1.1.0",
     "read-pkg-up": "^4.0.0"
   },
   "devDependencies": {

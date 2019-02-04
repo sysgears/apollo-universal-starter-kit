@@ -3,10 +3,13 @@ import firebase, { auth, firestore } from 'firebase-admin';
 import { admin } from '../../../../config/firebase';
 
 export async function seed() {
-  firebase.initializeApp({
-    credential: firebase.credential.cert(admin),
-    databaseURL: process.env.DB_FIREBASE
-  });
+  firebase.initializeApp(
+    {
+      credential: firebase.credential.cert(admin),
+      databaseURL: process.env.DB_FIREBASE
+    },
+    'seed'
+  );
   firestore().settings({ timestampsInSnapshots: true });
   try {
     const { uid, passwordHash } = await auth().createUser({

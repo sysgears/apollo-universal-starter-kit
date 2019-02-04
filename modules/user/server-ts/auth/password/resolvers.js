@@ -2,7 +2,6 @@ import bcrypt from 'bcryptjs';
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
-import firebase from 'firebase-admin';
 import access from '../../access';
 import settings from '../../../../../settings';
 
@@ -44,55 +43,10 @@ export default () => ({
 
       return { user, tokens };
     },
-    async firebaseLogin(
-      obj,
-      {
-        input: { email, errorCode, token }
-      },
-      { req, User }
-    ) {
-      let errors = {};
-      if (errorCode) {
-        if (errorCode === 'auth/wrong-password') {
-          errors = { password: req.t('user:auth.password.validPassword') };
-        }
-        if (errorCode === 'auth/user-not-found') {
-          errors = { email: req.t('user:auth.password.validPasswordEmail') };
-        }
-        if (errorCode === 'auth/too-many-requests') {
-          errors = { email: req.t('user:auth.tooManyRequests') };
-        }
-      }
-      const user = await User.getUserByEmail(email);
-      if (user && settings.user.auth.password.confirm && !user.isActive) {
-        errors = { email: req.t('user:auth.password.emailConfirmation') };
-      }
-      if (!isEmpty(errors)) throw new UserInputError(errorCode, { errors });
-
-      await access.grantAccess(token, req);
-
-      return { user };
-    },
     async register(obj, { input }, { mailer, User, req }) {
       const { t } = req;
       const errors = {};
-      let firebaseSignOut;
-      if (settings.user.auth.firebase.enabled) {
-        try {
-          firebaseSignOut = await firebase.auth().createUser({
-            fullName: input.username,
-            ...input
-          });
-        } catch ({ errorInfo }) {
-          firebaseSignOut = errorInfo.code;
-        }
-      }
-      // Firebase errors
-      if (firebaseSignOut.code === 'auth/email-already-exists') {
-        errors.email = t('user:auth.password.usernameIsExisted');
-      }
 
-      // Custom errors
       const userExists = await User.getUserByUsername(input.username);
       if (userExists) {
         errors.username = t('user:auth.password.usernameIsExisted');
@@ -200,10 +154,6 @@ export default () => ({
         throw new Error(t('user:auth.password.invalidToken'));
       }
       if (user) {
-        if (settings.user.auth.firebase.enabled) {
-          const { uid } = await firebase.auth().getUserByEmail(email);
-          await firebase.auth().updateUser(uid, { password: reset.password });
-        }
         await User.updatePassword(user.id, reset.password);
       }
     }

@@ -10,8 +10,6 @@ import User from './firestore';
 import resources from './locales';
 import { admin } from '../../../config/firebase';
 
-import settings from '../../../settings';
-
 const createContextFunc = async ({ context: { user } }) => ({
   User,
   user,
@@ -20,11 +18,11 @@ const createContextFunc = async ({ context: { user } }) => ({
     scope: user ? scopes[user.role] : null
   }
 });
-if (settings.user.auth.firebase.enabled) {
-  const firebasApp = firebase.initializeApp({
-    credential: firebase.credential.cert(admin),
-    databaseURL: process.env.DB_FIREBASE
-  });
+const firebasApp = firebase.initializeApp({
+  credential: firebase.credential.cert(admin),
+  databaseURL: process.env.DB_FIREBASE
+});
+if (!__TEST__) {
   firebasApp.firestore().settings({ timestampsInSnapshots: true });
 }
 

@@ -1,4 +1,5 @@
-import { jwt, session } from './modules';
+import jwt from './jwt';
+import session from './session';
 import serial from './serial';
 
 import AccessModule from './AccessModule';

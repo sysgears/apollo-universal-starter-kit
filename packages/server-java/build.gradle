@@ -6,6 +6,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.springframework.boot:spring-boot-gradle-plugin:2.1.2.RELEASE"
+		classpath "net.ltgt.gradle:gradle-apt-plugin:0.21"
 	}
 }
 
@@ -14,6 +15,7 @@ subprojects {
 	apply plugin: 'java'
 	apply plugin: 'org.springframework.boot'
 	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'net.ltgt.apt'
 	
 	sourceCompatibility = JavaVersion.VERSION_11
 	

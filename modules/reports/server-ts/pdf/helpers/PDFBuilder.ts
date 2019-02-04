@@ -1,13 +1,6 @@
 import PdfPrinter from 'pdfmake';
+import { Content, Style } from 'pdfmake/build/pdfmake';
 import fonts from './fonts/Roboto/';
-
-interface StyleShape {
-  fontSize?: number;
-  bold?: boolean;
-  italics?: boolean;
-  alignment?: string;
-  margin?: number[];
-}
 
 interface UserContact {
   id: number;
@@ -16,31 +9,10 @@ interface UserContact {
   email: string;
 }
 
-interface Content {
-  text?: string;
-  style?: string;
-  alignment?: string;
-  image?: string;
-  table?: Table;
-  width?: number;
-  height?: number;
-}
-
-interface Table {
-  widths: string[];
-  body: string[][];
-}
-
 export default class PDFBuilder {
-  private printer: any;
-  private content: Array<Content | string>;
-  private styles: { [name: string]: StyleShape };
-
-  constructor() {
-    this.printer = new PdfPrinter(fonts);
-    this.content = [];
-    this.styles = {};
-  }
+  private printer = new PdfPrinter(fonts);
+  private content: Content = [];
+  private styles: { [name: string]: Style } = {};
 
   public addText(text: string, style?: string, alignment?: string) {
     this.content.push({
@@ -50,7 +22,7 @@ export default class PDFBuilder {
     });
   }
 
-  public addStyle(name: string, style: StyleShape) {
+  public addStyle(name: string, style: Style) {
     this.styles[name] = style;
   }
 

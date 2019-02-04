@@ -5,10 +5,12 @@
 </template>
 
 <script lang='ts'>
+import Vue from 'vue';
+import { ApolloCache } from 'apollo-cache';
 import { ADD_COUNTER, COUNTER_QUERY } from '@gqlapp/counter-common';
 import { Button } from '@gqlapp/look-client-vue';
 
-export default {
+export default Vue.extend({
   props: { counter: Object },
   components: {
     Button
@@ -19,12 +21,12 @@ export default {
         mutation: ADD_COUNTER,
         variables: { amount: 1 },
         update(
-          cache,
+          cache: ApolloCache<any>,
           {
             data: {
               addServerCounter: { amount }
             }
-          }
+          }: any
         ) {
           cache.writeQuery({
             query: COUNTER_QUERY,
@@ -40,11 +42,11 @@ export default {
           __typename: 'Mutation',
           addServerCounter: {
             __typename: 'Counter',
-            amount: (this as any).counter.amount + 1
+            amount: this.counter.amount + 1
           }
         }
       });
     }
   }
-};
+});
 </script>

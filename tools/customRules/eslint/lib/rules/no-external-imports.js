@@ -5,20 +5,19 @@
 
 'use strict';
 
-var path = require('path');
-var fs = require('fs');
+const path = require('path');
+const fs = require('fs');
 
 const DEPENDENCIES_VARIANTS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-function getDependencies(providedPath, moduleDependencies, nodeImport) {
+function getDependencies(providedPath, moduleDependencies) {
   const dirPath = path.resolve(path.dirname(providedPath));
   const packageJsonPath = findFilesystemEntity(dirPath, 'package.json');
   if (typeof packageJsonPath !== 'undefined') {
     getDependenciesFromPackageJson(packageJsonPath, moduleDependencies);
   }
   checkDependenciesInNodeModules(dirPath, moduleDependencies);
-
-  if (!moduleDependencies.has(nodeImport)) {
+  if (dirPath !== '/') {
     checkDependenciesInNodeModules(path.dirname(dirPath), moduleDependencies);
   }
 }
@@ -40,20 +39,24 @@ function findFilesystemEntity(current, name) {
     prev = current;
     current = path.dirname(current);
   } while (prev !== current);
-  return undefined;
+  {
+    return undefined;
+  }
 }
 
-function addDependencies(moduleDependencies, dependencies, moduleSubDependencies) {
-  for (const name in dependencies) {
-    if (dependencies.hasOwnProperty(name)) {
-      if (moduleSubDependencies && name.indexOf('@') === 0) {
-        const moduleParts = name.split('/');
-        moduleSubDependencies[moduleParts[0]] = moduleParts[1];
+function collectNodeModulesDependencies(currentPath, packageJsonDependencies) {
+  const nodeModulesFolders = fs.readdirSync(currentPath);
+  for (const moduleFolder of nodeModulesFolders) {
+    const stat = fs.lstatSync(path.join(currentPath, moduleFolder));
+
+    if (packageJsonDependencies.has(moduleFolder)) {
+      if (stat.isSymbolicLink()) {
+        getDependenciesFromPackageJson(path.join(currentPath, moduleFolder, 'package.json'), packageJsonDependencies);
       }
-      moduleDependencies.add(name);
     }
   }
 }
+
 function getDependenciesFromPackageJson(packageJsonPath, moduleDependencies) {
   // don't use require here to avoid caching
   // remove BOM from file content before parsing
@@ -65,14 +68,14 @@ function getDependenciesFromPackageJson(packageJsonPath, moduleDependencies) {
   });
 }
 
-function collectNodeModulesDependencies(currentPath, packageJsonDependencies) {
-  const nodeModulesFolders = fs.readdirSync(currentPath);
-  for (const moduleFolder of nodeModulesFolders) {
-    const stat = fs.lstatSync(path.join(currentPath, moduleFolder));
-    if (packageJsonDependencies.has(moduleFolder)) {
-      if (stat.isSymbolicLink()) {
-        getDependenciesFromPackageJson(path.join(currentPath, moduleFolder, 'package.json'), packageJsonDependencies);
+function addDependencies(moduleDependencies, dependencies, moduleSubDependencies) {
+  for (const name in dependencies) {
+    if (dependencies.hasOwnProperty(name)) {
+      if (moduleSubDependencies && name.indexOf('@') === 0) {
+        const moduleParts = name.split('/');
+        moduleSubDependencies[moduleParts[0]] = moduleParts[1];
       }
+      moduleDependencies.add(name);
     }
   }
 }
@@ -110,13 +113,12 @@ module.exports = {
     const moduleDependencies = new Set();
     getDependencies(context.getFilename(), moduleDependencies);
     // any helper functions should go here or else delete this section
-
     //----------------------------------------------------------------------
     // Public
     //----------------------------------------------------------------------
     return {
       ImportDeclaration: function(node) {
-        reportIfMissing(context, node, moduleDependencies, node.source.value);
+        reportIfMissing(context, node, moduleDependencies);
       }
     };
   }

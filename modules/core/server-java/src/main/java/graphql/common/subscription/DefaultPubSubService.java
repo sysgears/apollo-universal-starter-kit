@@ -8,13 +8,13 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 
 
-public abstract class DefaultPublisher<T> implements Publisher<T> {
+public abstract class DefaultPubSubService<T> implements PubSubService<T> {
 
     private final Flowable<T> publisher;
 
     private ObservableEmitter<T> emitter;
 
-    public DefaultPublisher() {
+    public DefaultPubSubService() {
         Observable<T> stockPriceUpdateObservable = Observable.create(emitter ->
                 this.emitter = emitter
         );

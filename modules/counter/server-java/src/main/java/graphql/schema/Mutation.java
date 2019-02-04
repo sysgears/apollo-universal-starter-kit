@@ -2,7 +2,7 @@ package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import graphql.model.Counter;
-import graphql.publisher.CounterPublisher;
+import graphql.publisher.CounterPubSubService;
 import graphql.repository.CounterRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class Mutation implements GraphQLMutationResolver {
     private CounterRepository counterRepository;
 
     @Autowired
-    private CounterPublisher counterPublisher;
+    private CounterPubSubService counterPubSubService;
 
     @Transactional
     public Counter addServerCounter(Integer amount) {
@@ -31,7 +31,7 @@ public class Mutation implements GraphQLMutationResolver {
         logger.debug("Server counter -> Update amount");
         Counter savedCounter = counterRepository.save(counter);
         logger.debug("Server counter -> Publish element");
-        counterPublisher.publish(savedCounter);
+        counterPubSubService.publish(savedCounter);
         return savedCounter;
     }
 }

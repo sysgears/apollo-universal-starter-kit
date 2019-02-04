@@ -2,7 +2,7 @@ package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLSubscriptionResolver;
 import graphql.model.Counter;
-import graphql.publisher.CounterPublisher;
+import graphql.publisher.CounterPubSubService;
 import io.reactivex.functions.Predicate;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,10 +16,10 @@ class Subscription implements GraphQLSubscriptionResolver {
     Logger logger = LogManager.getLogger(Subscription.class);
 
     @Autowired
-    private CounterPublisher counterPublisher;
+    private CounterPubSubService counterPubSubService;
 
     public Publisher<Counter> counterUpdated() {
         logger.debug("Server counter -> Subscribe");
-        return counterPublisher.subscribe((Predicate<Counter>) counter -> true);
+        return counterPubSubService.subscribe((Predicate<Counter>) counter -> true);
     }
 }

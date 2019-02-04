@@ -9,9 +9,31 @@ interface StyleShape {
   margin?: number[];
 }
 
+interface UserContact {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+}
+
+interface Content {
+  text?: string;
+  style?: string;
+  alignment?: string;
+  image?: string;
+  table?: Table;
+  width?: number;
+  height?: number;
+}
+
+interface Table {
+  widths: string[];
+  body: string[][];
+}
+
 export default class PDFBuilder {
   private printer: any;
-  private content: object[];
+  private content: Array<Content | string>;
   private styles: { [name: string]: StyleShape };
 
   constructor() {
@@ -32,7 +54,7 @@ export default class PDFBuilder {
     this.styles[name] = style;
   }
 
-  public addTable(data: object[], columnsWidth: string[]) {
+  public addTable(data: UserContact[], columnsWidth: string[]) {
     this.content.push({
       table: {
         widths: columnsWidth,

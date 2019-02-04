@@ -6,7 +6,6 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
-import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
 class UserAdd extends React.Component {
@@ -26,13 +25,7 @@ class UserAdd extends React.Component {
 
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
-    userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
-
     userValues = UserFormatter.trimExtraSpaces(userValues);
-
-    if (settings.user.auth.certificate.enabled) {
-      userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
-    }
 
     try {
       await addUser(userValues);

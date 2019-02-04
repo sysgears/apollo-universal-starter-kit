@@ -66,11 +66,11 @@ export default pubsub => ({
       async (obj, { input }, { User, user, req: { t } }) => {
         const { errors, id } = await User.register(input);
 
-        if (errors.code === 'auth/email-already-exists') {
+        if (errors && errors.code === 'auth/email-already-exists') {
           errors.email = t('firebase:emailIsExisted');
         }
 
-        if (errors.code === 'auth/invalid-password') {
+        if (errors && errors.code === 'auth/invalid-password') {
           errors.password = t('firebase:passwordLength');
         }
         if (!isEmpty(errors)) throw new UserInputError('Failed to get events due to validation errors', { errors });
@@ -96,11 +96,11 @@ export default pubsub => ({
       async (obj, { input }, { User, user, req: { t } }) => {
         const { errors, id } = await User.editUser(input);
 
-        if (errors.code === 'auth/email-already-exists') {
+        if (errors && errors.code === 'auth/email-already-exists') {
           errors.email = t('firebase:emailIsExisted');
         }
 
-        if (errors.code === 'auth/invalid-password') {
+        if (errors && errors.code === 'auth/invalid-password') {
           errors.password = t('firebase:passwordLength');
         }
 
@@ -127,7 +127,7 @@ export default pubsub => ({
       },
       async (obj, { id }, { User, user, req: { t } }) => {
         const { errors, deletedUid } = await User.deleteUser(id);
-        if (errors.code === 'auth/user-not-found') {
+        if (errors && errors.code === 'auth/user-not-found') {
           throw new Error(t('firebase:userIsNotExisted'));
         }
 

@@ -3,32 +3,43 @@ import { firestore, auth } from 'firebase-admin';
 class User {
   async getUsers(orderBy, filter) {
     const docs = await firestore().collection('users');
-    let userWithFilters;
-    // add filter conditions
+
+    let usersWithOrderBy = docs;
     if (filter) {
-      if (filter.isActive !== null) {
-        userWithFilters = await docs.where('isActive', '==', filter.isActive);
-      }
-
-      if (filter.role) {
-        userWithFilters = await docs.where('role', '==', filter.role);
-      }
-
-      if (filter.searchText !== '') {
-        userWithFilters = await docs.where('username', '==', filter.searchText);
-        userWithFilters = await docs.where('email', '==', filter.searchText);
-      }
       // add order by
       if (orderBy && orderBy.column) {
-        userWithFilters = await docs.orderBy(orderBy.column, orderBy.order);
+        usersWithOrderBy = await docs.orderBy(orderBy.column, orderBy.order);
       }
     }
-    const getDocs = await userWithFilters.get();
+    const getDocs = await usersWithOrderBy.get();
     if (getDocs.empty) return false;
     let users = [];
     getDocs.forEach(doc => {
-      users.push(doc);
+      users.push(doc.data());
     });
+    // add filter conditions
+    if (filter) {
+      if (filter.isActive !== null) {
+        users = users.filter(isActiveFilter => {
+          return isActiveFilter.isActive === filter.isActive;
+        });
+      }
+
+      if (filter.role) {
+        users = users.filter(roleFilter => {
+          return roleFilter.role === filter.role;
+        });
+      }
+
+      if (filter.searchText !== '') {
+        users = users.filter(searchTextFilter => {
+          return (
+            searchTextFilter.username.toLowerCase() === filter.searchText ||
+            searchTextFilter.email.toLowerCase() === filter.searchText
+          );
+        });
+      }
+    }
     return users;
   }
   async getUser(uid) {
@@ -64,31 +75,31 @@ class User {
   //   }
 
   async register({ username, email, role = 'user', isActive, password }) {
-    let id, userPasswordHash, errors;
+    const active = isActive ? isActive : false;
+    let id, errors;
     try {
       const { uid, passwordHash } = await auth().createUser({
         email,
         password,
         displayName: username,
-        emailVerified: isActive,
+        emailVerified: active,
         disabled: false
       });
       id = uid;
-      userPasswordHash = passwordHash;
+      await firestore()
+        .collection('users')
+        .doc(id)
+        .set({
+          id,
+          username,
+          email,
+          role,
+          isActive: active,
+          passwordHash
+        });
     } catch (e) {
-      errors = e;
+      errors = e.errorInfo;
     }
-    await firestore()
-      .collection('users')
-      .doc(id)
-      .set({
-        id,
-        username,
-        email,
-        role,
-        isActive,
-        userPasswordHash
-      });
     return { errors, id };
   }
 
@@ -109,11 +120,11 @@ class User {
   //   }
 
   async editUser({ id, username, email, role, isActive, password }) {
-    const localAuthInput = password ? { email, password } : { email };
-    let user, errors;
+    const localAuthInput = password ? { email, password, displayName: username } : { email, displayName: username };
+    let errors;
     try {
-      const { passwordHash } = await auth().updateUser(id, ...localAuthInput);
-      user = await firestore()
+      const { passwordHash } = await auth().updateUser(id, localAuthInput);
+      await firestore()
         .collection('users')
         .doc(id)
         .update({
@@ -122,12 +133,11 @@ class User {
           role,
           isActive,
           passwordHash
-        })
-        .get();
+        });
     } catch (e) {
-      errors = e;
+      errors = e.errorInfo;
     }
-    return { errors, user };
+    return { errors, id };
   }
 
   //   async isUserProfileExists(userId) {
@@ -169,18 +179,18 @@ class User {
   //   }
 
   async deleteUser(id) {
-    let deletedUid, errors;
+    let errors;
     try {
       await auth().deleteUser(id);
-      id = await firestore()
+      await firestore()
         .collection('users')
         .doc(id)
         .delete();
     } catch (e) {
-      errors = e;
+      errors = e.errorInfo;
     }
 
-    return { errors, deletedUid };
+    return { errors, id };
   }
 
   async updatePassword(id, newPassword) {

@@ -22,8 +22,14 @@ import ResetPassword from './containers/ResetPassword';
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 import settings from '../../../settings';
 
-// Initialize Firebase
-firebase.initializeApp(settings.firebase.clientData);
+// checking for running firebase default app
+const existApp = firebase.apps.find(app => {
+  return app.name === '[DEFAULT]';
+});
+if (!existApp) {
+  // Initialize Firebase
+  firebase.initializeApp(settings.firebase.clientData);
+}
 
 const ProfileName = withLoadedUser(({ currentUser }) =>
   currentUser ? currentUser.fullName || currentUser.username : null

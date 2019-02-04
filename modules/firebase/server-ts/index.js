@@ -18,7 +18,13 @@ const createContextFunc = async ({ context: { user } }) => ({
     scope: user ? scopes[user.role] : null
   }
 });
-if (!__TEST__) {
+
+// checking for running firebase default app
+const existApp = firebase.apps.find(app => {
+  return app.name === '[DEFAULT]';
+});
+if (!existApp) {
+  // init firebase default app
   const firebasApp = firebase.initializeApp({
     credential: firebase.credential.cert(settings.firebase.admin),
     databaseURL: process.env.DB_FIREBASE

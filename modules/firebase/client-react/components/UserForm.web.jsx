@@ -26,8 +26,8 @@ const updateUserFormSchema = {
   passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
 };
 
-const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
-  const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
+const UserForm = ({ values, handleSubmit, errors, t, shouldDisplayRole, shouldDisplayActive }) => {
+  const { username, email, role, isActive, password, passwordConfirmation } = values;
 
   return (
     <Form name="user" onSubmit={handleSubmit}>
@@ -58,32 +58,6 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
           type="checkbox"
           label={t('userEdit.form.field.active')}
           checked={isActive}
-        />
-      )}
-      <Field
-        name="firstName"
-        component={RenderField}
-        type="text"
-        label={t('userEdit.form.field.firstName')}
-        value={profile.firstName}
-        onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
-      />
-      <Field
-        name="lastName"
-        component={RenderField}
-        type="text"
-        label={t('userEdit.form.field.lastName')}
-        value={profile.lastName}
-        onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
-      />
-      {settings.user.auth.certificate.enabled && (
-        <Field
-          name="serial"
-          component={RenderField}
-          type="text"
-          label={t('userEdit.form.field.serial')}
-          value={auth && auth.certificate && auth.certificate.serial}
-          onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
       )}
       <Field
@@ -126,21 +100,14 @@ UserForm.propTypes = {
 
 const UserFormWithFormik = withFormik({
   mapPropsToValues: values => {
-    const { username, email, role, isActive, profile } = values.initialValues;
+    const { username, email, role, isActive } = values.initialValues;
     return {
       username: username,
       email: email,
       role: role || 'user',
       isActive: isActive,
       password: '',
-      passwordConfirmation: '',
-      profile: {
-        firstName: profile && profile.firstName,
-        lastName: profile && profile.lastName
-      },
-      auth: {
-        ...values.initialValues.auth
-      }
+      passwordConfirmation: ''
     };
   },
   async handleSubmit(

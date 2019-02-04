@@ -22,8 +22,14 @@ import UserAdd from './containers/UserAdd';
 
 import settings from '../../../settings';
 
-// Initialize Firebase
-firebase.initializeApp(settings.firebase.clientData);
+// checking for running firebase default app
+const existApp = firebase.apps.find(app => {
+  return app.name === '[DEFAULT]';
+});
+if (!existApp) {
+  // Initialize Firebase
+  firebase.initializeApp(settings.firebase.clientData);
+}
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

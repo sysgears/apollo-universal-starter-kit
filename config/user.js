@@ -16,8 +16,8 @@ export default {
       }
     },
     firebase: {
-      enabled: false,
-      jwt: false,
+      enabled: true,
+      jwt: true,
       session: false
     },
     password: {

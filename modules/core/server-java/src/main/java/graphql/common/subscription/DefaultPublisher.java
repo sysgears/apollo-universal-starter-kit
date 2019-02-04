@@ -8,7 +8,7 @@ import io.reactivex.functions.Predicate;
 import io.reactivex.observables.ConnectableObservable;
 
 
-public abstract class DefaultPublisher<T> {
+public abstract class DefaultPublisher<T> implements Publisher<T> {
 
     private final Flowable<T> publisher;
 
@@ -25,11 +25,11 @@ public abstract class DefaultPublisher<T> {
         publisher = connectableObservable.toFlowable(BackpressureStrategy.BUFFER);
     }
 
-    public ObservableEmitter<T> getEmitter() {
-        return this.emitter;
+    public Flowable<T> subscribe(Predicate predicate) {
+        return this.publisher.filter(predicate);
     }
 
-    public Flowable<T> getPublisher(Predicate predicate) {
-        return publisher.filter(predicate);
+    public void publish(T event) {
+        this.emitter.onNext(event);
     }
 }

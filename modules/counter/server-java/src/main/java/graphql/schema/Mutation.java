@@ -31,7 +31,7 @@ public class Mutation implements GraphQLMutationResolver {
         logger.debug("Server counter -> Update amount");
         Counter savedCounter = counterRepository.save(counter);
         logger.debug("Server counter -> Publish element");
-        counterPublisher.getEmitter().onNext(savedCounter);
+        counterPublisher.publish(savedCounter);
         return savedCounter;
     }
 }

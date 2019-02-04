@@ -20,6 +20,6 @@ class Subscription implements GraphQLSubscriptionResolver {
 
     public Publisher<Counter> counterUpdated() {
         logger.debug("Server counter -> Subscribe");
-        return counterPublisher.getPublisher((Predicate<Counter>) counter -> true);
+        return counterPublisher.subscribe((Predicate<Counter>) counter -> true);
     }
 }

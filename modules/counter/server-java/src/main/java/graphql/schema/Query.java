@@ -18,7 +18,7 @@ public class Query implements GraphQLQueryResolver {
     private CounterRepository counterRepository;
 
     public Counter serverCounter() {
-        logger.info("Get amount");
+        logger.debug("Server counter -> Get amount");
         return counterRepository.findById(1).get(); //TODO Unsafe
     }
 }

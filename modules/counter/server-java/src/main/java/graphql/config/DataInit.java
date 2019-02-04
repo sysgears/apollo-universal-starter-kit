@@ -28,7 +28,7 @@ public class DataInit implements ApplicationRunner {
         long count = counterRepository.count();
 
         if (count == 0) {
-            logger.info("Init DB. Table [COUNTER]");
+            logger.debug("Init DB. Table [COUNTER]");
             counterRepository.save(Counter.builder().amount(1).id(COUNTER_ID).build());
         }
     }

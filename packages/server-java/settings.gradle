@@ -1,3 +1,4 @@
-include ':app', ':counter'
+include ':app', ':core', ':counter'
 
+project(':core').projectDir = new File('../../modules/core/server-java')
 project(':counter').projectDir = new File('../../modules/counter/server-java')

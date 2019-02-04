@@ -54,3 +54,10 @@ project(':app') {
 	}
 }
 
+project(':counter') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}
+

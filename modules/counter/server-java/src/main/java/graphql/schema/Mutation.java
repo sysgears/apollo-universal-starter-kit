@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static graphql.config.DataInit.COUNTER_ID;
+import static graphql.repository.DataInit.COUNTER_ID;
 
 @Component
 public class Mutation implements GraphQLMutationResolver {

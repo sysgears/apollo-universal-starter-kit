@@ -1,7 +1,6 @@
-package graphql.config;
+package graphql.repository;
 
 import graphql.model.Counter;
-import graphql.repository.CounterRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +15,8 @@ public class DataInit implements ApplicationRunner {
 
     public static final Integer COUNTER_ID = 1;
 
-    private CounterRepository counterRepository;
-
     @Autowired
-    public DataInit(CounterRepository counterRepository) {
-        this.counterRepository = counterRepository;
-    }
+    private CounterRepository counterRepository;
 
     @Override
     public void run(ApplicationArguments args) {

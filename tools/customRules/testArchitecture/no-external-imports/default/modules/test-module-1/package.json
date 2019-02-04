@@ -1,0 +1,8 @@
+{
+  "name": "test-module-1-client-react",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "safe":"0.4.6"
+  }
+}

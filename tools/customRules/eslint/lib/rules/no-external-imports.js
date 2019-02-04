@@ -10,7 +10,7 @@ var fs = require('fs');
 
 const DEPENDENCIES_VARIANTS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies'];
 
-function getDependencies(providedPath, moduleDependencies, nodeModuleDependencies) {
+function getDependencies(providedPath, moduleDependencies, nodeModuleDependencies, nodeImport) {
   // console.log('getDependencies')
   const subModuleDependencies = {};
   const dirPath = path.resolve(path.dirname(providedPath));
@@ -19,6 +19,15 @@ function getDependencies(providedPath, moduleDependencies, nodeModuleDependencie
     getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies);
   }
   checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, subModuleDependencies, moduleDependencies);
+
+  if (!moduleDependencies.has(nodeImport)) {
+    checkDependenciesInNodeModules(
+      path.dirname(dirPath),
+      nodeModuleDependencies,
+      subModuleDependencies,
+      moduleDependencies
+    );
+  }
 }
 
 function checkDependenciesInNodeModules(
@@ -165,7 +174,7 @@ module.exports = {
     //----------------------------------------------------------------------
     return {
       ImportDeclaration: function(node) {
-        reportIfMissing(context, node, moduleDependencies);
+        reportIfMissing(context, node, moduleDependencies, node.source.value);
       }
     };
   }

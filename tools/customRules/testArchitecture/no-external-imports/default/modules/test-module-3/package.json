@@ -1,0 +1,9 @@
+{
+    "name": "@modules/test-module-3-client-react",
+    "version": "1.0.0",
+    "private": true,
+    "devDependencies": {
+      "bla": "^1.1.2"
+    }
+  }
+  

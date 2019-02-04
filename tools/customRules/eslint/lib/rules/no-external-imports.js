@@ -20,8 +20,7 @@ function getDependencies(providedPath, moduleDependencies) {
 }
 
 function checkDependenciesInNodeModules(currentFolderPath, packageJsonDependencies) {
-  //TODO add bash file fo rename 'test_node_modules' to 'node_modules'
-  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
+  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'node_modules');
   if (typeof nodeModulesPath !== 'undefined') {
     collectNodeModulesDependencies(nodeModulesPath, packageJsonDependencies);
   }

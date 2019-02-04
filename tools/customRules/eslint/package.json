@@ -11,9 +11,9 @@
   "main": "lib/index.js",
   "scripts": {
     "start test": "npm-run-all -s renameForTest test renameForBuild",
-    "renameForTest": "bash ./renameForTests.sh commandFirst",
+    "renameForTest": "bash ../common/no-external-imports/renameForTests.sh commandFirst",
     "test" : "mocha tests --recursive",
-    "renameForBuild": "bash ./renameForTests.sh"
+    "renameForBuild": "bash ../common/no-external-imports/renameForTests.sh"
   },
   "dependencies": {
     "requireindex": "^1.1.0",

@@ -20,10 +20,10 @@ import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 
-import { clientData } from '../../../config/firebase';
+import settings from '../../../settings';
 
 // Initialize Firebase
-firebase.initializeApp(clientData);
+firebase.initializeApp(settings.firebase.clientData);
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({

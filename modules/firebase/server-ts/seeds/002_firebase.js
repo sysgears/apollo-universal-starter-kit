@@ -1,25 +1,27 @@
-import firebase, { auth, firestore } from 'firebase-admin';
+import firebase from 'firebase-admin';
 
-import { admin } from '../../../../config/firebase';
+import settings from '../../../../settings';
 
 export async function seed() {
-  firebase.initializeApp(
+  if (!settings.firebase.admin.private_key) return;
+  const firebaseApp = firebase.initializeApp(
     {
-      credential: firebase.credential.cert(admin),
+      credential: firebase.credential.cert(settings.firebase.admin),
       databaseURL: process.env.DB_FIREBASE
     },
     'seed'
   );
-  firestore().settings({ timestampsInSnapshots: true });
+  firebaseApp.firestore().settings({ timestampsInSnapshots: true });
   try {
-    const { uid, passwordHash } = await auth().createUser({
+    const { uid, passwordHash } = await firebaseApp.auth().createUser({
       email: 'admin@example.com',
       emailVerified: true,
       password: 'admin123',
       displayName: 'admin',
       disabled: false
     });
-    await firestore()
+    await firebaseApp
+      .firestore()
       .collection('users')
       .doc(uid)
       .set({
@@ -34,14 +36,15 @@ export async function seed() {
     console.log('Firebase user exsist', e);
   }
   try {
-    const { uid, passwordHash } = await auth().createUser({
+    const { uid, passwordHash } = await firebaseApp.auth().createUser({
       email: 'user@example.com',
       emailVerified: true,
       password: 'user1234',
       displayName: 'user',
       disabled: false
     });
-    await firestore()
+    await firebaseApp
+      .firestore()
       .collection('users')
       .doc(uid)
       .set({

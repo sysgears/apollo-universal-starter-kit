@@ -9,3 +9,4 @@ export { default as i18n } from './i18n';
 export { default as pagination } from './pagination';
 export { default as upload } from './upload';
 export { default as chat } from './chat';
+export { default as firebase } from './firebase';

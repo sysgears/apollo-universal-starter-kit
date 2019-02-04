@@ -20,10 +20,10 @@ import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
-import { clientData } from '../../../config/firebase';
+import settings from '../../../settings';
 
 // Initialize Firebase
-firebase.initializeApp(clientData);
+firebase.initializeApp(settings.firebase.clientData);
 
 const ProfileName = withLoadedUser(({ currentUser }) =>
   currentUser ? currentUser.fullName || currentUser.username : null

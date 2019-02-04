@@ -11,7 +11,7 @@ interface ReportProps {
 }
 
 const Report = ({ t }: ReportProps) => (
-  <PageLayout navBar>
+  <PageLayout>
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
       meta={[

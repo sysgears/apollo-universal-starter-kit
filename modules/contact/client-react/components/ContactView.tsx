@@ -15,7 +15,7 @@ interface ContactViewProps {
 const ContactView = (props: ContactViewProps) => {
   const { t } = props;
   return (
-    <PageLayout navBar>
+    <PageLayout>
       <Helmet
         title={`${settings.app.name} - ${t('title')}`}
         meta={[{ name: 'description', content: `${settings.app.name} - ${t('meta')}` }]}

@@ -9,11 +9,11 @@ const { Header, Content, Footer } = Layout;
 
 class PageLayout extends React.Component {
   render() {
-    const { children, navBar } = this.props;
+    const { children, hideNavBar } = this.props;
 
     return (
       <Layout>
-        {navBar !== false && (
+        {!hideNavBar && (
           <Header>
             <NavBar />
           </Header>
@@ -31,7 +31,7 @@ class PageLayout extends React.Component {
 
 PageLayout.propTypes = {
   children: PropTypes.node,
-  navBar: PropTypes.bool
+  hideNavBar: PropTypes.bool
 };
 
 export default PageLayout;

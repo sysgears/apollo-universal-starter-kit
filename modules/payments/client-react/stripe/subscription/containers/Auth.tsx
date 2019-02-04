@@ -26,7 +26,7 @@ const SubscriptionAuthRouter = ({
   // empty screen when stripe subscription info is loading
   // Important: You don't need to include page layout inside protected routes!
   return (
-    <PageLayout navBar>
+    <PageLayout>
       {!loading && stripeSubscription && stripeSubscription.active ? (
         <Component {...props} />
       ) : !loading && stripeSubscription && !stripeSubscription.active ? (

@@ -13,11 +13,12 @@ export const onAppCreate = modules => (ref.modules = modules);
 const styles = {
   appBar: {
     margin: 0,
-    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    boxShadow: '0 3px 5px 2px rgba(0,0,0,0.14)',
     marginBottom: '20px'
   },
   appBarItemWrapper: {
-    margin: 0
+    margin: 0,
+    width: '100%'
   },
   activeLinkBock: {
     borderBottom: '2px solid #3f51b5'

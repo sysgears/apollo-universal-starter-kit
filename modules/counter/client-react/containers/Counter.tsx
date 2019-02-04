@@ -11,7 +11,7 @@ interface CounterProps {
 }
 
 const Counter = ({ t }: CounterProps) => (
-  <PageLayout navBar>
+  <PageLayout>
     <Helmet
       title={`${settings.app.name} - ${t('title')}`}
       meta={[

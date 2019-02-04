@@ -21,7 +21,7 @@ export default (props: AddSubscriptionViewProps) => {
   const { t } = props;
 
   return (
-    <PageLayout navBar>
+    <PageLayout>
       <Helmet title={`${settings.app.name} - ${t('title')}`} />
       <h1 className="text-center">{t('title')}</h1>
       <Row style={{ justifyContent: 'center' }}>

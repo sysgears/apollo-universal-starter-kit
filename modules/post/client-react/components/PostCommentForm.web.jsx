@@ -14,12 +14,12 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
   return (
     <Form name="comment" onSubmit={handleSubmit}>
       <Row alignItems="center">
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <Label>
             {t(`comment.label.${comment.id ? 'edit' : 'add'}`)} {t('comment.label.comment')}
           </Label>
         </Col>
-        <Col xs={8} md={8}>
+        <Col xs={8}>
           <Field
             name="content"
             component={RenderField}
@@ -29,7 +29,7 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
             label={t('comment.label.field')}
           />
         </Col>
-        <Col xs={2} md={2}>
+        <Col xs={2}>
           <Button color="primary" type="submit" className="float-right">
             {t('comment.btn.submit')}
           </Button>

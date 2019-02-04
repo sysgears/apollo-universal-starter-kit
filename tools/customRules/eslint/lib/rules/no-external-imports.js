@@ -17,15 +17,16 @@ function getDependencies(providedPath, moduleDependencies) {
     getDependenciesFromPackageJson(packageJsonPath, moduleDependencies);
   }
   checkDependenciesInNodeModules(dirPath, moduleDependencies);
-  if (dirPath !== '/') {
-    checkDependenciesInNodeModules(path.dirname(dirPath), moduleDependencies);
-  }
 }
 
 function checkDependenciesInNodeModules(currentFolderPath, packageJsonDependencies) {
+  //TODO add bash file fo rename 'test_node_modules' to 'node_modules'
   const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
   if (typeof nodeModulesPath !== 'undefined') {
     collectNodeModulesDependencies(nodeModulesPath, packageJsonDependencies);
+  }
+  if (currentFolderPath !== '/') {
+    checkDependenciesInNodeModules(path.dirname(currentFolderPath), packageJsonDependencies);
   }
 }
 

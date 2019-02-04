@@ -1,14 +1,14 @@
 import { TranslationFunction } from 'i18next';
 import PDFBuilder from './PDFBuilder';
 
-interface Report {
+interface UserContact {
   id: number;
   name: string;
   phone: string;
   email: string;
 }
 
-function createPDF(reports: Report[], t: TranslationFunction) {
+function createPDF(contacts: UserContact[], t: TranslationFunction) {
   const pdf = new PDFBuilder();
   const image = `${__dirname}/app.png`;
 
@@ -26,7 +26,7 @@ function createPDF(reports: Report[], t: TranslationFunction) {
 
   pdf.addText(t('PdfReport:title'), 'header');
   pdf.addText(t('PdfReport:database'), 'subheader');
-  pdf.addTable(reports, Object.keys(reports[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
+  pdf.addTable(contacts, Object.keys(contacts[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
   pdf.addText(t('PdfReport:orderedList'), 'subheader');
   pdf.addList([5, 4, 3, 2, 1], 'ol');
   pdf.addText(t('PdfReport:unorderedList'), 'subheader');
@@ -37,8 +37,8 @@ function createPDF(reports: Report[], t: TranslationFunction) {
   return pdf.getDocument();
 }
 
-export default function generator(reports: Report[], t: TranslationFunction) {
-  const doc = createPDF(reports, t);
+export default function generator(contacts: UserContact[], t: TranslationFunction) {
+  const doc = createPDF(contacts, t);
   const chunks: Uint8Array[] = [];
 
   doc.on('data', (chunk: Uint8Array) => {

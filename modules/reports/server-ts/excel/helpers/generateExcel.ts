@@ -1,5 +1,12 @@
 import * as xl from 'excel4node';
 
+interface Report {
+  id: number;
+  name: string;
+  phone: string;
+  email: string;
+}
+
 const wb = new xl.Workbook();
 const options = {
   sheetFormat: {
@@ -13,7 +20,7 @@ const style = wb.createStyle({
   }
 });
 
-export default function generateBufferExcel(reports: object[]) {
+export default function generateBufferExcel(reports: Report[]) {
   const ws = wb.addWorksheet('Report', options);
   const titles = Object.keys(reports[0]);
 

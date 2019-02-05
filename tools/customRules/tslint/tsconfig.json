@@ -1,20 +1,19 @@
 {
     "compilerOptions": {
-        "types" : ["node","glob"],
-        "declaration": true,
-        "lib": ["es6"],
-        "target": "es5",
-        "outDir": "./buildRules",
-        "rootDir": "./rules",
-        "module": "commonjs",
-        "strict": true,
-        "pretty": true
+      "types" : ["node","glob"],
+      "declaration": true,
+      "lib": ["es6"],
+      "target": "es5",
+      "outDir": "./buildRules",
+      "rootDir": "./rules",
+      "module": "commonjs",
+      "strict": true,
+      "pretty": true
     },
     "exclude": [
-        "./buildRules",
-        "../rules"
+      "./buildRules"
     ],
     "include": [
-        "**/typings.d.ts"
+      "**/typings.d.ts"
     ]
 }

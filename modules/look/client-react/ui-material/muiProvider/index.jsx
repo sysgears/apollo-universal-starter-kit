@@ -22,7 +22,7 @@ const theme = createMuiTheme({
 // Create a new class name generator for Material UI.
 const generateClassName = createGenerateClassName();
 
-const muiSSRProvider = ({ children }) => {
+const muiProvider = ({ children }) => {
   return (
     <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
       <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
@@ -32,8 +32,8 @@ const muiSSRProvider = ({ children }) => {
   );
 };
 
-muiSSRProvider.propTypes = {
+muiProvider.propTypes = {
   children: PropTypes.node
 };
 
-export default muiSSRProvider;
+export default muiProvider;

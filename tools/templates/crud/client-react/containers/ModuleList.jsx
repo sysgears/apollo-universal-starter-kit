@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { ListView } from '@gqlapp/core-client-react';
 import { removeTypename, removeEmpty, updateEntry, deleteEntry } from '@gqlapp/core-common';
 
-import { $Module$Schema } from '@gqlapp/$-module-ts/schema';
+import { $Module$Schema } from '@gqlapp/$-module$-server-ts/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 import UPDATE_LIMIT from '../graphql/UpdateLimit.client.graphql';

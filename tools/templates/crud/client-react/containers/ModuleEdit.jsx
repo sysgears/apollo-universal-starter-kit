@@ -2,7 +2,7 @@ import React from 'react';
 import { graphql, compose } from 'react-apollo';
 
 import { EditView } from '@gqlapp/core-client-react';
-import { $Module$Schema } from '@gqlapp/$-module-ts/schema';
+import { $Module$Schema } from '@gqlapp/$-module$-server-ts/schema';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';
 import CREATE_$MODULE$ from '../graphql/Create$Module$.graphql';
 import UPDATE_$MODULE$ from '../graphql/Update$Module$.graphql';

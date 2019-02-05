@@ -47,4 +47,8 @@ PageLayout.propTypes = {
   classes: PropTypes.object
 };
 
+PageLayout.defaultProps = {
+  hideNavBar: false
+};
+
 export default withStyles(styles)(PageLayout);

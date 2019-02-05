@@ -34,4 +34,8 @@ PageLayout.propTypes = {
   hideNavBar: PropTypes.bool
 };
 
+PageLayout.defaultProps = {
+  hideNavBar: false
+};
+
 export default PageLayout;

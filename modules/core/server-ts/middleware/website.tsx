@@ -14,12 +14,6 @@ import { isApiExternal, apiUrl } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
 import ClientModule from '@gqlapp/module-client-react';
 import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
-import { styles } from '@gqlapp/look-client-react';
-
-// For Material UI style render
-import { SheetsRegistry } from 'jss';
-import JssProvider from 'react-jss/lib/JssProvider';
-import { MuiThemeProvider, createMuiTheme, createGenerateClassName } from '@material-ui/core/styles';
 
 let assetMap: { [key: string]: string };
 
@@ -39,18 +33,6 @@ if (__SSR__) {
     });
   }
 }
-
-// Create a sheetsRegistry instance for Material UI.
-const sheetsRegistry = new SheetsRegistry();
-
-// Create a sheetsManager instance for Material UI.
-const sheetsManager = new Map();
-
-// Create a theme instance for Material UI.
-const theme = createMuiTheme();
-
-// Create a new class name generator for Material UI.
-const generateClassName = createGenerateClassName();
 
 const Html = ({ content, state, css, helmet }: HtmlProps) => (
   <html lang="en" {...helmet.htmlAttributes.toComponent()}>
@@ -73,11 +55,7 @@ const Html = ({ content, state, css, helmet }: HtmlProps) => (
       {!!__DEV__ && (
         <style
           dangerouslySetInnerHTML={{
-            __html:
-              styles._getCss() +
-              clientModules.stylesInserts.map((style: any) => style._getCss()).join('') +
-              sheetsRegistry.toString()
-            // __html: styles._getCss() + clientModules.stylesInserts.map((style: any) => style._getCss()).join('')
+            __html: clientModules.stylesInserts.map((style: any) => style()).join('')
           }}
         />
       )}
@@ -118,18 +96,15 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   });
   const store = createReduxStore(clientModules.reducers, {}, client);
   const context: any = {};
+
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>
       <ApolloProvider client={client}>
-        <JssProvider registry={sheetsRegistry} generateClassName={generateClassName}>
-          <MuiThemeProvider theme={theme} sheetsManager={sheetsManager}>
-            {clientModules.getDataRoot(
-              <StaticRouter location={req.url} context={context}>
-                {clientModules.router}
-              </StaticRouter>
-            )}
-          </MuiThemeProvider>
-        </JssProvider>
+        {clientModules.getDataRoot(
+          <StaticRouter location={req.url} context={context}>
+            {clientModules.router}
+          </StaticRouter>
+        )}
       </ApolloProvider>
     </Provider>,
     req

@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import { withApollo } from 'react-apollo';
 import { getItem, removeItem, setItem } from '@gqlapp/core-common/clientStorage';
 
 import jwt from './jwt';
@@ -26,14 +25,13 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
-const firebaseJwtController = client => {
+const firebaseJwtController = () => {
   firebase.auth().onAuthStateChanged(async user => {
     const token = await getItem('idToken');
     if (user) {
       if (!token) {
         const newToken = await user.getIdToken();
         await setItem('idToken', newToken);
-        await resetApolloCacheAndRerenderApp(client);
       }
     } else {
       if (token) {
@@ -54,7 +52,7 @@ class PageReloader extends React.Component {
 
   componentDidMount() {
     const { client } = this.props;
-    if (settings.user.auth.firebase.jwt) {
+    if (settings.firebase.jwt.enabled) {
       firebaseJwtController(client);
     }
   }
@@ -73,11 +71,7 @@ PageReloader.propTypes = {
   client: PropTypes.object
 };
 
-const AuthPageReloader = ({ children, client }) => (
-  <PageReloader client={client} ref={ref}>
-    {children}
-  </PageReloader>
-);
+const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
 
 AuthPageReloader.propTypes = {
   children: PropTypes.node,
@@ -85,7 +79,7 @@ AuthPageReloader.propTypes = {
 };
 
 export default new AccessModule(jwt, session, {
-  dataRootComponent: [withApollo(AuthPageReloader)],
+  dataRootComponent: [AuthPageReloader],
   login: [login],
   logout: [logout]
 });

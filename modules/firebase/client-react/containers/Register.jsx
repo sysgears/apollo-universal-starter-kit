@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { translate } from '@gqlapp/i18n-client-react';
+import 'firebase/auth';
 // Apollo
 import { graphql, compose } from 'react-apollo';
 

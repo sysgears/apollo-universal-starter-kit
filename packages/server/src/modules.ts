@@ -27,7 +27,7 @@ const modules: ServerModule = new ServerModule(
   counter,
   post,
   upload,
-  settings.user.auth.firebase.enabled ? firebase : user,
+  settings.firebase.enabled ? firebase : user,
   subscription,
   contact,
   mailer,

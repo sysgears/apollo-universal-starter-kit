@@ -6,7 +6,7 @@ export async function seed() {
   if (!settings.firebase.admin.private_key) return;
   const firebaseApp = firebase.initializeApp(
     {
-      credential: firebase.credential.cert(settings.firebase.admin),
+      credential: firebase.credential.cert(settings.firebase.config.admin),
       databaseURL: process.env.DB_FIREBASE
     },
     'seed'

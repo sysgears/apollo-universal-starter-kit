@@ -114,7 +114,7 @@ DataRootComponent.propTypes = {
   children: PropTypes.node
 };
 
-export default (settings.user.auth.firebase.jwt
+export default (settings.firebase.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
       link: __CLIENT__ ? [JWTLink] : [],

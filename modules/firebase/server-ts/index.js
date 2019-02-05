@@ -8,6 +8,7 @@ import resolvers from './resolvers';
 import scopes from './scopes';
 import User from './firestore';
 import resources from './locales';
+import confirmMiddleware from './confirm';
 import settings from '../../../settings';
 
 const createContextFunc = async ({ context: { user } }) => ({
@@ -19,6 +20,12 @@ const createContextFunc = async ({ context: { user } }) => ({
   }
 });
 
+const middleware = app => {
+  if (settings.firebase.sendConfirmationEmail.enabled) {
+    app.get('/confirmation/:token', confirmMiddleware);
+  }
+};
+
 // checking for running firebase default app
 const existApp = firebase.apps.find(app => {
   return app.name === '[DEFAULT]';
@@ -26,7 +33,7 @@ const existApp = firebase.apps.find(app => {
 if (!existApp) {
   // init firebase default app
   const firebasApp = firebase.initializeApp({
-    credential: firebase.credential.cert(settings.firebase.admin),
+    credential: firebase.credential.cert(settings.firebase.config.admin),
     databaseURL: process.env.DB_FIREBASE
   });
   firebasApp.firestore().settings({ timestampsInSnapshots: true });
@@ -38,5 +45,6 @@ export default new ServerModule(access, auth, {
   schema: [schema],
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
+  middleware: [middleware],
   localization: [{ ns: 'firebase', resources }]
 });

@@ -41,7 +41,7 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.firebase.session
+  settings.firebase.session.enabled
     ? {
         grant: [grant],
         schema: [schema],

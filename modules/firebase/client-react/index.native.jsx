@@ -28,7 +28,7 @@ const existApp = firebase.apps.find(app => {
 });
 if (!existApp) {
   // Initialize Firebase
-  firebase.initializeApp(settings.firebase.clientData);
+  firebase.initializeApp(settings.firebase.config.clientData);
 }
 
 class LoginScreen extends React.Component {

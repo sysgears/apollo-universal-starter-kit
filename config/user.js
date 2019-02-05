@@ -15,11 +15,6 @@ export default {
         refreshTokenExpiresIn: '7d'
       }
     },
-    firebase: {
-      enabled: true,
-      jwt: true,
-      session: false
-    },
     password: {
       confirm: true,
       sendConfirmationEmail: true,

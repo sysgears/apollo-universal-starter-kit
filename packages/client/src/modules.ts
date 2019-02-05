@@ -31,7 +31,7 @@ const modules = new ClientModule(
   pagination,
   chat,
   payments,
-  settings.user.auth.firebase.enabled ? firebase : user,
+  settings.firebase.enabled ? firebase : user,
   i18n,
   reports,
   pageNotFound,

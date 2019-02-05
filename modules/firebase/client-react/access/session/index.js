@@ -10,7 +10,7 @@ const logout = client => {
   return client.mutate({ mutation: LOGOUT });
 };
 
-export default (settings.user.auth.firebase.session
+export default (settings.firebase.session.enabled
   ? new AccessModule({
       logout: [logout]
     })

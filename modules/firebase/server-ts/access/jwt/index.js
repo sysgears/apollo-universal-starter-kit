@@ -30,7 +30,7 @@ const createContextFunc = async ({ req, connectionParams, webSocket, context }) 
 };
 
 export default new AccessModule(
-  settings.user.auth.firebase.jwt
+  settings.firebase.jwt.enabled
     ? {
         grant: [grant],
         schema: [],

@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Spin } from 'antd';
 import { pascalize } from 'humps';
-import { schemaQueries } from '@gqlapp/core-client-react';
+
+import schemaQueries from '../../generatedContainers';
 
 const Option = Select.Option;
 const LIMIT = 10;

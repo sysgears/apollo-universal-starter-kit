@@ -153,7 +153,7 @@ function computePackagePath(packageName) {
  */
 function computeGeneratedSchemasPath(packageName, fileName, old) {
   const modulePackageName = getModulePackageName(packageName, old);
-  return `${BASE_PATH}/modules/core/${modulePackageName}/${fileName}`;
+  return `${BASE_PATH}/modules/${packageName === 'server' ? 'core' : 'look'}/${modulePackageName}/${fileName}`;
 }
 
 /**

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
 import { FormFeedback } from 'reactstrap';
-import { schemaQueries } from '@gqlapp/core-client-react';
 import { FormItem, Select, Spin } from './index';
+import schemaQueries from '../../generatedContainers';
 
 const LIMIT = 10;
 

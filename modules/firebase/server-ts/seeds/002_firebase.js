@@ -3,7 +3,7 @@ import firebase from 'firebase-admin';
 import settings from '../../../../settings';
 
 export async function seed() {
-  if (!settings.firebase.admin.private_key) return;
+  if (!settings.firebase.config.admin.private_key) return;
   const firebaseApp = firebase.initializeApp(
     {
       credential: firebase.credential.cert(settings.firebase.config.admin),

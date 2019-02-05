@@ -1,3 +1,4 @@
+// require('./typings.d.ts');
 const path = require('path');
 const fs = require('fs');
 
@@ -13,7 +14,7 @@ module.exports = (providedPath, moduleDependencies) => {
 };
 
 function checkDependenciesInNodeModules(currentFolderPath, packageJsonDependencies) {
-  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'node_modules');
+  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
   if (typeof nodeModulesPath !== 'undefined') {
     collectNodeModulesDependencies(nodeModulesPath, packageJsonDependencies);
   }
@@ -61,13 +62,9 @@ function getDependenciesFromPackageJson(packageJsonPath, moduleDependencies) {
   });
 }
 
-function addDependencies(moduleDependencies, dependencies, moduleSubDependencies) {
+function addDependencies(moduleDependencies, dependencies) {
   for (const name in dependencies) {
     if (dependencies.hasOwnProperty(name)) {
-      if (moduleSubDependencies && name.indexOf('@') === 0) {
-        const moduleParts = name.split('/');
-        moduleSubDependencies[moduleParts[0]] = moduleParts[1];
-      }
       moduleDependencies.add(name);
     }
   }

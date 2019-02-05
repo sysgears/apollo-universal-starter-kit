@@ -1,9 +1,8 @@
 import * as ts from 'typescript';
 import * as Lint from 'tslint';
-import * as fs from "fs";
-import * as path from "path";
 
 import { findImports, ImportKind } from "tsutils";
+import getDependencies from '../../common/no-external-imports'
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static FAILURE_STRING = `Can't find this dependency in the packages.json or in ` +
@@ -27,169 +26,19 @@ export class Rule extends Lint.Rules.AbstractRule {
     );
   }
 }
-interface PackageJson {
-  name: string;
-  dependencies?: Dependencies;
-  devDependencies?: Dependencies;
-  peerDependencies?: Dependencies;
-  optionalDependencies?: Dependencies;
-  [key: string]: any
-}
 
-interface Dependencies extends Object {
-  [name: string]: any;
-}
-
-type FindFilesystemEntity = (current: string) => string | undefined;
-
-const MODULE_IMPLIMENTATION = [
-  'client-react',
-  'client-angular',
-  'server-ts',
-  'common'
-];
-const DEPENDENCIES_VARIANTS = [
-  'dependencies',
-  'devDependencies',
-  'peerDependencies',
-  'optionalDependencies'
-]
-
-type SubModuleDependencies = { [key: string]: string };
-
-const MODULE_TAG = '@module';
 
 class NoExternalImportsWalker extends Lint.AbstractWalker<null> {
   public walk(sourceFile: ts.SourceFile) {
     const moduleDependencies = new Set<string>();
-    const nodeModuleDependencies = new Set<string>();
     for (const name of findImports(sourceFile, ImportKind.ImportDeclaration)) {
       if (!ts.isExternalModuleNameRelative(name.text)) {
-        if (!moduleDependencies.size && !nodeModuleDependencies.size) {
-          this.getDependencies(sourceFile.fileName, moduleDependencies, nodeModuleDependencies);
-        }
-        console.log('des', nodeModuleDependencies)
-        if (!nodeModuleDependencies.has(name.text)) {
+        getDependencies(sourceFile.fileName, moduleDependencies);
+        console.log('des', moduleDependencies)
+        if (!moduleDependencies.has(name.text)) {
           this.addFailureAtNode(name, Rule.FAILURE_STRING);
         }
       }
     }
   }
-
-
-  /**
-   * Get dependencies of the module and related module
-   * @param providedPath 
-   * @param relatedModule 
-   */
-  private getDependencies(providedPath: string, moduleDependencies: Set<string>, nodeModuleDependencies: Set<string>): void {
-    const subModuleDependencies: SubModuleDependencies = {};
-    const dirPath: string = path.resolve(path.dirname(providedPath));
-    const packageJsonPath = this.findFilesystemEntity(dirPath, 'package.json');
-    if (typeof packageJsonPath !== 'undefined') {
-      this.getDependenciesFromPackageJson(packageJsonPath, moduleDependencies, subModuleDependencies)
-    }
-    this.checkDependenciesInNodeModules(dirPath, nodeModuleDependencies, subModuleDependencies, moduleDependencies);
-  }
-
-  checkDependenciesInNodeModules(currentFolderPath: string,
-    nodeModuleDependencies: Set<string>,
-    subModuleDependencies: SubModuleDependencies,
-    packageJsonDependencies: Set<string>) {
-    const nodeModulesPath = this.findFilesystemEntity(currentFolderPath, 'test_node_modules');
-    if (typeof nodeModulesPath !== 'undefined') {
-
-      this.collectNodeModulesDependencies(nodeModulesPath, nodeModuleDependencies, subModuleDependencies, packageJsonDependencies);
-
-    }
-  }
-
-  private collectNodeModulesDependencies(currentPath: string, nodeModuleDependencies: Set<string>,
-    subModuleDependencies: SubModuleDependencies,
-    packageJsonDependencies: Set<string>, nested: boolean = false) {
-    const nodeModulesFolders = fs.readdirSync(currentPath)
-    for (const moduleFolder of nodeModulesFolders) {
-      const stat = fs.lstatSync(path.join(currentPath, moduleFolder))
-      if (packageJsonDependencies.has(moduleFolder)) {
-        if (stat.isDirectory()) {
-          nodeModuleDependencies.add(moduleFolder)
-          continue;
-        }
-        if (stat.isSymbolicLink()) {
-          this.getDependenciesFromPackageJson(
-            path.join(currentPath, moduleFolder, 'package.json'),
-            nodeModuleDependencies)
-          continue;
-        }
-      }
-      if (subModuleDependencies[moduleFolder]) {
-        if (stat.isDirectory()) {
-          this.collectNodeModulesDependencies(path.join(currentPath, moduleFolder),
-            nodeModuleDependencies, subModuleDependencies, packageJsonDependencies)
-            continue;
-        }
-      }
-      console.log('Name', moduleFolder);
-      console.log('isFolder', stat.isDirectory());
-      console.log('Link', stat.isSymbolicLink());
-    }
-  }
-
-  /**
-   *  Parse package.json and get all needed dependencies
-   * @param packageJsonPath 
-   * @param moduleDependencies 
-   */
-  private getDependenciesFromPackageJson(packageJsonPath: string, moduleDependencies: Set<string>, subModuleDependencies?: SubModuleDependencies) {
-    // don't use require here to avoid caching
-    // remove BOM from file content before parsing
-    try {
-      const content = JSON.parse(
-        fs.readFileSync(packageJsonPath, "utf8").replace(/^\uFEFF/, ""),
-      ) as PackageJson;
-      DEPENDENCIES_VARIANTS.forEach((dependencyVariant: string) => {
-        if (typeof content[dependencyVariant] !== 'undefined') {
-          this.addDependencies(moduleDependencies, content[dependencyVariant], subModuleDependencies);
-        }
-      });
-    } catch (e) { }
-
-  }
-
-  /**
-   * Add dependency name from package.json to the set and object
-   */
-  private addDependencies(moduleDependencies: Set<string>,
-    dependencies: Dependencies,
-    moduleSubDependencies?: SubModuleDependencies,
-) {
-    for (const name in dependencies) {
-      if (dependencies.hasOwnProperty(name)) {
-        if (moduleSubDependencies && name.indexOf('@') === 0) {
-          const moduleParts = name.split('/')
-          moduleSubDependencies[moduleParts[0]] = moduleParts[1];
-        }
-        moduleDependencies.add(name);
-      }
-    }
-  }
-
-  /**
-   * Look for findFilesystemEntity
-   * @param current 
-   */
-  private findFilesystemEntity(current: string, name: string): string | undefined {
-    let prev: string;
-    do {
-      // ddddd/package.json
-      const fileName = path.join(current, name);
-      if (fs.existsSync(fileName)) {
-        return fileName;
-      }
-      prev = current;
-      current = path.dirname(current);
-    } while (prev !== current);
-    return undefined;
-  }
-
 }

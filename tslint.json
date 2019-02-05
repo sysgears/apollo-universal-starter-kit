@@ -14,7 +14,7 @@
   "linterOptions": {
     "exclude": ["**/*.js", "**/*.jsx", "**/*.d.ts", "tools/**/*.*"]
   },
-  "rulesDirectory": "./tools/customRules/tslint/buildRules",
+//  "rulesDirectory": "./tools/customRules/tslint/buildRules",
   "rules": {
     "prettier": [true, {
       "printWidth": 120,

@@ -12,6 +12,9 @@
     },
     "exclude": [
         "./buildRules",
-      "../rules"
+        "../rules"
+    ],
+    "include": [
+        "**/typings.d.ts"
     ]
 }

@@ -1,4 +1,5 @@
 import value from 'dependency';
                   ~~~~~~~~~~~~  [Can't find this dependency in the packages.json or in related module's package.json.]
-import { chalk } from 'chalk';
-import tyop from 'safe';
+import Bla from "bla";
+import Module2 from "test-module-2-client-react";
+import Module from "@modules/test-module-3-client-react";

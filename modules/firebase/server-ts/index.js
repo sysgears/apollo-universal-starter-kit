@@ -30,7 +30,7 @@ const middleware = app => {
 const existApp = firebase.apps.find(app => {
   return app.name === '[DEFAULT]';
 });
-if (!existApp && !__TEST__) {
+if (!existApp && !__TEST__ && settings.firebase.config.admin.private_key) {
   // init firebase default app
   const firebasApp = firebase.initializeApp({
     credential: firebase.credential.cert(settings.firebase.config.admin),

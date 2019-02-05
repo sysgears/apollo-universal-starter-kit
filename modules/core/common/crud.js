@@ -1,4 +1,5 @@
 import { isEqual, has } from 'lodash';
+import { flatten } from 'flat';
 
 export const onSubmit = async ({ schema, values, updateEntry, createEntry, title, data = null }) => {
   let result = null;
@@ -35,7 +36,7 @@ export const mapFormPropsToValues = ({ schema, data = null, formType = 'form' })
           fields[key] = data ? data[key] : '';
         }
       } else if (value.type.constructor === Array) {
-        fields[key] = data ? data[key] : [];
+        fields[key] = data ? data[key] : [mapFormPropsToValues({ schema: value.type[0], formType })];
       }
     } else {
       if (value.show !== false) {
@@ -62,31 +63,39 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
     const value = schema.values[key];
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
     if (formType === 'filter') {
-      if (value.show !== false && value.type.constructor !== Array) {
-        if (value.type.isSchema && values[key]) {
-          inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
-        } else if (hasTypeOf(Date)) {
-          if (values[`${key}_lte`]) {
-            inputValues[`${key}_lte`] = values[`${key}_lte`];
-          }
-          if (values[`${key}_gte`]) {
-            inputValues[`${key}_gte`] = values[`${key}_gte`];
-          }
-        } else if (hasTypeOf(Boolean)) {
-          if (values[key] === 'true') {
-            inputValues[key] = true;
-          } else if (values[key] === 'false') {
-            inputValues[key] = false;
+      if (value.show !== false) {
+        if (value.type.constructor !== Array) {
+          if (value.type.isSchema && values[key]) {
+            inputValues[`${key}Id`] = Number(values[key].id ? values[key].id : values[key]);
+          } else if (hasTypeOf(Date)) {
+            if (values[`${key}_lte`]) {
+              inputValues[`${key}_lte`] = values[`${key}_lte`];
+            }
+            if (values[`${key}_gte`]) {
+              inputValues[`${key}_gte`] = values[`${key}_gte`];
+            }
+          } else if (hasTypeOf(Boolean)) {
+            if (values[key] === 'true') {
+              inputValues[key] = true;
+            } else if (values[key] === 'false') {
+              inputValues[key] = false;
+            } else {
+              inputValues[key] = '';
+            }
+          } else if (hasTypeOf(String)) {
+            if (values[`${key}_contains`]) {
+              inputValues[`${key}_contains`] = values[`${key}_contains`];
+            }
           } else {
-            inputValues[key] = '';
+            if (key in values && values[key]) {
+              inputValues[key] = values[key];
+            }
           }
-        } else if (hasTypeOf(String)) {
-          if (values[`${key}_contains`]) {
-            inputValues[`${key}_contains`] = values[`${key}_contains`];
-          }
-        } else {
-          if (key in values && values[key]) {
-            inputValues[key] = values[key];
+        } else if (value.type.constructor === Array) {
+          if (values && values[key] && values.hasOwnProperty(key)) {
+            values[key].forEach(item => {
+              inputValues[key] = pickInputFields({ schema: value.type[0], values: item, data: null, formType });
+            });
           }
         }
       }
@@ -230,6 +239,18 @@ export const mergeFilter = (filter, defaults, schema) => {
       }
     }
   }
+
+  // flatten objects with __ delimiter, because apollo state does not allow nested data
+  mergeFilter = flatten(mergeFilter, {
+    delimiter: '__',
+    overwrite: true
+  });
+  // remove all empty objects
+  Object.keys(mergeFilter).map(item => {
+    if (typeof mergeFilter[item] === 'object') {
+      delete mergeFilter[item];
+    }
+  });
 
   return mergeFilter;
 };

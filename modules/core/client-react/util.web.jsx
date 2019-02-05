@@ -24,7 +24,7 @@ import {
   Icon,
   Button,
   FormItem,
-  Col,
+  //Col,
   Input,
   DatePicker,
   RenderCellSelectQuery
@@ -277,7 +277,7 @@ export const createFormFields = ({
               )
             );
           }
-        } else if (formType === 'batch') {
+        } else {
           fields.push(
             createFormFieldsArray(key, values, value, type, handleChange, handleBlur, formItemLayout, prefix, formType)
           );
@@ -317,40 +317,36 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
     component = RenderDate;
     if (formType === 'filter') {
       dateFields.push(
-        <Col span={8} key={`${key}_lte`}>
-          <Field
-            name={`${prefix}${key}_lte`}
-            key={`${key}_lte`}
-            component={component}
-            schema={type}
-            value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
-            type={inputType}
-            style={style}
-            label={`From ${startCase(key)}`}
-            formItemLayout={formItemLayout}
-            formType={formType}
-            hasTypeOf={hasTypeOf}
-            optional={optional}
-          />
-        </Col>
+        <Field
+          name={`${prefix}${key}_lte`}
+          key={`${key}_lte`}
+          component={component}
+          schema={type}
+          value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
+          type={inputType}
+          style={style}
+          label={`From ${startCase(key)}`}
+          formItemLayout={formItemLayout}
+          formType={formType}
+          hasTypeOf={hasTypeOf}
+          optional={optional}
+        />
       );
       dateFields.push(
-        <Col span={8} key={`${key}_gte`}>
-          <Field
-            name={`${prefix}${key}_gte`}
-            key={`${key}_gte`}
-            component={component}
-            schema={type}
-            value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
-            type={inputType}
-            style={style}
-            label={`To ${startCase(key)}`}
-            formItemLayout={formItemLayout}
-            formType={formType}
-            hasTypeOf={hasTypeOf}
-            optional={optional}
-          />
-        </Col>
+        <Field
+          name={`${prefix}${key}_gte`}
+          key={`${key}_gte`}
+          component={component}
+          schema={type}
+          value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
+          type={inputType}
+          style={style}
+          label={`To ${startCase(key)}`}
+          formItemLayout={formItemLayout}
+          formType={formType}
+          hasTypeOf={hasTypeOf}
+          optional={optional}
+        />
       );
     }
   } else if (hasTypeOf(Number)) {
@@ -382,15 +378,7 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
     />
   );
 
-  return dateFields.length === 2 ? (
-    dateFields
-  ) : formType === 'filter' ? (
-    <Col span={8} key={key}>
-      {field}
-    </Col>
-  ) : (
-    field
-  );
+  return dateFields.length === 2 ? dateFields : formType === 'filter' ? field : field;
 };
 
 const tailFormItemLayout = {
@@ -435,7 +423,7 @@ const createFormFieldsArray = (
                   prefix: `${prefix}${key}[${index}].`,
                   formType
                 })}
-                {!value.hasOne && formType !== 'batch' && (
+                {!value.hasOne && formType === 'form' && (
                   <FormItem {...tailFormItemLayout}>
                     <Button color="primary" size="sm" onClick={() => remove(index)}>
                       Delete
@@ -444,7 +432,7 @@ const createFormFieldsArray = (
                 )}
               </div>
             ))}
-            {!value.hasOne && formType !== 'batch' && (
+            {!value.hasOne && formType === 'form' && (
               <FormItem {...tailFormItemLayout}>
                 <Button color="dashed" onClick={() => push({})} style={{ width: '180px' }}>
                   Add field

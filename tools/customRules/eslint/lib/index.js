@@ -1,11 +1,3 @@
-/**
- * @fileoverview For custom rules
- * @author SysGears INC
- */
-'use strict';
-
-//------------------------------------------------------------------------------
-// Requirements
 const requireIndex = require('requireindex');
 
 //in package json: "eslint-plugin-custom-rules": "file:./tools/customRules/eslint",

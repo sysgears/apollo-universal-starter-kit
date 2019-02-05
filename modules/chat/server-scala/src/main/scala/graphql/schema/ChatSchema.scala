@@ -27,8 +27,7 @@ class ChatSchema @Inject()(
         text = input("text").asInstanceOf[String],
         userId = input("userId").asInstanceOf[Option[Int]],
         uuid = input("uuid").asInstanceOf[Option[String]],
-        quotedId = input("quotedId").asInstanceOf[Option[Int]],
-        attachment = input("attachment").asInstanceOf[Option[ScalarType[Unit]]]
+        quotedId = input("quotedId").asInstanceOf[Option[Int]]
       )
   }
 

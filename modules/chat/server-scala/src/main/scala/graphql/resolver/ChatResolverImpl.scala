@@ -9,7 +9,7 @@ import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
 import com.google.inject.Inject
 import common.Logger
 import common.actors.ActorMessageDelivering
-import common.errors.{Error, NotFound}
+import common.errors.NotFound
 import common.implicits.RichDBIO._
 import common.implicits.RichFuture._
 import models._
@@ -26,60 +26,62 @@ class ChatResolverImpl @Inject()(
   with Logger
   with ActorMessageDelivering {
 
-  override def addMessage(input: AddMessageInput, parts: Source[FormData.BodyPart, Any]): Future[Message] = {
-
-    if (parts.toString.isEmpty) {
-      chatRepository
-        .saveMessage(
-          message = DbMessage(
-            text = input.text,
-            userId = input.userId,
-            uuid = input.uuid,
-            quotedId = input.quotedId
+  override def addMessage(input: AddMessageInput, parts: Source[FormData.BodyPart, Any]): Future[Message] =
+    for {
+      maybeAttachments <- parts.filter(_.filename.nonEmpty).toMat(Sink.seq)(Keep.right).run()
+      isEmpty = maybeAttachments.isEmpty
+      maybeMessage <- if (isEmpty) {
+        chatRepository
+          .saveMessage(
+            message = DbMessage(
+              text = input.text,
+              userId = input.userId,
+              uuid = input.uuid,
+              quotedId = input.quotedId
+            )
           )
-        )
-        .run
-    } else {
-      parts
-        .filter(_.filename.nonEmpty)
-        .mapAsync(1) {
-          part =>
-            {
-              val hashedFilename = append(part.filename.get)
-              if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
-              part.entity.dataBytes.runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename))).map {
-                ioResult =>
-                  Some(
-                    MessageAttachment(
-                      messageId = 0,
-                      name = part.filename.get,
-                      contentType = part.entity.contentType.toString,
-                      size = ioResult.count.toInt,
-                      path = s"public/$hashedFilename"
+          .run
+      } else {
+        parts
+          .filter(_.filename.nonEmpty)
+          .mapAsync(1) {
+            part =>
+              {
+                val hashedFilename = append(part.filename.get)
+                if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
+                part.entity.dataBytes.runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename))).map {
+                  ioResult =>
+                    Some(
+                      MessageAttachment(
+                        messageId = 0,
+                        name = part.filename.get,
+                        contentType = part.entity.contentType.toString,
+                        size = ioResult.count.toInt,
+                        path = s"public/$hashedFilename"
+                      )
                     )
-                  )
+                }
               }
-            }
-        }
-        .mapAsync(1) {
-          attachment =>
-            chatRepository
-              .saveMessage(
-                DbMessage(
-                  text = input.text,
-                  userId = input.userId,
-                  uuid = input.uuid,
-                  quotedId = input.quotedId
-                ),
-                attachment
-              )
-              .run
-        }
-        .toMat(Sink.headOption)(Keep.right)
-        .run
-        .map(maybeMessage => maybeMessage.get)
-    }
-  }
+          }
+          .mapAsync(1) {
+            attachment =>
+              chatRepository
+                .saveMessage(
+                  DbMessage(
+                    text = input.text,
+                    userId = input.userId,
+                    uuid = input.uuid,
+                    quotedId = input.quotedId
+                  ),
+                  attachment
+                )
+                .run
+          }
+          .toMat(Sink.headOption)(Keep.right)
+          .run
+          .map(maybeMessage => maybeMessage.get)
+      }
+    } yield maybeMessage
 
   override def editMessage(input: EditMessageInput): Future[Message] =
     for {

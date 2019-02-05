@@ -38,6 +38,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
           case Some(value) => {
             attachmentTableQuery += value.copy(messageId = messageId)
           }
+          case _ => DBIO.successful()
         }
         maybeMessage <- findMessage(messageId)
         result <- if (maybeMessage.isDefined) DBIO.successful(maybeMessage.get)

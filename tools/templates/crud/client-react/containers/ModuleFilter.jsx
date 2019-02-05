@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql, compose } from 'react-apollo';
-import { FilterView } from '@gqlapp/look-client-react';
+import { FilterView } from '@gqlapp/core-client-react';
 import { removeTypename } from '@gqlapp/core-common';
 
-import { $Module$Schema } from '../../server-ts/schema';
+import { $Module$Schema } from '@gqlapp/$-module-ts/schema';
 
 import $MODULE$_STATE_QUERY from '../graphql/$Module$StateQuery.client.graphql';
 import UPDATE_FILTER from '../graphql/UpdateFilter.client.graphql';

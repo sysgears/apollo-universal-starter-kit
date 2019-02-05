@@ -5,7 +5,7 @@ const GraphQLGenerator = require('@domain-schema/graphql').default;
 const { pascalize, camelize } = require('humps');
 
 const { getModulePackageName, computeModulePath, generateField, runPrettier } = require('../helpers/util');
-const schemas = require('../../../modules/core/server-ts/common/generatedSchemas');
+const schemas = require('../../../modules/core/server-ts/generatedSchemas');
 
 /**
  * Update module schema.

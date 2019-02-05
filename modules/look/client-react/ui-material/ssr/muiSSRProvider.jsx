@@ -13,7 +13,11 @@ export const sheetsRegistry = new SheetsRegistry();
 const sheetsManager = new Map();
 
 // Create a theme instance for Material UI.
-const theme = createMuiTheme();
+const theme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  }
+});
 
 // Create a new class name generator for Material UI.
 const generateClassName = createGenerateClassName();

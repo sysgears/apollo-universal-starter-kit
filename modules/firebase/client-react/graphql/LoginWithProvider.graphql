@@ -1,0 +1,8 @@
+#import "./User.graphql"
+mutation loginWithProvider($input: LoginWithProviderUserInput!) {
+  loginWithProvider(input: $input) {
+    user {
+      ...UserInfo
+    }
+  }
+}

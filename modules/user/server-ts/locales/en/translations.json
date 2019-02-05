@@ -17,7 +17,6 @@
       "passwordsIsNotMatch": "Passwords do not match.",
       "passwordLength": "Password must be {{length}} characters or more.",
       "invalidToken": "Invalid token"
-    },
-    "tooManyRequests": "Too many unsuccessful login attempts. Try again later."
+    }
   }
 }

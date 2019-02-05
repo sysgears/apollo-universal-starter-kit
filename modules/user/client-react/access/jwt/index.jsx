@@ -50,6 +50,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
         observer.complete();
         return;
       }
+
       await setJWTContext(operation);
       try {
         sub = forward(operation).subscribe({

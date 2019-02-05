@@ -10,6 +10,18 @@ export default {
   session: {
     enabled: false
   },
+  facebook: {
+    enabled: false,
+    scope: ['email']
+  },
+  github: {
+    enabled: false,
+    scope: ['user:email']
+  },
+  google: {
+    enabled: false,
+    scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+  },
   config: {
     admin: {
       type: '',

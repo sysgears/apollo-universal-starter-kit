@@ -18,6 +18,7 @@ const validateUserPassword = async (user, password, t) => {
   if (settings.user.auth.password.confirm && !user.isActive) {
     return { usernameOrEmail: t('user:auth.password.emailConfirmation') };
   }
+
   const valid = await bcrypt.compare(password, user.passwordHash);
   if (!valid) {
     // bad password
@@ -46,7 +47,6 @@ export default () => ({
     async register(obj, { input }, { mailer, User, req }) {
       const { t } = req;
       const errors = {};
-
       const userExists = await User.getUserByUsername(input.username);
       if (userExists) {
         errors.username = t('user:auth.password.usernameIsExisted');
@@ -75,6 +75,7 @@ export default () => ({
         await User.updatePassword(emailExists.userId, input.password);
         userId = emailExists.userId;
       }
+
       const user = await User.getUser(userId);
 
       if (mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && req) {

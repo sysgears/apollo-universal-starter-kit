@@ -35,29 +35,6 @@ export default pubsub => ({
       }
     }
   },
-  // User: {
-  //   profile(obj) {
-  //     return obj;
-  //   },
-  //   auth(obj) {
-  //     return obj;
-  //   }
-  // },
-  // UserProfile: {
-  //   firstName(obj) {
-  //     return obj.firstName;
-  //   },
-  //   lastName(obj) {
-  //     return obj.lastName;
-  //   },
-  //   fullName(obj) {
-  //     if (obj.firstName && obj.lastName) {
-  //       return `${obj.firstName} ${obj.lastName}`;
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // },
   Mutation: {
     addUser: withAuth(
       (obj, args, { User, user }) => {
@@ -143,7 +120,27 @@ export default pubsub => ({
           throw new Error(t('firebase:userCouldNotDeleted'));
         }
       }
-    )
+    ),
+    loginWithProvider: async (obj, { input }, { User, req }) => {
+      if (input.provider.isNewUser) {
+        const registerInput = {
+          userId: input.id,
+          email: input.email,
+          isActive: input.emailVerified
+        };
+        await User.register({ ...registerInput });
+      }
+      await User.registerWithProvider({
+        userId: input.id,
+        providerId: input.provider.providerId,
+        profileId: input.provider.providerId,
+        name: input.provider.name,
+        link: input.provider.link
+      });
+
+      const user = await User.getUser(input.id);
+      return user;
+    }
   },
   Subscription: {
     usersUpdated: {

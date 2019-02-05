@@ -1,14 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import { Button } from '@gqlapp/look-client-react';
 
+import settings from '../../../../../../settings';
+
 import './GitHubButton.css';
 
 const githubLogin = () => {
-  window.location = '/auth/github';
+  const provider = new firebase.auth.GithubAuthProvider();
+  provider.addScope(settings.firebase.github.scope);
+  try {
+    firebase.auth().signInWithRedirect(provider);
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 const GitHubButton = withApollo(({ text }) => {

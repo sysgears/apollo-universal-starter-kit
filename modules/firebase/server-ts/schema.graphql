@@ -65,6 +65,8 @@ extend type Mutation {
   editUser(input: EditUserInput!): UserPayload!
   # Delete a user
   deleteUser(id: String!): UserPayload!
+  # LoginWithProvider
+  loginWithProvider(input: LoginWithProviderUserInput!): UserPayload!
 }
 
 # Input for ordering users
@@ -151,4 +153,19 @@ extend type Subscription {
 type UpdateUserPayload {
   mutation: String!
   node: User!
+}
+
+input ProviderInput {
+  providerId: String!
+  isNewUser: Boolean
+  profileId: String
+  name: String
+  link: String
+}
+
+input LoginWithProviderUserInput {
+  id: String!
+  email: String
+  emailVerified: Boolean
+  provider: ProviderInput!
 }

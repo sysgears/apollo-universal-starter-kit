@@ -39,7 +39,7 @@ export default () => ({
     },
     async register(obj, { input }, { User, req, mailer }) {
       const { t } = req;
-      const isActive = !settings.user.auth.password.confirm;
+      const isActive = !settings.firebase.sendConfirmationEmail.enabled;
       const { errors, id } = await User.register({ ...input, isActive });
 
       // Firebase errors

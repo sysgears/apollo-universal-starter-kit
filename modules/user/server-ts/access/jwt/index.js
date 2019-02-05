@@ -10,6 +10,7 @@ import settings from '../../../../../settings';
 const grant = async user => {
   const refreshSecret = settings.user.secret + user.passwordHash;
   const [accessToken, refreshToken] = await createTokens(user, settings.user.secret, refreshSecret);
+
   return {
     accessToken,
     refreshToken

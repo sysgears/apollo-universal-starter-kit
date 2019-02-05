@@ -169,6 +169,7 @@ export default pubsub => ({
         const isProfileExists = await User.isUserProfileExists(input.id);
         const passwordHash = await createPasswordHash(input.password);
         const trx = await createTransaction();
+
         try {
           await User.editUser(userInfo, passwordHash).transacting(trx);
           await User.editUserProfile(input, isProfileExists).transacting(trx);

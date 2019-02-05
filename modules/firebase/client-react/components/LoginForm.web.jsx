@@ -7,12 +7,61 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { required, minLength, validate, email } from '@gqlapp/validation-common-react';
 import { Form, RenderField, Alert, Button } from '@gqlapp/look-client-react';
 
+import FacebookButton from '../auth/facebook';
+import GoogleButton from '../auth/google';
+import GitHubButton from '../auth/github';
+
+import settings from '../../../../settings';
+
 const loginFormSchema = {
   email: [required, email],
   password: [required, minLength(8)]
 };
 
+const { facebook, google, github } = settings.firebase;
+
+const renderSocialButtons = (buttonsLength, t) => {
+  return buttonsLength > 2 ? (
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
+      {settings.firebase.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.firebase.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'icon'} />
+        </div>
+      )}
+      {settings.firebase.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'icon'} />
+        </div>
+      )}
+    </div>
+  ) : (
+    <div>
+      {settings.firebase.facebook.enabled && (
+        <div className="text-center">
+          <FacebookButton text={t('login.fbBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.firebase.google.enabled && (
+        <div className="text-center">
+          <GoogleButton text={t('login.googleBtn')} type={'button'} />
+        </div>
+      )}
+      {settings.firebase.github.enabled && (
+        <div className="text-center">
+          <GitHubButton text={t('login.githubBtn')} type={'button'} />
+        </div>
+      )}
+    </div>
+  );
+};
+
 const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
+  const buttonsLength = [facebook.enabled, google.enabled, github.enabled].filter(button => button).length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
       <Field
@@ -36,7 +85,9 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
             {t('login.form.btnSubmit')}
           </Button>
         </div>
+        {renderSocialButtons(buttonsLength, t)}
       </div>
+
       <div className="text-center" style={{ marginTop: 10 }}>
         <Link to="/forgot-password">{t('login.btn.forgotPass')}</Link>
       </div>

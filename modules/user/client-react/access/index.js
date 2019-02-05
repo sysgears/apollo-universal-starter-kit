@@ -26,6 +26,7 @@ class PageReloader extends React.Component {
     super(props);
     this.props = props;
   }
+
   state = {
     key: 1
   };
@@ -44,7 +45,6 @@ PageReloader.propTypes = {
 };
 
 const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
-
 AuthPageReloader.propTypes = {
   children: PropTypes.node
 };

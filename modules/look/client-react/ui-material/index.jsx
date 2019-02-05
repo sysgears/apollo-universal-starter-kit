@@ -2,7 +2,7 @@ import React from 'react';
 
 import ClientModule from '@gqlapp/module-client-react';
 import { onAppCreate } from './components/NavBar';
-import MuiSSRProvider, { sheetsRegistry } from './ssr/muiSSRProvider';
+import MuiSSRProvider, { sheetsRegistry } from './muiProvider';
 import styles from './styles/styles.scss';
 
 export * from './components';

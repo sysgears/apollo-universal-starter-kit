@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import DomainValidator from '@domain-schema/validation';
 
-import { Form, FormItem, Button, createFormFields } from '@gqlapp/look-client-react';
-import { onSubmit, mapFormPropsToValues } from '@gqlapp/core-client-react';
+import { Form, FormItem, Button } from '@gqlapp/look-client-react';
+import { createFormFields } from '@gqlapp/core-client-react';
+import { onSubmit, mapFormPropsToValues } from '@gqlapp/core-common';
 
 const tailFormItemLayout = {
   wrapperCol: {

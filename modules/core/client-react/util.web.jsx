@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { FieldArray } from 'formik';
 import moment from 'moment';
 import DomainSchema from '@domain-schema/core';
-import { mapFormPropsToValues } from '@gqlapp/core-client-react';
+import { mapFormPropsToValues } from '@gqlapp/core-common';
 import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
 import {

@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Formik } from 'formik';
 import { DebounceInput } from 'react-debounce-input';
-import { Form, FormItem, Input, Row, Col, Button, Icon, createFormFields } from '@gqlapp/look-client-react';
-import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-client-react';
+import { Form, FormItem, Input, Row, Col, Button, Icon } from '@gqlapp/look-client-react';
+import { createFormFields } from '@gqlapp/core-client-react';
+import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-common';
 
 const { hasRole } = require('@gqlapp/user-client-react');
 

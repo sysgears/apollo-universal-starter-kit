@@ -6,20 +6,9 @@ import { Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { DragDropContext, DragSource, DropTarget } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
-import {
-  Table,
-  Button,
-  Popconfirm,
-  Row,
-  Col,
-  Form,
-  FormItem,
-  Alert,
-  Spin,
-  createColumnFields,
-  createFormFields
-} from '@gqlapp/look-client-react';
-import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-client-react';
+import { Table, Button, Popconfirm, Row, Col, Form, FormItem, Alert, Spin } from '@gqlapp/look-client-react';
+import { createColumnFields, createFormFields } from '@gqlapp/core-client-react';
+import { mapFormPropsToValues, pickInputFields } from '@gqlapp/core-common';
 
 const { hasRole } = require('@gqlapp/user-client-react');
 

@@ -30,7 +30,7 @@ class PostList extends React.PureComponent {
       loadData
     } = this.props;
 
-    pagination === 'relay' ? loadData(endCursor + 1, 'add') : loadData((pageNumber - 1) * itemsNumber, 'replace');
+    pagination === 'relay' ? loadData(endCursor + 1, 'add') : loadData(pageNumber * itemsNumber, 'replace');
   };
 
   render() {
@@ -70,7 +70,7 @@ class PostList extends React.PureComponent {
           total={posts.totalCount}
           loadMoreText={t('list.btn.more')}
           defaultPageSize={itemsNumber}
-          currentPage={posts.pageInfo.currentPage}
+          currentPage={Math.ceil(posts.pageInfo.endCursor / itemsNumber)}
         />
       </Fragment>
     );

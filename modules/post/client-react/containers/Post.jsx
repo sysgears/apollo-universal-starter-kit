@@ -160,7 +160,6 @@ export default compose(
             const newEdges = fetchMoreResult.posts.edges;
             const pageInfo = fetchMoreResult.posts.pageInfo;
             const displayedEdges = dataDelivery === 'add' ? [...previousResult.posts.edges, ...newEdges] : newEdges;
-
             return {
               // By returning `cursor` here, we update the `fetchMore` function
               // to the new cursor.

@@ -38,7 +38,7 @@ class PaginationDemo extends React.Component {
     if (pagination === 'relay') {
       loadData(items.pageInfo.endCursor, 'add');
     } else {
-      loadData((pageNumber - 1) * items.limit, 'replace');
+      loadData(pageNumber * items.limit, 'replace');
     }
   };
 

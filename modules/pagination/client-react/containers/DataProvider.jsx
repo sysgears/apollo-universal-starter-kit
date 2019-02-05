@@ -29,15 +29,13 @@ export default function withDataProvider(WrappedComponent) {
       const edges = dataDelivery === 'add' ? (!items ? newEdges : [...items.edges, ...newEdges]) : newEdges;
       const endCursor = edges[edges.length - 1].cursor;
       const hasNextPage = endCursor < allEdges[allEdges.length - 1].cursor;
-      const currentPage = offset / itemsNumber;
 
       this.setState({
         items: {
           totalCount: allEdges.length,
           pageInfo: {
             endCursor,
-            hasNextPage,
-            currentPage
+            hasNextPage
           },
           edges: edges,
           offset: offset,

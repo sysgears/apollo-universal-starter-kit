@@ -18,10 +18,10 @@ const actionsStyles = theme => ({
 });
 
 const TablePaginationActions = ({ classes, count, page, rowsPerPage, onChangePage }) => {
-  const maxPage = Math.ceil(count / rowsPerPage) - 1;
+  const maxPage = Math.ceil(count / rowsPerPage);
 
   const handleFirstPageButtonClick = () => {
-    onChangePage(0);
+    onChangePage(1);
   };
 
   const handleBackButtonClick = () => {
@@ -38,10 +38,10 @@ const TablePaginationActions = ({ classes, count, page, rowsPerPage, onChangePag
 
   return (
     <div className={classes.root}>
-      <IconButton onClick={handleFirstPageButtonClick} disabled={page === 0} aria-label="First Page">
+      <IconButton onClick={handleFirstPageButtonClick} disabled={page === 1} aria-label="First Page">
         <FirstPageIcon />
       </IconButton>
-      <IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="Previous Page">
+      <IconButton onClick={handleBackButtonClick} disabled={page === 1} aria-label="Previous Page">
         <KeyboardArrowLeft />
       </IconButton>
       <IconButton onClick={handleNextButtonClick} disabled={page >= maxPage} aria-label="Next Page">
@@ -78,7 +78,8 @@ const Pagination = ({
   currentPage
 }) => {
   const handleChangePage = page => {
-    handlePageChange(pagination, page + 1);
+    if (!page) return;
+    handlePageChange(pagination, page - 1);
   };
 
   return (
@@ -123,7 +124,7 @@ Pagination.propTypes = {
 };
 
 Pagination.defaultProps = {
-  currentPage: 0
+  currentPage: 1
 };
 
 export default Pagination;

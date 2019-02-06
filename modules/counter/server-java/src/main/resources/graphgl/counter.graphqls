@@ -1,26 +1,15 @@
-schema {
-    query: Query
-    mutation: Mutation
-    subscription : Subscription
-}
-
-type Query {
-    # Counter
+extend type Query {
     serverCounter: Counter
 }
 
-type Mutation {
-    # Increase counter value, returns current counter amount
+extend type Mutation {
     addServerCounter(amount: Int!): Counter
 }
 
-type Subscription {
-    # Subscription fired when anyone increases counter
+extend type Subscription {
     counterUpdated: Counter
 }
 
-# Database counter
 type Counter {
-    # Current amount
     amount: Int!
 }

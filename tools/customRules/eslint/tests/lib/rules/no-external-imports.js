@@ -13,7 +13,7 @@ var path = require('path');
 
 const testPath = path.join(
   __dirname,
-  '../../../../testArchitecture/no-external-imports/default/packages/client/container',
+  '../../testArchitecture/no-external-imports/default/packages/client/container',
   'foo.js'
 );
 

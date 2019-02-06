@@ -14,7 +14,7 @@ module.exports = (providedPath, moduleDependencies) => {
 };
 
 function checkDependenciesInNodeModules(currentFolderPath, packageJsonDependencies) {
-  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'test_node_modules');
+  const nodeModulesPath = findFilesystemEntity(currentFolderPath, 'node_modules');
   if (typeof nodeModulesPath !== 'undefined') {
     collectNodeModulesDependencies(nodeModulesPath, packageJsonDependencies);
   }

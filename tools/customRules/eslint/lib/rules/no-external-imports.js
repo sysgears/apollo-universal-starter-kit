@@ -5,7 +5,7 @@
 
 'use strict';
 
-const getDependencies = require('../../../common/no-external-imports');
+const getDependencies = require('../../common/no-external-imports');
 
 function missingErrorMessage(packageName) {
   return `Can't find '${packageName}' in the packages.json or in related module's package.json.`;

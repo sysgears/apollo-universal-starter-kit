@@ -1,7 +1,7 @@
 {
-  "name": "eslint-plugin-custom-rules",
+  "name": "eslint-plugin-larix",
   "version": "0.0.5",
-  "description": "For custom rules",
+  "description": "Rules for Larix framework",
   "keywords": [
     "eslint",
     "eslintplugin",
@@ -10,10 +10,10 @@
   "author": "SysGears INC",
   "main": "lib/index.js",
   "scripts": {
-    "start test": "npm-run-all -s renameForTest test renameForBuild",
-    "renameForTest": "bash ../common/no-external-imports/renameForTests.sh commandFirst",
-    "test" : "mocha tests --recursive",
-    "renameForBuild": "bash ../common/no-external-imports/renameForTests.sh"
+    "test": "npm-run-all -s prepareForTest start-test prepareForProject",
+    "prepareForTest": "bash ./common/no-external-imports/prepareTest.sh commandFirst",
+    "start-test" : "mocha tests --recursive",
+    "prepareForProject": "bash ./common/no-external-imports/prepareTest.sh"
   },
   "dependencies": {
     "requireindex": "^1.1.0",

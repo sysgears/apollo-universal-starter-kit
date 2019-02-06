@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 import * as Lint from 'tslint';
 
 import { findImports, ImportKind } from "tsutils";
-import getDependencies from '../../common/no-external-imports'
+import getDependencies from '../../eslint/common/no-external-imports'
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static FAILURE_STRING = `Can't find this dependency in the packages.json or in ` +

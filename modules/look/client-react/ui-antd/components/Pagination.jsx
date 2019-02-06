@@ -32,10 +32,10 @@ const Pagination = ({
   } else {
     return (
       <ADPagination
-        defaultCurrent={currentPage + 1}
+        current={currentPage}
         defaultPageSize={defaultPageSize}
         total={total}
-        onChange={pageNumber => handlePageChange(pagination, pageNumber)}
+        onChange={pageNumber => handlePageChange(pagination, pageNumber - 1)}
       />
     );
   }
@@ -53,7 +53,7 @@ Pagination.propTypes = {
 };
 
 Pagination.defaultProps = {
-  currentPage: 0
+  currentPage: 1
 };
 
 export default Pagination;

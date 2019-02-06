@@ -14,3 +14,15 @@
 a {
   text-decoration: none;
 }
+
+.active {
+  border-bottom: 4px solid white;
+  padding-bottom: 13px;
+}
+
+.nav-link {
+  a {
+    color: white;
+    opacity: .8
+  }
+}

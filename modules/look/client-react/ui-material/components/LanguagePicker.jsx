@@ -2,14 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { MenuItem, Menu, Typography } from '@material-ui/core';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 
 const styles = {
   paddingNone: {
     padding: '0'
   },
   title: {
-    paddingTop: 2,
-    cursor: 'pointer'
+    cursor: 'pointer',
+    color: 'white',
+    opacity: '0.8',
+    fontWeight: 500,
+    display: 'flex',
+    alignItems: 'center'
   }
 };
 
@@ -42,8 +47,8 @@ class LanguagePicker extends React.Component {
 
     return (
       <React.Fragment>
-        <Typography component="span" className={classes.title} onClick={this.handleClickListItem}>
-          {selected}
+        <Typography component="div" className={classes.title} onClick={this.handleClickListItem}>
+          {selected} <ExpandMore />
         </Typography>
         <Menu
           id="lock-menu"

@@ -50,7 +50,6 @@ class User {
     if (doc.exist) return false;
     const user = doc.data();
     delete user.password;
-    console.log(user);
     return user;
   }
 
@@ -63,17 +62,14 @@ class User {
     docs.forEach(doc => {
       user = doc.data();
     });
-    console.log(user);
     return user;
   }
 
   async editUser({ id, username, email, role, isActive, password }) {
     const localAuthInput = password ? { email, password, displayName: username } : { email, displayName: username };
     let errors;
-    console.log(username);
     try {
       const { passwordHash } = await auth().updateUser(id, localAuthInput);
-      console.log(passwordHash);
       await firestore()
         .collection('users')
         .doc(id)
@@ -91,7 +87,6 @@ class User {
   }
 
   async register({ userId, username, email, role = 'user', isActive, password }) {
-    const active = isActive ? isActive : false;
     let id = userId;
     let errors;
     try {
@@ -100,7 +95,7 @@ class User {
           email,
           password,
           displayName: username,
-          emailVerified: active,
+          emailVerified: isActive || false,
           disabled: false
         });
         id = uid;
@@ -115,7 +110,7 @@ class User {
           username: username || 'user',
           email,
           role,
-          isActive: active,
+          isActive: isActive || false,
           password: password || null
         });
     } catch (e) {

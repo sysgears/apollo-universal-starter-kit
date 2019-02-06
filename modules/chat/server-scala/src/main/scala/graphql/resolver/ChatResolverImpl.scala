@@ -88,7 +88,7 @@ class ChatResolverImpl @Inject()(
       updatedMessage <- chatRepository.editMessage(input.id, input.text, input.userId).run
     } yield updatedMessage
 
-  override def deleteMessage(id: Int): Future[Option[Message]] =
+  override def deleteMessage(id: Int): Future[Message] =
     for {
       deleteResult <- chatRepository.deleteMessage(id).run
     } yield deleteResult

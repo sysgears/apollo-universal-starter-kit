@@ -12,7 +12,7 @@ trait ChatResolver {
 
   def editMessage(input: EditMessageInput): Future[Message]
 
-  def deleteMessage(id: Int): Future[Option[Message]]
+  def deleteMessage(id: Int): Future[Message]
 
   def messages(limit: Int, after: Int): Future[Messages]
 

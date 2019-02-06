@@ -121,7 +121,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
         .filter(
           message =>
             message.id === id &&
-              (if (userId.isDefined) message.id === userId.get
+              (if (userId.isDefined) message.userId.getOrElse(0) === userId.get
                else true)
         )
         .result
@@ -134,9 +134,11 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
     } yield result
   }
 
-  def deleteMessage(id: Int): DBIO[Option[Message]] = executeTransactionally {
+  def deleteMessage(id: Int): DBIO[Message] = executeTransactionally {
     for {
       maybeMessage <- findMessage(id)
+      message <- if (maybeMessage.isDefined) DBIO.successful(maybeMessage.get)
+      else DBIO.failed(NotFound(s"Not found message with [id=$id]"))
       maybeDbMessage <- findOne(id)
       deleteDbMessage <- if (maybeDbMessage.isDefined) delete(maybeDbMessage.get)
       else DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been deleted"))
@@ -154,7 +156,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       } else true
       _ <- if (isDeleteFile) DBIO.successful()
       else DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
-    } yield maybeMessage
+    } yield message
   }
 
   def findAttachment(messageId: Int): DBIO[Option[MessageAttachment]] =

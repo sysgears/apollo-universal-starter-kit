@@ -1,20 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
+import { MenuItem, Menu, Typography } from '@material-ui/core';
 
-const styles = theme => ({
-  root: {
-    backgroundColor: theme.palette.background.paper
-  },
+const styles = {
   paddingNone: {
     padding: '0'
   }
-});
+};
 
 class LanguagePicker extends React.Component {
   state = {
@@ -41,15 +34,14 @@ class LanguagePicker extends React.Component {
     const { anchorEl, options, selected } = this.state;
     const languages = Object.keys(i18n.store.data);
 
+    // return null;
     if (i18n.language && languages.length <= 1) return null;
 
     return (
-      <div className={classes.root}>
-        <List className={classes.paddingNone}>
-          <ListItem button onClick={this.handleClickListItem} className={classes.paddingNone}>
-            <ListItemText secondary={selected} />
-          </ListItem>
-        </List>
+      <React.Fragment>
+        <Typography component="p" onClick={this.handleClickListItem}>
+          {selected}
+        </Typography>
         <Menu
           id="lock-menu"
           anchorEl={anchorEl}
@@ -67,7 +59,7 @@ class LanguagePicker extends React.Component {
             </MenuItem>
           ))}
         </Menu>
-      </div>
+      </React.Fragment>
     );
   }
 }

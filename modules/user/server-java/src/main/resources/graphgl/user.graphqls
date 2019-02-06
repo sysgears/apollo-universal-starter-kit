@@ -1,0 +1,51 @@
+extend type Query {
+    currentUser: User
+}
+
+type User {
+    id: Int!
+    username: String!
+    role: String!
+    isActive: Boolean
+    email: String!
+    profile: UserProfile
+    auth: UserAuth
+}
+
+type UserProfile {
+    firstName: String
+    lastName: String
+    fullName: String
+}
+
+type UserAuth {
+    certificate: CertificateAuth
+    facebook: FacebookAuth
+    google: GoogleAuth
+    github: GithubAuth
+    linkedin: LinkedInAuth
+}
+
+type CertificateAuth {
+    serial: String
+}
+
+type FacebookAuth {
+    fbId: String
+    displayName: String
+}
+
+type GoogleAuth {
+    googleId: String
+    displayName: String
+}
+
+type GithubAuth {
+    ghId: String
+    displayName: String
+}
+
+type LinkedInAuth {
+    lnId: String
+    displayName: String
+}

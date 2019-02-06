@@ -53,10 +53,18 @@ project(':app') {
 	//REQUIRED
 	dependencies {
 		implementation project(':counter')
-	}
+        implementation project(':user')
+    }
 }
 
 project(':counter') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}
+
+project(':user') {
 	//REQUIRED
 	dependencies {
 		implementation project(':core')

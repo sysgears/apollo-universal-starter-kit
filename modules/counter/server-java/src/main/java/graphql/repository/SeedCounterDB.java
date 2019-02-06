@@ -9,9 +9,9 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataInit implements ApplicationRunner {
+public class SeedCounterDB implements ApplicationRunner {
 
-    Logger logger = LogManager.getLogger(DataInit.class);
+    Logger logger = LogManager.getLogger(SeedCounterDB.class);
 
     public static final Integer COUNTER_ID = 1;
 

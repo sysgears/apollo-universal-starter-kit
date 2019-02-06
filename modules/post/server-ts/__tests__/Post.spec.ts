@@ -40,7 +40,6 @@ describe('Post and comments example API works', () => {
         pageInfo: {
           endCursor: 0,
           hasNextPage: true,
-          currentPage: 0,
           __typename: 'PostPageInfo'
         },
         __typename: 'Posts'

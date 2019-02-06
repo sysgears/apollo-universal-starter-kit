@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class Counter {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id", nullable = false)
     private Integer id;
     private Integer amount;

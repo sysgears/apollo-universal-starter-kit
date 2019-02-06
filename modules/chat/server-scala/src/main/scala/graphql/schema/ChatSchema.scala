@@ -13,14 +13,15 @@ import sangria.marshalling.FromInput
 import sangria.schema.{Argument, Field, InputObjectType, IntType, ObjectType, OptionInputType, OptionType, _}
 import sangria.streaming.akkaStreams._
 import services.publisher.EndCursor
+import common.publisher.RichPubSubService._
 
 import scala.concurrent.ExecutionContext
 
 class ChatSchema @Inject()(
     chatResolver: ChatResolver,
     implicit val materializer: ActorMaterializer,
-    messagePubSubService: PubSubService[Event[Message]],
-    actorSystem: ActorSystem,
+    implicit val messagePubSubService: PubSubService[Event[Message]],
+    implicit val actorSystem: ActorSystem,
     implicit val executionContext: ExecutionContext
 ) extends InputUnmarshallerGenerator
   with Logger {
@@ -110,7 +111,7 @@ class ChatSchema @Inject()(
       arguments = List(
         Argument(name = "input", argumentType = Types.AddMessageInput)
       ),
-      resolve = sc => chatResolver.addMessage(sc.args.arg[AddMessageInput]("input"), sc.ctx.filesData)
+      resolve = sc => chatResolver.addMessage(sc.args.arg[AddMessageInput]("input"), sc.ctx.filesData).pub(ADD_MESSAGE)
     ),
     Field(
       name = DELETE_MESSAGE,
@@ -118,7 +119,7 @@ class ChatSchema @Inject()(
       arguments = List(
         Argument(name = "id", argumentType = IntType)
       ),
-      resolve = sc => chatResolver.deleteMessage(sc.args.arg[Int]("id"))
+      resolve = sc => chatResolver.deleteMessage(sc.args.arg[Int]("id")).pub(DELETE_MESSAGE)
     ),
     Field(
       name = EDIT_MESSAGE,
@@ -126,7 +127,7 @@ class ChatSchema @Inject()(
       arguments = List(
         Argument(name = "input", argumentType = Types.EditMessageInput)
       ),
-      resolve = sc => chatResolver.editMessage(sc.args.arg[EditMessageInput]("input"))
+      resolve = sc => chatResolver.editMessage(sc.args.arg[EditMessageInput]("input")).pub(EDIT_MESSAGE)
     )
   )
 

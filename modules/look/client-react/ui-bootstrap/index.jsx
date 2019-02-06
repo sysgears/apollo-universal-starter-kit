@@ -6,5 +6,5 @@ export * from './components';
 
 export default new ClientModule({
   onAppCreate: [onAppCreate],
-  stylesInsert: [[() => styles._getCss()]]
+  stylesInsert: [() => styles._getCss()]
 });

@@ -11,9 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-class Subscription implements GraphQLSubscriptionResolver {
+class CounterSubscription implements GraphQLSubscriptionResolver {
 
-    Logger logger = LogManager.getLogger(Subscription.class);
+    Logger logger = LogManager.getLogger(CounterSubscription.class);
 
     @Autowired
     private CounterPubSubService counterPubSubService;

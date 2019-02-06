@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Query implements GraphQLQueryResolver {
+public class CounterQuery implements GraphQLQueryResolver {
 
-    Logger logger = LogManager.getLogger(Query.class);
+    Logger logger = LogManager.getLogger(CounterQuery.class);
 
     @Autowired
     private CounterRepository counterRepository;

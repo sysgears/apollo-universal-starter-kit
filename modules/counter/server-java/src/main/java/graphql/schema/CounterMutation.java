@@ -10,12 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import static graphql.repository.DataInit.COUNTER_ID;
+import static graphql.repository.SeedCounterDB.COUNTER_ID;
 
 @Component
-public class Mutation implements GraphQLMutationResolver {
+public class CounterMutation implements GraphQLMutationResolver {
 
-    Logger logger = LogManager.getLogger(Mutation.class);
+    Logger logger = LogManager.getLogger(CounterMutation.class);
 
     @Autowired
     private CounterRepository counterRepository;

@@ -6,6 +6,10 @@ import { MenuItem, Menu, Typography } from '@material-ui/core';
 const styles = {
   paddingNone: {
     padding: '0'
+  },
+  title: {
+    paddingTop: 2,
+    cursor: 'pointer'
   }
 };
 
@@ -34,12 +38,11 @@ class LanguagePicker extends React.Component {
     const { anchorEl, options, selected } = this.state;
     const languages = Object.keys(i18n.store.data);
 
-    // return null;
     if (i18n.language && languages.length <= 1) return null;
 
     return (
       <React.Fragment>
-        <Typography component="p" onClick={this.handleClickListItem}>
+        <Typography component="span" className={classes.title} onClick={this.handleClickListItem}>
           {selected}
         </Typography>
         <Menu

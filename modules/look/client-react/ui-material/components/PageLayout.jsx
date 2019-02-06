@@ -12,10 +12,11 @@ const styles = {
     backgroundColor: 'white'
   },
   main: {
-    minHeight: 'calc(100vh - 103px)'
+    minHeight: 'calc(100vh - 91px)',
+    paddingTop: 20
   },
   mainWithoutNavBar: {
-    minHeight: 'calc(100vh - 49px)'
+    minHeight: 'calc(100vh - 39px)'
   },
   footer: {
     margin: '10px 0'
@@ -29,7 +30,7 @@ const PageLayout = ({ children, hideNavBar, classes }) => (
       {!hideNavBar && <NavBar />}
       <Grid item className={!hideNavBar ? classes.main : classes.mainWithoutNavBar} id="content">
         <Grid container justify="center">
-          <Grid item md={11} lg={11} sm={11} xl={11} xs={11}>
+          <Grid item xs={11}>
             {children}
           </Grid>
         </Grid>

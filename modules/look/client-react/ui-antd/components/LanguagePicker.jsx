@@ -12,12 +12,19 @@ export default class LanguagePicker extends React.Component {
   );
 
   render() {
+    const { i18n } = this.props;
+    const languages = Object.keys(i18n.store.data);
+
     return (
-      <Dropdown overlay={this.getMenuItems()}>
-        <a className="ant-dropdown-link" href="#">
-          {this.props.i18n.language.slice(0, 2).toUpperCase()} <Icon type="down" />
-        </a>
-      </Dropdown>
+      <React.Fragment>
+        {languages.length > 1 && (
+          <Dropdown overlay={this.getMenuItems()}>
+            <a className="ant-dropdown-link" href="#">
+              {this.props.i18n.language.slice(0, 2).toUpperCase()} <Icon type="down" />
+            </a>
+          </Dropdown>
+        )}
+      </React.Fragment>
     );
   }
 }

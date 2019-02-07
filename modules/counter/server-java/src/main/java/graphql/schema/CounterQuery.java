@@ -1,6 +1,7 @@
 package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
+import graphql.global.exception.NotFoundException;
 import graphql.model.Counter;
 import graphql.repository.CounterRepository;
 import org.apache.logging.log4j.LogManager;
@@ -19,6 +20,6 @@ public class CounterQuery implements GraphQLQueryResolver {
 
     public Counter serverCounter() {
         logger.debug("Server counter -> Get amount");
-        return counterRepository.findById(1).get(); //TODO Unsafe
+        return counterRepository.findById(1).orElseThrow(() -> new NotFoundException("Counter not found"));
     }
 }

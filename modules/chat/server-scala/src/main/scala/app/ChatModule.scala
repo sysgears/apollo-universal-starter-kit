@@ -22,7 +22,8 @@ class ChatModule extends ServerModule[UserContext, SchemaInitializer[_]] {
 
   override lazy val queries: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(chatSchema.queries: _*)
   override lazy val mutations: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(chatSchema.mutations: _*)
-  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] = mutable.HashSet(chatSchema.subscriptions: _*)
+  override lazy val subscriptions: mutable.HashSet[Field[UserContext, Unit]] =
+    mutable.HashSet(chatSchema.subscriptions: _*)
 
   bindings = new ChatBinding
 }

@@ -2,6 +2,7 @@ const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
 const GraphQLGenerator = require('@domain-schema/graphql').default;
+const DomainSchema = require('@domain-schema/core').default;
 const { pascalize, camelize } = require('humps');
 
 const { getModulePackageName, computeModulePath, generateField, runPrettier } = require('../helpers/util');
@@ -60,20 +61,26 @@ function updateModule({ logger, packageName, moduleName, old }) {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
             inputFilter += `  ${key}_in: [${generateField(value, true)}!]\n`;
             inputFilter += `  ${key}_contains: ${generateField(value, true)}\n`;
+          } else if (hasTypeOf(DomainSchema.Int)) {
+            inputFilter += `  ${key}: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_lt: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_lte: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_gt: ${generateField(value, true)}\n`;
+            inputFilter += `  ${key}_gte: ${generateField(value, true)}\n`;
           } else {
             inputFilter += `  ${key}: ${generateField(value, true)}\n`;
           }
         } else if (value.type.constructor === Array && value.type[0].isSchema) {
-          inputCreate += `  ${key}: ${pascalize(key)}CreateManyInput\n`;
-          inputUpdate += `  ${key}: ${pascalize(key)}UpdateManyInput\n`;
+          inputCreate += `  ${key}: ${pascalize(value.type[0].name)}CreateManyInput\n`;
+          inputUpdate += `  ${key}: ${pascalize(value.type[0].name)}UpdateManyInput\n`;
           inputFilter += `  ${key}: ${pascalize(value.type[0].name)}FilterInput\n`;
           manyInput += `
 
-input ${pascalize(key)}CreateManyInput {
+input ${pascalize(value.type[0].name)}CreateManyInput {
   create: [${pascalize(value.type[0].name)}CreateInput!]
 }
 
-input ${pascalize(key)}UpdateManyInput {
+input ${pascalize(value.type[0].name)}UpdateManyInput {
   create: [${pascalize(value.type[0].name)}CreateInput!]
   delete: [${pascalize(value.type[0].name)}WhereUniqueInput!]
   update: [${pascalize(value.type[0].name)}UpdateWhereInput!]
@@ -126,7 +133,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         )
         .to(file);
 
-      logger.info(chalk.green(`✔ Schema in ${destinationPath}${file} successfully updated!`));
+      logger.info(chalk.green(`✔ Schema in ${destinationPath}/${file} successfully updated!`));
 
       const resolverFile = `resolvers.ts`;
       let hasBatchResolvers = false;
@@ -163,7 +170,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
         .to(resolverFile);
       runPrettier(resolverFile);
 
-      logger.info(chalk.green(`✔ Resolver in ${destinationPath}${resolverFile} successfully updated!`));
+      logger.info(chalk.green(`✔ Resolver in ${destinationPath}/${resolverFile} successfully updated!`));
     }
 
     if (packageName === 'client') {
@@ -216,6 +223,12 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
               graphql += `    ${key}_gte\n`;
             } else if (hasTypeOf(String)) {
               graphql += `    ${key}_contains\n`;
+            } else if (hasTypeOf(DomainSchema.Int)) {
+              graphql += `    ${key}\n`;
+              graphql += `    ${key}_lt\n`;
+              graphql += `    ${key}_lte\n`;
+              graphql += `    ${key}_gt\n`;
+              graphql += `    ${key}_gte\n`;
             } else {
               graphql += `    ${key}\n`;
             }
@@ -253,6 +266,12 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
               defaults += `${key}_gte: '',\n`;
             } else if (hasTypeOf(String)) {
               defaults += `${key}_contains: '',\n`;
+            } else if (hasTypeOf(DomainSchema.Int)) {
+              defaults += `    ${key}\n`;
+              defaults += `    ${key}_lt\n`;
+              defaults += `    ${key}_lte\n`;
+              defaults += `    ${key}_gt\n`;
+              defaults += `    ${key}_gte\n`;
             } else {
               defaults += `${key}: '',\n`;
             }
@@ -273,7 +292,7 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
           .to(file);
         runPrettier(file);
 
-        logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}${file} successfully updated!`));
+        logger.info(chalk.green(`✔ State Resolver in ${pathStateResolver}/${file} successfully updated!`));
       } else {
         logger.error(chalk.red(`✘ State Resolver path ${pathStateResolver} not found!`));
       }

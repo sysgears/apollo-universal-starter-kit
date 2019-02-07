@@ -58,6 +58,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       text = message._1._1.text
       createdAt = message._1._1.createdAt.toString
       maybeUser = message._1._2
+      userId = if (maybeUser.isDefined) maybeUser.get.id else None
       username = if (maybeUser.isDefined) maybeUser.get.username else emptyStr
       uuid = message._1._1.uuid
       quotedId = message._1._1.quotedId
@@ -65,7 +66,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       path = if (attachment.isDefined) attachment.get.path else emptyStr
     } yield
       Some(
-        Message(id, text, maybeUser.get.id, Some(createdAt), Some(username), uuid, quotedId, Some(fileName), Some(path))
+        Message(id, text, userId, Some(createdAt), Some(username), uuid, quotedId, Some(fileName), Some(path))
       )
   }
 
@@ -80,7 +81,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       id = message._1._1.id.get
       text = message._1._1.text
       maybeUser = message._1._2
-      username = maybeUser.get.username
+      username = if (maybeUser.isDefined) maybeUser.get.username else emptyStr
       fileName = if (attachment.isDefined) attachment.get.name else emptyStr
       path = if (attachment.isDefined) attachment.get.path else emptyStr
     } yield

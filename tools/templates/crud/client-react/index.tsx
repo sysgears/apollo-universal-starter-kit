@@ -1,13 +1,21 @@
 import React from 'react';
 import ClientModule from '@gqlapp/module-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { NavLink } from 'react-router-dom';
 import { MenuItem } from '@gqlapp/look-client-react';
 
 import $Module$ from './components/$Module$';
 import $Module$Edit from './containers/$Module$Edit';
 import resolvers from './resolvers';
+import resources from './locales';
 
 const { AuthRoute, IfLoggedIn } = require('@gqlapp/user-client-react');
+
+const NavLinkWithI18n = translate('$module$')(({ t }: { t: TranslateFunction }) => (
+  <NavLink to="/$module$" className="nav-link" activeClassName="active">
+    {t('$module$:navLink')}
+  </NavLink>
+));
 
 export default new ClientModule({
   route: [
@@ -31,11 +39,10 @@ export default new ClientModule({
   navItem: [
     <IfLoggedIn role={['editor', 'admin']}>
       <MenuItem key="/$module$">
-        <NavLink to="/$module$" className="nav-link" activeClassName="active">
-          $MoDuLe$
-        </NavLink>
+        <NavLinkWithI18n />
       </MenuItem>
     </IfLoggedIn>
   ],
-  resolver: [resolvers]
+  resolver: [resolvers],
+  localization: [{ ns: '$module$', resources }]
 });

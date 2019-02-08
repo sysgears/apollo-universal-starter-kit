@@ -60,7 +60,7 @@ const renderSocialButtons = (buttonsLength, t) => {
   );
 };
 
-const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
+const LoginForm = ({ handleSubmit, submitting, errors, values, t, firebaseError }) => {
   const buttonsLength = [facebook.enabled, google.enabled, github.enabled].filter(button => button).length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
@@ -79,6 +79,7 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
         value={values.password}
       />
       <div className="text-center">{errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}</div>
+      <div className="text-center">{firebaseError && <Alert color="error">{'ERROR ERROR ERROR'}</Alert>}</div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">
           <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
@@ -108,7 +109,8 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool,
   errors: PropTypes.object,
   values: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
+  firebaseError: PropTypes.bool
 };
 
 const LoginFormWithFormik = withFormik({

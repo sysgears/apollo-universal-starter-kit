@@ -20,26 +20,35 @@ class LoginView extends React.Component {
     loginWithProvider: PropTypes.func
   };
 
+  state = {
+    firebaseError: false
+  };
+
   componentDidMount() {
     // redirect from socials provider
     this.handleRedirectResult();
   }
 
+  async componentWillUnmount() {
+    await firebase.app().delete();
+    await firebase.initializeApp(settings.firebase.config.clientData);
+  }
+
   handleRedirectResult = async () => {
     const { client, onLogin, loginWithProvider } = this.props;
     try {
-      const test = await firebase.auth().getRedirectResult();
-      if (test.user) {
-        await loginWithProvider(test.user, test.additionalUserInfo);
+      const { user, additionalUserInfo } = await firebase.auth().getRedirectResult();
+      if (user) {
+        await loginWithProvider(user, additionalUserInfo);
         await access.doLogin(client);
         if (onLogin) {
           onLogin();
-          await firebase.app().delete();
-          await firebase.initializeApp(settings.firebase.config.clientData);
         }
       }
     } catch (e) {
-      console.log(e);
+      if (e.code === 'auth/account-exists-with-different-credential') {
+        this.setState(() => ({ firebaseError: true }));
+      }
     }
   };
 
@@ -61,13 +70,14 @@ class LoginView extends React.Component {
 
   render() {
     const { onSubmit, t } = this.props;
+    const { firebaseError } = this.state;
 
     return (
       <PageLayout>
         {this.renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">{t('login.form.title')}</h1>
-          <LoginForm onSubmit={onSubmit} />
+          <LoginForm onSubmit={onSubmit} firebaseError={firebaseError} />
           <hr />
           <Card>
             <CardGroup>

@@ -19,7 +19,6 @@ import CounterSection from '../../containers/CounterSection.vue';
 import { INCREMENT } from '../reducers';
 
 export default Vue.extend({
-  name: 'VuexCounter',
   components: {
     Button,
     CounterSection

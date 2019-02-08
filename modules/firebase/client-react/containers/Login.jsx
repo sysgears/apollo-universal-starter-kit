@@ -23,10 +23,10 @@ class Login extends React.Component {
     loginWithProvider: PropTypes.func
   };
 
-  // componentDidMount() {
-  //   // redirect from socials provider
-  //   this.handleRedirectResult();
-  // }
+  componentDidMount() {
+    // redirect from socials provider
+    // this.handleRedirectResult();
+  }
 
   handleRedirectResult = async () => {
     const { client, onLogin, loginWithProvider, t } = this.props;
@@ -37,6 +37,7 @@ class Login extends React.Component {
         await access.doLogin(client);
         if (onLogin) {
           onLogin();
+          // reload firebase app in order to rewrite redirect result
           await firebase.app().delete();
           await firebase.initializeApp(settings.firebase.config.clientData);
         }
@@ -49,6 +50,7 @@ class Login extends React.Component {
 
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
+    console.log(values);
     try {
       await login(values);
     } catch (e) {

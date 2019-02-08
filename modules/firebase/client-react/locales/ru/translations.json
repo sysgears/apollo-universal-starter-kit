@@ -176,9 +176,9 @@
     "nativeMock": "Привет, ",
     "mobile": {
       "login": {
-        "usernameOrEmail": {
-          "label": "Имя пользователя или email",
-          "placeholder": "Введите имя пользователя или эл.почту"
+        "email": {
+          "label": "email",
+          "placeholder": "Введите эл.почту"
         },
         "pass": {
           "label": "Пароль",

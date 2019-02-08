@@ -13,6 +13,9 @@ const post = require('@gqlapp/post-client-react').default;
 const upload = require('@gqlapp/upload-client-react').default;
 const pagination = require('@gqlapp/pagination-client-react').default;
 const user = require('@gqlapp/user-client-react').default;
+const firebase = require('@gqlapp/firebase-client-react').default;
+
+import settings from '../../../settings';
 
 const modules = new ClientModule(
   validation,
@@ -24,7 +27,7 @@ const modules = new ClientModule(
   pagination,
   chat,
   payments,
-  user,
+  settings.firebase.enabled ? firebase : user,
   i18n,
   core
 );

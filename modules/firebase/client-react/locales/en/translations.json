@@ -178,9 +178,9 @@
     "nativeMock": "Hello, ",
     "mobile": {
       "login": {
-        "usernameOrEmail": {
-          "label": "Username or Email",
-          "placeholder": "Enter Your Username or Email"
+        "email": {
+          "label": "Email",
+          "placeholder": "Enter Email"
         },
         "pass": {
           "label": "Password",

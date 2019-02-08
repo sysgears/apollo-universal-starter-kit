@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
-import { WebBrowser } from 'expo';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+// import { WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
+import firebase from 'firebase/app';
+import 'firebase/auth';
 import { FontAwesome } from '@expo/vector-icons';
 import {
   iconWrapper,
@@ -15,14 +17,15 @@ import {
   btnText
 } from '@gqlapp/look-client-react-native/styles';
 
-import buildRedirectUrlForMobile from '../../../helpers';
+import settings from '../../../../../../settings';
 
-const googleLogin = () => {
-  const url = buildRedirectUrlForMobile('google');
-  if (Platform.OS === 'ios') {
-    WebBrowser.openBrowserAsync(url);
-  } else {
-    Linking.openURL(url);
+const googleLogin = async () => {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  provider.addScope(settings.firebase.google.scope);
+  try {
+    firebase.auth().signInWithRedirect(provider);
+  } catch (e) {
+    console.log(e);
   }
 };
 

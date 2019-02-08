@@ -2269,6 +2269,11 @@
     "@types/events" "*"
     "@types/node" "*"
 
+"@types/pdfmake@^0.1.3":
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/@types/pdfmake/-/pdfmake-0.1.3.tgz#0f16bd71fc2ff1b9bed3b4ad042fd7119f08ae7e"
+  integrity sha512-b6/notpoQg/jXnbDMImRj/c7GUDzpvC2DF1gtatJlvQ7JXI4O5t3KlgW5F9xCLjd//7RtyoiTcD8gQshMj1pzQ==
+
 "@types/prop-types@*":
   version "15.5.8"
   resolved "https://registry.npmjs.org/@types/prop-types/-/prop-types-15.5.8.tgz#8ae4e0ea205fe95c3901a5a1df7f66495e3a56ce"
@@ -9622,7 +9627,7 @@ graphql-upload@^8.0.2:
 
 graphql@0.13.2, graphql@^0.13.0:
   version "0.13.2"
-  resolved "https://registry.npmjs.org/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
+  resolved "https://registry.yarnpkg.com/graphql/-/graphql-0.13.2.tgz#4c740ae3c222823e7004096f832e7b93b2108270"
   integrity sha512-QZ5BL8ZO/B20VA8APauGBg3GyEgZ19eduvpLWoq5x7gMmWnHoy8rlQWPLmWgFvo1yNgjSEFMesmS4R6pPr7xog==
   dependencies:
     iterall "^1.2.1"
@@ -10249,7 +10254,7 @@ immediate@~3.0.5:
 
 immutability-helper@2.8.1, immutability-helper@^2.6.2:
   version "2.8.1"
-  resolved "https://registry.npmjs.org/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
+  resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
   dependencies:
     invariant "^2.2.0"
@@ -11105,7 +11110,7 @@ items@2.x.x:
 
 iterall@^1.1.3, iterall@^1.2.1, iterall@^1.2.2:
   version "1.2.2"
-  resolved "https://registry.npmjs.org/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
+  resolved "https://registry.yarnpkg.com/iterall/-/iterall-1.2.2.tgz#92d70deb8028e0c39ff3164fdbf4d8b088130cd7"
   integrity sha512-yynBb1g+RFUPY64fTrFv7nsjRrENBQJaX2UL+2Szc9REFrSNm1rpSXHGzhmAy7a9uv3vlvgBlXnf9RqmPH1/DA==
 
 jest-changed-files@^23.4.2:
@@ -16619,7 +16624,6 @@ react-native-view-shot@2.5.0:
 
 "react-native@https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz":
   version "0.57.1"
-  uid "78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   resolved "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz#78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   dependencies:
     absolute-path "^0.0.0"
@@ -16854,13 +16858,6 @@ react-timer-mixin@^0.13.2, react-timer-mixin@^0.13.3:
   version "0.13.4"
   resolved "https://registry.npmjs.org/react-timer-mixin/-/react-timer-mixin-0.13.4.tgz#75a00c3c94c13abe29b43d63b4c65a88fc8264d3"
   integrity sha512-4+ow23tp/Tv7hBM5Az5/Be/eKKF7DIvJ09voz5LyHGQaqqz9WV8YMs31eFvcYQs7d451LSg7kDJV70XYN/Ug/Q==
-
-react-to-print@^2.0.0-alpha-6:
-  version "2.0.0-alpha-6"
-  resolved "https://registry.yarnpkg.com/react-to-print/-/react-to-print-2.0.0-alpha-6.tgz#8275a3e374523dcf235dd5810275bd6689c72aa1"
-  integrity sha512-MtsfNmL86WG0r8RH3T0OUoQayCumhmnnrWLfnDRHIFbTjR7p3aEBo/CXaeEjbmoLkx7Bm+Kp3VmfoP8nk15Csg==
-  dependencies:
-    prop-types "^15.6.2"
 
 react-transform-hmr@^1.0.4:
   version "1.0.4"
@@ -19555,7 +19552,7 @@ unzip-response@^2.0.1:
 
 upath@^1.0.5, upath@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
+  resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
   integrity sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==
 
 upper-case@^1.1.1:

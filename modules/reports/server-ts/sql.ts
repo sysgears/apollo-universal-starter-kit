@@ -1,7 +1,7 @@
 import { knex } from '@gqlapp/database-server-ts';
 
-export default class Report {
-  public report() {
+export default class ContactsDAO {
+  public getContacts() {
     return knex
       .select('id', 'name', 'phone', 'email')
       .from('report')

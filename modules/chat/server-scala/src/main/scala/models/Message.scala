@@ -1,4 +1,5 @@
 package models
+import spray.json.{DefaultJsonProtocol, JsonFormat}
 
 case class Message(
     id: Int,
@@ -11,3 +12,7 @@ case class Message(
     fileName: Option[String] = None,
     path: Option[String] = None
 )
+
+object MessageJsonProtocol extends DefaultJsonProtocol {
+  implicit val MessageJsonProtocolFormat: JsonFormat[Message] = jsonFormat9(Message)
+}

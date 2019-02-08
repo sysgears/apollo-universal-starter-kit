@@ -133,9 +133,8 @@ export default pubsub => ({
       await User.registerWithProvider({
         userId: input.id,
         providerId: input.provider.providerId,
-        profileId: input.provider.providerId,
-        name: input.provider.name,
-        link: input.provider.link
+        profileId: input.provider.profileId,
+        name: input.provider.name
       });
 
       const user = await User.getUser(input.id);

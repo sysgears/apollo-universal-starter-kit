@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
 import firebase from 'firebase/app';
 import 'firebase/auth';
-import 'firebase/firestore';
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
 
 import LoginView from '../components/LoginView';
 import access from '../access';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 import LOGIN_WITH_PROVIDER from '../graphql/LoginWithProvider.graphql';
+
+import settings from '../../../../settings';
 
 class Login extends React.Component {
   static propTypes = {
@@ -23,19 +23,29 @@ class Login extends React.Component {
     loginWithProvider: PropTypes.func
   };
 
-  async componentDidMount() {
-    // redirect from socials provider
-    const { user, additionalUserInfo } = await firebase.auth().getRedirectResult();
-    if (user) {
-      const { login, client, onLogin, loginWithProvider } = this.props;
-      await loginWithProvider(user, additionalUserInfo);
-      await access.doLogin(client);
-      await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
-      if (onLogin) {
-        onLogin();
+  // componentDidMount() {
+  //   // redirect from socials provider
+  //   this.handleRedirectResult();
+  // }
+
+  handleRedirectResult = async () => {
+    const { client, onLogin, loginWithProvider, t } = this.props;
+    try {
+      const test = await firebase.auth().getRedirectResult();
+      if (test.user) {
+        await loginWithProvider(test.user, test.additionalUserInfo);
+        await access.doLogin(client);
+        if (onLogin) {
+          onLogin();
+          await firebase.app().delete();
+          await firebase.initializeApp(settings.firebase.config.clientData);
+        }
       }
+    } catch (e) {
+      console.log(e);
+      throw new FormError(t('login.errorMsg'));
     }
-  }
+  };
 
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
@@ -46,7 +56,6 @@ class Login extends React.Component {
     }
 
     await access.doLogin(client);
-    await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
     if (onLogin) {
       onLogin();
     }
@@ -94,20 +103,19 @@ const LoginWithApollo = compose(
   graphql(LOGIN_WITH_PROVIDER, {
     props: ({ mutate }) => ({
       loginWithProvider: async (
-        { uid, email, emailVerified },
-        { providerId, profile: { name, id, link }, isNewUser }
+        { uid, email: emailUser, emailVerified },
+        { providerId, profile: { name, id, email: emailProfile, verified_email }, isNewUser }
       ) => {
         const userInput = {
           id: uid,
-          email,
-          emailVerified
+          email: emailUser || emailProfile,
+          emailVerified: emailVerified || verified_email
         };
         const provider = {
           providerId,
           isNewUser,
           profileId: id,
-          name,
-          link
+          name
         };
         const result = await mutate({
           variables: { input: { ...userInput, provider } }

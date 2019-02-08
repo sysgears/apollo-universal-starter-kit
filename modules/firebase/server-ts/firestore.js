@@ -119,7 +119,7 @@ class User {
     return { errors, id };
   }
 
-  async registerWithProvider({ userId, providerId, profileId, name, link }) {
+  async registerWithProvider({ userId, providerId, profileId, name }) {
     await firestore()
       .collection('users')
       .doc(userId)
@@ -127,7 +127,6 @@ class User {
       .doc(providerId)
       .set({
         name,
-        link,
         profileId
       });
   }

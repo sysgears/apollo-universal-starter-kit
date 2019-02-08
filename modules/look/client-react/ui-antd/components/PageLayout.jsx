@@ -14,14 +14,14 @@ class PageLayout extends React.Component {
     return (
       <Layout>
         {navBar !== false && (
-          <Header>
+          <Header className="no-print">
             <NavBar />
           </Header>
         )}
         <Content id="content" style={{ background: '#fff', padding: 24 }}>
           {children}
         </Content>
-        <Footer style={{ textAlign: 'center' }}>
+        <Footer className="no-print" style={{ textAlign: 'center' }}>
           &copy; {new Date().getFullYear()}. {settings.app.name}.
         </Footer>
       </Layout>

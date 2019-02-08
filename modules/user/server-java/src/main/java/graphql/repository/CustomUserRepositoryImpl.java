@@ -3,6 +3,7 @@ package graphql.repository;
 import graphql.model.FilterUserInput;
 import graphql.model.OrderByUserInput;
 import graphql.model.User;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -10,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 public class CustomUserRepositoryImpl implements CustomUserRepository {
@@ -18,7 +20,8 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
     private EntityManager em;
 
     @Override
-    public List<User> users(OrderByUserInput orderBy, FilterUserInput filter) {
+    @Async("repositoryThreadPoolTaskExecutor")
+    public CompletableFuture<List<User>> users(OrderByUserInput orderBy, FilterUserInput filter) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
 
@@ -51,6 +54,6 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 
         cq.where(predicates.toArray(new Predicate[0]));
 
-        return em.createQuery(cq).getResultList();
+        return CompletableFuture.supplyAsync(() -> em.createQuery(cq).getResultList());
     }
 }

@@ -1,14 +1,16 @@
 package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import graphql.global.exception.NotFoundException;
 import graphql.model.Counter;
 import graphql.repository.CounterRepository;
 import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class CounterQuery implements GraphQLQueryResolver {
@@ -18,8 +20,9 @@ public class CounterQuery implements GraphQLQueryResolver {
     @Autowired
     private CounterRepository counterRepository;
 
-    public Counter serverCounter() {
-        logger.debug("Server counter -> Get amount");
-        return counterRepository.findById(1).orElseThrow(() -> new NotFoundException("Counter not found"));
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<Counter> serverCounter() {
+        logger.debug("Get counter");
+        return counterRepository.findOneById(1);
     }
 }

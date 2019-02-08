@@ -11,9 +11,11 @@ import org.apache.logging.log4j.LogManager;
 
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Component
 public class UserQuery implements GraphQLQueryResolver {
@@ -23,20 +25,26 @@ public class UserQuery implements GraphQLQueryResolver {
     @Autowired
     private UserRepository userRepository;
 
-    public User currentUser() {
-        logger.debug("User -> Current User");
-        return userRepository.findById(1).get(); //TODO MOCK
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<User> currentUser() {
+        logger.debug("Get current User");
+        return userRepository.findOneById(1); //TODO MOCK
     }
 
-    public UserPayload user(Integer id) {
-        logger.debug("User -> User by ID: {}", id);
-        User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("User with ID: %d not found", id)));
-        return UserPayload.builder()
-                .user(user)
-                .build();
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<UserPayload> user(Integer id) {
+        logger.debug("Get User by ID: {}", id);
+        return CompletableFuture.supplyAsync(() -> {
+            User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("User with ID: %d not found", id)));
+            return UserPayload.builder()
+                    .user(user)
+                    .build();
+        });
     }
 
-    public List<User> users(OrderByUserInput orderBy, FilterUserInput filter) {
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<List<User>> users(OrderByUserInput orderBy, FilterUserInput filter) {
+        logger.debug("Get Users by specified params: orderBy [{}], filter [{}]", orderBy, filter);
         return userRepository.users(orderBy, filter);
     }
 }

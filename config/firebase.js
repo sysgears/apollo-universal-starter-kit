@@ -12,15 +12,15 @@ export default {
   },
   facebook: {
     enabled: false,
-    scope: ['email']
+    scope: 'email'
   },
   github: {
     enabled: false,
-    scope: ['user:email']
+    scope: 'user:email'
   },
   google: {
     enabled: false,
-    scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+    scope: 'https://www.googleapis.com/auth/userinfo.email'
   },
   config: {
     admin: {

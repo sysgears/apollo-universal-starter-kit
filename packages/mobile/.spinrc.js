@@ -20,7 +20,7 @@ const config = {
       defines: {
         __CLIENT__: true
       },
-      enabled: true
+      enabled: false
     },
     test: {
       stack: ['server'],

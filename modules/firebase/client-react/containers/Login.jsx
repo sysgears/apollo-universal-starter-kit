@@ -12,39 +12,12 @@ import access from '../access';
 import LOGIN from '../graphql/Login.graphql';
 import LOGIN_WITH_PROVIDER from '../graphql/LoginWithProvider.graphql';
 
-import settings from '../../../../settings';
-
 class Login extends React.Component {
   static propTypes = {
     login: PropTypes.func,
     onLogin: PropTypes.func,
     t: PropTypes.func,
-    client: PropTypes.object,
-    loginWithProvider: PropTypes.func
-  };
-
-  // componentDidMount() {
-  //   // redirect from socials provider
-  //   this.handleRedirectResult();
-  // }
-
-  handleRedirectResult = async () => {
-    const { client, onLogin, loginWithProvider, t } = this.props;
-    try {
-      const test = await firebase.auth().getRedirectResult();
-      if (test.user) {
-        await loginWithProvider(test.user, test.additionalUserInfo);
-        await access.doLogin(client);
-        if (onLogin) {
-          onLogin();
-          await firebase.app().delete();
-          await firebase.initializeApp(settings.firebase.config.clientData);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-      throw new FormError(t('login.errorMsg'));
-    }
+    client: PropTypes.object
   };
 
   onSubmit = async values => {

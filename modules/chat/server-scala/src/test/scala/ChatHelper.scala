@@ -4,6 +4,7 @@ import com.google.inject.Guice
 import common.implicits.RichDBIO._
 import core.guice.bindings.CoreBinding
 import guice.ChatBinding
+import model.User
 import models.{DbMessage, Message}
 import net.codingwell.scalaguice.ScalaModule
 import repositories._
@@ -24,6 +25,7 @@ trait ChatHelper extends TestHelper {
   lazy val userSchemaInitializer: UserSchemaInitializer = inject[UserSchemaInitializer]
   lazy val userProfileSchemaInitializer: UserProfileSchemaInitializer = inject[UserProfileSchemaInitializer]
 
+  val userRepo: UserRepository = inject[UserRepository]
   val chatRepo: ChatRepository = inject[ChatRepository]
 
   override def beforeEach() {
@@ -39,6 +41,21 @@ trait ChatHelper extends TestHelper {
   }
 
   protected def seedDatabase = {
+    await(
+      userRepo
+        .save(
+          User(
+            Some(1),
+            "testUser",
+            "mock@test.com",
+            "12345password",
+            "admin",
+            true
+          )
+        )
+        .run
+    )
+
     val messageList: List[Message] = List
       .range(1, 5)
       .map(
@@ -57,6 +74,7 @@ trait ChatHelper extends TestHelper {
               message = DbMessage(
                 id = Some(message.id),
                 text = message.text,
+                userId = Some(1),
                 uuid = message.uuid,
                 quotedId = message.quotedId
               )

@@ -14,11 +14,7 @@ import './GitHubButton.css';
 const githubLogin = () => {
   const provider = new firebase.auth.GithubAuthProvider();
   provider.addScope(settings.firebase.github.scope);
-  try {
-    firebase.auth().signInWithRedirect(provider);
-  } catch (e) {
-    console.log(e);
-  }
+  firebase.auth().signInWithRedirect(provider);
 };
 
 const GitHubButton = withApollo(({ text }) => {

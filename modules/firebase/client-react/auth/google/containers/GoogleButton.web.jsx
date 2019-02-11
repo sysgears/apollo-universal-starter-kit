@@ -14,11 +14,7 @@ import './GoogleButton.css';
 const googleLogin = async () => {
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.addScope(settings.firebase.google.scope);
-  try {
-    firebase.auth().signInWithRedirect(provider);
-  } catch (e) {
-    console.log(e);
-  }
+  firebase.auth().signInWithRedirect(provider);
 };
 
 const GoogleButton = withApollo(({ text }) => {

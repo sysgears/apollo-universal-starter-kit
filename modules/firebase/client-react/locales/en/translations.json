@@ -32,15 +32,13 @@
       "googleBtn": "Log in with Google",
       "githubBtn": "Log in with GitHub",
       "linkedinBtn": "Log in with LinkedIn",
+      "waiting": "Waiting...",
       "form": {
         "title": "Sign In",
-        "field": {
-          "usernameOrEmail": "Username or Email",
-          "pass": "Password"
-        },
         "firebase": {
           "email": "Email",
-          "pass": "Password"
+          "pass": "Password",
+          "accountExist": "User is already exist"
         },
         "btnSubmit": "Login"
       },

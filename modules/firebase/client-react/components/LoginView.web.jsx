@@ -21,7 +21,8 @@ class LoginView extends React.Component {
   };
 
   state = {
-    firebaseError: false
+    firebaseError: false,
+    loader: false
   };
 
   componentDidMount() {
@@ -37,15 +38,20 @@ class LoginView extends React.Component {
   handleRedirectResult = async () => {
     const { client, onLogin, loginWithProvider } = this.props;
     try {
+      this.setState(() => ({ loader: true }));
       const { user, additionalUserInfo } = await firebase.auth().getRedirectResult();
       if (user) {
+        this.setState(() => ({ loader: false }));
         await loginWithProvider(user, additionalUserInfo);
         await access.doLogin(client);
         if (onLogin) {
           onLogin();
         }
+      } else {
+        this.setState(() => ({ loader: false }));
       }
     } catch (e) {
+      this.setState(() => ({ loader: false }));
       if (e.code === 'auth/account-exists-with-different-credential') {
         this.setState(() => ({ firebaseError: true }));
       }
@@ -70,14 +76,14 @@ class LoginView extends React.Component {
 
   render() {
     const { onSubmit, t } = this.props;
-    const { firebaseError } = this.state;
+    const { firebaseError, loader } = this.state;
 
     return (
       <PageLayout>
         {this.renderMetaData()}
         <LayoutCenter>
           <h1 className="text-center">{t('login.form.title')}</h1>
-          <LoginForm onSubmit={onSubmit} firebaseError={firebaseError} />
+          <LoginForm onSubmit={onSubmit} firebaseError={firebaseError} loader={loader} />
           <hr />
           <Card>
             <CardGroup>

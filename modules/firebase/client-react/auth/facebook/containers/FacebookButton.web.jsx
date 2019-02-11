@@ -14,11 +14,7 @@ import './FacebookButton.css';
 const facebookLogin = () => {
   const provider = new firebase.auth.FacebookAuthProvider();
   provider.addScope(settings.firebase.facebook.scope);
-  try {
-    firebase.auth().signInWithRedirect(provider);
-  } catch (e) {
-    console.log(e);
-  }
+  firebase.auth().signInWithRedirect(provider);
 };
 
 const FacebookButton = withApollo(({ text }) => {

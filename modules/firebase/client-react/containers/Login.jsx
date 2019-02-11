@@ -22,7 +22,6 @@ class Login extends React.Component {
 
   onSubmit = async values => {
     const { t, login, client, onLogin } = this.props;
-    console.log(values);
     try {
       await login(values);
     } catch (e) {

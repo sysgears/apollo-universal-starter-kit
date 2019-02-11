@@ -20,7 +20,7 @@ const loginFormSchema = {
 
 const { facebook, google, github } = settings.firebase;
 
-const renderSocialButtons = (buttonsLength, t) => {
+const renderSocialButtons = (buttonsLength, t, loader) => {
   return buttonsLength > 2 ? (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
       {settings.firebase.facebook.enabled && (
@@ -56,11 +56,30 @@ const renderSocialButtons = (buttonsLength, t) => {
           <GitHubButton text={t('login.githubBtn')} type={'button'} />
         </div>
       )}
+      {loader && (
+        <div
+          style={{
+            position: 'fixed',
+            top: '0',
+            bottom: '0',
+            left: '0',
+            right: '0',
+            zIndex: '1000',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}
+        >
+          <Alert color="error">
+            <div className="text-center">{t('login.waiting')}</div>
+          </Alert>
+        </div>
+      )}
     </div>
   );
 };
 
-const LoginForm = ({ handleSubmit, submitting, errors, values, t, firebaseError }) => {
+const LoginForm = ({ handleSubmit, submitting, errors, values, t, firebaseError, loader }) => {
   const buttonsLength = [facebook.enabled, google.enabled, github.enabled].filter(button => button).length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
@@ -79,14 +98,16 @@ const LoginForm = ({ handleSubmit, submitting, errors, values, t, firebaseError 
         value={values.password}
       />
       <div className="text-center">{errors && errors.errorMsg && <Alert color="error">{errors.errorMsg}</Alert>}</div>
-      <div className="text-center">{firebaseError && <Alert color="error">{'ERROR ERROR ERROR'}</Alert>}</div>
+      <div className="text-center">
+        {firebaseError && <Alert color="error">{t('login.form.firebase.accountExist')}</Alert>}
+      </div>
       <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
         <div className="text-center">
           <Button size="lg" style={{ minWidth: '320px' }} color="primary" type="submit" disabled={submitting}>
             {t('login.form.btnSubmit')}
           </Button>
         </div>
-        {renderSocialButtons(buttonsLength, t)}
+        {renderSocialButtons(buttonsLength, t, loader)}
       </div>
 
       <div className="text-center" style={{ marginTop: 10 }}>
@@ -110,7 +131,8 @@ LoginForm.propTypes = {
   errors: PropTypes.object,
   values: PropTypes.object,
   t: PropTypes.func,
-  firebaseError: PropTypes.bool
+  firebaseError: PropTypes.bool,
+  loader: PropTypes.bool
 };
 
 const LoginFormWithFormik = withFormik({

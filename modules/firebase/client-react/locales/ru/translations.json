@@ -32,15 +32,13 @@
       "googleBtn": "Войти через Google",
       "githubBtn": "Войти через GitHub",
       "linkedinBtn": "Войти через LinkedIn",
+      "waiting": "Ожидайте...",
       "form": {
         "title": "Вход в систему",
-        "field": {
-          "usernameOrEmail": "Имя пользователя или эл.почта",
-          "pass": "Пароль"
-        },
         "firebase": {
           "email": "Электронная почта",
-          "pass": "Пароль"
+          "pass": "Пароль",
+          "accountExist": "Пользователь с таким email уже существует"
         },
         "btnSubmit": "Войти"
       },

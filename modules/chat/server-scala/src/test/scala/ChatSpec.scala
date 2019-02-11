@@ -150,7 +150,7 @@ class ChatSpec extends ChatHelper {
     "save a new message with attachment" in {
 
       val mutationAddMessage =
-        "mutation { addMessage ( input: { text:\"message with attachment\", userId:1, uuid:\"dfsgadrfhafrhadshb\", quotedId:2}){ id text userId username quotedId fileName path } }"
+        "mutation { addMessage ( input: { text:\"message with attachment\", userId:1, uuid:\"dfsgadrfhafrhadshb\", quotedId:2}){ id text userId username quotedId filename path } }"
 
       val addAttachmentEntity = Multipart.FormData(
         Multipart.FormData.BodyPart.Strict(
@@ -182,13 +182,13 @@ class ChatSpec extends ChatHelper {
         result.id shouldEqual 5
         result.text shouldEqual "message with attachment"
         result.path.isDefined shouldEqual true
-        result.fileName shouldEqual Some("attachment.txt")
+        result.filename shouldEqual Some("attachment.txt")
       }
     }
 
     "delete an existed message and attachment" in {
       val mutationAddMessage =
-        "mutation { addMessage ( input: { text:\"message with attachment\", userId:1, uuid:\"dfsgadrfhafrhadshb\", quotedId:2}){ id text userId username quotedId fileName path } }"
+        "mutation { addMessage ( input: { text:\"message with attachment\", userId:1, uuid:\"dfsgadrfhafrhadshb\", quotedId:2}){ id text userId username quotedId filename path } }"
 
       val addAttachmentEntity = Multipart.FormData(
         Multipart.FormData.BodyPart.Strict(
@@ -220,11 +220,11 @@ class ChatSpec extends ChatHelper {
         result.id shouldEqual 5
         result.text shouldEqual "message with attachment"
         result.path.isDefined shouldEqual true
-        result.fileName shouldEqual Some("attachment.txt")
+        result.filename shouldEqual Some("attachment.txt")
       }
 
       val mutationDeleteMessage =
-        "mutation { deleteMessage (id: 5) { id text uuid userId username fileName path } }"
+        "mutation { deleteMessage (id: 5) { id text uuid userId username filename path } }"
 
       val entity = HttpEntity(`application/json`, graphQLMessage(mutationDeleteMessage))
       Post(endpoint, entity) ~> routes ~> check {
@@ -241,7 +241,7 @@ class ChatSpec extends ChatHelper {
         result.id shouldEqual 5
         result.text shouldEqual "message with attachment"
         result.path.isDefined shouldEqual true
-        result.fileName shouldEqual Some("attachment.txt")
+        result.filename shouldEqual Some("attachment.txt")
 
         Paths.get(getClass.getResource("/").getPath, result.path.get).toFile.exists shouldBe false
       }

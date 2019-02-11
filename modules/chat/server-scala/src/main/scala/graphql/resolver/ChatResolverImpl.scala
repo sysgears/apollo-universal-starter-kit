@@ -5,7 +5,7 @@ import java.util.UUID
 
 import akka.http.scaladsl.model.Multipart.FormData
 import akka.stream.ActorMaterializer
-import akka.stream.scaladsl.{FileIO, Keep, Sink, Source}
+import akka.stream.scaladsl.{FileIO, Sink, Source}
 import com.google.inject.Inject
 import common.Logger
 import common.actors.ActorMessageDelivering
@@ -28,7 +28,7 @@ class ChatResolverImpl @Inject()(
 
   override def addMessage(input: AddMessageInput, parts: Source[FormData.BodyPart, Any]): Future[Message] =
     for {
-      maybeAttachments <- parts.filter(_.filename.nonEmpty).toMat(Sink.seq)(Keep.right).run()
+      maybeAttachments <- parts.filter(_.filename.nonEmpty) runWith Sink.seq
       isEmpty = maybeAttachments.isEmpty
       maybeMessage <- if (isEmpty) {
         chatRepository
@@ -77,9 +77,7 @@ class ChatResolverImpl @Inject()(
                 )
                 .run
           }
-          .toMat(Sink.headOption)(Keep.right)
-          .run
-          .map(maybeMessage => maybeMessage.get)
+          .runWith(Sink.head)
       }
     } yield maybeMessage
 

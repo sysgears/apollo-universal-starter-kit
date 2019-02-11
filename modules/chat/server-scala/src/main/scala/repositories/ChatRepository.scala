@@ -22,11 +22,10 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
   val tableQuery = TableQuery[DbMessageTable]
   val pkType = implicitly[BaseTypedType[Int]]
   type TableType = DbMessageTable
+  type DBActionMessage = DBIOAction[Message, NoStream, Effect]
 
   val attachmentTableQuery = TableQuery[MessageAttachmentTable]
   val userTableQuery = TableQuery[UserTable]
-
-  val emptyStr = ""
 
   def saveMessage(message: DbMessage, attachment: Option[MessageAttachment] = None): DBIO[Message] =
     executeTransactionally {
@@ -52,21 +51,19 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       dbMessageSeq <- query.filter(_._1._1.id === id).result
       message <- if (dbMessageSeq.size == 1) DBIO.successful(dbMessageSeq.head)
       else DBIO.failed(NotFound(s"Not found message with = $id"))
-      attachmentSeq <- attachmentTableQuery.filter(_.messageId === id).result
-      attachment = attachmentSeq.headOption
-      id = message._1._1.id.get
-      text = message._1._1.text
-      createdAt = message._1._1.createdAt.toString
-      maybeUser = message._1._2
-      userId = if (maybeUser.isDefined) maybeUser.get.id else None
-      username = if (maybeUser.isDefined) maybeUser.get.username else emptyStr
-      uuid = message._1._1.uuid
-      quotedId = message._1._1.quotedId
-      fileName = if (attachment.isDefined) attachment.get.name else emptyStr
-      path = if (attachment.isDefined) attachment.get.path else emptyStr
+      ((dbMessage, user), attachment) = message
+      id = dbMessage.id.get
+      text = dbMessage.text
+      createdAt = dbMessage.createdAt.toString
+      userId = user.fold[Option[Int]](None)(_.id)
+      username = Some(user.fold("")(_.username))
+      uuid = dbMessage.uuid
+      quotedId = dbMessage.quotedId
+      fileName = Some(attachment.fold("")(_.name))
+      path = Some(attachment.fold("")(_.path))
     } yield
       Some(
-        Message(id, text, userId, Some(createdAt), Some(username), uuid, quotedId, Some(fileName), Some(path))
+        Message(id, text, userId, Some(createdAt), username, uuid, quotedId, fileName, path)
       )
   }
 
@@ -76,17 +73,15 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       dbMessageSeq <- query.filter(_._1._1.id === id).result
       message <- if (dbMessageSeq.size == 1) DBIO.successful(dbMessageSeq.head)
       else DBIO.failed(NotFound(s"Not found message with ID = $id"))
-      attachmentSeq <- attachmentTableQuery.filter(_.messageId === id).result
-      attachment = attachmentSeq.headOption
-      id = message._1._1.id.get
-      text = message._1._1.text
-      maybeUser = message._1._2
-      username = if (maybeUser.isDefined) maybeUser.get.username else emptyStr
-      fileName = if (attachment.isDefined) attachment.get.name else emptyStr
-      path = if (attachment.isDefined) attachment.get.path else emptyStr
+      ((dbMessage, user), attachment) = message
+      id = dbMessage.id.get
+      text = dbMessage.text
+      username = Some(user.fold("")(_.username))
+      fileName = Some(attachment.fold("")(_.name))
+      path = Some(attachment.fold("")(_.path))
     } yield
       Some(
-        QuotedMessage(id, text, Some(username), Some(fileName), Some(path))
+        QuotedMessage(id, text, username, fileName, path)
       )
   }
 
@@ -117,46 +112,42 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
   }
 
   def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = executeTransactionally {
+    val query = tableQuery.filter(
+      message =>
+        message.id === id &&
+          (if (userId.isDefined) message.userId.getOrElse(0) === userId.get
+           else true)
+    )
     for {
-      dbMessageSeq <- tableQuery
-        .filter(
-          message =>
-            message.id === id &&
-              (if (userId.isDefined) message.userId.getOrElse(0) === userId.get
-               else true)
-        )
-        .result
+      dbMessageSeq <- query.result
       dbMessage <- if (dbMessageSeq.size == 1) DBIO.successful(dbMessageSeq.head)
       else DBIO.failed(NotFound(s"Not found message with [id=$id], [userId=$userId]"))
       _ <- update(dbMessage.copy(text = text))
       message <- findMessage(id)
-      result <- if (message.isDefined) DBIO.successful(message.get)
-      else DBIO.failed(AmbigousResult(s"Could not update message with [id=$id]"))
+      result <- message.fold[DBActionMessage](DBIO.failed(AmbigousResult(s"Could not update message with [id=$id]")))(
+        m => DBIO.successful(m)
+      )
     } yield result
   }
 
   def deleteMessage(id: Int): DBIO[Message] = executeTransactionally {
     for {
       maybeMessage <- findMessage(id)
-      message <- if (maybeMessage.isDefined) DBIO.successful(maybeMessage.get)
-      else DBIO.failed(NotFound(s"Not found message with [id=$id]"))
-      maybeDbMessage <- findOne(id)
-      deleteDbMessage <- if (maybeDbMessage.isDefined) delete(maybeDbMessage.get)
-      else DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been deleted"))
+      message <- maybeMessage
+        .fold[DBActionMessage](DBIO.failed(NotFound(s"Not found message with [id=$id]")))(m => DBIO.successful(m))
+      _ <- delete(DbMessage(id = Some(message.id), text = message.text))
       maybeAttachment <- findAttachment(id)
-      deleteAttachment <- if (maybeAttachment.isDefined) attachmentTableQuery.filter(_.messageId === id).delete
-      else DBIO.successful()
+      _ <- if (maybeAttachment.isDefined) attachmentTableQuery.filter(_.messageId === id).delete else DBIO.successful()
       maybeDeleteMessage <- findOne(id)
       maybeDeleteAttachment <- findAttachment(id)
       _ <- if (maybeDeleteAttachment.isDefined || maybeDeleteMessage.isDefined)
         DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been full deleted"))
       else DBIO.successful()
-      isDeleteFile = if (maybeAttachment.isDefined) {
-        Files.deleteIfExists(resourcesDirPath.resolve(maybeAttachment.get.path))
-        true
-      } else true
-      _ <- if (isDeleteFile) DBIO.successful()
-      else DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
+      isDeleteFile = maybeAttachment.fold(true)(a => Files.deleteIfExists(resourcesDirPath.resolve(a.path)))
+      _ <- isDeleteFile match {
+        case true => DBIO.successful()
+        case false => DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
+      }
     } yield message
   }
 

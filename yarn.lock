@@ -13181,29 +13181,6 @@ mocha-steps@^1.1.0:
   resolved "https://registry.npmjs.org/mocha-steps/-/mocha-steps-1.3.0.tgz#2449231ec45ec56810f65502cb22e2571862957f"
   integrity sha512-KZvpMJTqzLZw3mOb+EEuYi4YZS41C9iTnb7skVFRxHjUd1OYbl64tCMSmpdIRM9LnwIrSOaRfPtNpF5msgv6Eg==
 
-mocha-webpack@^2.0.0-beta.0:
-  version "2.0.0-beta.0"
-  resolved "https://registry.npmjs.org/mocha-webpack/-/mocha-webpack-2.0.0-beta.0.tgz#d85fc9a70f82a4ad595b7702a1181605dfa59549"
-  integrity sha512-2ezbW0h5cYWr874F/hzytQCqINxk+GVelMY4xWTSHwwH1LrPAOzjlUljZ+/PhpaP6QeqYbL5x5vK/bnaXqkfEw==
-  dependencies:
-    babel-runtime "^6.18.0"
-    chalk "^2.3.0"
-    chokidar "^2.0.2"
-    glob-parent "^3.1.0"
-    globby "^7.1.1"
-    interpret "^1.0.1"
-    is-glob "^4.0.0"
-    loader-utils "^1.1.0"
-    lodash "^4.3.0"
-    memory-fs "^0.4.1"
-    nodent-runtime "^3.0.3"
-    normalize-path "^2.0.1"
-    progress "^2.0.0"
-    source-map-support "^0.5.0"
-    strip-ansi "^4.0.0"
-    toposort "^1.0.0"
-    yargs "^11.0.0"
-
 mocha@^5.1.1:
   version "5.2.0"
   resolved "https://registry.npmjs.org/mocha/-/mocha-5.2.0.tgz#6d8ae508f59167f940f2b5b3c4a612ae50c90ae6"
@@ -13220,6 +13197,29 @@ mocha@^5.1.1:
     minimatch "3.0.4"
     mkdirp "0.5.1"
     supports-color "5.4.0"
+
+mochapack@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/mochapack/-/mochapack-1.0.0.tgz#f6a742bb9c1e7bb40ee8939bde83018ec7a940ee"
+  integrity sha512-/RtWnfyW/O7lzlE4dx3ba8K15J/46oWk/Xwz3ejeRNKkg7EgPbUmvPfnje5x5XliGi9nIZiqR4Pq1Lt+RcIqew==
+  dependencies:
+    babel-runtime "^6.18.0"
+    chalk "^2.3.0"
+    chokidar "^2.0.4"
+    glob-parent "^3.1.0"
+    globby "^7.1.1"
+    interpret "^1.0.1"
+    is-glob "^4.0.0"
+    loader-utils "^1.1.0"
+    lodash "^4.3.0"
+    memory-fs "^0.4.1"
+    nodent-runtime "^3.0.3"
+    normalize-path "^2.0.1"
+    progress "^2.0.0"
+    source-map-support "^0.5.0"
+    strip-ansi "^4.0.0"
+    toposort "^1.0.0"
+    yargs "^11.0.0"
 
 modify-values@^1.0.0:
   version "1.0.1"
@@ -18003,10 +18003,10 @@ spdy@^4.0.0:
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
 
-spinjs@^0.4.190:
-  version "0.4.190"
-  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.190.tgz#4d070e3339ca6910488fce2cb2b74ad8340d7ec5"
-  integrity sha512-eeAbVUT516FTzLr0Qs5sqx01uRHgebpTTHcUwljF5FIteVgozDPrPbfpl91zi7Gw/WDlXwVQW48xFufxcOiX7w==
+spinjs@^0.4.191:
+  version "0.4.191"
+  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.191.tgz#5b99c48499cb23dd79601631f77d6fbe928b5194"
+  integrity sha512-vg/ox1e2Psotgtz/7A7sE67wxJ14hMZd9kHXCIH5rJVe4C3NDFFHSbnn+rW1OcGf72cM+5LIOP97haHYaClycQ==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -19762,7 +19762,7 @@ webpack-virtual-modules@^0.1.10:
   dependencies:
     debug "^3.0.0"
 
-webpack@^4.12.0, webpack@^4.25.1:
+webpack@^4.12.0:
   version "4.29.0"
   resolved "https://registry.npmjs.org/webpack/-/webpack-4.29.0.tgz#f2cfef83f7ae404ba889ff5d43efd285ca26e750"
   integrity sha512-pxdGG0keDBtamE1mNvT5zyBdx+7wkh6mh7uzMOo/uRQ/fhsdj5FXkh/j5mapzs060forql1oXqXN9HJGju+y7w==
@@ -19787,6 +19787,36 @@ webpack@^4.12.0, webpack@^4.25.1:
     neo-async "^2.5.0"
     node-libs-browser "^2.0.0"
     schema-utils "^0.4.4"
+    tapable "^1.1.0"
+    terser-webpack-plugin "^1.1.0"
+    watchpack "^1.5.0"
+    webpack-sources "^1.3.0"
+
+webpack@^4.29.3:
+  version "4.29.3"
+  resolved "https://registry.npmjs.org/webpack/-/webpack-4.29.3.tgz#e0b406a7b4201ed5e4fb4f84fd7359f9a7db4647"
+  integrity sha512-xPJvFeB+8tUflXFq+OgdpiSnsCD5EANyv56co5q8q8+YtEasn5Sj3kzY44mta+csCIEB0vneSxnuaHkOL2h94A==
+  dependencies:
+    "@webassemblyjs/ast" "1.7.11"
+    "@webassemblyjs/helper-module-context" "1.7.11"
+    "@webassemblyjs/wasm-edit" "1.7.11"
+    "@webassemblyjs/wasm-parser" "1.7.11"
+    acorn "^6.0.5"
+    acorn-dynamic-import "^4.0.0"
+    ajv "^6.1.0"
+    ajv-keywords "^3.1.0"
+    chrome-trace-event "^1.0.0"
+    enhanced-resolve "^4.1.0"
+    eslint-scope "^4.0.0"
+    json-parse-better-errors "^1.0.2"
+    loader-runner "^2.3.0"
+    loader-utils "^1.1.0"
+    memory-fs "~0.4.1"
+    micromatch "^3.1.8"
+    mkdirp "~0.5.0"
+    neo-async "^2.5.0"
+    node-libs-browser "^2.0.0"
+    schema-utils "^1.0.0"
     tapable "^1.1.0"
     terser-webpack-plugin "^1.1.0"
     watchpack "^1.5.0"

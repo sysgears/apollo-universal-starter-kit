@@ -46,6 +46,10 @@ subprojects {
 		// https://projectlombok.org
 		compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
 		annotationProcessor group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+
+		//DotEnv support
+		implementation group: 'io.github.cdimascio', name: 'java-dotenv', version: '3.1.7'
+
 	}
 }
 

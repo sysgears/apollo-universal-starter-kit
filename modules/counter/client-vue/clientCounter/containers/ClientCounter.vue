@@ -16,7 +16,6 @@ import IncrementCounter from '../components/IncrementCounter.vue';
 import CounterSection from '../../containers/CounterSection.vue';
 
 export default Vue.extend({
-  name: 'ClientCounter',
   components: {
     IncrementCounter,
     CounterSection

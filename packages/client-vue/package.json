@@ -41,11 +41,10 @@
   "dependencies": {
     "@fortawesome/fontawesome": "^1.1.8",
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
-    "@fortawesome/react-fontawesome": "0.0.18",
     "@gqlapp/core-client-vue": "^0.1.0",
     "@gqlapp/counter-client-vue": "^0.1.0",
     "@gqlapp/module-client-vue": "^0.1.0",
-    "apollo-cache-inmemory": "1.2.9",
+    "apollo-cache-inmemory": "^1.4.2",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
@@ -61,7 +60,7 @@
     "error-stack-parser": "^2.0.1",
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
-    "graphql": "^0.13.0",
+    "graphql": "^14.1.1",
     "graphql-iso-date": "^3.5.0",
     "graphql-tag": "^2.6.0",
     "history": "^4.7.2",
@@ -104,15 +103,9 @@
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
-    "mocha-webpack": "^2.0.0-beta.0",
+    "mochapack": "^1.0.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.2"
-  },
-  "optionalDependencies": {
-    "@expo/vector-icons": "^6.2.1",
-    "antd-mobile-rn": "^2.2.1",
-    "expo": "^31.0.2",
-    "uuid": "^3.3.2"
   },
   "peerDependencies": {
     "spinjs": "^0.4.0"

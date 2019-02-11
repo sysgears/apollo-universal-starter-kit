@@ -122,6 +122,7 @@
     "redux": "^4.0.0",
     "roboto-npm-webfont": "^1.0.1",
     "serialize-javascript": "^1.4.0",
+    "sofa-api": "^0.2.0",
     "shortid": "^2.2.8",
     "source-map-support": "^0.5.0",
     "sourcemapped-stacktrace": "^1.1.8",

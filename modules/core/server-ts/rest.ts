@@ -10,7 +10,9 @@ import swaggerUi from 'swagger-ui-express';
 import settings from '../../../settings';
 
 const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModule) => {
+  // need to enable explicitly
   if (settings.rest.enabled) {
+    // setup the openApi objecct
     const openApi = OpenAPI({
       schema,
       info: {
@@ -19,34 +21,36 @@ const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModul
       }
     });
 
+    // need to parse json bodies for sofa (maybe others, content negotiation middleware anywhere?)
     app.use(settings.rest.basePath, bodyParser.json());
 
+    // setups up sofa at basepath
     app.use(
       settings.rest.basePath,
       sofa({
         schema,
         onRoute: info => {
-          // console.log(info);
-          if (info.path == '/login') {
-            console.log(JSON.stringify(info.document, null, 2));
-          }
           openApi.addRoute(info, {
             basePath: settings.rest.basePath
           });
         },
+        // construct the context, this shows up as the context parameter to resolvers
         context: async ({ req, res }) => {
-          let ctx = await modules.createContext(req, res);
-          ctx.req = req;
-          ctx.res = res;
-          return ctx;
+          const ctx = await modules.createContext(req, res);
+          return {
+            req,
+            res,
+            ...ctx
+          };
         }
       })
     );
 
-    // writes every recorder route
-    const swaggerDocument = openApi.get();
-
-    app.use(settings.rest.basePath + '/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    // possibly setup a swagger interface
+    if (settings.rest.swaggerPath) {
+      const swaggerDocument = openApi.get();
+      app.use(settings.rest.basePath + settings.rest.swaggerPath, swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+    }
   }
 };
 

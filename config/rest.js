@@ -1,4 +1,5 @@
 export default {
   enabled: true,
-  basePath: '/api'
+  basePath: '/api',
+  swaggerPath: '/swagger'
 };

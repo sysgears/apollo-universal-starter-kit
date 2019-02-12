@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@gqlapp/core-common": "^0.1.0",
-    "@hofstadter-io/sofa-api": "^0.2.4",
+    "@hofstadter-io/sofa-api": "^0.2.5",
     "swagger-ui-express": "^4.0.2",
     "@types/swagger-ui-express": "^3.0.0"
   }

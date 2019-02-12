@@ -33,11 +33,11 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, context, req: { t } }) => {
+const createContextFunc = async ({ req, context }) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {
-    throw new Error(t('auth:appendContext'));
+    throw new Error(req.t('auth:appendContext'));
   }
 
   attachSession(req);

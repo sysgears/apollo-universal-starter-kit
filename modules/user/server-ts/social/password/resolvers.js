@@ -6,19 +6,13 @@ import { access } from '@gqlapp/authentication-server-ts';
 import User from '../../sql';
 import settings from '../../../../../settings';
 
-const {
-  auth: { secret },
-  user: { auth },
-  app
-} = settings;
-
 const validateUserPassword = async (user, password, t) => {
   if (!user) {
     // user with provided email not found
     return { usernameOrEmail: t('user:auth.password.validPasswordEmail') };
   }
 
-  if (auth.password.confirm && !user.isActive) {
+  if (settings.user.auth.password.confirm && !user.isActive) {
     return { usernameOrEmail: t('user:auth.password.emailConfirmation') };
   }
 
@@ -64,7 +58,7 @@ export default () => ({
 
       let userId = 0;
       if (!emailExists) {
-        let isActive = !auth.password.confirm;
+        let isActive = !settings.user.auth.password.confirm;
         [userId] = await User.register({ ...input, isActive });
 
         // if user has previously logged with facebook auth
@@ -75,17 +69,17 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && auth.password.sendConfirmationEmail && !emailExists && req) {
+      if (mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && req) {
         // async email
-        jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
+        jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');
           const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
           mailer.sendMail({
-            from: `${app.name} <${process.env.EMAIL_USER}>`,
+            from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
             to: user.email,
             subject: 'Confirm Email',
             html: `<p>Hi, ${user.username}!</p>
-              <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
+              <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
               <p><a href="${url}">${url}</a></p>
               <p>Below are your login information</p>
               <p>Your email is: ${user.email}</p>
@@ -105,14 +99,14 @@ export default () => ({
           // async email
           jwt.sign(
             { email: user.email, password: user.passwordHash },
-            settings.user.secret,
+            settings.auth.secret,
             { expiresIn: '1d' },
             (err, emailToken) => {
               // encoded token since react router does not match dots in params
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${__WEBSITE_URL__}/reset-password/${encodedToken}`;
               mailer.sendMail({
-                from: `${app.name} <${process.env.EMAIL_USER}>`,
+                from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Reset Password',
                 html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
@@ -139,14 +133,14 @@ export default () => ({
         errors.password = t('user:auth.password.passwordsIsNotMatch');
       }
 
-      if (reset.password.length < auth.password.minLength) {
-        errors.password = t('user:auth.password.passwordLength', { length: auth.password.minLength });
+      if (reset.password.length < settings.user.auth.password.minLength) {
+        errors.password = t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength });
       }
 
       if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
 
       const token = Buffer.from(reset.token, 'base64').toString();
-      const { email, password } = jwt.verify(token, settings.user.secret);
+      const { email, password } = jwt.verify(token, settings.auth.secret);
       const user = await User.getUserByEmail(email);
       if (user.passwordHash !== password) {
         throw new Error(t('user:auth.password.invalidToken'));

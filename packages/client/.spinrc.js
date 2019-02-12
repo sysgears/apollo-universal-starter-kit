@@ -2,11 +2,12 @@ const url = require('url');
 
 const config = {
   builders: {
-    web: {
+    react: {
       entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],
+      dllBuildDir: '../../.cache/dll',
       defines: {
         __CLIENT__: true
       },

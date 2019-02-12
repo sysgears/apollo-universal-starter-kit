@@ -3,11 +3,18 @@ import Helmet from 'react-helmet';
 import { Query } from 'react-apollo';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { removeTypename } from '@gqlapp/core-common';
+import { Table, Button } from '@gqlapp/look-client-react';
 
 import settings from '../../../../../../settings';
-import ReportPreview from '../components/ReportPreview';
-import Button from '../components/Button';
 import ReportQuery from '../../../graphql/ReportQuery.graphql';
+
+interface Report {
+  id: string;
+  name: string;
+  phone: string;
+  email: string;
+  typename?: string;
+}
 
 class Report extends Component<{ t: TranslateFunction }> {
   public renderMetaData = () => {
@@ -25,9 +32,12 @@ class Report extends Component<{ t: TranslateFunction }> {
     );
   };
 
+  public print = () => {
+    window.print();
+  };
+
   public render() {
     const { t } = this.props;
-    const button = <Button>{t('print')}</Button>;
 
     return (
       <Query query={ReportQuery}>
@@ -36,8 +46,20 @@ class Report extends Component<{ t: TranslateFunction }> {
             return t('loading');
           }
 
-          const report = data.report.map((item: object) => removeTypename(item));
-          return <ReportPreview data={report} button={button} title={t('title')} />;
+          const report = data.report.map((item: Report) => removeTypename(item));
+          const columns = Object.keys(report[0]).map((name: string) => ({
+            title: name,
+            key: name,
+            dataIndex: name
+          }));
+          return (
+            <>
+              <Table dataSource={report} columns={columns} />
+              <Button className="no-print" onClick={this.print}>
+                {t('print')}
+              </Button>
+            </>
+          );
         }}
       </Query>
     );

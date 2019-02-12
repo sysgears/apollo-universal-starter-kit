@@ -37,3 +37,9 @@
   width: 30%;
   margin-bottom: 20px;
 }
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}

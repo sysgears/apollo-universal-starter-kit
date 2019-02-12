@@ -1,10 +1,11 @@
 const config = {
   builders: {
-    web: {
+    vue: {
       entry: './src/index.ts',
       stack: [ 'web' ],
       openBrowser: true,
       dllExcludes: [ 'bootstrap' ],
+      dllBuildDir: '../../.cache/dll',
       defines: {
         __CLIENT__: true
       },

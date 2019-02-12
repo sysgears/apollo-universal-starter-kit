@@ -20,10 +20,10 @@ class PageLayout extends React.Component {
     return (
       <section className="d-flex flex-column flex-grow-1">
         <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
-          <section className="d-flex flex-column">{navBar !== false && <NavBar />}</section>
+          <section className="d-flex flex-column no-print">{navBar !== false && <NavBar />}</section>
           <Container id="content">{children}</Container>
         </section>
-        <Footer className="d-flex flex-shrink-0 justify-content-center">
+        <Footer className="d-flex flex-shrink-0 justify-content-center no-print">
           <span>
             &copy; {new Date().getFullYear()}. {settings.app.name}.
           </span>

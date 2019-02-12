@@ -20,8 +20,8 @@ export interface ServerModuleShape extends CommonModuleShape {
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
   createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
   // Middleware
-  beforeware?: Array<(app: Express, module: object) => void>;
-  middleware?: Array<(app: Express, module: object) => void>;
+  beforeware?: Array<(app: Express, modules: ServerModuleShape) => void>;
+  middleware?: Array<(app: Express, modules: ServerModuleShape) => void>;
   // Shared modules data
   data?: { [key: string]: any };
 }

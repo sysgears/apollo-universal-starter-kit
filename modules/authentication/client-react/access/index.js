@@ -9,7 +9,11 @@ import AccessModule from './AccessModule';
 const ref = React.createRef();
 
 const resetApolloCacheAndRerenderApp = async client => {
-  if (client) await client.clearStore();
+  // We use `client.cache.reset` instead of `client.clearStore`,
+  // because client.clearStore cancels all queries that are
+  // executing at the moment, as a result error being thrown.
+
+  await client.cache.reset();
   ref.current.reloadPage();
 };
 

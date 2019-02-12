@@ -8,11 +8,12 @@ import AccessModule from './AccessModule';
 
 const ref = React.createRef();
 
-const resetApolloCacheAndRerenderApp = async client => {
-  // We use `client.cache.reset` instead of `client.clearStore`,
-  // because client.clearStore cancels all queries that are
-  // executing at the moment, as a result error being thrown.
+// We are calling this method from inside JWTLink in
+// the middle of executing queries and we cannot cancel
+// in-flight queries, thus we use `client.cache.reset`
+// instead of `client.clearStore`
 
+const resetApolloCacheAndRerenderApp = async client => {
   await client.cache.reset();
   ref.current.reloadPage();
 };

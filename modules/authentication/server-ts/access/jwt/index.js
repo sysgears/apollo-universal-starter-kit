@@ -6,11 +6,10 @@ import resolvers from './resolvers';
 import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
-import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
 const grant = async (identity, req, hash = '') => {
   const refreshSecret = settings.auth.secret + hash;
-  const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret);
+  const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret, req.t);
 
   return {
     accessToken,
@@ -33,7 +32,7 @@ const createContextFunc = async ({ req, context }) => {
     const { appendContext } = context;
 
     if (!appendContext) {
-      throw new Error(MESSAGE_APPEND_CONTEXT);
+      throw new Error(req.t('auth:appendContext'));
     }
 
     const identity = context.identity || (await getCurrentIdentity({ req }));

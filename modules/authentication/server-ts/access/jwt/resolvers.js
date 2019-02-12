@@ -2,20 +2,27 @@ import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 import createTokens from './createTokens';
 import settings from '../../../../../settings';
-import { MESSAGE_INVALID_REFRESH, MESSAGE_GET_IDENTIFY } from '../errorMessages';
 
 export default () => ({
   Mutation: {
-    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { getIdentity, getHash }) {
+    async refreshTokens(
+      obj,
+      { refreshToken: inputRefreshToken },
+      {
+        getIdentity,
+        getHash,
+        req: { t }
+      }
+    ) {
       const decodedToken = jwt.decode(inputRefreshToken);
       const isValidToken = decodedToken && decodedToken.id;
 
       if (!isValidToken) {
-        throw new AuthenticationError(MESSAGE_INVALID_REFRESH);
+        throw new AuthenticationError(t('auth:invalidRefresh'));
       }
 
       if (!getIdentity) {
-        throw new AuthenticationError(MESSAGE_GET_IDENTIFY);
+        throw new AuthenticationError(t('auth:getIdentify'));
       }
 
       const identity = await getIdentity(decodedToken.id);

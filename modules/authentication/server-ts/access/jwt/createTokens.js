@@ -1,13 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 import settings from '../../../../../settings';
-import { MESSAGE_IDENTITY_WITHOUT_ID } from '../errorMessages';
 
 const { tokenExpiresIn, refreshTokenExpiresIn } = settings.auth.jwt;
 
-const createTokens = async (identity, secret, refreshSecret) => {
+const createTokens = async (identity, secret, refreshSecret, t) => {
   if (!identity.id) {
-    throw new AuthenticationError(MESSAGE_IDENTITY_WITHOUT_ID);
+    throw new AuthenticationError(t('auth:identityWithoutId'));
   }
 
   const createToken = jwt.sign({ identity }, secret, { expiresIn: tokenExpiresIn });

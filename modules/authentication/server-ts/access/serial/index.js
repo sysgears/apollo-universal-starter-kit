@@ -1,6 +1,5 @@
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
-import { MESSAGE_APPEND_CONTEXT } from '../errorMessages';
 
 const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.headers['authorization']) {
@@ -12,11 +11,11 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, context }) => {
+const createContextFunc = async ({ req, context, req: { t } }) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {
-    throw new Error(MESSAGE_APPEND_CONTEXT);
+    throw new Error(t('auth:appendContext'));
   }
 
   if (getIdentity) {

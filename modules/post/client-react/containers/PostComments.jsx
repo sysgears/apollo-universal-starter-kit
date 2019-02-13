@@ -68,8 +68,8 @@ const writePostToCache = (cache, post, postId) =>
     }
   });
 
-const subscribeToCommentList = (subscribeToMore, postId) => {
-  return subscribeToMore({
+const subscribeToCommentList = (subscribeToMore, postId) =>
+  subscribeToMore({
     document: COMMENT_SUBSCRIPTION,
     variables: { postId },
     updateQuery: (
@@ -92,7 +92,6 @@ const subscribeToCommentList = (subscribeToMore, postId) => {
       return newResult;
     }
   });
-};
 
 const PostComments = props => {
   useEffect(() => {

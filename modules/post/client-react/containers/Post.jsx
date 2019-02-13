@@ -71,8 +71,8 @@ const onDeletePost = (prev, id) => {
   });
 };
 
-const subscribeToPostList = (subscribeToMore, endCursor) => {
-  return subscribeToMore({
+const subscribeToPostList = (subscribeToMore, endCursor) =>
+  subscribeToMore({
     document: POSTS_SUBSCRIPTION,
     variables: { endCursor },
     updateQuery: (
@@ -96,7 +96,6 @@ const subscribeToPostList = (subscribeToMore, endCursor) => {
       return newResult;
     }
   });
-};
 
 const Post = props => {
   useEffect(() => {

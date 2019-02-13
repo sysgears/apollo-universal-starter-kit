@@ -8,8 +8,8 @@ import POST_QUERY from '../graphql/PostQuery.graphql';
 import EDIT_POST from '../graphql/EditPost.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 
-const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) => {
-  return subscribeToMore({
+const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) =>
+  subscribeToMore({
     document: POST_SUBSCRIPTION,
     variables: { id: postId },
     updateQuery: (
@@ -32,7 +32,6 @@ const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) => {
       return prev;
     }
   });
-};
 
 const PostEdit = props => {
   useEffect(() => {

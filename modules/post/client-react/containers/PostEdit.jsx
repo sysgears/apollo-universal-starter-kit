@@ -35,14 +35,16 @@ const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) =>
 
 const PostEdit = props => {
   useEffect(() => {
-    const {
-      subscribeToMore,
-      post: { id },
-      history,
-      navigation
-    } = props;
-    const subscribe = subscribeToPostEdit(subscribeToMore, id, history, navigation);
-    return () => subscribe();
+    if (props.post) {
+      const {
+        subscribeToMore,
+        post: { id },
+        history,
+        navigation
+      } = props;
+      const subscribe = subscribeToPostEdit(subscribeToMore, id, history, navigation);
+      return () => subscribe();
+    }
   });
 
   return <PostEditView {...props} />;

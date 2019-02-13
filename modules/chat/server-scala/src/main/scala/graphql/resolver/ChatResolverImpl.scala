@@ -28,7 +28,7 @@ class ChatResolverImpl @Inject()(
 
   override def addMessage(input: AddMessageInput, parts: Source[FormData.BodyPart, Any]): Future[Message] =
     for {
-      maybeAttachments <- parts.filter(_.filename.nonEmpty) runWith Sink.seq
+      maybeAttachments <- parts.filter(_.filename.nonEmpty).runWith(Sink.seq)
       isEmpty = maybeAttachments.isEmpty
       maybeMessage <- if (isEmpty) {
         chatRepository

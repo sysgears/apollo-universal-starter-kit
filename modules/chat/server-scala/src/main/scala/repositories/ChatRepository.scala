@@ -22,7 +22,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
   val tableQuery = TableQuery[DbMessageTable]
   val pkType = implicitly[BaseTypedType[Int]]
   type TableType = DbMessageTable
-  type DBActionMessage = DBIOAction[Message, NoStream, Effect]
+  type DBActionMessage = DBIOAction[Message, _, Effect]
 
   val attachmentTableQuery = TableQuery[MessageAttachmentTable]
   val userTableQuery = TableQuery[UserTable]
@@ -31,17 +31,18 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
     executeTransactionally {
       for {
         savedDbMessage <- save(message)
-        messageId <- if (savedDbMessage.id.isDefined) DBIO.successful(savedDbMessage.id.get)
-        else DBIO.failed(AmbigousResult(s"Message [message=$message] has not been saved"))
+        messageId <- savedDbMessage.id.fold[DBIOAction[Int, _, Effect]](
+          DBIO.failed(AmbigousResult(s"Message [message=$message] has not been saved"))
+        )(DBIO.successful)
         _ <- attachment match {
-          case Some(value) => {
+          case Some(value) =>
             attachmentTableQuery += value.copy(messageId = messageId)
-          }
           case _ => DBIO.successful()
         }
         maybeMessage <- findMessage(messageId)
-        result <- if (maybeMessage.isDefined) DBIO.successful(maybeMessage.get)
-        else DBIO.failed(NotFound(s"Not found message with [id = $messageId]"))
+        result <- maybeMessage.fold[DBActionMessage](
+          DBIO.failed(NotFound(s"Not found message with [id = $messageId]"))
+        )(DBIO.successful)
       } yield result
     }
 
@@ -55,7 +56,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       id = dbMessage.id.get
       text = dbMessage.text
       createdAt = dbMessage.createdAt.toString
-      userId = user.fold[Option[Int]](None)(_.id)
+      userId = user.flatMap(_.id)
       username = Some(user.fold("")(_.username))
       uuid = dbMessage.uuid
       quotedId = dbMessage.quotedId
@@ -112,12 +113,10 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
   }
 
   def editMessage(id: Int, text: String, userId: Option[Int]): DBIO[Message] = executeTransactionally {
-    val query = tableQuery.filter(
+    val query = tableQuery.filter {
       message =>
-        message.id === id &&
-          (if (userId.isDefined) message.userId.getOrElse(0) === userId.get
-           else true)
-    )
+        message.id === id && userId.fold[Rep[Boolean]](true)(uid => message.userId.getOrElse(0) === uid)
+    }
     for {
       dbMessageSeq <- query.result
       dbMessage <- if (dbMessageSeq.size == 1) DBIO.successful(dbMessageSeq.head)
@@ -144,9 +143,10 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
         DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been full deleted"))
       else DBIO.successful()
       isDeleteFile = maybeAttachment.fold(true)(a => Files.deleteIfExists(resourcesDirPath.resolve(a.path)))
-      _ <- isDeleteFile match {
-        case true => DBIO.successful()
-        case false => DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
+      _ <- if (isDeleteFile) {
+        DBIO.successful()
+      } else {
+        DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
       }
     } yield message
   }

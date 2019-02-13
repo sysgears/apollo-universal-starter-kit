@@ -109,9 +109,7 @@ const Post = props => {
       } = props;
       const endCursor = posts ? propsEndCursor : 0;
       const subscribe = subscribeToPostList(props.subscribeToMore, endCursor);
-      return () => {
-        subscribe();
-      };
+      return () => subscribe();
     }
   });
 

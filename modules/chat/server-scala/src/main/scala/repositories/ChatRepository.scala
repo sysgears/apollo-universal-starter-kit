@@ -57,11 +57,11 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       text = dbMessage.text
       createdAt = dbMessage.createdAt.toString
       userId = user.flatMap(_.id)
-      username = Some(user.fold("")(_.username))
+      username = user.map(_.username)
       uuid = dbMessage.uuid
       quotedId = dbMessage.quotedId
-      fileName = Some(attachment.fold("")(_.name))
-      path = Some(attachment.fold("")(_.path))
+      fileName = attachment.map(_.name)
+      path = attachment.map(_.path)
     } yield
       Some(
         Message(id, text, userId, Some(createdAt), username, uuid, quotedId, fileName, path)
@@ -77,9 +77,9 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       ((dbMessage, user), attachment) = message
       id = dbMessage.id.get
       text = dbMessage.text
-      username = Some(user.fold("")(_.username))
-      fileName = Some(attachment.fold("")(_.name))
-      path = Some(attachment.fold("")(_.path))
+      username = user.map(_.username)
+      fileName = attachment.map(_.name)
+      path = attachment.map(_.path)
     } yield
       Some(
         QuotedMessage(id, text, username, fileName, path)

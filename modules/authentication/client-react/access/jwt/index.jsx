@@ -2,7 +2,6 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
 
 import AccessModule from '../AccessModule';
-import authentication from '../index';
 import settings from '../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
@@ -29,11 +28,6 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
-};
-
-const doLogout = async client => {
-  await removeTokens();
-  await authentication.doLogout(client);
 };
 
 const JWTLink = getApolloClient =>
@@ -99,14 +93,14 @@ const JWTLink = getApolloClient =>
                       const { accessToken, refreshToken } = data.refreshTokens;
                       await saveTokens({ accessToken, refreshToken });
                     } else {
-                      await doLogout(apolloClient);
+                      await removeTokens();
                     }
                     // Retry current operation
                     await setJWTContext(operation);
                     retrySub = forward(operation).subscribe(observer);
                   } catch (e) {
                     // We have received error during refresh - drop tokens and return original request result
-                    await doLogout(apolloClient);
+                    await removeTokens();
                     observer.error(networkError);
                   }
                 } else {

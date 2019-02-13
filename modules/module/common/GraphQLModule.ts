@@ -1,13 +1,14 @@
 import { merge } from 'lodash';
 import { ApolloLink } from 'apollo-link';
+import { ApolloClient } from 'apollo-client';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 
 import CommonModule, { CommonModuleShape } from './CommonModule';
 
 export interface GraphQLModuleShape extends CommonModuleShape {
-  link?: ApolloLink[];
-  createNetLink?: () => ApolloLink;
+  createLink?: Array<(getApolloClient: () => ApolloClient<any>) => ApolloLink>;
+  createNetLink?: (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
   connectionParam?: ConnectionParamsOptions[];
   resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
 }

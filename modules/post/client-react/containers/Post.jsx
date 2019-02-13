@@ -100,17 +100,19 @@ const subscribeToPostList = (subscribeToMore, endCursor) => {
 
 const Post = props => {
   useEffect(() => {
-    const {
-      posts,
-      posts: {
-        pageInfo: { endCursor: propsEndCursor }
-      }
-    } = props;
-    const endCursor = posts ? propsEndCursor : 0;
-    const subscribe = subscribeToPostList(props.subscribeToMore, endCursor);
-    return () => {
-      subscribe();
-    };
+    if (props.posts) {
+      const {
+        posts,
+        posts: {
+          pageInfo: { endCursor: propsEndCursor }
+        }
+      } = props;
+      const endCursor = posts ? propsEndCursor : 0;
+      const subscribe = subscribeToPostList(props.subscribeToMore, endCursor);
+      return () => {
+        subscribe();
+      };
+    }
   });
 
   return <PostList {...props} />;

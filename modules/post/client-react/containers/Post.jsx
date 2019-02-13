@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
@@ -71,74 +71,56 @@ const onDeletePost = (prev, id) => {
   });
 };
 
-class Post extends React.Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    posts: PropTypes.object,
-    subscribeToMore: PropTypes.func.isRequired
-  };
-
-  constructor(props) {
-    super(props);
-    this.subscription = null;
-  }
-
-  componentDidUpdate(prevProps) {
-    if (!this.props.loading) {
-      const endCursor = this.props.posts ? this.props.posts.pageInfo.endCursor : 0;
-      const prevEndCursor = prevProps.posts ? prevProps.posts.pageInfo.endCursor : null;
-      // Check if props have changed and, if necessary, stop the subscription
-      if (this.subscription && prevEndCursor !== endCursor) {
-        this.subscription();
-        this.subscription = null;
-      }
-      if (!this.subscription) {
-        this.subscribeToPostList(endCursor);
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-      this.subscription = null;
-    }
-  }
-
-  subscribeToPostList = endCursor => {
-    const { subscribeToMore } = this.props;
-
-    this.subscription = subscribeToMore({
-      document: POSTS_SUBSCRIPTION,
-      variables: { endCursor },
-      updateQuery: (
-        prev,
-        {
-          subscriptionData: {
-            data: {
-              postsUpdated: { mutation, node }
-            }
+const subscribeToPostList = (subscribeToMore, endCursor) => {
+  return subscribeToMore({
+    document: POSTS_SUBSCRIPTION,
+    variables: { endCursor },
+    updateQuery: (
+      prev,
+      {
+        subscriptionData: {
+          data: {
+            postsUpdated: { mutation, node }
           }
         }
-      ) => {
-        let newResult = prev;
-
-        if (mutation === 'CREATED') {
-          newResult = onAddPost(prev, node);
-        } else if (mutation === 'DELETED') {
-          newResult = onDeletePost(prev, node.id);
-        }
-
-        return newResult;
       }
-    });
-  };
+    ) => {
+      let newResult = prev;
 
-  render() {
-    return <PostList {...this.props} />;
-  }
-}
+      if (mutation === 'CREATED') {
+        newResult = onAddPost(prev, node);
+      } else if (mutation === 'DELETED') {
+        newResult = onDeletePost(prev, node.id);
+      }
+
+      return newResult;
+    }
+  });
+};
+
+const Post = props => {
+  useEffect(() => {
+    const {
+      posts,
+      posts: {
+        pageInfo: { endCursor: propsEndCursor }
+      }
+    } = props;
+    const endCursor = posts ? propsEndCursor : 0;
+    const subscribe = subscribeToPostList(props.subscribeToMore, endCursor);
+    return () => {
+      subscribe();
+    };
+  });
+
+  return <PostList {...props} />;
+};
+
+Post.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  posts: PropTypes.object,
+  subscribeToMore: PropTypes.func.isRequired
+};
 
 export default compose(
   graphql(POSTS_QUERY, {

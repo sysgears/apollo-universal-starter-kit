@@ -6,10 +6,11 @@ import { translate } from '@gqlapp/i18n-client-react';
 import settings from '../../../../settings';
 
 import PaginationDemoView from '../components/PaginationDemoView.web';
-import withDataProvider from '../containers/DataProvider';
+import { useDataProvider } from '../containers/DataProvider';
 
-const PaginationDemo = ({ t, items, loadData }) => {
+const PaginationDemo = ({ t }) => {
   const [pagination, setPagination] = useState('standard');
+  const { items, loadData } = useDataProvider();
 
   const renderMetaData = () => {
     return (
@@ -52,9 +53,7 @@ const PaginationDemo = ({ t, items, loadData }) => {
 };
 
 PaginationDemo.propTypes = {
-  t: PropTypes.func,
-  loadData: PropTypes.func,
-  items: PropTypes.object
+  t: PropTypes.func
 };
 
-export default withDataProvider(translate('pagination')(PaginationDemo));
+export default translate('pagination')(PaginationDemo);

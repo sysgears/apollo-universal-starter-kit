@@ -6,7 +6,11 @@ import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
 
-const Contact = (props: { t: TranslateFunction }): any => {
+interface ContctProps {
+  t: TranslateFunction;
+}
+
+const Contact = (props: ContctProps): any => {
   const onSubmit = (sendContact: any) => async (values: ContactForm) => {
     const { t } = props;
 

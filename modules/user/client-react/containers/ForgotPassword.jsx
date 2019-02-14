@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
@@ -8,20 +8,13 @@ import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
 
-class ForgotPassword extends React.Component {
-  static propTypes = {
-    forgotPassword: PropTypes.func,
-    t: PropTypes.func
-  };
+const ForgotPassword = props => {
+  const { forgotPassword, t } = props;
 
-  state = {
-    sent: false
-  };
+  const [sent, setSent] = useState(false);
 
-  onSubmit = async values => {
-    const { forgotPassword, t } = this.props;
-
-    this.setState({ sent: true });
+  const onSubmit = async values => {
+    setSent(true);
     try {
       await forgotPassword(values);
     } catch (e) {
@@ -29,28 +22,29 @@ class ForgotPassword extends React.Component {
     }
   };
 
-  render() {
-    const { sent } = this.state;
+  return <ForgotPasswordView {...props} sent={sent} onSubmit={onSubmit} />;
+};
 
-    return <ForgotPasswordView {...this.props} sent={sent} onSubmit={this.onSubmit} />;
-  }
-}
+ForgotPassword.propTypes = {
+  forgotPassword: PropTypes.func,
+  t: PropTypes.func
+};
 
-const ForgotPasswordWithApollo = compose(
-  translate('user'),
-  graphql(FORGOT_PASSWORD, {
-    props: ({ mutate }) => ({
-      forgotPassword: async ({ email }) => {
+const ForgotPasswordWithApollo = props => (
+  <Mutation mutation={FORGOT_PASSWORD}>
+    {mutate => {
+      const forgotPassword = async ({ email }) => {
         const {
           data: { forgotPassword }
         } = await mutate({
           variables: { input: { email } }
         });
-
         return forgotPassword;
-      }
-    })
-  })
-)(ForgotPassword);
+      };
 
-export default ForgotPasswordWithApollo;
+      return <ForgotPassword {...props} forgotPassword={forgotPassword} />;
+    }}
+  </Mutation>
+);
+
+export default translate('user')(ForgotPasswordWithApollo);

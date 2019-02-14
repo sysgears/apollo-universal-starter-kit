@@ -29,22 +29,20 @@ ResetPassword.propTypes = {
   match: PropTypes.object
 };
 
-const ResetPasswordWithApollo = props => {
-  return (
-    <Mutation mutation={RESET_PASSWORD}>
-      {mutate => {
-        const resetPassword = async ({ password, passwordConfirmation, token }) => {
-          const {
-            data: { resetPassword }
-          } = await mutate({
-            variables: { input: { password, passwordConfirmation, token } }
-          });
-          return resetPassword;
-        };
-        return <ResetPassword {...props} resetPassword={resetPassword} />;
-      }}
-    </Mutation>
-  );
-};
+const ResetPasswordWithApollo = props => (
+  <Mutation mutation={RESET_PASSWORD}>
+    {mutate => {
+      const resetPassword = async ({ password, passwordConfirmation, token }) => {
+        const {
+          data: { resetPassword }
+        } = await mutate({
+          variables: { input: { password, passwordConfirmation, token } }
+        });
+        return resetPassword;
+      };
+      return <ResetPassword {...props} resetPassword={resetPassword} />;
+    }}
+  </Mutation>
+);
 
 export default translate('user')(ResetPasswordWithApollo);

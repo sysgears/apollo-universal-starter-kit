@@ -8,9 +8,7 @@ import RegisterForm from '../components/RegisterForm';
 
 import settings from '../../../../settings';
 
-const RegisterView = props => {
-  const { t, onSubmit } = props;
-
+const RegisterView = ({ t, onSubmit }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('reg.title')}`}

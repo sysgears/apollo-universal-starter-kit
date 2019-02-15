@@ -6,8 +6,7 @@ import { Link } from 'react-router-dom';
 import { translate } from '@gqlapp/i18n-client-react';
 import { Table, Button } from '@gqlapp/look-client-react';
 
-const UsersView = props => {
-  const { deleteUser, orderBy, onOrderBy, loading, users, t } = props;
+const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
   const [errors, setErrors] = useState([]);
 
   const handleDeleteUser = async id => {

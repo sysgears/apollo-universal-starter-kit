@@ -8,9 +8,7 @@ import { PageLayout } from '@gqlapp/look-client-react';
 import UserForm from './UserForm';
 import settings from '../../../../settings';
 
-const UserAddView = props => {
-  const { t, onSubmit } = props;
-
+const UserAddView = ({ t, onSubmit }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('userEdit.title')}`}

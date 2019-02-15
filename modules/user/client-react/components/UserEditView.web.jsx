@@ -8,8 +8,7 @@ import { PageLayout } from '@gqlapp/look-client-react';
 import UserForm from './UserForm';
 import settings from '../../../../settings';
 
-const UserEditView = props => {
-  const { loading, user, t, currentUser, onSubmit } = props;
+const UserEditView = ({ loading, user, t, currentUser, onSubmit }) => {
   const isNotSelf = !user || (user && user.id !== currentUser.id);
 
   const renderMetaData = () => (

@@ -55,7 +55,7 @@ class UserEditView extends React.PureComponent {
       return (
         <PageLayout>
           {this.renderMetaData(t)}
-          <Link id="back-button" to={user && user.role === 'admin' ? '/users' : '/profile'}>
+          <Link id="back-button" to={currentUser && currentUser.role === 'admin' ? '/users' : '/profile'}>
             Back
           </Link>
           <h2>

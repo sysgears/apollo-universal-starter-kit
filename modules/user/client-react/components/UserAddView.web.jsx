@@ -8,31 +8,10 @@ import { PageLayout } from '@gqlapp/look-client-react';
 import UserForm from './UserForm';
 import settings from '../../../../settings';
 
-class UserAddView extends React.PureComponent {
-  static propTypes = {
-    user: PropTypes.object,
-    errors: PropTypes.array,
-    loading: PropTypes.bool,
-    addUser: PropTypes.func.isRequired,
-    history: PropTypes.object,
-    t: PropTypes.func,
-    onSubmit: PropTypes.func
-  };
+const UserAddView = props => {
+  const { t, onSubmit } = props;
 
-  constructor(props) {
-    super(props);
-  }
-
-  state = {};
-
-  static getDerivedStateFromProps(nextProps) {
-    if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
-      nextProps.history.push('/profile');
-    }
-    return null;
-  }
-
-  renderMetaData = t => (
+  const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('userEdit.title')}`}
       meta={[
@@ -44,22 +23,23 @@ class UserAddView extends React.PureComponent {
     />
   );
 
-  render() {
-    const { t, onSubmit } = this.props;
+  return (
+    <PageLayout>
+      {renderMetaData()}
+      <Link id="back-button" to="/users">
+        Back
+      </Link>
+      <h2>
+        {t('userEdit.form.titleCreate')} {t('userEdit.form.title')}
+      </h2>
+      <UserForm onSubmit={onSubmit} initialValues={{}} shouldDisplayRole={true} shouldDisplayActive={true} />
+    </PageLayout>
+  );
+};
 
-    return (
-      <PageLayout>
-        {this.renderMetaData(t)}
-        <Link id="back-button" to="/users">
-          Back
-        </Link>
-        <h2>
-          {t('userEdit.form.titleCreate')} {t('userEdit.form.title')}
-        </h2>
-        <UserForm onSubmit={onSubmit} initialValues={{}} shouldDisplayRole={true} shouldDisplayActive={true} />
-      </PageLayout>
-    );
-  }
-}
+UserAddView.propTypes = {
+  t: PropTypes.func,
+  onSubmit: PropTypes.func
+};
 
 export default translate('user')(UserAddView);

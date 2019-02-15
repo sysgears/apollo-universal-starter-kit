@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
@@ -19,48 +19,41 @@ import {
   updateUsersState
 } from './UserOperations';
 
-class Users extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const Users = props => {
+  const { t, usersUpdated, updateQuery } = props;
 
-  componentDidUpdate() {
-    const { usersUpdated, updateQuery } = this.props;
+  useEffect(() => {
     if (usersUpdated) {
       updateUsersState(usersUpdated, updateQuery);
     }
-  }
+  });
 
-  renderMetaData() {
-    return (
-      <Helmet
-        title={`${settings.app.name} - ${this.props.t('users.title')}`}
-        meta={[
-          {
-            name: 'description',
-            content: `${settings.app.name} - ${this.props.t('users.meta')}`
-          }
-        ]}
-      />
-    );
-  }
+  const renderMetaData = () => (
+    <Helmet
+      title={`${settings.app.name} - ${t('users.title')}`}
+      meta={[
+        {
+          name: 'description',
+          content: `${settings.app.name} - ${t('users.meta')}`
+        }
+      ]}
+    />
+  );
 
-  render() {
-    return (
-      <PageLayout>
-        {this.renderMetaData()}
-        <h2>{this.props.t('users.list.title')}</h2>
-        <Link to="/users/new">
-          <Button color="primary">{this.props.t('users.btn.add')}</Button>
-        </Link>
-        <hr />
-        <UsersFilterView {...this.props} />
-        <hr />
-        <UsersListView {...this.props} />
-      </PageLayout>
-    );
-  }
-}
+  return (
+    <PageLayout>
+      {renderMetaData()}
+      <h2>{t('users.list.title')}</h2>
+      <Link to="/users/new">
+        <Button color="primary">{t('users.btn.add')}</Button>
+      </Link>
+      <hr />
+      <UsersFilterView {...props} />
+      <hr />
+      <UsersListView {...props} />
+    </PageLayout>
+  );
+};
 
 Users.propTypes = {
   usersUpdated: PropTypes.object,

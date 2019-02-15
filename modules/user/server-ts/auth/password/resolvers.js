@@ -25,12 +25,13 @@ const validateUserPassword = async (user, password, t) => {
 
 export default () => ({
   Mutation: {
-    async login(data) {
-      console.log("LOGIN", data)
-      let { obj, ctx, thing } = data;
-      let { input } = ctx;
-      let { req } = thing;
-      let { usernameOrEmail, password } = input;
+    async login(
+      obj,
+      {
+        input: { usernameOrEmail, password }
+      },
+      { req }
+    ) {
       const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
 
       const errors = await validateUserPassword(user, password, req.t);

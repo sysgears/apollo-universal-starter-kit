@@ -267,11 +267,11 @@ input ${pascalize(value.type[0].name)}UpdateWhereInput {
             } else if (hasTypeOf(String)) {
               defaults += `${key}_contains: '',\n`;
             } else if (hasTypeOf(DomainSchema.Int)) {
-              defaults += `    ${key}\n`;
-              defaults += `    ${key}_lt\n`;
-              defaults += `    ${key}_lte\n`;
-              defaults += `    ${key}_gt\n`;
-              defaults += `    ${key}_gte\n`;
+              defaults += `    ${key}: '',\n`;
+              defaults += `    ${key}_lt: '',\n`;
+              defaults += `    ${key}_lte: '',\n`;
+              defaults += `    ${key}_gt: '',\n`;
+              defaults += `    ${key}_gte: '',\n`;
             } else {
               defaults += `${key}: '',\n`;
             }

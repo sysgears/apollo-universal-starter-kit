@@ -5,7 +5,16 @@ import PostAddView from '../components/PostAddView';
 
 import ADD_POST from '../graphql/AddPost.graphql';
 
-const PostAdd = props => <PostAddView {...props} />;
+class PostAdd extends React.Component {
+  constructor(props) {
+    super(props);
+    this.subscription = null;
+  }
+
+  render() {
+    return <PostAddView {...this.props} />;
+  }
+}
 
 export default graphql(ADD_POST, {
   props: ({ ownProps: { history, navigation }, mutate }) => ({

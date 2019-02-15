@@ -9,7 +9,7 @@ import { Button, PageLayout } from '@gqlapp/look-client-react';
 import settings from '../../../../settings';
 import UsersFilterView from '../components/UsersFilterView';
 import UsersListView from '../components/UsersListView';
-import withSubscription from './withSubscription';
+import { useUsersWithSubscription } from './withSubscription';
 import {
   withFilterUpdating,
   withOrderByUpdating,
@@ -20,7 +20,8 @@ import {
 } from './UserOperations';
 
 const Users = props => {
-  const { t, usersUpdated, updateQuery } = props;
+  const { t, updateQuery, subscribeToMore, filter } = props;
+  const usersUpdated = useUsersWithSubscription(subscribeToMore, filter);
 
   useEffect(() => {
     if (usersUpdated) {
@@ -58,7 +59,9 @@ const Users = props => {
 Users.propTypes = {
   usersUpdated: PropTypes.object,
   updateQuery: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
+  subscribeToMore: PropTypes.func,
+  filter: PropTypes.object
 };
 
 export default compose(
@@ -66,6 +69,5 @@ export default compose(
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating,
-  withSubscription
+  withFilterUpdating
 )(translate('user')(Users));

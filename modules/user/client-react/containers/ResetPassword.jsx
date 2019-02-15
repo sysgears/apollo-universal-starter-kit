@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { translate } from '@gqlapp/i18n-client-react';
 
 import { FormError } from '@gqlapp/forms-client-react';
@@ -29,20 +29,22 @@ ResetPassword.propTypes = {
   match: PropTypes.object
 };
 
-const ResetPasswordWithApollo = props => (
-  <Mutation mutation={RESET_PASSWORD}>
-    {mutate => {
-      const resetPassword = async ({ password, passwordConfirmation, token }) => {
+const ResetPasswordWithApollo = compose(
+  translate('user'),
+
+  graphql(RESET_PASSWORD, {
+    props: ({ mutate }) => ({
+      resetPassword: async ({ password, passwordConfirmation, token }) => {
         const {
           data: { resetPassword }
         } = await mutate({
           variables: { input: { password, passwordConfirmation, token } }
         });
-        return resetPassword;
-      };
-      return <ResetPassword {...props} resetPassword={resetPassword} />;
-    }}
-  </Mutation>
-);
 
-export default translate('user')(ResetPasswordWithApollo);
+        return resetPassword;
+      }
+    })
+  })
+)(ResetPassword);
+
+export default ResetPasswordWithApollo;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Mutation } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
@@ -30,21 +30,21 @@ ForgotPassword.propTypes = {
   t: PropTypes.func
 };
 
-const ForgotPasswordWithApollo = props => (
-  <Mutation mutation={FORGOT_PASSWORD}>
-    {mutate => {
-      const forgotPassword = async ({ email }) => {
+const ForgotPasswordWithApollo = compose(
+  translate('user'),
+  graphql(FORGOT_PASSWORD, {
+    props: ({ mutate }) => ({
+      forgotPassword: async ({ email }) => {
         const {
           data: { forgotPassword }
         } = await mutate({
           variables: { input: { email } }
         });
+
         return forgotPassword;
-      };
+      }
+    })
+  })
+)(ForgotPassword);
 
-      return <ForgotPassword {...props} forgotPassword={forgotPassword} />;
-    }}
-  </Mutation>
-);
-
-export default translate('user')(ForgotPasswordWithApollo);
+export default ForgotPasswordWithApollo;

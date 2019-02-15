@@ -8,7 +8,6 @@ import ServerModule from '@gqlapp/module-server-ts';
 import graphiqlMiddleware from './middleware/graphiql';
 import websiteMiddleware from './middleware/website';
 import createApolloServer from './graphql';
-import createRestAPI from './rest';
 import errorMiddleware from './middleware/error';
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
@@ -27,8 +26,6 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
     const graphqlServer = createApolloServer(schema, modules);
     graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: { credentials: true, origin: true } });
   }
-
-  createRestAPI(app, schema, modules);
 
   app.get('/graphiql', (req, res, next) => graphiqlMiddleware(req, res, next));
   app.use(websiteMiddleware(schema, modules));

@@ -18,10 +18,9 @@ import repositories.PublicResources._
 
 import scala.concurrent.{ExecutionContext, Future}
 
-class ChatResolverImpl @Inject()(
-    chatRepository: ChatRepository,
+class ChatResolverImpl @Inject()(chatRepository: ChatRepository)(
     implicit val executionContext: ExecutionContext,
-    implicit val materializer: ActorMaterializer
+    materializer: ActorMaterializer
 ) extends ChatResolver
   with Logger
   with ActorMessageDelivering {
@@ -46,21 +45,19 @@ class ChatResolverImpl @Inject()(
           .filter(_.filename.nonEmpty)
           .mapAsync(1) {
             part =>
-              {
-                val hashedFilename = append(part.filename.get)
-                if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
-                part.entity.dataBytes.runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename))).map {
-                  ioResult =>
-                    Some(
-                      MessageAttachment(
-                        messageId = 0,
-                        name = part.filename.get,
-                        contentType = part.entity.contentType.toString,
-                        size = ioResult.count.toInt,
-                        path = s"public/$hashedFilename"
-                      )
+              val hashedFilename = append(part.filename.get)
+              if (!publicDirPath.toFile.exists) Files.createDirectory(publicDirPath)
+              part.entity.dataBytes.runWith(FileIO.toPath(publicDirPath.resolve(hashedFilename))).map {
+                ioResult =>
+                  Some(
+                    MessageAttachment(
+                      messageId = 0,
+                      name = part.filename.get,
+                      contentType = part.entity.contentType.toString,
+                      size = ioResult.count.toInt,
+                      path = s"public/$hashedFilename"
                     )
-                }
+                  )
               }
           }
           .mapAsync(1) {

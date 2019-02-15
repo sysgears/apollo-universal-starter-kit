@@ -8,14 +8,15 @@ import common.errors.{AmbigousResult, NotFound}
 import model.UserTable.UserTable
 import models.DbMessageTable.DbMessageTable
 import models.MessageAttachmentTable.MessageAttachmentTable
-import repositories.PublicResources._
 import models._
+import repositories.PublicResources._
 import slick.ast.BaseTypedType
 import slick.jdbc.JdbcProfile
 
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext
 
-class ChatRepository @Inject()(override val driver: JdbcProfile) extends Repository[DbMessage, Int](driver) {
+class ChatRepository @Inject()(override val driver: JdbcProfile)(implicit val ec: ExecutionContext)
+  extends Repository[DbMessage, Int](driver) {
 
   import driver.api._
 
@@ -95,10 +96,11 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       dbMessageSeq <- tableQuery.drop(after).take(limit).result
       maybeMessagesList <- DBIO.sequence(dbMessageSeq.map(dbMessage => findMessage(dbMessage.id.get)))
       messages = maybeMessagesList.flatten.toList
-      messageEdges = messages.map(message => {
-        val cursor = messages.indexOf(message) + after + 1
-        MessageEdges(message, cursor)
-      })
+      messageEdges = messages.map {
+        message =>
+          val cursor = messages.indexOf(message) + after + 1
+          MessageEdges(message, cursor)
+      }
       endCursor = after + messages.size
       hasNextPage = (totalCount - (after + limit)) > 0
     } yield
@@ -124,7 +126,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       _ <- update(dbMessage.copy(text = text))
       message <- findMessage(id)
       result <- message.fold[DBActionMessage](DBIO.failed(AmbigousResult(s"Could not update message with [id=$id]")))(
-        m => DBIO.successful(m)
+        DBIO.successful
       )
     } yield result
   }
@@ -133,7 +135,7 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
     for {
       maybeMessage <- findMessage(id)
       message <- maybeMessage
-        .fold[DBActionMessage](DBIO.failed(NotFound(s"Not found message with [id=$id]")))(m => DBIO.successful(m))
+        .fold[DBActionMessage](DBIO.failed(NotFound(s"Not found message with [id=$id]")))(DBIO.successful)
       _ <- delete(DbMessage(id = Some(message.id), text = message.text))
       maybeAttachment <- findAttachment(id)
       _ <- if (maybeAttachment.isDefined) attachmentTableQuery.filter(_.messageId === id).delete else DBIO.successful()
@@ -142,12 +144,10 @@ class ChatRepository @Inject()(override val driver: JdbcProfile) extends Reposit
       _ <- if (maybeDeleteAttachment.isDefined || maybeDeleteMessage.isDefined)
         DBIO.failed(AmbigousResult(s"Message with [id=$id] has not been full deleted"))
       else DBIO.successful()
-      isDeleteFile = maybeAttachment.fold(true)(a => Files.deleteIfExists(resourcesDirPath.resolve(a.path)))
-      _ <- if (isDeleteFile) {
-        DBIO.successful()
-      } else {
+      isDeleteFile = maybeAttachment.forall(a => Files.deleteIfExists(resourcesDirPath.resolve(a.path)))
+      _ <- if (!isDeleteFile)
         DBIO.failed(AmbigousResult(s"The file associated with the message [id = $id] was not deleted"))
-      }
+      else DBIO.successful()
     } yield message
   }
 

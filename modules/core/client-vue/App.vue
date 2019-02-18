@@ -1,5 +1,5 @@
 <template>
-    <div id='root' :key="frontendReloadCount" ref='root'>
+    <div id='root' :key=frontendReloadCount ref='root'>
       <router-view></router-view>
     </div>
 </template>
@@ -10,11 +10,6 @@ export default Vue.extend({
   name: 'App',
   props: {
     frontendReloadCount: Number
-  },
-  data() {
-    return {
-      frontendReloadCount: 0
-    };
   },
   methods: {
     reloadFrontend() {

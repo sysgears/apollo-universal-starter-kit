@@ -60,7 +60,7 @@ class PageLayout extends React.Component {
         </Sider>
         <Layout>
           {navBar !== false && (
-            <Header style={{ padding: 0 }}>
+            <Header className="no-print" style={{ padding: 0 }}>
               <Row gutter={0}>
                 <Col span={14}>
                   <Menu mode="horizontal" theme="dark" selectable={false} style={{ lineHeight: '64px' }}>
@@ -95,7 +95,7 @@ class PageLayout extends React.Component {
           <Content id="content" style={{ background: '#fff', padding: 24 }}>
             {children}
           </Content>
-          <Footer style={{ textAlign: 'center' }}>
+          <Footer className="no-print" style={{ textAlign: 'center' }}>
             &copy; {new Date().getFullYear()}. {settings.app.name}.
           </Footer>
         </Layout>

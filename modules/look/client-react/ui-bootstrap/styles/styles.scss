@@ -38,6 +38,12 @@
   margin-bottom: 20px;
 }
 
+@media print {
+  .no-print {
+    display: none;
+  }
+}
+
 .editable-cell {
   .editable-cell-text-wrapper, .editable-cell-input-wrapper {
     & > div {

@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === 'production') {
 const extraDefines = {
   __SSR__: config.options.ssr,
   __FRONTEND_BUILD_DIR__: `"../client/build"`,
-  __DLL_BUILD_DIR__: `"../client/build/dll"`
+  __DLL_BUILD_DIR__: `"../../.cache/dll"`
 };
 
 config.options.defines = Object.assign(config.options.defines, extraDefines);

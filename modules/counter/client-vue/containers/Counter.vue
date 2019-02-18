@@ -1,6 +1,6 @@
 <template>
   <page-layout>
-    <div v-for='counter in counters' :key=counter.name>
+    <div v-for='counter in counters' :key=counter.cid>
       <component v-bind:is=counter></component>
     </div>
   </page-layout>
@@ -14,7 +14,6 @@ import { PageLayout } from '@gqlapp/look-client-vue';
 import counters from '../counters';
 
 export default Vue.extend({
-  name: 'CounterContainer',
   components: {
     PageLayout
   },

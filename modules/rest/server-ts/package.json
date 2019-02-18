@@ -1,0 +1,13 @@
+{
+  "name": "@gqlapp/rest-server-ts",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hofstadter-io/sofa-api": "^0.3.0",
+    "swagger-ui-express": "^4.0.2"
+  },
+  "devDependencies": {
+    "@types/swagger-ui-express": "^3.0.0"
+  }
+}
+

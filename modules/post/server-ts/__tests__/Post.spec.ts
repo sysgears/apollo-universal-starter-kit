@@ -172,7 +172,7 @@ describe('Post and comments example API works', () => {
   step('Publishes post on removal', done => {
     apollo.mutate({
       mutation: DELETE_POST,
-      variables: { id: '21' }
+      variables: { id: 21 }
     });
 
     const subscription = apollo

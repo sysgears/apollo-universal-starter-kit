@@ -69,7 +69,7 @@ export default compose(
       }
 
       return {
-        variables: { id }
+        variables: { id: Number(id) }
       };
     },
     props({ data: { loading, user } }) {

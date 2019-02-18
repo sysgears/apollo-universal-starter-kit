@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { TranslateFunction } from '@module/i18n-client-react';
-import { Card, CardSubtitleText } from '@module/look-client-react-native';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Card, CardSubtitleText } from '@gqlapp/look-client-react-native';
 
 interface SubscribersOnlyViewProps {
   loading: boolean;

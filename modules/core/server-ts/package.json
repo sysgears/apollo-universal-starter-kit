@@ -1,9 +1,12 @@
 {
-  "name": "@module/core-server-ts",
-  "version": "1.0.0",
+  "name": "@gqlapp/core-server-ts",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@module/core-common": "^1.0.0"
+    "@gqlapp/core-common": "^0.1.0",
+    "@hofstadter-io/sofa-api": "^0.3.0",
+    "swagger-ui-express": "^4.0.2",
+    "@types/swagger-ui-express": "^3.0.0"
   }
 }
 

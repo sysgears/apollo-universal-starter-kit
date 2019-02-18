@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { StripeSubscriptionProfile } from '@module/payments-client-react';
-import { translate } from '@module/i18n-client-react';
-import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout } from '@module/look-client-react';
+import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
+import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout } from '@gqlapp/look-client-react';
 
 import settings from '../../../../settings';
 
@@ -49,13 +49,12 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
               <CardTitle>{t('profile.card.group.role')}:</CardTitle>
               <CardText>{currentUser.role}</CardText>
             </CardGroup>
-            {currentUser.profile &&
-              currentUser.profile.fullName && (
-                <CardGroup>
-                  <CardTitle>{t('profile.card.group.full')}:</CardTitle>
-                  <CardText>{currentUser.profile.fullName}</CardText>
-                </CardGroup>
-              )}
+            {currentUser.profile && currentUser.profile.fullName && (
+              <CardGroup>
+                <CardTitle>{t('profile.card.group.full')}:</CardTitle>
+                <CardText>{currentUser.profile.fullName}</CardText>
+              </CardGroup>
+            )}
             {/* Credit card info (Stripe subscription module)*/}
             {settings.stripe.subscription.enabled &&
               settings.stripe.subscription.publicKey &&

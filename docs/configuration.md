@@ -14,6 +14,7 @@ by clicking the links below:
 * [Mobile Chat](#mobile-chat)
 * [Pagination](#pagination)
 * [Stripe Subscription](#stripe-subscription)
+* [Server Side Rendering](#server-side-rendering)
 * [Upload Module](#upload-module)
 * [User Authentication](#user-authentication)
 
@@ -107,7 +108,7 @@ By default, Apollo Universal Starter Kit uses Twitter Bootstrap for the client a
 app. You can enable the alternatives this way: 
 
 * To use Ant Design instead of Twitter Bootstrap, uncomment the respective import for Ant Design and comment out the 
-import for Bootstrap in the `packages/client/src/modules/common/components/web/index.jsx` file: 
+import for Bootstrap in the `packages/client/src/modules/common/components/web/index.tsx` file: 
 
 ```javascript
 // export * from './ui-bootstrap';
@@ -115,7 +116,7 @@ export * from './ui-antd';
 ```
 
 * To use Ant Design Mobile instead of NativeBase, uncomment the Ant Design Mobile export and comment out the NativeBase
-export in the `packages/client/src/modules/common/components/native/index.jsx` file:
+export in the `packages/client/src/modules/common/components/native/index.tsx` file:
 
 ```javascript
 // export * from './ui-native-base';
@@ -270,6 +271,115 @@ export default {
   }
 };
 ```
+
+## Server Side Rendering
+
+Apollo Universal Starter Kit supports Server Side Rendering (SSR), and this features is enabled by default for both 
+Express server application and React client app. 
+
+**NOTE**: SSR is disabled by default for the **Angular application** in `packages/client-angular` because the current 
+Angular app implementation doesn't support SSR.
+
+If you want to disable SSR for React and Express applications, you need to change a dedicated SpinJS setting in two
+`.spinrc.js` files:
+
+* For the Express application, set `config.options.ssr` to `false` in `packages/server/.spinrc.js`
+* For the React application, set `config.options.ssr` to `false` in `packages/client/.spinrc.js`
+
+**NOTE**: If you're going to disable SSR, do this in **both** `server` and `client` packages!
+
+### Disabling SSR for Express
+
+Disabling SSR in the Express application is done this way:
+
+```js
+// File packages/server/.spinrc.js
+
+const config = {
+  builders: {
+    // ...
+    stack: ['server'],
+  },
+  options: {
+    // SSR is now disabled for server
+    // Remember to also set config.options.ssr to false in package/client/.sprinrc.js
+    ssr: false, // Disables SSR
+    // ...
+  }
+};
+// ...
+```
+
+### Disabling SSR for React
+
+Concerning the React application, SSR can be disabled in two ways:
+
+1. You can set the property `config.options.ssr` to `false` in `packages/client/.spinrc.js`.
+2. You can set the environment variable `process.env.DISABLE_SSR` to `true` when running the application.
+
+The second option gives you more flexibility, because no matter the value of `config.options.ssr`, the value of the
+`process.env.DISABLE_SSR` takes precedence.
+ 
+In `package/client/.spinrc.js`, you may notice an additional check of the value of `DISABLE_SSR`:
+
+```js
+const url = require('url');
+
+const config = {
+  builders: {
+    // ...
+  },
+  options: {
+    // ...
+    ssr: true,
+    // ...
+  }
+};
+
+// SSR will be disabled if process.env.DISABLE_SSR is true and even if config.options.ssr is also true
+if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
+  config.options.ssr = false;
+}
+```
+
+If you don't set `process.env.DISABLE_SSR`, then change the `config.options.ssr` directly.
+
+Disabling SSR for the React application is useful when you need to run the client application alone without running the
+Express application. Otherwise, if you disable building the Express application and run the React app with SSR, the 
+frontend will never load (note the message `web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...`):
+
+```sh
+λ yarn watch-client
+yarn run v1.13.0
+$ cross-env DISABLE_SSR=true lerna run --scope=client watch --stream
+lerna notice cli v3.10.6
+lerna info versioning independent
+lerna info filter [ 'client' ]
+lerna info Executing command in 1 package: "yarn run watch"
+client: $ spin watch
+client: spin info Version 0.4.182
+client: Starting type checking service...
+client: Using 1 worker with 2048MB memory limit
+client: web-webpack info Webpack dev server listening on http://localhost:3000
+client: web-webpack debug waiting for tcp:localhost:8080
+client: web-webpack debug still waiting for tcp:localhost:8080 after 10000ms...
+client: web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...
+```
+
+Apollo Universal Starter Kit has a script `watch-client` that runs _only_ the client application, which is why SSR must 
+be disabled (otherwise, the application won't be loaded). 
+
+This is what the command looks like:
+
+```json
+{
+  "scripts": {
+    "watch-client": "yarn cross-env DISABLE_SSR=true lerna run --scope=client watch --stream"
+  }
+}
+```
+
+To enable SSR again, you need to set `config.options.ssr` to `true` in _both_ server and client packages.
 
 ## Stripe Subscription
 

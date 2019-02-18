@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
-import { MenuItem } from '@module/look-client-react';
-import ClientModule from '@module/module-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { MenuItem } from '@gqlapp/look-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 import settings from '../../../../../settings';
 
@@ -12,7 +12,7 @@ import AddSubscription from './containers/AddSubscription';
 import SubscriberPage from './containers/SubscriberPage';
 import UpdateCreditCard from './containers/UpdateCreditCard';
 
-const { AuthRoute, IfLoggedIn } = require('@module/user-client-react');
+const { AuthRoute, IfLoggedIn } = require('@gqlapp/user-client-react');
 
 const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/subscriber-page" className="nav-link" activeClassName="active">

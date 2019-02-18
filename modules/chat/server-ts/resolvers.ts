@@ -1,8 +1,8 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
-import ServerModule from '@module/module-server-ts';
-import { FileSystemStorage, UploadFileStream } from '@module/upload-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
+import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
 
 import settings from '../../../settings';
 import ChatDAO, { Message, Identifier } from './sql';
@@ -74,7 +74,7 @@ export default (pubsub: PubSub) => ({
       const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
-      const fileSystemStorage: FileSystemStorage = ref.modules.data.fileSystemStorage;
+      const fileSystemStorage: FileSystemStorage = ref.modules.context.fileSystemStorage;
 
       if (!fileSystemStorage) {
         throw new Error(t('chat:messageNotAdded'));
@@ -90,7 +90,7 @@ export default (pubsub: PubSub) => ({
     },
     async deleteMessage(obj: any, { id }: Identifier, { Chat, req }: ChatContext) {
       const { t } = req;
-      const fileSystemStorage: FileSystemStorage = ref.modules.data.fileSystemStorage;
+      const fileSystemStorage: FileSystemStorage = ref.modules.context.fileSystemStorage;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);
       const isDeleted = await Chat.deleteMessage(id);

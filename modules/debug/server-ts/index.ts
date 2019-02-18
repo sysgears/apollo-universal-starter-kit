@@ -1,6 +1,6 @@
 import now from 'performance-now';
-import { knex } from '@module/database-server-ts';
-import { log } from '@module/core-common';
+import { knex } from '@gqlapp/database-server-ts';
+import { log } from '@gqlapp/core-common';
 import settings from '../../../settings';
 
 interface EventQuery {

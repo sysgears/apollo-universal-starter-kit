@@ -1,9 +1,9 @@
 /*eslint-disable no-unused-vars*/
 import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
-import CURRENT_USER_QUERY from '@module/user-client-react/graphql/CurrentUserQuery.graphql';
-import USER_QUERY from '@module/user-client-react/graphql/UserQuery.graphql';
-import { getApollo } from '@module/testing-server-ts';
+import CURRENT_USER_QUERY from '@gqlapp/user-client-react/graphql/CurrentUserQuery.graphql';
+import USER_QUERY from '@gqlapp/user-client-react/graphql/UserQuery.graphql';
+import { getApollo } from '@gqlapp/testing-server-ts';
 
 import { login, logout } from '../testHelpers';
 
@@ -19,7 +19,7 @@ describe('User API works', () => {
     expect(result.data).to.deep.equal({ currentUser: null });
   });
 
-  step('Siging in as ordinary user works', async () => {
+  step('Signing in as ordinary user works', async () => {
     await login('user', 'user1234');
     const result = await apollo.query({ query: CURRENT_USER_QUERY });
     expect(result.data.currentUser.username).to.equal('user');
@@ -63,8 +63,11 @@ describe('User API works', () => {
     });
 
     step('Cannot query other users profile', async () => {
-      const result = await apollo.query({ query: USER_QUERY, variables: { id: 1 } });
-      expect(result.data.user.user).to.be.null;
+      try {
+        await apollo.query({ query: USER_QUERY, variables: { id: 1 } });
+      } catch (e) {
+        expect(e.graphQLErrors).to.be.an('Array');
+      }
     });
   });
 

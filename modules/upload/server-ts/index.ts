@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import ServerModule from '@module/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 
 import Upload from './sql';
 import schema from './schema.graphql';
@@ -15,7 +15,7 @@ export * from './FileSystemStorage';
 
 export default new ServerModule({
   schema: [schema],
-  data: {
+  context: {
     fileSystemStorage
   },
   createResolversFunc: [createResolvers],

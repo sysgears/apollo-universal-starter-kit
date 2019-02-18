@@ -11,7 +11,7 @@ import {
   wait,
   waitForElementRender,
   Renderer
-} from '@module/testing-client-react';
+} from '@gqlapp/testing-client-react';
 
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
@@ -20,7 +20,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 chai.should();
 
 const createNode = id => ({
-  id: `${id}`,
+  id,
   title: `Post title ${id}`,
   content: `Post content ${id}`,
   comments: [
@@ -190,9 +190,9 @@ describe('Posts and comments example UI works', () => {
       data: {
         postUpdated: {
           mutation: 'UPDATED',
-          id: '3',
+          id: 3,
           node: {
-            id: '3',
+            id: 3,
             title: 'Post title 203',
             content: 'Post content 204',
             __typename: 'Post'

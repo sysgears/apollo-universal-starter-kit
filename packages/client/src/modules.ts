@@ -1,20 +1,21 @@
-import core from '@module/core-client-react';
-import look from '@module/look-client-react';
-import i18n from '@module/i18n-client-react';
-import counter from '@module/counter-client-react';
-import chat from '@module/chat-client-react';
-import contact from '@module/contact-client-react';
-import validation from '@module/validation-common-react';
-import ClientModule from '@module/module-client-react';
-import defaultRouter from '@module/router-client-react';
-import payments from '@module/payments-client-react';
-import '@module/favicon-common';
+import core from '@gqlapp/core-client-react';
+import look from '@gqlapp/look-client-react';
+import i18n from '@gqlapp/i18n-client-react';
+import counter from '@gqlapp/counter-client-react';
+import chat from '@gqlapp/chat-client-react';
+import contact from '@gqlapp/contact-client-react';
+import validation from '@gqlapp/validation-common-react';
+import ClientModule from '@gqlapp/module-client-react';
+import defaultRouter from '@gqlapp/router-client-react';
+import payments from '@gqlapp/payments-client-react';
+import '@gqlapp/favicon-common';
 
-const post = require('@module/post-client-react').default;
-const pageNotFound = require('@module/page-not-found-client-react').default;
-const upload = require('@module/upload-client-react').default;
-const pagination = require('@module/pagination-client-react').default;
-const user = require('@module/user-client-react').default;
+const post = require('@gqlapp/post-client-react').default;
+const pageNotFound = require('@gqlapp/page-not-found-client-react').default;
+const reports = require('@gqlapp/reports-client-react').default;
+const upload = require('@gqlapp/upload-client-react').default;
+const pagination = require('@gqlapp/pagination-client-react').default;
+const user = require('@gqlapp/user-client-react').default;
 
 const modules = new ClientModule(
   look,
@@ -29,6 +30,7 @@ const modules = new ClientModule(
   payments,
   user,
   i18n,
+  reports,
   pageNotFound,
   core
 );

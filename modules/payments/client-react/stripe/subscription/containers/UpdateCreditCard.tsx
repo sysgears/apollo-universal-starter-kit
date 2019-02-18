@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
-import { translate, TranslateFunction } from '@module/i18n-client-react';
-import { PLATFORM } from '@module/core-common';
-
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { PLATFORM } from '@gqlapp/core-common';
+import { FormError } from '@gqlapp/forms-client-react';
+import { isApolloError } from 'apollo-client';
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 
 import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
@@ -24,8 +25,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   constructor(props: UpdateCreditCardProps) {
     super(props);
     this.state = {
-      submitting: false,
-      error: null
+      submitting: false
     };
   }
 
@@ -36,29 +36,25 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
 
     try {
       // create credit card token
-      try {
-        preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
-        if (preparedCreditCard.error) {
-          this.setState({ submitting: false, error: t('stripeError') });
-          return;
-        }
-      } catch (e) {
-        this.setState({ submitting: false, error: t('creditCardError') });
-        return;
-      }
+      preparedCreditCard = await createCreditCardToken(creditCardInput, stripe);
 
-      const { data } = await updateCard({ variables: { input: preparedCreditCard } });
-      const { updateStripeSubscriptionCard } = data;
-
-      if (!updateStripeSubscriptionCard) {
-        this.setState({ submitting: false, error: t('serverError') });
-        return;
-      }
+      await updateCard({ variables: { input: preparedCreditCard } });
 
       this.setState({ submitting: false });
       history ? history.push('/profile') : navigation.navigate('Profile');
     } catch (e) {
-      this.setState({ submitting: false, error: t('serverError') });
+      this.setState({
+        submitting: false
+      });
+      if (isApolloError(e)) {
+        if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
+          throw new FormError(t('stripeError'), e);
+        } else {
+          throw new FormError(t('serverError'), e);
+        }
+      } else {
+        throw new FormError(t('creditCardError'));
+      }
     }
   };
 
@@ -71,20 +67,10 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <UpdateCreditCardView
-                    error={this.state.error}
-                    submitting={this.state.submitting}
-                    onSubmit={this.onSubmit(updateCard)}
-                    t={t}
-                  />
+                  <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
                 </StripeProvider>
               ) : (
-                <UpdateCreditCardView
-                  error={this.state.error}
-                  submitting={this.state.submitting}
-                  onSubmit={this.onSubmit(updateCard)}
-                  t={t}
-                />
+                <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
               )}
             </Fragment>
           );

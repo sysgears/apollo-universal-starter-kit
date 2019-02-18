@@ -3,7 +3,7 @@ import React from 'react';
 import { withApollo } from 'react-apollo';
 import PropTypes from 'prop-types';
 
-import { getItem, setItem, removeItem } from '@module/core-common/clientStorage';
+import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
 import Loading from './components/Loading';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
@@ -57,7 +57,7 @@ const JWTLink = new ApolloLink((operation, forward) => {
           next: result => {
             const promise = (async () => {
               if (operation.operationName === 'login') {
-                if (result.data.login.tokens && !result.data.login.errors) {
+                if (!!result.data && result.data.login.tokens) {
                   const {
                     data: {
                       login: {
@@ -184,7 +184,7 @@ DataRootComponent.propTypes = {
 export default (settings.user.auth.access.jwt.enabled
   ? new AccessModule({
       dataRootComponent: [withApollo(DataRootComponent)],
-      link: __CLIENT__ ? [JWTLink] : [],
+      createLink: __CLIENT__ ? [() => JWTLink] : [],
       logout: [removeTokens]
     })
   : undefined);

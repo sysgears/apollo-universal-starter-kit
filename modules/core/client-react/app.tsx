@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { hydrate, render } from 'react-dom';
-import ClientModule from '@module/module-client-react';
+import ClientModule from '@gqlapp/module-client-react';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line
@@ -16,30 +16,32 @@ let frontendReloadCount = 0;
 
 const renderApp = ({ key }: { key: number }) => renderFunc(<Main rootTag={root} key={key} />, root);
 
-const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
-  onCreateMain(modules, entryModule);
+const initWebpackHMR = (modules: ClientModule, entryModule: NodeModule) => {
   if (entryModule.hot) {
     entryModule.hot.dispose(data => onAppDispose(modules, data));
     if (__CLIENT__) {
       entryModule.hot.accept();
     }
+    if (entryModule.hot.data) {
+      log.debug('Updating front-end');
+      frontendReloadCount = (frontendReloadCount || 0) + 1;
+    }
   }
-  if (entryModule.hot && entryModule.hot.data) {
-    log.debug('Updating front-end');
-    frontendReloadCount = (frontendReloadCount || 0) + 1;
-  }
+};
+
+const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+  initWebpackHMR(modules, entryModule);
+  onCreateMain(modules, entryModule);
   renderApp({ key: frontendReloadCount });
 };
 
-if (__DEV__) {
-  if (module.hot) {
-    module.hot.accept();
+if (__DEV__ && module.hot) {
+  module.hot.accept();
 
-    module.hot.accept('backend_reload', () => {
-      log.debug('Reloading front-end');
-      window.location.reload();
-    });
-  }
+  module.hot.accept('backend_reload', () => {
+    log.debug('Reloading front-end');
+    window.location.reload();
+  });
 }
 
 export default new ClientModule({ onAppCreate: [onAppCreate] });

@@ -4,7 +4,7 @@ import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
 import url from 'url';
 
-import ClientModule from '@module/module-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
 import log from '../../../packages/common/log';
 import createApolloClient from '../../../packages/common/createApolloClient';
 
@@ -35,7 +35,7 @@ export default class Main extends React.Component<MainProps> {
     const client = createApolloClient({
       apiUrl,
       createNetLink: modules.createNetLink,
-      links: modules.link,
+      createLink: modules.createLink,
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });

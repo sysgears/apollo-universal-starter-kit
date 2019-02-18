@@ -12,19 +12,19 @@ describe('Contact API works', () => {
   });
 
   step('Should return validation errors', async () => {
-    const { data } = await apollo.mutate({
-      mutation: CONTACT,
-      variables: {
-        input: {
-          content: 'Short',
-          email: 'InvalidEmail@2.d',
-          name: 'N'
+    try {
+      await apollo.mutate({
+        mutation: CONTACT,
+        variables: {
+          input: {
+            content: 'Short',
+            email: 'InvalidEmail@2.d',
+            name: 'N'
+          }
         }
-      }
-    });
-
-    expect(data.contact)
-      .to.have.property('errors')
-      .with.length(3);
+      });
+    } catch (e) {
+      expect(e.graphQLErrors).to.be.an('Array');
+    }
   });
 });

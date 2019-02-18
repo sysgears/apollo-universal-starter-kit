@@ -1,6 +1,6 @@
 {
-  "name": "@module/look-client-angular",
-  "version": "1.0.0",
+  "name": "@gqlapp/look-client-angular",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@angular/animations": "^7.1.4",

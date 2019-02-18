@@ -1,41 +1,25 @@
 import React from 'react';
 import { merge } from 'lodash';
-import { ApolloLink } from 'apollo-link';
-import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { Reducer } from 'redux';
-import { IResolvers } from 'graphql-tools';
 
-import CommonModule, { CommonModuleShape } from '@module/module-common';
+import { GraphQLModule, GraphQLModuleShape } from '@gqlapp/module-common';
 
-export interface BaseModuleShape extends CommonModuleShape {
-  link?: ApolloLink[];
-  createNetLink?: () => ApolloLink;
-  connectionParam?: ConnectionParamsOptions[];
+export interface BaseModuleShape extends GraphQLModuleShape {
   reducer?: Array<{ [key: string]: Reducer }>;
-  resolver?: Array<{ defaults: { [key: string]: any }; resolvers: IResolvers }>;
   router?: React.ReactElement<any>;
   rootComponentFactory?: Array<(req: Request) => React.ReactElement<any>>;
   dataRootComponent?: React.ComponentType[];
-  data?: { [key: string]: any };
 }
 
 interface BaseModule extends BaseModuleShape {}
 
-class BaseModule extends CommonModule {
+class BaseModule extends GraphQLModule {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
   }
 
   get reducers() {
     return merge({}, ...this.reducer);
-  }
-
-  get resolvers() {
-    return merge({}, ...this.resolver);
-  }
-
-  get connectionParams() {
-    return this.connectionParam;
   }
 
   public getDataRoot(root: React.ReactElement<any>) {

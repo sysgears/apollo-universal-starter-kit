@@ -10,11 +10,11 @@ import path from 'path';
 import Helmet, { HelmetData } from 'react-helmet';
 import serialize from 'serialize-javascript';
 import { GraphQLSchema } from 'graphql';
-import { isApiExternal, apiUrl } from '@module/core-common';
-import ServerModule from '@module/module-server-ts';
-import ClientModule from '@module/module-client-react';
-import { createApolloClient, createReduxStore } from '@module/core-common';
-import { styles } from '@module/look-client-react';
+import { isApiExternal, apiUrl } from '@gqlapp/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
+import ClientModule from '@gqlapp/module-client-react';
+import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
+import { styles } from '@gqlapp/look-client-react';
 
 let assetMap: { [key: string]: string };
 
@@ -90,7 +90,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
-    links: clientModules.link,
+    createLink: clientModules.createLink,
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });

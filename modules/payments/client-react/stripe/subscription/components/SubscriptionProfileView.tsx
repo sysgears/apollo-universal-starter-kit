@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 
 import CreditCardInfo from '../containers/CreditCardInfo';
 import CancelSubscription from '../containers/CancelSubscription';
-import { CardGroup, CardText, CardTitle } from '@module/look-client-react';
-import { TranslateFunction } from '@module/i18n-client-react';
+import { CardGroup, CardText, CardTitle } from '@gqlapp/look-client-react';
+import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface SubscriptionProfileViewProps {
   loading: boolean;

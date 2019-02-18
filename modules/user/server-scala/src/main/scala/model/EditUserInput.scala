@@ -1,5 +1,7 @@
 package model
 
+import model.auth.AuthInput
+
 case class EditUserInput(
     id: Int,
     username: String,
@@ -7,5 +9,6 @@ case class EditUserInput(
     isActive: Option[Boolean],
     email: String,
     password: Option[String],
-    profile: Option[ProfileInput]
+    profile: Option[ProfileInput],
+    auth: Option[AuthInput]
 )

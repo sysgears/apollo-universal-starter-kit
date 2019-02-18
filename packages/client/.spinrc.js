@@ -2,11 +2,12 @@ const url = require('url');
 
 const config = {
   builders: {
-    web: {
+    react: {
       entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,
       dllExcludes: ['bootstrap'],
+      dllBuildDir: '../../.cache/dll',
       defines: {
         __CLIENT__: true
       },
@@ -25,7 +26,7 @@ const config = {
   options: {
     stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
-    ssr: !process.env.DISABLE_SSR,
+    ssr: true,
     webpackDll: true,
     reactHotLoader: false,
     defines: {
@@ -40,6 +41,10 @@ const config = {
     }
   }
 };
+
+if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
+  config.options.ssr = false;
+}
 
 config.options.devProxy = config.options.ssr;
 

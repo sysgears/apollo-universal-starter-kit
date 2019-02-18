@@ -11,8 +11,8 @@ import { graphql, print, getOperationAST, DocumentNode, GraphQLSchema } from 'gr
 import { Provider } from 'react-redux';
 import { ApolloClient } from 'apollo-client';
 
-import { createApolloClient } from '@module/core-common';
-import ClientModule from '@module/module-client-react';
+import { createApolloClient } from '@gqlapp/core-common';
+import ClientModule from '@gqlapp/module-client-react';
 
 const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
 (global as any).document = dom.window.document;
@@ -111,7 +111,7 @@ class MockLink extends ApolloLink {
     }
   }
 
-  public _getSubscriptions(query: DocumentNode, variables: any) {
+  public _getSubscriptions(query: DocumentNode, variables?: any) {
     if (!query) {
       return this.subscriptionQueries;
     }
@@ -155,7 +155,7 @@ export class Renderer {
 
     const client = createApolloClient({
       createNetLink: () => schemaLink,
-      links: ref.clientModules.link,
+      createLink: ref.clientModules.createLink,
       clientResolvers: resolvers || ref.clientModules.resolvers
     });
 
@@ -182,7 +182,7 @@ export class Renderer {
     );
   }
 
-  public getSubscriptions(query: DocumentNode, variables: any) {
+  public getSubscriptions(query: DocumentNode, variables?: any) {
     return this.mockLink._getSubscriptions(query, variables);
   }
 

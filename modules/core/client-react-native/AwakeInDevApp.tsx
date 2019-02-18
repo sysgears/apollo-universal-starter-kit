@@ -2,7 +2,7 @@ import * as Expo from 'expo';
 import React from 'react';
 import { View } from 'react-native';
 import App from './App';
-import ClientModule from '@module/module-client-react-native';
+import ClientModule from '@gqlapp/module-client-react-native';
 
 interface AwakeInDevAppProps {
   exp: any;
@@ -33,7 +33,7 @@ export default (modules: ClientModule) => {
 
     public render() {
       if (!this.state.isReady) {
-        return <Expo.AppLoading />;
+        return <Expo.AppLoading startAsync={null} onError={null} onFinish={null} />;
       }
 
       return React.createElement(

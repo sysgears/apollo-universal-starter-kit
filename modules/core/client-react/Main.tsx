@@ -6,8 +6,8 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
-import { apiUrl } from '@module/core-common';
-import ClientModule from '@module/module-client-react';
+import { apiUrl } from '@gqlapp/core-common';
+import ClientModule from '@gqlapp/module-client-react';
 
 import RedBox from './RedBox';
 import createApolloClient from '../../../packages/common/createApolloClient';
@@ -28,7 +28,7 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   ref.client = createApolloClient({
     apiUrl,
     createNetLink: ref.modules.createNetLink,
-    links: ref.modules.link,
+    createLink: ref.modules.createLink,
     connectionParams: ref.modules.connectionParams,
     clientResolvers: ref.modules.resolvers
   });

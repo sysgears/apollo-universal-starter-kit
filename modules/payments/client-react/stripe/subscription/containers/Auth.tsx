@@ -1,6 +1,6 @@
 import React, { ComponentType } from 'react';
 import { Redirect } from 'react-router-dom';
-import { PageLayout } from '@module/look-client-react';
+import { PageLayout } from '@gqlapp/look-client-react';
 
 import { withStripeSubscription } from './withStripeSubscription';
 

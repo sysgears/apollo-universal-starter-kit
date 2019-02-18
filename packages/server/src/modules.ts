@@ -12,6 +12,7 @@ import mailer from '@gqlapp/mailer-server-ts';
 import graphqlTypes from '@gqlapp/graphql-types-server-ts';
 import authentication from '@gqlapp/authentication-server-ts';
 import reports from '@gqlapp/reports-server-ts';
+import rest from '@gqlapp/rest-server-ts';
 import '@gqlapp/debug-server-ts';
 
 import ServerModule from '@gqlapp/module-server-ts';
@@ -32,6 +33,7 @@ const modules: ServerModule = new ServerModule(
   mailer,
   chat,
   reports,
+  rest,
   graphqlTypes,
   core
 );

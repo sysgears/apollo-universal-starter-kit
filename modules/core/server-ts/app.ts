@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
+
 import { isApiExternal } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
 

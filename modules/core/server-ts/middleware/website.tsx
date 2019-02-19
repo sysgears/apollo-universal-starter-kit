@@ -85,7 +85,7 @@ const Html = ({ content, state, css, helmet }: HtmlProps) => (
 const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
   const schemaLink = new SchemaLink({
     schema,
-    context: { ...(await modules.createContext(req, res)), req, res }
+    context: { ...(await modules.createGraphQLContext(req, res)), req, res }
   });
   const client = createApolloClient({
     apiUrl,

@@ -6,5 +6,5 @@ import ServerModule from '../ServerModule';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createContextFunc: [() => ({ $Module$: new $Module$() })]
+  createGraphQLContextFunc: [() => ({ $Module$: new $Module$() })]
 });

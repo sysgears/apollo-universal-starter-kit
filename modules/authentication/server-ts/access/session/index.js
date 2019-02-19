@@ -33,7 +33,7 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, context, appContext }) => {
+const createGraphQLContextFunc = async ({ req, context, appContext }) => {
   const { getIdentity, appendContext } = appContext;
 
   if (!appendContext) {
@@ -58,7 +58,7 @@ export default new AccessModule(
         grant: [grant],
         schema: [schema],
         createResolversFunc: [resolvers],
-        createContextFunc: [createContextFunc]
+        createGraphQLContextFunc: [createGraphQLContextFunc]
       }
     : {}
 );

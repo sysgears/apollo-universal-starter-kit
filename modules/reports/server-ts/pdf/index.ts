@@ -7,6 +7,6 @@ import resources from './locales';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [resolvers],
-  createContextFunc: [() => ({ Report: new Report() })],
+  createGraphQLContextFunc: [() => ({ Report: new Report() })],
   localization: [{ ns: 'PdfReport', resources }]
 });

@@ -7,5 +7,5 @@ import createResolvers from './resolvers';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createContextFunc: [() => ({ Post: new Post() })]
+  createGraphQLContextFunc: [() => ({ Post: new Post() })]
 });

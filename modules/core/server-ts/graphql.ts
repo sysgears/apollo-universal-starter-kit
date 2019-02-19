@@ -11,7 +11,7 @@ export default (schema: GraphQLSchema, modules: ServerModule) => {
   return new ApolloServer({
     schema,
     context: async ({ req, res }: { req: Request; res: Response }) => ({
-      ...(await modules.createContext(req, res)),
+      ...(await modules.createGraphQLContext(req, res)),
       req,
       res
     }),

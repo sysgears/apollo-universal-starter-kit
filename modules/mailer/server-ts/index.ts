@@ -5,5 +5,5 @@ import mailer from './mailer';
 export { mailer };
 
 export default new ServerModule({
-  createContextFunc: [() => ({ mailer })]
+  createGraphQLContextFunc: [() => ({ mailer })]
 });

@@ -7,5 +7,5 @@ import ServerModule from '@gqlapp/module-server-ts';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createContextFunc: [() => ({ Counter: new Counter() })]
+  createGraphQLContextFunc: [() => ({ Counter: new Counter() })]
 });

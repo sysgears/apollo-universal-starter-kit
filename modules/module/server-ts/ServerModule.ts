@@ -6,7 +6,7 @@ import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
-interface CreateContextFuncProps {
+interface CreateGraphQLContextFuncProps {
   req: Request;
   res: Response;
   connectionParams: ConnectionParamsOptions;
@@ -19,7 +19,8 @@ export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
-  createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
+  createGraphQLContextFunc?: Array<(props: CreateGraphQLContextFuncProps) => { [key: string]: any }>;
+  createAppContextFunc?: Array<() => { [key: string]: any }>;
   // Middleware
   beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
   middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
@@ -40,7 +41,17 @@ class ServerModule extends CommonModule {
     return this.schema;
   }
 
-  public async createContext(
+  public async createAppContext() {
+    let appContext = {};
+    if (this.createAppContextFunc) {
+      for (const createAppContextFunc of this.createAppContextFunc) {
+        appContext = merge(appContext, await createAppContextFunc());
+      }
+    }
+    this.appContext = appContext;
+  }
+
+  public async createGraphQLContext(
     req: Request,
     res: Response,
     connectionParams?: ConnectionParamsOptions,
@@ -48,10 +59,10 @@ class ServerModule extends CommonModule {
   ) {
     let context = {};
 
-    for (const createContextFunc of this.createContextFunc) {
+    for (const createGraphQLContextFunc of this.createGraphQLContextFunc) {
       context = merge(
         context,
-        await createContextFunc({ req, res, connectionParams, webSocket, context, appContext: this.appContext })
+        await createGraphQLContextFunc({ req, res, connectionParams, webSocket, context, appContext: this.appContext })
       );
     }
     return context;

@@ -36,7 +36,7 @@ const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModul
         },
         // construct the context, this shows up as the context parameter to resolvers
         context: async ({ req, res }) => {
-          const ctx = await modules.createContext(req, res);
+          const ctx = await modules.createGraphQLContext(req, res);
           return {
             req,
             res,

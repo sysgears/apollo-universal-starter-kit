@@ -12,7 +12,7 @@
              - What should it return?
              - Using pubsub 
                  - explain the pubsub argument
-         - createContextFunc
+         - createGraphQLContextFunc
              - when is it invoked?
              - what should it return?
          - middleware

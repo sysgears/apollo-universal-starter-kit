@@ -13,9 +13,9 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
       execute,
       subscribe,
       onConnect: (connectionParams: any, webSocket: any) =>
-        modules.createContext(null, null, connectionParams, webSocket),
+        modules.createGraphQLContext(null, null, connectionParams, webSocket),
       onOperation: async (message: any, params: any, webSocket: any) => {
-        params.context = await modules.createContext(null, null, message.payload, webSocket);
+        params.context = await modules.createGraphQLContext(null, null, message.payload, webSocket);
         return params;
       }
     },

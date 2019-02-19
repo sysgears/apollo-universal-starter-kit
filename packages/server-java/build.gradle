@@ -75,3 +75,9 @@ project(':user') {
 	}
 }
 
+project(':post') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}

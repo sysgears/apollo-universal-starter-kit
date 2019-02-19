@@ -12,6 +12,7 @@ interface CreateContextFuncProps {
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
   context: { [key: string]: any };
+  appContext: { [key: string]: any };
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
@@ -20,8 +21,8 @@ export interface ServerModuleShape extends CommonModuleShape {
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
   createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
   // Middleware
-  beforeware?: Array<(app: Express, modules: ServerModuleShape) => void>;
-  middleware?: Array<(app: Express, modules: ServerModuleShape) => void>;
+  beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
   // Shared modules data
   data?: { [key: string]: any };
 }
@@ -46,8 +47,12 @@ class ServerModule extends CommonModule {
     webSocket?: WebSocket
   ) {
     let context = {};
+
     for (const createContextFunc of this.createContextFunc) {
-      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
+      context = merge(
+        context,
+        await createContextFunc({ req, res, connectionParams, webSocket, context, appContext: this.appContext })
+      );
     }
     return context;
   }

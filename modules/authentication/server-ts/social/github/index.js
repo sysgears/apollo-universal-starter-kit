@@ -5,7 +5,7 @@ import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.github;
 
-const middleware = (app, { context }) => {
+const middleware = (app, { social }) => {
   if (!enabled || __TEST__) {
     return false;
   }
@@ -19,14 +19,14 @@ const middleware = (app, { context }) => {
   app.get(
     '/auth/github/callback',
     passport.authenticate('github', { session: false, failureRedirect: '/login' }),
-    context.social.github.onAuthenticationSuccess
+    social.github.onAuthenticationSuccess
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
-      new GitHubStrategy({ clientID, clientSecret, scope, callbackURL }, context.social.github.verifyCallback)
+      new GitHubStrategy({ clientID, clientSecret, scope, callbackURL }, appContext.social.github.verifyCallback)
     );
   }
 };

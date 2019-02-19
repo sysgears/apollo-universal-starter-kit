@@ -27,10 +27,13 @@ const getIdentity = (id, serial = '') => {
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
 const createContextFunc = () => ({
+  User
+});
+
+const createAppContextFunc = () => ({
   appendContext,
   getIdentity,
-  getHash,
-  User
+  getHash
 });
 
 const middleware = app => {
@@ -43,6 +46,7 @@ export default new ServerModule(social, {
   schema: [schema],
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
+  createAppContextFunc: [createAppContextFunc],
   middleware: [middleware],
   localization: [{ ns: 'user', resources }]
 });

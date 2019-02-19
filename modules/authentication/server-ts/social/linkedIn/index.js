@@ -5,7 +5,7 @@ import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.linkedin;
 
-const middleware = (app, { context }) => {
+const middleware = (app, { social }) => {
   if (!enabled || __TEST__) {
     return false;
   }
@@ -19,14 +19,14 @@ const middleware = (app, { context }) => {
   app.get(
     '/auth/linkedin/callback',
     passport.authenticate('linkedin', { session: false, failureRedirect: '/login' }),
-    context.social.linkedin.onAuthenticationSuccess
+    social.linkedin.onAuthenticationSuccess
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
-      new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, context.social.linkedin.verifyCallback)
+      new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, appContext.social.linkedin.verifyCallback)
     );
   }
 };

@@ -35,11 +35,18 @@ export default {
       scope: ['r_emailaddress', 'r_basicprofile']
     },
     google: {
-      enabled: false,
-      clientID: process.env.GOOGLE_CLIENTID,
-      clientSecret: process.env.GOOGLE_CLIENTSECRET,
+      enabled: true,
+      clientID: '936744536604-phfojlvtniin07oukj07b33qju8edjdn.apps.googleusercontent.com',
+      clientSecret: 'rq_IhawCIRqWezn4Y_QDah0Z',
       callbackURL: '/auth/google/callback',
       scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
     }
+    // google: {
+    //   enabled: false,
+    //   clientID: process.env.GOOGLE_CLIENTID,
+    //   clientSecret: process.env.GOOGLE_CLIENTSECRET,
+    //   callbackURL: '/auth/google/callback',
+    //   scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+    // }
   }
 };

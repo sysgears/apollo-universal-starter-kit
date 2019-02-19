@@ -11,8 +11,8 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, context, req: { t } }) => {
-  const { getIdentity, appendContext } = context;
+const createContextFunc = async ({ req, context, appContext, req: { t } }) => {
+  const { getIdentity, appendContext } = appContext;
 
   if (!appendContext) {
     throw new Error(t('auth:appendContext'));

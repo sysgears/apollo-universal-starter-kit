@@ -5,7 +5,7 @@ import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.google;
 
-const middleware = (app, { context }) => {
+const middleware = (app, { social }) => {
   if (!enabled || __TEST__) {
     return false;
   }
@@ -19,13 +19,13 @@ const middleware = (app, { context }) => {
   app.get(
     '/auth/google/callback',
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
-    context.social.google.onAuthenticationSuccess
+    social.google.onAuthenticationSuccess
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
-    passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, context.social.google.verifyCallback));
+    passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, appContext.social.google.verifyCallback));
   }
 };
 

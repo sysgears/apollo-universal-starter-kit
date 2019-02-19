@@ -5,7 +5,7 @@ import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, profileFields, enabled } = settings.auth.social.facebook;
 
-const middleware = (app, { context }) => {
+const middleware = (app, { social }) => {
   if (!enabled || __TEST__) {
     return false;
   }
@@ -19,16 +19,16 @@ const middleware = (app, { context }) => {
   app.get(
     '/auth/facebook/callback',
     passport.authenticate('facebook', { session: false, failureRedirect: '/login' }),
-    context.social.facebook.onAuthenticationSuccess
+    social.facebook.onAuthenticationSuccess
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
       new FacebookStrategy(
         { clientID, clientSecret, scope, callbackURL, profileFields },
-        context.social.facebook.verifyCallback
+        appContext.social.facebook.verifyCallback
       )
     );
   }

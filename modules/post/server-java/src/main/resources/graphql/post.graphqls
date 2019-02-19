@@ -1,0 +1,29 @@
+# Post
+type Post {
+    id: Int!
+    title: String!
+    content: String!
+}
+
+# Comment
+type Comment {
+    id: Int!
+    content: String!
+}
+
+extend type Query {
+    # Retrive a post entity by its id
+    post(id: Int!): Post
+}
+
+extend type Mutation {
+    # Create new post
+    addPost(input: AddPostInput!): Post
+}
+
+# CRUD payloads
+# Input for addPost Mutation
+input AddPostInput {
+    title: String!
+    content: String!
+}

@@ -5,7 +5,7 @@ const config = {
     android: {
       entry: './src/index.ts',
       buildDir: 'build/android',
-      dllBuildDir: 'build/android/dll',
+      dllBuildDir: '../../.cache/dll',
       stack: ['react-native', 'android'],
       defines: {
         __CLIENT__: true
@@ -15,7 +15,7 @@ const config = {
     ios: {
       entry: './src/index.ts',
       buildDir: 'build/ios',
-      dllBuildDir: 'build/ios/dll',
+      dllBuildDir: '../../.cache/dll',
       stack: ['react-native', 'ios'],
       defines: {
         __CLIENT__: true

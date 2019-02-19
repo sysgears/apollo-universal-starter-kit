@@ -23,12 +23,12 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ appContext }) => {
+const onAppCreate = ({ context }) => {
   if (enabled && !__TEST__) {
     passport.use(
       new FacebookStrategy(
         { clientID, clientSecret, scope, callbackURL, profileFields },
-        appContext.social.facebook.verifyCallback
+        context.social.facebook.verifyCallback
       )
     );
   }

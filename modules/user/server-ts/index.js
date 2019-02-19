@@ -26,15 +26,15 @@ const getIdentity = (id, serial = '') => {
 
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
-const createGraphQLContextFunc = () => ({
+const createContextFunc = () => ({
   User
 });
 
-const createAppContextFunc = () => ({
+const context = {
   appendContext,
   getIdentity,
   getHash
-});
+};
 
 const middleware = app => {
   if (settings.user.auth.password.sendConfirmationEmail) {
@@ -44,9 +44,9 @@ const middleware = app => {
 
 export default new ServerModule(social, {
   schema: [schema],
+  context,
   createResolversFunc: [resolvers],
-  createGraphQLContextFunc: [createGraphQLContextFunc],
-  createAppContextFunc: [createAppContextFunc],
+  createContextFunc: [createContextFunc],
   middleware: [middleware],
   localization: [{ ns: 'user', resources }]
 });

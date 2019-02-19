@@ -13,5 +13,5 @@ const social = {
 };
 
 export default new AuthModule(facebook, github, google, linkedin, password, {
-  createAppContextFunc: [() => ({ social })]
+  context: { social }
 });

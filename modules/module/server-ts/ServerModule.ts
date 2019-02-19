@@ -6,24 +6,22 @@ import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
-interface CreateGraphQLContextFuncProps {
+interface CreateContextFuncProps {
   req: Request;
   res: Response;
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
   context: { [key: string]: any };
-  appContext: { [key: string]: any };
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
-  createGraphQLContextFunc?: Array<(props: CreateGraphQLContextFuncProps) => { [key: string]: any }>;
-  createAppContextFunc?: Array<() => { [key: string]: any }>;
+  createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
   // Middleware
-  beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
-  middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  beforeware?: Array<(app: Express, context: { [key: string]: any }) => void>;
+  middleware?: Array<(app: Express, context: { [key: string]: any }) => void>;
   // Shared modules data
   data?: { [key: string]: any };
 }
@@ -41,29 +39,16 @@ class ServerModule extends CommonModule {
     return this.schema;
   }
 
-  public async createAppContext() {
-    let appContext = {};
-    if (this.createAppContextFunc) {
-      for (const createAppContextFunc of this.createAppContextFunc) {
-        appContext = merge(appContext, await createAppContextFunc());
-      }
-    }
-    this.appContext = appContext;
-  }
-
-  public async createGraphQLContext(
+  public async createContext(
     req: Request,
     res: Response,
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket
   ) {
-    let context = {};
+    let context = { ...this.context };
 
-    for (const createGraphQLContextFunc of this.createGraphQLContextFunc) {
-      context = merge(
-        context,
-        await createGraphQLContextFunc({ req, res, connectionParams, webSocket, context, appContext: this.appContext })
-      );
+    for (const createContextFunc of this.createContextFunc) {
+      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
     }
     return context;
   }

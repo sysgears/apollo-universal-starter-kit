@@ -26,7 +26,7 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   });
 }
 
-const createGraphQLContextFunc = async ({ context: { user } }: any) => ({
+const createContextFunc = async ({ context: { user } }: any) => ({
   StripeSubscription,
   stripeSubscription: user ? await StripeSubscription.getSubscription(user.id) : null
 });
@@ -43,7 +43,7 @@ export default (enabled
   ? new ServerModule({
       schema: [schema],
       createResolversFunc: [createResolvers],
-      createGraphQLContextFunc: [createGraphQLContextFunc],
+      createContextFunc: [createContextFunc],
       beforeware: [beforeware],
       middleware: [middleware],
       localization: [{ ns: 'stripeSubscription', resources }]

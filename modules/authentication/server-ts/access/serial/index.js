@@ -11,8 +11,8 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createGraphQLContextFunc = async ({ req, context, appContext, req: { t } }) => {
-  const { getIdentity, appendContext } = appContext;
+const createContextFunc = async ({ req, context, req: { t } }) => {
+  const { getIdentity, appendContext } = context;
 
   if (!appendContext) {
     throw new Error(t('auth:appendContext'));
@@ -31,7 +31,7 @@ const createGraphQLContextFunc = async ({ req, context, appContext, req: { t } }
 export default new AccessModule(
   settings.auth.serial.enabled
     ? {
-        createGraphQLContextFunc: [createGraphQLContextFunc]
+        createContextFunc: [createContextFunc]
       }
     : {}
 );

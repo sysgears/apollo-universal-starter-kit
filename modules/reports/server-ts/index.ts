@@ -10,6 +10,6 @@ import excel from './excel';
 export default new ServerModule(pdf, excel, {
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createGraphQLContextFunc: [() => ({ Contacts: new ContactsDAO() })],
+  createContextFunc: [() => ({ Contacts: new ContactsDAO() })],
   localization: [{ ns: 'reports', resources }]
 });

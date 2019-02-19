@@ -8,7 +8,7 @@ import resources from './locales';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  createGraphQLContextFunc: [() => ({ Chat: new Chat() })],
+  createContextFunc: [() => ({ Chat: new Chat() })],
   localization: [{ ns: 'chat', resources }],
   onAppCreate: [onAppCreate]
 });

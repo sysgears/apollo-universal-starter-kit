@@ -19,7 +19,7 @@ export default new ServerModule({
     fileSystemStorage
   },
   createResolversFunc: [createResolvers],
-  createGraphQLContextFunc: [() => ({ Upload: new Upload() })],
+  createContextFunc: [() => ({ Upload: new Upload() })],
   middleware: [middleware],
   localization: [{ ns: 'upload', resources }]
 });

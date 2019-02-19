@@ -27,9 +27,9 @@ const getCurrentIdentity = async ({ req }) => {
   }
 };
 
-const createGraphQLContextFunc = async ({ req, context, appContext }) => {
+const createContextFunc = async ({ req, context }) => {
   try {
-    const { appendContext } = appContext;
+    const { appendContext } = context;
 
     if (!appendContext) {
       throw new Error(req.t('auth:appendContext'));
@@ -52,7 +52,7 @@ export default new AccessModule(
         grant: [grant],
         schema: [schema],
         createResolversFunc: [resolvers],
-        createGraphQLContextFunc: [createGraphQLContextFunc]
+        createContextFunc: [createContextFunc]
       }
     : {}
 );

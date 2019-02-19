@@ -35,7 +35,7 @@ export default class Main extends React.Component<MainProps> {
     const client = createApolloClient({
       apiUrl,
       createNetLink: modules.createNetLink,
-      links: modules.link,
+      createLink: modules.createLink,
       connectionParams: modules.connectionParams,
       clientResolvers: modules.resolvers
     });

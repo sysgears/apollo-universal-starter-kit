@@ -5,16 +5,31 @@ import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
-import { SubscriptionClient } from 'subscriptions-transport-ws';
+import { SubscriptionClient, ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import ApolloClient from 'apollo-client';
 import ApolloCacheRouter from 'apollo-cache-router';
 import { hasDirectives } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
+import { IResolvers } from 'graphql-tools';
 
 import log from './log';
 import settings from '../../../settings';
 
-const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, clientResolvers }: any) => {
+interface CreateApolloClientOptions {
+  apiUrl?: string;
+  createLink?: Array<(getApolloClient: () => ApolloClient<any>) => ApolloLink>;
+  createNetLink?: (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
+  connectionParams?: ConnectionParamsOptions[];
+  clientResolvers?: { defaults: { [key: string]: any }; resolvers: IResolvers };
+}
+
+const createApolloClient = ({
+  apiUrl,
+  createNetLink,
+  createLink,
+  connectionParams,
+  clientResolvers
+}: CreateApolloClientOptions): ApolloClient<any> => {
   const netCache = new InMemoryCache();
   const localCache = new InMemoryCache();
   const cache = ApolloCacheRouter.override(
@@ -39,8 +54,10 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     }
   );
 
+  const getApolloClient = (): ApolloClient<any> => client;
+
   const queryLink = createNetLink
-    ? createNetLink(apiUrl)
+    ? createNetLink(apiUrl, getApolloClient)
     : new BatchHttpLink({
         uri: apiUrl,
         credentials: 'include'
@@ -51,7 +68,7 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
     const finalConnectionParams = {};
     if (connectionParams) {
       for (const connectionParam of connectionParams) {
-        Object.assign(finalConnectionParams, connectionParam());
+        Object.assign(finalConnectionParams, (connectionParam as any)());
       }
     }
 
@@ -98,7 +115,11 @@ const createApolloClient = ({ apiUrl, createNetLink, links, connectionParams, cl
 
   const linkState = withClientState({ ...clientResolvers, cache });
 
-  const allLinks = [...(links || []), linkState, apiLink];
+  const allLinks = [
+    ...(createLink ? createLink.map((create: any) => create(getApolloClient)) : []),
+    linkState,
+    apiLink
+  ];
 
   if (settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')) {
     allLinks.unshift(new LoggingLink({ logger: log.debug.bind(log) }));

@@ -72,8 +72,8 @@ class CounterSchema @Inject()(
     Field.subs(
       name = COUNTER_UPDATED,
       fieldType = Types.counter,
-      resolve = _ => {
-        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty).map(action => action.map(_.element))
+      resolve = cs => {
+        counterPubSubService.subscribe(Seq(ADD_SERVER_COUNTER), Seq.empty)(cs.ctx).map(action => action.map(_.element))
       }
     )
   )

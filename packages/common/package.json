@@ -37,7 +37,7 @@
     "eslint": "^4.13.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
-    "mocha-webpack": "^2.0.0-beta.0"
+    "mochapack": "^1.0.0"
   },
   "optionalDependencies": {
     "expo": "^32.0.0"

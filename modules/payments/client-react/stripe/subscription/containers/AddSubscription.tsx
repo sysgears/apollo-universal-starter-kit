@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
@@ -21,17 +21,11 @@ interface AddSubscriptionProps {
 }
 
 // react-stripe-elements will not render on the server and on the mobile.
-class AddSubscription extends React.Component<AddSubscriptionProps, { [key: string]: any }> {
-  constructor(props: AddSubscriptionProps) {
-    super(props);
-    this.state = {
-      submitting: false
-    };
-  }
+const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
+  const [submitting, setSubmitting] = useState(false);
 
-  public onSubmit = (addSubscription: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
-    const { t, history, navigation } = this.props;
-    this.setState({ submitting: true });
+  const onSubmit = (addSubscription: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
+    setSubmitting(true);
     let preparedCreditCard;
 
     try {
@@ -40,14 +34,10 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
 
       await addSubscription({ variables: { input: preparedCreditCard } });
 
-      this.setState({
-        submitting: false
-      });
+      setSubmitting(false);
       history ? history.push('/subscriber-page') : navigation.goBack();
     } catch (e) {
-      this.setState({
-        submitting: false
-      });
+      setSubmitting(false);
       if (isApolloError(e)) {
         if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
           throw new FormError(t('stripeError'), e);
@@ -60,37 +50,32 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
     }
   };
 
-  public render() {
-    const { t } = this.props;
-    const { submitting } = this.state;
-
-    return (
-      <Mutation
-        mutation={ADD_SUBSCRIPTION}
-        update={(cache, { data: { addStripeSubscription } }) => {
-          const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
-          data.stripeSubscription = addStripeSubscription;
-          cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
-        }}
-        refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
-      >
-        {addSubscription => {
-          return (
-            <Fragment>
-              {/* Stripe elements should render only for web*/}
-              {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
-                </StripeProvider>
-              ) : (
-                <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />
-              )}
-            </Fragment>
-          );
-        }}
-      </Mutation>
-    );
-  }
-}
+  return (
+    <Mutation
+      mutation={ADD_SUBSCRIPTION}
+      update={(cache, { data: { addStripeSubscription } }) => {
+        const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
+        data.stripeSubscription = addStripeSubscription;
+        cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
+      }}
+      refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
+    >
+      {addSubscription => {
+        return (
+          <Fragment>
+            {/* Stripe elements should render only for web*/}
+            {__CLIENT__ && PLATFORM === 'web' ? (
+              <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
+                <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
+              </StripeProvider>
+            ) : (
+              <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
+            )}
+          </Fragment>
+        );
+      }}
+    </Mutation>
+  );
+};
 
 export default translate('stripeSubscription')(AddSubscription);

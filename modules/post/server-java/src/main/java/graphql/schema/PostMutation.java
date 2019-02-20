@@ -19,16 +19,17 @@ public class PostMutation implements GraphQLMutationResolver {
     @Autowired
     private PostRepository postRepository;
 
-
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
     public Post addPost(AddPostInput addPostInputPayload) {
         logger.debug("Started creation of a post entity");
 
-        final Post postEntity = new Post(null, addPostInputPayload.getTitle(), addPostInputPayload.getContent());
+        final Post postEntity = Post.builder()
+                .title(addPostInputPayload.getTitle())
+                .content(addPostInputPayload.getContent())
+                .build();
         final Post post = postRepository.save(postEntity);
         logger.debug("Completed creation of a post entity, post id: " + post.getId());
         return post;
     }
-
 }

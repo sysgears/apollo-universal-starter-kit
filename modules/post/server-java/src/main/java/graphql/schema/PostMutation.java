@@ -21,7 +21,7 @@ public class PostMutation implements GraphQLMutationResolver {
 
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
-    public Post addPost(AddPostInput addPostInputPayload) {
+    public Post addPost(final AddPostInput addPostInputPayload) {
         logger.debug("Started creation of a post entity");
 
         final Post postEntity = Post.builder()
@@ -31,5 +31,17 @@ public class PostMutation implements GraphQLMutationResolver {
         final Post post = postRepository.save(postEntity);
         logger.debug("Completed creation of a post entity, post id: " + post.getId());
         return post;
+    }
+
+    @Transactional
+    @Async("resolverThreadPoolTaskExecutor")
+    public Post deletePost(final Integer postId) {
+        logger.debug("Started deleting a post with id: " + postId);
+        return postRepository.findById(postId).map(postToRemove -> {
+            logger.debug("Found a post with id: " + postId);
+            postRepository.deleteById(postId);
+            logger.debug("Completed removal of a post entity, post id: " + postId);
+            return postToRemove;
+        }).orElse(null);
     }
 }

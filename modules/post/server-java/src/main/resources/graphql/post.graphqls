@@ -17,8 +17,10 @@ extend type Query {
 }
 
 extend type Mutation {
-    # Create new post
+    # Create a new post
     addPost(input: AddPostInput!): Post
+    # Delete a post
+    deletePost(id: Int!): Post
 }
 
 # CRUD payloads

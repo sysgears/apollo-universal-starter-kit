@@ -11,6 +11,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.concurrent.CompletableFuture;
+
 @Component
 public class PostMutation implements GraphQLMutationResolver {
 
@@ -35,13 +37,13 @@ public class PostMutation implements GraphQLMutationResolver {
 
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
-    public Post deletePost(final Integer postId) {
+    public CompletableFuture<Post> deletePost(final Integer postId) {
         logger.debug("Started deleting a post with id: " + postId);
-        return postRepository.findById(postId).map(postToRemove -> {
+        return postRepository.findOneById(postId).thenApply(postToRemove -> {
             logger.debug("Found a post with id: " + postId);
             postRepository.deleteById(postId);
             logger.debug("Completed removal of a post entity, post id: " + postId);
             return postToRemove;
-        }).orElse(null);
+        });
     }
 }

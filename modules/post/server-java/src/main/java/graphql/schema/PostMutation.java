@@ -2,6 +2,7 @@ package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
 import graphql.model.AddPostInput;
+import graphql.model.EditPostInput;
 import graphql.model.Post;
 import graphql.repository.PostRepository;
 import org.apache.logging.log4j.LogManager;
@@ -46,6 +47,21 @@ public class PostMutation implements GraphQLMutationResolver {
             postRepository.deleteById(postId);
             logger.debug("Completed removal of a post entity, post id: " + postId);
             return postToRemove;
+        });
+    }
+
+    @Transactional
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<Post> editPost(final EditPostInput editPostInputPayload) {
+        final Integer postId = editPostInputPayload.getId();
+        logger.debug("Started deleting a post with id: " + postId);
+        return postRepository.findOneById(postId).thenApply(postToEdit -> {
+            logger.debug("Found a post with id: " + postId);
+            postToEdit.setTitle(editPostInputPayload.getTitle());
+            postToEdit.setContent(editPostInputPayload.getContent());
+            postRepository.save(postToEdit);
+            logger.debug("Completed removal of a post entity, post id: " + postId);
+            return postToEdit;
         });
     }
 }

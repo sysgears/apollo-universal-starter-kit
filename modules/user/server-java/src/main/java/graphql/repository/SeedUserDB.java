@@ -1,8 +1,7 @@
 package graphql.repository;
 
 import graphql.model.*;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -10,10 +9,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class SeedUserDB implements ApplicationRunner {
-
-    Logger logger = LogManager.getLogger(SeedUserDB.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -23,7 +21,7 @@ public class SeedUserDB implements ApplicationRunner {
         long count = userRepository.count();
 
         if (count == 0) {
-            logger.debug("Init DB. Table [USER]");
+            log.debug("Init DB. Table [USER]");
             userRepository.save(User.builder()
                     .username("username")
                     .role("role")

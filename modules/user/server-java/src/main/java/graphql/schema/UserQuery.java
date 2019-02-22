@@ -7,9 +7,7 @@ import graphql.model.OrderByUserInput;
 import graphql.model.User;
 import graphql.model.UserPayload;
 import graphql.repository.UserRepository;
-import org.apache.logging.log4j.LogManager;
-
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -17,23 +15,22 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @Component
 public class UserQuery implements GraphQLQueryResolver {
-
-    Logger logger = LogManager.getLogger(UserQuery.class);
 
     @Autowired
     private UserRepository userRepository;
 
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<User> currentUser() {
-        logger.debug("Get current User");
+        log.debug("Get current User");
         return userRepository.findOneById(1); //TODO MOCK
     }
 
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<UserPayload> user(Integer id) {
-        logger.debug("Get User by ID: {}", id);
+        log.debug("Get User by ID: {}", id);
         return CompletableFuture.supplyAsync(() -> {
             User user = userRepository.findById(id).orElseThrow(() -> new NotFoundException(String.format("User with ID: %d not found", id)));
             return UserPayload.builder()
@@ -44,7 +41,7 @@ public class UserQuery implements GraphQLQueryResolver {
 
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<List<User>> users(OrderByUserInput orderBy, FilterUserInput filter) {
-        logger.debug("Get Users by specified params: orderBy [{}], filter [{}]", orderBy, filter);
+        log.debug("Get Users by specified params: orderBy [{}], filter [{}]", orderBy, filter);
         return userRepository.users(orderBy, filter);
     }
 }

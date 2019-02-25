@@ -11,7 +11,7 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, req: { t } }, context) => {
+const createContextFunc = async ({ req, req: { t }, apolloContext }, context) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {
@@ -19,7 +19,7 @@ const createContextFunc = async ({ req, req: { t } }, context) => {
   }
 
   if (getIdentity) {
-    const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
+    const identity = apolloContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
     return {
       identity,

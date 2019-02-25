@@ -33,7 +33,7 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req }, context) => {
+const createContextFunc = async ({ req, apolloContext }, context) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {
@@ -43,7 +43,7 @@ const createContextFunc = async ({ req }, context) => {
   attachSession(req);
 
   if (getIdentity) {
-    const identity = context.identity || (await getCurrentIdentity({ req, getIdentity }));
+    const identity = apolloContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
     return {
       identity,

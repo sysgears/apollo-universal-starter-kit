@@ -6,10 +6,13 @@ import ContactView from '../components/ContactView';
 import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
 
-@translate('contact')
-class Contact extends React.Component<{ t: TranslateFunction }> {
-  public onSubmit = (sendContact: any) => async (values: ContactForm) => {
-    const { t } = this.props;
+interface ContctProps {
+  t: TranslateFunction;
+}
+
+const Contact = (props: ContctProps): any => {
+  const onSubmit = (sendContact: any) => async (values: ContactForm) => {
+    const { t } = props;
 
     try {
       await sendContact(values);
@@ -18,21 +21,19 @@ class Contact extends React.Component<{ t: TranslateFunction }> {
     }
   };
 
-  public render() {
-    return (
-      <Mutation mutation={CONTACT}>
-        {mutate => {
-          const sendContact = async (values: ContactForm) => {
-            const {
-              data: { contact }
-            } = (await mutate({ variables: { input: values } })) as FetchResult;
-            return contact;
-          };
-          return <ContactView {...this.props} onSubmit={this.onSubmit(sendContact)} />;
-        }}
-      </Mutation>
-    );
-  }
-}
+  return (
+    <Mutation mutation={CONTACT}>
+      {mutate => {
+        const sendContact = async (values: ContactForm) => {
+          const {
+            data: { contact }
+          } = (await mutate({ variables: { input: values } })) as FetchResult;
+          return contact;
+        };
+        return <ContactView {...props} onSubmit={onSubmit(sendContact)} />;
+      }}
+    </Mutation>
+  );
+};
 
-export default Contact;
+export default translate('contact')(Contact);

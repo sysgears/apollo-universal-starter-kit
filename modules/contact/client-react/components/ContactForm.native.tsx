@@ -6,7 +6,8 @@ import { isFormError } from '@gqlapp/forms-client-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
 import { validate } from '@gqlapp/validation-common-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
-import Field from '../../../../packages/client/src/utils/FieldAdapter';
+import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
+
 import {
   RenderField,
   FormView,

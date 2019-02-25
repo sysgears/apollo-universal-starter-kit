@@ -9,11 +9,7 @@ import ProfileView from '../components/ProfileView';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
-class Profile extends React.Component {
-  render() {
-    return <ProfileView {...this.props} />;
-  }
-}
+const Profile = props => <ProfileView {...props} />;
 
 export default compose(
   graphql(CURRENT_USER_QUERY, {

@@ -9,13 +9,6 @@ import User from './sql';
 import resources from './locales';
 import social from './social';
 
-const appendContext = identity => ({
-  auth: {
-    isAuthenticated: !!identity,
-    scope: identity && identity.role ? scopes[identity.role] : null
-  }
-});
-
 const getIdentity = (id, serial = '') => {
   if (!id && serial) {
     return User.getUserWithSerial(serial);
@@ -26,12 +19,15 @@ const getIdentity = (id, serial = '') => {
 
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
-const createContextFunc = () => ({
-  User
+const createContextFunc = ({ apolloContext: { identity } }) => ({
+  User,
+  auth: {
+    isAuthenticated: !!identity,
+    scope: identity && identity.role ? scopes[identity.role] : null
+  }
 });
 
 const context = {
-  appendContext,
   getIdentity,
   getHash
 };

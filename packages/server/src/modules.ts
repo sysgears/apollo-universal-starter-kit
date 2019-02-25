@@ -20,15 +20,15 @@ import ServerModule from '@gqlapp/module-server-ts';
 const user = require('@gqlapp/user-server-ts').default;
 
 const modules: ServerModule = new ServerModule(
+  authentication,
   cookies,
   i18n,
   validation,
   counter,
   post,
-  authentication,
-  upload,
-  user,
   subscription,
+  user,
+  upload,
   contact,
   mailer,
   chat,

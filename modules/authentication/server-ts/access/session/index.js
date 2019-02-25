@@ -34,21 +34,14 @@ const attachSession = req => {
 };
 
 const createContextFunc = async ({ req, apolloContext }, context) => {
-  const { getIdentity, appendContext } = context;
-
-  if (!appendContext) {
-    throw new Error(req.t('auth:appendContext'));
-  }
+  const { getIdentity } = context;
 
   attachSession(req);
 
   if (getIdentity) {
     const identity = apolloContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
-    return {
-      identity,
-      ...appendContext(identity)
-    };
+    return { identity };
   }
 };
 

@@ -33,7 +33,7 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, context }) => {
+const createContextFunc = async ({ req }, context) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {

@@ -11,7 +11,7 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, context, req: { t } }) => {
+const createContextFunc = async ({ req, req: { t } }, context) => {
   const { getIdentity, appendContext } = context;
 
   if (!appendContext) {

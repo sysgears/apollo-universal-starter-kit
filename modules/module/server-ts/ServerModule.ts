@@ -11,14 +11,16 @@ interface CreateContextFuncProps {
   res: Response;
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
-  context: { [key: string]: any };
+  apolloContext: { [key: string]: any };
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
-  createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
+  createContextFunc?: Array<
+    (props: CreateContextFuncProps, context?: { [key: string]: any }) => { [key: string]: any }
+  >;
   // Middleware
   beforeware?: Array<(app: Express, context: { [key: string]: any }) => void>;
   middleware?: Array<(app: Express, context: { [key: string]: any }) => void>;
@@ -45,12 +47,15 @@ class ServerModule extends CommonModule {
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket
   ) {
-    let context = { ...this.context };
+    let apolloContext = {};
 
     for (const createContextFunc of this.createContextFunc) {
-      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
+      apolloContext = merge(
+        apolloContext,
+        await createContextFunc({ req, res, connectionParams, webSocket, apolloContext }, this.context)
+      );
     }
-    return context;
+    return apolloContext;
   }
 
   public createResolvers(pubsub: PubSub) {

@@ -8,6 +8,7 @@ import validation from '@gqlapp/validation-common-react';
 import ClientModule from '@gqlapp/module-client-react';
 import defaultRouter from '@gqlapp/router-client-react';
 import payments from '@gqlapp/payments-client-react';
+import authentication from '@gqlapp/authentication-client-react';
 import '@gqlapp/favicon-common';
 
 const post = require('@gqlapp/post-client-react').default;
@@ -32,7 +33,8 @@ const modules = new ClientModule(
   i18n,
   reports,
   pageNotFound,
-  core
+  core,
+  authentication
 );
 
 export default modules;

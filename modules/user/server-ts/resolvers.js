@@ -10,6 +10,10 @@ import { UserInputError } from 'apollo-server-errors';
 import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
+const {
+  auth: { secret, certificate, password },
+  app
+} = settings;
 
 const createPasswordHash = password => {
   return bcrypt.hash(password, 12) || false;
@@ -20,25 +24,20 @@ export default pubsub => ({
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
       return User.getUsers(orderBy, filter);
     }),
-    user: withAuth(
-      () => {
-        return ['user:view:self'];
-      },
-      (obj, { id }, { user, User, req: { t } }) => {
-        if (user.id === id || user.role === 'admin') {
-          try {
-            return { user: User.getUser(id) };
-          } catch (e) {
-            return { errors: e };
-          }
+    user: withAuth(['user:view:self'], (obj, { id }, { identity, User, req: { t } }) => {
+      if (identity.id === id || identity.role === 'admin') {
+        try {
+          return { user: User.getUser(id) };
+        } catch (e) {
+          return { errors: e };
         }
-
-        throw new Error(t('user:accessDenied'));
       }
-    ),
-    currentUser(obj, args, { User, user }) {
-      if (user) {
-        return User.getUser(user.id);
+
+      throw new Error(t('user:accessDenied'));
+    }),
+    currentUser(obj, args, { User, identity }) {
+      if (identity) {
+        return User.getUser(identity.id);
       } else {
         return null;
       }
@@ -69,10 +68,10 @@ export default pubsub => ({
   },
   Mutation: {
     addUser: withAuth(
-      (obj, args, { User, user }) => {
-        return user.id !== args.input.id ? ['user:create'] : ['user:create:self'];
+      (obj, { input }, { identity }) => {
+        return identity.id !== input.id ? ['user:create'] : ['user:create:self'];
       },
-      async (obj, { input }, { User, user, req: { universalCookies }, mailer, req, req: { t } }) => {
+      async (obj, { input }, { User, req: { universalCookies, t }, mailer, req }) => {
         const errors = {};
 
         const userExists = await User.getUserByUsername(input.username);
@@ -85,9 +84,10 @@ export default pubsub => ({
           errors.email = t('user:emailIsExisted');
         }
 
-        if (input.password.length < settings.user.auth.password.minLength) {
-          errors.password = t('user:passwordLength', { length: settings.user.auth.password.minLength });
+        if (input.password.length < password.minLength) {
+          errors.password = t('user:passwordLength', { length: password.minLength });
         }
+
         if (!isEmpty(errors)) throw new UserInputError('Failed to get events due to validation errors', { errors });
 
         const passwordHash = await createPasswordHash(input.password);
@@ -97,8 +97,7 @@ export default pubsub => ({
         try {
           [createdUserId] = await User.register(input, passwordHash).transacting(trx);
           await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
-          if (settings.user.auth.certificate.enabled)
-            await User.editAuthCertificate({ id: createdUserId, ...input }).transacting(trx);
+          if (certificate.enabled) await User.editAuthCertificate({ id: createdUserId, ...input }).transacting(trx);
           trx.commit();
         } catch (e) {
           trx.rollback();
@@ -107,21 +106,21 @@ export default pubsub => ({
         try {
           const user = await User.getUser(createdUserId);
 
-          if (mailer && settings.user.auth.password.sendAddNewUserEmail && !emailExists && req) {
+          if (mailer && password.sendAddNewUserEmail && !emailExists && req) {
             // async email
-            jwt.sign({ user: pick(user, 'id') }, settings.user.secret, { expiresIn: '1d' }, (err, emailToken) => {
+            jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
               mailer.sendMail({
-                from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+                from: `${app.name} <${process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Your account has been created',
                 html: `<p>Hi, ${user.username}!</p>
-                <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
+                <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>
                 <p>Your email is: ${user.email}</p>
-                <p>Your password is: ${input.password}</p>`
+                <p>Your password is: ${user.password}</p>`
               });
             });
           }
@@ -139,12 +138,12 @@ export default pubsub => ({
       }
     ),
     editUser: withAuth(
-      (obj, args, { User, user }) => {
-        return user.id !== args.input.id ? ['user:update'] : ['user:update:self'];
+      (obj, args, { identity }) => {
+        return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, user, req: { t } }) => {
-        const isAdmin = () => user.role === 'admin';
-        const isSelf = () => user.id === input.id;
+      async (obj, { input }, { User, identity, req: { t } }) => {
+        const isAdmin = () => identity.role === 'admin';
+        const isSelf = () => identity.id === input.id;
 
         const errors = {};
 
@@ -158,8 +157,8 @@ export default pubsub => ({
           errors.email = t('user:emailIsExisted');
         }
 
-        if (input.password && input.password.length < settings.user.auth.password.minLength) {
-          errors.password = t('user:passwordLength', { length: settings.user.auth.password.minLength });
+        if (input.password && input.password.length < password.minLength) {
+          errors.password = t('user:passwordLength', { length: password.minLength });
         }
 
         if (!isEmpty(errors)) throw new UserInputError('Failed to get events due to validation errors', { errors });
@@ -178,7 +177,7 @@ export default pubsub => ({
           trx.rollback();
         }
 
-        if (settings.user.auth.certificate.enabled) {
+        if (certificate.enabled) {
           await User.editAuthCertificate(input);
         }
 
@@ -198,16 +197,12 @@ export default pubsub => ({
       }
     ),
     deleteUser: withAuth(
-      (obj, args, { User, user }) => {
-        return user.id !== args.id ? ['user:delete'] : ['user:delete:self'];
+      (obj, args, { identity }) => {
+        return identity.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, context) => {
-        const {
-          User,
-          req: { t }
-        } = context;
-        const isAdmin = () => context.user.role === 'admin';
-        const isSelf = () => context.user.id === id;
+      async (obj, { id }, { identity, User, req: { t } }) => {
+        const isAdmin = () => identity.role === 'admin';
+        const isSelf = () => identity.id === id;
 
         const user = await User.getUser(id);
         if (!user) {

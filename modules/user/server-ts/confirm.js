@@ -7,7 +7,7 @@ export default async (req, res) => {
     const token = Buffer.from(req.params.token, 'base64').toString();
     const {
       user: { id }
-    } = jwt.verify(token, settings.user.secret);
+    } = jwt.verify(token, settings.auth.secret);
 
     await User.updateActive(id, true);
 

@@ -9,8 +9,8 @@ import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
 import settings from '../../../../settings';
 
 const resetPasswordFormSchema = {
-  password: [required, minLength(settings.user.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
 };
 
 const ResetPasswordForm = ({ values, handleSubmit, errors, t }) => (

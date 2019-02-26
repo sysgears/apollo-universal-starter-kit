@@ -12,8 +12,8 @@ import { required, minLength, validate, match } from '@gqlapp/validation-common-
 import settings from '../../../../settings';
 
 const resetPasswordFormSchema = {
-  password: [required, minLength(settings.user.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
 };
 
 const ResetPasswordForm = ({ values, handleSubmit, t }) => {

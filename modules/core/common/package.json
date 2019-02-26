@@ -1,5 +1,8 @@
 {
   "name": "@gqlapp/core-common",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "unfetch": "^4.0.1"
+  }
 }

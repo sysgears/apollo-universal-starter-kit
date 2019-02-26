@@ -9401,7 +9401,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.1"
     object-path "^0.11.4"
 
-graphql@14.1.1, graphql@^14.1.1:
+graphql@^14.1.1:
   version "14.1.1"
   resolved "https://registry.npmjs.org/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
   integrity sha512-C5zDzLqvfPAgTtP8AUPIt9keDabrdRAqSWjj2OPRKrKxI9Fb65I36s1uCs1UUBFnSWTdO7hyHi7z1ZbwKMKF6Q==
@@ -10036,7 +10036,7 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
 
-immutability-helper@2.8.1, immutability-helper@^2.6.2:
+immutability-helper@^2.6.2:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
@@ -19291,6 +19291,11 @@ underscore@^1.7.0:
   resolved "https://registry.npmjs.org/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
   integrity sha512-5/4etnCkd9c8gwgowi5/om/mYO5ajCaOgdzj/oW+0eQV9WxKBDZw5+ycmKmeaTXjInS/W0BzpGLo2xR2aBwZdg==
 
+unfetch@^4.0.1:
+  version "4.0.1"
+  resolved "https://registry.npmjs.org/unfetch/-/unfetch-4.0.1.tgz#8750c4c7497ade75d40387d7dbc4ba024416b8f6"
+  integrity sha512-HzDM9NgldcRvHVDb/O9vKoUszVij30Yw5ePjOZJig8nF/YisG7QN/9CBXZ8dsHLouXMeLZ82r+Jod9M2wFkEbQ==
+
 unicode-canonical-property-names-ecmascript@^1.0.4:
   version "1.0.4"
   resolved "https://registry.npmjs.org/unicode-canonical-property-names-ecmascript/-/unicode-canonical-property-names-ecmascript-1.0.4.tgz#2619800c4c825800efdd8343af7dd9933cbe2818"
@@ -19402,7 +19407,7 @@ unzip-response@^2.0.1:
   resolved "https://registry.npmjs.org/unzip-response/-/unzip-response-2.0.1.tgz#d2f0f737d16b0615e72a6935ed04214572d56f97"
   integrity sha1-0vD3N9FrBhXnKmk17QQhRXLVb5c=
 
-upath@^1.0.5, upath@^1.1.0:
+upath@^1.0.5:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
   integrity sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==
@@ -19784,7 +19789,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
+watchpack@^1.5.0:
   version "1.6.0"
   resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:

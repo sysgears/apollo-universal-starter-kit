@@ -1,3 +1,4 @@
+import fetch from 'unfetch';
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
@@ -60,7 +61,8 @@ const createApolloClient = ({
     ? createNetLink(apiUrl, getApolloClient)
     : new BatchHttpLink({
         uri: apiUrl,
-        credentials: 'include'
+        credentials: 'include',
+        fetch
       });
 
   let apiLink = queryLink;

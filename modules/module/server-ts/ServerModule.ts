@@ -12,6 +12,7 @@ interface CreateContextFuncProps {
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
   graphqlContext: { [key: string]: any };
+  appContext: { [key: string]: any };
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
@@ -47,12 +48,13 @@ class ServerModule extends CommonModule {
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket
   ) {
+    const appContext = this.appContext;
     let graphqlContext = {};
 
     for (const createContextFunc of this.createContextFunc) {
       graphqlContext = merge(
         graphqlContext,
-        await createContextFunc({ req, res, connectionParams, webSocket, graphqlContext }, this.appContext)
+        await createContextFunc({ req, res, connectionParams, webSocket, graphqlContext, appContext })
       );
     }
     return graphqlContext;

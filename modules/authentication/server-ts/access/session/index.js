@@ -33,7 +33,7 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, graphqlContext }, appContext) => {
+const createContextFunc = async ({ req, graphqlContext, appContext }) => {
   const { getIdentity } = appContext;
 
   attachSession(req);

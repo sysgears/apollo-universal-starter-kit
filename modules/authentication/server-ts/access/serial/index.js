@@ -11,7 +11,7 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, graphqlContext }, appContext) => {
+const createContextFunc = async ({ req, graphqlContext, appContext }) => {
   const { getIdentity } = appContext;
 
   if (getIdentity) {

@@ -11,10 +11,7 @@ import settings from '../../../settings';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 const {
-  auth: { secret },
-  user: {
-    auth: { certificate, password }
-  },
+  auth: { secret, certificate, password },
   app
 } = settings;
 

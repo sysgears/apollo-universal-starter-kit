@@ -14,7 +14,7 @@ import settings from '../../../../settings';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)]
 };
 const { github, facebook, linkedin, google } = settings.auth.social;
 

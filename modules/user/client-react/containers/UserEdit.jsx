@@ -21,7 +21,7 @@ const UserEdit = props => {
 
     userValues = UserFormatter.trimExtraSpaces(userValues);
 
-    if (settings.user.auth.certificate.enabled) {
+    if (settings.auth.certificate.enabled) {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 

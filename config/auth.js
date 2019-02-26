@@ -1,3 +1,5 @@
+const CERTIFICATE_DEVSERIAL = '00';
+
 export default {
   secret: process.env.NODE_ENV === 'test' ? 'secret for tests' : process.env.AUTH_SECRET,
   serial: {
@@ -10,6 +12,17 @@ export default {
     enabled: true,
     tokenExpiresIn: '1m',
     refreshTokenExpiresIn: '7d'
+  },
+  password: {
+    confirm: true,
+    sendConfirmationEmail: true,
+    sendAddNewUserEmail: true,
+    minLength: 8,
+    enabled: true
+  },
+  certificate: {
+    devSerial: CERTIFICATE_DEVSERIAL,
+    enabled: false
   },
   social: {
     facebook: {

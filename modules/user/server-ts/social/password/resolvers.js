@@ -12,7 +12,7 @@ const validateUserPassword = async (user, password, t) => {
     return { usernameOrEmail: t('user:auth.password.validPasswordEmail') };
   }
 
-  if (settings.user.auth.password.confirm && !user.isActive) {
+  if (settings.auth.password.confirm && !user.isActive) {
     return { usernameOrEmail: t('user:auth.password.emailConfirmation') };
   }
 
@@ -58,7 +58,7 @@ export default () => ({
 
       let userId = 0;
       if (!emailExists) {
-        let isActive = !settings.user.auth.password.confirm;
+        let isActive = !settings.auth.password.confirm;
         [userId] = await User.register({ ...input, isActive });
 
         // if user has previously logged with facebook auth
@@ -69,7 +69,7 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && settings.user.auth.password.sendConfirmationEmail && !emailExists && req) {
+      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists && req) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -133,8 +133,8 @@ export default () => ({
         errors.password = t('user:auth.password.passwordsIsNotMatch');
       }
 
-      if (reset.password.length < settings.user.auth.password.minLength) {
-        errors.password = t('user:auth.password.passwordLength', { length: settings.user.auth.password.minLength });
+      if (reset.password.length < settings.auth.password.minLength) {
+        errors.password = t('user:auth.password.passwordLength', { length: settings.auth.password.minLength });
       }
 
       if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });

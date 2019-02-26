@@ -23,10 +23,10 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
-      new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, context.social.linkedin.verifyCallback)
+      new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, appContext.social.linkedin.verifyCallback)
     );
   }
 };

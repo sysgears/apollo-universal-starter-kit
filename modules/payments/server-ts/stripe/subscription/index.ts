@@ -26,7 +26,7 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   });
 }
 
-const createContextFunc = async ({ apolloContext: { identity } }: any) => ({
+const createContextFunc = async ({ graphqlContext: { identity } }: any) => ({
   StripeSubscription,
   stripeSubscription: identity ? await StripeSubscription.getSubscription(identity.id) : null
 });

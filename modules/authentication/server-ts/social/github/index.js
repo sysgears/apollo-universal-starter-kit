@@ -23,10 +23,10 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
-      new GitHubStrategy({ clientID, clientSecret, scope, callbackURL }, context.social.github.verifyCallback)
+      new GitHubStrategy({ clientID, clientSecret, scope, callbackURL }, appContext.social.github.verifyCallback)
     );
   }
 };

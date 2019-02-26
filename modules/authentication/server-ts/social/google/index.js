@@ -23,9 +23,9 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ context }) => {
+const onAppCreate = ({ appContext }) => {
   if (enabled && !__TEST__) {
-    passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, context.social.google.verifyCallback));
+    passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, appContext.social.google.verifyCallback));
   }
 };
 

@@ -33,13 +33,13 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, apolloContext }, context) => {
-  const { getIdentity } = context;
+const createContextFunc = async ({ req, graphqlContext }, appContext) => {
+  const { getIdentity } = appContext;
 
   attachSession(req);
 
   if (getIdentity) {
-    const identity = apolloContext.identity || (await getCurrentIdentity({ req, getIdentity }));
+    const identity = graphqlContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
     return { identity };
   }

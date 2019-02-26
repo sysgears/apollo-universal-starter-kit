@@ -27,9 +27,9 @@ const getCurrentIdentity = async ({ req }) => {
   }
 };
 
-const createContextFunc = async ({ req, apolloContext }) => {
+const createContextFunc = async ({ req, graphqlContext }) => {
   try {
-    const identity = apolloContext.identity || (await getCurrentIdentity({ req }));
+    const identity = graphqlContext.identity || (await getCurrentIdentity({ req }));
 
     return { identity };
   } catch (e) {

@@ -19,7 +19,7 @@ const getIdentity = (id, serial = '') => {
 
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
-const createContextFunc = ({ apolloContext: { identity } }) => ({
+const createContextFunc = ({ graphqlContext: { identity } }) => ({
   User,
   auth: {
     isAuthenticated: !!identity,
@@ -27,7 +27,7 @@ const createContextFunc = ({ apolloContext: { identity } }) => ({
   }
 });
 
-const context = {
+const appContext = {
   getIdentity,
   getHash
 };
@@ -40,7 +40,7 @@ const middleware = app => {
 
 export default new ServerModule(social, {
   schema: [schema],
-  context,
+  appContext,
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
   middleware: [middleware],

@@ -8,13 +8,8 @@ import RegisterForm from '../components/RegisterForm';
 
 import settings from '../../../../settings';
 
-class RegisterView extends React.PureComponent {
-  static propTypes = {
-    t: PropTypes.func,
-    onSubmit: PropTypes.func
-  };
-
-  renderMetaData = t => (
+const RegisterView = ({ t, onSubmit }) => {
+  const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('reg.title')}`}
       meta={[
@@ -26,18 +21,20 @@ class RegisterView extends React.PureComponent {
     />
   );
 
-  render() {
-    const { t, onSubmit } = this.props;
-    return (
-      <PageLayout>
-        {this.renderMetaData(t)}
-        <LayoutCenter>
-          <h1 className="text-center">{t('reg.form.title')}</h1>
-          <RegisterForm onSubmit={onSubmit} />
-        </LayoutCenter>
-      </PageLayout>
-    );
-  }
-}
+  return (
+    <PageLayout>
+      {renderMetaData(t)}
+      <LayoutCenter>
+        <h1 className="text-center">{t('reg.form.title')}</h1>
+        <RegisterForm onSubmit={onSubmit} />
+      </LayoutCenter>
+    </PageLayout>
+  );
+};
+
+RegisterView.propTypes = {
+  t: PropTypes.func,
+  onSubmit: PropTypes.func
+};
 
 export default translate('user')(RegisterView);

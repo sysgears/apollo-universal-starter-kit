@@ -22,8 +22,8 @@ const withUsers = Component =>
         variables: { orderBy, filter }
       };
     },
-    props({ data: { loading, users, refetch, error, updateQuery } }) {
-      return { loading, users, refetch, updateQuery, errors: error ? error.graphQLErrors : null };
+    props({ data: { loading, users, refetch, error, updateQuery, subscribeToMore } }) {
+      return { loading, users, refetch, subscribeToMore, updateQuery, errors: error ? error.graphQLErrors : null };
     }
   })(Component);
 

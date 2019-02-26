@@ -11,17 +11,10 @@ import LoginView from '../components/LoginView';
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
-class Login extends React.Component {
-  static propTypes = {
-    login: PropTypes.func,
-    onLogin: PropTypes.func,
-    t: PropTypes.func,
-    client: PropTypes.object
-  };
+const Login = props => {
+  const { t, login, client, onLogin } = props;
 
-  onSubmit = async values => {
-    const { t, login, client, onLogin } = this.props;
-
+  const onSubmit = async values => {
     try {
       await login(values);
     } catch (e) {
@@ -35,10 +28,15 @@ class Login extends React.Component {
     }
   };
 
-  render() {
-    return <LoginView {...this.props} onSubmit={this.onSubmit} />;
-  }
-}
+  return <LoginView {...props} onSubmit={onSubmit} />;
+};
+
+Login.propTypes = {
+  login: PropTypes.func,
+  onLogin: PropTypes.func,
+  t: PropTypes.func,
+  client: PropTypes.object
+};
 
 const LoginWithApollo = compose(
   withApollo,

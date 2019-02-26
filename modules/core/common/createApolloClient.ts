@@ -1,4 +1,4 @@
-import fetch from 'unfetch';
+import fetch from 'isomorphic-unfetch';
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';

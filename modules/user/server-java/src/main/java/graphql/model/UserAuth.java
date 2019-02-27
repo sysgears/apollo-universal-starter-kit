@@ -1,6 +1,6 @@
 package graphql.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,21 +14,21 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "USER_AUTH")
-@JsonIgnoreProperties("id")
 public class UserAuth {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
+    @JsonIgnore
     private Integer id;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private CertificateAuth certificate;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private FacebookAuth facebook;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private GoogleAuth google;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private GithubAuth github;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private LinkedInAuth linkedin;
 }

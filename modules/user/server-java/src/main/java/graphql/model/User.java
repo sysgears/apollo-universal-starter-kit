@@ -1,9 +1,7 @@
 package graphql.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -19,12 +17,17 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
+    @NonNull
     private String username;
+    @NonNull
     private String role;
+    @JsonIgnore
+    private String password;
     private Boolean isActive;
+    @NonNull
     private String email;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private UserProfile profile;
-    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST })
+    @OneToOne(fetch = FetchType.EAGER , cascade = { CascadeType.ALL })
     private UserAuth auth;
 }

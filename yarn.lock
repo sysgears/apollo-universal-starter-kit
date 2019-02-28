@@ -1299,10 +1299,10 @@
     uuid "3.3.2"
     yamljs "0.3.0"
 
-"@larix/zen@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.npmjs.org/@larix/zen/-/zen-0.1.1.tgz#97641460533ec17360cddf6a9934e398b60be257"
-  integrity sha512-pXd+1p2CmYvBpB0aaXqQMPJMTpnFluxremkxzmD/RlOlgR+4Heha9cpXWkXIIdm3xjWCxa+DHEX3UeOJu6+2oQ==
+"@larix/zen@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@larix/zen/-/zen-0.1.2.tgz#5cf7d0abed5d9f605e27e2fc9c8c69f59b0093e8"
+  integrity sha512-00VyqQwEpxT2ngzCr1BREpA1zfpP7sYpimLbvsWVsxIrIXZIhHETVGLqFe4bYUKm4XvefrjMyzI3vR7Mdl5urA==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

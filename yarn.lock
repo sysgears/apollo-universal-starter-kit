@@ -1299,6 +1299,32 @@
     uuid "3.3.2"
     yamljs "0.3.0"
 
+"@larix/zen@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmjs.org/@larix/zen/-/zen-0.1.2.tgz#5cf7d0abed5d9f605e27e2fc9c8c69f59b0093e8"
+  integrity sha512-00VyqQwEpxT2ngzCr1BREpA1zfpP7sYpimLbvsWVsxIrIXZIhHETVGLqFe4bYUKm4XvefrjMyzI3vR7Mdl5urA==
+  dependencies:
+    connect-cors "^0.5.6"
+    debug "^3.1.0"
+    detect-port "^1.2.2"
+    dlv "^1.1.2"
+    glob "^7.1.2"
+    humps "^2.0.1"
+    ip "^1.1.5"
+    is-docker "^1.1.0"
+    lodash "^4.17.4"
+    minilog "^3.1.0"
+    mkdirp "^0.5.1"
+    node-fetch "^2.2.0"
+    require-relative "^0.8.7"
+    serve-static "^1.13.1"
+    source-list-map "^2.0.0"
+    source-map "^0.7.3"
+    source-map-support "^0.4.15"
+    webpack-merge "^4.1.0"
+    webpack-sources "^1.0.1"
+    yargs "^8.0.2"
+
 "@lerna/add@3.10.6":
   version "3.10.6"
   resolved "https://registry.npmjs.org/@lerna/add/-/add-3.10.6.tgz#6f2c6b26eb905c40fef4180f3ffa34ad9dbb860b"
@@ -9401,7 +9427,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.1"
     object-path "^0.11.4"
 
-graphql@^14.1.1:
+graphql@14.1.1, graphql@^14.1.1:
   version "14.1.1"
   resolved "https://registry.npmjs.org/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
   integrity sha512-C5zDzLqvfPAgTtP8AUPIt9keDabrdRAqSWjj2OPRKrKxI9Fb65I36s1uCs1UUBFnSWTdO7hyHi7z1ZbwKMKF6Q==
@@ -10036,7 +10062,7 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
 
-immutability-helper@^2.6.2:
+immutability-helper@2.8.1, immutability-helper@^2.6.2:
   version "2.8.1"
   resolved "https://registry.npmjs.org/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
@@ -18135,32 +18161,6 @@ spdy@^4.0.0:
     select-hose "^2.0.0"
     spdy-transport "^3.0.0"
 
-spinjs@^0.4.191:
-  version "0.4.191"
-  resolved "https://registry.npmjs.org/spinjs/-/spinjs-0.4.191.tgz#5b99c48499cb23dd79601631f77d6fbe928b5194"
-  integrity sha512-vg/ox1e2Psotgtz/7A7sE67wxJ14hMZd9kHXCIH5rJVe4C3NDFFHSbnn+rW1OcGf72cM+5LIOP97haHYaClycQ==
-  dependencies:
-    connect-cors "^0.5.6"
-    debug "^3.1.0"
-    detect-port "^1.2.2"
-    dlv "^1.1.2"
-    glob "^7.1.2"
-    humps "^2.0.1"
-    ip "^1.1.5"
-    is-docker "^1.1.0"
-    lodash "^4.17.4"
-    minilog "^3.1.0"
-    mkdirp "^0.5.1"
-    node-fetch "^2.2.0"
-    require-relative "^0.8.7"
-    serve-static "^1.13.1"
-    source-list-map "^2.0.0"
-    source-map "^0.7.3"
-    source-map-support "^0.4.15"
-    webpack-merge "^4.1.0"
-    webpack-sources "^1.0.1"
-    yargs "^8.0.2"
-
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"
   resolved "https://registry.npmjs.org/split-string/-/split-string-3.1.0.tgz#7cb09dda3a86585705c64b39a6466038682e8fe2"
@@ -19415,7 +19415,7 @@ unzip-response@^2.0.1:
   resolved "https://registry.npmjs.org/unzip-response/-/unzip-response-2.0.1.tgz#d2f0f737d16b0615e72a6935ed04214572d56f97"
   integrity sha1-0vD3N9FrBhXnKmk17QQhRXLVb5c=
 
-upath@^1.0.5:
+upath@^1.0.5, upath@^1.1.0:
   version "1.1.0"
   resolved "https://registry.npmjs.org/upath/-/upath-1.1.0.tgz#35256597e46a581db4793d0ce47fa9aebfc9fabd"
   integrity sha512-bzpH/oBhoS/QI/YtbkqCg6VEiPYjSZtrHQM6/QnJS6OL9pKUFLqb3aFh4Scvwm45+7iAgiMkLhSbaZxUqmrprw==
@@ -19797,7 +19797,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0:
+watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
   version "1.6.0"
   resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:

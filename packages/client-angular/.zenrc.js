@@ -1,6 +1,6 @@
 const config = {
   builders: {
-    angular: {
+    'client-angular': {
       entry: './src/index.ts',
       stack: ['web'],
       openBrowser: true,

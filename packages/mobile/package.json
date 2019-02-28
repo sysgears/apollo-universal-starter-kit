@@ -8,10 +8,10 @@
     "yarn": ">= 1.0.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production spin build",
+    "build": "cross-env NODE_ENV=production zen build",
     "clean": "rimraf build .expo .tmp",
-    "exp": "cross-env NODE_ENV=production spin exp",
-    "exp-login": "cross-env NODE_ENV=production spin exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
+    "exp": "cross-env NODE_ENV=production zen exp",
+    "exp-login": "cross-env NODE_ENV=production zen exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
     "exp-publish": "yarn exp-login && yarn exp -- p --non-interactive",
     "jest": "cross-env NODE_ENV=jest PORT=7070 jest",
     "jest:watch": "cross-env NODE_ENV=jest PORT=7070 jest --watch",
@@ -19,9 +19,9 @@
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "spin watch",
-    "watch:android": "spin -e android -d ios watch",
-    "watch:ios": "spin -e ios -d android watch",
+    "watch": "zen watch",
+    "watch:android": "zen -e android -d ios watch",
+    "watch:ios": "zen -e ios -d android watch",
     "heroku-postbuild": "yarn build && yarn exp-publish",
     "cli": "node ../../tools/cli"
   },
@@ -119,7 +119,7 @@
     "xdl": "^49.2.0"
   },
   "peerDependencies": {
-    "spinjs": "^0.4.0"
+    "@larix/zen": "^0.1.0"
   },
   "jest": {
     "verbose": true,

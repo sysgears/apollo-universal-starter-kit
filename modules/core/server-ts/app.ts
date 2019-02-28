@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
+
 import { isApiExternal } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
 
@@ -14,8 +15,8 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   // Don't rate limit heroku
   app.enable('trust proxy');
 
-  modules.beforeware.forEach(applyBeforeware => applyBeforeware(app));
-  modules.middleware.forEach(applyMiddleware => applyMiddleware(app));
+  modules.beforeware.forEach(applyBeforeware => applyBeforeware(app, modules.appContext));
+  modules.middleware.forEach(applyMiddleware => applyMiddleware(app, modules.appContext));
 
   if (__DEV__) {
     app.get('/servdir', (req, res) => res.send(process.cwd() + path.sep));

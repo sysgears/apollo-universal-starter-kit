@@ -11,17 +11,10 @@ import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
-class Register extends React.Component {
-  static propTypes = {
-    register: PropTypes.func,
-    history: PropTypes.object,
-    t: PropTypes.func,
-    navigation: PropTypes.object
-  };
+const Register = props => {
+  const { t, register, history, navigation } = props;
 
-  onSubmit = async values => {
-    const { t, register, history, navigation } = this.props;
-
+  const onSubmit = async values => {
     try {
       await register(values);
     } catch (e) {
@@ -35,10 +28,15 @@ class Register extends React.Component {
     }
   };
 
-  render() {
-    return <RegisterView {...this.props} onSubmit={this.onSubmit} />;
-  }
-}
+  return <RegisterView {...props} onSubmit={onSubmit} />;
+};
+
+Register.propTypes = {
+  register: PropTypes.func,
+  history: PropTypes.object,
+  t: PropTypes.func,
+  navigation: PropTypes.object
+};
 
 const RegisterWithApollo = compose(
   translate('user'),

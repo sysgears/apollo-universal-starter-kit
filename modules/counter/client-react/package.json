@@ -1,8 +1,8 @@
 {
   "name": "@gqlapp/counter-client-react",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/counter-common": "^0.0.1"
+    "@gqlapp/counter-common": "^0.1.0"
   }
 }

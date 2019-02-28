@@ -78,6 +78,57 @@ const config = {
 
 Reference: [#585](https://github.com/sysgears/apollo-universal-starter-kit/issues/585)
 
+## How do I disable Server Side Rendering?
+
+To disable Server Side Rendering (SSR), change a dedicated SpinJS setting in `.spinrc.js` files:
+
+* For the Express application, set `config.options.ssr` to `false` in `packages/server/.spinrc.js`
+* For the React application, set `config.options.ssr` to `false` in `packages/client/.spinrc.js`
+
+**NOTE**: If you're going to disable SSR, you must disable it in **both** packages &ndash; `server` and `client`!
+
+Disabling SSR in the `server` package:
+
+```js
+// File packages/server/.spinrc.js
+
+const config = {
+  builders: {
+    // ...
+    stack: ['server'],
+  },
+  options: {
+    // SSR is now disabled for server
+    // Remember to disable SSR for the client in package/client/.sprinrc.js
+    ssr: false,
+    // ...
+  }
+};
+// ...
+```
+
+Similarly, you can turn off SSR in the `client` package:
+
+```js
+// File packages/client/.spinrc.js
+
+const config = {
+  builders: {
+    web: {
+      // ...
+      stack: ['web'],
+    },
+  },
+  options: {
+    // SSR is now disabled for client
+    // Remember to disable SSR for the server in package/server/.spinrc.js
+    ssr: false,
+  }
+};
+```
+
+More information: [Server Side Rendering with Apollo Universal Starter Kit].
+
 ## How do I use a different database instead of SQLite?
 
 You can almost all relational database management systems that use SQL and are supported by [Knex] such as PostgreSQL, 
@@ -125,13 +176,9 @@ export default {
 };
 ```
  
-## How do I set up environment variables for development?
-
-To be updated...
-
 ## How do I add support for a custom domain name in the local development environment?
 
-To be updated... First, modify the host file in the following way:
+First, modify the host file in the following way:
 
 `127.0.0.1 localhost.host`
 
@@ -139,11 +186,12 @@ Then, add this setting into `/packages/client/.sprinjs` file under `options` sec
 
 ```
 webpackConfig: {
-      devServer: {
-        public: 'localhost.host'
-      }
-    }
+  devServer: {
+    public: 'localhost.host'
+  }
+}
 ```
+
 ## What extensions can I use when creating files in my project?
 
 Apollo Universal Starter Kit suggests that you use the following extensions when creating your modules:
@@ -189,5 +237,6 @@ amount of merge conflicts to a minimum.
 
 [knex]: https://knexjs.org/
 [`resolve.extensions`]: https://webpack.js.org/configuration/resolve/#resolve-extensions
+[server side rendering with apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/configuration.md#server-side-rendering
 [configuring a remote for a fork]: https://help.github.com/articles/configuring-a-remote-for-a-fork/
 [syncing a fork]: https://help.github.com/articles/syncing-a-fork/

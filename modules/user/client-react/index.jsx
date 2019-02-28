@@ -5,10 +5,9 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 
-import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
-import ProfileView from './components/ProfileView';
+import DataRootComponent from './containers/DataRootComponent';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
@@ -16,6 +15,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
+import ProfileView from './components/ProfileView';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
@@ -42,6 +42,7 @@ const LogoutLink = withRouter(
 );
 
 export * from './containers/Auth';
+export { default as LOGIN } from './graphql/Login.graphql';
 
 const NavLinkUsersWithI18n = translate('user')(({ t }) => (
   <NavLink to="/users" className="nav-link" activeClassName="active">
@@ -54,7 +55,7 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   </NavLink>
 ));
 
-export default new ClientModule(access, {
+export default new ClientModule({
   route: [
     <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
@@ -101,6 +102,7 @@ export default new ClientModule(access, {
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
+  dataRootComponent: [DataRootComponent],
   // eslint-disable-next-line react/display-name
   rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
 });

@@ -1,36 +1,24 @@
-import React from 'react';
+/* eslint-disable react/display-name */
+
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { translate } from '@gqlapp/i18n-client-react';
 import { Table, Button } from '@gqlapp/look-client-react';
 
-class UsersView extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    users: PropTypes.array,
-    orderBy: PropTypes.object,
-    onOrderBy: PropTypes.func.isRequired,
-    deleteUser: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
+const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
+  const [errors, setErrors] = useState([]);
 
-  state = {
-    errors: []
-  };
-
-  handleDeleteUser = async id => {
-    const { deleteUser } = this.props;
+  const handleDeleteUser = async id => {
     const result = await deleteUser(id);
     if (result && result.errors) {
-      this.setState({ errors: result.errors });
+      setErrors(result.errors);
     } else {
-      this.setState({ errors: [] });
+      setErrors([]);
     }
   };
 
-  renderOrderByArrow = name => {
-    const { orderBy } = this.props;
-
+  const renderOrderByArrow = name => {
     if (orderBy && orderBy.column === name) {
       if (orderBy.order === 'desc') {
         return <span className="badge badge-primary">&#8595;</span>;
@@ -42,9 +30,7 @@ class UsersView extends React.PureComponent {
     }
   };
 
-  orderBy = (e, name) => {
-    const { onOrderBy, orderBy } = this.props;
-
+  const handleOrderBy = (e, name) => {
     e.preventDefault();
 
     let order = 'asc';
@@ -62,69 +48,66 @@ class UsersView extends React.PureComponent {
     return onOrderBy({ column: name, order });
   };
 
-  render() {
-    const { loading, users, t } = this.props;
-    const { errors } = this.state;
+  const columns = [
+    {
+      title: (
+        <a onClick={e => handleOrderBy(e, 'username')} href="#">
+          {t('users.column.name')} {renderOrderByArrow('username')}
+        </a>
+      ),
+      dataIndex: 'username',
+      key: 'username',
+      render: (text, record) => (
+        <Link className="user-link" to={`/users/${record.id}`}>
+          {text}
+        </Link>
+      )
+    },
+    {
+      title: (
+        <a onClick={e => handleOrderBy(e, 'email')} href="#">
+          {t('users.column.email')} {renderOrderByArrow('email')}
+        </a>
+      ),
+      dataIndex: 'email',
+      key: 'email'
+    },
+    {
+      title: (
+        <a onClick={e => handleOrderBy(e, 'role')} href="#">
+          {t('users.column.role')} {renderOrderByArrow('role')}
+        </a>
+      ),
+      dataIndex: 'role',
+      key: 'role'
+    },
+    {
+      title: (
+        <a onClick={e => handleOrderBy(e, 'isActive')} href="#">
+          {t('users.column.active')} {renderOrderByArrow('isActive')}
+        </a>
+      ),
+      dataIndex: 'isActive',
+      key: 'isActive',
+      render: text => text.toString()
+    },
+    {
+      title: t('users.column.actions'),
+      key: 'actions',
+      render: (text, record) => (
+        <Button color="primary" size="sm" onClick={() => handleDeleteUser(record.id)}>
+          {t('users.btn.delete')}
+        </Button>
+      )
+    }
+  ];
 
-    const columns = [
-      {
-        title: (
-          <a onClick={e => this.orderBy(e, 'username')} href="#">
-            {t('users.column.name')} {this.renderOrderByArrow('username')}
-          </a>
-        ),
-        dataIndex: 'username',
-        key: 'username',
-        render: (text, record) => (
-          <Link className="user-link" to={`/users/${record.id}`}>
-            {text}
-          </Link>
-        )
-      },
-      {
-        title: (
-          <a onClick={e => this.orderBy(e, 'email')} href="#">
-            {t('users.column.email')} {this.renderOrderByArrow('email')}
-          </a>
-        ),
-        dataIndex: 'email',
-        key: 'email'
-      },
-      {
-        title: (
-          <a onClick={e => this.orderBy(e, 'role')} href="#">
-            {t('users.column.role')} {this.renderOrderByArrow('role')}
-          </a>
-        ),
-        dataIndex: 'role',
-        key: 'role'
-      },
-      {
-        title: (
-          <a onClick={e => this.orderBy(e, 'isActive')} href="#">
-            {t('users.column.active')} {this.renderOrderByArrow('isActive')}
-          </a>
-        ),
-        dataIndex: 'isActive',
-        key: 'isActive',
-        render: text => text.toString()
-      },
-      {
-        title: t('users.column.actions'),
-        key: 'actions',
-        render: (text, record) => (
-          <Button color="primary" size="sm" onClick={() => this.handleDeleteUser(record.id)}>
-            {t('users.btn.delete')}
-          </Button>
-        )
-      }
-    ];
-
-    if (loading && !users) {
-      return <div className="text-center">{t('users.loadMsg')}</div>;
-    } else {
-      return (
-        <div>
+  return (
+    <>
+      {loading && !users ? (
+        <div className="text-center">{t('users.loadMsg')}</div>
+      ) : (
+        <>
           {errors &&
             errors.map(error => (
               <div className="alert alert-danger" role="alert" key={error.field}>
@@ -132,10 +115,19 @@ class UsersView extends React.PureComponent {
               </div>
             ))}
           <Table dataSource={users} columns={columns} />
-        </div>
-      );
-    }
-  }
-}
+        </>
+      )}
+    </>
+  );
+};
+
+UsersView.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  users: PropTypes.array,
+  orderBy: PropTypes.object,
+  onOrderBy: PropTypes.func.isRequired,
+  deleteUser: PropTypes.func.isRequired,
+  t: PropTypes.func
+};
 
 export default translate('user')(UsersView);

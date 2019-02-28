@@ -4,6 +4,12 @@ import { connect } from 'react-redux';
 import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
+// ToDo: In 16.8 version The React doesn't provide hooks for work
+// with the Redux connect, provider. In the future, new versions
+// of these libraries might also export custom Hooks such as useRedux()
+//  or useRouter()
+// https://reactjs.org/docs/hooks-faq.html#what-do-hooks-mean-for-popular-apis-like-redux-connect-and-react-router
+
 interface CounterProps {
   t: TranslateFunction;
   onReduxIncrement: (increment: number) => () => void;

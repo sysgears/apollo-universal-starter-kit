@@ -12,8 +12,8 @@ import settings from '../../../../settings';
 const registerFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(settings.user.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
 };
 
 const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {

@@ -15,7 +15,7 @@ export * from './FileSystemStorage';
 
 export default new ServerModule({
   schema: [schema],
-  data: {
+  appContext: {
     fileSystemStorage
   },
   createResolversFunc: [createResolvers],

@@ -4,6 +4,8 @@ import Module, { ModuleShape } from './Module';
 
 export interface CommonModuleShape extends ModuleShape {
   localization?: Array<{ ns: string; resources: Resource }>;
+  // Application modules shared context
+  appContext?: { [key: string]: any };
 }
 
 interface CommonModule extends CommonModuleShape {}

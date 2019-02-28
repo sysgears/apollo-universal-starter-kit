@@ -1,0 +1,7 @@
+{
+  "title": "This is title of the report",
+  "database": "You can create table with data from database",
+  "orderedList": "Here is example of ordered list",
+  "unorderedList": "And unordered list",
+  "image": "To add an image you have to provide path to an image, width and height"
+}

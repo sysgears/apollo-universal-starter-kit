@@ -54,6 +54,19 @@ public class SeedUserDB implements ApplicationRunner {
                                     .build())
                             .build())
                     .build());
+
+            userRepository.save(User.builder()
+                    .username("user")
+                    .password(passwordEncoder.encode("user1234"))
+                    .role("USER")
+                    .isActive(true)
+                    .email("user@example.com")
+                    .profile(UserProfile.builder()
+                            .firstName("firstName")
+                            .lastName("lastName")
+                            .fullName("fullName")
+                            .build())
+                    .build());
         }
     }
 }

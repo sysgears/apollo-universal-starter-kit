@@ -26,6 +26,10 @@ extend type Mutation {
     editPost(input: EditPostInput!): Post
     # Add a comment to a post
     addComment(input: AddCommentInput!): Comment
+    # Delete a comment
+    deleteComment(input: DeleteCommentInput!): Comment
+    # Edit a comment
+    editComment(input: EditCommentInput!): Comment
 }
 
 # CRUD payloads
@@ -44,6 +48,21 @@ input EditPostInput {
 
 # Input for addComment Mutation
 input AddCommentInput {
+    content: String!
+    # Needed for commentUpdated Subscription filter
+    postId: Int!
+}
+
+# Input for editComment Mutation
+input DeleteCommentInput {
+    id: Int!
+    # Needed for commentUpdated Subscription filter
+    postId: Int!
+}
+
+# Input for deleteComment Mutation
+input EditCommentInput {
+    id: Int!
     content: String!
     # Needed for commentUpdated Subscription filter
     postId: Int!

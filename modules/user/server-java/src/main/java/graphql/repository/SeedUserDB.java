@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -16,6 +17,9 @@ public class SeedUserDB implements ApplicationRunner {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(ApplicationArguments args) {
         long count = userRepository.count();
@@ -23,10 +27,11 @@ public class SeedUserDB implements ApplicationRunner {
         if (count == 0) {
             log.debug("Init DB. Table [USER]");
             userRepository.save(User.builder()
-                    .username("username")
-                    .role("role")
+                    .username("admin")
+                    .password(passwordEncoder.encode("admin123"))
+                    .role("ADMIN")
                     .isActive(true)
-                    .email("example@email.com")
+                    .email("admin@example.com")
                     .profile(UserProfile.builder()
                             .firstName("firstName")
                             .lastName("lastName")

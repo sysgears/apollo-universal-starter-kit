@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
@@ -21,36 +22,30 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
 
     @Override
     @Async("repositoryThreadPoolTaskExecutor")
-    public CompletableFuture<List<User>> users(OrderByUserInput orderBy, FilterUserInput filter) {
+    public CompletableFuture<List<User>> users(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
 
         Root<User> user = cq.from(User.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if(filter != null) {
-            if(filter.getRole() != null) {
-                predicates.add(cb.like(user.get("role"), filter.getRole()));
-            }
+        filter.ifPresent(filterUserInput -> {
+            filterUserInput.getRole().ifPresent(role -> predicates.add(cb.like(user.get("role"), role)));
+            filterUserInput.getIsActive().ifPresent(isActive -> predicates.add(cb.equal(user.get("isActive"), isActive)));
+            filterUserInput.getSearchText().ifPresent(searchText -> {
+                predicates.add(cb.or((cb.like(user.get("username"), searchText)),
+                        cb.like(user.get("email"), searchText)));
+            });
+        });
 
-            if(filter.getIsActive() != null) {
-                predicates.add(cb.equal(user.get("isActive"), filter.getIsActive()));
-            }
-
-            if(filter.getSearchText() != null) {
-                predicates.add(cb.or((cb.like(user.get("username"), filter.getSearchText())),
-                        cb.like(user.get("email"), filter.getSearchText())));
-            }
-        }
-
-        if(orderBy != null) {
-            String orderColumn = orderBy.getColumn() != null ? orderBy.getColumn() : "id";
-            if(orderBy.getOrder() != null && orderBy.getOrder().toLowerCase().equals("desc")) {
+        orderBy.ifPresent(orderByUserInput -> {
+            String orderColumn = orderByUserInput.getColumn().orElse("id");
+            if(orderByUserInput.getOrder().isPresent() && orderByUserInput.getOrder().get().toLowerCase().equals("desc")) {
                 cq.orderBy(cb.desc(user.get(orderColumn)));
             } else {
                 cq.orderBy(cb.asc(user.get(orderColumn)));
             }
-        }
+        });
 
         cq.where(predicates.toArray(new Predicate[0]));
 

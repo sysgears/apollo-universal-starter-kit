@@ -13,6 +13,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
@@ -40,7 +41,7 @@ public class UserQuery implements GraphQLQueryResolver {
     }
 
     @Async("resolverThreadPoolTaskExecutor")
-    public CompletableFuture<List<User>> users(OrderByUserInput orderBy, FilterUserInput filter) {
+    public CompletableFuture<List<User>> users(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
         log.debug("Get Users by specified params: orderBy [{}], filter [{}]", orderBy, filter);
         return userRepository.users(orderBy, filter);
     }

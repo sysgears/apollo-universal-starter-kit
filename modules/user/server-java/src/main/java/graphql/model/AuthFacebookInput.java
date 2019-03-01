@@ -1,19 +1,31 @@
 package graphql.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Optional;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthFacebookInput {
+    @JsonIgnore
     private String fbId;
+    @JsonIgnore
     private String displayName;
 
-    public FacebookAuth transform() {
-        return FacebookAuth.builder().fbId(this.fbId).displayName(this.displayName).build();
+    @JsonProperty("fbId")
+    public Optional<String> getFbId(){
+        return Optional.ofNullable(fbId);
+    }
+
+    @JsonProperty("displayName")
+    public Optional<String> getDisplayName(){
+        return Optional.ofNullable(displayName);
     }
 }

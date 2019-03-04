@@ -3,6 +3,7 @@ import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
 import { access } from '@gqlapp/authentication-server-ts';
+import { log } from '@gqlapp/core-common';
 import User from '../../sql';
 import settings from '../../../../../settings';
 
@@ -69,7 +70,7 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists && req) {
+      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -82,9 +83,9 @@ export default () => ({
               <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
               <p><a href="${url}">${url}</a></p>
               <p>Below are your login information</p>
-              <p>Your email is: ${user.email}</p>
-              <p>Your password is: ${input.password}</p>`
+              <p>Your email is: ${user.email}</p>`
           });
+          log.info(`Sent registration confirmation email to: ${user.email}`);
         });
       }
 

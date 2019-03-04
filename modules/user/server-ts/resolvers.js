@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { createTransaction } from '@gqlapp/database-server-ts';
 import { UserInputError } from 'apollo-server-errors';
+import { createTransaction } from '@gqlapp/database-server-ts';
+import { log } from '@gqlapp/core-common';
 
 import settings from '../../../settings';
 
@@ -106,7 +107,7 @@ export default pubsub => ({
         try {
           const user = await User.getUser(createdUserId);
 
-          if (mailer && password.sendAddNewUserEmail && !emailExists && req) {
+          if (mailer && password.sendAddNewUserEmail && !emailExists) {
             // async email
             jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -119,9 +120,9 @@ export default pubsub => ({
                 <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>
-                <p>Your email is: ${user.email}</p>
-                <p>Your password is: ${user.password}</p>`
+                <p>Your email is: ${user.email}</p>`
               });
+              log.info(`Sent registration confirmation email to: ${user.email}`);
             });
           }
 

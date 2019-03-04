@@ -7,6 +7,8 @@ import { log } from '@gqlapp/core-common';
 import User from '../../sql';
 import settings from '../../../../../settings';
 
+const createPasswordHash = password => bcrypt.hash(password, 12) || false;
+
 const validateUserPassword = async (user, password, t) => {
   if (!user) {
     // user with provided email not found
@@ -59,8 +61,9 @@ export default () => ({
 
       let userId = 0;
       if (!emailExists) {
+        const passwordHash = await createPasswordHash(input.password);
         let isActive = !settings.auth.password.confirm;
-        [userId] = await User.register({ ...input, isActive });
+        [userId] = await User.register({ ...input, isActive }, passwordHash);
 
         // if user has previously logged with facebook auth
       } else {
@@ -70,7 +73,7 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists) {
+      if (mailer && settings.auth.password.confirm && !emailExists) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');

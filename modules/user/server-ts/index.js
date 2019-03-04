@@ -33,7 +33,7 @@ const appContext = {
 };
 
 const middleware = app => {
-  if (settings.auth.password.confirm) {
+  if (settings.auth.password.sendConfirmatiOnEmail) {
     app.get('/confirmation/:token', confirmMiddleware);
   }
 };

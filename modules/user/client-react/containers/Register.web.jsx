@@ -1,5 +1,5 @@
 // React
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { translate } from '@gqlapp/i18n-client-react';
 // Apollo
@@ -11,24 +11,27 @@ import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
 
+import settings from '../../../../settings';
+
 const Register = props => {
-  const { t, register, history, navigation } = props;
+  const { t, register, history } = props;
+
+  const [isRegistered, setIsRegistered] = useState(false);
 
   const onSubmit = async values => {
     try {
       await register(values);
+      if (!settings.auth.password.requireEmailConfirmation) {
+        history.push('/login');
+      } else {
+        setIsRegistered(true);
+      }
     } catch (e) {
       throw new FormError(t('reg.errorMsg'), e);
     }
-
-    if (history) {
-      history.push('/profile');
-    } else if (navigation) {
-      navigation.goBack();
-    }
   };
 
-  return <RegisterView {...props} onSubmit={onSubmit} />;
+  return <RegisterView {...props} isRegistered={isRegistered} onSubmit={onSubmit} />;
 };
 
 Register.propTypes = {

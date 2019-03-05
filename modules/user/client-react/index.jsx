@@ -62,15 +62,7 @@ export default new ClientModule({
     <AuthRoute exact path="/users/new" role={['admin']} component={UserAdd} />,
     <AuthRoute path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
     <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
-    <AuthRoute
-      exact
-      path="/login"
-      redirectOnLoggedIn
-      redirect="/"
-      component={withRouter(({ history }) => (
-        <Login onLogin={() => history.push('/profile')} />
-      ))}
-    />,
+    <AuthRoute exact path="/login" redirectOnLoggedIn redirect="/" component={Login} />,
     <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
     <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
   ],

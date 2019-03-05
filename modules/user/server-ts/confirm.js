@@ -9,7 +9,7 @@ export default async (req, res, next) => {
 
     await User.updateActive(result.identity.id, true);
 
-    res.redirect('/login');
+    res.redirect('/login/?email-verified');
   } catch (e) {
     next(e);
   }

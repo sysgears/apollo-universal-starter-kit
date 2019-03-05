@@ -15,7 +15,7 @@ const validateUserPassword = async (user, password, t) => {
     return { usernameOrEmail: t('user:auth.password.validPasswordEmail') };
   }
 
-  if (settings.auth.password.sendConfirmatiOnEmail && !user.isActive) {
+  if (settings.auth.password.sendConfirmationEmail && !user.isActive) {
     return { usernameOrEmail: t('user:auth.password.emailConfirmation') };
   }
 
@@ -62,7 +62,7 @@ export default () => ({
       let userId = 0;
       if (!emailExists) {
         const passwordHash = await createPasswordHash(input.password);
-        const isActive = !settings.auth.password.sendConfirmatiOnEmail;
+        const isActive = !settings.auth.password.sendConfirmationEmail;
         [userId] = await User.register({ ...input, isActive }, passwordHash);
 
         // if user has previously logged with facebook auth
@@ -73,7 +73,7 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && settings.auth.password.sendConfirmatiOnEmail && !emailExists) {
+      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -115,6 +115,7 @@ export default () => ({
                 subject: 'Reset Password',
                 html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
               });
+              log.info(`Sent link to reset email to: ${user.email}`);
             }
           );
         }
@@ -127,7 +128,8 @@ export default () => ({
       { input },
       {
         req: { t },
-        User
+        User,
+        mailer
       }
     ) {
       const errors = {};
@@ -151,6 +153,19 @@ export default () => ({
       }
       if (user) {
         await User.updatePassword(user.id, reset.password);
+        const url = `${__WEBSITE_URL__}/profile`;
+
+        if (mailer && settings.auth.password.sendPasswordChangesEmail) {
+          mailer.sendMail({
+            from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+            to: user.email,
+            subject: 'Your Password Has Been Updated',
+            html: `<p>As you requested, your account password has been updated.</p>
+                   <p>To view or edit your account settings, please visit the “Profile” page at</p>
+                   <p><a href="${url}">${url}</a></p>`
+          });
+          log.info(`Sent password has been updated to: ${user.email}`);
+        }
       }
     }
   }

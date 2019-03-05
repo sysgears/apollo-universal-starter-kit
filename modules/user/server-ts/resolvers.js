@@ -96,7 +96,7 @@ export default pubsub => ({
         const trx = await createTransaction();
         let createdUserId;
         try {
-          const isActive = password.sendConfirmatiOnEmail ? input.isActive || false : !password.sendConfirmatiOnEmail;
+          const isActive = password.sendConfirmationEmail ? input.isActive || false : !password.sendConfirmationEmail;
 
           [createdUserId] = await User.register({ ...input, isActive }, passwordHash).transacting(trx);
           await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
@@ -109,7 +109,7 @@ export default pubsub => ({
         try {
           const user = await User.getUser(createdUserId);
 
-          if (mailer && password.sendConfirmatiOnEmail && !emailExists) {
+          if (mailer && password.sendConfirmationEmail && !emailExists) {
             // async email
             jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -144,7 +144,7 @@ export default pubsub => ({
       (obj, args, { identity }) => {
         return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, identity, req: { t } }) => {
+      async (obj, { input }, { User, identity, req: { t }, mailer }) => {
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === input.id;
 
@@ -175,6 +175,20 @@ export default pubsub => ({
         try {
           await User.editUser(userInfo, passwordHash).transacting(trx);
           await User.editUserProfile(input, isProfileExists).transacting(trx);
+
+          if (mailer && input.password && password.sendPasswordChangesEmail) {
+            const url = `${__WEBSITE_URL__}/profile`;
+
+            mailer.sendMail({
+              from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+              to: input.email,
+              subject: 'Your Password Has Been Updated',
+              html: `<p>Your account password has been updated.</p>
+                     <p>To view or edit your account settings, please visit the “Profile” page at</p>
+                     <p><a href="${url}">${url}</a></p>`
+            });
+            log.info(`Sent password has been updated to: ${input.email}`);
+          }
           trx.commit();
         } catch (e) {
           trx.rollback();

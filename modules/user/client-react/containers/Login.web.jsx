@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose, withApollo } from 'react-apollo';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -12,7 +12,25 @@ import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 const Login = props => {
-  const { t, login, client, onLogin } = props;
+  const { t, login, client, history } = props;
+  const {
+    location: { search }
+  } = props.history;
+
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [isReady, setIsReady] = useState(false);
+
+  useEffect(() => {
+    if (search.includes('email-verified')) {
+      setIsRegistered(true);
+    }
+    setIsReady(true);
+  }, []);
+
+  const handleHideNotification = () => {
+    setIsRegistered(false);
+    history.push({ search: '' });
+  };
 
   const onSubmit = async values => {
     try {
@@ -23,19 +41,28 @@ const Login = props => {
 
     await authentication.doLogin(client);
     await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
-    if (onLogin) {
-      onLogin();
-    }
+    history.push('/profile');
   };
 
-  return <LoginView {...props} onSubmit={onSubmit} />;
+  return (
+    <React.Fragment>
+      {isReady && (
+        <LoginView
+          {...props}
+          isRegistered={isRegistered}
+          handleHideNotification={handleHideNotification}
+          onSubmit={onSubmit}
+        />
+      )}
+    </React.Fragment>
+  );
 };
 
 Login.propTypes = {
   login: PropTypes.func,
-  onLogin: PropTypes.func,
   t: PropTypes.func,
-  client: PropTypes.object
+  client: PropTypes.object,
+  history: PropTypes.object
 };
 
 const LoginWithApollo = compose(

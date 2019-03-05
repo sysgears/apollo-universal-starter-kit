@@ -15,7 +15,7 @@ const validateUserPassword = async (user, password, t) => {
     return { usernameOrEmail: t('user:auth.password.validPasswordEmail') };
   }
 
-  if (settings.auth.password.sendConfirmationEmail && !user.isActive) {
+  if (settings.auth.password.requireEmailConfirmation && !user.isActive) {
     return { usernameOrEmail: t('user:auth.password.emailConfirmation') };
   }
 
@@ -62,7 +62,7 @@ export default () => ({
       let userId = 0;
       if (!emailExists) {
         const passwordHash = await createPasswordHash(input.password);
-        const isActive = !settings.auth.password.sendConfirmationEmail;
+        const isActive = !settings.auth.password.requireEmailConfirmation;
         [userId] = await User.register({ ...input, isActive }, passwordHash);
 
         // if user has previously logged with facebook auth
@@ -73,7 +73,7 @@ export default () => ({
 
       const user = await User.getUser(userId);
 
-      if (mailer && settings.auth.password.sendConfirmationEmail && !emailExists) {
+      if (mailer && settings.auth.password.requireEmailConfirmation && !emailExists) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
           const encodedToken = Buffer.from(emailToken).toString('base64');

@@ -96,7 +96,9 @@ export default pubsub => ({
         const trx = await createTransaction();
         let createdUserId;
         try {
-          const isActive = password.sendConfirmationEmail ? input.isActive || false : !password.sendConfirmationEmail;
+          const isActive = password.requireEmailConfirmation
+            ? input.isActive || false
+            : !password.requireEmailConfirmation;
 
           [createdUserId] = await User.register({ ...input, isActive }, passwordHash).transacting(trx);
           await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
@@ -109,7 +111,7 @@ export default pubsub => ({
         try {
           const user = await User.getUser(createdUserId);
 
-          if (mailer && password.sendConfirmationEmail && !emailExists) {
+          if (mailer && password.requireEmailConfirmation && !emailExists) {
             // async email
             jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');

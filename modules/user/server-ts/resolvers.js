@@ -4,8 +4,9 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
-import { createTransaction } from '@gqlapp/database-server-ts';
 import { UserInputError } from 'apollo-server-errors';
+import { createTransaction } from '@gqlapp/database-server-ts';
+import { log } from '@gqlapp/core-common';
 
 import settings from '../../../settings';
 
@@ -95,7 +96,11 @@ export default pubsub => ({
         const trx = await createTransaction();
         let createdUserId;
         try {
-          [createdUserId] = await User.register(input, passwordHash).transacting(trx);
+          const isActive = password.requireEmailConfirmation
+            ? input.isActive || false
+            : !password.requireEmailConfirmation;
+
+          [createdUserId] = await User.register({ ...input, isActive }, passwordHash).transacting(trx);
           await User.editUserProfile({ id: createdUserId, ...input }).transacting(trx);
           if (certificate.enabled) await User.editAuthCertificate({ id: createdUserId, ...input }).transacting(trx);
           trx.commit();
@@ -106,7 +111,7 @@ export default pubsub => ({
         try {
           const user = await User.getUser(createdUserId);
 
-          if (mailer && password.sendAddNewUserEmail && !emailExists && req) {
+          if (mailer && password.requireEmailConfirmation && !emailExists) {
             // async email
             jwt.sign({ identity: pick(user, 'id') }, secret, { expiresIn: '1d' }, (err, emailToken) => {
               const encodedToken = Buffer.from(emailToken).toString('base64');
@@ -119,9 +124,9 @@ export default pubsub => ({
                 <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>
-                <p>Your email is: ${user.email}</p>
-                <p>Your password is: ${user.password}</p>`
+                <p>Your email is: ${user.email}</p>`
               });
+              log.info(`Sent registration confirmation email to: ${user.email}`);
             });
           }
 
@@ -141,7 +146,7 @@ export default pubsub => ({
       (obj, args, { identity }) => {
         return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, identity, req: { t } }) => {
+      async (obj, { input }, { User, identity, req: { t }, mailer }) => {
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === input.id;
 
@@ -172,6 +177,20 @@ export default pubsub => ({
         try {
           await User.editUser(userInfo, passwordHash).transacting(trx);
           await User.editUserProfile(input, isProfileExists).transacting(trx);
+
+          if (mailer && input.password && password.sendPasswordChangesEmail) {
+            const url = `${__WEBSITE_URL__}/profile`;
+
+            mailer.sendMail({
+              from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+              to: input.email,
+              subject: 'Your Password Has Been Updated',
+              html: `<p>Your account password has been updated.</p>
+                     <p>To view or edit your account settings, please visit the “Profile” page at</p>
+                     <p><a href="${url}">${url}</a></p>`
+            });
+            log.info(`Sent password has been updated to: ${input.email}`);
+          }
           trx.commit();
         } catch (e) {
           trx.rollback();

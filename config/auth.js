@@ -14,9 +14,8 @@ export default {
     refreshTokenExpiresIn: '7d'
   },
   password: {
-    confirm: true,
-    sendConfirmationEmail: true,
-    sendAddNewUserEmail: true,
+    requireEmailConfirmation: true,
+    sendPasswordChangesEmail: true,
     minLength: 8,
     enabled: true
   },

@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
 import { access } from '@gqlapp/authentication-server-ts';
 import { log } from '@gqlapp/core-common';
-import User from '../../sql';
-import settings from '../../../../../settings';
+import User from '../sql';
+import settings from '../../../../settings';
 
 const createPasswordHash = password => bcrypt.hash(password, 12) || false;
 

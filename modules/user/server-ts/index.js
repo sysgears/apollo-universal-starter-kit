@@ -8,6 +8,7 @@ import settings from '../../../settings';
 import User from './sql';
 import resources from './locales';
 import social from './social';
+import password from './password';
 
 const getIdentity = (id, serial = '') => {
   if (!id && serial) {
@@ -38,7 +39,7 @@ const middleware = app => {
   }
 };
 
-export default new ServerModule(social, {
+export default new ServerModule(social, password, {
   schema: [schema],
   appContext,
   createResolversFunc: [resolvers],

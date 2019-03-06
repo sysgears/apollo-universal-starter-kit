@@ -9,21 +9,24 @@ class RegisterView extends React.PureComponent {
   static propTypes = {
     onSubmit: PropTypes.func,
     isRegistered: PropTypes.bool,
-    handleHideModal: PropTypes.func,
+    hideModal: PropTypes.func,
     t: PropTypes.func
   };
 
-  renderModal = () => (
-    <View style={styles.modalWrapper}>
-      <Text style={styles.modalTitle}>{this.props.t('reg.confirmationMsgTitle')}</Text>
-      <Text style={styles.modalBody}>{this.props.t('reg.confirmationMsgBody')}</Text>
-      <View style={styles.button}>
-        <Button onPress={this.props.handleHideModal} type={primary}>
-          {this.props.t('reg.confirmationBtn')}
-        </Button>
+  renderModal = () => {
+    const { t, hideModal } = this.props;
+    return (
+      <View style={styles.modalWrapper}>
+        <Text style={styles.modalTitle}>{t('reg.confirmationMsgTitle')}</Text>
+        <Text style={styles.modalBody}>{t('reg.confirmationMsgBody')}</Text>
+        <View style={styles.button}>
+          <Button onPress={hideModal} type={primary}>
+            {t('reg.confirmationBtn')}
+          </Button>
+        </View>
       </View>
-    </View>
-  );
+    );
+  };
 
   render() {
     const { onSubmit, isRegistered } = this.props;

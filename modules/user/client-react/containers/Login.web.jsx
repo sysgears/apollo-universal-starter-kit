@@ -27,7 +27,7 @@ const Login = props => {
     setIsReady(true);
   }, []);
 
-  const handleHideNotification = () => {
+  const hideModal = () => {
     setIsRegistered(false);
     history.push({ search: '' });
   };
@@ -46,14 +46,7 @@ const Login = props => {
 
   return (
     <React.Fragment>
-      {isReady && (
-        <LoginView
-          {...props}
-          isRegistered={isRegistered}
-          handleHideNotification={handleHideNotification}
-          onSubmit={onSubmit}
-        />
-      )}
+      {isReady && <LoginView {...props} isRegistered={isRegistered} hideModal={hideModal} onSubmit={onSubmit} />}
     </React.Fragment>
   );
 };

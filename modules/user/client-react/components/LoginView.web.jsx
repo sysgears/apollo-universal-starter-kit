@@ -7,7 +7,7 @@ import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText, Button 
 import LoginForm from './LoginForm';
 import settings from '../../../../settings';
 
-const LoginView = ({ onSubmit, t, isRegistered, handleHideNotification }) => {
+const LoginView = ({ onSubmit, t, isRegistered, hideModal }) => {
   const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('login.title')}`}
@@ -26,7 +26,7 @@ const LoginView = ({ onSubmit, t, isRegistered, handleHideNotification }) => {
         <CardTitle>{t('reg.successRegTitle')}</CardTitle>
         <CardText>{t('reg.successRegBody')}</CardText>
         <CardText>
-          <Button style={{ minWidth: '320px' }} color="primary" onClick={handleHideNotification}>
+          <Button style={{ minWidth: '320px' }} color="primary" onClick={hideModal}>
             {t('login.form.btnSubmit')}
           </Button>
         </CardText>
@@ -63,7 +63,7 @@ LoginView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   t: PropTypes.func,
   isRegistered: PropTypes.bool,
-  handleHideNotification: PropTypes.func
+  hideModal: PropTypes.func
 };
 
 export default LoginView;

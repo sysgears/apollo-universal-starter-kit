@@ -34,7 +34,7 @@ class Register extends React.Component {
     }
   };
 
-  handleHideModal = () => {
+  hideModal = () => {
     this.props.navigation.goBack();
   };
 
@@ -45,12 +45,7 @@ class Register extends React.Component {
   render() {
     const { isRegistered } = this.state;
     return (
-      <RegisterView
-        {...this.props}
-        isRegistered={isRegistered}
-        handleHideModal={this.handleHideModal}
-        onSubmit={this.onSubmit}
-      />
+      <RegisterView {...this.props} isRegistered={isRegistered} hideModal={this.hideModal} onSubmit={this.onSubmit} />
     );
   }
 }

@@ -1,0 +1,6 @@
+{
+  "getIdentify": "Can not find 'getIdentity' method. Please, add this method to the context.",
+  "invalidCsrf": "CSRF token validation failed",
+  "identityWithoutId": "Identity must have 'id' method.",
+  "invalidRefresh": "Refresh token validation failed"
+}

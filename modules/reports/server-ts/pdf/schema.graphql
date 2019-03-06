@@ -1,0 +1,4 @@
+extend type Query {
+  #pdfReport
+  pdf: [Int]
+}

@@ -7,6 +7,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "jsx": "react",
     "lib": ["es2015", "dom", "esnext"],
@@ -18,13 +19,12 @@
     "skipLibCheck": true
   },
   "include": [
+    "**/typings.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.vue"
   ],
-  "awesomeTypescriptLoaderOptions": {
-    "reportFiles": [
-      "**/*.ts",
-      "**/*.tsx"
-    ]
-  }
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,0 +1,11 @@
+{
+  "name": "@gqlapp/module-common",
+  "version": "0.1.0",
+  "prefab": "modules/module/common",
+  "dependencies": {
+    "fractal-objects": "^0.10.0"
+  },
+  "peerDependencies": {
+    "i18next": "*"
+  }
+}

@@ -1,0 +1,45 @@
+@import '~bootstrap/scss/bootstrap';
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.active {
+  color: #000;
+}
+
+.lang-section {
+  button {
+    cursor: pointer;
+    &.active {
+      border: 1px solid #000;
+    }
+  }
+}
+
+.menu-center {
+  display: flex;
+  align-items: center;
+}
+
+.pagination {
+  .page-item:focus,
+  .page-link:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+
+.pagination-select {
+  width: 30%;
+  margin-bottom: 20px;
+}
+
+@media print {
+  .no-print {
+    display: none;
+  }
+}

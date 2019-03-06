@@ -1,0 +1,14 @@
+{
+  "navLink": "Upload",
+  "title": "Upload",
+  "meta": "An Upload page example",
+  "message": "Drag and drop some files here or click to select files for upload.",
+  "table": {
+    "column": {
+      "name": "File name",
+      "actions": "Actions"
+    },
+    "btnDel": "Delete"
+  },
+  "nativeMock": "Hello, Upload!"
+}

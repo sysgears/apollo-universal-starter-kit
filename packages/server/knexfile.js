@@ -1,7 +1,5 @@
-/* eslint import/no-extraneous-dependencies: 0 */
 require('dotenv/config');
-require('babel-register')({ presets: ['env'] });
-require('babel-polyfill');
-const config = require('./knexdata');
+require('@babel/register')({ cwd: __dirname + '/../..', extensions: ['.js', '.ts'] });
+require('@babel/polyfill');
 
-module.exports = config;
+module.exports = require('@gqlapp/database-server-ts/knexdata');

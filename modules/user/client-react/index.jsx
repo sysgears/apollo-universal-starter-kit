@@ -15,7 +15,7 @@ import Register from './containers/Register';
 import Login from './containers/Login';
 import ForgotPassword from './containers/ForgotPassword';
 import ResetPassword from './containers/ResetPassword';
-import ProfileView from './components/ProfileView';
+import Profile from './containers/Profile';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
@@ -57,7 +57,7 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
 
 export default new ClientModule({
   route: [
-    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
+    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={Profile} />,
     <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
     <AuthRoute exact path="/users/new" role={['admin']} component={UserAdd} />,
     <AuthRoute path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,

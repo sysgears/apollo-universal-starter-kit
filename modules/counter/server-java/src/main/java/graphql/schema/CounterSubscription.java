@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @Component
 class CounterSubscription implements GraphQLSubscriptionResolver {
@@ -18,8 +20,8 @@ class CounterSubscription implements GraphQLSubscriptionResolver {
     private CounterPubSubService counterPubSubService;
 
     @Async("resolverThreadPoolTaskExecutor")
-    public Publisher<Counter> counterUpdated() {
+    public CompletableFuture<Publisher<Counter>> counterUpdated() {
         log.debug("Subscribe: counter updated");
-        return counterPubSubService.subscribe((Predicate<Counter>) counter -> true);
+        return CompletableFuture.supplyAsync(() -> counterPubSubService.subscribe((Predicate<Counter>) counter -> true));
     }
 }

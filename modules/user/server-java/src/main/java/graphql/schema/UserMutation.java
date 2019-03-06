@@ -1,11 +1,11 @@
 package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
+import graphql.common.model.Event;
 import graphql.model.*;
 import graphql.publisher.UserPubSubService;
 import graphql.repository.UserRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,10 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 
+import static graphql.schema.OperationNames.*;
+
+@Slf4j
 @Component
 public class UserMutation implements GraphQLMutationResolver {
-
-    Logger logger = LogManager.getLogger(UserMutation.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -31,7 +32,7 @@ public class UserMutation implements GraphQLMutationResolver {
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<UserPayload> addUser(AddUserInput input) {
-        logger.debug("Add User: [{}]", input);
+        log.debug("Add User: [{}]", input);
 
         UserProfile profile = input.getProfile().map(profileInput -> UserProfile.builder()
                 .firstName(profileInput.getFirstName().orElse(""))
@@ -90,6 +91,9 @@ public class UserMutation implements GraphQLMutationResolver {
                 .build();
 
         User savedUser = userRepository.save(user);
+
+        userPubSubService.publish(Event.<User>builder().element(savedUser).name(ADD_USER).build());
+
         return CompletableFuture.supplyAsync(() -> UserPayload.builder()
                 .user(savedUser)
                 .build());
@@ -98,59 +102,63 @@ public class UserMutation implements GraphQLMutationResolver {
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<UserPayload> editUser(EditUserInput input) {
-        logger.debug("Edit User: [{}]", input);
+        log.debug("Edit User: [{}]", input);
         return userRepository.findOneById(input.getId())
-                .thenApplyAsync(maybeUser -> {
+                .thenApplyAsync(user -> {
 
-                    maybeUser.setUsername(input.getUsername());
-                    maybeUser.setEmail(input.getEmail());
-                    maybeUser.setRole(input.getRole());
+                    user.setUsername(input.getUsername());
+                    user.setEmail(input.getEmail());
+                    user.setRole(input.getRole());
 
-                    input.getIsActive().ifPresent(maybeUser::setIsActive);
-                    input.getPassword().ifPresent(password -> maybeUser.setPassword(passwordEncoder.encode(password)));
+                    input.getIsActive().ifPresent(user::setIsActive);
+                    input.getPassword().ifPresent(password -> user.setPassword(passwordEncoder.encode(password)));
 
                     input.getProfile().ifPresent(profileInput -> {
                         profileInput.getFirstName().ifPresent(firstName -> {
-                            maybeUser.getProfile().setFirstName(firstName);
-                            String lastName = maybeUser.getProfile().getLastName();
-                            maybeUser.getProfile().setFullName(firstName + " " + lastName);
+                            user.getProfile().setFirstName(firstName);
+                            String lastName = user.getProfile().getLastName();
+                            user.getProfile().setFullName(firstName + " " + lastName);
                         });
                         profileInput.getLastName().ifPresent(lastName -> {
-                            maybeUser.getProfile().setLastName(lastName);
-                            String firstName = maybeUser.getProfile().getFirstName();
-                            maybeUser.getProfile().setFullName(firstName + " " + lastName);
+                            user.getProfile().setLastName(lastName);
+                            String firstName = user.getProfile().getFirstName();
+                            user.getProfile().setFullName(firstName + " " + lastName);
                         });
                     });
 
                     input.getAuth().ifPresent(authInput -> {
 
                         authInput.getCertificate().ifPresent(certificate -> {
-                            certificate.getSerial().ifPresent(serial -> maybeUser.getAuth().getCertificate().setSerial(serial));
+                            certificate.getSerial().ifPresent(serial -> user.getAuth().getCertificate().setSerial(serial));
                         });
 
                         authInput.getFacebook().ifPresent(facebook -> {
-                            facebook.getFbId().ifPresent(fbId -> maybeUser.getAuth().getFacebook().setFbId(fbId));
-                            facebook.getDisplayName().ifPresent(displayName -> maybeUser.getAuth().getFacebook().setDisplayName(displayName));
+                            facebook.getFbId().ifPresent(fbId -> user.getAuth().getFacebook().setFbId(fbId));
+                            facebook.getDisplayName().ifPresent(displayName -> user.getAuth().getFacebook().setDisplayName(displayName));
                         });
 
                         authInput.getGithub().ifPresent(github -> {
-                            github.getGhId().ifPresent(ghId -> maybeUser.getAuth().getGithub().setGhId(ghId));
-                            github.getDisplayName().ifPresent(displayName -> maybeUser.getAuth().getGithub().setDisplayName(displayName));
+                            github.getGhId().ifPresent(ghId -> user.getAuth().getGithub().setGhId(ghId));
+                            github.getDisplayName().ifPresent(displayName -> user.getAuth().getGithub().setDisplayName(displayName));
                         });
 
                         authInput.getGoogle().ifPresent(google -> {
-                            google.getGoogleId().ifPresent(googleId -> maybeUser.getAuth().getGoogle().setGoogleId(googleId));
-                            google.getDisplayName().ifPresent(displayName -> maybeUser.getAuth().getGithub().setDisplayName(displayName));
+                            google.getGoogleId().ifPresent(googleId -> user.getAuth().getGoogle().setGoogleId(googleId));
+                            google.getDisplayName().ifPresent(displayName -> user.getAuth().getGithub().setDisplayName(displayName));
                         });
 
                         authInput.getLinkedin().ifPresent(linkedIn -> {
-                            linkedIn.getLnId().ifPresent(lnId -> maybeUser.getAuth().getLinkedin().setLnId(lnId));
-                            linkedIn.getDisplayName().ifPresent(displayName -> maybeUser.getAuth().getGithub().setDisplayName(displayName));
+                            linkedIn.getLnId().ifPresent(lnId -> user.getAuth().getLinkedin().setLnId(lnId));
+                            linkedIn.getDisplayName().ifPresent(displayName -> user.getAuth().getGithub().setDisplayName(displayName));
                         });
 
                     });
 
-                    return userRepository.save(maybeUser);
+                    User savedUser = userRepository.save(user);
+
+                    userPubSubService.publish(Event.<User>builder().element(savedUser).name(EDIT_USER).build());
+
+                    return savedUser;
                 })
                 .thenApplyAsync(updatedUser -> UserPayload.builder()
                         .user(updatedUser)
@@ -160,12 +168,13 @@ public class UserMutation implements GraphQLMutationResolver {
     @Transactional
     @Async("resolverThreadPoolTaskExecutor")
     public CompletableFuture<UserPayload> deleteUser(Integer id) {
-        logger.debug("Delete User by ID: [{}]", id);
+        log.debug("Delete User by ID: [{}]", id);
         return userRepository.findOneById(id)
-                .thenApplyAsync(maybeUser -> {
-                    userRepository.delete(maybeUser);
+                .thenApplyAsync(user -> {
+                    userRepository.delete(user);
+                    userPubSubService.publish(Event.<User>builder().element(user).name(DELETE_USER).build());
                     return UserPayload.builder()
-                            .user(maybeUser)
+                            .user(user)
                             .build();
                 });
     }

@@ -17,6 +17,11 @@ extend type Mutation {
     deleteUser(id: Int!): UserPayload!
 }
 
+extend type Subscription {
+    # Subscription for users list
+    usersUpdated(filter: FilterUserInput): UpdateUserPayload
+}
+
 type User {
     id: Int!
     username: String!
@@ -148,13 +153,8 @@ input ProfileInput {
     lastName: String
 }
 
-#extend type Subscription {
-#    # Subscription for users list
-#    usersUpdated(filter: FilterUserInput): UpdateUserPayload
-#}
-#
-## Payload for usersUpdated Subscription
-#type UpdateUserPayload {
-#    mutation: String!
-#    node: User!
-#}
+# Payload for usersUpdated Subscription
+type UpdateUserPayload {
+    mutation: String!
+    node: User!
+}

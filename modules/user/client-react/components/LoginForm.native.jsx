@@ -8,18 +8,15 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-react-native';
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { required, minLength, validate } from '@gqlapp/validation-common-react';
+import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@gqlapp/authentication-client-react';
 
-import FacebookButton from '../auth/facebook';
-import GoogleButton from '../auth/google';
-import GitHubButton from '../auth/github';
-import LinkedInButton from '../auth/linkedin';
 import settings from '../../../../settings';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)]
 };
-const { facebook, linkedin, google, github } = settings.user.auth;
+const { github, facebook, linkedin, google } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (

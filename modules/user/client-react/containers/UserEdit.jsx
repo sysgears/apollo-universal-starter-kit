@@ -11,26 +11,17 @@ import EDIT_USER from '../graphql/EditUser.graphql';
 import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
-class UserEdit extends React.Component {
-  propTypes = {
-    user: PropTypes.object.isRequired,
-    editUser: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
-    navigation: PropTypes.object,
-    history: PropTypes.object,
-    location: PropTypes.object
-  };
+const UserEdit = props => {
+  const { user, editUser, t, history, navigation } = props;
 
-  onSubmit = async values => {
-    const { user, editUser, t, history, navigation, location } = this.props;
-
+  const onSubmit = async values => {
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
     userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
 
     userValues = UserFormatter.trimExtraSpaces(userValues);
 
-    if (settings.user.auth.certificate.enabled) {
+    if (settings.auth.certificate.enabled) {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
@@ -41,10 +32,7 @@ class UserEdit extends React.Component {
     }
 
     if (history) {
-      if (location && location.state && location.state.from === 'profile') {
-        return history.push('/profile');
-      }
-      return history.push('/users');
+      return history.goBack();
     }
 
     if (navigation) {
@@ -52,10 +40,17 @@ class UserEdit extends React.Component {
     }
   };
 
-  render() {
-    return <UserEditView onSubmit={this.onSubmit} {...this.props} />;
-  }
-}
+  return <UserEditView onSubmit={onSubmit} {...props} />;
+};
+
+UserEdit.propTypes = {
+  user: PropTypes.object,
+  editUser: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
+  navigation: PropTypes.object,
+  history: PropTypes.object,
+  location: PropTypes.object
+};
 
 export default compose(
   translate('user'),
@@ -67,9 +62,8 @@ export default compose(
       } else if (props.navigation) {
         id = props.navigation.state.params.id;
       }
-
       return {
-        variables: { id }
+        variables: { id: Number(id) }
       };
     },
     props({ data: { loading, user } }) {

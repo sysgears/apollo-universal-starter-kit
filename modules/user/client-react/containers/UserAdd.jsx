@@ -9,28 +9,17 @@ import ADD_USER from '../graphql/AddUser.graphql';
 import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
-class UserAdd extends React.Component {
-  propTypes = {
-    addUser: PropTypes.func.isRequired,
-    t: PropTypes.func.isRequired,
-    navigation: PropTypes.object,
-    history: PropTypes.object
-  };
+const UserAdd = props => {
+  const { addUser, t, history, navigation } = props;
 
-  constructor(props) {
-    super(props);
-  }
-
-  onSubmit = async values => {
-    const { addUser, t, history, navigation } = this.props;
-
+  const onSubmit = async values => {
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
     userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
 
     userValues = UserFormatter.trimExtraSpaces(userValues);
 
-    if (settings.user.auth.certificate.enabled) {
+    if (settings.auth.certificate.enabled) {
       userValues['auth'] = { certificate: pick(values.auth.certificate, 'serial') };
     }
 
@@ -48,10 +37,15 @@ class UserAdd extends React.Component {
     }
   };
 
-  render() {
-    return <UserAddView onSubmit={this.onSubmit} {...this.props} />;
-  }
-}
+  return <UserAddView onSubmit={onSubmit} {...props} />;
+};
+
+UserAdd.propTypes = {
+  addUser: PropTypes.func.isRequired,
+  t: PropTypes.func.isRequired,
+  navigation: PropTypes.object,
+  history: PropTypes.object
+};
 
 export default compose(
   translate('user'),

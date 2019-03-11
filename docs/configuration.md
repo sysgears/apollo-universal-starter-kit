@@ -469,11 +469,10 @@ Configures the password validation and other settings for the server-side and cl
 
 | password              | Object  | Contains the global properties for the `password` configurations         |
 | --------------------- | ------- | ------------------------------------------------------------------------ |
-| confirm               | Boolean | Requires password confirmation for validation. Defaults to `true`        |
-| sendConfirmationEmail | Boolean | Sends the confirmation email after the user changes their password       |
-| sendAddNewUserEmail   | Boolean | Requires password confirmation for validation. Defaults to `true`        |
-| minLength             | Number  | Sets the minimal password length for validation. Defaults to `8`         |
-| enabled               | Boolean | Enables or disables the password field on the client. Defaults to `true` |
+| requireEmailConfirmation | Boolean | Require email confirmation for new registered users. Defaults to `true` |
+| sendPasswordChangesEmail | Boolean | Sends the confirmation email after the user changes their password. Defaults to `true`|
+| minLength                | Number  | Sets the minimal password length for validation. Defaults to `8`         |
+| enabled                  | Boolean | Enables or disables the password field on the client. Defaults to `true` |
 
 Usage example:
 
@@ -482,7 +481,7 @@ export default {
   auth: {
     password: {
       confirm: true,
-      sendConfirmationEmail: true,
+      requireEmailConfirmation: true,
       sendAddNewUserEmail: true,
       minLength: 8,
       enabled: true

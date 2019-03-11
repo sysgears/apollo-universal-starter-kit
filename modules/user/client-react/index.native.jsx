@@ -5,9 +5,9 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
 
-import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
+import DataRootComponent from './containers/DataRootComponent';
 import UserScreenNavigator from './containers/UserScreenNavigator';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
@@ -17,6 +17,8 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
+
+export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
 
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -146,7 +148,7 @@ const MainScreenNavigator = () => {
   return <Navigator />;
 };
 
-export default new ClientModule(access, {
+export default new ClientModule({
   drawerItem: [
     {
       Profile: {
@@ -243,5 +245,6 @@ export default new ClientModule(access, {
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
+  dataRootComponent: [DataRootComponent],
   onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

@@ -22,7 +22,8 @@ export default () => ({
         );
 
         // save files data into DB
-        return Upload.saveFiles(uploadedFiles);
+        await Upload.saveFiles(uploadedFiles);
+        return true;
       } catch (e) {
         throw new Error(t('upload:fileNotLoaded'));
       }

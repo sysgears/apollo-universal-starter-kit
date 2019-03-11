@@ -8,15 +8,15 @@
     "yarn": ">= 1.0.0"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production spin build",
+    "build": "cross-env NODE_ENV=production zen build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 spin test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
+    "tests": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --include src/__tests__/entry.ts --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
+    "tests:watch": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --include src/__tests__/entry.ts --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-react/**/*.spec.*\"",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "spin watch",
+    "watch": "zen -v watch",
     "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
@@ -156,7 +156,7 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "spinjs": "^0.4.0"
+    "@larix/zen": "^0.1.0"
   },
   "browserslist": {
     "development": [

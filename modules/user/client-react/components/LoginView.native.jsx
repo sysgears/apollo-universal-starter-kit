@@ -5,7 +5,7 @@ import { WebBrowser } from 'expo';
 import { translate } from '@gqlapp/i18n-client-react';
 import { placeholderColor } from '@gqlapp/look-client-react-native/styles';
 import { setItem } from '@gqlapp/core-common/clientStorage';
-import authentication from '../access/index';
+import authentication from '@gqlapp/authentication-client-react';
 
 import LoginForm from './LoginForm';
 

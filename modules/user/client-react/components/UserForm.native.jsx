@@ -14,8 +14,8 @@ import settings from '../../../../settings';
 const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
-  password: [required, minLength(settings.user.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
 };
 
 const handleRoleChange = (type, value, setFieldValue) => {
@@ -96,7 +96,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           value={profile.lastName}
           onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
         />
-        {settings.user.auth.certificate.enabled && (
+        {settings.auth.certificate.enabled && (
           <Field
             name="serial"
             component={RenderField}

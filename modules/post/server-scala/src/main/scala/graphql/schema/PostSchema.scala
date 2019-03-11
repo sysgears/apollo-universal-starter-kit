@@ -225,7 +225,7 @@ class PostSchema @Inject()(
       resolve = sc => {
         val id = sc.args.arg[Int]("id")
         postPubSubService
-          .subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))
+          .subscribe(Seq(EDIT_POST, DELETE_POST), Seq(EntityId(id)))(sc.ctx)
           .map(
             action =>
               action.map(publishElement => {
@@ -245,7 +245,7 @@ class PostSchema @Inject()(
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
         postPubSubService
-          .subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))
+          .subscribe(Seq(ADD_POST, EDIT_POST, DELETE_POST), Seq(EndCursor(endCursor)))(sc.ctx)
           .map(
             action =>
               action.map(event => {
@@ -261,7 +261,7 @@ class PostSchema @Inject()(
       resolve = sc => {
         val postId = sc.args.arg[Int]("postId")
         commentPubSubService
-          .subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))
+          .subscribe(Seq(EDIT_COMMENT, DELETE_COMMENT), Seq(PostId(id = postId)))(sc.ctx)
           .map(
             action =>
               action.map(event => {

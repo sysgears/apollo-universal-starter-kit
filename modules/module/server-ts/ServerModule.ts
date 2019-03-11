@@ -11,17 +11,22 @@ interface CreateContextFuncProps {
   res: Response;
   connectionParams: ConnectionParamsOptions;
   webSocket: WebSocket;
-  context: { [key: string]: any };
+  graphqlContext: { [key: string]: any };
+  appContext: { [key: string]: any };
 }
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
   createResolversFunc?: Array<(pubsub: PubSub) => IResolvers>;
-  createContextFunc?: Array<(props: CreateContextFuncProps) => { [key: string]: any }>;
+  createContextFunc?: Array<
+    (props: CreateContextFuncProps, appContext?: { [key: string]: any }) => { [key: string]: any }
+  >;
   // Middleware
-  beforeware?: Array<(app: Express) => void>;
-  middleware?: Array<(app: Express) => void>;
+  beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  // Shared modules data
+  data?: { [key: string]: any };
 }
 
 interface ServerModule extends ServerModuleShape {}
@@ -43,11 +48,16 @@ class ServerModule extends CommonModule {
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket
   ) {
-    let context = {};
+    const appContext = this.appContext;
+    let graphqlContext = {};
+
     for (const createContextFunc of this.createContextFunc) {
-      context = merge(context, await createContextFunc({ req, res, connectionParams, webSocket, context }));
+      graphqlContext = merge(
+        graphqlContext,
+        await createContextFunc({ req, res, connectionParams, webSocket, graphqlContext, appContext })
+      );
     }
-    return context;
+    return graphqlContext;
   }
 
   public createResolvers(pubsub: PubSub) {

@@ -16,14 +16,14 @@ const userFormSchema = {
 
 const createUserFormSchema = {
   ...userFormSchema,
-  password: [required, minLength(settings.user.auth.password.minLength)],
-  passwordConfirmation: [required, match('password'), minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
+  passwordConfirmation: [required, match('password'), minLength(settings.auth.password.minLength)]
 };
 
 const updateUserFormSchema = {
   ...userFormSchema,
-  password: minLength(settings.user.auth.password.minLength),
-  passwordConfirmation: [match('password'), minLength(settings.user.auth.password.minLength)]
+  password: minLength(settings.auth.password.minLength),
+  passwordConfirmation: [match('password'), minLength(settings.auth.password.minLength)]
 };
 
 const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
@@ -76,7 +76,7 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
         value={profile.lastName}
         onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
       />
-      {settings.user.auth.certificate.enabled && (
+      {settings.auth.certificate.enabled && (
         <Field
           name="serial"
           component={RenderField}

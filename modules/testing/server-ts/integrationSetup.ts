@@ -15,9 +15,11 @@ let server: Server;
 let apollo: ApolloClient<any>;
 
 before(async () => {
-  // tslint:disable-next-line
-  require('@babel/register')({ cwd: __dirname + '/../../..', extensions: ['.js', '.ts'] });
-  require('@babel/polyfill');
+  if (!global._babelPolyfill) {
+    // tslint:disable-next-line
+    require('@babel/register')({ cwd: __dirname + '/../../..', extensions: ['.js', '.ts'], ignore: [ /build\/main.js/ ] });
+    require('@babel/polyfill');
+  }
   await populateTestDb();
 
   server = await serverPromise;

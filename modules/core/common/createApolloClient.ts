@@ -1,3 +1,4 @@
+import fetch from 'isomorphic-unfetch';
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
@@ -41,7 +42,7 @@ const createApolloClient = ({
           // Pass all @client queries and @client defaults to localCache
           return localCache;
         } else {
-          // Pass all the other queries to netCache
+          // Pass all the other queries to netCache);
           return netCache;
         }
       }
@@ -60,7 +61,8 @@ const createApolloClient = ({
     ? createNetLink(apiUrl, getApolloClient)
     : new BatchHttpLink({
         uri: apiUrl,
-        credentials: 'include'
+        credentials: 'include',
+        fetch
       });
 
   let apiLink = queryLink;

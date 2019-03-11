@@ -60,10 +60,7 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
               settings.stripe.subscription.publicKey &&
               currentUser.role === 'user' && <StripeSubscriptionProfile />}
           </Card>
-          <Link
-            className="mt-2 btn user-link"
-            to={{ pathname: `/users/${currentUser.id}`, state: { from: 'profile' } }}
-          >
+          <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
             {t('profile.editProfileText')}
           </Link>
         </LayoutCenter>

@@ -6,39 +6,35 @@ import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { required, minLength, validate } from '@gqlapp/validation-common-react';
 import { Form, RenderField, Alert, Button } from '@gqlapp/look-client-react';
-
-import FacebookButton from '../auth/facebook';
-import GoogleButton from '../auth/google';
-import LinkedInButton from '../auth/linkedin';
-import GitHubButton from '../auth/github';
+import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@gqlapp/authentication-client-react';
 
 import settings from '../../../../settings';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)]
 };
-const { facebook, linkedin, google, github } = settings.user.auth;
+const { github, facebook, linkedin, google } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', minWidth: 200 }}>
-      {settings.user.auth.facebook.enabled && (
+      {facebook.enabled && (
         <div className="text-center">
           <FacebookButton text={t('login.fbBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.google.enabled && (
+      {google.enabled && (
         <div className="text-center">
           <GoogleButton text={t('login.googleBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.github.enabled && (
+      {github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'icon'} />
         </div>
       )}
-      {settings.user.auth.linkedin.enabled && (
+      {linkedin.enabled && (
         <div className="text-center">
           <LinkedInButton text={t('login.linkedinBtn')} type={'icon'} />
         </div>
@@ -46,22 +42,22 @@ const renderSocialButtons = (buttonsLength, t) => {
     </div>
   ) : (
     <div>
-      {settings.user.auth.facebook.enabled && (
+      {facebook.enabled && (
         <div className="text-center">
           <FacebookButton text={t('login.fbBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.google.enabled && (
+      {google.enabled && (
         <div className="text-center">
           <GoogleButton text={t('login.googleBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.github.enabled && (
+      {github.enabled && (
         <div className="text-center">
           <GitHubButton text={t('login.githubBtn')} type={'button'} />
         </div>
       )}
-      {settings.user.auth.linkedin.enabled && (
+      {linkedin.enabled && (
         <div className="text-center">
           <LinkedInButton text={t('login.linkedinBtn')} type={'button'} />
         </div>

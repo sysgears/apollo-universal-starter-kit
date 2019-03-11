@@ -4,7 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import { translate } from '@gqlapp/i18n-client-react';
 import ClientModule from '@gqlapp/module-client-react-native';
 
-import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
+import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import $Module$ from './containers/$Module$';
 import resources from './locales';
 

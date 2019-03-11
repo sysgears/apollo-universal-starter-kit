@@ -6,7 +6,7 @@ import { pascalize } from 'humps';
 import schemaQueries from '../../generatedContainers';
 
 const Option = Select.Option;
-const LIMIT = 10;
+const LIMIT = 20;
 
 export default class RenderCellSelectQuery extends React.Component {
   static propTypes = {

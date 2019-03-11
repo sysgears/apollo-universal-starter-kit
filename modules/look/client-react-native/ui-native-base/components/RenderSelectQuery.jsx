@@ -6,6 +6,8 @@ import { schemaQueries } from '@gqlapp/core-client-react';
 import { RenderSelect } from './index';
 import InputItemStyles from '../styles/InputItem';
 
+const LIMIT = 20;
+
 const handleSelect = (selectedValue, edges, onChange) => {
   let selectedItem = edges && Array.isArray(edges) ? edges.find(item => item.value == selectedValue) : '';
   onChange(selectedItem ? selectedItem : '');
@@ -48,7 +50,7 @@ const RenderSelectQuery = ({
   }
 
   return (
-    <Query limit={10}>
+    <Query limit={LIMIT}>
       {({ loading, data }) => {
         if (!loading || data) {
           let computedData = null;

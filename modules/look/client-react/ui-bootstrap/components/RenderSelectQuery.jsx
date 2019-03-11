@@ -5,7 +5,7 @@ import { FormFeedback } from 'reactstrap';
 import { FormItem, Select, Spin } from './index';
 import schemaQueries from '../../generatedContainers';
 
-const LIMIT = 10;
+const LIMIT = 20;
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {

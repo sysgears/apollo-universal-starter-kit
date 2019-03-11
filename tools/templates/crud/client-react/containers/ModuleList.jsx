@@ -98,7 +98,7 @@ export default compose(
     options: ({ limit, orderBy, filter }) => {
       return {
         fetchPolicy: 'cache-and-network',
-        variables: { limit, orderBy, filter: removeEmpty(filter) }
+        variables: { limit, orderBy, filter: removeEmpty(filter, $Module$Schema) }
       };
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore, subscribeToMore } }) => {

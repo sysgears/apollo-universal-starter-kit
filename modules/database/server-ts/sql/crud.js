@@ -1004,8 +1004,8 @@ export class Crud {
     }
   }
 
-  async getByIds(ids, by, Obj, info) {
-    info = parseFields(info);
+  async getByIds(ids, by, Obj, info, infoCustom = null) {
+    info = infoCustom === null ? parseFields(info) : infoCustom;
     const remoteId = by !== 'id' ? `${by}Id` : by;
     info[remoteId] = true;
     const baseQuery = knex(`${Obj.getFullTableName()} as ${Obj.getTableName()}`);

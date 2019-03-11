@@ -72,7 +72,7 @@ class FilterView extends React.PureComponent {
         render={({ values, handleChange, handleBlur, handleSubmit, handleReset }) => (
           <Form className="ant-advanced-search-form bootstrap-advanced-search-form" onSubmit={handleSubmit}>
             <Row>
-              <Col span={8}>
+              <Col lg={8} md={6} xs={24}>
                 <FormItem label="Find" {...formItemLayout}>
                   <DebounceInput
                     minLength={2}
@@ -83,20 +83,22 @@ class FilterView extends React.PureComponent {
                   />
                 </FormItem>
               </Col>
-              <Col span={16} style={{ textAlign: 'right' }}>
-                <Button type="primary" htmlType="submit">
-                  Search
-                </Button>
-                <Button style={{ marginLeft: 8 }} onClick={handleReset}>
-                  Clear
-                </Button>
-                <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
-                  Advanced{' '}
-                  <Icon
-                    type={this.state.expand ? 'up' : 'down'}
-                    className={this.state.expand ? 'fas fa-chevron-up' : 'fas fa-chevron-down'}
-                  />
-                </a>
+              <Col md={18} xs={24} style={{ float: 'right' }}>
+                <FormItem>
+                  <Button type="primary" htmlType="submit">
+                    Search
+                  </Button>
+                  <Button style={{ marginLeft: 8 }} onClick={handleReset}>
+                    Clear
+                  </Button>
+                  <a style={{ marginLeft: 8, fontSize: 12 }} onClick={this.toggle}>
+                    Advanced{' '}
+                    <Icon
+                      type={this.state.expand ? 'up' : 'down'}
+                      className={this.state.expand ? 'fas fa-chevron-up' : 'fas fa-chevron-down'}
+                    />
+                  </a>
+                </FormItem>
               </Col>
             </Row>
             <Row gutter={24} style={{ display: expand ? 'block' : 'none' }}>

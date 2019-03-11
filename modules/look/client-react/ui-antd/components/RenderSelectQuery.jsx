@@ -7,7 +7,7 @@ import { FormItem } from './index';
 import schemaQueries from '../../generatedContainers';
 
 const Option = Select.Option;
-const LIMIT = 10;
+const LIMIT = 20;
 
 export default class RenderSelectQuery extends React.Component {
   static propTypes = {
@@ -78,7 +78,7 @@ export default class RenderSelectQuery extends React.Component {
     return (
       <FormItem label={label} {...formItemLayout} validateStatus={touched && error ? 'error' : ''} help={error}>
         <div>
-          <Query limit={10} filter={{ searchText }} orderBy={orderBy()}>
+          <Query limit={LIMIT} filter={{ searchText }} orderBy={orderBy()}>
             {({ loading, data }) => {
               if (!loading || data) {
                 const {

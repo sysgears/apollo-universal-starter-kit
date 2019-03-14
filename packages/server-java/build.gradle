@@ -74,6 +74,7 @@ project(':app') {
 		implementation project(':counter')
         implementation project(':user')
         implementation project(':post')
+		implementation project(':upload')
     }
 }
 
@@ -92,6 +93,13 @@ project(':user') {
 }
 
 project(':post') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}
+
+project(':upload') {
 	//REQUIRED
 	dependencies {
 		implementation project(':core')

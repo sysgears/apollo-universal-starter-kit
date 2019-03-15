@@ -40,3 +40,12 @@ spring:
             hibernate:
                 dialect: org.hibernate.dialect.H2Dialect
         show-sql: true
+    servlet:
+      multipart:
+        enabled: true
+        location: /tmp
+        file-size-threshold: 0B
+        max-file-size: 10MB
+        max-request-size: 15MB
+        resolve-lazily: false
+

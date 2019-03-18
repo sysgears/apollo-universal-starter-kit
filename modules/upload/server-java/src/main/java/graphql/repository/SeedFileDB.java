@@ -1,6 +1,7 @@
 package graphql.repository;
 
 import graphql.model.File;
+import graphql.services.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,9 @@ public class SeedFileDB implements ApplicationRunner {
     @Autowired
     private FileRepository fileRepository;
 
+    @Autowired
+    private FileService fileService;
+
     @Override
     @Transactional
     public void run(ApplicationArguments args) throws Exception {
@@ -27,16 +31,19 @@ public class SeedFileDB implements ApplicationRunner {
         if (count == 0) {
             logger.debug("Starting seed file database");
 
-//            TODO:add creating file on file system
-            fileRepository.save(File.builder()
-                    .id(1)
-                    .name("avatar")
-                    .type("jpg")
-                    .size(12000514L)
-                    .path("/tmp/avatar.jpg")
-                    .build()
-            );
+            String fileName = "avatar.jpg";
+
+            fileService.createNewFile(fileName).thenAccept(file -> {
+                fileRepository.save(File.builder()
+                        .id(1)
+                        .name(file.getName())
+                        .type(fileService.getFileExtension(file.getName()))
+                        .size((Long) file.length())
+                        .path(file.getPath())
+                        .build()
+                );
+                logger.debug("File database successfully seeded");
+            });
         }
-        logger.debug("File database successfully seeded");
     }
 }

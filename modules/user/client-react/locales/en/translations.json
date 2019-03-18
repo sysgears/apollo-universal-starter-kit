@@ -81,7 +81,12 @@
         "passConf": "Password Confirmation"
       },
       "btnSubmit": "Register"
-    }
+    },
+    "confirmationMsgTitle": "Verify Your Email Address",
+    "confirmationMsgBody": "We now need to verify your email address. We've sent you the email. Please click the link in that email to continue. ",
+    "confirmationBtn": "Go back to Login page",
+    "successRegTitle": "Email Has Been Verified Successfully",
+    "successRegBody": "Your email has been verified successfully. You can sign in using your login and password."
   },
 
   "resetPass": {

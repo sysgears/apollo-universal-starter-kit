@@ -1,22 +1,25 @@
 package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLMutationResolver;
-import graphql.model.File;
+import graphql.model.FileMetadata;
+import graphql.model.FileUpload;
 import graphql.repository.FileRepository;
 import graphql.services.FileService;
+import graphql.servlet.GraphQLContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.Part;
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class FileMutation implements GraphQLMutationResolver {
@@ -29,29 +32,30 @@ public class FileMutation implements GraphQLMutationResolver {
     @Autowired
     private FileService fileService;
 
-    public CompletableFuture<Boolean> uploadFiles(List<MultipartFile> files) {
-        AtomicInteger successfullyUploadCounter = new AtomicInteger();
-       return CompletableFuture.supplyAsync(() -> {
-            files.parallelStream().forEach(file -> {
-                try {
-                    String hashedFileName = fileService.hashAppend(file.getOriginalFilename());
-                    java.io.File uploadedFile = new java.io.File(fileService.publicDirPath.toString()+hashedFileName);
-                    file.transferTo(uploadedFile);
-                    fileRepository.save(new File(
-                            0,
-                            hashedFileName,
-                            fileService.getFileExtension(hashedFileName),
-                            file.getSize(),
-                            uploadedFile.getPath()
+    @Async("resolverThreadPoolTaskExecutor")
+    public CompletableFuture<Boolean> uploadFiles(List<FileUpload> files, DataFetchingEnvironment environment) {
+        GraphQLContext context = environment.getContext();
+        Optional<Map<String, List<Part>>> uploadFiles = context.getFiles();
+        uploadFiles.ifPresent(keys -> {
+                    keys.values().parallelStream().forEach(file ->
+                            file.parallelStream().forEach(f -> {
+                                        if (f.getSubmittedFileName() != null) {
+                                            String hashedFileName = fileService.hashAppend(f.getSubmittedFileName());
+                                            File toStoreFile = new File(fileService.publicDirPath + "/" + hashedFileName);
+                                            try {
+                                                toStoreFile.createNewFile();
+                                                f.write(toStoreFile.getPath());
+                                                fileRepository.save(new FileMetadata(null, hashedFileName, f.getContentType(), f.getSize(), toStoreFile.getPath()));
+                                                logger.debug("File with [name=" + f.getSubmittedFileName() + "] successfully stored!");
+                                            } catch (IOException e) {
+                                                logger.error("File with [name=" + f.getSubmittedFileName() + "] not stored!");
+                                            }
+                                        }
+                                    }
                             ));
-                    successfullyUploadCounter.getAndIncrement();
-                } catch (IOException e) {
-                    logger.debug("Unsuccessful upload file with [name=" + file.getOriginalFilename() + "]");
                 }
-            });
-            return files.size() == successfullyUploadCounter.get();
-        }
         );
+        return CompletableFuture.supplyAsync(() -> true);
     }
 
     @Async("repositoryThreadPoolTaskExecutor")

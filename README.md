@@ -150,6 +150,16 @@ git clone -b stable https://github.com/sysgears/apollo-universal-starter-kit.git
 cd apollo-universal-starter-kit
 ```
 
+**NOTE**: If you're going to use Windows to develop with Apollo Universal Starter Kit, you need to additionally enable 
+symlinks _before_ you run the project.
+
+For Windows 10:
+
+* Press `Win` + `I` to open **Settings**
+* Click **Update & Security**
+* Click the **For Developers** tab
+* In the **Use developer features** window, switch to **Developer Mode**
+
 2. Install the dependencies. Make sure that you use Yarn 1.0.0 or higher.
 
 ```

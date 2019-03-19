@@ -1,0 +1,6 @@
+FROM openjdk:11-jdk
+
+MAINTAINER Victor Vlasenko <victor.vlasenko@sysgears.com>
+
+RUN \
+    echo "__JAVA_VERSION__" \ && java --version \ && javac --version

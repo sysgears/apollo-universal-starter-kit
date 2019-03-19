@@ -126,10 +126,7 @@ stripe-local sends requests to Stripe every 15 seconds to verify if any new even
 subscribe in development mode. If there are any new events, stripe-local will get them and send them to your application 
 on `localhost:port`. Simply put, you can consider stripe-local as a _proxy_ between your application and Stripe.
 
-<p align="center">
-  <img alt="Notification flow between Stripe and your application in development flow with the stripe-local library" 
-       src="https://user-images.githubusercontent.com/24529997/46010501-91188f00-c0cb-11e8-8bf0-58e21b125588.png" />
-</p>
+![Notification flow between Stripe and your application in development flow with the stripe-local library](https://user-images.githubusercontent.com/21691607/54425396-e5690700-471d-11e9-8e5f-dcca07513509.png)
 
 ### Configuring stripe-local
 

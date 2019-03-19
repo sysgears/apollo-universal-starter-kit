@@ -56,21 +56,25 @@ public class FileMutation implements GraphQLMutationResolver {
 
     @Async("repositoryThreadPoolTaskExecutor")
     @Transactional
-    public Boolean removeFile(Integer id) {
+    public CompletableFuture<Boolean> removeFile(Integer id) {
         logger.debug("Started removing a file with [id=" + id + "]");
-        Optional<File> maybeFile = fileRepository.findById(id);
-        if (maybeFile.isPresent()) {
-            File dbFile = maybeFile.get();
-            java.io.File toDeleteFile = new java.io.File(dbFile.getPath());
-            if(toDeleteFile.delete()) {
-                fileRepository.deleteById(dbFile.getId());
-                logger.debug("File with [id=" + id + "] successfully removed");
-                return true;
-            }
-            return false;
-        } else {
-            logger.debug("The file with [id=" + id + "] not found");
-            return false;
-        }
+
+        return CompletableFuture.supplyAsync(() -> {
+                    Optional<FileMetadata> maybeFile = fileRepository.findById(id);
+                    if (maybeFile.isPresent()) {
+                        FileMetadata dbFileMetadata = maybeFile.get();
+                        File toDeleteFile = new File(dbFileMetadata.getPath());
+                        if (toDeleteFile.delete()) {
+                            fileRepository.deleteById(dbFileMetadata.getId());
+                            logger.debug("FileMetadata with [id=" + id + "] successfully removed");
+                            return true;
+                        }
+                        return false;
+                    } else {
+                        logger.debug("The file with [id=" + id + "] not found");
+                        return false;
+                    }
+                }
+        );
     }
 }

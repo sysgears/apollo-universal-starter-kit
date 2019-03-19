@@ -13,10 +13,10 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "FILES")
-public class File {
+public class FileMetadata {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "Id", nullable = false)
     private Integer id;
 

@@ -1,6 +1,6 @@
 package graphql.repository;
 
-import graphql.model.File;
+import graphql.model.FileMetadata;
 import graphql.services.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
@@ -34,7 +34,7 @@ public class SeedFileDB implements ApplicationRunner {
             String fileName = "avatar.jpg";
 
             fileService.createNewFile(fileName).thenAccept(file -> {
-                fileRepository.save(File.builder()
+                fileRepository.save(FileMetadata.builder()
                         .id(1)
                         .name(file.getName())
                         .type(fileService.getFileExtension(file.getName()))
@@ -42,7 +42,7 @@ public class SeedFileDB implements ApplicationRunner {
                         .path(file.getPath())
                         .build()
                 );
-                logger.debug("File database successfully seeded");
+                logger.debug("FileMetadata database successfully seeded");
             });
         }
     }

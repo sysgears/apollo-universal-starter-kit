@@ -1,7 +1,7 @@
 package graphql.schema;
 
 import com.coxautodev.graphql.tools.GraphQLQueryResolver;
-import graphql.model.File;
+import graphql.model.FileMetadata;
 import graphql.repository.FileRepository;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class FileQuery implements GraphQLQueryResolver {
     private FileRepository fileRepository;
 
     @Async("repositoryThreadPoolTaskExecutor")
-    public CompletableFuture<List<File>> files() {
+    public CompletableFuture<List<FileMetadata>> files() {
         logger.debug("Started retrieving a files");
         return CompletableFuture.supplyAsync(() -> fileRepository.findAll());
     }

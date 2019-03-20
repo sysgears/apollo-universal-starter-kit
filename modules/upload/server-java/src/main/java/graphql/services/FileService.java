@@ -39,7 +39,7 @@ public class FileService {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                logger.error("The file wasn't create");
+                logger.error("The file with [name="+ fileName +"] wasn't create");
             }
             return file;
         });

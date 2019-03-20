@@ -24,7 +24,7 @@ public class FileService {
         return UUID.randomUUID().toString().substring(0, 5) + "_" + fileName;
     }
 
-    public void createResourceDirectory() throws IOException {
+    private void createResourceDirectory() throws IOException {
         if (!publicDirPath.toFile().exists()) {
             Files.createDirectory(publicDirPath);
             logger.debug("Directory created [" + publicDirPath + "]");

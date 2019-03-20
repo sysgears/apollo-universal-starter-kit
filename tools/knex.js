@@ -10,15 +10,16 @@ const Module = require('module');
 
 const modulesDir = path.join(__dirname, '../modules');
 const virtualDirs = {
-  '/module-migrations': glob.sync(path.join(modulesDir, '**/migrations')),
-  '/module-seeds': glob.sync(path.join(modulesDir, '**/seeds'))
+  [path.resolve('/module-migrations')]: glob.sync(path.join(modulesDir, '**/migrations')),
+  [path.resolve('/module-seeds')]: glob.sync(path.join(modulesDir, '**/seeds'))
 };
 const virtualFiles = {};
 
 const realResolve = Module._resolveFilename;
 Module._resolveFilename = function fakeResolve(request, parent) {
-  if (virtualFiles[request]) {
-    return virtualFiles[request];
+  const normRequest = request.replace(/\\/g, '/');
+  if (virtualFiles[normRequest]) {
+    return virtualFiles[normRequest];
   } else {
     const result = realResolve(request, parent);
     return result;
@@ -30,7 +31,7 @@ for (const virtualDir of Object.keys(virtualDirs)) {
   for (const realDir of realDirs) {
     const realFiles = fs.readdirSync(realDir);
     for (const file of realFiles) {
-      virtualFiles[path.join(virtualDir, file)] = path.join(realDir, file);
+      virtualFiles[path.join(virtualDir, file).replace(/\\/g, '/')] = path.join(realDir, file);
     }
   }
 }

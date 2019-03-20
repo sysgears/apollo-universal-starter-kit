@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 @Component
 public class FileMutation implements GraphQLMutationResolver {
@@ -36,26 +37,36 @@ public class FileMutation implements GraphQLMutationResolver {
     public CompletableFuture<Boolean> uploadFiles(List<FileUpload> files, DataFetchingEnvironment environment) {
         GraphQLContext context = environment.getContext();
         Optional<Map<String, List<Part>>> uploadFiles = context.getFiles();
-        uploadFiles.ifPresent(keys -> {
-                    keys.values().parallelStream().forEach(file ->
-                            file.parallelStream().forEach(f -> {
-                                        if (f.getSubmittedFileName() != null) {
-                                            String hashedFileName = fileService.hashAppend(f.getSubmittedFileName());
-                                            File toStoreFile = new File(fileService.publicDirPath + "/" + hashedFileName);
-                                            try {
-                                                toStoreFile.createNewFile();
-                                                f.write(toStoreFile.getPath());
-                                                fileRepository.save(new FileMetadata(null, hashedFileName, f.getContentType(), f.getSize(), toStoreFile.getPath()));
-                                                logger.debug("File with [name=" + f.getSubmittedFileName() + "] successfully stored!");
-                                            } catch (IOException e) {
-                                                logger.error("File with [name=" + f.getSubmittedFileName() + "] not stored!");
+        return CompletableFuture.supplyAsync(() ->
+                uploadFiles.map(keys ->
+                        keys.values().parallelStream().map(file ->
+                                file.parallelStream().map(f -> {
+                                            if (f.getSubmittedFileName() != null) {
+                                                String hashedFileName = fileService.hashAppend(f.getSubmittedFileName());
+                                                File toStoreFile = new File(fileService.publicDirPath + "/" + hashedFileName);
+                                                try {
+                                                    toStoreFile.createNewFile();
+                                                    f.write(toStoreFile.getPath());
+                                                    fileRepository.save(new FileMetadata(
+                                                            null,
+                                                            f.getSubmittedFileName(),
+                                                            f.getContentType(),
+                                                            f.getSize(),
+                                                            toStoreFile.getPath()));
+                                                    logger.debug("File with [name=" + f.getSubmittedFileName() + "] successfully stored!");
+                                                    return true;
+                                                } catch (IOException e) {
+                                                    logger.error("File with [name=" + f.getSubmittedFileName() + "] not stored!");
+                                                    return false;
+                                                }
+                                            } else {
+                                                return false;
                                             }
                                         }
-                                    }
-                            ));
-                }
+                                ).collect(Collectors.toList()).parallelStream().reduce(true, (l, r) -> l == r)
+                        ).collect(Collectors.toList()).parallelStream().reduce(true, (l, r) -> l == r)
+                ).orElse(false)
         );
-        return CompletableFuture.supplyAsync(() -> true);
     }
 
     @Async("repositoryThreadPoolTaskExecutor")

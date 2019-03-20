@@ -31,12 +31,6 @@ public class FileService {
         }
     }
 
-    public String getFileExtension(String fileName) {
-        if(fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-            return fileName.substring(fileName.lastIndexOf(".") + 1);
-        } else return "";
-    }
-
     public CompletableFuture<File> createNewFile(String fileName) throws IOException {
         final String hashedFileName = hashAppend(fileName);
         createResourceDirectory();

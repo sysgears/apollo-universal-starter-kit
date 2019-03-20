@@ -30,15 +30,13 @@ public class SeedFileDB implements ApplicationRunner {
 
         if (count == 0) {
             logger.debug("Starting seed file database");
-
             String fileName = "avatar.jpg";
-
             fileService.createNewFile(fileName).thenAccept(file -> {
                 fileRepository.save(FileMetadata.builder()
-                        .id(1)
-                        .name(file.getName())
-                        .type(fileService.getFileExtension(file.getName()))
-                        .size((Long) file.length())
+                        .id(null)
+                        .name(fileName)
+                        .type("jpg")
+                        .size(file.length())
                         .path(file.getPath())
                         .build()
                 );

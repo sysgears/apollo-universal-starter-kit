@@ -1301,10 +1301,10 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
-"@larix/zen@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.2.tgz#5cf7d0abed5d9f605e27e2fc9c8c69f59b0093e8"
-  integrity sha512-00VyqQwEpxT2ngzCr1BREpA1zfpP7sYpimLbvsWVsxIrIXZIhHETVGLqFe4bYUKm4XvefrjMyzI3vR7Mdl5urA==
+"@larix/zen@^0.1.4":
+  version "0.1.4"
+  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.4.tgz#8888260d6a8ba786ccdbbbdde46c6065b4e26c1b"
+  integrity sha512-xClyPn7LAIichnmhgpUFmmlLoUGe/9KPN4mdfUTsBmfhZmOvNYpJYxP2gWSN2AwbgU2ZUsuHJT/0msVdzjlizA==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -16550,6 +16550,7 @@ react-native-view-shot@2.5.0:
 
 "react-native@https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz":
   version "0.57.1"
+  uid "78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   resolved "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz#78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   dependencies:
     absolute-path "^0.0.0"

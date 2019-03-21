@@ -1,7 +1,6 @@
 package graphql.services;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
@@ -13,9 +12,8 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Component
+@Slf4j
 public class FileService {
-
-    private final Logger logger = LogManager.getLogger(FileService.class);
 
     private Path resourcesDirPath = Paths.get(this.getClass().getResource("/").getPath());
     public Path publicDirPath = resourcesDirPath.resolve("public");
@@ -27,7 +25,7 @@ public class FileService {
     private void createResourceDirectory() throws IOException {
         if (!publicDirPath.toFile().exists()) {
             Files.createDirectory(publicDirPath);
-            logger.debug("Directory created [" + publicDirPath + "]");
+            log.debug("Directory created [" + publicDirPath + "]");
         }
     }
 
@@ -39,7 +37,7 @@ public class FileService {
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                logger.error("The file with [name="+ fileName +"] wasn't create");
+                log.error("The file with [name=" + fileName + "] wasn't create");
             }
             return file;
         });

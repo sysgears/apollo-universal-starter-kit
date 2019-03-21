@@ -1,4 +1,4 @@
-import { createAppContainer, createDrawerNavigator } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
@@ -52,15 +52,13 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    const MainScreenNavigatorComponent = createAppContainer(
-      createDrawerNavigator(
-        { ...this.navItemsFilter() },
-        {
-          // eslint-disable-next-line
+    const MainScreenNavigatorComponent = createDrawerNavigator(
+      { ...this.navItemsFilter() },
+      {
+        // eslint-disable-next-line
         contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
-          initialRouteName: this.getInitialRoute()
-        }
-      )
+        initialRouteName: this.getInitialRoute()
+      }
     );
 
     return <MainScreenNavigatorComponent />;

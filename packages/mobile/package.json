@@ -79,7 +79,7 @@
     "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^3.5.1",
+    "react-navigation": "^2.18.2",
     "react-redux": "^5.0.6",
     "redux": "^4.0.0",
     "subscriptions-transport-ws": "^0.9.4",

@@ -2,9 +2,7 @@ const url = require('url');
 
 const config = {
   builders: {
-    react: {
-      entry: './src/index.ts',
-      stack: ['web'],
+    web: {
       openBrowser: true,
       dllExcludes: ['bootstrap'],
       dllBuildDir: '../../.cache/dll',
@@ -14,21 +12,12 @@ const config = {
       // Wait for backend to start prior to letting webpack load frontend page
       waitOn: [`tcp:${process.env.SERVER_HOST || 'localhost:8080'}`],
       enabled: true
-    },
-    test: {
-      stack: ['server'],
-      roles: ['test'],
-      defines: {
-        __TEST__: true
-      }
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'css', 'sass', 'less', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     ssr: true,
     webpackDll: true,
-    reactHotLoader: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"/graphql"',

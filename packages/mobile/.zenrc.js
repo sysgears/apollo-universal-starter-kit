@@ -3,39 +3,25 @@ const url = require('url');
 const config = {
   builders: {
     android: {
-      entry: './src/index.ts',
       buildDir: 'build/android',
       dllBuildDir: '../../.cache/dll',
-      stack: ['react-native', 'android'],
       defines: {
         __CLIENT__: true
       },
       enabled: false
     },
     ios: {
-      entry: './src/index.ts',
       buildDir: 'build/ios',
       dllBuildDir: '../../.cache/dll',
-      stack: ['react-native', 'ios'],
       defines: {
         __CLIENT__: true
       },
       enabled: false
-    },
-    test: {
-      stack: ['server'],
-      roles: ['test'],
-      defines: {
-        __TEST__: true
-      }
     }
   },
   options: {
-    stack: ['apollo', 'react', 'styled-components', 'es6', 'ts', 'webpack', 'i18next'],
     cache: '../../.cache',
     webpackDll: true,
-    reactHotLoader: false,
-    persistGraphQL: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',

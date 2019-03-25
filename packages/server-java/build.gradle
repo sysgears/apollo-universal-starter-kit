@@ -48,6 +48,7 @@ subprojects {
 		//SpringBoot
 		implementation 'org.springframework.boot:spring-boot-starter-web'
 		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 		//GraphQL
 		implementation 'com.graphql-java-kickstart:graphql-java-tools:5.5.1'
@@ -59,12 +60,43 @@ subprojects {
 
 		//H2 DataBase
 		implementation 'com.h2database:h2:1.4.198'
+		
 		// https://projectlombok.org
-		compileOnly 'org.projectlombok:lombok:1.18.6'
+		implementation 'org.projectlombok:lombok:1.18.6'
 		annotationProcessor 'org.projectlombok:lombok:1.18.6'
 
 		//DotEnv support
 		implementation 'io.github.cdimascio:java-dotenv:5.0.0'
+
+		//JUnit
+		testImplementation('org.junit.jupiter:junit-jupiter:5.4.1')
+		testImplementation 'org.mockito:mockito-junit-jupiter:2.25.1'
+		testImplementation 'org.mockito:mockito-core:2.25.1'
+
+		testImplementation project(':app')
+	}
+
+	task wrapper(type: Wrapper) {
+		gradleVersion = '5.2.1'
+	}
+
+	test {
+		useJUnitPlatform()
+		testLogging {
+			// set options for log level LIFECYCLE
+			events "passed", "skipped", "failed"
+			exceptionFormat "short"
+
+			// set options for log level DEBUG
+			debug {
+				events "started", "skipped", "failed"
+				exceptionFormat "full"
+			}
+
+			// remove standard output/error logging from --info builds
+			// by assigning only 'failed' and 'skipped' events
+			info.events = ["failed", "skipped"]
+		}
 	}
 }
 

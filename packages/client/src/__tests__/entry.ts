@@ -1,6 +1,6 @@
 import { initRenderer } from '@gqlapp/testing-client-react';
-import rootSchema from '@gqlapp/core-server-ts/api/rootSchema.graphql';
+import { ROOT_SCHEMA } from '@gqlapp/core-common';
 import clientModules from '..';
 import serverModules from '../../../server/src/modules';
 
-initRenderer([rootSchema].concat(serverModules.schema), clientModules);
+initRenderer([ROOT_SCHEMA].concat(serverModules.schema), clientModules);

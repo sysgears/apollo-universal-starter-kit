@@ -1,0 +1,7 @@
+{
+  "name": "@gqlapp/post-common",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+  }
+}

@@ -3,6 +3,28 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/counter-common": "^0.1.0"
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/counter-common": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "immutability-helper": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-helmet": "*",
+    "react-navigation": "*",
+    "react-native": "*",
+    "react-router-dom": "*",
+    "react-redux": "*",
+    "styled-components": "*"
   }
 }

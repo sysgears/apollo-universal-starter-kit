@@ -1,5 +1,12 @@
 {
   "name": "@gqlapp/router-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-client-react": "^0.1.0",
+    "react-router-dom": "^4.2.2"
+  },
+  "peerDependencies": {
+    "react": "*"
+  }
 }

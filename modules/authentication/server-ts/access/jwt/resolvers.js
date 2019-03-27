@@ -1,7 +1,9 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
+
+import { settings } from '@gqlapp/core-common';
+
 import createTokens from './createTokens';
-import settings from '../../../../../settings';
 
 export default () => ({
   Mutation: {

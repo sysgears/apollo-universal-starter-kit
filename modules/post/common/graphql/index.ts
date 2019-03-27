@@ -1,0 +1,13 @@
+export { default as POSTS_QUERY } from './PostsQuery.graphql';
+export { default as POSTS_SUBSCRIPTION } from './PostsSubscription.graphql';
+export { default as DELETE_POST } from './DeletePost.graphql';
+export { default as ADD_POST } from './AddPost.graphql';
+export { default as EDIT_POST } from './EditPost.graphql';
+export { default as POST_QUERY } from './PostQuery.graphql';
+export { default as POST_SUBSCRIPTION } from './PostSubscription.graphql';
+export { default as ADD_COMMENT } from './AddComment.graphql';
+export { default as EDIT_COMMENT } from './EditComment.graphql';
+export { default as DELETE_COMMENT } from './DeleteComment.graphql';
+export { default as COMMENT_SUBSCRIPTION } from './CommentSubscription.graphql';
+export { default as ADD_COMMENT_CLIENT } from './AddComment.client.graphql';
+export { default as COMMENT_QUERY_CLIENT } from './CommentQuery.client.graphql';

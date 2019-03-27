@@ -14,7 +14,7 @@ import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
 
 import log from './log';
-import settings from '../../../settings';
+import settings from './settings';
 
 interface CreateApolloClientOptions {
   apiUrl?: string;

@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row, Col } from 'antd';
-import MenuItem from './MenuItem';
 
-import settings from '../../../../../settings';
+import { settings } from '@gqlapp/core-common';
+
+import MenuItem from './MenuItem';
 
 const ref = { modules: null };
 

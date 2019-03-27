@@ -6,6 +6,11 @@
     "fractal-objects": "^0.10.0"
   },
   "peerDependencies": {
-    "i18next": "*"
+    "apollo-client": "*",
+    "apollo-link": "*",
+    "graphql-tools": "*",
+    "lodash": "*",
+    "i18next": "*",
+    "subscriptions-transport-ws": "*"
   }
 }

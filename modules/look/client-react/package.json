@@ -1,5 +1,19 @@
 {
   "name": "@gqlapp/look-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome": "^1.1.8",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "antd": "^3.10.0",
+    "bootstrap": "^4.1.1",
+    "reactstrap": "^5.0.0-beta"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-router-dom": "*",
+    "prop-types": "*",
+    "styled-components": "*"
+  }
 }

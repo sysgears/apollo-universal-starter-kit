@@ -1,5 +1,23 @@
 {
   "name": "@gqlapp/testing-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-server-ts": "^0.1.0",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/testing-common": "^0.1.0",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/chai-http": "^3.0.5",
+    "@types/jsdom": "^12.2.0"
+  },
+  "peerDependencies": {
+    "@babel/polyfill": "*",
+    "apollo-client": "*",
+    "ws": "*"
+  }
 }

@@ -1,5 +1,16 @@
 {
   "name": "@gqlapp/chat-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/upload-server-ts": "^0.1.0"
+  },
+  "peerDependencies": {
+    "graphql-resolve-batch": "*",
+    "graphql-subscriptions": "*",
+    "i18next": "*"
+  }
 }

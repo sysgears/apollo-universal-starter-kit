@@ -1,17 +1,14 @@
-// React
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { translate } from '@gqlapp/i18n-client-react';
-// Apollo
 import { graphql, compose } from 'react-apollo';
 
-// Components
+import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
+import { settings } from '@gqlapp/core-common';
+
 import RegisterView from '../components/RegisterView';
 
 import REGISTER from '../graphql/Register.graphql';
-
-import settings from '../../../../settings';
 
 const Register = props => {
   const { t, register, history } = props;

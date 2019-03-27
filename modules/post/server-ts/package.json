@@ -1,6 +1,20 @@
 {
   "name": "@gqlapp/post-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/post-common": "^0.1.0"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-server-ts": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "graphql-subscriptions": "*",
+    "graphql-resolve-batch": "*"
+  }
 }
 

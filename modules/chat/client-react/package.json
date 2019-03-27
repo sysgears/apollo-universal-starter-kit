@@ -3,6 +3,26 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/core-client-react": "^0.1.0"
+    "@gqlapp/core-client-react": "^0.1.0",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/user-client-react": "^0.1.0",
+    "apollo-upload-client": "^8.0.0",
+    "react": "*",
+    "react-native-elements": "^0.19.1",
+    "react-native-gifted-chat": "^0.4.3",
+    "react-native-mime-types": "^2.2.1",
+    "uuid": "^3.3.2"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "expo": "*",
+    "immutability-helper": "*",
+    "react-apollo": "*",
+    "react-native": "*",
+    "react-navigation": "*",
+    "prop-types": "*"
   }
 }

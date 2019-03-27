@@ -1,5 +1,23 @@
 {
   "name": "@gqlapp/authentication-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-free-brands": "^5.0.6",
+    "@fortawesome/react-fontawesome": "0.0.18",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "react": "*"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "apollo-client": "*",
+    "apollo-link": "*",
+    "expo": "*",
+    "react-apollo": "*",
+    "react-native": "*",
+    "prop-types": "*"
+  }
 }

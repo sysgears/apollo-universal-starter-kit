@@ -2,14 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
-import { PLATFORM } from '@gqlapp/core-common';
+
+import { PLATFORM, settings } from '@gqlapp/core-common';
+
+import { POSTS_QUERY, POSTS_SUBSCRIPTION, DELETE_POST } from '@gqlapp/post-common';
 
 import PostList from '../components/PostList';
-
-import POSTS_QUERY from '../graphql/PostsQuery.graphql';
-import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
-import DELETE_POST from '../graphql/DeletePost.graphql';
-import settings from '../../../../settings';
 
 const limit =
   PLATFORM === 'web' || PLATFORM === 'server'

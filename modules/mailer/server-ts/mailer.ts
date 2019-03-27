@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
-import settings from '../../../settings';
+
+import { settings } from '@gqlapp/core-common';
 
 export default nodemailer.createTransport(settings.mailer);

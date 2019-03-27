@@ -1,9 +1,9 @@
 import React from 'react';
 import { graphql } from 'react-apollo';
 
-import PostAddView from '../components/PostAddView';
+import { ADD_POST } from '@gqlapp/post-common';
 
-import ADD_POST from '../graphql/AddPost.graphql';
+import PostAddView from '../components/PostAddView';
 
 class PostAdd extends React.Component {
   constructor(props) {

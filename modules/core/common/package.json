@@ -3,6 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "isomorphic-unfetch": "^3.0.0"
+    "apollo-cache-inmemory": "1.4.2",
+    "apollo-cache-router": "^1.1.6",
+    "apollo-client": "^2.4.7",
+    "apollo-link": "^1.0.6",
+    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-state": "^0.4.1",
+    "apollo-link-ws": "^1.0.3",
+    "apollo-logger": "^0.3.0",
+    "apollo-utilities": "^1.0.3",
+    "graphql": "^14.1.1",
+    "graphql-tools": "^2.13.0",
+    "isomorphic-unfetch": "^3.0.0",
+    "minilog": "^3.1.0",
+    "react-router-redux": "^5.0.0-alpha.8",
+    "redux": "^4.0.0",
+    "redux-devtools-extension": "^2.13.2",
+    "subscriptions-transport-ws": "^0.9.4"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.112",
+    "@types/webpack-env": "^1.13.5"
+  },
+  "peerDependencies": {
+    "expo": "optional:*",
+    "lodash": "*"
   }
 }

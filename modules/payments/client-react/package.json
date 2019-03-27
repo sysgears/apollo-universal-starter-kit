@@ -1,5 +1,38 @@
 {
   "name": "@gqlapp/payments-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/core-client-react": "^0.1.0",
+    "@gqlapp/forms-client-react": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/user-client-react": "^0.1.0",
+    "@gqlapp/validation-common-react": "^0.1.0",
+    "react-native-credit-card-input": "^0.4.1",
+    "react-stripe-elements": "^1.2.1"
+  },
+  "devDependencies": {
+    "@types/react-stripe-elements": "^1.1.7",
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "apollo-client": "*",
+    "formik": "*",
+    "lodash": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-helmet": "*",
+    "react-native": "*",
+    "react-native-keyboard-spacer": "*",
+    "react-navigation": "*",
+    "react-router-dom": "*"
+  }
 }

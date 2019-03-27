@@ -3,8 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@gqlapp/module-client-angular": "^0.1.0",
     "@angular/animations": "^7.1.4",
     "@angular/cdk": "^7.2.0",
     "@angular/material": "^7.2.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "*",
+    "@angular/common": "*",
+    "@angular/platform-browser": "*"
   }
 }

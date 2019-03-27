@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { hydrate, render } from 'react-dom';
+
 import ClientModule from '@gqlapp/module-client-react';
+import { log } from '@gqlapp/core-common';
 
 // Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
 // tslint:disable-next-line
 import 'backend_reload';
 
-import log from '../../../packages/common/log';
 import { onAppCreate as onCreateMain, Main, onAppDispose } from './Main';
 
 const renderFunc = __SSR__ ? hydrate : render;

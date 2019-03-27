@@ -1,6 +1,7 @@
 import chai, { expect } from 'chai';
 import { step } from 'mocha-steps';
 import _ from 'lodash';
+
 import {
   find,
   findAll,
@@ -12,10 +13,7 @@ import {
   waitForElementRender,
   Renderer
 } from '@gqlapp/testing-client-react';
-
-import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
-import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
+import { POSTS_SUBSCRIPTION, POST_SUBSCRIPTION, COMMENT_SUBSCRIPTION } from '@gqlapp/post-common';
 
 chai.should();
 

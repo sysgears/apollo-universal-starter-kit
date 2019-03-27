@@ -1,6 +1,13 @@
 {
   "name": "@gqlapp/graphql-types-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "graphql-iso-date": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/graphql-iso-date": "^3.3.0"
+  }
 }
 

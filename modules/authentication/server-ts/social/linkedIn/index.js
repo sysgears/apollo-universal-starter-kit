@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
-import settings from '../../../../../settings';
+
+import { settings } from '@gqlapp/core-common';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.linkedin;

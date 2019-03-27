@@ -4,6 +4,19 @@
   "private": true,
   "dependencies": {
     "@gqlapp/core-common": "^0.1.0",
-    "glob": "^7.1.3"
+    "glob": "^7.1.3",
+    "graphql-resolve-batch": "^1.0.2",
+    "humps": "^2.0.1",
+    "knex": "^0.14.2",
+    "sqlite3": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/graphql-resolve-batch": "^1.1.1",
+    "@types/humps": "^1.1.2",
+    "@types/knex": "^0.14.20"
+  },
+  "peerDependencies": {
+    "@babel/register": "*",
+    "@babel/polyfill": "*"
   }
 }

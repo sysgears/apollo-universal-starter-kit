@@ -1,5 +1,23 @@
 {
   "name": "@gqlapp/page-not-found-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "prop-types": "*",
+    "react": "*",
+    "react-router-dom": "*",
+    "react-helmet": "*",
+    "styled-components": "*"
+  }
 }

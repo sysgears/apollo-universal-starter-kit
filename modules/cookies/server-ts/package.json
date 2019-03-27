@@ -1,6 +1,13 @@
 {
   "name": "@gqlapp/cookies-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "universal-cookie-express": "^2.2.0"
+  },
+  "peerDependencies": {
+    "express": "*"
+  }
 }
 

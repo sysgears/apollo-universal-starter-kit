@@ -1,5 +1,6 @@
+import { settings } from '@gqlapp/core-common';
+
 import fileSystemStorage, { UploadFileStream } from './FileSystemStorage';
-import settings from '../../../settings';
 
 interface UploadFileStreams {
   files: [Promise<UploadFileStream>];

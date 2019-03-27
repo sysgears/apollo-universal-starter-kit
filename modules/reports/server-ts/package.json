@@ -1,6 +1,19 @@
 {
   "name": "@gqlapp/reports-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "excel4node": "^1.7.0",
+    "pdfmake":  "^0.1.40",
+    "roboto-npm-webfont": "^1.0.1"
+  },
+  "devDependencies": {
+    "@types/pdfmake": "^0.1.3"
+  },
+  "peerDependencies": {
+    "i18next": "*"
+  }
 }
 

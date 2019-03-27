@@ -1,6 +1,8 @@
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
-import settings from '../../../../../settings';
+
+import { settings } from '@gqlapp/core-common';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, profileFields, enabled } = settings.auth.social.facebook;

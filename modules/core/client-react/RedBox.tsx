@@ -1,9 +1,8 @@
 import React from 'react';
-import ErrorStackParser from 'error-stack-parser';
-import { StackFrame } from 'error-stack-parser';
+import ErrorStackParser, { StackFrame } from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
 
-import settings from '../../../settings';
+import { settings } from '@gqlapp/core-common';
 
 const format = (fmt: string, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, index: number) => (typeof args[index] !== 'undefined' ? args[index] : match));

@@ -2,11 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
+import { settings } from '@gqlapp/core-common';
+
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
-import settings from '../../../../settings';
 import UserFormatter from '../helpers/UserFormatter';
 
 const UserAdd = props => {

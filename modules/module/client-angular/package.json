@@ -1,5 +1,13 @@
 {
   "name": "@gqlapp/module-client-angular",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-common": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@angular/router": "*",
+    "@ngrx/store": "*",
+    "lodash": "*"
+  }
 }

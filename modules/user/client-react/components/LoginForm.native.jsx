@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { withFormik } from 'formik';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-react-native';
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { required, minLength, validate } from '@gqlapp/validation-common-react';
 import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@gqlapp/authentication-client-react';
-
-import settings from '../../../../settings';
+import { settings } from '@gqlapp/core-common';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],

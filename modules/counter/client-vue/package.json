@@ -5,5 +5,8 @@
   "dependencies": {
     "@gqlapp/counter-common": "^0.1.0",
     "@gqlapp/module-client-vue": "^0.1.0"
+  },
+  "peerDependencies": {
+    "vue": "*"
   }
 }

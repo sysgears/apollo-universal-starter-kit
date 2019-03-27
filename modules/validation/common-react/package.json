@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/module-common": "^0.1.0"
+    "@gqlapp/module-common": "^0.1.0",
+    "@gqlapp/i18n-common-react": "^0.1.0"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "i18next": "*"
   }
 }

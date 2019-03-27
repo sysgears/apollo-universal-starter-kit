@@ -1,6 +1,16 @@
 {
   "name": "@gqlapp/user-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "bcryptjs": "^2.4.3",
+    "graphql-auth": "0.2.3"
+  },
+  "peerDependencies": {
+    "jsonwebtoken": "*",
+    "lodash": "*"
+  }
 }
 

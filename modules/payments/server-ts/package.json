@@ -1,6 +1,28 @@
 {
   "name": "@gqlapp/payments-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/mailer-server-ts": "^0.1.0",
+    "@gqlapp/user-server-ts": "^0.1.0",
+    "stripe": "^5.4.0",
+    "stripe-local": "^0.1.1"
+  },
+  "devDependencies": {
+    "@types/stripe": "^5.0.21"
+  },
+  "peerDependencies": {
+    "@babel/register": "*",
+    "@babel/polyfill": "*",
+    "apollo-server-errors": "*",
+    "body-parser": "*",
+    "dotenv": "*",
+    "express": "*",
+    "graphql-auth": "*",
+    "humps": "*",
+    "i18next": "*"
+  }
 }
-

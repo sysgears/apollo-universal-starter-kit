@@ -1,11 +1,10 @@
 import { ApolloServer, AuthenticationError, ApolloError } from 'apollo-server-express';
 import { formatResponse } from 'apollo-logger';
 import { GraphQLSchema } from 'graphql';
-import 'isomorphic-fetch';
-import { log } from '@gqlapp/core-common';
-import ServerModule from '@gqlapp/module-server-ts';
+import 'isomorphic-unfetch';
 
-import settings from '../../../settings';
+import { log, settings } from '@gqlapp/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
 
 export default (schema: GraphQLSchema, modules: ServerModule) => {
   return new ApolloServer({

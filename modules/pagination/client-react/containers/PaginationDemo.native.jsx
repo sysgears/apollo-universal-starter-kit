@@ -5,7 +5,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { itemAction, itemTitle } from '@gqlapp/look-client-react-native/styles';
 import { Select } from '@gqlapp/look-client-react-native';
 import PaginationDemoView from '../components/PaginationDemoView.native';
-import withDataProvider from '../containers/DataProvider';
+import withDataProvider from './DataProvider';
 
 @translate('pagination')
 class PaginationDemo extends React.Component {

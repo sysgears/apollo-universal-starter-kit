@@ -1,5 +1,13 @@
 {
   "name": "@gqlapp/look-client-vue",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "bootstrap": "^4.1.1",
+    "bootstrap-vue": "^2.0.0-rc.11"
+  },
+  "peerDependencies": {
+    "vue": "*"
+  }
 }

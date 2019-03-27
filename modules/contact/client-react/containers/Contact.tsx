@@ -2,8 +2,9 @@ import React from 'react';
 import { Mutation, FetchResult } from 'react-apollo';
 import { FormError } from '@gqlapp/forms-client-react';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { CONTACT } from '@gqlapp/contact-common';
+
 import ContactView from '../components/ContactView';
-import CONTACT from '../graphql/Contact.graphql';
 import { ContactForm } from '../types';
 
 interface ContctProps {

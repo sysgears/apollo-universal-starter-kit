@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout } from '@gqlapp/look-client-react';
+import { settings } from '@gqlapp/core-common';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
-import settings from '../../../../settings';
 
 const onSubmit = (post, editPost) => values => {
   editPost(post.id, values.title, values.content);

@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
+import { isApolloError } from 'apollo-client';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
+
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { PLATFORM } from '@gqlapp/core-common';
+import { PLATFORM, settings } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
-import { isApolloError } from 'apollo-client';
-import settings from '../../../../../../settings';
+
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';
 import AddSubscriptionView from '../components/AddSubscriptionView';

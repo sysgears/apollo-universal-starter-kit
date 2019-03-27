@@ -1,9 +1,10 @@
 import React from 'react';
 import { createStackNavigator } from 'react-navigation';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
-import settings from '../../../../../settings';
+import { settings } from '@gqlapp/core-common';
 
 import resources from './locales';
 import SubscriptionAuthRouter from './containers/Auth';

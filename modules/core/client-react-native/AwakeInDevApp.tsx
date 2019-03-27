@@ -1,8 +1,10 @@
 import * as Expo from 'expo';
 import React from 'react';
 import { View } from 'react-native';
-import App from './App';
+
 import ClientModule from '@gqlapp/module-client-react-native';
+
+import App from './App';
 
 interface AwakeInDevAppProps {
   exp: any;
@@ -22,6 +24,7 @@ export default (modules: ClientModule) => {
     }
 
     public async componentDidMount() {
+      // TODO: get rid of native-base dependency here
       await Expo.Font.loadAsync({
         Roboto: require('native-base/Fonts/Roboto.ttf'),
         Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),

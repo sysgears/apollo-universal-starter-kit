@@ -1,5 +1,18 @@
 {
   "name": "@gqlapp/reports-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0"
+  },
+  "peerDependencies": {
+    "apollo-client": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-helmet": "*",
+    "react-router-dom": "*"
+  }
 }

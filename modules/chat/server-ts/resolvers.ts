@@ -1,10 +1,11 @@
 import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
+
 import ServerModule from '@gqlapp/module-server-ts';
 import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
+import { settings } from '@gqlapp/core-common';
 
-import settings from '../../../settings';
 import ChatDAO, { Message, Identifier } from './sql';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';

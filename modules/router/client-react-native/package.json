@@ -1,5 +1,14 @@
 {
   "name": "@gqlapp/router-client-react-native",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "react-navigation": "^3.5.1"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  }
 }

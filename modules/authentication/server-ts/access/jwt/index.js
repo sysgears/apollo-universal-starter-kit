@@ -1,11 +1,12 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 
+import { settings } from '@gqlapp/core-common';
+
 import createTokens from './createTokens';
 import resolvers from './resolvers';
 import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
-import settings from '../../../../../settings';
 
 const grant = async (identity, req, hash = '') => {
   const refreshSecret = settings.auth.secret + hash;

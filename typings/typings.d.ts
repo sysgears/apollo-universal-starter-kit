@@ -3,8 +3,8 @@
 declare module '*.graphql' {
   import { DocumentNode } from 'graphql';
 
-  const value: DocumentNode;
-  export = value;
+  const ROOT_GRAPHQL_SCHEMA: DocumentNode;
+  export = ROOT_GRAPHQL_SCHEMA;
 }
 
 declare module '*.json' {

@@ -1,6 +1,14 @@
 {
   "name": "@gqlapp/mailer-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "nodemailer": "^4.4.1"
+  },
+  "devDependencies": {
+    "@types/nodemailer": "^4.6.2"
+  }
 }
 

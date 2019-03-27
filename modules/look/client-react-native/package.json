@@ -1,5 +1,18 @@
 {
   "name": "@gqlapp/look-client-react-native",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@expo/vector-icons": "^9.0.0",
+    "antd-mobile-rn": "^2.2.1",
+    "native-base": "^2.3.5",
+    "react-native-modal": "^5.4.0",
+    "react-native-simple-picker": "^2.0.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-navigation": "*",
+    "prop-types": "*"
+  }
 }

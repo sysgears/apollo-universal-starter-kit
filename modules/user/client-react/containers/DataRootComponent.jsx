@@ -2,11 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 
-import { getItem } from '@gqlapp/core-common/clientStorage';
+import { clientStorage, settings } from '@gqlapp/core-common';
 
 import Loading from '../components/Loading';
-
-import settings from '../../../../settings';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
@@ -19,7 +17,7 @@ class DataRootComponent extends React.Component {
   }
 
   async componentDidMount() {
-    if (!this.state.ready && (await getItem('refreshToken'))) {
+    if (!this.state.ready && (await clientStorage.getItem('refreshToken'))) {
       const { client } = this.props;
       let result;
       try {

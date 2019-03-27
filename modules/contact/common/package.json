@@ -1,5 +1,8 @@
 {
   "name": "@gqlapp/contact-common",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/validation-common-react": "^0.1.0"
+  }
 }

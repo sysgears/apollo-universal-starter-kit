@@ -10,6 +10,8 @@
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --full-trace --watch \"../../modules/**/common-react/**/*.spec.*\""
   },
   "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/validation-common-react": "^0.1.0",
     "apollo-cache-inmemory": "1.4.2",
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
@@ -20,6 +22,7 @@
     "apollo-logger": "^0.3.0",
     "apollo-utilities": "^1.0.11",
     "graphql": "^14.1.1",
+    "graphql-tools": "^4.0.4",
     "i18next": "^11.2.3",
     "i18next-browser-languagedetector": "^2.1.0",
     "lodash": "^4.17.4",
@@ -34,10 +37,12 @@
     "@types/i18next-browser-languagedetector": "^2.0.1",
     "@types/react-i18next": "^7.8.3",
     "chai": "^4.1.2",
-    "eslint": "^4.13.1",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
     "mochapack": "^1.0.0"
+  },
+  "peerDependencies": {
+    "eslint": "*"
   },
   "optionalDependencies": {
     "expo": "^32.0.0"

@@ -1,9 +1,11 @@
 import { pick } from 'lodash';
+
 import { AuthModule } from '@gqlapp/authentication-server-ts';
+import { settings } from '@gqlapp/core-common';
+
 import { onAuthenticationSuccess } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
-import settings from '../../../../../settings';
 
 const registerUser = async ({ id, emails: [{ value }] }) => {
   return User.register({

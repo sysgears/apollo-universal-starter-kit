@@ -1,6 +1,23 @@
 {
   "name": "@gqlapp/upload-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "mkdirp": "^0.5.1",
+    "shortid": "^2.2.14"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "@types/mkdirp": "^0.5.2",
+    "@types/shortid": "0.0.29",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "express": "*"
+  }
 }
 

@@ -1,4 +1,4 @@
-import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
+import { COMMENT_QUERY_CLIENT } from '@gqlapp/post-common';
 
 const TYPE_NAME = 'CommentState';
 const TYPE_NAME_COMMENT = 'Comment';

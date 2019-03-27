@@ -3,6 +3,30 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/core-client-react": "^0.1.0"
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/core-client-react": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/testing-common": "^0.1.0",
+    "dom-testing-library": "^3.13.0",
+    "react-addons-test-utils": "^16.0.0-alpha.3",
+    "react-test-renderer": "^16.8.1",
+    "react-testing-library": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^12.2.0",
+    "jsdom": "^11.5.1"
+  },
+  "peerDependencies": {
+    "apollo-client": "*",
+    "apollo-link": "*",
+    "apollo-utilities": "*",
+    "graphql": "*",
+    "graphql-tools": "*",
+    "history": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-redux": "*",
+    "react-router-dom": "*",
+    "redux": "*"
   }
 }

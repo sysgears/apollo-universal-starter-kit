@@ -3,6 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@gqlapp/core-common": "^0.1.0"
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "expo": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-redux": "*",
+    "redux": "*",
+    "native-base": "*",
+    "react-native": "*",
+    "react-test-renderer": "*"
+  },
+  "devDependencies": {
+    "@types/react-native": "^0.55.7",
+    "@types/react-navigation": "^3.0.5"
   }
 }

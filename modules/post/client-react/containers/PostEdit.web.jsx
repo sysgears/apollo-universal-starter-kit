@@ -2,11 +2,9 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 
-import PostEditView from '../components/PostEditView';
+import { POST_QUERY, EDIT_POST, POST_SUBSCRIPTION } from '@gqlapp/post-common';
 
-import POST_QUERY from '../graphql/PostQuery.graphql';
-import EDIT_POST from '../graphql/EditPost.graphql';
-import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
+import PostEditView from '../components/PostEditView';
 
 const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) =>
   subscribeToMore({

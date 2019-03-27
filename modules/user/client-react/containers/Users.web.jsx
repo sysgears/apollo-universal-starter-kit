@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import { compose } from 'react-apollo';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { Button, PageLayout } from '@gqlapp/look-client-react';
+import { settings } from '@gqlapp/core-common';
 
-import settings from '../../../../settings';
 import UsersFilterView from '../components/UsersFilterView';
 import UsersListView from '../components/UsersListView';
 import { useUsersWithSubscription } from './withSubscription';

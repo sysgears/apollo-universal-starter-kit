@@ -1,5 +1,12 @@
 {
   "name": "@gqlapp/post-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/post-common": "^0.1.0"
+  },
+  "peerDependencies": {
+    "react": "*",
+    "react-helmet": "*"
+  }
 }

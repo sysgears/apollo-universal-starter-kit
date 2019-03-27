@@ -1,5 +1,20 @@
 {
   "name": "@gqlapp/contact-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/contact-common": "^0.1.0",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/validation-common-react": "^0.1.0"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-server-ts": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "apollo-server-errors": "*",
+    "lodash": "*"
+  }
 }

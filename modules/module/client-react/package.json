@@ -4,5 +4,10 @@
   "private": true,
   "dependencies": {
     "@gqlapp/module-common": "^0.1.0"
+  },
+  "peerDependencies": {
+    "lodash": "*",
+    "react": "*",
+    "redux": "optional:*"
   }
 }

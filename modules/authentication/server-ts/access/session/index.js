@@ -1,10 +1,9 @@
-import { isApiExternal } from '@gqlapp/core-common';
+import { isApiExternal, settings } from '@gqlapp/core-common';
 
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
 import schema from './schema.graphql';
 import resolvers from './resolvers';
-import settings from '../../../../../settings';
 
 const grant = async ({ id }, req) => {
   const session = { ...req.session, id };

@@ -2,11 +2,10 @@ import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { isFormError } from '@gqlapp/forms-client-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
 import { validate } from '@gqlapp/validation-common-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
-import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
 import {
   RenderField,
@@ -14,9 +13,9 @@ import {
   Button,
   Modal,
   danger,
-  success
-} from '../../../../packages/client/src/modules/common/components/native';
-import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
+  success,
+  styles as lookStyles
+} from '@gqlapp/look-client-react-native';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {
@@ -49,7 +48,7 @@ const ContactForm = ({
           type="text"
           placeholder={t('form.field.name')}
           value={values.name}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="email"
@@ -58,7 +57,7 @@ const ContactForm = ({
           placeholder={t('form.field.email')}
           value={values.email}
           keyboardType="email-address"
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="content"
@@ -66,7 +65,7 @@ const ContactForm = ({
           type="textarea"
           placeholder={t('form.field.content')}
           value={values.content}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
       </View>
       <View style={styles.submit}>
@@ -97,7 +96,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'stretch'
   },
-  submit
+  submit: lookStyles.submit
 });
 
 const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({

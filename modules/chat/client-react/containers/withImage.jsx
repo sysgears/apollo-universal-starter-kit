@@ -6,7 +6,8 @@ import url from 'url';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 
-import chatConfig from '../../../../config/chat';
+import { settings } from '@gqlapp/core-common';
+
 import ModalNotify from '../components/ModalNotify';
 
 const {
@@ -29,7 +30,7 @@ export default Component => {
     state = {
       edges: [],
       endCursor: 0,
-      allowImages: chatConfig.allowImages,
+      allowImages: settings.chat.allowImages,
       notify: null
     };
 
@@ -121,11 +122,11 @@ export default Component => {
     pickImage = async ({ onSend }) => {
       const { t } = this.props;
       if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
-        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
+        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(settings.chat.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);
           const reg = /[^\\/]*\.\w+$/;
-          if (size <= chatConfig.image.maxSize && reg.test(uri)) {
+          if (size <= settings.chat.image.maxSize && reg.test(uri)) {
             const type = mime.lookup(uri);
             const name = uri.match(reg)[0];
             const imageData = new ReactNativeFile({ uri, type, name });

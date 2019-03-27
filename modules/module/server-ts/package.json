@@ -4,6 +4,14 @@
   "prefab": "modules/module/server-ts",
   "dependencies": {
     "@gqlapp/module-common": "^0.1.0"
+  },
+  "peerDependencies": {
+    "express": "*",
+    "lodash": "*",
+    "graphql": "*",
+    "graphql-subscriptions": "*",
+    "graphql-tools": "*",
+    "subscriptions-transport-ws": "*"
   }
 }
 

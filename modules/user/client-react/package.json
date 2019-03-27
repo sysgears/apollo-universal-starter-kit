@@ -1,5 +1,39 @@
 {
   "name": "@gqlapp/user-client-react",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/authentication-client-react": "^0.1.0",
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/forms-client-react": "^0.1.0",
+    "@gqlapp/i18n-client-react": "^0.1.0",
+    "@gqlapp/look-client-react": "^0.1.0",
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/payments-client-react": "^0.1.0",
+    "@gqlapp/validation-common-react": "^0.1.0",
+    "react-cookie": "^2.2.0",
+    "react-debounce-input": "^3.1.0",
+    "react-native-keyboard-spacer": "^0.4.1"
+  },
+  "devDependencies": {
+    "@gqlapp/testing-client-react": "^0.1.0",
+    "chai": "*",
+    "mocha-steps": "*"
+  },
+  "peerDependencies": {
+    "@expo/vector-icons": "*",
+    "expo": "*",
+    "formik": "*",
+    "immutability-helper": "*",
+    "lodash": "*",
+    "prop-types": "*",
+    "react": "*",
+    "react-apollo": "*",
+    "react-router-dom": "*",
+    "react-helmet": "*",
+    "react-native": "*",
+    "react-navigation": "*"
+  }
 }

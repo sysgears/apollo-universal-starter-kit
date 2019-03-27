@@ -3,7 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/i18n-common-react": "^0.1.0",
     "@gqlapp/look-client-react": "^0.1.0",
-    "@gqlapp/look-client-react-native": "^0.1.0"
+    "@gqlapp/look-client-react-native": "^0.1.0",
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/module-client-react-native": "^0.1.0"
+  },
+  "peerDependencies": {
+     "react": "*",
+     "i18next": "*",
+     "react-i18next": "*"
   }
 }

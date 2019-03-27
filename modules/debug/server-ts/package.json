@@ -1,6 +1,11 @@
 {
   "name": "@gqlapp/debug-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/database-server-ts": "^0.1.0",
+    "performance-now": "^2.1.0"
+  }
 }
 

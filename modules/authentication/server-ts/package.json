@@ -1,5 +1,20 @@
 {
   "name": "@gqlapp/authentication-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/core-common": "^0.1.0",
+    "jsonwebtoken": "^8.1.0",
+    "passport": "^0.4.0",
+    "passport-facebook": "^2.1.1",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-linkedin-oauth2": "^1.5.0",
+    "passport-local": "^1.0.0"
+  },
+  "peerDependencies": {
+    "apollo-server-errors": "*",
+    "lodash": "*"
+  }
 }

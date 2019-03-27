@@ -6,14 +6,12 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
-import { apiUrl } from '@gqlapp/core-common';
+
+import { apiUrl, settings } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
+import { createApolloClient, createReduxStore, getStoreReducer, log } from '@gqlapp/core-common';
 
 import RedBox from './RedBox';
-import createApolloClient from '../../../packages/common/createApolloClient';
-import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
-import log from '../../../packages/common/log';
-import settings from '../../../settings';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 

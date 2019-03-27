@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import settings from '../../../../../settings';
+
+import { settings } from '@gqlapp/core-common';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.google;

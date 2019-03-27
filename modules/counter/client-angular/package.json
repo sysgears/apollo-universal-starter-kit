@@ -1,5 +1,17 @@
 {
   "name": "@gqlapp/counter-client-angular",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/counter-common": "^0.1.0",
+    "@gqlapp/module-client-angular": "^0.1.0",
+    "@gqlapp/look-client-angular": "^0.1.0"
+  },
+  "peerDependencies": {
+    "@angular/core": "*",
+    "@angular/common": "*",
+    "@ngrx/store": "*",
+    "apollo-angular": "*",
+    "rxjs": "*"
+  }
 }

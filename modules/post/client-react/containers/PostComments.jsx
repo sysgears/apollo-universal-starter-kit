@@ -3,15 +3,17 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
-import PostCommentsView from '../components/PostCommentsView';
+import {
+  POST_QUERY,
+  ADD_COMMENT,
+  EDIT_COMMENT,
+  DELETE_COMMENT,
+  COMMENT_SUBSCRIPTION,
+  ADD_COMMENT_CLIENT,
+  COMMENT_QUERY_CLIENT
+} from '@gqlapp/post-common';
 
-import POST_QUERY from '../graphql/PostQuery.graphql';
-import ADD_COMMENT from '../graphql/AddComment.graphql';
-import EDIT_COMMENT from '../graphql/EditComment.graphql';
-import DELETE_COMMENT from '../graphql/DeleteComment.graphql';
-import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
-import ADD_COMMENT_CLIENT from '../graphql/AddComment.client.graphql';
-import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
+import PostCommentsView from '../components/PostCommentsView';
 
 const onAddComment = (prev, node) => {
   // ignore if duplicate

@@ -9,12 +9,15 @@
     "@gqlapp/settings-common": "^0.1.0",
     "antd": "^3.10.0",
     "bootstrap": "^4.1.1",
-    "reactstrap": "^5.0.0-beta"
+    "reactstrap": "^5.0.0-beta",
+    "styled-components": "^4.2.0"
+  },
+  "devDependencies": {
+    "babel-plugin-styled-components": "^1.10.0"
   },
   "peerDependencies": {
     "react": "*",
     "react-router-dom": "*",
-    "prop-types": "*",
-    "styled-components": "*"
+    "prop-types": "*"
   }
 }

@@ -10,7 +10,8 @@
     "@gqlapp/module-client-react-native": "^0.1.0",
     "@gqlapp/look-client-react": "^0.1.0",
     "@gqlapp/look-client-react-native": "^0.1.0",
-    "@gqlapp/settings-common": "^0.1.0"
+    "@gqlapp/settings-common": "^0.1.0",
+    "styled-components": "*"
   },
   "devDependencies": {
     "@gqlapp/testing-client-react": "^0.1.0",
@@ -25,7 +26,6 @@
     "react-navigation": "*",
     "react-native": "*",
     "react-router-dom": "*",
-    "react-redux": "*",
-    "styled-components": "*"
+    "react-redux": "*"
   }
 }

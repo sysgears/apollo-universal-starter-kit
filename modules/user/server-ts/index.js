@@ -1,5 +1,5 @@
 import ServerModule from '@gqlapp/module-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import confirmMiddleware from './confirm';
 import schema from './schema.graphql';

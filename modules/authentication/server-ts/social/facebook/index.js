@@ -1,7 +1,7 @@
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import AuthModule from '../AuthModule';
 

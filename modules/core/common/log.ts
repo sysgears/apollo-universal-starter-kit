@@ -1,6 +1,6 @@
 import minilog from 'minilog';
 
-import settings from './settings';
+import settings from '@gqlapp/settings-common';
 
 minilog.enable();
 

@@ -9,7 +9,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '@gqlapp/look-client-react-native';
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const userFormSchema = {
   username: [required, minLength(3)],

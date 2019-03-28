@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { LayoutCenter } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 interface SubscribersOnlyViewProps {
   loading: boolean;

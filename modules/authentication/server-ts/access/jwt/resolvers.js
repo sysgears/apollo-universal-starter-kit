@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import createTokens from './createTokens';
 

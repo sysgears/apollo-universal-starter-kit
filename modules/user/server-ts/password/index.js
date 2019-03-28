@@ -1,5 +1,5 @@
 import { AuthModule } from '@gqlapp/authentication-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import schema from './schema.graphql';
 import resolvers from './resolvers';

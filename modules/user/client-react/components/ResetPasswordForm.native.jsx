@@ -9,7 +9,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { RenderField, Button, primary } from '@gqlapp/look-client-react-native';
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { required, minLength, validate, match } from '@gqlapp/validation-common-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const resetPasswordFormSchema = {
   password: [required, minLength(settings.auth.password.minLength)],

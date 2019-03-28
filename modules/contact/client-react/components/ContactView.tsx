@@ -3,7 +3,7 @@ import Helmet from 'react-helmet';
 
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { LayoutCenter, PageLayout } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import ContactForm from './ContactForm';
 import { ContactForm as IContactForm } from '../types';

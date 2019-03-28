@@ -6,6 +6,7 @@
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/i18n-common-react": "^0.1.0",
     "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "i18next-express-middleware": "^1.1.1"
   },
   "devDependencies": {

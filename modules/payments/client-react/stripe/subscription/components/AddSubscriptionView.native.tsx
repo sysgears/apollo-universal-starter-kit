@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { CreditCardInput } from '../types';

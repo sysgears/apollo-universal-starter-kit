@@ -1,6 +1,6 @@
 import { groupBy } from 'lodash';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 export const returnId = knexTable => (settings.db.client === 'sqlite3' ? knexTable : knexTable.returning('id'));
 

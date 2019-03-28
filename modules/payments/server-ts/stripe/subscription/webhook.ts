@@ -2,7 +2,7 @@ import Stripe from 'stripe';
 import { TranslationFunction } from 'i18next';
 
 import { mailer } from '@gqlapp/mailer-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import StripeSubscriptionDAO from './sql';
 

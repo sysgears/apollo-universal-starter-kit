@@ -5,7 +5,7 @@ import { I18nextProvider } from 'react-i18next';
 import ClientModule from '@gqlapp/module-client-react-native';
 import commonI18n from '@gqlapp/i18n-common-react';
 import { LanguagePicker, Root } from '@gqlapp/look-client-react-native';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import resources from './locales';
 

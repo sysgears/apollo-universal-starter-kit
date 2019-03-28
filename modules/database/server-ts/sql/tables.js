@@ -1,4 +1,4 @@
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const truncateTables = async (knex, Promise, tables) => {
   if (settings.db.client === 'sqlite3') {

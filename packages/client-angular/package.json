@@ -73,11 +73,11 @@
     "graphql-tools": "^4.0.4",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
-    "mochapack": "^1.0.0",
+    "mochapack": "^1.1.1",
     "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0"
+    "@larix/zen": "*"
   },
   "browserslist": {
     "development": [

@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 
-import { log, settings } from '@gqlapp/core-common';
+import { log } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 // Use password-based key derivation function to derive MAC key and encryption key from secret passphrase
 const _deriveSymmetricKey = salt => crypto.pbkdf2Sync(settings.auth.secret, salt, 10000, 32, 'sha256');

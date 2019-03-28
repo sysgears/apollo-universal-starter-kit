@@ -39,7 +39,7 @@
     "chai": "^4.1.2",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
-    "mochapack": "^1.0.0"
+    "mochapack": "^1.1.1"
   },
   "peerDependencies": {
     "eslint": "*"

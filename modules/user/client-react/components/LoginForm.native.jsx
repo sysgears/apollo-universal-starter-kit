@@ -10,7 +10,7 @@ import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-reac
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { required, minLength, validate } from '@gqlapp/validation-common-react';
 import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@gqlapp/authentication-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],

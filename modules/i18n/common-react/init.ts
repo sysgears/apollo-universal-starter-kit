@@ -1,7 +1,8 @@
 import i18n from 'i18next';
 import { reactI18nextModule } from 'react-i18next';
 
-import { PLATFORM, settings } from '@gqlapp/core-common';
+import { PLATFORM } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import LanguageDetector from './LanguageDetector';
 

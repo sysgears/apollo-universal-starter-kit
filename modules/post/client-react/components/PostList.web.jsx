@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout, Table, Button, Pagination } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const { itemsNumber, type } = settings.pagination.web;
 

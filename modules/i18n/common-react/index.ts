@@ -1,7 +1,7 @@
 import i18next, { i18n as I18N, Resource } from 'i18next';
 
 import CommonModule from '@gqlapp/module-common';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import './init';
 

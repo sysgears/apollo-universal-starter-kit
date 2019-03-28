@@ -75,5 +75,8 @@
     "@gqlapp/user-server-ts": "^0.1.0",
     "@gqlapp/validation-common-react": "^0.1.0",
     "dotenv": "^5.0.1"
+  },
+  "devDependencies": {
+    "mochapack": "^1.1.1"
   }
 }

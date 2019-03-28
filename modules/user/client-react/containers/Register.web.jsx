@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import RegisterView from '../components/RegisterView';
 

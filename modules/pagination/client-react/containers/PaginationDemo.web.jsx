@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import { PageLayout, Select, Option } from '@gqlapp/look-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import PaginationDemoView from '../components/PaginationDemoView.web';
 import { useDataProvider } from './DataProvider';

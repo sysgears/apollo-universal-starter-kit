@@ -29,10 +29,10 @@ const createNode = id => ({
 });
 
 const mutations = {
-  editPost: true,
-  addComment: true,
-  editComment: true,
-  onCommentSelect: true
+  editPost: () => {},
+  addComment: () => {},
+  editComment: () => {},
+  onCommentSelect: () => {}
 };
 
 const mocks = {
@@ -63,11 +63,13 @@ const mocks = {
       return createNode(id);
     }
   }),
-  Mutation: () => ({
-    deletePost: (obj, { id }) => createNode(id),
-    deleteComment: (obj, { input }) => input,
-    ...mutations
-  })
+  Mutation: () => {
+    return {
+      deletePost: (obj, { id }) => createNode(id),
+      deleteComment: (obj, { input }) => input,
+      ...mutations
+    };
+  }
 };
 
 describe('Posts and comments example UI works', () => {
@@ -206,11 +208,14 @@ describe('Posts and comments example UI works', () => {
 
   step('Post editing form works', done => {
     mutations.editPost = (obj, { input }) => {
-      expect(input.id).to.equal(3);
-      expect(input.title).to.equal('Post title 33');
-      expect(input.content).to.equal('Post content 33');
-      done();
-      return input;
+      try {
+        expect(input.id).to.equal(3);
+        expect(input.title).to.equal('Post title 33');
+        expect(input.content).to.equal('Post content 33');
+        return input;
+      } finally {
+        done();
+      }
     };
 
     const postForm = find(container, 'form[name="post"]');
@@ -232,10 +237,13 @@ describe('Posts and comments example UI works', () => {
 
   step('Comment adding works', done => {
     mutations.addComment = (obj, { input }) => {
-      expect(input.postId).to.equal(3);
-      expect(input.content).to.equal('Post comment 24');
-      done();
-      return input;
+      try {
+        expect(input.postId).to.equal(3);
+        expect(input.content).to.equal('Post comment 24');
+        return input;
+      } finally {
+        done();
+      }
     };
 
     const commentForm = find(container, 'form[name="comment"]');
@@ -304,11 +312,15 @@ describe('Posts and comments example UI works', () => {
   });
   step('Comment editing works', async done => {
     mutations.editComment = (obj, { input }) => {
-      expect(input.postId).to.equal(3);
-      expect(input.content).to.equal('Edited comment 2');
-      done();
-      return input;
+      try {
+        expect(input.postId).to.equal(3);
+        expect(input.content).to.equal('Edited comment 2');
+        return input;
+      } finally {
+        done();
+      }
     };
+
     const editButtons = findAll(container, '.edit-comment');
     expect(editButtons).has.lengthOf(2);
     click(editButtons[editButtons.length - 1]);

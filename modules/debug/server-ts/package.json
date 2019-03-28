@@ -5,6 +5,7 @@
   "dependencies": {
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/database-server-ts": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "performance-now": "^2.1.0"
   }
 }

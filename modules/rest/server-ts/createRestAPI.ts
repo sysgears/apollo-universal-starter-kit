@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 
 import ServerModule from '@gqlapp/module-server-ts';
 import sofa, { OpenAPI } from '@hofstadter-io/sofa-api';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import swaggerUi from 'swagger-ui-express';
 

@@ -4,7 +4,7 @@ import i18nMiddleware from 'i18next-express-middleware';
 
 import commonI18n from '@gqlapp/i18n-common-react';
 import ServerModule from '@gqlapp/module-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const beforeware = (app: Express) => {
   if (settings.i18n.enabled) {

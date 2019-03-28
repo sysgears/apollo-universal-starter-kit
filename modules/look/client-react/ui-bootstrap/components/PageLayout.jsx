@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import NavBar from './NavBar';
 

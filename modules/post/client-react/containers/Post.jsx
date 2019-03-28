@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
 
-import { PLATFORM, settings } from '@gqlapp/core-common';
+import { PLATFORM } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import { POSTS_QUERY, POSTS_SUBSCRIPTION, DELETE_POST } from '@gqlapp/post-common';
 

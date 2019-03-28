@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts">
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import Footer from './Footer.vue';
 

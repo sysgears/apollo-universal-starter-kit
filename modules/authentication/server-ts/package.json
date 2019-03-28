@@ -5,6 +5,7 @@
   "dependencies": {
     "@gqlapp/module-server-ts": "^0.1.0",
     "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "jsonwebtoken": "^8.1.0",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",

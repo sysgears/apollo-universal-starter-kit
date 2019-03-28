@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const renderMetaData = t => {
   return (

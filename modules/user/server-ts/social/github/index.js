@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 
 import { AuthModule } from '@gqlapp/authentication-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import { onAuthenticationSuccess, registerUser } from '../shared';
 import User from '../../sql';

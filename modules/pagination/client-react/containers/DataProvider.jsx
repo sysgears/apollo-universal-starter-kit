@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const generateEdgesArray = quantity => {
   const arr = [];

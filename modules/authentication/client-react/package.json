@@ -6,6 +6,7 @@
     "@fortawesome/fontawesome-free-brands": "^5.0.6",
     "@fortawesome/react-fontawesome": "0.0.18",
     "@gqlapp/core-common": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "@gqlapp/look-client-react": "^0.1.0",
     "@gqlapp/look-client-react-native": "^0.1.0",
     "@gqlapp/module-client-react": "^0.1.0",

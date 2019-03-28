@@ -6,6 +6,7 @@
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/database-server-ts": "^0.1.0",
     "@gqlapp/module-server-ts": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "mkdirp": "^0.5.1",
     "shortid": "^2.2.14"
   },

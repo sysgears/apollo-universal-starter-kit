@@ -13,8 +13,9 @@ import { hasDirectives } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
 
+import settings from '@gqlapp/settings-common';
+
 import log from './log';
-import settings from './settings';
 
 interface CreateApolloClientOptions {
   apiUrl?: string;

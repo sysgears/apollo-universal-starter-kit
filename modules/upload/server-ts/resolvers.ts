@@ -1,4 +1,4 @@
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import fileSystemStorage, { UploadFileStream } from './FileSystemStorage';
 

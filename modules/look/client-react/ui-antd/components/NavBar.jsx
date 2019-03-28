@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row, Col } from 'antd';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import MenuItem from './MenuItem';
 

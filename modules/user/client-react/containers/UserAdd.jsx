@@ -5,7 +5,7 @@ import { pick } from 'lodash';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';

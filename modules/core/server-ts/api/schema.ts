@@ -1,6 +1,6 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import ServerModule from '@gqlapp/module-server-ts';
-import { ROOT_SCHEMA } from '@gqlapp/core-common';
+import { ROOT_SCHEMA } from '@gqlapp/core-common/graphql';
 
 import pubsub from './pubsub';
 

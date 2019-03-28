@@ -1,7 +1,7 @@
 import * as glob from 'glob';
 import * as path from 'path';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 // This code gathers migrations and seeds from all modules into two fake directories
 // /module-migrations - contains all the migrations from all modules

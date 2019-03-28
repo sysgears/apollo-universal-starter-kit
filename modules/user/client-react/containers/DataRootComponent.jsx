@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 
-import { clientStorage, settings } from '@gqlapp/core-common';
+import { clientStorage } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import Loading from '../components/Loading';
 

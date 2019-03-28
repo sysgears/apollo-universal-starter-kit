@@ -9,6 +9,7 @@
     "@gqlapp/look-client-react-native": "^0.1.0",
     "@gqlapp/module-client-react": "^0.1.0",
     "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "apollo-upload-client": "^8.0.0",
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",

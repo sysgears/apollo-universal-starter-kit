@@ -4,8 +4,9 @@ import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { PLATFORM, settings } from '@gqlapp/core-common';
+import { PLATFORM } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
+import settings from '@gqlapp/settings-common';
 
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';

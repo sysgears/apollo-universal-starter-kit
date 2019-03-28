@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import SubscriptionAuthRouter from './containers/Auth';
 import resources from './locales';

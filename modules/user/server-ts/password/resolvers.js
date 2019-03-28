@@ -4,7 +4,8 @@ import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
 
 import { access } from '@gqlapp/authentication-server-ts';
-import { log, settings } from '@gqlapp/core-common';
+import { log } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import User from '../sql';
 

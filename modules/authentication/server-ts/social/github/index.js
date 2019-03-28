@@ -1,7 +1,7 @@
 import passport from 'passport';
 import GitHubStrategy from 'passport-github';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import AuthModule from '../AuthModule';
 

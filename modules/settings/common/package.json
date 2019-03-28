@@ -1,0 +1,8 @@
+{
+  "name": "@gqlapp/settings-common",
+  "version": "0.1.0",
+  "private": true,
+  "peerDependencies": {
+    "lodash": "*"
+  }
+}

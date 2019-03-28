@@ -3,7 +3,8 @@ import { Express } from 'express';
 import stripeLocal from 'stripe-local';
 
 import ServerModule from '@gqlapp/module-server-ts';
-import { log, settings } from '@gqlapp/core-common';
+import { log } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import StripeSubscriptionDAO from './sql';
 import schema from './schema.graphql';

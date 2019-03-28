@@ -6,7 +6,8 @@
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/i18n-client-react": "^0.1.0",
     "@gqlapp/look-client-react": "^0.1.0",
-    "@gqlapp/module-client-react": "^0.1.0"
+    "@gqlapp/module-client-react": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0"
   },
   "devDependencies": {
     "@gqlapp/testing-client-react": "^0.1.0",

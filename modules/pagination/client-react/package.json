@@ -8,7 +8,8 @@
     "@gqlapp/look-client-react": "^0.1.0",
     "@gqlapp/look-client-react-native": "^0.1.0",
     "@gqlapp/module-client-react": "^0.1.0",
-    "@gqlapp/module-client-react-native": "^0.1.0"
+    "@gqlapp/module-client-react-native": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0"
   },
   "peerDependencies": {
     "prop-types": "*",

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';

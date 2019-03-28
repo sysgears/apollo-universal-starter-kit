@@ -6,7 +6,7 @@ import styled from 'styled-components';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout, Button } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const Section = styled.section`
   text-align: center;

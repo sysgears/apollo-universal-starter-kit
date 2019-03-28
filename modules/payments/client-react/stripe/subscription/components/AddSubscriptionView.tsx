@@ -5,7 +5,7 @@ import { Elements } from 'react-stripe-elements';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { PageLayout, LayoutCenter, Table, Row, Col } from '@gqlapp/look-client-react';
 import { clientOnly } from '@gqlapp/core-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { CreditCardInput } from '../types';

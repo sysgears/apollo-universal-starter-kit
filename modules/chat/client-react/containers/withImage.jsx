@@ -6,7 +6,7 @@ import url from 'url';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import ModalNotify from '../components/ModalNotify';
 

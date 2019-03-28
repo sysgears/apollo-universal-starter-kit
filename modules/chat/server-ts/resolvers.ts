@@ -4,7 +4,7 @@ import { TranslationFunction } from 'i18next';
 
 import ServerModule from '@gqlapp/module-server-ts';
 import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import ChatDAO, { Message, Identifier } from './sql';
 

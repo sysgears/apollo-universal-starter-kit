@@ -8,7 +8,7 @@ import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '@gqlapp/look-client-react-native';
 import { linkText } from '@gqlapp/look-client-react-native/styles';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const renderProfileItem = (title, value, idx) => (
   <CardItem key={idx}>

@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
 import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const { enabled, publicKey } = settings.stripe.subscription;
 

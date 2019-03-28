@@ -2,7 +2,8 @@ import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
 import { ApolloError } from 'apollo-server-errors';
 
-import { log, settings } from '@gqlapp/core-common';
+import { log } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const { plan } = settings.stripe.subscription;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);

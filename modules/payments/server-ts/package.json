@@ -7,6 +7,7 @@
     "@gqlapp/database-server-ts": "^0.1.0",
     "@gqlapp/module-server-ts": "^0.1.0",
     "@gqlapp/mailer-server-ts": "^0.1.0",
+    "@gqlapp/settings-common": "^0.1.0",
     "@gqlapp/user-server-ts": "^0.1.0",
     "stripe": "^5.4.0",
     "stripe-local": "^0.1.1"

@@ -5,7 +5,7 @@ import update from 'immutability-helper';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { withUser } from '@gqlapp/user-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import withUuid from './withUuid';
 import Chat from './Chat';

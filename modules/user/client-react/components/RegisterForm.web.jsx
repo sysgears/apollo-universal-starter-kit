@@ -6,7 +6,7 @@ import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { match, email, minLength, required, validate } from '@gqlapp/validation-common-react';
 import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 const registerFormSchema = {
   username: [required, minLength(3)],

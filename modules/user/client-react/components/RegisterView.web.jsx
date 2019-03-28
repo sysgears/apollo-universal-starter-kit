@@ -4,7 +4,7 @@ import Helmet from 'react-helmet';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import RegisterForm from './RegisterForm';
 

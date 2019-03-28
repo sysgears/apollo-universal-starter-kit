@@ -3,8 +3,9 @@ import { formatResponse } from 'apollo-logger';
 import { GraphQLSchema } from 'graphql';
 import 'isomorphic-unfetch';
 
-import { log, settings } from '@gqlapp/core-common';
+import { log } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
+import settings from '@gqlapp/settings-common';
 
 export default (schema: GraphQLSchema, modules: ServerModule) => {
   return new ApolloServer({

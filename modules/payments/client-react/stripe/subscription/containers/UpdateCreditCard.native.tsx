@@ -4,8 +4,9 @@ import { StripeProvider } from 'react-stripe-elements';
 import { isApolloError } from 'apollo-client';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { PLATFORM, settings } from '@gqlapp/core-common';
+import { PLATFORM } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
+import settings from '@gqlapp/settings-common';
 
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 import { createCreditCardToken } from './stripeOperations';

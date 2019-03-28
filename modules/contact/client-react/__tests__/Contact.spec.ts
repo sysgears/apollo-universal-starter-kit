@@ -73,6 +73,8 @@ describe('Contact UI works', () => {
 
   step('Click on submit button works', () => {
     click(submitButton);
+    renderer.history.push('/');
+    renderer.history.push('/contact');
   });
 
   step('Form is not submitted with not valid data', async () => {

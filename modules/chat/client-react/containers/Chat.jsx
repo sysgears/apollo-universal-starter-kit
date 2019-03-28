@@ -4,7 +4,7 @@ import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 
 import { Loading } from '@gqlapp/look-client-react-native';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';

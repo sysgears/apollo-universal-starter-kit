@@ -7,9 +7,10 @@ import createHistory from 'history/createBrowserHistory';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
 
-import { apiUrl, settings } from '@gqlapp/core-common';
+import { apiUrl } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
 import { createApolloClient, createReduxStore, getStoreReducer, log } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import RedBox from './RedBox';
 

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText, Button } from '@gqlapp/look-client-react';
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import LoginForm from './LoginForm';
 

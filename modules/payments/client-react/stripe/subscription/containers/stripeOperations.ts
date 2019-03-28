@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash';
 
-import { settings } from '@gqlapp/core-common';
+import settings from '@gqlapp/settings-common';
 
 import { CreditCardInput } from '../types';
 

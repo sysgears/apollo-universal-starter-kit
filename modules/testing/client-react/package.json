@@ -7,10 +7,10 @@
     "@gqlapp/core-client-react": "^0.1.0",
     "@gqlapp/module-client-react": "^0.1.0",
     "@gqlapp/testing-common": "^0.1.0",
-    "dom-testing-library": "^3.13.0",
+    "dom-testing-library": "^3.18.2",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "^16.8.1",
-    "react-testing-library": "^3.0.2"
+    "react-testing-library": "^6.0.3"
   },
   "devDependencies": {
     "@types/jsdom": "^12.2.0",

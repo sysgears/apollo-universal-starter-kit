@@ -19,6 +19,7 @@
     "rxjs": "^6.3.3"
   },
   "devDependencies": {
-    "autoprefixer": "*"
+    "autoprefixer": "*",
+    "angular2-template-loader": "^0.6.2"
   }
 }

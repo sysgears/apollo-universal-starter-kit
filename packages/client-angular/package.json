@@ -41,39 +41,10 @@
     "@gqlapp/counter-client-angular": "^0.1.0",
     "@gqlapp/counter-common": "^0.1.0",
     "@gqlapp/look-client-angular": "^0.1.0",
-    "@gqlapp/module-client-angular": "^0.1.0",
-    "angular2-template-loader": "^0.6.2",
-    "apollo-cache-inmemory": "1.4.2",
-    "apollo-cache-router": "^1.1.6",
-    "apollo-cache": "^1.1.25",
-    "apollo-client": "^2.4.7",
-    "apollo-link": "^1.0.6",
-    "apollo-link-batch-http": "^1.2.11",
-    "apollo-link-context": "^1.0.7",
-    "apollo-link-state": "^0.4.1",
-    "apollo-link-ws": "^1.0.3",
-    "apollo-upload-client": "^8.0.0",
-    "graphql": "^14.1.1",
-    "graphql-tools": "^4.0.4",
-    "minilog": "^3.1.0",
-    "subscriptions-transport-ws": "^0.9.4",
-    "zone.js": "^0.8.26"
+    "@gqlapp/module-client-angular": "^0.1.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.4",
-    "@types/lodash": "^4.14.118",
-    "@types/mocha": "^5.2.5",
-    "@types/webpack-env": "^1.13.6",
-    "autoprefixer": "^8.3.0",
-    "chai": "^4.1.2",
-    "chai-http": "^4.0.0",
-    "cross-env": "^5.1.1",
-    "eslint": "^4.13.1",
-    "graphql-tools": "^4.0.4",
-    "mocha": "^5.1.1",
-    "mocha-steps": "^1.1.0",
-    "mochapack": "^1.1.1",
-    "rimraf": "^2.6.2"
+    "mochapack": "^1.1.1"
   },
   "peerDependencies": {
     "@larix/zen": "*"

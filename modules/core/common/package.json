@@ -11,7 +11,7 @@
     "apollo-link-batch-http": "^1.2.11",
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.17",
-    "apollo-logger": "^0.3.0",
+    "apollo-logger": "^0.3.1",
     "apollo-utilities": "^1.0.3",
     "graphql": "^14.1.1",
     "graphql-tools": "^2.13.0",

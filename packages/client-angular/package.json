@@ -52,7 +52,6 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.0",
     "apollo-upload-client": "^8.0.0",
     "graphql": "^14.1.1",
     "graphql-tools": "^4.0.4",

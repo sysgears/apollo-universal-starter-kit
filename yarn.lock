@@ -3421,10 +3421,10 @@ apollo-link@^1.0.0, apollo-link@^1.0.6, apollo-link@^1.2.1, apollo-link@^1.2.11,
     tslib "^1.9.3"
     zen-observable-ts "^0.8.18"
 
-apollo-logger@^0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.3.0.tgz#e6a68ad915678c1827c27394b23d3cb42775c18c"
-  integrity sha512-BbRBtNjHNfwekJwmxLiJ3HhXEufpTqYSG3hN9nkK2ML60ZjXO7uUVGKI5uhdK3B2I8MiZCDOcB3/S543AGE71Q==
+apollo-logger@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/apollo-logger/-/apollo-logger-0.3.1.tgz#f933dbf78fdc04708238fe96ed0da53b528ced1c"
+  integrity sha512-5jU8HVO0n2/wAe6lceAMSGramrGhB76pbt0uTD/OgMYoqPrUJebT3nNms9udp5rBVz1hVy0tNCV2vsRnomcyWw==
   dependencies:
     debug "^3.0.1"
 

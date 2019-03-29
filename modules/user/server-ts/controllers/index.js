@@ -1,4 +1,5 @@
 import getUsersController from './getUsers';
 
-export const getApi = [{ route: '/getUsers', controller: getUsersController }];
-export const postApi = [];
+const restApi = [{ route: '/getUsers', controller: getUsersController, method: 'GET' }];
+
+export default restApi;

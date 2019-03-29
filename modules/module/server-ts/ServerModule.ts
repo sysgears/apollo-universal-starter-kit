@@ -15,6 +15,8 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
+type RestMethods = 'GET' | 'POST' | 'PUT' | 'DELETE';
+
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
@@ -25,8 +27,7 @@ export interface ServerModuleShape extends CommonModuleShape {
   // Middleware
   beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
   middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
-  getApi?: Array<{ route: string; controller: (req: any, res: any) => void }>;
-  postApi?: Array<{ route: string; controller: (req: any, res: any) => void }>;
+  restApi?: Array<{ route: string; method: RestMethods; controller: (req: any, res: any) => void }>;
   // Shared modules data
   data?: { [key: string]: any };
 }

@@ -18,12 +18,19 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   modules.beforeware.forEach(applyBeforeware => applyBeforeware(app, modules.appContext));
   modules.middleware.forEach(applyMiddleware => applyMiddleware(app, modules.appContext));
 
-  modules.getApi.forEach(({ route, controller }) => {
-    app.get(route, controller);
-  });
-
-  modules.postApi.forEach(({ route, controller }) => {
-    app.post(route, controller);
+  modules.restApi.forEach(({ route, controller, method }) => {
+    switch (method) {
+      case 'GET':
+        return app.get(route, controller);
+      case 'POST':
+        return app.post(route, controller);
+      case 'PUT':
+        return app.put(route, controller);
+      case 'DELETE':
+        return app.delete(route, controller);
+      default:
+        return;
+    }
   });
 
   if (__DEV__) {

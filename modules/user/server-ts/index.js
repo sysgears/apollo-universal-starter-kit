@@ -9,7 +9,7 @@ import User from './sql';
 import resources from './locales';
 import social from './social';
 import password from './password';
-import { getApi, postApi } from './controllers';
+import restApi from './controllers';
 
 const getIdentity = (id, serial = '') => {
   if (!id && serial) {
@@ -46,7 +46,6 @@ export default new ServerModule(social, password, {
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
   middleware: [middleware],
-  getApi: [...getApi],
-  postApi: [...postApi],
+  restApi,
   localization: [{ ns: 'user', resources }]
 });

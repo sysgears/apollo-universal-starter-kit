@@ -10,12 +10,14 @@ import graphiqlMiddleware from './middleware/graphiql';
 import websiteMiddleware from './middleware/website';
 import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
+import identityMiddleware from './middleware/identity';
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
   app.use(bodyParser());
+  app.use(identityMiddleware);
 
   modules.beforeware.forEach(applyBeforeware => applyBeforeware(app, modules.appContext));
   modules.middleware.forEach(applyMiddleware => applyMiddleware(app, modules.appContext));

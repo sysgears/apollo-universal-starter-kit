@@ -2339,6 +2339,13 @@
     "@types/tough-cookie" "*"
     parse5 "^4.0.0"
 
+"@types/jsonwebtoken@^8.3.2":
+  version "8.3.2"
+  resolved "https://registry.yarnpkg.com/@types/jsonwebtoken/-/jsonwebtoken-8.3.2.tgz#e3d5245197152346fae7ee87d5541aa5a92d0362"
+  integrity sha512-Mkjljd9DTpkPlrmGfTJvcP4aBU7yO2QmW7wNVhV4/6AEUxYoacqU7FJU/N0yFEHTsIrE4da3rUrjrR5ejicFmA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/knex@^0.14.20":
   version "0.14.26"
   resolved "https://registry.yarnpkg.com/@types/knex/-/knex-0.14.26.tgz#18c1b5d5a7e44bb0d394209f7e0e965b2987ce57"
@@ -9594,7 +9601,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.1"
     object-path "^0.11.4"
 
-graphql@14.1.1, graphql@^14.1.1:
+graphql@^14.1.1:
   version "14.1.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
   integrity sha512-C5zDzLqvfPAgTtP8AUPIt9keDabrdRAqSWjj2OPRKrKxI9Fb65I36s1uCs1UUBFnSWTdO7hyHi7z1ZbwKMKF6Q==
@@ -10221,7 +10228,7 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
 
-immutability-helper@2.8.1, immutability-helper@^2.6.2:
+immutability-helper@^2.6.2:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
@@ -16568,7 +16575,6 @@ react-native-view-shot@2.5.0:
 
 "react-native@https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz":
   version "0.57.1"
-  uid "78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   resolved "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz#78bcdc7d34a2f4a58c179699e775842a74da6c6f"
   dependencies:
     absolute-path "^0.0.0"
@@ -19926,7 +19932,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
+watchpack@^1.5.0:
   version "1.6.0"
   resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:

@@ -1,4 +1,4 @@
-import ServerModule from '@gqlapp/module-server-ts';
+import { ServerRestModule } from '@gqlapp/module-server-ts';
 
 import confirmMiddleware from './confirm';
 import schema from './schema.graphql';
@@ -40,7 +40,7 @@ const middleware = app => {
   }
 };
 
-export default new ServerModule(social, password, {
+export default new ServerRestModule(social, password, {
   schema: [schema],
   appContext,
   createResolversFunc: [resolvers],

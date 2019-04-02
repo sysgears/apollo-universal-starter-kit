@@ -18,7 +18,7 @@ const createPasswordHash = password => {
   return bcrypt.hash(password, 12) || false;
 };
 
-const getUsers = async ({ query: { column, order, searchText = '', role = '', isActive = null } }, res) => {
+const getUsers = async ({ body: { column, order, searchText = '', role = '', isActive = null } }, res) => {
   const orderBy = { column, order };
   const filter = { searchText, role, isActive };
   const users = await User.getUsers(orderBy, filter);

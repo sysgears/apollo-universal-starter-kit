@@ -15,7 +15,12 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
-type RestMethods = 'GET' | 'POST' | 'PUT' | 'DELETE';
+enum RestMethod {
+  Get = 'GET',
+  Post = 'POST',
+  Put = 'PUT',
+  Delete = 'DELETE'
+}
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
@@ -27,7 +32,7 @@ export interface ServerModuleShape extends CommonModuleShape {
   // Middleware
   beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
   middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
-  restApi?: Array<{ route: string; method: RestMethods; controller: (req: any, res: any) => void }>;
+  restApi?: Array<{ route: string; method: RestMethod; controller: (req: any, res: any) => void }>;
   // Shared modules data
   data?: { [key: string]: any };
 }

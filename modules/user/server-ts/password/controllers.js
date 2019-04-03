@@ -30,15 +30,18 @@ const validateUserPassword = async (user, password, t) => {
 };
 
 const register = async ({ body: input }, res) => {
+  const {
+    locals: { t }
+  } = res;
   const errors = {};
   const userExists = await User.getUserByUsername(input.username);
   if (userExists) {
-    errors.username = 'user:auth.password.usernameIsExisted';
+    errors.username = t('user:auth.password.usernameIsExisted');
   }
 
   const emailExists = await User.getUserByEmail(input.email);
   if (emailExists) {
-    errors.email = 'user:auth.password.emailIsExisted';
+    errors.email = t('user:auth.password.emailIsExisted');
   }
 
   if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
@@ -125,15 +128,18 @@ const forgotPassword = async ({ body: input }, res) => {
 };
 
 const resetPassword = async ({ body: input }, res) => {
+  const {
+    locals: { t }
+  } = res;
   const errors = {};
 
   const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
   if (reset.password !== reset.passwordConfirmation) {
-    errors.password = 'user:auth.password.passwordsIsNotMatch';
+    errors.password = t('user:auth.password.passwordsIsNotMatch');
   }
 
   if (reset.password.length < settings.auth.password.minLength) {
-    errors.password = 'user:auth.password.passwordLength';
+    errors.password = t('user:auth.password.passwordLength');
   }
 
   if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
@@ -142,7 +148,7 @@ const resetPassword = async ({ body: input }, res) => {
   const { email, password } = jwt.verify(token, settings.auth.secret);
   const user = await User.getUserByEmail(email);
   if (user.passwordHash !== password) {
-    throw new Error('user:auth.password.invalidToken');
+    throw new Error(t('user:auth.password.invalidToken'));
   }
   if (user) {
     await User.updatePassword(user.id, reset.password);

@@ -28,19 +28,22 @@ const getUsers = async ({ body: { column, order, searchText = '', role = '', isA
 
 const addUser = async ({ body: input }, res) => {
   const errors = {};
+  const {
+    locals: { t }
+  } = res;
 
   const userExists = await User.getUserByUsername(input.username);
   if (userExists) {
-    errors.username = 'user:usernameIsExisted';
+    errors.username = t('user:usernameIsExisted');
   }
 
   const emailExists = await User.getUserByEmail(input.email);
   if (emailExists) {
-    errors.email = 'user:emailIsExisted';
+    errors.email = t('user:emailIsExisted');
   }
 
   if (input.password.length < password.minLength) {
-    errors.password = 'user:passwordLength';
+    errors.password = t('user:passwordLength');
   }
 
   if (!isEmpty(errors)) throw new Error('Failed to get events due to validation errors');
@@ -89,6 +92,9 @@ const addUser = async ({ body: input }, res) => {
 };
 
 const editUser = async ({ body: input }, res) => {
+  const {
+    locals: { t }
+  } = res;
   const isAdmin = () => true;
   const isSelf = () => true;
 
@@ -96,16 +102,16 @@ const editUser = async ({ body: input }, res) => {
 
   const userExists = await User.getUserByUsername(input.username);
   if (userExists && userExists.id !== input.id) {
-    errors.username = 'user:usernameIsExisted';
+    errors.username = t('user:usernameIsExisted');
   }
 
   const emailExists = await User.getUserByEmail(input.email);
   if (emailExists && emailExists.id !== input.id) {
-    errors.email = 'user:emailIsExisted';
+    errors.email = t('user:emailIsExisted');
   }
 
   if (input.password && input.password.length < password.minLength) {
-    errors.password = 'user:passwordLength';
+    errors.password = t('user:passwordLength');
   }
 
   if (!isEmpty(errors)) throw new Error('Failed to get events due to validation errors');
@@ -152,16 +158,19 @@ const editUser = async ({ body: input }, res) => {
 };
 
 const deleteUser = async ({ body: { id } }, res) => {
+  const {
+    locals: { t }
+  } = res;
   const isAdmin = () => true;
   const isSelf = () => false;
 
   const user = await User.getUser(id);
   if (!user) {
-    throw new Error('userIsNotExisted');
+    throw new Error(t('userIsNotExisted'));
   }
 
   if (isSelf()) {
-    throw new Error('userCannotDeleteYourself');
+    throw new Error(t('userCannotDeleteYourself'));
   }
 
   const isDeleted = !isSelf() && isAdmin() ? await User.deleteUser(id) : false;
@@ -169,7 +178,7 @@ const deleteUser = async ({ body: { id } }, res) => {
   if (isDeleted) {
     res.json(user);
   } else {
-    throw new Error('userCouldNotDeleted');
+    throw new Error(t('userCouldNotDeleted'));
   }
 };
 

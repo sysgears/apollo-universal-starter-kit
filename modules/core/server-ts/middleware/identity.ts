@@ -8,7 +8,7 @@ const identityMiddleware = (req: express.Request, res: express.Response, next: a
   const parts = authorization && authorization.split(' ');
   const token = parts && parts.length === 2 && parts[1];
   if (token) {
-    const identity = jwt.verify(token, settings.auth.secret);
+    const { identity } = jwt.verify(token, settings.auth.secret);
     res.locals.identity = identity;
   }
   next();

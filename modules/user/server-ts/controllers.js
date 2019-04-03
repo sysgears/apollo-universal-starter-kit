@@ -19,11 +19,45 @@ const createPasswordHash = password => {
 };
 
 const getUsers = async ({ body: { column, order, searchText = '', role = '', isActive = null } }, res) => {
+  const {
+    locals: { identity, t }
+  } = res;
+
+  if (identity.role !== 'admin') res.status(401).json(t('user:accessDenied'));
+
   const orderBy = { column, order };
   const filter = { searchText, role, isActive };
   const users = await User.getUsers(orderBy, filter);
 
   res.json(users);
+};
+
+const getUser = ({ body: { id } }, res) => {
+  const {
+    locals: { identity, t }
+  } = res;
+
+  if (identity.id === id || identity.role === 'admin') {
+    try {
+      res.json({ user: User.getUser(id) });
+    } catch (e) {
+      res.status(500).json(e);
+    }
+  }
+
+  res.status(401).json(t('user:accessDenied'));
+};
+
+const currentUser = (req, res) => {
+  const {
+    locals: { identity }
+  } = res;
+
+  if (identity) {
+    return User.getUser(identity.id);
+  } else {
+    return null;
+  }
 };
 
 const addUser = async ({ body: input }, res) => {
@@ -46,7 +80,7 @@ const addUser = async ({ body: input }, res) => {
     errors.password = t('user:passwordLength');
   }
 
-  if (!isEmpty(errors)) throw new Error('Failed to get events due to validation errors');
+  if (!isEmpty(errors)) res.status(422).json({ message: 'Failed to get events due to validation errors', errors });
 
   const passwordHash = await createPasswordHash(input.password);
 
@@ -93,10 +127,10 @@ const addUser = async ({ body: input }, res) => {
 
 const editUser = async ({ body: input }, res) => {
   const {
-    locals: { t }
+    locals: { identity, t }
   } = res;
-  const isAdmin = () => true;
-  const isSelf = () => true;
+  const isAdmin = () => identity.role === 'admin';
+  const isSelf = () => identity.id === input.id;
 
   const errors = {};
 
@@ -114,7 +148,7 @@ const editUser = async ({ body: input }, res) => {
     errors.password = t('user:passwordLength');
   }
 
-  if (!isEmpty(errors)) throw new Error('Failed to get events due to validation errors');
+  if (!isEmpty(errors)) res.status(422).json({ message: 'Failed to get events due to validation errors', errors });
 
   const userInfo = !isSelf() && isAdmin() ? input : pick(input, ['id', 'username', 'email', 'password']);
 
@@ -159,10 +193,10 @@ const editUser = async ({ body: input }, res) => {
 
 const deleteUser = async ({ body: { id } }, res) => {
   const {
-    locals: { t }
+    locals: { identity, t }
   } = res;
-  const isAdmin = () => true;
-  const isSelf = () => false;
+  const isAdmin = () => identity.role === 'admin';
+  const isSelf = () => identity.id === id;
 
   const user = await User.getUser(id);
   if (!user) {
@@ -184,6 +218,8 @@ const deleteUser = async ({ body: { id } }, res) => {
 
 const restApi = [
   { route: '/getUsers', controller: getUsers, method: 'GET' },
+  { route: '/getUser', controller: getUser, method: 'GET' },
+  { route: '/getCurrentUser', controller: currentUser, method: 'GET' },
   { route: '/addUser', controller: addUser, method: 'POST' },
   { route: '/editUser', controller: editUser, method: 'PUT' },
   { route: '/deleteUser', controller: deleteUser, method: 'DELETE' }

@@ -10,7 +10,7 @@ export default {
   },
   jwt: {
     enabled: true,
-    tokenExpiresIn: '1m',
+    tokenExpiresIn: '5m',
     refreshTokenExpiresIn: '7d'
   },
   password: {

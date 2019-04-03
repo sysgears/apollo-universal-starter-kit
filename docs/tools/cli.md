@@ -29,7 +29,6 @@ $ node tools/cli
    COMMANDS
 
      addmodule <moduleName> [location]                  Create a new Module.
-     addcrud <moduleName> [location] [tablePrefix]      Create a new Module with CRUD
      deletemodule <moduleName> [location]               Delete a Module
      help <command>                                     Display help for a specific command
 
@@ -133,6 +132,8 @@ Done in 3.89s.
 You can use this command to delete any standard module that Apollo Universal Starter Kit comes with.
 
 ## Creating CRUD Modules with `addcrud`
+
+**NOTE**: The `addcrud` command is only available in the [cli-crud] branch. The master branch doesn't have this command!
 
 The `addcrud` command is similar to [`addmodule`](#basic-scaffolding-with-addmodule) in that it also generates the
 application modules. But the key difference between the two commands is that `addcrud` generates the server modules that 

@@ -142,7 +142,7 @@ export default (schema: GraphQLSchema, modules: ServerModule) => async (
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res, schema, modules);
-    } else if (!__SSR__ && req.method === 'GET') {
+    } else if (req.path.indexOf('.') < 0 && !__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {
       next();

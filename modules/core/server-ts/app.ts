@@ -4,7 +4,7 @@ import { GraphQLSchema } from 'graphql';
 import bodyParser from 'body-parser';
 
 import { isApiExternal } from '@gqlapp/core-common';
-import ServerModule from '@gqlapp/module-server-ts';
+import { ServerRestModule } from '@gqlapp/module-server-ts';
 
 import graphiqlMiddleware from './middleware/graphiql';
 import websiteMiddleware from './middleware/website';
@@ -12,7 +12,7 @@ import createApolloServer from './graphql';
 import errorMiddleware from './middleware/error';
 import identityMiddleware from './middleware/identity';
 
-export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
+export const createServerApp = (schema: GraphQLSchema, modules: ServerRestModule) => {
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');

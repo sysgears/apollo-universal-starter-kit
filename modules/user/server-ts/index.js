@@ -49,3 +49,5 @@ export default new ServerRestModule(social, password, {
   restApi,
   localization: [{ ns: 'user', resources }]
 });
+
+export { User };

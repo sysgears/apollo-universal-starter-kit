@@ -3,6 +3,7 @@ import { AuthenticationError } from 'apollo-server-errors';
 
 import createTokens from './createTokens';
 import resolvers from './resolvers';
+import restApi from './controllers';
 import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 import settings from '../../../../../settings';
@@ -43,7 +44,8 @@ export default new AccessModule(
         grant: [grant],
         schema: [schema],
         createResolversFunc: [resolvers],
-        createContextFunc: [createContextFunc]
+        createContextFunc: [createContextFunc],
+        restApi
       }
     : {}
 );

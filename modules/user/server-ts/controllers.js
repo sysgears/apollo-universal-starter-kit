@@ -40,7 +40,7 @@ const getUser = ({ body: { id } }, res) => {
     locals: { identity, t }
   } = res;
 
-  if ((identity && identity.id === id) || identity.role === 'admin') {
+  if (identity && (identity.id === id || identity.role === 'admin')) {
     try {
       res.json({ user: User.getUser(id) });
     } catch (e) {
@@ -127,7 +127,7 @@ const addUser = async ({ body: input }, res) => {
 
     res.json({ user });
   } catch (e) {
-    console.log(e);
+    res.status(500).json(e);
   }
 };
 

@@ -23,7 +23,10 @@ const getUsers = async ({ body: { column, order, searchText = '', role = '', isA
     locals: { identity, t }
   } = res;
 
-  if (identity.role !== 'admin') res.status(401).json(t('user:accessDenied'));
+  if (!identity || identity.role !== 'admin') {
+    res.status(401).json(t('user:accessDenied'));
+    return;
+  }
 
   const orderBy = { column, order };
   const filter = { searchText, role, isActive };
@@ -37,7 +40,7 @@ const getUser = ({ body: { id } }, res) => {
     locals: { identity, t }
   } = res;
 
-  if (identity.id === id || identity.role === 'admin') {
+  if ((identity && identity.id === id) || identity.role === 'admin') {
     try {
       res.json({ user: User.getUser(id) });
     } catch (e) {
@@ -80,7 +83,10 @@ const addUser = async ({ body: input }, res) => {
     errors.password = t('user:passwordLength');
   }
 
-  if (!isEmpty(errors)) res.status(422).json({ message: 'Failed to get events due to validation errors', errors });
+  if (!isEmpty(errors)) {
+    res.status(422).json({ message: 'Failed to get events due to validation errors', errors });
+    return;
+  }
 
   const passwordHash = await createPasswordHash(input.password);
 
@@ -121,7 +127,7 @@ const addUser = async ({ body: input }, res) => {
 
     res.json({ user });
   } catch (e) {
-    return e;
+    console.log(e);
   }
 };
 
@@ -129,6 +135,12 @@ const editUser = async ({ body: input }, res) => {
   const {
     locals: { identity, t }
   } = res;
+
+  if (!identity) {
+    res.status(401).json(t('user:accessDenied'));
+    return;
+  }
+
   const isAdmin = () => identity.role === 'admin';
   const isSelf = () => identity.id === input.id;
 
@@ -195,6 +207,11 @@ const deleteUser = async ({ body: { id } }, res) => {
   const {
     locals: { identity, t }
   } = res;
+  if (!identity) {
+    res.status(401).json(t('user:accessDenied'));
+    return;
+  }
+
   const isAdmin = () => identity.role === 'admin';
   const isSelf = () => identity.id === id;
 

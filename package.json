@@ -18,7 +18,6 @@
     "watch:angular": "zen -d client -e angular watch",
     "watch:android": "zen -e android -d client -d ios watch",
     "watch:ios": "zen -e ios -d client -d android watch",
-    "watch:rest": "zen -d client -e client-rest watch",
     "watch-client": "cross-env DISABLE_SSR=true lerna run --scope=client watch --stream",
     "cli": "node tools/cli",
     "stripe:setup": "lerna run --scope=server stripe:setup",

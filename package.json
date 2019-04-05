@@ -78,7 +78,8 @@
     "modules/**/client-vue",
     "modules/**/common",
     "modules/**/common-react",
-    "modules/**/server-ts"
+    "modules/**/server-ts",
+    "modules/**/server-ts-rest"
   ],
   "greenkeeper": {
     "ignore": [

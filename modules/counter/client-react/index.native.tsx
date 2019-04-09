@@ -22,7 +22,8 @@ export default new ClientModule(counters, {
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
               ),
-              headerStyle: { backgroundColor: '#fff' }
+              headerStyle: { backgroundColor: '#fff' },
+              headerForceInset: {}
             })
           }
         }),

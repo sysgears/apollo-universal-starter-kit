@@ -169,6 +169,10 @@ function runPrettier(pathToFile) {
   }
 }
 
+function moveToModules() {
+  shell.cd(`${BASE_PATH}/modules/`);
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -182,5 +186,6 @@ module.exports = {
   computeModulePackageName,
   addSymlink,
   removeSymlink,
-  runPrettier
+  runPrettier,
+  moveToModules
 };

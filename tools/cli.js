@@ -1,12 +1,13 @@
 require('@babel/register')({ cwd: __dirname + '/..' });
 require('@babel/polyfill');
 const prog = require('caporal');
-
 const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
+const chooseTemplate = require('./cli/helpers/chooseTemplate');
+
 const CommandInvoker = require('./cli/CommandInvoker');
 
-const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand);
+const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand, chooseTemplate);
 
 prog
   .version('1.0.0')
@@ -27,6 +28,9 @@ prog
   .argument('<moduleName>', 'Module name')
   .argument('[location]', 'Where should we delete module. [both, server, client]', ['both', 'server', 'client'], 'both')
   .option('-o, --old', 'Old Structure')
-  .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger));
+  .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
+  // Choose stack
+  .command('choosestack', 'Choose the stack of technologies for the app')
+  .action(() => commandInvoker.runChooseStack());
 
 prog.parse(process.argv);

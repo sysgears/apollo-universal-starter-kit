@@ -8,10 +8,12 @@ class CommandInvoker {
    *
    * @param addModule - The function for creating a new module.
    * @param deleteModule - The function for deleting existing module.
+   * @param chooseStack - The function for for choosing stack of technologies.
    */
-  constructor(addModule, deleteModule) {
+  constructor(addModule, deleteModule, chooseStack) {
     this.addModule = addModule;
     this.deleteModule = deleteModule;
+    this.chooseStack = chooseStack;
   }
 
   /**
@@ -44,6 +46,13 @@ class CommandInvoker {
    */
   runDeleteModule(args, options, logger) {
     runOperation(this.deleteModule, args, options, logger);
+  }
+
+  /**
+   * Runs operation (function) for choosing stack of technologies.
+   */
+  runChooseStack() {
+    this.chooseStack();
   }
 }
 

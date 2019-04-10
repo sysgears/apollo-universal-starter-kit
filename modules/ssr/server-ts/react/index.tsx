@@ -2,23 +2,23 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import Helmet from 'react-helmet';
+import { Provider } from 'react-redux';
 import { GraphQLSchema } from 'graphql';
+import { StaticRouter } from 'react-router';
+import { SchemaLink } from 'apollo-link-schema';
 import { ServerStyleSheet } from 'styled-components';
-import { getDataFromTree } from 'react-apollo';
+import { ApolloProvider, getDataFromTree } from 'react-apollo';
 import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import ServerModule from '@gqlapp/module-server-ts';
 import ClientModule from '@gqlapp/module-client-react';
+import { isApiExternal, apiUrl } from '@gqlapp/core-common';
+import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
 import { DocumentProps, Document } from './template';
 
 let assetMap: { [key: string]: string };
 let clientModules: ClientModule;
-let assets: any;
-let bundle: any;
 
 if (__SSR__) {
-  assets = require('../../../../packages/client/build/assets.json');
-  require(`../../../../packages/client/build${assets['vendor.js']}`);
-  bundle = require(`../../../../packages/client/build${assets['index.js']}`);
   clientModules = require('../../../../packages/client/src').default;
 
   if (module.hot) {
@@ -27,6 +27,45 @@ if (__SSR__) {
     });
   }
 }
+
+const createApp = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
+  const schemaLink = new SchemaLink({
+    context: { ...(await modules.createContext(req, res)), req, res },
+    schema
+  });
+
+  const client = createApolloClient({
+    createNetLink: !isApiExternal ? () => schemaLink : undefined,
+    clientResolvers: clientModules.resolvers,
+    links: clientModules.link,
+    connectionParams: null,
+    apiUrl
+  });
+
+  const store = createReduxStore(clientModules.reducers, {}, client);
+  const context: any = {};
+
+  const App = clientModules.getWrappedRoot(
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        {clientModules.getDataRoot(
+          <StaticRouter location={req.url} context={context}>
+            {clientModules.router}
+          </StaticRouter>
+        )}
+      </ApolloProvider>
+    </Provider>,
+    req
+  );
+
+  return {
+    schemaLink,
+    context,
+    client,
+    store,
+    App
+  };
+};
 
 const redirectOnMovedPage = (res: any, context: any) => {
   res.writeHead(301, { Location: context.url });
@@ -72,12 +111,11 @@ const respondWithDocument = (req: any, res: any, App: any, client: any) => {
 };
 
 const renderApp = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
-  // const { App, client, context } = await createApp(req, res, schema, modules);
-  // await getDataFromTree(App);
-  // res.status(!!context.pageNotFound ? 404 : 200);
+  const { App, client, context } = await createApp(req, res, schema, modules);
+  await getDataFromTree(App);
+  res.status(!!context.pageNotFound ? 404 : 200);
 
-  // return context.url ? redirectOnMovedPage(res, context) : respondWithDocument(req, res, App, client);
-  res.end('Developing');
+  return context.url ? redirectOnMovedPage(res, context) : respondWithDocument(req, res, App, client);
 };
 
 export default renderApp;

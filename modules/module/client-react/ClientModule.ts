@@ -7,7 +7,6 @@ export interface ClientModuleShape extends BaseModuleShape {
   navItemRight?: Array<React.ReactElement<any>>;
   stylesInsert?: string[];
   scriptsInsert?: string[];
-  createServerApp?: Array<(req: any, res: any, schema: any, modules: any) => any>;
 }
 
 interface ClientModule extends ClientModuleShape {}

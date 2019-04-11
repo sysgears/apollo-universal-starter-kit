@@ -13,6 +13,7 @@ import graphqlTypes from '@gqlapp/graphql-types-server-ts';
 import authentication from '@gqlapp/authentication-server-ts';
 import reports from '@gqlapp/reports-server-ts';
 import rest from '@gqlapp/rest-server-ts';
+import ssr from '@gqlapp/ssr-server-ts';
 import '@gqlapp/debug-server-ts';
 
 import ServerModule from '@gqlapp/module-server-ts';
@@ -35,7 +36,8 @@ const modules: ServerModule = new ServerModule(
   reports,
   rest,
   graphqlTypes,
-  core
+  core,
+  ssr
 );
 
 export default modules;

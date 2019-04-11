@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import { GraphQLSchema } from 'graphql';
 
 interface CreateContextFuncProps {
   req: Request;
@@ -15,7 +16,12 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
-export type TWare = (app: Express, appContext: { [key: string]: any }, createContext: any) => void;
+export interface GraphQLConfig {
+  schema: GraphQLSchema;
+  createContext: any;
+}
+
+export type TWare = (app: Express, appContext: { [key: string]: any }, graphQLConfig: GraphQLConfig) => void;
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API

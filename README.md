@@ -311,7 +311,7 @@ You can support this project by becoming a sponsor! Your logo will show up here 
 
 ## License
 
-Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under the [MIT] license.
+Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is licensed under the [MIT] license.
 
 [our chat]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [mit]: LICENSE
@@ -358,7 +358,7 @@ Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under t
 [frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/faq.md
 [stripe payments]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
 [mobile chat]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
-[sysgears inc]: http://sysgears.com
+[sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki

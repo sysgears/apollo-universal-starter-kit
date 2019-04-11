@@ -15,6 +15,8 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
+export type TWare = (app: Express, appContext: { [key: string]: any }, createContext: any) => void;
+
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
@@ -23,8 +25,8 @@ export interface ServerModuleShape extends CommonModuleShape {
     (props: CreateContextFuncProps, appContext?: { [key: string]: any }) => { [key: string]: any }
   >;
   // Middleware
-  beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
-  middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  beforeware?: TWare[];
+  middleware?: TWare[];
   // Shared modules data
   data?: { [key: string]: any };
 }

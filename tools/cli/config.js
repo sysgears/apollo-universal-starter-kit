@@ -11,8 +11,8 @@ const LIST_STACKS = {
   // 'react native': 'mobile',
   angular: 'client-angular',
   vue: 'client-vue',
-  node: 'server',
-  scala: 'scala'
+  node: 'server-ts',
+  scala: 'server-scala'
 };
 
 module.exports = {

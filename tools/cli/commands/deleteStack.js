@@ -1,8 +1,8 @@
-import fs from 'fs';
+// import fs from 'fs';
 import shell from 'shelljs';
 // import path from 'path';
 // import * as glob from 'glob';
-import { moveToModules } from '../helpers/util';
+import { moveToModules, getPathsDirectory } from '../helpers/util';
 import { BASE_PATH } from '../config';
 
 const deleteStack = stacks => {
@@ -27,15 +27,15 @@ const handleDeleteDirectory = path => {
   }
 };
 
-const getPathsDirectory = route => {
-  const listDirPaths = [];
-  const elements = fs.readdirSync(route);
-  elements.forEach(element => {
-    if (!fs.statSync(`${route}/${element}`).isFile()) {
-      listDirPaths.push(`${route}/${element}`);
-    }
-  });
-  return listDirPaths;
-};
+// const getPathsDirectory = route => {
+//   const listDirPaths = [];
+//   const elements = fs.readdirSync(route);
+//   elements.forEach(element => {
+//     if (!fs.statSync(`${route}/${element}`).isFile()) {
+//       listDirPaths.push(`${route}/${element}`);
+//     }
+//   });
+//   return listDirPaths;
+// };
 
 export default deleteStack;

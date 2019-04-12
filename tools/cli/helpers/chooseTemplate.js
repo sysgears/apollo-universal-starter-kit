@@ -1,5 +1,6 @@
 import * as inquirer from 'inquirer';
 import deleteStack from '../commands/deleteStack';
+import { LIST_STACKS } from '../config';
 
 async function chooseTemplate() {
   const questions = [
@@ -9,13 +10,13 @@ async function chooseTemplate() {
       name: 'stack',
       choices: [
         new inquirer.Separator(' ------- FrontEnd ------- '),
-        { name: 'react', test: 'test' },
-        { name: 'react native', test: 'test' },
-        { name: 'angular', test: 'test' },
-        { name: 'vue', test: 'test' },
+        { name: 'react', checked: true },
+        { name: 'react native' },
+        { name: 'angular' },
+        { name: 'vue' },
         new inquirer.Separator(' ------- BackEnd ------- '),
-        { name: 'node', test: 'test' },
-        { name: 'scala', test: 'test' }
+        { name: 'node' },
+        { name: 'scala' }
       ],
       validate: function(answer) {
         if (answer.length < 1) {
@@ -26,9 +27,17 @@ async function chooseTemplate() {
       }
     }
   ];
-  const result = await inquirer.prompt(questions);
+  const { stack } = await inquirer.prompt(questions);
 
-  deleteStack(result);
+  const unusedStack = [];
+
+  for (let stackName in LIST_STACKS) {
+    if (!stack.includes(stackName)) {
+      unusedStack.push(LIST_STACKS[stackName]);
+    }
+  }
+
+  deleteStack(unusedStack);
 }
 
 module.exports = chooseTemplate;

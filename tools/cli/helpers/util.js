@@ -169,8 +169,9 @@ function runPrettier(pathToFile) {
   }
 }
 
-function moveToModules() {
-  shell.cd(`${BASE_PATH}/modules/`);
+function moveToModules(directory) {
+  shell.cd(`${BASE_PATH}/${directory}/`);
+  return shell.pwd().stdout;
 }
 
 module.exports = {

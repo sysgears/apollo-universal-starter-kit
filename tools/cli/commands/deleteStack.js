@@ -3,6 +3,7 @@ import shell from 'shelljs';
 // import path from 'path';
 // import * as glob from 'glob';
 import { moveToModules } from '../helpers/util';
+import { BASE_PATH } from '../config';
 
 const deleteStack = stacks => {
   const route = moveToModules('modules');
@@ -10,15 +11,20 @@ const deleteStack = stacks => {
   const dirsList = getPathsDirectory(route);
   console.log('dirsList --->', dirsList);
   stacks.forEach(stack => {
+    handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
-      try {
-        // console.log('STATUS --->', fs.statSync(`${dir}/${stack}`));
-        shell.rm('-rf', `${dir}/${stack}`);
-      } catch (e) {
-        console.log('Stack not found');
-      }
+      handleDeleteDirectory(`${dir}/${stack}`);
     });
   });
+};
+
+const handleDeleteDirectory = path => {
+  try {
+    // console.log('STATUS --->', fs.statSync(`${dir}/${stack}`));
+    shell.rm('-rf', path);
+  } catch (e) {
+    console.log('Stack not found');
+  }
 };
 
 const getPathsDirectory = route => {

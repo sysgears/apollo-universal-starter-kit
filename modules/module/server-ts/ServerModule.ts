@@ -16,9 +16,11 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
+export type TCreateGraphQLContext = (req: Request, res: Response) => any;
+
 export interface GraphQLConfig {
   schema: GraphQLSchema;
-  createContext: any;
+  createGraphQLContext: TCreateGraphQLContext;
 }
 
 export type TWare = (app: Express, appContext: { [key: string]: any }, graphQLConfig: GraphQLConfig) => void;

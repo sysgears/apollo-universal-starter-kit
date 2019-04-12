@@ -3,7 +3,7 @@ import path from 'path';
 import { GraphQLSchema } from 'graphql';
 
 import { isApiExternal } from '@gqlapp/core-common';
-import ServerModule, { TWare } from '@gqlapp/module-server-ts';
+import ServerModule, { TWare, TCreateGraphQLContext } from '@gqlapp/module-server-ts';
 
 import graphiqlMiddleware from './middleware/graphiql';
 import createApolloServer from './graphql';
@@ -15,8 +15,9 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   const app: Express = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
-  const { appContext, createContext, beforeware, middleware } = modules;
-  const applyWare: TApplyWare = ware => ware(app, appContext, { createContext, schema });
+  const { appContext, beforeware, middleware } = modules;
+  const createGraphQLContext: TCreateGraphQLContext = (req, res) => modules.createContext(req, res);
+  const applyWare: TApplyWare = ware => ware(app, appContext, { createGraphQLContext, schema });
 
   beforeware.forEach(applyWare);
   middleware.forEach(applyWare);
@@ -37,5 +38,6 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
     app.use('/', express.static(__DLL_BUILD_DIR__, { maxAge: '180 days' }));
     app.use(errorMiddleware);
   }
+
   return app;
 };

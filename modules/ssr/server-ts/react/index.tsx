@@ -4,7 +4,6 @@ import React from 'react';
 import Helmet from 'react-helmet';
 import { Provider } from 'react-redux';
 import ApolloClient from 'apollo-client';
-import { Request, Response } from 'express';
 import { StaticRouter } from 'react-router';
 import { SchemaLink } from 'apollo-link-schema';
 import { ServerStyleSheet } from 'styled-components';
@@ -40,11 +39,11 @@ interface CreatedApp {
   client: ApolloClient<any>;
   store: any;
   App: any;
-  req: Request;
-  res: Response;
+  req: any;
+  res: any;
 }
 
-type TCreateApp = (req: Request, res: Response, graphQLConfig: GraphQLConfig) => Promise<CreatedApp>;
+type TCreateApp = (req: any, res: any, graphQLConfig: GraphQLConfig) => Promise<CreatedApp>;
 
 const createApp: TCreateApp = async (req, res, { schema, createGraphQLContext }) => {
   const schemaLink = new SchemaLink({ schema, context: await createGraphQLContext(req, res) });
@@ -85,7 +84,7 @@ const createApp: TCreateApp = async (req, res, { schema, createGraphQLContext })
   };
 };
 
-type RedirectOnMovedPage = (res: Response, context: CreatedAppContext) => void;
+type RedirectOnMovedPage = (res: any, context: CreatedAppContext) => void;
 
 const redirectOnMovedPage: RedirectOnMovedPage = (res, context) => {
   res.writeHead(301, { Location: context.url });
@@ -126,7 +125,7 @@ const renderDocument: TRenderDocument = documentProps => `
   <!doctype html>\n${renderToStaticMarkup(<Document {...documentProps} />)}
 `;
 
-type TRespondWithDocument = (req: Request, res: Response, App: any, client: ApolloClient<any>) => any;
+type TRespondWithDocument = (req: any, res: any, App: any, client: ApolloClient<any>) => any;
 
 const respondWithDocument: TRespondWithDocument = (req, res, App, client) => {
   updateAssetMap();
@@ -152,7 +151,7 @@ const getDataFromApp: TGetDataFromApp = async app => {
   return app;
 };
 
-type TRenderApp = (req: Request, res: Response, graphQLConfig: GraphQLConfig) => any;
+type TRenderApp = (req: any, res: any, graphQLConfig: GraphQLConfig) => any;
 
 const renderApp: TRenderApp = async (req, res, graphQLConfig) => {
   const { App, client, context } = await setStatus(await getDataFromApp(await createApp(req, res, graphQLConfig)));

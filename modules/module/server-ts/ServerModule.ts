@@ -1,7 +1,7 @@
 import { merge } from 'lodash';
 import { DocumentNode } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
-import { Express, Request, Response } from 'express';
+import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';

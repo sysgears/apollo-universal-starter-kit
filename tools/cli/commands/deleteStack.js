@@ -5,7 +5,6 @@ import { BASE_PATH } from '../config';
 
 const deleteStack = stacks => {
   const route = moveToModules('modules');
-  console.log('stacks --->', stacks);
   const dirsList = getPathsDirectory(route);
   stacks.forEach(stack => {
     handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);

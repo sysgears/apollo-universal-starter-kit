@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import { getApollo } from '../../../../packages/server-ts/src/testHelpers/integrationSetup';
+import { getApollo } from '../../../../packages/server/src/testHelpers/integrationSetup';
 import CONTACT from '../../client-react/graphql/Contact.graphql';
 
 describe('Contact API works', () => {

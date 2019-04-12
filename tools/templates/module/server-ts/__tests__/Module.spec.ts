@@ -3,7 +3,7 @@ import { ApolloClient } from 'apollo-client';
 import { step } from 'mocha-steps';
 import gql from 'graphql-tag';
 
-import { getApollo } from '../../../../../packages/server-ts/src/testHelpers/integrationSetup';
+import { getApollo } from '../../../../../packages/server/src/testHelpers/integrationSetup';
 
 
 const INTROSPECTION_QUERY = gql`

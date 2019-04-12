@@ -9,7 +9,7 @@ const deleteStack = stacks => {
   stacks.forEach(stack => {
     handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
-      handleDeleteDirectory(`${dir}/${stack}`);
+      handleDeleteDirectory(`${dir}/${stack === 'server' ? 'server-ts' : stack}`);
     });
   });
 };

@@ -10,7 +10,7 @@ const LIST_STACKS = {
   'client-angular': 'angular',
   'client-vue': 'vue',
   'server-scala': 'server-scala',
-  'server-ts': 'server-node'
+  server: 'server-node'
 };
 
 module.exports = {

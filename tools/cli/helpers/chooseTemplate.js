@@ -1,23 +1,22 @@
+import fs from 'fs';
 import * as inquirer from 'inquirer';
 import deleteStack from '../commands/deleteStack';
-import { LIST_STACKS } from '../config';
+import { LIST_STACKS, BASE_PATH } from '../config';
 
 async function chooseTemplate() {
+  const stacksList = fs.readdirSync(`${BASE_PATH}/packages`).filter(stack => stack !== 'common');
+  console.log('stacksList --->', stacksList);
+
+  const choices = stacksList.reduce((prev, curr) => {
+    return [...prev, { name: LIST_STACKS[curr] }];
+  }, []);
+
   const questions = [
     {
       type: 'checkbox',
       message: 'Choose stack of technologies',
       name: 'stack',
-      choices: [
-        new inquirer.Separator(' ------- FrontEnd ------- '),
-        { name: 'react', checked: true },
-        { name: 'react native' },
-        { name: 'angular' },
-        { name: 'vue' },
-        new inquirer.Separator(' ------- BackEnd ------- '),
-        { name: 'node' },
-        { name: 'scala' }
-      ],
+      choices,
       validate: function(answer) {
         if (answer.length < 1) {
           return 'You must choose at least one stack.';
@@ -32,8 +31,8 @@ async function chooseTemplate() {
   const unusedStack = [];
 
   for (let stackName in LIST_STACKS) {
-    if (!stack.includes(stackName)) {
-      unusedStack.push(LIST_STACKS[stackName]);
+    if (!stack.includes(LIST_STACKS[stackName])) {
+      unusedStack.push(stackName);
     }
   }
 

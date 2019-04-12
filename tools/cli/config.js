@@ -5,14 +5,12 @@ const TEMPLATES_DIR = `${BASE_PATH}/tools/templates`;
 const MODULE_TEMPLATES = `${TEMPLATES_DIR}/module`;
 const MODULE_TEMPLATES_OLD = `${TEMPLATES_DIR}/module_old`;
 const LIST_STACKS = {
-  // TODO: Add in next step.
-
-  // react: 'client',
-  // 'react native': 'mobile',
-  angular: 'client-angular',
-  vue: 'client-vue',
-  node: 'server-ts',
-  scala: 'server-scala'
+  client: 'react',
+  mobile: 'react native',
+  'client-angular': 'angular',
+  'client-vue': 'vue',
+  'server-scala': 'server-scala',
+  'server-ts': 'server-node'
 };
 
 module.exports = {

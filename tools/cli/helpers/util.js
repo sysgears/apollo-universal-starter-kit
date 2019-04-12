@@ -174,17 +174,6 @@ function moveToModules(directory) {
   return shell.pwd().stdout;
 }
 
-function getPathsDirectory(route) {
-  const listDirPaths = [];
-  const elements = fs.readdirSync(route);
-  elements.forEach(element => {
-    if (!fs.statSync(`${route}/${element}`).isFile()) {
-      listDirPaths.push(`${route}/${element}`);
-    }
-  });
-  return listDirPaths;
-}
-
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -199,6 +188,5 @@ module.exports = {
   addSymlink,
   removeSymlink,
   runPrettier,
-  moveToModules,
-  getPathsDirectory
+  moveToModules
 };

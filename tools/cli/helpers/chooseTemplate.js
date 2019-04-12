@@ -5,7 +5,6 @@ import { LIST_STACKS, BASE_PATH } from '../config';
 
 async function chooseTemplate() {
   const stacksList = fs.readdirSync(`${BASE_PATH}/packages`).filter(stack => stack !== 'common');
-  console.log('stacksList --->', stacksList);
 
   const choices = stacksList.reduce((prev, curr) => {
     return [...prev, { name: LIST_STACKS[curr] }];
@@ -36,7 +35,8 @@ async function chooseTemplate() {
     }
   }
 
-  deleteStack(unusedStack);
+  // Add client and mobile stacks in next step
+  deleteStack(unusedStack.filter(stack => stack !== 'client' && stack !== 'mobile'));
 }
 
 module.exports = chooseTemplate;

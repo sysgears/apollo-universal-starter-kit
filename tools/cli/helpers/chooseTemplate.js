@@ -4,7 +4,7 @@ import deleteStack from '../commands/deleteStack';
 import { STACK_LIST, BASE_PATH } from '../config';
 
 async function chooseTemplate() {
-  const stackList = fs.readdirSync(`${BASE_PATH}/packages`).filter(stack => stack !== 'common');
+  const stackList = fs.readdirSync(`${BASE_PATH}/packages`).filter(stack => stack !== 'common' && stack !== 'mobile');
 
   const choices = stackList.reduce((prev, curr) => {
     return [...prev, { name: STACK_LIST[curr] }];
@@ -27,16 +27,19 @@ async function chooseTemplate() {
   ];
   const { stack } = await inquirer.prompt(questions);
 
-  const unusedStack = [];
+  let unusedStack = [];
 
   for (let stackName in STACK_LIST) {
     if (!stack.includes(STACK_LIST[stackName])) {
-      unusedStack.push(stackName);
+      unusedStack = [
+        ...unusedStack,
+        ...(stackName === 'client' ? ['client', 'client-react', 'client-react-native', 'mobile'] : [stackName])
+      ];
     }
   }
 
   // Add client and mobile stacks in next step
-  deleteStack(unusedStack.filter(stack => stack !== 'client' && stack !== 'mobile'));
+  deleteStack(unusedStack);
 }
 
 module.exports = chooseTemplate;

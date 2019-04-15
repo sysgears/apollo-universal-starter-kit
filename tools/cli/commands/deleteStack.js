@@ -3,10 +3,11 @@ import shell from 'shelljs';
 import { moveToModules } from '../helpers/util';
 import { BASE_PATH } from '../config';
 
-const deleteStack = stacks => {
+const deleteStack = stackList => {
+  // console.log('stackList --->', stackList);
   const route = moveToModules('modules');
   const dirsList = getPathsDirectory(route);
-  stacks.forEach(stack => {
+  stackList.forEach(stack => {
     handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
       handleDeleteDirectory(`${dir}/${stack === 'server' ? 'server-ts' : stack}`);

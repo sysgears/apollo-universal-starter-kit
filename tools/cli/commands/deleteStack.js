@@ -23,14 +23,14 @@ const handleDeleteDirectory = path => {
 };
 
 const getPathsDirectory = route => {
-  const listDirPaths = [];
+  const dirPathList = [];
   const elements = fs.readdirSync(route);
   elements.forEach(element => {
     if (!fs.statSync(`${route}/${element}`).isFile()) {
-      listDirPaths.push(`${route}/${element}`);
+      dirPathList.push(`${route}/${element}`);
     }
   });
-  return listDirPaths;
+  return dirPathList;
 };
 
 export default deleteStack;

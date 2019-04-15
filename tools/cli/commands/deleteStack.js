@@ -4,7 +4,6 @@ import { moveToModules } from '../helpers/util';
 import { BASE_PATH } from '../config';
 
 const deleteStack = stackList => {
-  // console.log('stackList --->', stackList);
   const route = moveToModules('modules');
   const dirsList = getPathsDirectory(route);
   stackList.forEach(stack => {

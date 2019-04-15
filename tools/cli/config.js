@@ -9,8 +9,8 @@ const STACK_LIST = {
   mobile: 'react native',
   'client-angular': 'angular',
   'client-vue': 'vue',
-  'server-scala': 'server-scala',
-  server: 'server-node'
+  'server-scala': 'scala',
+  server: 'node'
 };
 
 module.exports = {

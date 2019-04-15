@@ -131,6 +131,33 @@ Done in 3.89s.
 
 You can use this command to delete any standard module that Apollo Universal Starter Kit comes with.
 
+## Choose the stack of technologies `choosestack`
+
+You can leave only the stack of technologies that you need to run:
+
+```bash
+yarn cli choosestack
+```
+
+After that you need to select the stack of technologies you want to use.
+```bash
+Choose stack of technologies (Press <space> to select, <a> to toggle all, <i> to invert selection)
+- react
+- angular
+- vue
+- react native
+- server-node
+- server-scala
+```
+
+**NOTE** In this version it is not possible to remove or separate React and React Native.
+
+You'll see the following confirmation in the command line:
+
+```bash
+Done
+```
+
 ## Creating CRUD Modules with `addcrud`
 
 **NOTE**: The `addcrud` command is only available in the [cli-crud] branch. The master branch doesn't have this command!

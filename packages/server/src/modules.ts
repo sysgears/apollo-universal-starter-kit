@@ -9,7 +9,7 @@ import post from '@gqlapp/post-server-ts';
 import upload from '@gqlapp/upload-server-ts';
 import subscription from '@gqlapp/payments-server-ts';
 import mailer from '@gqlapp/mailer-server-ts';
-import graphqlTypes from '@gqlapp/graphql-types-server-ts';
+import graphql from '@gqlapp/graphql-server-ts';
 import authentication from '@gqlapp/authentication-server-ts';
 import reports from '@gqlapp/reports-server-ts';
 import rest from '@gqlapp/rest-server-ts';
@@ -35,7 +35,7 @@ const modules: ServerModule = new ServerModule(
   chat,
   reports,
   rest,
-  graphqlTypes,
+  graphql,
   core,
   ssr
 );

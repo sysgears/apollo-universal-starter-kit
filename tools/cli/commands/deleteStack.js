@@ -18,7 +18,7 @@ const handleDeleteDirectory = path => {
   try {
     shell.rm('-rf', path);
   } catch (e) {
-    console.log('Stack not found');
+    console.log('The stack was not found');
   }
 };
 

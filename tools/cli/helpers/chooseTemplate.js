@@ -13,7 +13,7 @@ async function chooseTemplate() {
   const questions = [
     {
       type: 'checkbox',
-      message: 'Choose stack of technologies',
+      message: 'Choose your technology stack or stacks',
       name: 'stack',
       choices,
       validate: function(answer) {

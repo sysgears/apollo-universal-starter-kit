@@ -4,7 +4,7 @@ import serialize from 'serialize-javascript';
 import ClientModule from '@gqlapp/module-client-react';
 import { styles } from '@gqlapp/look-client-react';
 
-export interface DocumentProps {
+export interface DocumentPropsShape {
   content: string;
   state: any;
   css: Array<ReactElement<{}>>;
@@ -16,7 +16,7 @@ export interface DocumentProps {
 const mapStylesToTags = (style: any) => style._getCss();
 const mapScriptsToTags = (script: string, i: number) => script && <script key={i} src={script} />;
 
-export const Document = ({ content, state, css, helmet, clientModules, assetMap }: DocumentProps) => {
+export const Document = ({ content, state, css, helmet, clientModules, assetMap }: DocumentPropsShape) => {
   return (
     <html lang="en" {...helmet.htmlAttributes.toComponent()}>
       <head>

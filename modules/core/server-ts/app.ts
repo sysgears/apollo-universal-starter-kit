@@ -1,18 +1,18 @@
 import express, { Express } from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
-import ServerModule, { TWare, TCreateGraphQLContext } from '@gqlapp/module-server-ts';
+import ServerModule, { Ware, CreateGraphQLContext } from '@gqlapp/module-server-ts';
 
 import errorMiddleware from './middleware/error';
 
-type TApplyWare = (ware: TWare) => void;
+type TApplyWare = (ware: Ware) => void;
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
   const app: Express = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
   const { appContext, beforeware, middleware } = modules;
-  const createGraphQLContext: TCreateGraphQLContext = (req, res) => modules.createContext(req, res);
+  const createGraphQLContext: CreateGraphQLContext = (req, res) => modules.createContext(req, res);
   const applyWare: TApplyWare = ware => ware(app, appContext, { createGraphQLContext, schema });
 
   beforeware.forEach(applyWare);

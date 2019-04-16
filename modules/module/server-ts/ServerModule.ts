@@ -16,14 +16,14 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
-export type TCreateGraphQLContext = (req: Request, res: Response) => any;
+export type CreateGraphQLContext = (req: Request, res: Response) => any;
 
-export interface GraphQLConfig {
+export interface GraphQLConfigShape {
   schema: GraphQLSchema;
-  createGraphQLContext: TCreateGraphQLContext;
+  createGraphQLContext: CreateGraphQLContext;
 }
 
-export type TWare = (app: Express, appContext: { [key: string]: any }, graphQLConfig: GraphQLConfig) => void;
+export type Ware = (app: Express, appContext: { [key: string]: any }, GraphQLConfigShape: GraphQLConfigShape) => void;
 
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
@@ -33,8 +33,8 @@ export interface ServerModuleShape extends CommonModuleShape {
     (props: CreateContextFuncProps, appContext?: { [key: string]: any }) => { [key: string]: any }
   >;
   // Middleware
-  beforeware?: TWare[];
-  middleware?: TWare[];
+  beforeware?: Ware[];
+  middleware?: Ware[];
   // Shared modules data
   data?: { [key: string]: any };
 }

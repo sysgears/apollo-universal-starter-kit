@@ -1,9 +1,13 @@
 import path from 'path';
-import SsrModule from './SsrModule';
+import ServerModule from '@gqlapp/module-server-ts';
 import reactRenderer from './react';
-import { TWare, GraphQLConfig } from '@gqlapp/module-server-ts';
+import { Ware, GraphQLConfigShape } from '@gqlapp/module-server-ts';
 
-const renderServerSide = (graphQLConfig: GraphQLConfig) => async (req: any, res: any, next: (e?: Error) => void) => {
+const renderServerSide = (graphQLConfig: GraphQLConfigShape) => async (
+  req: any,
+  res: any,
+  next: (e?: Error) => void
+) => {
   const isDocument = req.path.includes('.');
   const preRender = !isDocument && __SSR__;
   const serveEntryFile = !isDocument && !__SSR__ && req.method === 'GET';
@@ -21,10 +25,10 @@ const renderServerSide = (graphQLConfig: GraphQLConfig) => async (req: any, res:
   }
 };
 
-const middleware: TWare = (app, appContext, graphQLConfig) => {
+const middleware: Ware = (app, appContext, graphQLConfig) => {
   app.use(renderServerSide(graphQLConfig));
 };
 
-export default new SsrModule({
+export default new ServerModule({
   middleware: [middleware]
 });

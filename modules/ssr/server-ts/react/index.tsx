@@ -12,8 +12,8 @@ import { renderToString, renderToStaticMarkup } from 'react-dom/server';
 import ClientModule from '@gqlapp/module-client-react';
 import { isApiExternal, apiUrl } from '@gqlapp/core-common';
 import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
-import { DocumentProps, Document } from './template';
-import { GraphQLConfig } from '@gqlapp/module-server-ts';
+import { DocumentPropsShape, Document } from './template';
+import { GraphQLConfigShape } from '@gqlapp/module-server-ts';
 
 let assetMap: { [key: string]: string };
 let clientModules: ClientModule;
@@ -28,14 +28,14 @@ if (__SSR__) {
   }
 }
 
-interface CreatedAppContext {
+interface CreatedAppContextShape {
   url?: any;
   pageNotFound?: any;
 }
 
-interface CreatedApp {
+interface CreatedAppShape {
   schemaLink: SchemaLink;
-  context: CreatedAppContext;
+  context: CreatedAppContextShape;
   client: ApolloClient<any>;
   store: any;
   App: any;
@@ -43,9 +43,9 @@ interface CreatedApp {
   res: any;
 }
 
-type TCreateApp = (req: any, res: any, graphQLConfig: GraphQLConfig) => Promise<CreatedApp>;
+type CreateApp = (req: any, res: any, graphQLConfig: GraphQLConfigShape) => Promise<CreatedAppShape>;
 
-const createApp: TCreateApp = async (req, res, { schema, createGraphQLContext }) => {
+const createApp: CreateApp = async (req, res, { schema, createGraphQLContext }) => {
   const schemaLink = new SchemaLink({ schema, context: await createGraphQLContext(req, res) });
   const { resolvers, createLink, reducers, router } = clientModules;
 
@@ -58,7 +58,7 @@ const createApp: TCreateApp = async (req, res, { schema, createGraphQLContext })
   });
 
   const store = createReduxStore(reducers, {}, client);
-  const context: CreatedAppContext = {};
+  const context: CreatedAppContextShape = {};
 
   const dataRoot = clientModules.getDataRoot(
     <StaticRouter location={req.url} context={context}>
@@ -84,7 +84,7 @@ const createApp: TCreateApp = async (req, res, { schema, createGraphQLContext })
   };
 };
 
-type RedirectOnMovedPage = (res: any, context: CreatedAppContext) => void;
+type RedirectOnMovedPage = (res: any, context: CreatedAppContextShape) => void;
 
 const redirectOnMovedPage: RedirectOnMovedPage = (res, context) => {
   res.writeHead(301, { Location: context.url });
@@ -100,9 +100,9 @@ const updateAssetMap = () => {
 
 const mapElementToStyles = (el: any, key: number) => (el ? React.cloneElement(el, { key }) : el);
 
-type TGetDocumentProps = (App: any, client: ApolloClient<any>) => DocumentProps;
+type GetDocumentProps = (App: any, client: ApolloClient<any>) => DocumentPropsShape;
 
-const getDocumentProps: TGetDocumentProps = (App, client) => {
+const getDocumentProps: GetDocumentProps = (App, client) => {
   const sheet = new ServerStyleSheet();
   const content = renderToString(sheet.collectStyles(App));
   const css = sheet.getStyleElement().map(mapElementToStyles);
@@ -119,15 +119,15 @@ const getDocumentProps: TGetDocumentProps = (App, client) => {
   };
 };
 
-type TRenderDocument = (documentProps: DocumentProps) => string;
+type RenderDocument = (documentProps: DocumentPropsShape) => string;
 
-const renderDocument: TRenderDocument = documentProps => `
+const renderDocument: RenderDocument = documentProps => `
   <!doctype html>\n${renderToStaticMarkup(<Document {...documentProps} />)}
 `;
 
-type TRespondWithDocument = (req: any, res: any, App: any, client: ApolloClient<any>) => any;
+type RespondWithDocument = (req: any, res: any, App: any, client: ApolloClient<any>) => any;
 
-const respondWithDocument: TRespondWithDocument = (req, res, App, client) => {
+const respondWithDocument: RespondWithDocument = (req, res, App, client) => {
   updateAssetMap();
 
   if (!res.getHeader('Content-Type')) {
@@ -137,24 +137,26 @@ const respondWithDocument: TRespondWithDocument = (req, res, App, client) => {
   return res.end(req.method === 'HEAD' ? null : renderDocument(getDocumentProps(App, client)));
 };
 
-type TSetStatus = (app: CreatedApp) => Promise<CreatedApp>;
+type SetResponseStatus = (app: CreatedAppShape) => Promise<CreatedAppShape>;
 
-const setStatus: TSetStatus = async app => {
+const setResponseStatus: SetResponseStatus = async app => {
   app.res.status(!!app.context.pageNotFound ? 404 : 200);
   return app;
 };
 
-type TGetDataFromApp = (app: CreatedApp) => Promise<CreatedApp>;
+type GetDataFromApp = (app: CreatedAppShape) => Promise<CreatedAppShape>;
 
-const getDataFromApp: TGetDataFromApp = async app => {
+const getDataFromApp: GetDataFromApp = async app => {
   await getDataFromTree(app.App);
   return app;
 };
 
-type TRenderApp = (req: any, res: any, graphQLConfig: GraphQLConfig) => any;
+type RenderApp = (req: any, res: any, graphQLConfig: GraphQLConfigShape) => any;
 
-const renderApp: TRenderApp = async (req, res, graphQLConfig) => {
-  const { App, client, context } = await setStatus(await getDataFromApp(await createApp(req, res, graphQLConfig)));
+const renderApp: RenderApp = async (req, res, graphQLConfig) => {
+  const { App, client, context } = await setResponseStatus(
+    await getDataFromApp(await createApp(req, res, graphQLConfig))
+  );
 
   return context.url ? redirectOnMovedPage(res, context) : respondWithDocument(req, res, App, client);
 };

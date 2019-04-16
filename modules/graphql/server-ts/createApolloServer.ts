@@ -2,7 +2,7 @@ import { ApolloServer, AuthenticationError, ApolloError } from 'apollo-server-ex
 import { formatResponse } from 'apollo-logger';
 import 'isomorphic-fetch';
 import { log } from '@gqlapp/core-common';
-import { GraphQLConfig } from '@gqlapp/module-server-ts';
+import { GraphQLConfigShape } from '@gqlapp/module-server-ts';
 
 import settings from '../../../settings';
 
@@ -11,7 +11,7 @@ const {
   app: { logging }
 } = settings;
 
-export default ({ schema, createGraphQLContext }: GraphQLConfig) => {
+export default ({ schema, createGraphQLContext }: GraphQLConfigShape) => {
   const context = async ({ req, res }: { req: any; res: any }) => ({
     ...(await createGraphQLContext(req, res)),
     req,

@@ -25,7 +25,7 @@ JavaScript] applications. You can use this kit to create your applications in Ja
 platforms &ndash; mobile, web, and server.
 
 Apollo Universal Starter Kit is built with [Apollo], [GraphQL], [React], [Angular], [React Native], [Expo], [Knex.js], 
-and [Express] with support for relational databases such as PostgreSQL, MySQL, and SQLite. 
+and [Express] with support for relational databases such as PostgreSQL, MySQL, and SQLite.
 
 [TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla 
 JavaScript (the ES6 and ES7 syntax) and TypeScript when creating your modules.
@@ -119,6 +119,13 @@ password-based authentication; refreshing a forgotten password
 * **State Management**. The application state stored in the database and on the client using different approaches
 * **404 Not Found Page**. A minimalistic module for handling 404 requests
 
+If you don't want to use the pre-built modules in your project, you can remove them using a [dedicated CLI]. For module
+names, check out the directory `modules`:
+
+```bash
+yarn cli deletemodule <moduleName>
+```
+
 To learn more about the features and modules available in Apollo Universal Starter Kit, follow to the dedicated section 
 [Features and Modules].
 
@@ -163,6 +170,14 @@ For Windows 10:
 * Click **Update & Security**
 * Click the **For Developers** tab
 * In the **Use developer features** window, switch to **Developer Mode**
+
+**NOTE**: If you don't need the Scala modules, you can remove them with the following command:
+
+```bash
+find -name server-scala | xargs rm -rf
+```
+
+If you don't need some ready-made modules, remove them using the [custom CLI]. 
 
 2. Install the dependencies. Make sure that you use Yarn 1.0.0 or higher.
 
@@ -311,7 +326,7 @@ You can support this project by becoming a sponsor! Your logo will show up here 
 
 ## License
 
-Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under the [MIT] license.
+Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is licensed under the [MIT] license.
 
 [our chat]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [mit]: LICENSE
@@ -341,6 +356,7 @@ Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under t
 [single]: https://github.com/sysgears/apollo-universal-starter-kit/tree/single
 [apollo1]: https://github.com/sysgears/apollo-universal-starter-kit/tree/apollo1
 [cli-crud]: https://github.com/sysgears/apollo-universal-starter-kit/tree/cli-crud
+[custom cli]: https://github.com/sysgears/apollo-universal-starter-kit/tree/cli-crud
 [sqlite installation guide]: http://www.sqlitetutorial.net/download-install-sqlite/
 [http://localhost:3000]: http://localhost:3000
 [http://localhost:8080]: http://localhost:8080
@@ -351,6 +367,7 @@ Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under t
 [running apollo universal starter kit with docker]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/docker.md
 [deploying apollo universal starter kit to production]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md
 [configuring apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/configuration.md
+[dedicated cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md#deleting-features-with-deletemodule
 [features and modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/featuresAndModules.md
 [writing code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/writingCode.md
 [apollo universal starter kit cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md
@@ -358,7 +375,7 @@ Copyright &copy; 2016, 2017 [SysGears INC]. This source code is licensed under t
 [frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/faq.md
 [stripe payments]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
 [mobile chat]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
-[sysgears inc]: http://sysgears.com
+[sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki

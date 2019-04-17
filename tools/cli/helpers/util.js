@@ -169,9 +169,45 @@ function runPrettier(pathToFile) {
   }
 }
 
+/**
+ * Move to directory
+ *
+ * @param directory - The name of directory
+ * @returns {string} - Return the path to currenr directory
+ */
 function moveToModules(directory) {
   shell.cd(`${BASE_PATH}/${directory}/`);
   return shell.pwd().stdout;
+}
+
+/**
+ * Delete the directory
+ *
+ * @param path - The path to directory who need deleted
+ */
+function handleDeleteDirectory(path) {
+  try {
+    shell.rm('-rf', path);
+  } catch (e) {
+    console.log('The stack was not found');
+  }
+}
+
+/**
+ * Get list of directories
+ *
+ * @param route - The path to directory
+ * @returns {string} - Return path list for children directories
+ */
+function getPathsDirectory(route) {
+  const dirPathList = [];
+  const elements = fs.readdirSync(route);
+  elements.forEach(element => {
+    if (!fs.statSync(`${route}/${element}`).isFile()) {
+      dirPathList.push(`${route}/${element}`);
+    }
+  });
+  return dirPathList;
 }
 
 module.exports = {
@@ -188,5 +224,7 @@ module.exports = {
   addSymlink,
   removeSymlink,
   runPrettier,
-  moveToModules
+  moveToModules,
+  handleDeleteDirectory,
+  getPathsDirectory
 };

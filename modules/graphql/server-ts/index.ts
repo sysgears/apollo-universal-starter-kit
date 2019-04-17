@@ -1,12 +1,12 @@
 import schemaDocument from './schema.graphql';
 import createResolvers from './resolvers';
 import { isApiExternal } from '@gqlapp/core-common';
-import ServerModule, { MiddlewareCallback } from '@gqlapp/module-server-ts';
+import ServerModule, { MiddlewareFunc } from '@gqlapp/module-server-ts';
 
 import graphiqlMiddleware from './graphiql';
 import createApolloServer from './createApolloServer';
 
-const middleware: MiddlewareCallback = (app, appContext, GraphQLConfigShape) => {
+const middleware: MiddlewareFunc = (app, appContext, GraphQLConfigShape) => {
   app.get('/graphiql', graphiqlMiddleware);
 
   if (!isApiExternal) {

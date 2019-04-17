@@ -1,12 +1,12 @@
 import express from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
-import ServerModule, { MiddlewareCallback, CreateGraphQLContext } from '@gqlapp/module-server-ts';
+import ServerModule, { MiddlewareFunc, CreateGraphQLContext } from '@gqlapp/module-server-ts';
 
 import websiteMiddleware from './middleware/website';
 import errorMiddleware from './middleware/error';
 
-type ApplyMiddleWare = (fn: MiddlewareCallback) => void;
+type ApplyMiddleWare = (fn: MiddlewareFunc) => void;
 
 export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) => {
   const app = express();

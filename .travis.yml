@@ -1,20 +1,20 @@
 language: node_js
 node_js:
-  - "9"
+- '9'
 cache:
   directories:
-    - $HOME/.cache/yarn
-    - .cache
+  - "$HOME/.cache/yarn"
+  - ".cache"
 dist: trusty
 os:
-  - linux
+- linux
 script:
-  - yarn test
+- yarn test
 before_deploy: rm -rf node_modules
 deploy:
   provider: heroku
   api_key:
-    secure: o99xXQsrBR+tQwsyV8dM8Ia0JnpewWsCNQD/DUAW40Y82sRmCikI6k87kHHY1uHuZ30t9X5Slo+fI/9psEGfE0PGdkfMV99rzl1qVKrLeOLWTz8fNGapZtg1Ahjt1M5Ca23XJj1MRTXwAji/XP4KijiRrsMgBC3shlbvKNaWgbkzK1BTQVSMlMTJNY9ZT/tQ5tP4YljDfs0WYuXTXtAEl8ALf75NvQv2R9GQuDBGDALsJP/Vwr3FG+COJjq6YDFjpCKl6G90q2LwyfyL/bxJHCook+bVTMCOPrNmM1+HoiG7htBpHOakcpegiQlFDg4L4yfV+VFpSi9zzREVnjdnqsYKME0kmCC32kBw1viNqNnB8s6NYmYLRknMMvAVKZkQfGqS5hA/FM9Qt+3e5UdFmjs73uKavY159uMJIjHvR6+MHX0OVhyInW0xhBGrjyvLV8xV9ITsBAKLp11dkPYJgdDuFomsWzbML+6+x21R98vmdgUrIjPk8BXRiaBOtEfX15tBhcOk63lYa1WYSixuzFKjdRTB6JdURCVLTRgu4NV6TH7ZXRpHviXEMoGQJDBCrsLCEbd/zjXxMp/vE+cHnPS2228mVpr1oz9kFQ3HU9U2XcErKKJYLFjJaDKMLh/KQ2R3hrVq/c29XBfGTPR1jsUPyZS6Fg4N9vgt6ma1Rv8=
+    secure: sIe+wFvt7N8njuB8xtZzgFOZzla9UmlIz+0h84JRGyG4kE8VqIiqRlU3lXwGBWEIoKsIEIX4o3EHsRVIRplxw8oMRrfokwxQ9ZUtQP24MTJ4bevT8ypvhulEhUYGNtO16rFze8aslxaUlJUKz6ewHawK0ytpJQBMXfoeQuWVXOK6cv3Wa2ZG8D7WSoKEPtj6ZYhI180lcN0RP0+m+uOEPvhAvRStfyjPwmuQDp/aVnTlO/mhmOG/FVzAjeugyAwGEil9Ah5/fikkxy8dajGCU1O7YmgasnOrAuuDLno9ue1WOi0squzVqHgmkrTMJ1ckRml+MYH0q5SQSzGyigmSzeT9vg1jKrw0eMQxOArvu68KHWwcYn7cd9BkBWk+o43xuooAxsY3r98n0UHl2dxLd94ZngWNb/rWFFDEzDm417ltNXctdefbX9z64yl75IO/AMaXeiAzp9Gh+puz2UN+9+wRVAC2oZ6ITYIxjDKridmsyMWxURzgkatDAQupy9PaOG8AJSuDQMgTTyEXPYr+uWxVSioEODpOmO6hS4UiQ/TEa/yt/eB6tZVCiUY0waxx7sfF9DiaaF/U9W4HLHqTvMN6AOcWQJjMcemTvyH75xMN/n4Fc2xAT54ky7EvT6WyQMceNrCiAN6rghhkrOM5x4nHHGUokf63N4mTCtzjytQ=
   app: apollo-universal-starter-kit
   on:
     repo: sysgears/apollo-universal-starter-kit

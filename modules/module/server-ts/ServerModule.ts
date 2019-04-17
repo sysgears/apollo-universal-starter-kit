@@ -5,7 +5,7 @@ import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
-import { GraphQLSchema } from 'graphql';
+import { GraphQLConfigShape } from '@gqlapp/graphql-server-ts';
 
 /**
  * A function to create GraphQL context
@@ -35,26 +35,6 @@ interface CreateContextFuncProps {
 }
 
 /**
- * A function to create GraphQL context
- *
- * @param req HTTP request
- * @param res HTTP response
- *
- * @returns GraphQL context
- */
-export type CreateGraphQLContext = (req: Request, res: Response) => any;
-
-/**
- * GraphQL config shape
- */
-export interface GraphQLConfigShape {
-  // A GraphQL schema list of modules
-  schema: GraphQLSchema;
-  // A function to create GraphQL context
-  createGraphQLContext: CreateGraphQLContext;
-}
-
-/**
  * A function to create GraphQL resolvers
  *
  * @param pubsub a publish subscribe engine for GraphQL subscriptions
@@ -73,7 +53,7 @@ type CreateResolversFunc = (pubsub: PubSub) => IResolvers;
 export type MiddlewareFunc = (
   app: Express,
   appContext: { [key: string]: any },
-  GraphQLConfigShape: GraphQLConfigShape
+  graphQLConfigShape: GraphQLConfigShape
 ) => void;
 
 /**

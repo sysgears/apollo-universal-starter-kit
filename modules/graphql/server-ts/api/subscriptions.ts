@@ -1,18 +1,11 @@
 import { SubscriptionServer } from 'subscriptions-transport-ws';
-import { execute, subscribe, GraphQLSchema } from 'graphql';
-import { Server } from 'http';
+import { execute, subscribe } from 'graphql';
 import ServerModule from '@gqlapp/module-server-ts';
 import { log } from '@gqlapp/core-common';
 
+import { CreateSubscriptionServer, SubsServerConfigShape, ReloadSubscriptionServer, AddGraphQLSubs } from '..';
+
 let subscriptionServer: SubscriptionServer;
-
-interface SubsServerConfigShape {
-  httpServer: Server;
-  schema: GraphQLSchema;
-  modules: ServerModule;
-}
-
-type CreateSubscriptionServer = ({ httpServer, schema, modules }: SubsServerConfigShape) => SubscriptionServer;
 
 const createSubscriptionServer: CreateSubscriptionServer = ({ httpServer, schema, modules }) => {
   const subscriptionConfig = {
@@ -39,19 +32,10 @@ const addSubscriptions = (config: SubsServerConfigShape) => {
   subscriptionServer = createSubscriptionServer(config);
 };
 
-type ReloadSubscriptionServer = (prevServer: any, subscriptionConfig: SubsServerConfigShape) => void;
-
 const reloadSubscriptionServer: ReloadSubscriptionServer = (prevServer, subscriptionConfig) => {
   log.debug('Reloading the subscription server.');
   prevServer.wsServer.close(() => addSubscriptions(subscriptionConfig));
 };
-
-type AddGraphQLSubs = (
-  httpServer: Server,
-  schema: GraphQLSchema,
-  modules: ServerModule,
-  entryModule?: NodeModule
-) => any;
 
 const addGraphQLSubscriptions: AddGraphQLSubs = (httpServer, schema, modules, entryModule) => {
   const subscriptionConfig: SubsServerConfigShape = { httpServer, schema, modules };

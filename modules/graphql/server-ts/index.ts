@@ -6,16 +6,17 @@ import ServerModule, { MiddlewareFunc } from '@gqlapp/module-server-ts';
 import graphiqlMiddleware from './graphiql';
 import createApolloServer from './createApolloServer';
 
-const middleware: MiddlewareFunc = (app, appContext, GraphQLConfigShape) => {
+const middleware: MiddlewareFunc = (app, appContext, graphQLConfigShape) => {
   app.get('/graphiql', graphiqlMiddleware);
 
   if (!isApiExternal) {
-    const graphqlServer = createApolloServer(GraphQLConfigShape);
+    const graphqlServer = createApolloServer(graphQLConfigShape);
     graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: { credentials: true, origin: true } });
   }
 };
 
 export * from './api';
+export * from './types';
 
 export default new ServerModule({
   schema: [schemaDocument],

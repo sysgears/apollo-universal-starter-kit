@@ -1,13 +1,9 @@
 import http from 'http';
 import { serverPort, log } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
-import { createSchema } from './api/schema';
-
-import addGraphQLSubscriptions from './api/subscriptions';
+import { createSchema, addGraphQLSubscriptions, onAppDispose } from '@gqlapp/graphql-server-ts';
 
 import { createServerApp } from './app';
-
-import { onAppDispose } from './api/subscriptions';
 
 let server: http.Server;
 

@@ -15,6 +15,8 @@ const middleware: MiddlewareFunc = (app, appContext, GraphQLConfigShape) => {
   }
 };
 
+export * from './api';
+
 export default new ServerModule({
   schema: [schemaDocument],
   createResolversFunc: [createResolvers],

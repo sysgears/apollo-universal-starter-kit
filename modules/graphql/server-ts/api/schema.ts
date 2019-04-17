@@ -1,8 +1,7 @@
 import { makeExecutableSchema } from 'graphql-tools';
 import ServerModule from '@gqlapp/module-server-ts';
 
-import rootSchemaDef from './rootSchema.graphql';
-import pubsub from './pubsub';
+import { pubsub, rootSchemaDef } from '.';
 
 export const createSchema = (modules: ServerModule) =>
   makeExecutableSchema({

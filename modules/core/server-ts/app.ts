@@ -1,7 +1,7 @@
 import express from 'express';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
-import ServerModule, { MiddlewareFunc, CreateGraphQLContext } from '@gqlapp/module-server-ts';
+import ServerModule, { MiddlewareFunc } from '@gqlapp/module-server-ts';
 
 import websiteMiddleware from './middleware/website';
 import errorMiddleware from './middleware/error';
@@ -13,7 +13,7 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   // Don't rate limit heroku
   app.enable('trust proxy');
   const { appContext, beforeware, middleware } = modules;
-  const createGraphQLContext: CreateGraphQLContext = (req, res) => modules.createContext(req, res);
+  const createGraphQLContext = appContext.makeGQLContextCreator(modules);
   const applyMiddleWare: ApplyMiddleWare = fn => fn(app, appContext, { createGraphQLContext, schema });
 
   beforeware.forEach(applyMiddleWare);

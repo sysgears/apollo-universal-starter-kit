@@ -4,14 +4,13 @@ import ServerModule from '@gqlapp/module-server-ts';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 
 /**
- * A function to create GraphQL context
+ * A function to make a GraphQL context creator
  *
- * @param req HTTP request
- * @param res HTTP response
+ * @param modules App modules
  *
- * @returns GraphQL context
+ * @returns function that creates a GraphQL context
  */
-export type CreateGraphQLContext = (req: Request, res: Response) => any;
+export type MakeGQLContextCreator = (modules: ServerModule) => (req: Request, res: Response) => any;
 
 /**
  * GraphQL config shape
@@ -20,7 +19,7 @@ export interface GraphQLConfigShape {
   // A GraphQL schema list of modules
   schema: GraphQLSchema;
   // A function to create GraphQL context
-  createGraphQLContext: CreateGraphQLContext;
+  createGraphQLContext: (req: any, res: any) => object;
 }
 
 /**

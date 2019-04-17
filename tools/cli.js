@@ -3,7 +3,7 @@ require('@babel/polyfill');
 const prog = require('caporal');
 const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
-const chooseTemplate = require('./cli/helpers/chooseTemplate');
+const chooseTemplate = require('./cli/commands/chooseTemplate');
 
 const CommandInvoker = require('./cli/CommandInvoker');
 
@@ -31,6 +31,15 @@ prog
   .action((args, options, logger) => commandInvoker.runDeleteModule(args, options, logger))
   // Choose stack
   .command('choosestack', 'Choose the stack of technologies for the app')
-  .action(() => commandInvoker.runChooseStack());
+  .action(() => commandInvoker.runChooseStack())
+  .command(
+    'deletestack',
+    `Delete the stack of technologies for the app.
+List of technologies [react, angular, vue, scala, node]`
+  )
+  .argument('<stackList...>', 'List of technologies [react, angular, vue, scala, node]')
+  .action(args => {
+    console.log('args --->', args);
+  });
 
 prog.parse(process.argv);

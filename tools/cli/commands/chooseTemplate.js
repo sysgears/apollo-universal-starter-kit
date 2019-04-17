@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as inquirer from 'inquirer';
-import deleteStack from '../commands/deleteStack';
+import deleteStack from '../helpers/deleteStack';
 import { STACK_LIST, BASE_PATH } from '../config';
 
 async function chooseTemplate() {

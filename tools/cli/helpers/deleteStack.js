@@ -1,4 +1,4 @@
-import { moveToModules, handleDeleteDirectory, getPathsDirectory } from '../helpers/util';
+import { moveToModules, handleDeleteDirectory, getPathsDirectory } from './util';
 import { BASE_PATH } from '../config';
 
 /**

@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import { GraphQLSchema } from 'graphql';
 
 interface CreateContextFuncProps {
   req: Request;
@@ -15,6 +16,19 @@ interface CreateContextFuncProps {
   appContext: { [key: string]: any };
 }
 
+export type CreateGraphQLContext = (req: Request, res: Response) => any;
+
+export interface GraphQLConfigShape {
+  schema: GraphQLSchema;
+  createGraphQLContext: CreateGraphQLContext;
+}
+
+export type MiddlewareCallback = (
+  app: Express,
+  appContext: { [key: string]: any },
+  GraphQLConfigShape: GraphQLConfigShape
+) => void;
+
 export interface ServerModuleShape extends CommonModuleShape {
   // GraphQL API
   schema?: DocumentNode[];
@@ -23,8 +37,8 @@ export interface ServerModuleShape extends CommonModuleShape {
     (props: CreateContextFuncProps, appContext?: { [key: string]: any }) => { [key: string]: any }
   >;
   // Middleware
-  beforeware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
-  middleware?: Array<(app: Express, appContext: { [key: string]: any }) => void>;
+  beforeware?: MiddlewareCallback[];
+  middleware?: MiddlewareCallback[];
   // Shared modules data
   data?: { [key: string]: any };
 }

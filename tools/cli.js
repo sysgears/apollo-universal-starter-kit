@@ -4,10 +4,11 @@ const prog = require('caporal');
 const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
 const chooseTemplate = require('./cli/commands/chooseTemplate');
+const deleteStackCommand = require('./cli/commands/deleteStack');
 
 const CommandInvoker = require('./cli/CommandInvoker');
 
-const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand, chooseTemplate);
+const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand, chooseTemplate, deleteStackCommand);
 
 prog
   .version('1.0.0')
@@ -38,8 +39,11 @@ prog
 List of technologies [react, angular, vue, scala, node]`
   )
   .argument('<stackList...>', 'List of technologies [react, angular, vue, scala, node]')
-  .action(args => {
-    console.log('args --->', args);
+
+  /*eslint-disable */
+  .action(({ stackList }, {}, logger) => {
+    /*eslint-enable */
+    commandInvoker.runDeleteStack(stackList, logger);
   });
 
 prog.parse(process.argv);

@@ -9,7 +9,8 @@ To help you create and delete new application modules, the starter kit comes wit
 ## Table of Contents
 
 * [First Use of the CLI](#first-use-of-the-cli)
-* [Selecting the Technology Stack with `choosestack`](#choosing-technology-stacks-with-choosestack)
+* [Choosing Technology Stacks with `choosestack`](#choosing-technology-stacks-with-choosestack)
+* [Basic Scaffolding with `addmodule`](#basic-scaffolding-with-addmodule)
 * [Deleting Features with `deletemodule`](#deleting-features-with-deletemodule)
 * [Creating CRUD Modules with `addcrud`](#creating-crud-modules-with-addcrud)
     * [Using Optional Parameters with CLI Commands](#using-optional-parameters-with-cli-commands)

@@ -38,12 +38,11 @@ prog
     `Delete the stack of technologies for the app.
 List of technologies [react, angular, vue, scala, node]`
   )
-  .argument('<stackList...>', 'List of technologies [react, angular, vue, scala, node]')
+  .argument('[stackList...]', 'List of technologies [react, angular, vue, scala, node]')
+  .option('-l --list', 'Show stack of technologies list')
 
-  /*eslint-disable */
-  .action(({ stackList }, {}, logger) => {
-    /*eslint-enable */
-    commandInvoker.runDeleteStack(stackList, logger);
+  .action(({ stackList }, { list }, logger) => {
+    commandInvoker.runDeleteStack(stackList, logger, list);
   });
 
 prog.parse(process.argv);

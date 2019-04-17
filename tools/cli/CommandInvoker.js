@@ -60,8 +60,8 @@ class CommandInvoker {
   /**
    * Runs operation (function) for delete stack of technologies.
    */
-  runDeleteStack(args, logger) {
-    this.deleteStack(args, logger);
+  runDeleteStack(args, logger, isShowStackList) {
+    this.deleteStack(args, logger, isShowStackList);
   }
 }
 

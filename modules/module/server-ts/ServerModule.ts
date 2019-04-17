@@ -70,7 +70,7 @@ type CreateResolversFunc = (pubsub: PubSub) => IResolvers;
  * @param appContext application context
  * @param GraphQLConfigShape
  */
-type MiddlewareFunc = (
+export type MiddlewareFunc = (
   app: Express,
   appContext: { [key: string]: any },
   GraphQLConfigShape: GraphQLConfigShape

@@ -19,7 +19,7 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   beforeware.forEach(applyMiddleWare);
   middleware.forEach(applyMiddleWare);
 
-  app.use(websiteMiddleware(schema, modules));
+  app.use(websiteMiddleware(schema, createGraphQLContext));
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {

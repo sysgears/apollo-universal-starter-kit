@@ -1,5 +1,5 @@
 import express, { Express } from 'express';
-import ServerModule from '@gqlapp/module-server-ts';
+import { GraphQLModule } from '@gqlapp/graphql-server-ts';
 
 import Upload from './sql';
 import schema from './schema.graphql';
@@ -13,7 +13,7 @@ const middleware = (app: Express) => {
 
 export * from './FileSystemStorage';
 
-export default new ServerModule({
+export default new GraphQLModule({
   schema: [schema],
   appContext: {
     fileSystemStorage

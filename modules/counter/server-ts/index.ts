@@ -1,10 +1,10 @@
-import Counter from './sql';
+import { GraphQLModule } from '@gqlapp/graphql-server-ts';
 
+import Counter from './sql';
 import schema from './schema.graphql';
 import createResolvers from './resolvers';
-import ServerModule from '@gqlapp/module-server-ts';
 
-export default new ServerModule({
+export default new GraphQLModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
   createContextFunc: [() => ({ Counter: new Counter() })]

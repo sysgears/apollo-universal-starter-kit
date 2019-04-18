@@ -1,7 +1,7 @@
 import { isApiExternal } from '@gqlapp/core-common';
 import { MiddlewareFunc } from '@gqlapp/module-server-ts';
 
-import { GraphQLModule } from './GraphQLModule';
+import GraphQLModule from './GraphQLModule';
 import createResolvers from './resolvers';
 import schemaDocument from './schema.graphql';
 import graphiqlMiddleware from './graphiql';

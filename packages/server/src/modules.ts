@@ -15,11 +15,11 @@ import reports from '@gqlapp/reports-server-ts';
 import rest from '@gqlapp/rest-server-ts';
 import '@gqlapp/debug-server-ts';
 
-import ServerModule from '@gqlapp/module-server-ts';
+import { GraphQLModule } from '@gqlapp/graphql-server-ts';
 
 const user = require('@gqlapp/user-server-ts').default;
 
-const modules: ServerModule = new ServerModule(
+const modules: GraphQLModule = new GraphQLModule(
   authentication,
   cookies,
   i18n,

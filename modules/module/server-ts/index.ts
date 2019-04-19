@@ -1,2 +1,2 @@
-export { default } from './ServerModule';
-export * from './ServerModule';
+export { default } from './modules';
+export * from './modules';

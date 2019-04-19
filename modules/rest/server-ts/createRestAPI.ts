@@ -1,13 +1,13 @@
 import { Express } from 'express';
 import { GraphQLSchema } from 'graphql';
 import bodyParser from 'body-parser';
-import { GraphQLServerModule } from '@gqlapp/graphql-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 import sofa, { OpenAPI } from '@hofstadter-io/sofa-api';
 import swaggerUi from 'swagger-ui-express';
 
 import settings from '../../../settings';
 
-const createRestAPI = (app: Express, schema: GraphQLSchema, modules: GraphQLServerModule) => {
+const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModule) => {
   // need to enable explicitly
   if (settings.rest.enabled) {
     // setup the openApi objecct

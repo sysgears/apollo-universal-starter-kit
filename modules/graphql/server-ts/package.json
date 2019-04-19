@@ -1,6 +1,9 @@
 {
   "name": "@gqlapp/graphql-server-ts",
   "version": "0.1.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-server-ts": "^0.1.0"
+  }
 }
 

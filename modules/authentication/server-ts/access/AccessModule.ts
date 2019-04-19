@@ -1,14 +1,14 @@
 import { merge } from 'lodash';
-import { GraphQLServerModule, GraphQLServerModuleShape } from '@gqlapp/graphql-server-ts';
+import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
 
 // TODO: Change type of identity variable from any to User type, after converting the User DAO into Typescript
-interface AccessModuleShape extends GraphQLServerModuleShape {
+interface AccessModuleShape extends ServerModuleShape {
   grant: Array<(identity: any, req: Request, passwordHash: string) => { [key: string]: any } | void>;
 }
 
 interface AccessModule extends AccessModuleShape {}
 
-class AccessModule extends GraphQLServerModule {
+class AccessModule extends ServerModule {
   constructor(...modules: AccessModuleShape[]) {
     super(...modules);
   }

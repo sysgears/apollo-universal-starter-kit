@@ -3,7 +3,7 @@ import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
 import { PubSub } from 'graphql-subscriptions';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
-import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
+import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
 
 /**
  * Create GraphQL context function params
@@ -41,7 +41,7 @@ type CreateContextFunc = (props: CreateContextFuncProps) => { [key: string]: any
  */
 type CreateResolversFunc = (pubsub: PubSub) => IResolvers;
 
-export interface GraphQLServerModuleShape extends ServerModuleShape {
+export interface GraphQLServerModuleShape extends CommonModuleShape {
   // A GraphQL schema list of a module
   schema?: DocumentNode[];
   // A list of functions to create GraphQL resolvers
@@ -52,7 +52,7 @@ export interface GraphQLServerModuleShape extends ServerModuleShape {
 
 interface GraphQLServerModule extends GraphQLServerModuleShape {}
 
-class GraphQLServerModule extends ServerModule {
+class GraphQLServerModule extends CommonModule {
   /**
    * Constructs backend Node feature module representation, that folds all the feature modules
    * into a single module represented by this instance.

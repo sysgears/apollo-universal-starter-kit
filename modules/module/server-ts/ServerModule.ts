@@ -1,5 +1,5 @@
 import { Express } from 'express';
-import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import GraphQLServerModule, { GraphQLServerModuleShape } from './GraphQLServerModule';
 
 /**
  * A function which registers new middleware.
@@ -13,7 +13,7 @@ export type MiddlewareFunc = (app: Express, appContext: { [key: string]: any }, 
 /**
  * Server feature modules interface
  */
-export interface ServerModuleShape extends CommonModuleShape {
+export interface ServerModuleShape extends GraphQLServerModuleShape {
   // A list of functions to register high-priority middlewares (happens before registering normal priority ones)
   beforeware?: MiddlewareFunc[];
   // A list of functions to register normal-priority middlewares
@@ -27,7 +27,7 @@ interface ServerModule extends ServerModuleShape {}
  *
  * An instance of this class is exported by each Node backend feature module
  */
-class ServerModule extends CommonModule {
+class ServerModule extends GraphQLServerModule {
   /**
    * Constructs backend Node feature module representation, that folds all the feature modules
    * into a single module represented by this instance.

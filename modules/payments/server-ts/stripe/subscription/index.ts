@@ -1,7 +1,7 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 import stripeLocal from 'stripe-local';
-import { GraphQLServerModule } from '@gqlapp/graphql-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 import { log } from '@gqlapp/core-common';
 
 import settings from '../../../../../settings';
@@ -40,7 +40,7 @@ const middleware = (app: Express) => {
 };
 
 export default (enabled
-  ? new GraphQLServerModule({
+  ? new ServerModule({
       schema: [schema],
       createResolversFunc: [createResolvers],
       createContextFunc: [createContextFunc],

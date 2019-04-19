@@ -1,8 +1,7 @@
 import { GraphQLSchema } from 'graphql';
 import { Server } from 'http';
-import GraphQLServerModule from './GraphQLServerModule';
-
 import { SubscriptionServer } from 'subscriptions-transport-ws';
+import ServerModule from '@gqlapp/module-server-ts';
 
 /**
  * A function to make a GraphQL context creator
@@ -11,7 +10,7 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
  *
  * @returns function that creates a GraphQL context
  */
-export type MakeGQLContextCreator = (modules: GraphQLServerModule) => (req: Request, res: Response) => any;
+export type MakeGQLContextCreator = (modules: ServerModule) => (req: Request, res: Response) => any;
 
 /**
  * GraphQL config shape
@@ -32,7 +31,7 @@ export interface SubsServerConfigShape {
   // A GraphQL schema list of modules
   schema: GraphQLSchema;
   // App modules
-  modules: GraphQLServerModule;
+  modules: ServerModule;
 }
 
 /**
@@ -65,7 +64,7 @@ export type ReloadSubscriptionServer = (prevServer: any, subscriptionConfig: Sub
 export type AddGraphQLSubs = (
   httpServer: Server,
   schema: GraphQLSchema,
-  modules: GraphQLServerModule,
+  modules: ServerModule,
   entryModule?: NodeModule
 ) => any;
 

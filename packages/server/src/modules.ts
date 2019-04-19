@@ -9,13 +9,11 @@ import post from '@gqlapp/post-server-ts';
 import upload from '@gqlapp/upload-server-ts';
 import subscription from '@gqlapp/payments-server-ts';
 import mailer from '@gqlapp/mailer-server-ts';
-import graphql from '@gqlapp/graphql-server-ts';
+import graphql, { GraphQLModule } from '@gqlapp/graphql-server-ts';
 import authentication from '@gqlapp/authentication-server-ts';
 import reports from '@gqlapp/reports-server-ts';
 import rest from '@gqlapp/rest-server-ts';
 import '@gqlapp/debug-server-ts';
-
-import { GraphQLModule } from '@gqlapp/graphql-server-ts';
 
 const user = require('@gqlapp/user-server-ts').default;
 

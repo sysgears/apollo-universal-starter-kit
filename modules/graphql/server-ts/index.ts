@@ -1,7 +1,7 @@
 import { isApiExternal } from '@gqlapp/core-common';
 import { MiddlewareFunc } from '@gqlapp/module-server-ts';
 
-import GraphQLModule from './GraphQLModule';
+import GraphQLServerModule from './GraphQLServerModule';
 import createResolvers from './resolvers';
 import schemaDocument from './schema.graphql';
 import graphiqlMiddleware from './graphiql';
@@ -21,10 +21,10 @@ const makeGQLContextCreator: MakeGQLContextCreator = modules => (req, res) => mo
 
 export * from './api';
 export * from './types';
-export * from './GraphQLModule';
-export { default as GraphQLModule } from './GraphQLModule';
+export * from './GraphQLServerModule';
+export { default as GraphQLServerModule } from './GraphQLServerModule';
 
-export default new GraphQLModule({
+export default new GraphQLServerModule({
   schema: [schemaDocument],
   createResolversFunc: [createResolvers],
   middleware: [middleware],

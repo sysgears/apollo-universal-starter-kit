@@ -41,7 +41,7 @@ type CreateContextFunc = (props: CreateContextFuncProps) => { [key: string]: any
  */
 type CreateResolversFunc = (pubsub: PubSub) => IResolvers;
 
-export interface GraphQLModuleShape extends ServerModuleShape {
+export interface GraphQLServerModuleShape extends ServerModuleShape {
   // A GraphQL schema list of a module
   schema?: DocumentNode[];
   // A list of functions to create GraphQL resolvers
@@ -50,16 +50,16 @@ export interface GraphQLModuleShape extends ServerModuleShape {
   createContextFunc?: CreateContextFunc[];
 }
 
-interface GraphQLModule extends GraphQLModuleShape {}
+interface GraphQLServerModule extends GraphQLServerModuleShape {}
 
-class GraphQLModule extends ServerModule {
+class GraphQLServerModule extends ServerModule {
   /**
    * Constructs backend Node feature module representation, that folds all the feature modules
    * into a single module represented by this instance.
    *
    * @param modules feature modules
    */
-  constructor(...modules: GraphQLModuleShape[]) {
+  constructor(...modules: GraphQLServerModuleShape[]) {
     super(...modules);
   }
 
@@ -111,4 +111,4 @@ class GraphQLModule extends ServerModule {
   }
 }
 
-export default GraphQLModule;
+export default GraphQLServerModule;

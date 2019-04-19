@@ -1,9 +1,9 @@
 import { makeExecutableSchema } from 'graphql-tools';
 
 import { pubsub, rootSchemaDef } from '.';
-import { GraphQLModule } from '..';
+import { GraphQLServerModule } from '..';
 
-export const createSchema = (modules: GraphQLModule) =>
+export const createSchema = (modules: GraphQLServerModule) =>
   makeExecutableSchema({
     typeDefs: [rootSchemaDef].concat(modules.schema),
     resolvers: modules.createResolvers(pubsub)

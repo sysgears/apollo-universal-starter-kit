@@ -1,4 +1,4 @@
-import { GraphQLModule } from '@gqlapp/graphql-server-ts';
+import { GraphQLServerModule } from '@gqlapp/graphql-server-ts';
 
 import ContactsDAO from './sql';
 import schema from './schema.graphql';
@@ -7,7 +7,7 @@ import resources from './locales';
 import pdf from './pdf';
 import excel from './excel';
 
-export default new GraphQLModule(pdf, excel, {
+export default new GraphQLServerModule(pdf, excel, {
   schema: [schema],
   createResolversFunc: [createResolvers],
   createContextFunc: [() => ({ Contacts: new ContactsDAO() })],

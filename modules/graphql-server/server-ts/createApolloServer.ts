@@ -21,14 +21,14 @@ export default ({ schema, createGraphQLContext }: GraphQLConfigShape) => {
   const formatError = (error: ApolloError) =>
     error.message === 'Not Authenticated!' ? new AuthenticationError(error.message) : error;
 
-  const formatResponseCustom = (response: any, options: { [key: string]: any }) =>
+  const formatAndLogResponse = (response: any, options: { [key: string]: any }) =>
     logging.apolloLogging ? formatResponse({ logger: log.debug.bind(log) }, response, options) : response;
 
   return new ApolloServer({
     schema,
     context,
     formatError,
-    formatResponse: formatResponseCustom,
+    formatResponse: formatAndLogResponse,
     tracing: !!apiKey,
     cacheControl: !!apiKey,
     engine: apiKey ? { apiKey } : false,

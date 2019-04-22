@@ -1,5 +1,5 @@
 import ServerModule from '@gqlapp/module-server-ts';
-import { createSchema } from '@gqlapp/graphql-server-ts';
+import { createSchema } from '@gqlapp/graphql-server-server-ts';
 import { Express } from 'express';
 
 import createRestAPI from './createRestAPI';

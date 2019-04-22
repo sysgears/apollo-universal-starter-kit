@@ -2,7 +2,7 @@ import { ApolloServer, AuthenticationError, ApolloError } from 'apollo-server-ex
 import { formatResponse } from 'apollo-logger';
 import 'isomorphic-fetch';
 import { log } from '@gqlapp/core-common';
-import { GraphQLConfigShape } from '@gqlapp/graphql-server-ts';
+import { GraphQLConfigShape } from '@gqlapp/graphql-server-server-ts';
 
 import settings from '../../../settings';
 

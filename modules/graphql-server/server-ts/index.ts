@@ -20,7 +20,6 @@ type MakeGQLContextCreator = (modules: ServerModule) => (req: Request, res: Resp
 const makeGQLContextCreator: MakeGQLContextCreator = modules => (req, res) => modules.createContext(req, res);
 
 export * from './api';
-export * from './types';
 
 export default new ServerModule({
   schema: [schemaDocument],

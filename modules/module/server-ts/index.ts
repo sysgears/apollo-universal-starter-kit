@@ -1,2 +1,2 @@
-export { default } from './modules';
-export * from './modules';
+export { default } from './contracts';
+export * from './contracts';

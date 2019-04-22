@@ -5,7 +5,6 @@ import createResolvers from './resolvers';
 import schemaDocument from './schema.graphql';
 import graphiqlMiddleware from './graphiql';
 import createApolloServer from './createApolloServer';
-import { MakeGQLContextCreator } from './types';
 
 const middleware: MiddlewareFunc = (app, appContext, { createGraphQLContext, schema }) => {
   app.get('/graphiql', graphiqlMiddleware);
@@ -15,6 +14,8 @@ const middleware: MiddlewareFunc = (app, appContext, { createGraphQLContext, sch
     graphqlServer.applyMiddleware({ app, path: __API_URL__, cors: { credentials: true, origin: true } });
   }
 };
+
+type MakeGQLContextCreator = (modules: ServerModule) => (req: Request, res: Response) => any;
 
 const makeGQLContextCreator: MakeGQLContextCreator = modules => (req, res) => modules.createContext(req, res);
 

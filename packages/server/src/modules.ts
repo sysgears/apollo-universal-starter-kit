@@ -33,8 +33,8 @@ const modules: ServerModule = new ServerModule(
   chat,
   reports,
   rest,
-  graphql,
-  core
+  core,
+  graphql
 );
 
 export default modules;

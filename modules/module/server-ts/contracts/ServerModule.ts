@@ -6,9 +6,8 @@ import GraphQLServerModule, { GraphQLServerModuleShape } from './GraphQLServerMo
  *
  * @param app an instance of Express
  * @param appContext application context
- * @param options application additional options
  */
-export type MiddlewareFunc = (app: Express, appContext: { [key: string]: any }, options: any) => void;
+export type MiddlewareFunc = (app: Express, appContext: { [key: string]: any }) => void;
 
 /**
  * Server feature modules interface

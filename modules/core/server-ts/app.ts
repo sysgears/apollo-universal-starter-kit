@@ -12,14 +12,16 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
-  const { appContext, beforeware, middleware } = modules;
-  const createGraphQLContext = appContext.makeGQLContextCreator(modules);
-  const applyMiddleWare: ApplyMiddleWare = fn => fn(app, appContext, { createGraphQLContext, schema });
+  const { beforeware, middleware } = modules;
+  modules.appContext.schema = schema;
+  modules.appContext.app = app;
+
+  const applyMiddleWare: ApplyMiddleWare = fn => fn(app, modules.appContext);
 
   beforeware.forEach(applyMiddleWare);
   middleware.forEach(applyMiddleWare);
 
-  app.use(websiteMiddleware(schema, createGraphQLContext));
+  app.use(websiteMiddleware(schema, modules));
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {

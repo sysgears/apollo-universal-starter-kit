@@ -11,6 +11,7 @@ import Helmet, { HelmetData } from 'react-helmet';
 import serialize from 'serialize-javascript';
 import { GraphQLSchema } from 'graphql';
 import { isApiExternal, apiUrl } from '@gqlapp/core-common';
+import ServerModule from '@gqlapp/module-server-ts';
 import ClientModule from '@gqlapp/module-client-react';
 import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
 import { styles } from '@gqlapp/look-client-react';
@@ -81,11 +82,12 @@ const Html = ({ content, state, css, helmet }: HtmlProps) => (
   </html>
 );
 
-const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, createGraphQLContext: any) => {
+const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
   const schemaLink = new SchemaLink({
     schema,
-    context: { ...(await createGraphQLContext(req, res)), req, res }
+    context: { ...(await modules.createContext(req, res)), req, res }
   });
+
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
@@ -93,6 +95,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, creat
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });
+
   const store = createReduxStore(clientModules.reducers, {}, client);
   const context: any = {};
   const App = clientModules.getWrappedRoot(
@@ -133,14 +136,14 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, creat
   }
 };
 
-export default (schema: GraphQLSchema, createGraphQLContext: any) => async (
+export default (schema: GraphQLSchema, modules: ServerModule) => async (
   req: any,
   res: any,
   next: (e?: Error) => void
 ) => {
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res, schema, createGraphQLContext);
+      return await renderServerSide(req, res, schema, modules);
     } else if (req.path.indexOf('.') < 0 && !__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {

@@ -99,6 +99,7 @@
     "minilog": "^3.1.0",
     "mysql2": "^1.5.1",
     "nodemailer": "^4.4.1",
+    "objection": "^1.6.8",
     "passport": "^0.4.0",
     "passport-facebook": "^2.1.1",
     "passport-github": "^1.1.0",

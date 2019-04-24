@@ -30,7 +30,7 @@ run the project.
 NODE_ENV=production yarn seed
 ```
 
-4. Replace the default server port and website URL in `packages/server/.spinrc.js` to match your production setup: 
+4. Replace the default server port and website URL in `packages/server/.zenrc.js` to match your production setup: 
 
 ```javascript
 config.options.defines.__SERVER_PORT__ = 8080; // Change to the production port
@@ -38,7 +38,7 @@ config.options.defines.__WEBSITE_URL__ = '"https://your-website-name.com"'; // C
 ``` 
 
 5. If you need to run the mobile app, set the `__API_URL__` and `__WEBSITE_URL__` properties in 
-`packages/mobile/.spinrc.js`:
+`packages/mobile/.zenrc.js`:
 
 ```javascript
 // Other configurations for the mobile app are omitted for brevity
@@ -102,7 +102,7 @@ Click the name of your application in the list and then follow to the `Settings`
 | --------------- | ----- |
 | YARN_PRODUCTION | false |
 
-**NOTE**: If you don't need the mobile app when deploying to Heroku, open the file `packages/mobile/.spinrc.js` and set 
+**NOTE**: If you don't need the mobile app when deploying to Heroku, open the file `packages/mobile/.zenrc.js` and set 
 both `config.builders.android.enabled` and `config.builders.ios.enabled` to `false` as shown in the example below:
           
 ```javascript
@@ -132,7 +132,7 @@ the validation link will be sent to Ethereal, _not_ to the real users.
 | EMAIL_PASSWORD | examplePassword            |
 | EMAIL_USER     | example@example.com        | 
 
-6. Set a proper value for the server website URL in `packages/server/.spinrc.js` to match your production setup.
+6. Set a proper value for the server website URL in `packages/server/.zenrc.js` to match your production setup.
  
 * If you're deploying your application on Heroku without a custom domain name, the production URL will look similar to 
 this:
@@ -154,7 +154,7 @@ Remember to add the custom domain in [Heroku Dashboard]. Select your application
 `Settings` tab. Scroll to the button **Add domain** and add your domain.  
 
 7. If you're deploying your mobile app to Expo, you need to connect the app to the back-end URL. To do that, edit the 
-`packages/mobile/.spinrc.js` file:
+`packages/mobile/.zenrc.js` file:
 
 * If you're deploying your app on Heroku without a custom domain name, the production URLs will look like this:
 

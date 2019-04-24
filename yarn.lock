@@ -1301,10 +1301,10 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
-"@larix/zen@^0.1.6":
-  version "0.1.6"
-  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.6.tgz#cf7ba3f3c3ab1d9ffcfdce89c4c88c9c25802b12"
-  integrity sha512-Hi+YdXu0S+bLnFR/YKtF/CUlY6GJLKHT0afSQBVfAE3KMjSucGgMDV4glUKJLThWrYWVOWGaG4cTRcAJFSSuqQ==
+"@larix/zen@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.10.tgz#bde84c01b49f6c0ffcbaad78ea20e859b36c7382"
+  integrity sha512-6IbfFWGpFEd+Jblgod/EjjB0X8KeyqmymtSXY8OMVEBpcgLBLc+3iqI2oE7oc4dbV7ZnAdT3vmQxMVb9YFq5/g==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"
@@ -8972,10 +8972,10 @@ forwarded@~0.1.2:
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.1.2.tgz#98c23dab1175657b8c0573e8ceccd91b0ff18c84"
   integrity sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=
 
-fractal-objects@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.10.0.tgz#6eec3e09a5caf80066f8496383c9033f90492938"
-  integrity sha512-LZBO0rb1OEfCOMAMWoWlBUDIZhsNLErMMbA00Z9aV5fniw0VXewDyiKm0lz77Mul5KcMofJw6xyccUxUQBrdeA==
+fractal-objects@^0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/fractal-objects/-/fractal-objects-0.10.2.tgz#ecaab8c5520c08dd25ee17e7c4fd95558109561e"
+  integrity sha512-00lzsMdNYhdwxB+N4xQWiUa4+CgZAJdpSOGTbIpHYGE28EVpTl0vDi35Ay4oZg4Y38QX+GE0vky/eWma9598VQ==
 
 fragment-cache@^0.2.1:
   version "0.2.1"

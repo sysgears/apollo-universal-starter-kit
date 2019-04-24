@@ -40,7 +40,7 @@ git merge upstream/stable
 
 ## How do I use a custom GraphQL back end?
 
-To set your custom GraphQL back end endpoint, change the URL in `packages/server/.spinrc.js` for the 
+To set your custom GraphQL back end endpoint, change the URL in `packages/server/.zenrc.js` for the 
 `config.options.define.__API_URL__` property:
 
 ```javascript
@@ -62,7 +62,7 @@ const config = {
 
 We recommend that you still run the back-end code provided by the starter kit to use the server-side rendering (SSR).
 You can also turn off SSR if you don't use the starter kit back end. Set the `config.options.ssr` to `false` in 
-`packages/server/.spinrc.js`:
+`packages/server/.zenrc.js`:
 
 ```javascript
 const url = require('url');
@@ -80,17 +80,17 @@ Reference: [#585](https://github.com/sysgears/apollo-universal-starter-kit/issue
 
 ## How do I disable Server Side Rendering?
 
-To disable Server Side Rendering (SSR), change a dedicated SpinJS setting in `.spinrc.js` files:
+To disable Server Side Rendering (SSR), change a dedicated SpinJS setting in `.zenrc.js` files:
 
-* For the Express application, set `config.options.ssr` to `false` in `packages/server/.spinrc.js`
-* For the React application, set `config.options.ssr` to `false` in `packages/client/.spinrc.js`
+* For the Express application, set `config.options.ssr` to `false` in `packages/server/.zenrc.js`
+* For the React application, set `config.options.ssr` to `false` in `packages/client/.zenrc.js`
 
 **NOTE**: If you're going to disable SSR, you must disable it in **both** packages &ndash; `server` and `client`!
 
 Disabling SSR in the `server` package:
 
 ```js
-// File packages/server/.spinrc.js
+// File packages/server/.zenrc.js
 
 const config = {
   builders: {
@@ -110,7 +110,7 @@ const config = {
 Similarly, you can turn off SSR in the `client` package:
 
 ```js
-// File packages/client/.spinrc.js
+// File packages/client/.zenrc.js
 
 const config = {
   builders: {
@@ -121,7 +121,7 @@ const config = {
   },
   options: {
     // SSR is now disabled for client
-    // Remember to disable SSR for the server in package/server/.spinrc.js
+    // Remember to disable SSR for the server in package/server/.zenrc.js
     ssr: false,
   }
 };

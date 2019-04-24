@@ -23,7 +23,10 @@ export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphq
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <HeaderTitleWithI18n i18nKey="navLink.signIn" style="subTitle" />,
-    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    headerLeft: (
+      <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    ),
+    headerForceInset: {}
   });
 
   render() {
@@ -37,7 +40,8 @@ LoginScreen.propTypes = {
 
 class ForgotPasswordScreen extends React.Component {
   static navigationOptions = () => ({
-    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />,
+    headerForceInset: {}
   });
   render() {
     return <ForgotPassword navigation={this.props.navigation} />;
@@ -50,7 +54,8 @@ ForgotPasswordScreen.propTypes = {
 
 class RegisterScreen extends React.Component {
   static navigationOptions = () => ({
-    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />,
+    headerForceInset: {}
   });
   render() {
     return <Register navigation={this.props.navigation} />;
@@ -159,13 +164,15 @@ export default new ClientModule({
               headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              )
+              ),
+              headerForceInset: {}
             })
           },
           ProfileEdit: {
             screen: ProfilerEditScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />,
+              headerForceInset: {}
             })
           }
         }),
@@ -205,19 +212,22 @@ export default new ClientModule({
                     navigation.setParams({ isOpenFilter: !isOpenFilter });
                   }}
                 />
-              )
+              ),
+              headerForceInset: {}
             })
           },
           UserEdit: {
             screen: UserEditScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
+              headerForceInset: {}
             })
           },
           UserAdd: {
             screen: UserAddScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
+              headerForceInset: {}
             })
           }
         }),

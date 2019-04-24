@@ -1,28 +1,18 @@
 const config = {
   builders: {
-    'client-angular': {
-      entry: './src/index.ts',
-      stack: ['web'],
-      openBrowser: true,
-      dllExcludes: ['bootstrap'],
+    web: {
       dllBuildDir: '../../.cache/dll',
+      dllExcludes: [ 'bootstrap' ],
+      openBrowser: true,
+      // Wait for backend to start prior to letting webpack load frontend page
+      waitOn: [ 'tcp:localhost:8080' ],
       defines: {
         __CLIENT__: true
       },
-      // Wait for backend to start prior to letting webpack load frontend page
-      waitOn: ['tcp:localhost:8080'],
       enabled: false
-    },
-    test: {
-      stack: ['server'],
-      roles: ['test'],
-      defines: {
-        __TEST__: true
-      }
     }
   },
   options: {
-    stack: ['apollo', 'css', 'sass', 'less', 'ts', 'webpack', 'i18next', 'angular'],
     cache: '../../.cache',
     ssr: false,
     webpackDll: true,

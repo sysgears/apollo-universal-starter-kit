@@ -6,18 +6,18 @@ import schemaDocument from './schema.graphql';
 import graphiqlMiddleware from './graphiql';
 import createApolloServer from './createApolloServer';
 
+let graphqlServer: any;
+
 const onAppCreate = (modules: ServerModule): void => {
   const { schema } = modules.appContext;
 
   type CreateGraphQLContext = (req: Request, res: Response) => any;
   const createGraphQLContext: CreateGraphQLContext = (req, res) => modules.createContext(req, res);
-  const graphqlServer = createApolloServer({ createGraphQLContext, schema });
+  graphqlServer = createApolloServer({ createGraphQLContext, schema });
   modules.appContext.createGraphQLContext = createGraphQLContext;
-  modules.appContext.graphqlServer = graphqlServer;
 };
 
-const middleware = (app: any, appContext: any): void => {
-  const { graphqlServer } = appContext;
+const middleware = (app: any): void => {
   const cors = { credentials: true, origin: true };
 
   app.get('/graphiql', graphiqlMiddleware);

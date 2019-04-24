@@ -104,7 +104,7 @@
     "@babel/preset-typescript": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@larix/zen": "^0.1.10",
+    "@larix/zen": "^0.1.11",
     "autoprefixer": "^9.5.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.6",

@@ -1,7 +1,7 @@
 import http from 'http';
 import { serverPort, log } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
-import { createSchema, addGraphQLSubscriptions, onAppDispose } from '@gqlapp/graphql-server-server-ts';
+import { addGraphQLSubscriptions, onAppDispose } from '@gqlapp/graphql-server-server-ts';
 
 import { createServerApp } from './app';
 
@@ -14,43 +14,41 @@ const ref: { modules: ServerModule; resolve: (server: http.Server) => void } = {
 
 export const serverPromise: Promise<http.Server> = new Promise(resolve => (ref.resolve = resolve));
 
+const reloadBackEnd = (event: any): void => {
+  if (event === 'abort' || event === 'fail') {
+    console.error('HMR error status: ' + event);
+    // Signal webpack.run.js to do full-reload of the back-end
+    process.exit(250);
+  }
+};
+
 export const createServer = (modules: ServerModule, entryModule: NodeModule) => {
   try {
     ref.modules = modules;
+    const isStarting = !server || !entryModule.hot || !entryModule.hot.data;
 
     if (entryModule.hot) {
       entryModule.hot.dispose(data => onAppDispose(modules, data));
-      entryModule.hot.status(event => {
-        if (event === 'abort' || event === 'fail') {
-          console.error('HMR error status: ' + event);
-          // Signal webpack.run.js to do full-reload of the back-end
-          process.exit(250);
-        }
-      });
+      entryModule.hot.status(reloadBackEnd);
       entryModule.hot.accept();
     }
 
-    if (!server || !entryModule.hot || !entryModule.hot.data) {
-      server = http.createServer();
+    if (isStarting) {
+      const app = createServerApp(modules);
+      server = http.createServer(app);
 
-      const schema = createSchema(modules);
-
-      server.on('request', createServerApp(schema, modules));
-      addGraphQLSubscriptions(server, schema, modules);
+      addGraphQLSubscriptions(server, modules);
 
       server.listen(serverPort, () => {
         log.info(`API is now running on port ${serverPort}`);
         ref.resolve(server);
       });
 
-      server.on('close', () => {
-        server = undefined;
-      });
+      server.on('close', () => (server = null));
     } else {
-      const schema = createSchema(ref.modules);
-      server.removeAllListeners('request');
-      server.on('request', createServerApp(schema, ref.modules));
-      addGraphQLSubscriptions(server, schema, ref.modules, entryModule);
+      const app = createServerApp(modules);
+      server = http.createServer(app);
+      addGraphQLSubscriptions(server, ref.modules, entryModule);
     }
   } catch (e) {
     log.error(e);
@@ -64,7 +62,7 @@ if (module.hot) {
     try {
       if (server) {
         server.close();
-        server = undefined;
+        server = null;
       }
     } catch (error) {
       log(error.stack);

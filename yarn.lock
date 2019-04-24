@@ -1301,10 +1301,10 @@
     "@types/istanbul-lib-coverage" "^1.1.0"
     "@types/yargs" "^12.0.9"
 
-"@larix/zen@^0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.9.tgz#1eaf21523b4f1049927c2420a46cdaeb21c3fd31"
-  integrity sha512-QSAbyLrycoOlRZ7Ec1b8qBy4pUu+6Ou+gS6um/PkmaKiPv76HZH68/SUDwfpTPM9Trj1Lm3BA0ETQkuDrWPWCg==
+"@larix/zen@^0.1.10":
+  version "0.1.10"
+  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.10.tgz#bde84c01b49f6c0ffcbaad78ea20e859b36c7382"
+  integrity sha512-6IbfFWGpFEd+Jblgod/EjjB0X8KeyqmymtSXY8OMVEBpcgLBLc+3iqI2oE7oc4dbV7ZnAdT3vmQxMVb9YFq5/g==
   dependencies:
     connect-cors "^0.5.6"
     debug "^3.1.0"

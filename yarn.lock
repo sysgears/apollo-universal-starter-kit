@@ -1327,6 +1327,32 @@
     webpack-sources "^1.0.1"
     yargs "^8.0.2"
 
+"@larix/zen@^0.1.11":
+  version "0.1.11"
+  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.11.tgz#106ef5e251a97b2aea02f2af8571bdb67c7598a9"
+  integrity sha512-jFGRSdvztZEgP6A/gUN7XkjjebbgTfbY8RU1PDk0x9uyUHfO3YM1mCnuMLsBLUCJYCYTMQU/dF4ncQ+sHpa6Og==
+  dependencies:
+    connect-cors "^0.5.6"
+    debug "^3.1.0"
+    detect-port "^1.2.2"
+    dlv "^1.1.2"
+    glob "^7.1.2"
+    humps "^2.0.1"
+    ip "^1.1.5"
+    is-docker "^1.1.0"
+    lodash "^4.17.4"
+    minilog "^3.1.0"
+    mkdirp "^0.5.1"
+    node-fetch "^2.2.0"
+    require-relative "^0.8.7"
+    serve-static "^1.13.1"
+    source-list-map "^2.0.0"
+    source-map "^0.7.3"
+    source-map-support "^0.5.11"
+    webpack-merge "^4.1.0"
+    webpack-sources "^1.0.1"
+    yargs "^8.0.2"
+
 "@lerna/add@3.13.1":
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.13.1.tgz#2cd7838857edb3b43ed73e3c21f69a20beb9b702"
@@ -9594,7 +9620,7 @@ graphql-upload@^8.0.2:
     http-errors "^1.7.1"
     object-path "^0.11.4"
 
-graphql@14.1.1, graphql@^14.1.1:
+graphql@^14.1.1:
   version "14.1.1"
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-14.1.1.tgz#d5d77df4b19ef41538d7215d1e7a28834619fac0"
   integrity sha512-C5zDzLqvfPAgTtP8AUPIt9keDabrdRAqSWjj2OPRKrKxI9Fb65I36s1uCs1UUBFnSWTdO7hyHi7z1ZbwKMKF6Q==
@@ -10221,7 +10247,7 @@ immediate@~3.0.5:
   resolved "https://registry.yarnpkg.com/immediate/-/immediate-3.0.6.tgz#9db1dbd0faf8de6fbe0f5dd5e56bb606280de69b"
   integrity sha1-nbHb0Pr43m++D13V5Wu2BigN5ps=
 
-immutability-helper@2.8.1, immutability-helper@^2.6.2:
+immutability-helper@^2.6.2:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/immutability-helper/-/immutability-helper-2.8.1.tgz#3c5ec05fcd83676bfae7146f319595243ad904f4"
   integrity sha512-8AVB5EUpRBUdXqfe4cFsFECsOIZ9hX/Arl8B8S9/tmwpYv3UWvOsXUPOjkuZIMaVxfSWkxCzkng1rjmEoSWrxQ==
@@ -19926,7 +19952,7 @@ watch@~0.18.0:
     exec-sh "^0.2.0"
     minimist "^1.2.0"
 
-watchpack@^1.5.0, "watchpack@https://github.com/Globegitter/watchpack":
+watchpack@^1.5.0:
   version "1.6.0"
   resolved "https://github.com/Globegitter/watchpack#d903e64a910ab068299f824b04a5e216a15672e9"
   dependencies:

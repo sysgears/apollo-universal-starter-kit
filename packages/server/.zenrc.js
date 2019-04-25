@@ -28,7 +28,7 @@ const config = {
     frontendRefreshOnBackendChange: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
-      __SERVER_PORT__: 8080,
+      __SERVER_PORT__: 8000,
       __API_URL__: '"/graphql"', // Use full URL if API is external, e.g. https://example.com/graphql
       __WEBSITE_URL__: '"http://localhost:3000"'
     }
@@ -38,7 +38,7 @@ const config = {
 config.options.devProxy = config.options.ssr;
 
 if (process.env.NODE_ENV === 'production') {
-  config.options.defines.__SERVER_PORT__ = 8080;
+  config.options.defines.__SERVER_PORT__ = 8000;
   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
   // Generating source maps for production will slowdown compilation for roughly 25%
   config.options.sourceMap = false;

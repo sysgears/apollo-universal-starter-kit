@@ -1,18 +1,17 @@
-import http from 'http';
-import { serverPort, log } from '@gqlapp/core-common';
+import http, { Server } from 'http';
+import { clientPort, log } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
-import { addGraphQLSubscriptions, onAppDispose } from '@gqlapp/graphql-server-server-ts';
 
-import { createServerApp } from './app';
+import { createClientApp } from './app';
 
-let server: http.Server;
+let server: Server;
 
-const ref: { modules: ServerModule; resolve: (server: http.Server) => void } = {
+const ref: { modules: ServerModule; resolve: (server: Server) => void } = {
   modules: null,
   resolve: null
 };
 
-export const serverPromise: Promise<http.Server> = new Promise(resolve => (ref.resolve = resolve));
+export const serverPromise: Promise<Server> = new Promise(resolve => (ref.resolve = resolve));
 
 const reloadBackEnd = (event: any): void => {
   if (event === 'abort' || event === 'fail') {
@@ -28,27 +27,23 @@ export const createServer = (modules: ServerModule, entryModule: NodeModule) => 
     const isStarting = !server || !entryModule.hot || !entryModule.hot.data;
 
     if (entryModule.hot) {
-      entryModule.hot.dispose(data => onAppDispose(modules, data));
       entryModule.hot.status(reloadBackEnd);
       entryModule.hot.accept();
     }
 
     if (isStarting) {
-      const app = createServerApp(modules);
+      const app = createClientApp(modules);
       server = http.createServer(app);
 
-      addGraphQLSubscriptions(server, modules);
-
-      server.listen(serverPort, () => {
-        log.info(`API is now running on port ${serverPort}`);
+      server.listen(clientPort, () => {
+        log.info(`Client is now running on port ${clientPort}`);
         ref.resolve(server);
       });
 
       server.on('close', () => (server = null));
     } else {
-      const app = createServerApp(modules);
+      const app = createClientApp(modules);
       server = http.createServer(app);
-      addGraphQLSubscriptions(server, ref.modules, entryModule);
     }
   } catch (e) {
     log.error(e);

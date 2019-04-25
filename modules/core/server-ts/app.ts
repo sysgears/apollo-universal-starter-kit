@@ -1,26 +1,14 @@
 import express from 'express';
 import path from 'path';
-// import { GraphQLSchema } from 'graphql';
-import ServerModule, { MiddlewareFunc } from '@gqlapp/module-server-ts';
+import ServerModule from '@gqlapp/module-server-ts';
 
 // import websiteMiddleware from './middleware/website';
 import errorMiddleware from './middleware/error';
 
-type ApplyMiddleWare = (fn: MiddlewareFunc) => void;
-
-export const createServerApp = (modules: ServerModule) => {
+export const createClientApp = (modules: ServerModule) => {
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
-  const { beforeware, middleware } = modules;
-  modules.appContext.app = app;
-
-  const applyMiddleWare: ApplyMiddleWare = fn => fn(app, modules.appContext);
-
-  beforeware.forEach(applyMiddleWare);
-  middleware.forEach(applyMiddleWare);
-
-  // app.use(websiteMiddleware(modules));
   app.use('/', express.static(__FRONTEND_BUILD_DIR__, { maxAge: '180 days' }));
 
   if (__DEV__) {

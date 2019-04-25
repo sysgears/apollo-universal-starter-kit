@@ -7,6 +7,8 @@ import schemaDocument from './schema.graphql';
 import graphiqlMiddleware from './graphiql';
 import createApolloServer from './createApolloServer';
 
+import { createApiServer } from './server';
+
 let graphqlServer: any;
 
 const onAppCreate = (modules: ServerModule): void => {
@@ -20,7 +22,7 @@ const onAppCreate = (modules: ServerModule): void => {
   modules.appContext.schema = schema;
 };
 
-const middleware = (app: any): void => {
+export const middleware = (app: any): void => {
   const cors = { credentials: true, origin: true };
 
   app.get('/graphiql', graphiqlMiddleware);
@@ -31,9 +33,10 @@ const middleware = (app: any): void => {
 };
 
 export * from './api';
+export * from './server';
 
 export default new ServerModule({
-  onAppCreate: [onAppCreate],
+  onAppCreate: [onAppCreate, createApiServer],
   middleware: [middleware],
   schema: [schemaDocument],
   createResolversFunc: [createResolvers]

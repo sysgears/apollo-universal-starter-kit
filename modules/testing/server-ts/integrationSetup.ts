@@ -4,8 +4,8 @@ import chaiHttp from 'chai-http';
 import { ApolloClient } from 'apollo-client';
 import WebSocket from 'ws';
 
-import { serverPromise } from '@gqlapp/core-server-ts';
-import { createApolloClient } from '@gqlapp/core-common';
+import { serverPromise } from '@gqlapp/graphql-server-server-ts';
+import { createApolloClient, serverPort } from '@gqlapp/core-common';
 import { populateTestDb } from '@gqlapp/database-server-ts';
 
 chai.use(chaiHttp);
@@ -26,7 +26,7 @@ before(async () => {
 
   global.WebSocket = WebSocket;
   // TODO: remove any type after converting the createApolloClient.js file into Typescript
-  apollo = createApolloClient({ apiUrl: `http://localhost:${process.env.PORT}/graphql` } as any);
+  apollo = createApolloClient({ apiUrl: `http://localhost:${serverPort}/graphql` } as any);
 });
 
 after(() => {

@@ -10,52 +10,10 @@ In this guide, we explain how you can import modules with Apollo Universal Start
 
 ## Importing Custom Modules
 
-When you work on a custom module and need to import a file from another module, you can use relative or absolute paths.
+Apollo Universal Starter Kit is a Yarn Workspaces project, and so it uses symlinks when resolving dependencies. You can
+read about workspaces in the Yarn documentation. For now, we focus on how to import modules in our starter kit.
 
-The key idea is that **the relative paths in Apollo Universal Starter Kit are not resolved from the `modules` 
-directory**. In fact, they're resolved relative to the `node_modules/@gqlapp` directory.
-
-The diagram below explains better how it works:
-
-```
-apollo-universal-starter-kit
-├── node_modules                        # Global Node.js modules
-    ├── @gqlapp                         # Compiled files
-        ├── custom-module-client-react  # Custom module
-            ├── styles.less             # Actual relative path to styles.less
-        ├── look-client-react           # Compiled module "look"
-            └── ui-antd                 # Default Ant Design styles
-                └── styles
-                    └── index.less      # Actual relative path to "index.less"
-├── modules                             # Apollo Universal Starter Kit modules
-    ├── custom-module                   # Your custom React module
-        ├── client-react
-            ├── styles.less             # The file that needs to import "index.less"
-    ├── look                            # Node.js and Express server
-        └── client-react                # React client implementation
-            └── ui-antd                 # Default Ant Design styles
-                └── styles
-                    └── index.less      # The file to be imported to "styles.less"
-```
-
-As you can see from the diagram, the actual paths to files are changed this way:
-
-* `modules/look/client-react/ui-antd/styles/index.less` => `@gqlapp/look-client-react/ui-antd/styles/index.less`
-* `modules/custom-module/client-react/styles.less` => `@gqlapp/custom-module-client-react/styles.less` 
-
-Therefore, if a `styles.less` file inside `custom-module` needs to import `index.less` file from 
-`look/client-react/ui-antd/styles`, the correct relative path would be this:
-
-```less
-// inside modules/custom-module/client-react/styles.less
-// The real relative path to "styles.less" is different:
-// node_modules/@gqlapp/custom-module-client-react/styles.less
-// The real relative path to "index.less" is this:
-// node_modules/@gqlapp/look-client-react/ui-antd/styles/index.less
-@import '../look-client-react/ui-antd/styles/index.less';
-```
-
-To import the basic styles, we recommend using **absolute imports** rather than relative links. Therefore, in your 
+We recommend using **absolute imports** rather than relative links. For example, in your custom module in, say, 
 `styles.less` you need to import the basic styles the following way:
 
 ```less
@@ -80,9 +38,9 @@ let req = require.context('!file-loader?name=[hash].[ext]!./assets', true, /.*/)
 req.keys().map(req);
 ```
 
-## Installing and Importing New Dependencies
+## Installing and Importing Dependencies
 
-When installing dependencies for Apollo Universal Starter Kit, use Yarn. Once you have a dependency installed, you can 
-use the standard way to import necessary classes or components from a dependency &mdash; the ES6 `import` statements.
+When installing dependencies for Apollo Universal Starter Kit, **use Yarn**. Once you have a dependency installed, you 
+can use it by importing necessary classes or components with ES6 `import`.
 
 [webpack dependency management]: https://webpack.js.org/guides/dependency-management/

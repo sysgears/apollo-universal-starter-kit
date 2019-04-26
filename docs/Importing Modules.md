@@ -10,10 +10,10 @@ In this guide, we explain how you can import modules with Apollo Universal Start
 
 ## Importing Custom Modules
 
-Apollo Universal Starter Kit is a Yarn Workspaces project, and so it uses symlinks when resolving dependencies. You can
-read about workspaces in the [Yarn documentation]. For now, we focus on how to import modules in our starter kit.
+Apollo Universal Starter Kit is a Yarn Workspaces project. You can read about workspaces in the [Yarn documentation]. 
+For now, we focus on how to import modules in our starter kit.
 
-We recommend using **absolute imports** rather than relative links. For example, in `styles.less` (located in your 
+We recommend using **absolute imports** rather than relative paths. For example, in `styles.less` (located in your 
 custom module) you need to import the basic styles from another module the following way:
 
 ```less

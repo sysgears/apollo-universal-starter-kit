@@ -15,7 +15,7 @@ The `packages` folder contains all the currently existing packages in Apollo Uni
 packages
 ├── client                # The React application core
 ├── client-angular        # The Angular application core
-├── client-vue            # Vue implementation
+├── client-vue            # The Vue application core
 ├── common                # Common implementation for the client and server modules
 ├── mobile                # The React Native main module
 ├── server                # The Express server module
@@ -53,11 +53,11 @@ Concerning the Scala application, you can find the imported modules in `packages
 
 ## Apollo Universal Starter Kit Modules
 
-The `modules` directory contains all the global starter kit modules such Core, Authentication, Contact, i18n, Reports, 
-Payments, PageNotFound, and others. Most of them contain various implementations for specific technologies. 
+The `modules` directory contains all the global starter kit modules such as Core, Authentication, Contact, i18n, 
+Reports, Payments, PageNotFound, and others. Most of them contain various implementations for specific technologies. 
 
-The module structure generally looks like this (some folders may not exist if there are not implementation for a 
-specific technology):
+The module structure generally looks like this (some folder may not exist if there's no implementation for a specific 
+technology):
 
 ```
 modules

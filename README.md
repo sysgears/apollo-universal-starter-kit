@@ -269,6 +269,8 @@ Starter Kit.
 * [Writing Code]
 * [Available Scripts]
 * [Frequently Asked Questions]
+* [Project Structure]
+* [Importing Modules]
 
 Tools
 
@@ -375,6 +377,8 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/faq.md
 [stripe payments]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
 [mobile chat]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
+[project structure]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Project%20Structure.md
+[importing modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Importing%20Modules.md
 [sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues

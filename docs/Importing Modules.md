@@ -6,15 +6,15 @@ In this guide, we explain how you can import modules with Apollo Universal Start
 
 * [Importing Files](#importing-custom-modules)
 * [Importing Assets](#importing-assets)
-* [Installing and Importing Dependencies](#installing-and-importing-new-dependencies)
+* [Installing and Importing Dependencies](#installing-and-importing-dependencies)
 
 ## Importing Custom Modules
 
 Apollo Universal Starter Kit is a Yarn Workspaces project, and so it uses symlinks when resolving dependencies. You can
-read about workspaces in the Yarn documentation. For now, we focus on how to import modules in our starter kit.
+read about workspaces in the [Yarn documentation]. For now, we focus on how to import modules in our starter kit.
 
-We recommend using **absolute imports** rather than relative links. For example, in your custom module in, say, 
-`styles.less` you need to import the basic styles the following way:
+We recommend using **absolute imports** rather than relative links. For example, in `styles.less` (located in your 
+custom module) you need to import the basic styles from another module the following way:
 
 ```less
 @import '~@gqlapp/look-client-react/ui-antd/styles/index.less';
@@ -43,4 +43,5 @@ req.keys().map(req);
 When installing dependencies for Apollo Universal Starter Kit, **use Yarn**. Once you have a dependency installed, you 
 can use it by importing necessary classes or components with ES6 `import`.
 
+[yarn documentation]: https://yarnpkg.com/lang/en/docs/workspaces/
 [webpack dependency management]: https://webpack.js.org/guides/dependency-management/

@@ -7,15 +7,14 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 class ForgotPasswordView extends React.PureComponent {
   static propTypes = {
     onSubmit: PropTypes.func,
-    forgotPassword: PropTypes.func,
     sent: PropTypes.bool
   };
 
   render() {
-    const { onSubmit, sent, forgotPassword } = this.props;
+    const { onSubmit, sent } = this.props;
     return (
       <View style={styles.forgotPassContainer}>
-        <ForgotPasswordForm onSubmit={onSubmit({ forgotPassword })} sent={sent} />
+        <ForgotPasswordForm onSubmit={onSubmit} sent={sent} />
       </View>
     );
   }

@@ -65,8 +65,8 @@ on the server using Apollo Subscriptions for real-time updates.
 ## Server Side Rendering with Apollo Redux Store
 
 The starter kit uses Apollo Redux Store to handle Server Side Rendering (SSR). Once the client application requests a 
-web page, the back end fully renders the user interface and hands off the state of Apollo Redux Store to the front end. 
-Then, the front end updates itself when the user interacts with it. 
+web page, the backend fully renders the user interface and hands off the state of Apollo Redux Store to the frontend. 
+Then, the frontend updates itself when the user interacts with it. 
 
 You may consult the [Apollo Starter Kit configurations] to know how to enable and disable SSR.
 
@@ -85,25 +85,27 @@ The starter kit provides great styling possibilities by integrating a few generi
 The demo web application uses the Sass version of [Twitter Bootstrap]. To help you style the React components, the 
 starter kit was integrated with [Styled Components]. The React Native mobile application uses [NativeBase].
     
-Additionally, you can use [Ant Design] instead of Twitter Bootstrap for the web application, and [Ant Design Mobile] 
+Additionally, you can use [Ant Design] instead of Twitter Bootstrap for the React application, and [Ant Design Mobile] 
 instead of NativeBase for the mobile app.
+
+The Vue client also uses Bootstrap, while Angular is integrated with Angular Material.
 
 ## Google Analytics
 
 We integrated Google Analytics into the starter kit with the help of [React Google Analytics].
 
-## Webpack for Back End
+## Webpack for Backend
 
 The starter kit stands out compared to similar starter projects in that it uses [webpack] not only for building the code 
 for the client application, but for the server application as well. Using webpack for the server application adds 
 powerful features such as conditional compilation, embedding non-JavaScript and CSS files into the code, hot code 
 reloading, and other convenient functionalities.
 
-## Webpack and Expo for Mobile Front End
+## Webpack and Expo for Mobile Frontend
 
 To ensure that the code can be shared among all the Apollo Starter Kit packages &ndash; client, server, and mobile 
 &ndash; we set up webpack to build the bundles for React Native mobile app with the help of [Haul CLI]. Haul CLI and 
-webpack are coordinated with [SpinJS] to replace [Metro], a Facebook custom bundler for React Native apps.
+webpack are coordinated with [Zen] to replace [Metro], a Facebook custom bundler for React Native apps.
 
 The created React Native bundles use [Expo], which allows you avoid using additional tools for compiling the native 
 code. Consequently, it's simpler to develop native mobile applications with the starter kit.
@@ -121,13 +123,13 @@ Automatic code reloading for the server is done using webpack. When webpack prep
 SIGUSR2 signal is sent to the Node.js application, and embedded webpack Hot Module Runtime reacts to this signal and 
 applies patches to running modules from the filesystem.
   
-The hot code reload for the front end is implemented with [webpack-dev-server] and the [Hot Module Replacement] plugin. 
-Hot patches for React components are applied on the front end and back end at the same time, so React won't complain 
+The hot code reload for the frontend is implemented with [webpack-dev-server] and the [Hot Module Replacement] plugin. 
+Hot patches for React components are applied on the frontend and backend at the same time, so React won't complain 
 about the differences between the client and server code.
 
 ## Babel 
   
-Apollo Universal Starter Kit uses a popular transpiler [Babel] for transpiling the ES7 and ES6 code to ES5.
+Apollo Universal Starter Kit uses a popular transpiler [Babel] to transpile ES7 and ES6 code to ES5.
 
 ## DataLoader 
  
@@ -192,7 +194,7 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [react google analytics]: https://github.com/react-ga/react-ga
 [webpack]: https://webpack.js.org/
 [haul cli]: https://github.com/callstack-io/haul
-[spinjs]: https://github.com/sysgears/spinjs
+[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
 [metro]: https://facebook.github.io/metro/
 [expo]: https://expo.io
 [webpack-dev-server]: https://webpack.js.org/configuration/dev-server/

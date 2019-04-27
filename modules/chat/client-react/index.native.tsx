@@ -20,7 +20,8 @@ export default new ClientModule({
               headerTitle: <HeaderTitleWithI18n style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              )
+              ),
+              headerForceInset: {}
             })
           }
         }),

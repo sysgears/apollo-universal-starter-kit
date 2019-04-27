@@ -66,7 +66,7 @@ and disable the React application.
 
 To run the Angular application, do the following:
 
-1. Open the `packages/client/.spinrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
+1. Open the `packages/client/.zenrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
 `true`):
 
 ```javascript
@@ -89,7 +89,7 @@ const config = {
 //...
 ```
 
-2. Open the `packages/client-angular/.spinrc.js` file and set the `builders.web.enabled` to true (the default value is
+2. Open the `packages/client-angular/.zenrc.js` file and set the `builders.web.enabled` to true (the default value is
 set to `false`):
 
 ```javascript
@@ -120,7 +120,7 @@ only one of them (most likely, the React application) will be actually running.
 1. Install the Expo Client app on [your Android] or [iOS device].
 
 2. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
-`packages/mobile/.spinrc.js` configuration file:
+`packages/mobile/.zenrc.js` configuration file:
 
     * Set `builders.android.enabled` to `true` to build the mobile app for an Android
     * Set `builders.ios.enabled` to `true` to run the mobile app for iOS
@@ -206,7 +206,7 @@ simulator when you run the Apollo Universal Starter Kit project for mobile.
 `"/home/johndoe/Android/Sdk/platform-tools:$PATH"`.
 
 6. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
-`packages/mobile/.spinrc.js` configuration file:
+`packages/mobile/.zenrc.js` configuration file:
 
     * Set `builders.android.enabled` to `true` to build the mobile app for an Android
     * Set `builders.ios.enabled` to `true` to run the mobile app for iOS

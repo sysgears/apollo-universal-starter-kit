@@ -42,7 +42,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
           />
         </View>
         <View style={styles.submit}>
-          <Button type={primary} onPress={handleSubmit}>
+          <Button type={primary} onPress={() => handleSubmit(values)}>
             {t('forgotPass.form.btnSubmit')}
           </Button>
         </View>

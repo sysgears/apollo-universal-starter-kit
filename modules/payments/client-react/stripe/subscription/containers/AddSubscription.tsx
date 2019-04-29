@@ -15,6 +15,7 @@ import AddSubscriptionView from '../components/AddSubscriptionView';
 import ADD_SUBSCRIPTION from '../graphql/AddSubscription.graphql';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
+import { ApolloCache } from 'apollo-cache';
 
 interface AddSubscriptionProps {
   t: TranslateFunction;
@@ -55,14 +56,14 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
   return (
     <Mutation
       mutation={ADD_SUBSCRIPTION}
-      update={(cache, { data: { addStripeSubscription } }) => {
+      update={(cache: ApolloCache<any>, { data: { addStripeSubscription } }: any) => {
         const data: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
         data.stripeSubscription = addStripeSubscription;
         cache.writeQuery({ query: SUBSCRIPTION_QUERY, data });
       }}
       refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
     >
-      {addSubscription => {
+      {(addSubscription: any) => {
         return (
           <Fragment>
             {/* Stripe elements should render only for web*/}

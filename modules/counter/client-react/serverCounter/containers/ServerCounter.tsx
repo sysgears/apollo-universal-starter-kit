@@ -124,7 +124,7 @@ class ServerCounter extends React.Component<CounterProps> {
 
 const ServerCounterWithQuery = (props: any) => (
   <Query query={COUNTER_QUERY}>
-    {({ loading, error, data: { serverCounter }, subscribeToMore }) => {
+    {({ loading, error, data: { serverCounter }, subscribeToMore }: any) => {
       if (error) {
         throw new Error(String(error));
       }

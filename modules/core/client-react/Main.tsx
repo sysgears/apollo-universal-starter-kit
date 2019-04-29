@@ -3,7 +3,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
 
@@ -38,7 +38,7 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
-const history = createHistory();
+const history = createBrowserHistory();
 const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);

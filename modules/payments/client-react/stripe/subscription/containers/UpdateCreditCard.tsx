@@ -55,7 +55,7 @@ const UpdateCreditCard = ({ t, history, navigation }: UpdateCreditCardProps) => 
 
   return (
     <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
-      {updateCard => {
+      {(updateCard: any) => {
         return (
           <Fragment>
             {__CLIENT__ && PLATFORM === 'web' ? (

@@ -130,7 +130,8 @@ const createApolloClient = ({
 
   const clientParams: any = {
     link: ApolloLink.from(allLinks),
-    cache
+    cache,
+    resolvers: (clientResolvers || ({} as any)).resolvers
   };
   if (__SSR__ && !__TEST__) {
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {

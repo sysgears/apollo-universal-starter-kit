@@ -15,18 +15,19 @@
 </template>
 
 <script lang="ts">
+import settings from '@gqlapp/config';
+
 import Footer from './Footer.vue';
-import settings from '../../../../../settings';
 
 export default {
   name: 'PageLayout',
   components: {
-    Footer,
+    Footer
   },
   computed: {
     now() {
       return `${new Date().getFullYear()}. ${settings.app.name}.`;
     }
-  },
+  }
 };
 </script>

@@ -3,8 +3,8 @@ import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
 import ServerModule from '@gqlapp/module-server-ts';
 import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
+import settings from '@gqlapp/config';
 
-import settings from '../../../settings';
 import ChatDAO, { Message, Identifier } from './sql';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';

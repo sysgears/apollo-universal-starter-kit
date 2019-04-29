@@ -1,5 +1,6 @@
+import settings from '@gqlapp/config';
+
 import AccessModule from '../AccessModule';
-import settings from '../../../../../settings';
 
 import LOGOUT from './graphql/Logout.graphql';
 

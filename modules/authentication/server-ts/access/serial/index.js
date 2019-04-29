@@ -1,5 +1,6 @@
+import settings from '@gqlapp/config';
+
 import AccessModule from '../AccessModule';
-import settings from '../../../../../settings';
 
 const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.headers['authorization']) {

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
-import settings from '../../../../../settings';
+
+import settings from '@gqlapp/config';
 
 const { tokenExpiresIn, refreshTokenExpiresIn } = settings.auth.jwt;
 

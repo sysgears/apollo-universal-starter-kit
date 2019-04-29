@@ -1327,6 +1327,32 @@
     webpack-sources "^1.0.1"
     yargs "^8.0.2"
 
+"@larix/zen@^0.1.12":
+  version "0.1.12"
+  resolved "https://registry.yarnpkg.com/@larix/zen/-/zen-0.1.12.tgz#f647ce02974763a71f3d8cc3632fd672d685cf73"
+  integrity sha512-eCfa7FggHFNsAo0CT/OIYddcHQ2xO9jD+JbGaPh4Zz6PKva7VBPFaDZltEADxKMtrB/qOjA659WsEyNe/NCWJw==
+  dependencies:
+    connect-cors "^0.5.6"
+    debug "^3.1.0"
+    detect-port "^1.2.2"
+    dlv "^1.1.2"
+    glob "^7.1.2"
+    humps "^2.0.1"
+    ip "^1.1.5"
+    is-docker "^1.1.0"
+    lodash "^4.17.4"
+    minilog "^3.1.0"
+    mkdirp "^0.5.1"
+    node-fetch "^2.2.0"
+    require-relative "^0.8.7"
+    serve-static "^1.13.1"
+    source-list-map "^2.0.0"
+    source-map "^0.7.3"
+    source-map-support "^0.5.11"
+    webpack-merge "^4.1.0"
+    webpack-sources "^1.0.1"
+    yargs "^8.0.2"
+
 "@lerna/add@3.13.1":
   version "3.13.1"
   resolved "https://registry.yarnpkg.com/@lerna/add/-/add-3.13.1.tgz#2cd7838857edb3b43ed73e3c21f69a20beb9b702"
@@ -16244,7 +16270,7 @@ react-helmet@^5.2.0:
     prop-types "^15.5.4"
     react-side-effect "^1.1.0"
 
-react-hot-loader@^4.1.2, react-hot-loader@^4.3.6:
+react-hot-loader@^4.3.6:
   version "4.8.0"
   resolved "https://registry.yarnpkg.com/react-hot-loader/-/react-hot-loader-4.8.0.tgz#0b7c7dd9407415e23eb8246fdd28b0b839f54cb6"
   integrity sha512-HY9F0vITYSVmXhAR6tPkMk240nxmoH8+0rca9iO2B82KVguiCiBJkieS0Wb4CeSIzLWecYx3iOcq8dcbnp0bxA==

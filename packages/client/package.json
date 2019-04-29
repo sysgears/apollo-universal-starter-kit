@@ -16,7 +16,7 @@
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "zen -v watch",
+    "watch": "zen watch",
     "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
@@ -89,7 +89,6 @@
     "react-dropzone": "^4.2.3",
     "react-ga": "^2.3.5",
     "react-helmet": "^5.2.0",
-    "react-hot-loader": "^4.1.2",
     "react-i18next": "^7.6.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",

@@ -5,10 +5,10 @@ import bcrypt from 'bcryptjs';
 import withAuth from 'graphql-auth';
 import { withFilter } from 'graphql-subscriptions';
 import { UserInputError } from 'apollo-server-errors';
+
 import { createTransaction } from '@gqlapp/database-server-ts';
 import { log } from '@gqlapp/core-common';
-
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
 const USERS_SUBSCRIPTION = 'users_subscription';
 const {

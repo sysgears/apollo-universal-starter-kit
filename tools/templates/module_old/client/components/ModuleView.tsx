@@ -1,8 +1,10 @@
 import React from 'react';
 import Helmet from 'react-helmet';
+
+import settings from '@gqlapp/config';
+
 import { PageLayout } from '../../common/components/web';
 import { TranslateFunction } from '../../../i18n';
-import settings from '../../../../../../settings';
 
 interface $Module$ViewProps {
   t: TranslateFunction;

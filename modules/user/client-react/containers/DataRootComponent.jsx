@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
 
 import { getItem } from '@gqlapp/core-common/clientStorage';
+import settings from '@gqlapp/config';
 
 import Loading from '../components/Loading';
-
-import settings from '../../../../settings';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 

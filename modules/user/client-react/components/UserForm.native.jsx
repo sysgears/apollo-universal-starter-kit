@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-
 import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '@gqlapp/look-client-react-native';
 import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const userFormSchema = {
   username: [required, minLength(3)],

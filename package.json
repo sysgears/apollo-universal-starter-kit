@@ -69,6 +69,7 @@
   "author": "SysGears INC",
   "license": "MIT",
   "workspaces": [
+    "config",
     "packages/*",
     "modules/**/client-react",
     "modules/**/client-react-native",
@@ -172,7 +173,6 @@
     "whatwg-fetch": "^2.0.4"
   },
   "dependencies": {
-    "lodash": "^4.17.11",
     "opencollective": "^1.0.3"
   },
   "resolutions": {

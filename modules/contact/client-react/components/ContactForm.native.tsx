@@ -8,15 +8,7 @@ import { validate } from '@gqlapp/validation-common-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
-import {
-  RenderField,
-  FormView,
-  Button,
-  Modal,
-  danger,
-  success
-} from '../../../../packages/client/src/modules/common/components/native';
-import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
+import { RenderField, FormView, Button, Modal, danger, success, styles } from '@gqlapp/look-client-react-native';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {
@@ -32,16 +24,16 @@ const ContactForm = ({
   status,
   setStatus
 }: FormikProps<ContactForm> & ContactFormProps & { errors: { serverError: string } }) => (
-  <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
+  <FormView contentContainerStyle={{ flexGrow: 1 }} style={formStyles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
-      <View style={styles.modal}>
-        <Text style={styles.modalText}>{errors && errors.serverError ? errors.serverError : t('successMsg')}</Text>
+      <View style={formStyles.modal}>
+        <Text style={formStyles.modalText}>{errors && errors.serverError ? errors.serverError : t('successMsg')}</Text>
         <Button type={errors.serverError ? danger : success} onPress={setStatus}>
           {t('modal.btnMsg')}
         </Button>
       </View>
     </Modal>
-    <View style={styles.formContainer}>
+    <View style={formStyles.formContainer}>
       <View>
         <Field
           name="name"
@@ -49,7 +41,7 @@ const ContactForm = ({
           type="text"
           placeholder={t('form.field.name')}
           value={values.name}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={styles.placeholderColor}
         />
         <Field
           name="email"
@@ -58,7 +50,7 @@ const ContactForm = ({
           placeholder={t('form.field.email')}
           value={values.email}
           keyboardType="email-address"
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={styles.placeholderColor}
         />
         <Field
           name="content"
@@ -66,7 +58,7 @@ const ContactForm = ({
           type="textarea"
           placeholder={t('form.field.content')}
           value={values.content}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={styles.placeholderColor}
         />
       </View>
       <View style={styles.submit}>
@@ -77,7 +69,7 @@ const ContactForm = ({
   </FormView>
 );
 
-const styles = StyleSheet.create({
+const formStyles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 15,
     flex: 1,
@@ -97,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'stretch'
   },
-  submit
+  submit: styles.submit
 });
 
 const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({

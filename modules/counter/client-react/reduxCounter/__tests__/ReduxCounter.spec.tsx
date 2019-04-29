@@ -3,10 +3,10 @@ import chai from 'chai';
 import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
-import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
-import { click, find } from '../../../../../packages/client/src/testHelpers/testUtils';
-import ReduxCounter from '../containers/ReduxCounter';
 import { translate } from '@gqlapp/i18n-client-react';
+import { click, find, Renderer } from '@gqlapp/testing-client-react';
+
+import ReduxCounter from '../containers/ReduxCounter';
 
 chai.should();
 

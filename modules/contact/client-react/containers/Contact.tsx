@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mutation, FetchResult } from 'react-apollo';
+import { Mutation, FetchResult, MutationFn } from 'react-apollo';
 import { FormError } from '@gqlapp/forms-client-react';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import ContactView from '../components/ContactView';
@@ -23,7 +23,7 @@ const Contact = (props: ContctProps): any => {
 
   return (
     <Mutation mutation={CONTACT}>
-      {mutate => {
+      {(mutate: MutationFn) => {
         const sendContact = async (values: ContactForm) => {
           const {
             data: { contact }

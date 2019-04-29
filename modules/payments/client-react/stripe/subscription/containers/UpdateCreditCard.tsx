@@ -1,16 +1,18 @@
+import { isApolloError } from 'apollo-client';
 import React, { Fragment, useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
+
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { PLATFORM } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
-import { isApolloError } from 'apollo-client';
+import settings from '@gqlapp/config';
+
 import UpdateCreditCardView from '../components/UpdateCreditCardView';
 
 import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
-import settings from '../../../../../../settings';
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';
 
@@ -53,7 +55,7 @@ const UpdateCreditCard = ({ t, history, navigation }: UpdateCreditCardProps) => 
 
   return (
     <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
-      {updateCard => {
+      {(updateCard: any) => {
         return (
           <Fragment>
             {__CLIENT__ && PLATFORM === 'web' ? (

@@ -1,12 +1,13 @@
 import React from 'react';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
+
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { PageLayout, LayoutCenter, Table, Row, Col } from '@gqlapp/look-client-react';
 import { clientOnly } from '@gqlapp/core-client-react';
+import settings from '@gqlapp/config';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
-import settings from '../../../../../../settings';
 import { CreditCardInput } from '../types';
 
 const ElementsClientOnly = clientOnly(Elements);

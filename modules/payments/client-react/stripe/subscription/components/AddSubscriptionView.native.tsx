@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import settings from '@gqlapp/config';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
 import { CreditCardInput } from '../types';
-import settings from '../../../../../../settings';
 
 interface AddSubscriptionViewProps {
   t: TranslateFunction;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Mutation, Query } from 'react-apollo';
+import { Mutation, Query, MutationFn } from 'react-apollo';
 
 import { ClientCounterButton, ClientCounterView } from '../components/ClientCounterView';
 import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@gqlapp/counter-common';
@@ -12,7 +12,7 @@ interface ButtonProps {
 
 const IncreaseButton = ({ counterAmount, t }: ButtonProps): any => (
   <Mutation mutation={ADD_COUNTER_CLIENT}>
-    {mutate => {
+    {(mutate: MutationFn) => {
       const addClientCounter = (amount: any) => () => {
         const { value }: any = mutate({ variables: { amount } });
         return value;
@@ -34,7 +34,7 @@ const ClientCounter = ({ t }: CounterProps) => (
       data: {
         clientCounter: { amount }
       }
-    }) => {
+    }: any) => {
       return (
         <ClientCounterView text={t('text', { amount })}>
           <IncreaseButton t={t} counterAmount={1} />

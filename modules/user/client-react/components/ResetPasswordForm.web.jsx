@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { required, minLength, validate, match } from '@gqlapp/validation-common-react';
 import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
-
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const resetPasswordFormSchema = {
   password: [required, minLength(settings.auth.password.minLength)],

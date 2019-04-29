@@ -3,17 +3,15 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
 import ReactGA from 'react-ga';
-import { apiUrl } from '@gqlapp/core-common';
+
+import { apiUrl, createApolloClient, createReduxStore, getStoreReducer, log } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
+import settings from '@gqlapp/config';
 
 import RedBox from './RedBox';
-import createApolloClient from '../../../packages/common/createApolloClient';
-import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
-import log from '../../../packages/common/log';
-import settings from '../../../settings';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 
@@ -40,7 +38,7 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
-const history = createHistory();
+const history = createBrowserHistory();
 const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);

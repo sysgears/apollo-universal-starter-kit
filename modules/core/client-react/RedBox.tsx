@@ -3,7 +3,7 @@ import ErrorStackParser from 'error-stack-parser';
 import { StackFrame } from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
 
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
 const format = (fmt: string, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, index: number) => (typeof args[index] !== 'undefined' ? args[index] : match));

@@ -27,10 +27,10 @@ interface HtmlProps {
 
 let clientModules: ClientModule;
 if (__SSR__) {
-  clientModules = require('../../../../packages/client/src').default;
+  clientModules = require('client').default;
   if (module.hot) {
-    module.hot.accept(['../../../../packages/client/src'], () => {
-      clientModules = require('../../../../packages/client/src').default;
+    module.hot.accept(['client'], () => {
+      clientModules = require('client').default;
     });
   }
 }

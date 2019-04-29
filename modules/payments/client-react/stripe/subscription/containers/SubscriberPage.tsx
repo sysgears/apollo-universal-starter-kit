@@ -8,7 +8,7 @@ import SUBSCRIBER_NUMBER_QUERY from '../graphql/SubscriptionProtectedNumberQuery
 
 const SubscriberPage = ({ t }: { t: TranslateFunction }) => (
   <Query query={SUBSCRIBER_NUMBER_QUERY} fetchPolicy="network-only">
-    {({ loading, data }) => (
+    {({ loading, data }: any) => (
       <SubscriberPageView loading={loading} t={t} subscriberNumber={data.stripeSubscriptionProtectedNumber} />
     )}
   </Query>

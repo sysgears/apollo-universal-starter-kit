@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet } from 'react-native';
 import { withFormik } from 'formik';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-
-import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { RenderField, Button, primary, FormView, lookStyles } from '@gqlapp/look-client-react-native';
 import { match, email, minLength, required, validate } from '@gqlapp/validation-common-react';
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const registerFormSchema = {
   username: [required, minLength(3)],
@@ -28,7 +27,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
           type="text"
           placeholder={t('reg.form.field.name')}
           value={values.username}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="email"
@@ -37,7 +36,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
           placeholder={t('reg.form.field.email')}
           value={values.email}
           keyboardType="email-address"
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="password"
@@ -46,7 +45,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
           placeholder={t('reg.form.field.pass')}
           value={values.password}
           secureTextEntry={true}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="passwordConfirmation"
@@ -55,7 +54,7 @@ const RegisterForm = ({ values, handleSubmit, t }) => {
           placeholder={t('reg.form.field.passConf')}
           value={values.passwordConfirmation}
           secureTextEntry={true}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <View style={styles.submit}>
           <Button type={primary} onPress={handleSubmit}>
@@ -99,7 +98,7 @@ const RegisterFormWithFormik = withFormik({
 });
 
 const styles = StyleSheet.create({
-  submit,
+  submit: lookStyles.submit,
   formView: {
     flex: 1,
     alignSelf: 'stretch'

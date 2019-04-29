@@ -5,8 +5,7 @@ import { withFormik } from 'formik';
 import { translate } from '@gqlapp/i18n-client-react';
 import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { required, validate } from '@gqlapp/validation-common-react';
-import { FormView, RenderField, Button, primary } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { FormView, RenderField, Button, primary, lookStyles } from '@gqlapp/look-client-react-native';
 
 const commentFormSchema = {
   content: [required]
@@ -23,9 +22,9 @@ const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
         type="text"
         value={values.content}
         placeholder={t('comment.label.field')}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={lookStyles.placeholderColor}
       />
-      <View style={submit}>
+      <View style={lookStyles.submit}>
         <Button type={primary} onPress={handleSubmit}>
           {operation}
         </Button>

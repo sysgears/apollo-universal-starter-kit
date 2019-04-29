@@ -3,13 +3,20 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-
-import { RenderField, Button, RenderSelect, RenderSwitch, FormView, primary } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import {
+  RenderField,
+  Button,
+  RenderSelect,
+  RenderSwitch,
+  FormView,
+  primary,
+  lookStyles
+} from '@gqlapp/look-client-react-native';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const userFormSchema = {
   username: [required, minLength(3)],
@@ -45,7 +52,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           component={RenderField}
           type="text"
           value={username}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="email"
@@ -53,7 +60,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           placeholder={t('userEdit.form.field.email')}
           value={email}
           keyboardType="email-address"
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         {shouldDisplayRole && (
           <Field
@@ -62,7 +69,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
             label={t('userEdit.form.field.role.label')}
             okText={t('userEdit.select.okText')}
             dismissText={t('userEdit.select.dismissText')}
-            placeholderTextColor={placeholderColor}
+            placeholderTextColor={lookStyles.placeholderColor}
             selectedValue={role}
             onChange={value => handleRoleChange('role', value, setFieldValue)}
             cols={1}
@@ -77,14 +84,14 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
             component={RenderSwitch}
             placeholder={t('userEdit.form.field.active')}
             checked={isActive}
-            placeholderTextColor={placeholderColor}
+            placeholderTextColor={lookStyles.placeholderColor}
           />
         )}
         <Field
           name="firstName"
           component={RenderField}
           placeholder={t('userEdit.form.field.firstName')}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
           value={profile.firstName}
           onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
         />
@@ -92,7 +99,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           name="lastName"
           component={RenderField}
           placeholder={t('userEdit.form.field.lastName')}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
           value={profile.lastName}
           onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
         />
@@ -101,7 +108,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
             name="serial"
             component={RenderField}
             placeholder={t('userEdit.form.field.serial')}
-            placeholderTextColor={placeholderColor}
+            placeholderTextColor={lookStyles.placeholderColor}
             value={auth && auth.certificate && auth.certificate.serial}
             onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
           />
@@ -112,14 +119,14 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           component={RenderField}
           type="password"
           placeholder={t('userEdit.form.field.pass')}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
           value={password}
         />
         <Field
           name="passwordConfirmation"
           component={RenderField}
           placeholder={t('userEdit.form.field.passConf')}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
           value={passwordConfirmation}
           type="password"
           secureTextEntry={true}
@@ -196,7 +203,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1
   },
-  submit,
+  submit: lookStyles.submit,
   formView: {
     flex: 1,
     alignSelf: 'stretch'

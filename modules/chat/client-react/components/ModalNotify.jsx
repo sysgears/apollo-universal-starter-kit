@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
-import { Modal } from '../../../../packages/client/src/modules/common/components/native';
+
+import { Modal } from '@gqlapp/look-client-react-native';
 
 const ModalNotify = ({ notify, callback }) => (
   <Modal isVisible={!!notify} onBackdropPress={callback}>

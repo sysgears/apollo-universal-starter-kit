@@ -13,8 +13,9 @@ import { hasDirectives } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
 
+import settings from '@gqlapp/config';
+
 import log from './log';
-import settings from '../../../settings';
 
 interface CreateApolloClientOptions {
   apiUrl?: string;
@@ -129,7 +130,8 @@ const createApolloClient = ({
 
   const clientParams: any = {
     link: ApolloLink.from(allLinks),
-    cache
+    cache,
+    resolvers: (clientResolvers || ({} as any)).resolvers
   };
   if (__SSR__ && !__TEST__) {
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {

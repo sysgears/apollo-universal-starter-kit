@@ -3,7 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "engines": {
-    "node": ">= 6.11.1 <= 10",
     "yarn": ">= 1.0.0"
   },
   "cacheDirectories": [
@@ -90,6 +89,7 @@
     "logo": "https://opencollective.com/opencollective/logo.txt"
   },
   "devDependencies": {
+    "@alienfast/i18next-loader": "^1.0.15",
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
@@ -104,7 +104,7 @@
     "@babel/preset-typescript": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@larix/zen": "^0.1.11",
+    "@larix/zen": "^0.1.13",
     "autoprefixer": "^9.5.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^8.2.6",

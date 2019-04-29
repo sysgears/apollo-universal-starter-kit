@@ -79,7 +79,6 @@
     "vuex-router-sync": "^5.0.0"
   },
   "devDependencies": {
-    "@alienfast/i18next-loader": "^1.0.16",
     "@types/chai": "^4.1.4",
     "@types/jsdom": "^12.2.0",
     "@types/lodash": "^4.14.112",

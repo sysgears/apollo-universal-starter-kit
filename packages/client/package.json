@@ -16,7 +16,7 @@
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "zen -v watch",
+    "watch": "zen watch",
     "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
@@ -89,7 +89,6 @@
     "react-dropzone": "^4.2.3",
     "react-ga": "^2.3.5",
     "react-helmet": "^5.2.0",
-    "react-hot-loader": "^4.1.2",
     "react-i18next": "^7.6.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
@@ -105,7 +104,6 @@
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
-    "@alienfast/i18next-loader": "^1.0.16",
     "@types/chai": "^4.1.4",
     "@types/jsdom": "^12.2.0",
     "@types/lodash": "^4.14.112",
@@ -151,8 +149,8 @@
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
-    "react-native-simple-picker": "^2.0.0",
-    "react-navigation": "^3.5.1",
+    "react-native-simple-picker": "^3.1.1",
+    "react-navigation": "^3.9.1",
     "uuid": "^3.3.2"
   },
   "peerDependencies": {

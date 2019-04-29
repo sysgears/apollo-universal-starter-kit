@@ -1,8 +1,7 @@
 import { expect } from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../packages/client/src/testHelpers/Renderer';
-import { updateContent } from '../../../../packages/client/src/testHelpers/testUtils';
+import { updateContent, Renderer } from '@gqlapp/testing-client-react';
 
 describe('$Module$ UI works', () => {
   const renderer = new Renderer({});

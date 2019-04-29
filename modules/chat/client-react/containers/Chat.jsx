@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
 
+import { Loading } from '@gqlapp/look-client-react-native';
+import settings from '@gqlapp/config';
+
 import ChatFooter from '../components/ChatFooter';
 import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
-import { Loading } from '../../../../packages/client/src/modules/common/components/native';
 import ModalNotify from '../components/ModalNotify';
-import chatConfig from '../../../../config/chat';
 
 export default class extends React.Component {
   static propTypes = {
@@ -192,7 +193,7 @@ export default class extends React.Component {
       <View style={{ flex: 1 }}>
         {this.renderModal()}
         <GiftedChat
-          {...chatConfig.giftedChat}
+          {...settings.chat.giftedChat}
           ref={gc => (this.gc = gc)}
           text={message}
           onInputTextChanged={text => this.setMessageState(text)}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextStyle } from 'react-native';
 
-import { Button, primary } from '../../../../../packages/client/src/modules/common/components/native';
+import { Button, primary } from '@gqlapp/look-client-react-native';
 
 interface ViewProps {
   text: string;

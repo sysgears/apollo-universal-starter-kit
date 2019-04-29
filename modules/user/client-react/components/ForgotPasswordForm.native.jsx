@@ -5,8 +5,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { View, StyleSheet, Text, Keyboard } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
-import { RenderField, Button, primary } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { RenderField, Button, primary, lookStyles } from '@gqlapp/look-client-react-native';
 import { required, email, validate } from '@gqlapp/validation-common-react';
 import { translate } from '@gqlapp/i18n-client-react';
 
@@ -38,7 +37,7 @@ const ForgotPasswordForm = ({ handleSubmit, values, sent, t }) => {
             placeholder={t('forgotPass.form.fldEmail')}
             value={values.email}
             keyboardType="email-address"
-            placeholderTextColor={placeholderColor}
+            placeholderTextColor={lookStyles.placeholderColor}
           />
         </View>
         <View style={styles.submit}>
@@ -88,7 +87,7 @@ const ForgotPasswordFormWithFormik = withFormik({
 });
 
 const styles = StyleSheet.create({
-  submit,
+  submit: lookStyles.submit,
   formContainer: {
     flex: 1,
     alignItems: 'stretch',

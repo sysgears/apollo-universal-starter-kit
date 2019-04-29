@@ -6,8 +6,7 @@ import PropTypes from 'prop-types';
 
 import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-import { Card, CardItem, CardText, CardHeader, CardLabel, Loading } from '@gqlapp/look-client-react-native';
-import { linkText } from '@gqlapp/look-client-react-native/styles';
+import { Card, CardItem, CardText, CardHeader, CardLabel, Loading, lookStyles } from '@gqlapp/look-client-react-native';
 import settings from '@gqlapp/config';
 
 const renderProfileItem = (title, value, idx) => (
@@ -84,7 +83,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-  linkText
+  linkText: lookStyles.linkText
 });
 
 ProfileView.propTypes = {

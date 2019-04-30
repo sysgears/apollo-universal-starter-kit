@@ -1,7 +1,6 @@
 const config = {
   builders: {
     test: {
-      stack: ['server'],
       roles: ['test'],
       defines: {
         __DEV__: false,
@@ -11,8 +10,7 @@ const config = {
     }
   },
   options: {
-    cache: '../../.cache',
-    stack: ['ts', 'webpack', 'i18next'],
+    cache: '../../.cache'
   }
 };
 

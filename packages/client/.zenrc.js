@@ -5,7 +5,6 @@ const config = {
     web: {
       openBrowser: true,
       dllExcludes: ['bootstrap'],
-      dllBuildDir: '../../.cache/dll',
       defines: {
         __CLIENT__: true
       },
@@ -36,11 +35,6 @@ if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
 }
 
 config.options.devProxy = config.options.ssr;
-
-if (process.env.NODE_ENV === 'production') {
-  // Generating source maps for production will slowdown compilation for roughly 25%
-  config.options.sourceMap = false;
-}
 
 const extraDefines = {
   __SSR__: config.options.ssr

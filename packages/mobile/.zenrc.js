@@ -19,7 +19,6 @@ const config = {
   },
   options: {
     cache: '../../.cache',
-    webpackDll: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __API_URL__: '"http://localhost:8080/graphql"',

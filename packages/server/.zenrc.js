@@ -17,7 +17,6 @@ const config = {
   options: {
     cache: '../../.cache',
     ssr: true,
-    webpackDll: true,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __SERVER_PORT__: 8080,

@@ -82,7 +82,7 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
-    "eslint": "^4.13.1",
+    "eslint": "^5.16.0",
     "graphql-tools": "^2.13.0",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",

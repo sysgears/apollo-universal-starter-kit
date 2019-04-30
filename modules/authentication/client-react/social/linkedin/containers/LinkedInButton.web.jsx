@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-import faLinkedInSquare from '@fortawesome/fontawesome-free-brands/faLinkedin';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faLinkedin } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@gqlapp/look-client-react';
 import './LinkedInButton.css';
 
@@ -14,7 +14,7 @@ const LinkedInButton = withApollo(({ text }) => {
   return (
     <Button type="button" size="lg" onClick={linkedInLogin} className="linkedInBtn">
       <div className="iconContainer">
-        <FontAwesomeIcon icon={faLinkedInSquare} className="linkedInIcon" />
+        <FontAwesomeIcon icon={faLinkedin} className="linkedInIcon" />
         <div className="separator" />
       </div>
       <div className="btnText">
@@ -34,7 +34,7 @@ const LinkedInLink = withApollo(({ text }) => {
 
 const LinkedInIcon = () => (
   <FontAwesomeIcon
-    icon={faLinkedInSquare}
+    icon={faLinkedin}
     style={{ marginTop: 10, color: '#3B5998', fontSize: 40 }}
     onClick={linkedInLogin}
   />

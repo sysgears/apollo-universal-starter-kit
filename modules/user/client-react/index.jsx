@@ -24,21 +24,23 @@ const ProfileName = withLoadedUser(({ currentUser }) =>
 );
 
 const LogoutLink = withRouter(
-  withLogout(({ logout, history }) => (
-    <a
-      href="javascript:void(0)"
-      onClick={e => {
-        e.preventDefault();
-        (async () => {
-          await logout();
-          history.push('/');
-        })();
-      }}
-      className="nav-link"
-    >
-      Logout
-    </a>
-  ))
+  withLogout(
+    translate('user')(({ logout, history, t }) => (
+      <a
+        href="javascript:void(0)"
+        onClick={e => {
+          e.preventDefault();
+          (async () => {
+            await logout();
+            history.push('/');
+          })();
+        }}
+        className="nav-link"
+      >
+        {t('navLink.logout')}
+      </a>
+    ))
+  )
 );
 
 export * from './containers/Auth';

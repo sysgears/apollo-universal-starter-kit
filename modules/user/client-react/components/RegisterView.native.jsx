@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Button, primary } from '@gqlapp/look-client-react-native';
 import { View, Text, StyleSheet } from 'react-native';
 
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from './RegisterForm';
 
 class RegisterView extends React.PureComponent {
   static propTypes = {

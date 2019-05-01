@@ -48,15 +48,15 @@
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
-    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-batch-http": "^1.2.11",
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.0",
+    "apollo-logger": "^0.3.2",
     "apollo-upload-client": "^8.0.0",
     "babel-polyfill": "^6.26.0",
-    "bootstrap": "^4.1.1",
-    "bootstrap-vue": "^2.0.0-rc.11",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.19",
     "error-stack-parser": "^2.0.1",
     "extract-files": "^3.1.0",
     "filesize": "^3.5.11",
@@ -96,8 +96,7 @@
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
     "dom-testing-library": "^3.13.0",
-    "eslint": "^5.16.0",
-    "graphql-tools": "^2.13.0",
+    "graphql-tools": "^4.0.4",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
@@ -107,7 +106,8 @@
     "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0"
+    "@larix/zen": "^0.1.0",
+    "eslint": "*"
   },
   "browserslist": {
     "development": [

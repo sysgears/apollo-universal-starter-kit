@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Pagination as ADPagination } from 'antd';
-import { Button } from '../components';
+
+import Button from './Button';
 
 /**
  * @return {boolean}

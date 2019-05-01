@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { InputItem } from './';
+import { InputItem } from '.';
 
 const RenderField = ({ input, label, meta: { touched, error }, ...inputProps }) => {
   return (

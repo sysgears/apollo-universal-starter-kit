@@ -5,7 +5,7 @@ import Helmet from 'react-helmet';
 import { PageLayout } from '@gqlapp/look-client-react';
 import settings from '@gqlapp/config';
 
-import ResetPasswordForm from '../components/ResetPasswordForm';
+import ResetPasswordForm from './ResetPasswordForm';
 
 const ResetPasswordView = ({ t, onSubmit }) => {
   const renderMetaData = () => (

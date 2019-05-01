@@ -57,6 +57,7 @@
     "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@hofstadter-io/sofa-api": "^0.3.1",
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/database-server-ts": "^0.1.0",
     "@gqlapp/testing-server-ts": "^0.1.0",
@@ -65,16 +66,17 @@
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
-    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-batch-http": "^1.2.11",
     "apollo-link-schema": "^1.0.2",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.0",
+    "apollo-logger": "^0.3.2",
     "apollo-server-errors": "^2.2.0",
     "apollo-server-express": "^2.4.0",
     "apollo-server-module-graphiql": "1.3.4",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "client": "*",
     "dotenv": "^5.0.1",
     "error-stack-parser": "^2.0.1",
     "excel4node": "^1.7.0",
@@ -84,9 +86,9 @@
     "graphql-auth": "0.2.3",
     "graphql-iso-date": "^3.5.0",
     "graphql-resolve-batch": "^1.0.2",
-    "graphql-subscriptions": "^0.5.5",
+    "graphql-subscriptions": "^1.1.0",
     "graphql-tag": "^2.6.0",
-    "graphql-tools": "^2.13.0",
+    "graphql-tools": "^4.0.4",
     "humps": "^2.0.1",
     "i18next": "^11.3.3",
     "i18next-express-middleware": "^1.1.1",
@@ -125,10 +127,10 @@
     "shortid": "^2.2.8",
     "source-map-support": "^0.5.0",
     "sourcemapped-stacktrace": "^1.1.8",
+    "swagger-ui-express": "^4.0.2",
     "sqlite3": "^4.0.0",
     "stripe": "^5.4.0",
     "stripe-local": "^0.1.1",
-    "styled-components": "^3.2.6",
     "subscriptions-transport-ws": "^0.9.4",
     "tslint-config-prettier": "^1.5.0",
     "universal-cookie-express": "^2.2.0",
@@ -156,7 +158,6 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
-    "eslint": "^5.16.0",
     "ip": "^1.1.5",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
@@ -171,6 +172,10 @@
     "ws": "^5.1.1"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0"
+    "@larix/zen": "^0.1.0",
+    "eslint": "*"
+  },
+  "resolutions": {
+    "graphql-resolve-batch/graphql": "14.1.1"
   }
 }

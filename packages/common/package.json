@@ -14,10 +14,10 @@
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
-    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-batch-http": "^1.2.11",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.0",
+    "apollo-logger": "^0.3.2",
     "apollo-utilities": "^1.0.11",
     "connected-react-router": "^6.4.0",
     "graphql": "^14.1.1",
@@ -34,12 +34,11 @@
     "@types/i18next-browser-languagedetector": "^2.0.1",
     "@types/react-i18next": "^7.8.3",
     "chai": "^4.1.2",
-    "eslint": "^5.16.0",
     "mocha": "^5.1.1",
     "mocha-steps": "^1.1.0",
     "mochapack": "^1.0.0"
   },
-  "optionalDependencies": {
-    "expo": "^32.0.0"
+  "peerDependencies": {
+    "eslint": "*"
   }
 }

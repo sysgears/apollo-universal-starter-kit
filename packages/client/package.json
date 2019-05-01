@@ -40,8 +40,8 @@
   "license": "MIT",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.8.1",
-    "@fortawesome/free-brands-svg-icons": "^5.8.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.17",
+    "@fortawesome/free-brands-svg-icons": "^5.8.1",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@gqlapp/chat-client-react": "^0.1.0",
     "@gqlapp/contact-client-react": "^0.1.0",
@@ -59,14 +59,14 @@
     "apollo-cache-router": "^1.1.6",
     "apollo-client": "^2.4.7",
     "apollo-link": "^1.0.6",
-    "apollo-link-batch-http": "1.2.2",
+    "apollo-link-batch-http": "^1.2.11",
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.0",
+    "apollo-logger": "^0.3.2",
     "apollo-upload-client": "^8.0.0",
     "babel-polyfill": "^6.26.0",
-    "bootstrap": "^4.1.1",
+    "bootstrap": "^4.3.1",
     "connected-react-router": "^6.4.0",
     "error-stack-parser": "^2.0.1",
     "extract-files": "^3.1.0",
@@ -101,7 +101,7 @@
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
-    "styled-components": "^3.2.6",
+    "styled-components": "^4.2.0",
     "subscriptions-transport-ws": "^0.9.4"
   },
   "devDependencies": {
@@ -113,19 +113,19 @@
     "@types/react-dom": "^16.8.0",
     "@types/react-helmet": "^5.0.6",
     "@types/react-native": "^0.55.7",
-    "@types/react-navigation": "^3.0.5",
     "@types/react-redux": "^6.0.1",
     "@types/react-router-dom": "^4.2.7",
     "@types/react-stripe-elements": "^1.1.7",
+    "@types/styled-components": "^4.1.14",
     "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
     "autoprefixer": "^8.3.0",
+    "babel-plugin-styled-components": "^1.10.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
     "dom-testing-library": "^3.13.0",
-    "eslint": "^5.16.0",
-    "graphql-tools": "^2.13.0",
+    "graphql-tools": "^4.0.4",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "mocha": "^5.1.1",
@@ -138,7 +138,7 @@
     "rimraf": "^2.6.2"
   },
   "optionalDependencies": {
-    "@expo/vector-icons": "^9.0.0",
+    "@expo/vector-icons": "^10.0.1",
     "antd-mobile-rn": "^2.2.1",
     "expo": "^32.0.0",
     "native-base": "^2.3.5",
@@ -154,7 +154,8 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0"
+    "@larix/zen": "^0.1.0",
+    "eslint": "*"
   },
   "browserslist": {
     "development": [

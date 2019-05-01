@@ -1,9 +1,9 @@
 import { Express } from 'express';
 import { GraphQLSchema } from 'graphql';
 import bodyParser from 'body-parser';
-import sofa, { OpenAPI } from 'sofa-api';
 
 import ServerModule from '@gqlapp/module-server-ts';
+import sofa, { OpenAPI } from '@hofstadter-io/sofa-api';
 import settings from '@gqlapp/config';
 
 import swaggerUi from 'swagger-ui-express';

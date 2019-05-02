@@ -8,9 +8,7 @@ const chooseTemplate = async () => {
     .readdirSync(`${BASE_PATH}/packages`)
     .filter(stack => Object.keys(STACK_MAP).includes(stack));
 
-  const choices = existingStackList.reduce((prev, curr) => {
-    return [...prev, { name: STACK_MAP[curr].title }];
-  }, []);
+  const choices = existingStackList.reduce((prev, curr) => [...prev, { name: STACK_MAP[curr].title }], []);
 
   const questions = [
     {

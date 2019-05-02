@@ -21,9 +21,7 @@ const handleDeleteStackList = (stackList, logger, isShowStackList) => {
 
 const checkStackList = (stackList, existsStackList, logger) => {
   const notExistsStackList = stackList
-    .reduce((prev, curr) => {
-      return existsStackList.includes(curr) ? [...prev] : [...prev, curr];
-    }, [])
+    .reduce((prev, curr) => (existsStackList.includes(curr) ? [...prev] : [...prev, curr]), [])
     .map(stack => {
       logger.error(chalk.red(`The stack of technology "${stack}" not exists.`));
       return stack;

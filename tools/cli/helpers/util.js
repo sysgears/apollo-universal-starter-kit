@@ -175,7 +175,7 @@ function runPrettier(pathToFile) {
  * @param directory - The name of directory
  * @returns {string} - Return the path to currenr directory
  */
-function moveToModules(directory) {
+function moveToDirectory(directory) {
   shell.cd(`${BASE_PATH}/${directory}/`);
   return shell.pwd().stdout;
 }
@@ -185,9 +185,9 @@ function moveToModules(directory) {
  *
  * @param path - The path to directory who need deleted
  */
-function handleDeleteDirectory(path) {
+function handleDeleteDirectory() {
   try {
-    shell.rm('-rf', path);
+    // shell.rm('-rf', path);
   } catch (e) {
     console.log('The stack was not found');
   }
@@ -224,7 +224,7 @@ module.exports = {
   addSymlink,
   removeSymlink,
   runPrettier,
-  moveToModules,
+  moveToDirectory,
   handleDeleteDirectory,
   getPathsDirectory
 };

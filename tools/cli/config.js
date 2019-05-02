@@ -13,10 +13,34 @@ const STACK_LIST = {
   server: 'node'
 };
 
+const STACK_MAP = {
+  client: {
+    name: 'react & react native',
+    subdirs: ['client', 'client-react', 'client-react-native', 'mobile']
+  },
+  'client-vue': {
+    name: 'vue',
+    subdirs: ['client-vue']
+  },
+  'client-angular': {
+    name: 'angular',
+    subdirs: ['client-angular']
+  },
+  'server-scala': {
+    name: 'scala',
+    subdirs: ['server-scala']
+  },
+  server: {
+    name: 'node',
+    subdirs: ['server-ts', 'server']
+  }
+};
+
 module.exports = {
   BASE_PATH,
   TEMPLATES_DIR,
   MODULE_TEMPLATES,
   MODULE_TEMPLATES_OLD,
-  STACK_LIST
+  STACK_LIST,
+  STACK_MAP
 };

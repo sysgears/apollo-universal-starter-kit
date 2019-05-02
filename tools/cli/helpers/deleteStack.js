@@ -1,4 +1,4 @@
-import { moveToModules, handleDeleteDirectory, getPathsDirectory } from './util';
+import { moveToDirectory, handleDeleteDirectory, getPathsDirectory } from './util';
 import { BASE_PATH } from '../config';
 
 /**
@@ -7,12 +7,14 @@ import { BASE_PATH } from '../config';
  * @param stackList - List unused stack of technologies
  */
 const deleteStack = stackList => {
-  const route = moveToModules('modules');
+  console.log('stackList --->', stackList);
+  const route = moveToDirectory('modules');
   const dirsList = getPathsDirectory(route);
   stackList.forEach(stack => {
     handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
-      handleDeleteDirectory(`${dir}/${stack === 'server' ? 'server-ts' : stack}`);
+      // handleDeleteDirectory(`${dir}/${stack === 'server' ? 'server-ts' : stack}`);
+      handleDeleteDirectory(`${dir}/${stack}`);
     });
   });
 };

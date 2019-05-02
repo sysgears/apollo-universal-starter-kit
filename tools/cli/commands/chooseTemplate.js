@@ -1,20 +1,22 @@
 import fs from 'fs';
 import * as inquirer from 'inquirer';
 import deleteStack from '../helpers/deleteStack';
-import { STACK_LIST, BASE_PATH } from '../config';
+import { STACK_MAP, BASE_PATH } from '../config';
 
 async function chooseTemplate() {
-  const stackList = fs.readdirSync(`${BASE_PATH}/packages`).filter(stack => stack !== 'common' && stack !== 'mobile');
+  const existingStackList = fs
+    .readdirSync(`${BASE_PATH}/packages`)
+    .filter(stack => stack !== 'common' && stack !== 'mobile');
 
-  const choices = stackList.reduce((prev, curr) => {
-    return [...prev, { name: STACK_LIST[curr] }];
+  const choices = existingStackList.reduce((prev, curr) => {
+    return [...prev, { name: STACK_MAP[curr].name }];
   }, []);
 
   const questions = [
     {
       type: 'checkbox',
       message: 'Choose your technology stack or stacks',
-      name: 'stack',
+      name: 'stackList',
       choices,
       validate: function(answer) {
         if (answer.length < 1) {
@@ -25,16 +27,13 @@ async function chooseTemplate() {
       }
     }
   ];
-  const { stack } = await inquirer.prompt(questions);
+  const { stackList } = await inquirer.prompt(questions);
 
   let unusedStack = [];
 
-  for (let stackName in STACK_LIST) {
-    if (!stack.includes(STACK_LIST[stackName])) {
-      unusedStack = [
-        ...unusedStack,
-        ...(stackName === 'client' ? ['client', 'client-react', 'client-react-native', 'mobile'] : [stackName])
-      ];
+  for (let stack in STACK_MAP) {
+    if (!stackList.includes(STACK_MAP[stack].name)) {
+      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
     }
   }
 

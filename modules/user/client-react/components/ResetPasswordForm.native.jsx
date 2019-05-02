@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { View, StyleSheet } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-
-import { RenderField, Button, primary } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { RenderField, Button, primary, lookStyles } from '@gqlapp/look-client-react-native';
 import { required, minLength, validate, match } from '@gqlapp/validation-common-react';
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const resetPasswordFormSchema = {
   password: [required, minLength(settings.auth.password.minLength)],
@@ -26,7 +25,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
         label={t('resetPass.form.field.pass')}
         value={values.password}
         secureTextEntry={true}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={lookStyles.placeholderColor}
       />
       <Field
         name="passwordConfirmation"
@@ -35,7 +34,7 @@ const ResetPasswordForm = ({ values, handleSubmit, t }) => {
         label={t('resetPass.form.field.passConf')}
         value={values.passwordConfirmation}
         secureTextEntry={true}
-        placeholderTextColor={placeholderColor}
+        placeholderTextColor={lookStyles.placeholderColor}
       />
       <View style={styles.submit}>
         <Button type={primary} onPress={handleSubmit}>
@@ -81,7 +80,7 @@ const ResetPasswordFormWithFormik = withFormik({
 });
 
 const styles = StyleSheet.create({
-  submit,
+  submit: lookStyles.submit,
   formContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center'

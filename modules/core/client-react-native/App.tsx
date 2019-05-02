@@ -5,8 +5,7 @@ import { Provider } from 'react-redux';
 import url from 'url';
 
 import ClientModule from '@gqlapp/module-client-react-native';
-import log from '../../../packages/common/log';
-import createApolloClient from '../../../packages/common/createApolloClient';
+import { createApolloClient, log } from '@gqlapp/core-common';
 
 const { protocol, pathname, port } = url.parse(__API_URL__);
 

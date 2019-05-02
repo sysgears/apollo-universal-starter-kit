@@ -12,7 +12,7 @@ const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand,
 
 prog
   .version('1.0.0')
-  .description('Full info: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Apollo-Starter-Kit-CLI')
+  .description('Full info: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md')
   // Add module
   .command('addmodule', 'Create a new Module.')
   .argument('<moduleName>', 'Module name')

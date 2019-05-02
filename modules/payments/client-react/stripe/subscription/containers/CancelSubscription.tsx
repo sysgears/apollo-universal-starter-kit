@@ -7,6 +7,7 @@ import CancelSubscriptionView from '../components/CancelSubscriptionView';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 import CANCEL_SUBSCRIPTION from '../graphql/CancelSubscription.graphql';
+import { ApolloCache } from 'apollo-cache';
 
 interface CancelSubscriptionProps {
   t: TranslateFunction;
@@ -26,21 +27,21 @@ const CancelSubscription = ({ t }: CancelSubscriptionProps) => {
       setSubmitting(false);
     } catch (e) {
       setSubmitting(false);
-      setError(this.props.t('serverError'));
+      setError(t('serverError'));
     }
   };
 
   return (
     <Mutation
       mutation={CANCEL_SUBSCRIPTION}
-      update={(cache, { data: { cancelStripeSubscription } }) => {
+      update={(cache: ApolloCache<any>, { data: { cancelStripeSubscription } }: any) => {
         const cachedSubscription: any = cache.readQuery({ query: SUBSCRIPTION_QUERY });
         cachedSubscription.stripeSubscription = cancelStripeSubscription;
         cache.writeQuery({ query: SUBSCRIPTION_QUERY, data: cachedSubscription });
       }}
       refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
     >
-      {cancelSubscription => {
+      {(cancelSubscription: any) => {
         return (
           <CancelSubscriptionView submitting={submitting} error={error} onClick={onClick(cancelSubscription)} t={t} />
         );

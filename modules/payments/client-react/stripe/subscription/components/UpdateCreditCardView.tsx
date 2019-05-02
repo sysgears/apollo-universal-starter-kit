@@ -1,11 +1,12 @@
 import React, { Fragment } from 'react';
 import Helmet from 'react-helmet';
 import { Elements } from 'react-stripe-elements';
+
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { LayoutCenter } from '@gqlapp/look-client-react';
+import settings from '@gqlapp/config';
 
 import SubscriptionCardForm from './SubscriptionCardFormView';
-import settings from '../../../../../../settings';
 import { CreditCardInput } from '../types';
 
 interface UpdateCardViewProps {

@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
+
+import settings from '@gqlapp/config';
+
 import User from './sql';
-import settings from '../../../settings';
 
 export default async (req, res, next) => {
   try {

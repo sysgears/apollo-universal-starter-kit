@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-import faGithubSquare from '@fortawesome/fontawesome-free-brands/faGithubSquare';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faGithubSquare } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@gqlapp/look-client-react';
 
 import './GitHubButton.css';

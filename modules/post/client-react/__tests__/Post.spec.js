@@ -31,10 +31,10 @@ const createNode = id => ({
 });
 
 const mutations = {
-  editPost: true,
-  addComment: true,
-  editComment: true,
-  onCommentSelect: true
+  editPost: () => {},
+  addComment: () => {},
+  editComment: () => {},
+  onCommentSelect: () => {}
 };
 
 const mocks = {

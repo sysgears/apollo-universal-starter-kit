@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
+import settings from '@gqlapp/config';
+
 import NavBar from './NavBar';
-import settings from '../../../../../settings';
 
 const footerHeight = '40px';
 

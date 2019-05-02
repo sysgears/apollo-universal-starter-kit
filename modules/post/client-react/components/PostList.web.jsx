@@ -4,9 +4,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout, Table, Button, Pagination } from '@gqlapp/look-client-react';
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const { itemsNumber, type } = settings.pagination.web;
 

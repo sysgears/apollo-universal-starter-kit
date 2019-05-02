@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Layout } from 'antd';
 
+import settings from '@gqlapp/config';
+
 import NavBar from './NavBar';
-import settings from '../../../../../settings';
 
 const { Header, Content, Footer } = Layout;
 

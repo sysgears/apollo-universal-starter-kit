@@ -3,9 +3,7 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ActionReducer, MetaReducer } from '@ngrx/store';
-import { apiUrl } from '@gqlapp/core-common';
-
-import log from '../../../packages/common/log';
+import { apiUrl, log } from '@gqlapp/core-common';
 
 log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 

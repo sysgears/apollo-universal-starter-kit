@@ -1,23 +1,14 @@
 import fs from 'fs';
 import chalk from 'chalk';
-// import deleteStack from '../helpers/deleteStack';
 import { deleteStack } from '../helpers/util';
 
-import { STACK_LIST, STACK_MAP, BASE_PATH } from '../config';
+import { STACK_MAP, BASE_PATH } from '../config';
 
 const handleDeleteStackList = (stackList, logger, isShowStackList) => {
-  console.log('stackList --->', stackList);
   const existsStackList = fs
     .readdirSync(`${BASE_PATH}/packages`)
-    .filter(stack => stack !== 'common' && stack !== 'mobile')
-    .map(stack => (stack === 'client' ? 'react' : STACK_LIST[stack]));
-
-  const _existsStackList = fs
-    .readdirSync(`${BASE_PATH}/packages`)
-    .filter(stack => stack !== 'common' && stack !== 'mobile')
-    .map(stack => (stack === 'client' ? 'react' : STACK_MAP[stack]));
-
-  console.log('_existsStackList --->', _existsStackList);
+    .filter(stack => Object.keys(STACK_MAP).includes(stack))
+    .map(stack => STACK_MAP[stack].name);
 
   if (isShowStackList) {
     logger.info(chalk.yellow(`List exists stack of technology: ${existsStackList.join(', ')}`));
@@ -33,7 +24,7 @@ const checkStackList = (stackList, existsStackList, logger) => {
       return existsStackList.includes(curr) ? [...prev] : [...prev, curr];
     }, [])
     .map(stack => {
-      logger.error(chalk.red(`The stack of technology ${stack} not exists.`));
+      logger.error(chalk.red(`The stack of technology "${stack}" not exists.`));
       return stack;
     });
 
@@ -48,13 +39,9 @@ const checkStackList = (stackList, existsStackList, logger) => {
 const deleteStackList = stackList => {
   let unusedStack = [];
 
-  for (let stack in STACK_LIST) {
-    const stackName = STACK_LIST[stack].includes('react') ? 'react' : STACK_LIST[stack];
-    if (stackList.includes(stackName)) {
-      unusedStack = [
-        ...unusedStack,
-        ...(stack === 'client' ? ['client', 'client-react', 'client-react-native', 'mobile'] : [stack])
-      ];
+  for (let stack in STACK_MAP) {
+    if (stackList.includes(STACK_MAP[stack].name)) {
+      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
     }
   }
 

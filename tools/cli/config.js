@@ -5,14 +5,6 @@ const TEMPLATES_DIR = `${BASE_PATH}/tools/templates`;
 const MODULE_TEMPLATES = `${TEMPLATES_DIR}/module`;
 const MODULE_TEMPLATES_OLD = `${TEMPLATES_DIR}/module_old`;
 
-const STACK_LIST = {
-  client: 'react & react native',
-  'client-angular': 'angular',
-  'client-vue': 'vue',
-  'server-scala': 'scala',
-  server: 'node'
-};
-
 const STACK_MAP = {
   client: {
     title: 'react & react native',
@@ -46,6 +38,5 @@ module.exports = {
   TEMPLATES_DIR,
   MODULE_TEMPLATES,
   MODULE_TEMPLATES_OLD,
-  STACK_LIST,
   STACK_MAP
 };

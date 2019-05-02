@@ -28,7 +28,6 @@ async function chooseTemplate() {
     }
   ];
   const { stackList } = await inquirer.prompt(questions);
-  console.log('stackList --->', stackList);
 
   let unusedStack = [];
 
@@ -37,8 +36,6 @@ async function chooseTemplate() {
       unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
     }
   }
-
-  console.log('unusedStack --->', unusedStack);
 
   // Add client and mobile stacks in next step
   deleteStack(unusedStack);

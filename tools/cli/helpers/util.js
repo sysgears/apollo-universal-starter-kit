@@ -185,9 +185,9 @@ function moveToDirectory(directory) {
  *
  * @param path - The path to directory who need deleted
  */
-function handleDeleteDirectory(path) {
+function handleDeleteDirectory() {
   try {
-    shell.rm('-rf', path);
+    // shell.rm('-rf', path);
   } catch (e) {
     console.log('The stack was not found');
   }

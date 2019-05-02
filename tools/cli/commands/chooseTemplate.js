@@ -6,7 +6,7 @@ import { STACK_MAP, BASE_PATH } from '../config';
 async function chooseTemplate() {
   const existingStackList = fs
     .readdirSync(`${BASE_PATH}/packages`)
-    .filter(stack => stack !== 'common' && stack !== 'mobile');
+    .filter(stack => Object.keys(STACK_MAP).includes(stack));
 
   const choices = existingStackList.reduce((prev, curr) => {
     return [...prev, { name: STACK_MAP[curr].title }];
@@ -28,14 +28,17 @@ async function chooseTemplate() {
     }
   ];
   const { stackList } = await inquirer.prompt(questions);
+  console.log('stackList --->', stackList);
 
   let unusedStack = [];
 
   for (let stack in STACK_MAP) {
-    if (!stackList.includes(STACK_MAP[stack].name)) {
+    if (!stackList.includes(STACK_MAP[stack].title)) {
       unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
     }
   }
+
+  console.log('unusedStack --->', unusedStack);
 
   // Add client and mobile stacks in next step
   deleteStack(unusedStack);

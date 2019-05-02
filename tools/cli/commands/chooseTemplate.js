@@ -1,6 +1,5 @@
 import fs from 'fs';
 import * as inquirer from 'inquirer';
-// import deleteStack from '../helpers/deleteStack';
 import { deleteStack } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 

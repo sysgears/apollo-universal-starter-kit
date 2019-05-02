@@ -4,16 +4,14 @@ import { BASE_PATH } from '../config';
 /**
  * Delete unused stack of technologies
  *
- * @param stackList - List unused stack of technologies
+ * @param unusedStackList - List unused stack of technologies
  */
-const deleteStack = stackList => {
-  console.log('stackList --->', stackList);
+const deleteStack = unusedStackList => {
   const route = moveToDirectory('modules');
   const dirsList = getPathsDirectory(route);
-  stackList.forEach(stack => {
+  unusedStackList.forEach(stack => {
     handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
-      // handleDeleteDirectory(`${dir}/${stack === 'server' ? 'server-ts' : stack}`);
       handleDeleteDirectory(`${dir}/${stack}`);
     });
   });

@@ -210,6 +210,22 @@ function getPathsDirectory(route) {
   return dirPathList;
 }
 
+/**
+ * Delete unused stack of technologies
+ *
+ * @param unusedStackList - List unused stack of technologies
+ */
+function deleteStack(unusedStackList) {
+  const route = moveToDirectory('modules');
+  const dirsList = getPathsDirectory(route);
+  unusedStackList.forEach(stack => {
+    handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
+    dirsList.forEach(dir => {
+      handleDeleteDirectory(`${dir}/${stack}`);
+    });
+  });
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -226,5 +242,6 @@ module.exports = {
   runPrettier,
   moveToDirectory,
   handleDeleteDirectory,
-  getPathsDirectory
+  getPathsDirectory,
+  deleteStack
 };

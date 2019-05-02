@@ -3,7 +3,7 @@ import * as inquirer from 'inquirer';
 import { deleteStack } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 
-async function chooseTemplate() {
+const chooseTemplate = async () => {
   const existingStackList = fs
     .readdirSync(`${BASE_PATH}/packages`)
     .filter(stack => Object.keys(STACK_MAP).includes(stack));
@@ -39,6 +39,6 @@ async function chooseTemplate() {
 
   // Add client and mobile stacks in next step
   deleteStack(unusedStack);
-}
+};
 
 module.exports = chooseTemplate;

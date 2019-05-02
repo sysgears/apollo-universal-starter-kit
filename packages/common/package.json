@@ -19,7 +19,7 @@
     "apollo-link-ws": "^1.0.3",
     "apollo-logger": "^0.3.2",
     "apollo-utilities": "^1.0.11",
-    "connected-react-router": "^6.4.0",
+    "connected-react-router": "^5.0.0",
     "graphql": "^14.1.1",
     "i18next": "^11.2.3",
     "i18next-browser-languagedetector": "^2.1.0",

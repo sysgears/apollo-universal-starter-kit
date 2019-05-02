@@ -9,7 +9,7 @@ async function chooseTemplate() {
     .filter(stack => stack !== 'common' && stack !== 'mobile');
 
   const choices = existingStackList.reduce((prev, curr) => {
-    return [...prev, { name: STACK_MAP[curr].name }];
+    return [...prev, { name: STACK_MAP[curr].title }];
   }, []);
 
   const questions = [

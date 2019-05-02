@@ -12,6 +12,7 @@ const handleDeleteStackList = (stackList, logger, isShowStackList) => {
 
   if (isShowStackList) {
     logger.info(chalk.yellow(`List exists stack of technology: ${existsStackList.join(', ')}`));
+    return;
   }
 
   const formatStackList = stackList.map(stack => stack.toLowerCase());

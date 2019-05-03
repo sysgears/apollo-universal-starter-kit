@@ -15,7 +15,9 @@ const handlerDeleteStackCommand = (stackList, logger, isShowStackList) => {
   if (isShowStackList) {
     displayStackList(logger);
   } else {
-    deleteStackList(stackList.map(stack => stack.toLowerCase()), logger);
+    if (checkStackList(stackList, logger)) {
+      deleteStackList(stackList.map(stack => stack.toLowerCase()), logger);
+    }
   }
 };
 
@@ -35,15 +37,10 @@ const displayStackList = logger => {
  * Delete a list of technologies
  *
  * @param {Array} stackList - The technology list selected by user
- * @param {Function} logger - The Logger
  */
-const deleteStackList = (stackList, logger) => {
-  const checkedStackList = getCheckedStackList(stackList, logger);
-
-  if (!checkedStackList.length) return;
-
-  const fullStackList = generateFullStackList(checkedStackList);
-  deleteStack(fullStackList);
+const deleteStackList = stackList => {
+  const unusedStackList = generateUnusedStackList(stackList);
+  deleteStack(unusedStackList);
 };
 
 /**
@@ -52,16 +49,16 @@ const deleteStackList = (stackList, logger) => {
  * @param {Array} stackList - The list of technologies
  * @returns {Array} - The full list of technology
  */
-const generateFullStackList = stackList => {
-  let fullStackList = [];
+const generateUnusedStackList = stackList => {
+  let unusedStackList = [];
 
   for (let stack in STACK_MAP) {
     if (stackList.includes(STACK_MAP[stack].name)) {
-      fullStackList = [...fullStackList, ...STACK_MAP[stack].subdirs];
+      unusedStackList = [...unusedStackList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  return fullStackList;
+  return unusedStackList;
 };
 
 /**
@@ -78,15 +75,15 @@ const getExistsStackList = () =>
  *
  * @param {Array} stackList - The technology list selected by user
  * @param {Function} logger - The Logger
- * @returns {Array} - The checked list of technology
+ * @returns {Boolean}
  */
-const getCheckedStackList = (stackList, logger) => {
+const checkStackList = (stackList, logger) => {
   // getting a list of existing technologies
   const existsStackList = getExistsStackList();
 
   // check on the stackList in the existsStackList
   const notExistsStackList = stackList
-    // create non-existent technology list
+    // create non-existent list of technology
     .reduce((acc, curr) => (existsStackList.includes(curr) ? acc : [...acc, curr]), [])
     .map(stack => {
       // show a log in shell for each non-existent technology
@@ -96,10 +93,10 @@ const getCheckedStackList = (stackList, logger) => {
 
   if (notExistsStackList.length) {
     logger.error(chalk.yellow(`Please enter correct stack of technology`));
-    return [];
+    return false;
   }
 
-  return stackList;
+  return true;
 };
 
 module.exports = handlerDeleteStackCommand;

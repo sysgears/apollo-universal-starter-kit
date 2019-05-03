@@ -27,7 +27,8 @@ const handleDeleteStackList = (stackList, logger, isShowStackList) => {
 
   // formatting a list of tecnologies
   const formatStackList = stackList.map(stack => stack.toLowerCase());
-  checkStackList(formatStackList, existsStackList, logger);
+  const checkedStackList = checkStackList(formatStackList, existsStackList, logger);
+  deleteStackList(checkedStackList);
 };
 
 /**
@@ -36,6 +37,7 @@ const handleDeleteStackList = (stackList, logger, isShowStackList) => {
  * @param {Array} stackList - The technology list selected by user
  * @param {Array} existsStackList - The list of existing technologies
  * @param {Function} logger - The Logger
+ * @returns {Array} - The technology list selected by user
  */
 const checkStackList = (stackList, existsStackList, logger) => {
   // check on the stackList in the existsStackList
@@ -53,7 +55,7 @@ const checkStackList = (stackList, existsStackList, logger) => {
     return;
   }
 
-  deleteStackList(stackList);
+  return stackList;
 };
 
 /**

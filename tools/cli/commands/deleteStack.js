@@ -20,7 +20,7 @@ const handlerDeleteStackCommand = (stackList, logger, isShowStackList) => {
 };
 
 /**
- * Show the list of technologies
+ * Display the list of technologies
  *
  * @param {Function} logger - The Logger
  */

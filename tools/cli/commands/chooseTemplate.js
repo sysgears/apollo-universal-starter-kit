@@ -14,7 +14,7 @@ const chooseTemplate = async () => {
     .filter(stack => Object.keys(STACK_MAP).includes(stack));
 
   // creating a list of options with existing technologies for 'inquirer'
-  const choices = existingStackList.reduce((prev, curr) => [...prev, { name: STACK_MAP[curr].title }], []);
+  const choices = existingStackList.reduce((acc, curr) => [...acc, { name: STACK_MAP[curr].title }], []);
 
   // creating options for 'inquirer'
   const questions = [

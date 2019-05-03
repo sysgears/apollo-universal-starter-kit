@@ -47,10 +47,10 @@ const deleteStackList = (stackList, logger) => {
 };
 
 /**
- * Creating common list of technology
+ * Creating full list of technology
  *
  * @param {Array} stackList - The list of technologies
- * @returns {Array} - The list of common technology
+ * @returns {Array} - The full list of technology
  */
 const generateFullStackList = stackList => {
   let fullStackList = [];

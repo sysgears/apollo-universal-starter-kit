@@ -3,12 +3,17 @@ require('@babel/polyfill');
 const prog = require('caporal');
 const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
-const chooseTemplate = require('./cli/commands/chooseTemplate');
+const chooseTemplateCommand = require('./cli/commands/chooseTemplate');
 const deleteStackCommand = require('./cli/commands/deleteStack');
 
 const CommandInvoker = require('./cli/CommandInvoker');
 
-const commandInvoker = new CommandInvoker(addModuleCommand, deleteModuleCommand, chooseTemplate, deleteStackCommand);
+const commandInvoker = new CommandInvoker(
+  addModuleCommand,
+  deleteModuleCommand,
+  chooseTemplateCommand,
+  deleteStackCommand
+);
 
 prog
   .version('1.0.0')

@@ -11,25 +11,61 @@ import { STACK_MAP, BASE_PATH } from '../config';
  * @param {Function} logger - The Logger
  * @param {Boolean} isShowStackList - The flag to show list of existing technologies
  */
-const handleDeleteStackList = (stackList, logger, isShowStackList) => {
-  // getting a list of existing technologies
-  const existsStackList = fs
-    .readdirSync(`${BASE_PATH}/packages`)
-    .filter(stack => Object.keys(STACK_MAP).includes(stack))
-    .map(stack => STACK_MAP[stack].name);
-
-  // check for the availability of a flag if there is,
-  // show a list of technologies
+const handlerDeleteStackCommand = (stackList, logger, isShowStackList) => {
   if (isShowStackList) {
-    logger.info(chalk.yellow(`List exists stack of technology: ${existsStackList.join(', ')}`));
-    return;
+    displayStackList(logger);
+  } else {
+    deleteStackList(stackList, logger);
   }
+};
+
+/**
+ * check for the availability of a flag if there is,
+ * show a list of technologies
+ *
+ * @param {Function} logger - The Logger
+ */
+const displayStackList = logger => {
+  // getting a list of existing technologies
+  const existsStackList = getExistsStackList();
+
+  logger.info(chalk.yellow(`List exists stack of technology: ${existsStackList.join(', ')}`));
+};
+
+/**
+ * Delete a list of technologies
+ *
+ * @param {Array} stackList - The technology list selected by user
+ * @param {Function} logger - The Logger
+ */
+const deleteStackList = (stackList, logger) => {
+  let unusedStack = [];
+
+  // getting a list of existing technologies
+  const existsStackList = getExistsStackList();
 
   // formatting a list of tecnologies
   const formatStackList = stackList.map(stack => stack.toLowerCase());
   const checkedStackList = checkStackList(formatStackList, existsStackList, logger);
-  deleteStackList(checkedStackList);
+
+  // creating list of unused technologies
+  for (let stack in STACK_MAP) {
+    if (checkedStackList.includes(STACK_MAP[stack].name)) {
+      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
+    }
+  }
+
+  deleteStack(unusedStack);
 };
+
+/**
+ * Getting a list of existing technologies
+ */
+const getExistsStackList = () =>
+  fs
+    .readdirSync(`${BASE_PATH}/packages`)
+    .filter(stack => Object.keys(STACK_MAP).includes(stack))
+    .map(stack => STACK_MAP[stack].name);
 
 /**
  * Checking the list of technologies selected by user
@@ -37,7 +73,7 @@ const handleDeleteStackList = (stackList, logger, isShowStackList) => {
  * @param {Array} stackList - The technology list selected by user
  * @param {Array} existsStackList - The list of existing technologies
  * @param {Function} logger - The Logger
- * @returns {Array} - The technology list selected by user
+ * @returns {Array} - The checked list of technology
  */
 const checkStackList = (stackList, existsStackList, logger) => {
   // check on the stackList in the existsStackList
@@ -58,22 +94,4 @@ const checkStackList = (stackList, existsStackList, logger) => {
   return stackList;
 };
 
-/**
- * Delete unselected technologies
- *
- * @param {Array} stackList - The technology list selected by user
- */
-const deleteStackList = stackList => {
-  let unusedStack = [];
-
-  // creating list of unused technologies
-  for (let stack in STACK_MAP) {
-    if (stackList.includes(STACK_MAP[stack].name)) {
-      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
-    }
-  }
-
-  deleteStack(unusedStack);
-};
-
-module.exports = handleDeleteStackList;
+module.exports = handlerDeleteStackCommand;

@@ -173,7 +173,7 @@ function runPrettier(pathToFile) {
  * Move to directory
  *
  * @param directory - The name of directory
- * @returns {string} - Return the path to currenr directory
+ * @returns {string} - The path to current directory
  */
 function moveToDirectory(directory) {
   shell.cd(`${BASE_PATH}/${directory}/`);
@@ -183,7 +183,7 @@ function moveToDirectory(directory) {
 /**
  * Delete the directory
  *
- * @param path - The path to directory who need deleted
+ * @param path - The directory path
  */
 function handleDeleteDirectory(path) {
   try {
@@ -194,10 +194,10 @@ function handleDeleteDirectory(path) {
 }
 
 /**
- * Get list of directories
+ * Get a list of directories
  *
  * @param route - The path to directory
- * @returns {string} - Return path list for children directories
+ * @returns {string} - List of paths children directories
  */
 function getPathsDirectory(route) {
   const dirPathList = [];
@@ -211,9 +211,9 @@ function getPathsDirectory(route) {
 }
 
 /**
- * Delete unused stack of technologies
+ * Delete unused of technologies
  *
- * @param unusedStackList - List unused stack of technologies
+ * @param unusedStackList - List unused of technologies
  */
 function deleteStack(unusedStackList) {
   const route = moveToDirectory('modules');

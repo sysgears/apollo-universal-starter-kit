@@ -5,7 +5,7 @@ import { STACK_MAP, BASE_PATH } from '../config';
 
 /**
  * Generates a list of technologies for the library 'inquirer'
- * and returns a list of selected technologies
+ * and delete a list of unused technologies
  */
 const chooseTemplate = async () => {
   // getting a list of existing technologies

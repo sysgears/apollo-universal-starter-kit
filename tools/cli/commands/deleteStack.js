@@ -40,28 +40,28 @@ const displayStackList = logger => {
 const deleteStackList = (stackList, logger) => {
   const checkedStackList = getCheckedStackList(stackList, logger);
 
-  if (checkedStackList.length) return;
+  if (!checkedStackList.length) return;
 
-  const subdir = getSubdir(checkedStackList);
-  deleteStack(subdir);
+  const fullStackList = generateFullStackList(checkedStackList);
+  deleteStack(fullStackList);
 };
 
 /**
- * Creating common list of subdir for each technology
+ * Creating common list of technology
  *
  * @param {Array} stackList - The list of technologies
- * @returns {Array} - The list of common subdir for the technology list selected by user
+ * @returns {Array} - The list of common technology
  */
-const getSubdir = stackList => {
-  let subdir = [];
+const generateFullStackList = stackList => {
+  let fullStackList = [];
 
   for (let stack in STACK_MAP) {
     if (stackList.includes(STACK_MAP[stack].name)) {
-      subdir = [...subdir, ...STACK_MAP[stack].subdirs];
+      fullStackList = [...fullStackList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  return subdir;
+  return fullStackList;
 };
 
 /**
@@ -87,7 +87,7 @@ const getCheckedStackList = (stackList, logger) => {
   // check on the stackList in the existsStackList
   const notExistsStackList = stackList
     // create non-existent technology list
-    .reduce((prev, curr) => (existsStackList.includes(curr) ? [...prev] : [...prev, curr]), [])
+    .reduce((acc, curr) => (existsStackList.includes(curr) ? acc : [...acc, curr]), [])
     .map(stack => {
       // show a log in shell for each non-existent technology
       logger.error(chalk.red(`The stack of technology "${stack}" not exists.`));

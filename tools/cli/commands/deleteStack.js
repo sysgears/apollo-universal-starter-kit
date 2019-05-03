@@ -38,20 +38,30 @@ const displayStackList = logger => {
  * @param {Function} logger - The Logger
  */
 const deleteStackList = (stackList, logger) => {
-  let unusedStack = [];
-
   const checkedStackList = getCheckedStackList(stackList, logger);
 
-  if (!checkedStackList) return;
+  if (checkedStackList.length) return;
 
-  // creating list of unused technologies
+  const subdir = getSubdir(checkedStackList);
+  deleteStack(subdir);
+};
+
+/**
+ * Creating common list of subdir for each technology
+ *
+ * @param {Array} stackList - The list of technologies
+ * @returns {Array} - The list of common subdir for the technology list selected by user
+ */
+const getSubdir = stackList => {
+  let subdir = [];
+
   for (let stack in STACK_MAP) {
-    if (checkedStackList.includes(STACK_MAP[stack].name)) {
-      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
+    if (stackList.includes(STACK_MAP[stack].name)) {
+      subdir = [...subdir, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  deleteStack(unusedStack);
+  return subdir;
 };
 
 /**
@@ -68,7 +78,7 @@ const getExistsStackList = () =>
  *
  * @param {Array} stackList - The technology list selected by user
  * @param {Function} logger - The Logger
- * @returns {Array | null} - The checked list of technology
+ * @returns {Array} - The checked list of technology
  */
 const getCheckedStackList = (stackList, logger) => {
   // getting a list of existing technologies
@@ -86,7 +96,7 @@ const getCheckedStackList = (stackList, logger) => {
 
   if (notExistsStackList.length) {
     logger.error(chalk.yellow(`Please enter correct stack of technology`));
-    return null;
+    return [];
   }
 
   return stackList;

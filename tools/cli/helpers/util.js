@@ -185,7 +185,7 @@ function moveToDirectory(directory) {
  *
  * @param path - The directory path
  */
-function handleDeleteDirectory(path) {
+function deleteDirectory(path) {
   try {
     shell.rm('-rf', path);
   } catch (e) {
@@ -215,13 +215,13 @@ function getPathsDirectory(route) {
  *
  * @param unusedStackList - List unused of technologies
  */
-function deleteStack(unusedStackList) {
+function deleteStackDirectory(unusedStackList) {
   const route = moveToDirectory('modules');
   const dirsList = getPathsDirectory(route);
   unusedStackList.forEach(stack => {
-    handleDeleteDirectory(`${BASE_PATH}/packages/${stack}`);
+    deleteDirectory(`${BASE_PATH}/packages/${stack}`);
     dirsList.forEach(dir => {
-      handleDeleteDirectory(`${dir}/${stack}`);
+      deleteDirectory(`${dir}/${stack}`);
     });
   });
 }
@@ -241,7 +241,7 @@ module.exports = {
   removeSymlink,
   runPrettier,
   moveToDirectory,
-  handleDeleteDirectory,
+  deleteDirectory,
   getPathsDirectory,
-  deleteStack
+  deleteStackDirectory
 };

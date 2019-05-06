@@ -1,6 +1,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import { deleteStack } from '../helpers/util';
+import { deleteStackDirectory } from '../helpers/util';
 
 import { STACK_MAP, BASE_PATH } from '../config';
 
@@ -11,13 +11,11 @@ import { STACK_MAP, BASE_PATH } from '../config';
  * @param {Function} logger - The Logger
  * @param {Boolean} isShowStackList - The flag to show list of existing technologies
  */
-const handlerDeleteStackCommand = (stackList, logger, isShowStackList) => {
+const handleDeleteStackCommand = (stackList, logger, isShowStackList) => {
   if (isShowStackList) {
     displayStackList(logger);
-  } else {
-    if (checkStackList(stackList, logger)) {
-      deleteStackList(stackList.map(stack => stack.toLowerCase()), logger);
-    }
+  } else if (checkStackList(stackList, logger)) {
+    deleteStack(stackList.map(stack => stack.toLowerCase()), logger);
   }
 };
 
@@ -38,27 +36,27 @@ const displayStackList = logger => {
  *
  * @param {Array} stackList - The technology list selected by user
  */
-const deleteStackList = stackList => {
-  const unusedStackList = generateUnusedStackList(stackList);
-  deleteStack(unusedStackList);
+const deleteStack = stackList => {
+  const stackDirectoryList = collectStackDirectory(stackList);
+  deleteStackDirectory(stackDirectoryList);
 };
 
 /**
- * Creating full list of technology
+ * Collect full list of technology
  *
  * @param {Array} stackList - The list of technologies
- * @returns {Array} - The full list of technology
+ * @returns {Array} - The full list of stack directories
  */
-const generateUnusedStackList = stackList => {
-  let unusedStackList = [];
+const collectStackDirectory = stackList => {
+  let stackDirectoryList = [];
 
   for (let stack in STACK_MAP) {
     if (stackList.includes(STACK_MAP[stack].name)) {
-      unusedStackList = [...unusedStackList, ...STACK_MAP[stack].subdirs];
+      stackDirectoryList = [...stackDirectoryList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  return unusedStackList;
+  return stackDirectoryList;
 };
 
 /**
@@ -99,4 +97,4 @@ const checkStackList = (stackList, logger) => {
   return true;
 };
 
-module.exports = handlerDeleteStackCommand;
+module.exports = handleDeleteStackCommand;

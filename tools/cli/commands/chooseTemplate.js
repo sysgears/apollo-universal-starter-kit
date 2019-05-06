@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as inquirer from 'inquirer';
-import { deleteStack } from '../helpers/util';
+import { deleteStackDirectory } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 
 /**
@@ -36,16 +36,16 @@ const chooseTemplate = async () => {
   // getting a list of selected technologies using 'inquirer'
   const { stackList } = await inquirer.prompt(questions);
 
-  let unusedStack = [];
+  let stackDirectoryList = [];
 
   // creating list of unused technologies
   for (let stack in STACK_MAP) {
     if (!stackList.includes(STACK_MAP[stack].title)) {
-      unusedStack = [...unusedStack, ...STACK_MAP[stack].subdirs];
+      stackDirectoryList = [...stackDirectoryList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  deleteStack(unusedStack);
+  deleteStackDirectory(stackDirectoryList);
 };
 
 module.exports = chooseTemplate;

@@ -80,9 +80,7 @@ const checkStackList = (stackList, logger) => {
   const existsStackList = getExistsStackList();
 
   // check on the stackList in the existsStackList
-  const notExistsStackList = stackList
-    // create non-existent list of technology
-    .reduce((acc, curr) => (existsStackList.includes(curr) ? acc : [...acc, curr]), []);
+  const notExistsStackList = stackList.filter(stack => !existsStackList.includes(stack));
 
   if (notExistsStackList.length) {
     // show a log in shell for non-existent technology stack

@@ -23,13 +23,7 @@ const chooseTemplate = async () => {
       message: 'Choose your technology stack or stacks',
       name: 'stackList',
       choices,
-      validate: function(answer) {
-        if (answer.length < 1) {
-          return 'You must choose at least one stack.';
-        }
-
-        return true;
-      }
+      validate: answer => (answer.length < 1 ? 'You must choose at least one stack.' : true)
     }
   ];
 

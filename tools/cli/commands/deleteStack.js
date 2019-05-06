@@ -5,7 +5,7 @@ import { deleteStackDir } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 
 /**
- * Handler delete stack of technologies command
+ * Handler delete technology stack command
  *
  * @param {Array} stackList - The list of technologies
  * @param {Function} logger - The Logger
@@ -82,15 +82,12 @@ const checkStackList = (stackList, logger) => {
   // check on the stackList in the existsStackList
   const notExistsStackList = stackList
     // create non-existent list of technology
-    .reduce((acc, curr) => (existsStackList.includes(curr) ? acc : [...acc, curr]), [])
-    .map(stack => {
-      // show a log in shell for each non-existent technology
-      logger.error(chalk.red(`The stack of technology "${stack}" not exists.`));
-      return stack;
-    });
+    .reduce((acc, curr) => (existsStackList.includes(curr) ? acc : [...acc, curr]), []);
 
   if (notExistsStackList.length) {
-    logger.error(chalk.yellow(`Please enter correct stack of technology`));
+    // show a log in shell for non-existent technology stack
+    logger.error(chalk.red(`The technology stack "${notExistsStackList.join(', ')}" not exists.`));
+    logger.error(chalk.yellow(`Please enter correct technology stack`));
     return false;
   }
 

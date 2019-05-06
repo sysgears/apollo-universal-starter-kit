@@ -5,7 +5,9 @@ import { deleteStackDir } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 
 /**
- * Handler delete technology stack command
+ * This function, depending on the command entered,
+ * determines whether to display a list of technologies
+ * or delete them.
  *
  * @param {Array} stackList - The list of technologies
  * @param {Function} logger - The Logger
@@ -20,7 +22,7 @@ const handleDeleteStackCommand = (stackList, logger, isShowStackList) => {
 };
 
 /**
- * Display the list of technologies
+ * Displays the list of technologies
  *
  * @param {Function} logger - The Logger
  */
@@ -32,7 +34,7 @@ const displayStackList = logger => {
 };
 
 /**
- * Delete a list of technologies
+ * Deletes a list of technologies
  *
  * @param {Array} stackList - The technology list selected by user
  */
@@ -42,25 +44,22 @@ const deleteStack = stackList => {
 };
 
 /**
- * Collect full list of technology
+ * Collects full list of technology
  *
  * @param {Array} stackList - The list of technologies
  * @returns {Array} - The full list of stack directories
  */
 const collectStackDir = stackList => {
-  let stackDirList = [];
-
-  for (let stack in STACK_MAP) {
-    if (stackList.includes(STACK_MAP[stack].name)) {
-      stackDirList = [...stackDirList, ...STACK_MAP[stack].subdirs];
-    }
-  }
+  const stackDirList = Object.keys(STACK_MAP).reduce(
+    (acc, curr) => (!stackList.includes(STACK_MAP[curr].name) ? acc : [...acc, ...STACK_MAP[curr].subdirs]),
+    []
+  );
 
   return stackDirList;
 };
 
 /**
- * Getting a list of existing technologies
+ * Gets a list of existing technologies
  */
 const getExistsStackList = () =>
   fs
@@ -69,7 +68,7 @@ const getExistsStackList = () =>
     .map(stack => STACK_MAP[stack].name);
 
 /**
- * Checking the list of technologies selected by user
+ * Checks the list of technologies selected by the user
  *
  * @param {Array} stackList - The technology list selected by user
  * @param {Function} logger - The Logger

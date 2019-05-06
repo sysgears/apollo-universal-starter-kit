@@ -14,7 +14,9 @@ const chooseTemplate = async () => {
     .filter(stack => Object.keys(STACK_MAP).includes(stack));
 
   // creating a list of options with existing technologies for 'inquirer'
-  const choices = existingStackList.reduce((acc, curr) => [...acc, { name: STACK_MAP[curr].title }], []);
+  const choices = existingStackList.map(stack => ({
+    name: STACK_MAP[stack].title
+  }));
 
   // creating options for 'inquirer'
   const questions = [
@@ -30,14 +32,11 @@ const chooseTemplate = async () => {
   // getting a list of selected technologies using 'inquirer'
   const { stackList } = await inquirer.prompt(questions);
 
-  let stackDirList = [];
-
-  // creating list of unused technologies
-  for (let stack in STACK_MAP) {
-    if (!stackList.includes(STACK_MAP[stack].title)) {
-      stackDirList = [...stackDirList, ...STACK_MAP[stack].subdirs];
-    }
-  }
+  // collects list of unused technologies
+  const stackDirList = Object.keys(STACK_MAP).reduce(
+    (acc, curr) => (stackList.includes(STACK_MAP[curr].title) ? acc : [...acc, ...STACK_MAP[curr].subdirs]),
+    []
+  );
 
   deleteStackDir(stackDirList);
 };

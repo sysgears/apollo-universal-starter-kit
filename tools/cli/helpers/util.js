@@ -170,7 +170,7 @@ function runPrettier(pathToFile) {
 }
 
 /**
- * Take to the directory using its name
+ * Takes to the directory using its name
  *
  * @param directory - The name of directory
  * @returns {string} - The path to current directory
@@ -181,7 +181,7 @@ function moveToDirectory(directory) {
 }
 
 /**
- * Delete the directory
+ * Deletes the directory
  *
  * @param path - The path of the directory
  */
@@ -213,7 +213,7 @@ function getPathsSubdir(path) {
 }
 
 /**
- * Delete directories for unused stacks
+ * Deletes directories for unused stacks
  *
  * @param stackDirList - List of directories for unused stacks
  */

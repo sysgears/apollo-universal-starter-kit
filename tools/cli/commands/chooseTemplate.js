@@ -1,6 +1,6 @@
 import fs from 'fs';
 import * as inquirer from 'inquirer';
-import { deleteStackDirectory } from '../helpers/util';
+import { deleteStackDir } from '../helpers/util';
 import { STACK_MAP, BASE_PATH } from '../config';
 
 /**
@@ -39,7 +39,7 @@ const chooseTemplate = async () => {
     }
   }
 
-  deleteStackDirectory(stackDirectoryList);
+  deleteStackDir(stackDirectoryList);
 };
 
 module.exports = chooseTemplate;

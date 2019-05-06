@@ -1,6 +1,6 @@
 import fs from 'fs';
 import chalk from 'chalk';
-import { deleteStackDirectory } from '../helpers/util';
+import { deleteStackDir } from '../helpers/util';
 
 import { STACK_MAP, BASE_PATH } from '../config';
 
@@ -38,7 +38,7 @@ const displayStackList = logger => {
  */
 const deleteStack = stackList => {
   const stackDirectoryList = collectStackDirectory(stackList);
-  deleteStackDirectory(stackDirectoryList);
+  deleteStackDir(stackDirectoryList);
 };
 
 /**

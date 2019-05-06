@@ -30,16 +30,16 @@ const chooseTemplate = async () => {
   // getting a list of selected technologies using 'inquirer'
   const { stackList } = await inquirer.prompt(questions);
 
-  let stackDirectoryList = [];
+  let stackDirList = [];
 
   // creating list of unused technologies
   for (let stack in STACK_MAP) {
     if (!stackList.includes(STACK_MAP[stack].title)) {
-      stackDirectoryList = [...stackDirectoryList, ...STACK_MAP[stack].subdirs];
+      stackDirList = [...stackDirList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  deleteStackDir(stackDirectoryList);
+  deleteStackDir(stackDirList);
 };
 
 module.exports = chooseTemplate;

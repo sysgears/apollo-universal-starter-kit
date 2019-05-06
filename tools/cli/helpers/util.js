@@ -170,7 +170,7 @@ function runPrettier(pathToFile) {
 }
 
 /**
- * Move to directory
+ * Take to the directory using its name
  *
  * @param directory - The name of directory
  * @returns {string} - The path to current directory
@@ -183,7 +183,7 @@ function moveToDirectory(directory) {
 /**
  * Delete the directory
  *
- * @param path - The directory path
+ * @param path - The path of the directory
  */
 function deleteDir(path) {
   try {
@@ -194,33 +194,35 @@ function deleteDir(path) {
 }
 
 /**
- * Get a list of directories
+ * Gets a list of subdirectory paths
  *
- * @param route - The path to directory
- * @returns {string} - List of paths children directories
+ * @param path - The path to the directory
+ * @returns {string} - List of directories paths
  */
-function getPathsDir(route) {
-  const dirPathList = [];
-  const elements = fs.readdirSync(route);
-  elements.forEach(element => {
-    if (!fs.statSync(`${route}/${element}`).isFile()) {
-      dirPathList.push(`${route}/${element}`);
+function getPathsSubdir(path) {
+  const subdirPathList = [];
+  const subdirs = fs.readdirSync(path);
+
+  subdirs.forEach(subdir => {
+    if (!fs.statSync(`${path}/${subdir}`).isFile()) {
+      return subdirPathList.push(`${path}/${subdir}`);
     }
   });
-  return dirPathList;
+
+  return subdirPathList;
 }
 
 /**
- * Delete unused of technologies
+ * Delete directories for unused stacks
  *
- * @param unusedStackList - List unused of technologies
+ * @param stackDirList - List of directories for unused stacks
  */
-function deleteStackDir(unusedStackList) {
+function deleteStackDir(stackDirList) {
   const route = moveToDirectory('modules');
-  const dirsList = getPathsDir(route);
-  unusedStackList.forEach(stack => {
+  const subdirList = getPathsSubdir(route);
+  stackDirList.forEach(stack => {
     deleteDir(`${BASE_PATH}/packages/${stack}`);
-    dirsList.forEach(dir => {
+    subdirList.forEach(dir => {
       deleteDir(`${dir}/${stack}`);
     });
   });
@@ -242,6 +244,6 @@ module.exports = {
   runPrettier,
   moveToDirectory,
   deleteDir,
-  getPathsDir,
+  getPathsSubdir,
   deleteStackDir
 };

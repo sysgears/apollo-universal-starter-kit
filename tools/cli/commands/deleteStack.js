@@ -37,8 +37,8 @@ const displayStackList = logger => {
  * @param {Array} stackList - The technology list selected by user
  */
 const deleteStack = stackList => {
-  const stackDirectoryList = collectStackDirectory(stackList);
-  deleteStackDir(stackDirectoryList);
+  const stackDirList = collectStackDir(stackList);
+  deleteStackDir(stackDirList);
 };
 
 /**
@@ -47,16 +47,16 @@ const deleteStack = stackList => {
  * @param {Array} stackList - The list of technologies
  * @returns {Array} - The full list of stack directories
  */
-const collectStackDirectory = stackList => {
-  let stackDirectoryList = [];
+const collectStackDir = stackList => {
+  let stackDirList = [];
 
   for (let stack in STACK_MAP) {
     if (stackList.includes(STACK_MAP[stack].name)) {
-      stackDirectoryList = [...stackDirectoryList, ...STACK_MAP[stack].subdirs];
+      stackDirList = [...stackDirList, ...STACK_MAP[stack].subdirs];
     }
   }
 
-  return stackDirectoryList;
+  return stackDirList;
 };
 
 /**

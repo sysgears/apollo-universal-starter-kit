@@ -1,6 +1,5 @@
 import React from 'react';
-import { useQuery, useSubscription } from 'react-apollo-hooks';
-import { Mutation } from 'react-apollo';
+import { useQuery, useSubscription, useMutation } from 'react-apollo-hooks';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
@@ -12,40 +11,33 @@ interface ButtonProps {
   counter: any;
 }
 
-const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
-  <Mutation mutation={ADD_COUNTER}>
-    {(mutate: any) => {
-      const addServerCounter = (amount: number) => () =>
-        mutate({
-          variables: { amount },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            addServerCounter: {
-              __typename: 'Counter',
-              amount: counter.amount + 1
-            }
-          },
-          update: (cache: any, { data }: any) => {
-            const newAmount = data.addServerCounter.amount;
+const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
+  const addServerCounter = useMutation(ADD_COUNTER, {
+    variables: { amount: counterAmount },
+    optimisticResponse: {
+      __typename: 'Mutation',
+      addServerCounter: {
+        __typename: 'Counter',
+        amount: counter.amount + 1
+      }
+    },
+    update: (proxy: any, { data }: any) => {
+      const newAmount = data.addServerCounter.amount;
 
-            cache.writeQuery({
-              query: COUNTER_QUERY,
-              data: {
-                serverCounter: {
-                  amount: newAmount,
-                  __typename: 'Counter'
-                }
-              }
-            });
+      proxy.writeQuery({
+        query: COUNTER_QUERY,
+        data: {
+          serverCounter: {
+            amount: newAmount,
+            __typename: 'Counter'
           }
-        });
+        }
+      });
+    }
+  });
 
-      const onClickHandler = () => addServerCounter(counterAmount);
-
-      return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
-    }}
-  </Mutation>
-);
+  return <ServerCounterButton text={t('btnLabel')} onClick={addServerCounter} />;
+};
 
 interface CounterProps {
   t: TranslateFunction;

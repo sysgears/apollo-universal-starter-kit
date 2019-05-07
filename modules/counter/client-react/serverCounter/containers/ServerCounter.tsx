@@ -1,4 +1,5 @@
-import React from 'react';
+// import React from 'react';
+import React, { useEffect } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
@@ -54,73 +55,41 @@ interface CounterProps {
   counter: any;
 }
 
-class ServerCounter extends React.Component<CounterProps> {
-  private subscription: any;
-
-  constructor(props: CounterProps) {
-    super(props);
-    this.subscription = null;
-  }
-
-  public componentDidMount() {
-    if (!this.props.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  // remove when Renderer is overwritten
-  public componentDidUpdate(prevProps: CounterProps) {
-    if (!prevProps.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription();
-    }
-  }
-
-  public subscribeToCount() {
-    this.subscription = this.props.subscribeToMore({
-      document: COUNTER_SUBSCRIPTION,
-      variables: {},
-      updateQuery: (
-        prev: any,
-        {
-          subscriptionData: {
-            data: {
-              counterUpdated: { amount }
-            }
+const subscribeToCounter = (subscribeToMore: (opts: any) => any) =>
+  subscribeToMore({
+    document: COUNTER_SUBSCRIPTION,
+    variables: {},
+    updateQuery: (
+      prev: any,
+      {
+        subscriptionData: {
+          data: {
+            counterUpdated: { amount }
           }
-        }: any
-      ) => {
-        return update(prev, {
-          serverCounter: {
-            amount: {
-              $set: amount
-            }
+        }
+      }: any
+    ) => {
+      return update(prev, {
+        serverCounter: {
+          amount: {
+            $set: amount
           }
-        });
-      }
-    });
-  }
+        }
+      });
+    }
+  });
 
-  public render() {
-    const { t, counter, loading } = this.props;
-    return (
-      <ServerCounterView t={t} counter={counter} loading={loading}>
-        <IncreaseButton t={t} counterAmount={1} counter={counter} />
-      </ServerCounterView>
-    );
-  }
-}
+const ServerCounter = ({ t, counter, loading, subscribeToMore }: CounterProps) => {
+  useEffect(() => {
+    const subscribe = subscribeToCounter(subscribeToMore);
+    return () => subscribe();
+  });
+  return (
+    <ServerCounterView t={t} counter={counter} loading={loading}>
+      <IncreaseButton t={t} counterAmount={1} counter={counter} />
+    </ServerCounterView>
+  );
+};
 
 const ServerCounterWithQuery = (props: any) => (
   <Query query={COUNTER_QUERY}>

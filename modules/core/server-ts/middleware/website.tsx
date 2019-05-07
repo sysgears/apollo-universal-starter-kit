@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import ReactDOMServer from 'react-dom/server';
 import { SchemaLink } from 'apollo-link-schema';
 import { ApolloProvider, getDataFromTree } from 'react-apollo';
+import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import { ServerStyleSheet } from 'styled-components';
@@ -99,11 +100,13 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   const App = clientModules.getWrappedRoot(
     <Provider store={store}>
       <ApolloProvider client={client}>
-        {clientModules.getDataRoot(
-          <StaticRouter location={req.url} context={context}>
-            {clientModules.router}
-          </StaticRouter>
-        )}
+        <ApolloHooksProvider client={client}>
+          {clientModules.getDataRoot(
+            <StaticRouter location={req.url} context={context}>
+              {clientModules.router}
+            </StaticRouter>
+          )}
+        </ApolloHooksProvider>
       </ApolloProvider>
     </Provider>,
     req

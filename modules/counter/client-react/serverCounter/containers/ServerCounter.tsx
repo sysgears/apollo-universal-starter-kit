@@ -1,11 +1,10 @@
-// import React from 'react';
-import React, { useEffect } from 'react';
-import { Mutation, Query } from 'react-apollo';
-import update from 'immutability-helper';
+import React from 'react';
+import { useQuery, useSubscription } from 'react-apollo-hooks';
+import { Mutation } from 'react-apollo';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
+import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 
 interface ButtonProps {
   counterAmount: number;
@@ -50,40 +49,27 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
 
 interface CounterProps {
   t: TranslateFunction;
-  subscribeToMore: (opts: any) => any;
   loading: boolean;
   counter: any;
 }
 
-const subscribeToCounter = (subscribeToMore: (opts: any) => any) =>
-  subscribeToMore({
-    document: COUNTER_SUBSCRIPTION,
-    variables: {},
-    updateQuery: (
-      prev: any,
-      {
-        subscriptionData: {
-          data: {
-            counterUpdated: { amount }
-          }
-        }
-      }: any
-    ) => {
-      return update(prev, {
-        serverCounter: {
-          amount: {
-            $set: amount
+const ServerCounter = ({ t, counter, loading }: CounterProps) => {
+  useSubscription(COUNTER_SUBSCRIPTION, {
+    onSubscriptionData: ({ client, subscriptionData: { data } }) => {
+      const newAmount = data.counterUpdated.amount;
+
+      client.writeQuery({
+        query: COUNTER_QUERY,
+        data: {
+          serverCounter: {
+            amount: newAmount,
+            __typename: 'Counter'
           }
         }
       });
     }
   });
 
-const ServerCounter = ({ t, counter, loading, subscribeToMore }: CounterProps) => {
-  useEffect(() => {
-    const subscribe = subscribeToCounter(subscribeToMore);
-    return () => subscribe();
-  });
   return (
     <ServerCounterView t={t} counter={counter} loading={loading}>
       <IncreaseButton t={t} counterAmount={1} counter={counter} />
@@ -91,15 +77,16 @@ const ServerCounter = ({ t, counter, loading, subscribeToMore }: CounterProps) =
   );
 };
 
-const ServerCounterWithQuery = (props: any) => (
-  <Query query={COUNTER_QUERY}>
-    {({ loading, error, data: { serverCounter }, subscribeToMore }: any) => {
-      if (error) {
-        throw new Error(String(error));
-      }
-      return <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={serverCounter} />;
-    }}
-  </Query>
-);
+const ServerCounterWithQuery = (props: any) => {
+  const {
+    data: { serverCounter },
+    error,
+    loading
+  } = useQuery(COUNTER_QUERY);
+  if (error) {
+    throw new Error(String(error));
+  }
+  return <ServerCounter {...props} loading={loading} counter={serverCounter} />;
+};
 
 export default translate('serverCounter')(ServerCounterWithQuery);

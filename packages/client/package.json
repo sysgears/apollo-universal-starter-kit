@@ -84,6 +84,7 @@
     "prop-types": "^15.6.0",
     "react": "^16.8.0",
     "react-apollo": "^2.5.5",
+    "react-apollo-hooks": "^0.4.5",
     "react-art": "^16.8.0",
     "react-cookie": "^2.2.0",
     "react-debounce-input": "^3.1.0",

@@ -120,11 +120,7 @@ password-based authentication; refreshing a forgotten password
 * **404 Not Found Page**. A minimalistic module for handling 404 requests
 
 If you don't want to use the pre-built modules in your project, you can remove them using a [dedicated CLI]. For module
-names, check out the directory `modules`:
-
-```bash
-yarn cli deletemodule <moduleName>
-```
+names, see the names of directories under `modules`.
 
 To learn more about the features and modules available in Apollo Universal Starter Kit, follow to the dedicated section 
 [Features and Modules].
@@ -171,13 +167,15 @@ For Windows 10:
 * Click the **For Developers** tab
 * In the **Use developer features** window, switch to **Developer Mode**
 
-**NOTE**: If you don't need the Scala modules, you can remove them with the following command:
+**NOTE**: You can remove the unnecessary stacks from Apollo Universal Starter Kit by using the CLI. Consult a 
+[respective CLI section]. Alternatively, you can use the capabilities of your operating system. For example, by running
+the command below, you can remove all Scala server files:
 
 ```bash
 find -name server-scala | xargs rm -rf
 ```
 
-If you don't need some ready-made modules, remove them using the [custom CLI]. 
+If you don't need the ready-made modules, you can also remove them using the [custom CLI]. 
 
 2. Install the dependencies. Make sure that you use Yarn 1.0.0 or higher.
 
@@ -370,6 +368,7 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [deploying apollo universal starter kit to production]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md
 [configuring apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/configuration.md
 [dedicated cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md#deleting-features-with-deletemodule
+[respective cli section]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md#selecting-the-technology-stack-with-choosestack
 [features and modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/featuresAndModules.md
 [writing code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/writingCode.md
 [apollo universal starter kit cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md

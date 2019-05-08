@@ -169,6 +169,65 @@ function runPrettier(pathToFile) {
   }
 }
 
+/**
+ * Takes to the directory using its name
+ *
+ * @param directory - The name of directory
+ * @returns {string} - The path to current directory
+ */
+function moveToDirectory(directory) {
+  shell.cd(`${BASE_PATH}/${directory}/`);
+  return shell.pwd().stdout;
+}
+
+/**
+ * Deletes the directory
+ *
+ * @param path - The path of the directory
+ */
+function deleteDir(path) {
+  try {
+    shell.rm('-rf', path);
+  } catch (e) {
+    console.error(`The directory ${path} for the stack was not found`);
+  }
+}
+
+/**
+ * Gets a list of subdirectory paths
+ *
+ * @param path - The path to the directory
+ * @returns {string} - List of directories paths
+ */
+function getPathsSubdir(path) {
+  const subdirPathList = [];
+  const subdirs = fs.readdirSync(path);
+
+  subdirs.forEach(subdir => {
+    if (!fs.statSync(`${path}/${subdir}`).isFile()) {
+      return subdirPathList.push(`${path}/${subdir}`);
+    }
+  });
+
+  return subdirPathList;
+}
+
+/**
+ * Deletes directories for unused stacks
+ *
+ * @param stackDirList - List of directories for unused stacks
+ */
+function deleteStackDir(stackDirList) {
+  const route = moveToDirectory('modules');
+  const subdirList = getPathsSubdir(route);
+  stackDirList.forEach(stack => {
+    deleteDir(`${BASE_PATH}/packages/${stack}`);
+    subdirList.forEach(dir => {
+      deleteDir(`${dir}/${stack}`);
+    });
+  });
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -182,5 +241,9 @@ module.exports = {
   computeModulePackageName,
   addSymlink,
   removeSymlink,
-  runPrettier
+  runPrettier,
+  moveToDirectory,
+  deleteDir,
+  getPathsSubdir,
+  deleteStackDir
 };

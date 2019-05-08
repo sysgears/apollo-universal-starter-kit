@@ -189,7 +189,7 @@ function deleteDir(path) {
   try {
     shell.rm('-rf', path);
   } catch (e) {
-    console.log('The stack was not found');
+    console.error(`The directory ${path} for the stack was not found`);
   }
 }
 

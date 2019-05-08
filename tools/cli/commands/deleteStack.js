@@ -28,9 +28,9 @@ const handleDeleteStackCommand = (stackList, logger, isShowStackList) => {
  */
 const displayStackList = logger => {
   // getting a list of existing technologies
-  const existsStackList = getExistsStackList();
+  const existingStackList = getExistingStackList();
 
-  logger.info(chalk.yellow(`List exists stack of technology: ${existsStackList.join(', ')}`));
+  logger.info(chalk.yellow(`Existing technology stack list: ${existingStackList.join(', ')}`));
 };
 
 /**
@@ -39,7 +39,7 @@ const displayStackList = logger => {
  * @param {Array} stackList - The technology list selected by user
  */
 const deleteStack = stackList => {
-  const stackDirList = collectStackDir(stackList);
+  const stackDirList = collectStackDirList(stackList);
   deleteStackDir(stackDirList);
 };
 
@@ -49,7 +49,7 @@ const deleteStack = stackList => {
  * @param {Array} stackList - The list of technologies
  * @returns {Array} - The full list of stack directories
  */
-const collectStackDir = stackList => {
+const collectStackDirList = stackList => {
   const stackDirList = Object.keys(STACK_MAP).reduce(
     (acc, curr) => (!stackList.includes(STACK_MAP[curr].name) ? acc : [...acc, ...STACK_MAP[curr].subdirs]),
     []
@@ -61,7 +61,7 @@ const collectStackDir = stackList => {
 /**
  * Gets a list of existing technologies
  */
-const getExistsStackList = () =>
+const getExistingStackList = () =>
   fs
     .readdirSync(`${BASE_PATH}/packages`)
     .filter(stack => Object.keys(STACK_MAP).includes(stack))
@@ -76,14 +76,14 @@ const getExistsStackList = () =>
  */
 const checkStackList = (stackList, logger) => {
   // getting a list of existing technologies
-  const existsStackList = getExistsStackList();
+  const existingStackList = getExistingStackList();
 
-  // check on the stackList in the existsStackList
-  const notExistsStackList = stackList.filter(stack => !existsStackList.includes(stack));
+  // technology stack list supported by the kit, but not currently preset in a project
+  const notExistingStackList = stackList.filter(stack => !existingStackList.includes(stack));
 
-  if (notExistsStackList.length) {
-    // show a log in shell for non-existent technology stack
-    logger.error(chalk.red(`The technology stack "${notExistsStackList.join(', ')}" not exists.`));
+  if (notExistingStackList.length) {
+    // show a log in the shell for non-existent technology stack
+    logger.error(chalk.red(`The technology stack "${notExistingStackList.join(', ')}" does not exists.`));
     logger.error(chalk.yellow(`Please enter correct technology stack`));
     return false;
   }

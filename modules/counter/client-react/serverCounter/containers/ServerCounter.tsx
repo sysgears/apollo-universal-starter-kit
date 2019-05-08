@@ -39,13 +39,7 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
   return <ServerCounterButton text={t('btnLabel')} onClick={addServerCounter} />;
 };
 
-interface CounterProps {
-  t: TranslateFunction;
-  loading: boolean;
-  counter: any;
-}
-
-const ServerCounter = ({ t, counter, loading }: CounterProps) => {
+const subscribeOnCounterUpdate = () =>
   useSubscription(COUNTER_SUBSCRIPTION, {
     onSubscriptionData: ({ client, subscriptionData: { data } }) => {
       const newAmount = data.counterUpdated.amount;
@@ -61,6 +55,15 @@ const ServerCounter = ({ t, counter, loading }: CounterProps) => {
       });
     }
   });
+
+interface CounterProps {
+  t: TranslateFunction;
+  loading: boolean;
+  counter: any;
+}
+
+const ServerCounter = ({ t, counter, loading }: CounterProps) => {
+  subscribeOnCounterUpdate();
 
   return (
     <ServerCounterView t={t} counter={counter} loading={loading}>

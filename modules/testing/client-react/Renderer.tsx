@@ -3,7 +3,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, Observable, Operation } from 'apollo-link';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { Router, Switch } from 'react-router-dom';
-import createHistory, { MemoryHistory } from 'history/createMemoryHistory';
+import { createMemoryHistory, MemoryHistory } from 'history';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore, Store } from 'redux';
@@ -155,7 +155,7 @@ export class Renderer {
 
     const client = createApolloClient({
       createNetLink: () => schemaLink,
-      links: ref.clientModules.link,
+      createLink: ref.clientModules.createLink,
       clientResolvers: resolvers || ref.clientModules.resolvers
     });
 
@@ -166,7 +166,7 @@ export class Renderer {
       reduxState || {}
     );
 
-    const history = createHistory();
+    const history = createMemoryHistory();
 
     this.client = client;
     this.store = store;

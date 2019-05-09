@@ -6,6 +6,7 @@ import contact from '@gqlapp/contact-client-react';
 import validation from '@gqlapp/validation-common-react';
 import defaultRouter from '@gqlapp/router-client-react-native';
 import payments from '@gqlapp/payments-client-react';
+import authentication from '@gqlapp/authentication-client-react';
 
 import ClientModule from '@gqlapp/module-client-react-native';
 
@@ -26,7 +27,8 @@ const modules = new ClientModule(
   payments,
   user,
   i18n,
-  core
+  core,
+  authentication
 );
 
 export default modules;

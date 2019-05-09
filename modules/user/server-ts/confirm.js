@@ -1,18 +1,18 @@
 import jwt from 'jsonwebtoken';
-import User from './sql';
-import settings from '../../../settings';
 
-export default async (req, res) => {
+import settings from '@gqlapp/config';
+
+import User from './sql';
+
+export default async (req, res, next) => {
   try {
     const token = Buffer.from(req.params.token, 'base64').toString();
-    const {
-      user: { id }
-    } = jwt.verify(token, settings.user.secret);
+    const result = jwt.verify(token, settings.auth.secret);
 
-    await User.updateActive(id, true);
+    await User.updateActive(result.identity.id, true);
 
-    res.redirect('/login');
+    res.redirect('/login/?email-verified');
   } catch (e) {
-    res.send('error');
+    next(e);
   }
 };

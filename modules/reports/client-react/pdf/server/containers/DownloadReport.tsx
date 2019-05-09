@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
 import { ApolloClient } from 'apollo-client';
 import { withApollo } from 'react-apollo';
 
@@ -12,35 +12,24 @@ interface DownloadReportProps {
   client: ApolloClient<any>;
 }
 
-class DownloadReport extends Component<DownloadReportProps> {
-  public state = {
-    isLoading: false
-  };
+const DownloadReport = ({ t, client }: DownloadReportProps) => {
+  const [isLoading, setIsLoading] = useState(false);
 
-  constructor(props: DownloadReportProps) {
-    super(props);
-    this.donwload = this.donwload.bind(this);
-  }
-
-  public async donwload() {
-    this.setState({ isLoading: true });
-    const { client } = this.props;
+  const donwload = async () => {
+    setIsLoading(true);
     const { data } = await client.query({
       query
     });
     const url = getObjectURLFromArray(data.pdf);
     downloadFile(url, 'Report.pdf');
-    this.setState({ isLoading: false });
-  }
+    setIsLoading(false);
+  };
 
-  public render() {
-    const { t } = this.props;
-    return (
-      <Button disabled={this.state.isLoading} style={{ marginLeft: '10px' }} onClick={this.donwload}>
-        {t('downloadPDF')}
-      </Button>
-    );
-  }
-}
+  return (
+    <Button className="no-print" disabled={isLoading} style={{ marginLeft: '10px' }} onClick={donwload}>
+      {t('downloadPDF')}
+    </Button>
+  );
+};
 
 export default translate('PdfReport')(withApollo(DownloadReport));

@@ -26,10 +26,10 @@ interface HtmlProps {
 
 let clientModules: ClientModule;
 if (__SSR__) {
-  clientModules = require('../../../../packages/client/src').default;
+  clientModules = require('client').default;
   if (module.hot) {
-    module.hot.accept(['../../../../packages/client/src'], () => {
-      clientModules = require('../../../../packages/client/src').default;
+    module.hot.accept(['client'], () => {
+      clientModules = require('client').default;
     });
   }
 }
@@ -90,7 +90,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
-    links: clientModules.link,
+    createLink: clientModules.createLink,
     clientResolvers: clientModules.resolvers,
     connectionParams: null
   });
@@ -143,7 +143,7 @@ export default (schema: GraphQLSchema, modules: ServerModule) => async (
   try {
     if (req.path.indexOf('.') < 0 && __SSR__) {
       return await renderServerSide(req, res, schema, modules);
-    } else if (!__SSR__ && req.method === 'GET') {
+    } else if (req.path.indexOf('.') < 0 && !__SSR__ && req.method === 'GET') {
       res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
     } else {
       next();

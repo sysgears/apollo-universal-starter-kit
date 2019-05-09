@@ -1,8 +1,8 @@
-require('@babel/register')({ cwd: __dirname + '/../../../../../..' });
+require('@babel/register')({ cwd: __dirname + '/../../../../../..', extensions: ['.js', '.ts'] });
 require('@babel/polyfill');
 require('dotenv/config');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const settings = require('../../../../../../settings').default;
+const settings = require('@gqlapp/config').default;
 
 const { product, plan, enabled } = settings.stripe.subscription;
 

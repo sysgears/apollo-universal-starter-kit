@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Container } from 'reactstrap';
 
+import settings from '@gqlapp/config';
+
 import NavBar from './NavBar';
-import settings from '../../../../../settings';
 
 const footerHeight = '40px';
 
@@ -20,10 +21,10 @@ class PageLayout extends React.Component {
     return (
       <section className="d-flex flex-column flex-grow-1">
         <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
-          <section className="d-flex flex-column">{!hideNavBar && <NavBar />}</section>
+          <section className="d-flex flex-column no-print">{!hideNavBar && <NavBar />}</section>
           <Container id="content">{children}</Container>
         </section>
-        <Footer className="d-flex flex-shrink-0 justify-content-center">
+        <Footer className="d-flex flex-shrink-0 justify-content-center no-print">
           <span>
             &copy; {new Date().getFullYear()}. {settings.app.name}.
           </span>

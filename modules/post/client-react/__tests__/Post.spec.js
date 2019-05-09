@@ -20,7 +20,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 chai.should();
 
 const createNode = id => ({
-  id: `${id}`,
+  id,
   title: `Post title ${id}`,
   content: `Post content ${id}`,
   comments: [
@@ -31,10 +31,10 @@ const createNode = id => ({
 });
 
 const mutations = {
-  editPost: true,
-  addComment: true,
-  editComment: true,
-  onCommentSelect: true
+  editPost: () => {},
+  addComment: () => {},
+  editComment: () => {},
+  onCommentSelect: () => {}
 };
 
 const mocks = {
@@ -190,9 +190,9 @@ describe('Posts and comments example UI works', () => {
       data: {
         postUpdated: {
           mutation: 'UPDATED',
-          id: '3',
+          id: 3,
           node: {
-            id: '3',
+            id: 3,
             title: 'Post title 203',
             content: 'Post content 204',
             __typename: 'Post'

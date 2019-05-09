@@ -39,7 +39,8 @@ class PostListScreen extends React.Component {
     headerLeft: (
       <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
     ),
-    headerStyle: styles.header
+    headerStyle: styles.header,
+    headerForceInset: {}
   });
 
   render() {
@@ -74,7 +75,8 @@ PostAddTitle.propTypes = {
 class PostEditScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(PostEditTitle, { navigation }),
-    headerStyle: styles.header
+    headerStyle: styles.header,
+    headerForceInset: {}
   });
 
   render() {
@@ -88,7 +90,8 @@ PostEditScreen.propTypes = {
 class PostAddScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: withI18N(PostAddTitle, { navigation }),
-    headerStyle: styles.header
+    headerStyle: styles.header,
+    headerForceInset: {}
   });
 
   render() {

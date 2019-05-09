@@ -1,8 +1,9 @@
 import { expect } from 'chai';
 import { ApolloClient } from 'apollo-client';
 import { step } from 'mocha-steps';
-import { getApollo } from '../../../testHelpers/integrationSetup';
 import gql from 'graphql-tag';
+
+import { getApollo } from '@gqlapp/testing-server-ts';
 
 const INTROSPECTION_QUERY = gql`
   query introspectionQuery {

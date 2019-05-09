@@ -38,15 +38,33 @@ browser. The application code is minified and optimized to ensure the best perfo
 
 ### `yarn watch`
 
-Runs the app in development mode and watches the changes made to the code using hot code reload.
+Runs the app in development mode and watches the changes made to the code with the help of hot code reload.
 
-### `yarn watch-client`
+The `yarn watch` command has a few specific implementations.
+
+#### `yarn watch-client`
 
 Runs the client-side React application in development mode and watches the changes using hot code reload. 
 
 This command is especially useful if you're developing a Scala back-end application or your custom back-end app and you 
 don't need the Express application to run. Also note that the server-side rendering is _turned off_ if you run 
 `yarn watch-client`.
+
+#### `yarn watch:angular` 
+
+Runs only the Angular frontend application in development mode.
+
+#### `yarn watch:vue`
+
+Runs only the Vue frontend application in development mode.
+
+#### `yarn watch:android`
+
+Runs only the Android app in development mode.
+ 
+#### `yarn watch:ios`
+
+Runs only the iOS app in development mode.
 
 ### `yarn android`
  
@@ -90,7 +108,7 @@ for use by Expo SDK. Currently, Expo allows you to use both `exp` and `expo`, bu
 `exp`**! 
 
 In the starter kit, the command `yarn exp` is basically a wrapper around the `exp` command from the Expo SDK. `exp` in 
-the starter kit is in fact run by the [SpinJS] library, which creates the React Native app builds using [webpack] and 
+the starter kit is in fact run by the [Zen] library, which creates the React Native app builds using [webpack] and 
 [Haul CLI] **instead** of the [Metro bundler].
 
 The `yarn exp` command in the starter kit supports only the following `exp` (Expo CLI) commands: 
@@ -164,7 +182,7 @@ lines where issues were found) will be shown in the console.
 [lerna]: https://lernajs.io/
 [cli guide]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md
 [`expo`]: https://docs.expo.io/versions/latest/workflow/expo-cli
-[spinjs]: https://github.com/sysgears/spinjs
+[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
 [webpack]: https://webpack.js.org/
 [haul cli]: https://github.com/callstack/haul
 [metro bundler]: https://facebook.github.io/metro/

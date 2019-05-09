@@ -2,10 +2,10 @@ import React from 'react';
 import chai from 'chai';
 import { step } from 'mocha-steps';
 
-import Renderer from '../../../../../packages/client/src/testHelpers/Renderer';
-import { click, find, wait, render } from '../../../../../packages/client/src/testHelpers/testUtils';
-import ClientCounter from '../containers/ClientCounter';
+import { click, find, wait, render, Renderer } from '@gqlapp/testing-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
+
+import ClientCounter from '../containers/ClientCounter';
 
 chai.should();
 

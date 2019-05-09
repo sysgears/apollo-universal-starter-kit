@@ -1,8 +1,9 @@
+import { UserInputError } from 'apollo-server-errors';
 import { isEmpty } from 'lodash';
+
 import { validate } from '@gqlapp/validation-common-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
-import { UserInputError } from 'apollo-server-errors';
-import log from '../../../packages/common/log';
+import { log } from '@gqlapp/core-common';
 
 interface ContactInput {
   input: {

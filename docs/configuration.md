@@ -6,7 +6,7 @@ by clicking the links below:
 * [General Information](#general-information)
 * [Apollo Engine](#apollo-engine)
 * [Basic Application Settings](#basic-application-settings)
-* [Build Configuration with SpinJS](#build-configuration-with-spinjs)
+* [Build Configuration with Zen](#build-configuration-with-zen)
 * [Built-In UI Libraries](#built-in-ui-libraries)
 * [Database](#database)
 * [Internationalization](#internationalization)
@@ -14,6 +14,7 @@ by clicking the links below:
 * [Mobile Chat](#mobile-chat)
 * [Pagination](#pagination)
 * [Stripe Subscription](#stripe-subscription)
+* [Server Side Rendering](#server-side-rendering)
 * [Upload Module](#upload-module)
 * [User Authentication](#user-authentication)
 
@@ -84,38 +85,45 @@ You can learn more about `stackFragmentFormat` in the following documents:
 | debugSQL      | Boolean | Logs the SQL commands that are executed on the back end. Defaults to `false`   |
 | apolloLogging | Boolean | Logs all Apollo operations in the development environment. Defaults to `false` |
 
-## Build Configuration with SpinJS 
+## Build Configuration with Zen
 
-Apollo Universal Starter Kit uses [SpinJS], a custom JavaScript library, to configure and create builds of the web, 
-server, and React Native mobile applications using the same bundler [webpack]. You can change various build 
+Apollo Universal Starter Kit uses [Zen], a custom JavaScript library, to configure and create builds of the web, server, 
+and React Native mobile applications using just one bundler &mdash; [webpack]. You can change various build
 configurations in the `.spinrc.js` files:
 
-* `packages/client/.spinrc.js` contains the SpinJS settings for the client-side application
-* `packages/server/.spinrc.js` contains the SpinJS settings for the server-side application
-* `packages/mobile/.spinrc.js` contains the SpinJS settings for the React Native mobile app
+* `packages/client/.zenrc.js` contains Zen settings for the React application
+* `packages/client-angular/.zenrc.js` contains Zen settings for the Angular application
+* `packages/client-vue/.zenrc.js` contains Zen settings for the Vue application
+* `packages/server/.zenrc.js` contains Zen settings for the Node.js application
+* `packages/mobile/.zenrc.js` contains Zen settings for the React Native mobile app
 
-Consult the [SpinJS documentation] for more information on how you can work with SpinJS in your Apollo Universal Starter 
-Kit projects.
+Consult the [Zen documentation] for more information on how you can work with Zen in your Apollo Universal Starter Kit 
+projects.
 
 ## Built-In UI Libraries
 
-Apollo Universal Starter Kit uses [Twitter Bootstrap] to help you quickly add generic styles to the client application. 
-Besides Twitter Bootstrap, the starter kit also integrates [Ant Design]. For the React Native mobile app, you can use 
-[Ant Design Mobile] or [NativeBase].
+Apollo Universal Starter Kit uses various UI libraries for the three clients. 
 
-By default, Apollo Universal Starter Kit uses Twitter Bootstrap for the client application and NativeBase for the mobile
-app. You can enable the alternatives this way: 
+With React, you can use either [Twitter Bootstrap] or [Ant Design]. For the React Native mobile app, you can use [Ant 
+Design Mobile] or [NativeBase]. The Angular app comes with Angular Material, and the Vue client also uses Bootstrap.
 
-* To use Ant Design instead of Twitter Bootstrap, uncomment the respective import for Ant Design and comment out the 
-import for Bootstrap in the `packages/client/src/modules/common/components/web/index.tsx` file: 
+By default, Apollo Universal Starter Kit enables Twitter Bootstrap for the React and Vue clients and NativeBase for the 
+mobile app. Angular uses the Material library. 
+
+You can enable Ant Design styles for React by changing the module `look` exports: 
+
+* To use Ant Design instead of Twitter Bootstrap, uncomment the respective export for Ant Design and comment out the 
+export for Bootstrap in the `modules/look/client-react/look.ts` file: 
 
 ```javascript
 // export * from './ui-bootstrap';
 export * from './ui-antd';
 ```
 
+For the React Native mobile app, change the exports this way:
+
 * To use Ant Design Mobile instead of NativeBase, uncomment the Ant Design Mobile export and comment out the NativeBase
-export in the `packages/client/src/modules/common/components/native/index.tsx` file:
+export in the `modules/look/client-react-native/index.ts` file:
 
 ```javascript
 // export * from './ui-native-base';
@@ -125,7 +133,7 @@ export * from './ui-antd-mobile';
 ## Database
 
 Apollo Universal Starter Kit supports SQL databases (the commonest examples are PostgreSQL, MySQL, and SQLite; the 
-latter is used by default in the starter kit). The database configurations are located in the `config/db.js` file.
+latter is used by default by the starter kit). The database configurations are located in the `config/db.js` file.
 
 To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to `config/db.js` file. 
 `packages/server/.env` file:
@@ -271,6 +279,115 @@ export default {
 };
 ```
 
+## Server Side Rendering
+
+Apollo Universal Starter Kit supports Server Side Rendering (SSR), and this features is enabled by default for both 
+Express server application and React client app. 
+
+**NOTE**: SSR is disabled by default for the **Angular application** in `packages/client-angular` because the current 
+Angular app implementation doesn't support SSR.
+
+If you want to disable SSR for React and Express applications, you need to change a dedicated SpinJS setting in two
+`.spinrc.js` files:
+
+* For the Express application, set `config.options.ssr` to `false` in `packages/server/.spinrc.js`
+* For the React application, set `config.options.ssr` to `false` in `packages/client/.spinrc.js`
+
+**NOTE**: If you're going to disable SSR, do this in **both** `server` and `client` packages!
+
+### Disabling SSR for Express
+
+Disabling SSR in the Express application is done this way:
+
+```js
+// File packages/server/.zenrc.js
+
+const config = {
+  builders: {
+    // ...
+    stack: ['server'],
+  },
+  options: {
+    // SSR is now disabled for server
+    // Remember to also set config.options.ssr to false in package/client/.sprinrc.js
+    ssr: false, // Disables SSR
+    // ...
+  }
+};
+// ...
+```
+
+### Disabling SSR for React
+
+Concerning the React application, SSR can be disabled in two ways:
+
+1. You can set the property `config.options.ssr` to `false` in `packages/client/.zenrc.js`.
+2. You can set the environment variable `process.env.DISABLE_SSR` to `true` when running the application.
+
+The second option gives you more flexibility, because no matter the value of `config.options.ssr`, the value of the
+`process.env.DISABLE_SSR` takes precedence.
+ 
+In `package/client/.zenrc.js`, you may notice an additional check of the value of `DISABLE_SSR`:
+
+```js
+const url = require('url');
+
+const config = {
+  builders: {
+    // ...
+  },
+  options: {
+    // ...
+    ssr: true,
+    // ...
+  }
+};
+
+// SSR will be disabled if process.env.DISABLE_SSR is true and even if config.options.ssr is also true
+if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
+  config.options.ssr = false;
+}
+```
+
+If you don't set `process.env.DISABLE_SSR`, then change the `config.options.ssr` directly.
+
+Disabling SSR for the React application is useful when you need to run the client application alone without running the
+Express application. Otherwise, if you disable building the Express application and run the React app with SSR, the 
+frontend will never load (note the message `web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...`):
+
+```sh
+λ yarn watch-client
+yarn run v1.13.0
+$ cross-env DISABLE_SSR=true lerna run --scope=client watch --stream
+lerna notice cli v3.10.6
+lerna info versioning independent
+lerna info filter [ 'client' ]
+lerna info Executing command in 1 package: "yarn run watch"
+client: $ spin watch
+client: spin info Version 0.4.182
+client: Starting type checking service...
+client: Using 1 worker with 2048MB memory limit
+client: web-webpack info Webpack dev server listening on http://localhost:3000
+client: web-webpack debug waiting for tcp:localhost:8080
+client: web-webpack debug still waiting for tcp:localhost:8080 after 10000ms...
+client: web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...
+```
+
+Apollo Universal Starter Kit has a script `watch-client` that runs _only_ the client application, which is why SSR must 
+be disabled (otherwise, the application won't be loaded). 
+
+This is what the command looks like:
+
+```json
+{
+  "scripts": {
+    "watch-client": "yarn cross-env DISABLE_SSR=true lerna run --scope=client watch --stream"
+  }
+}
+```
+
+To enable SSR again, you need to set `config.options.ssr` to `true` in _both_ server and client packages.
+
 ## Stripe Subscription
 
 To configure the Stripe subscription module, follow to the dedicated section:
@@ -287,8 +404,8 @@ the uploaded files.
 | uploadDir | String | Sets the upload directory. Defaults to `public` |
 
 **NOTE**: the path to the upload directory is resolved from `packages/server`. If you set the `uploadDir` property to 
-`uploads`, the uploaded files will be located under `packages/server/uploads`. The upload directory is generated 
-automatically when you upload a file to the server.
+`uploads`, the uploaded files will be located under `packages/server/uploads`. The upload directory is automatically
+generated when you upload a file to the server.
 
 ## User Authentication
 
@@ -359,11 +476,10 @@ Configures the password validation and other settings for the server-side and cl
 
 | password              | Object  | Contains the global properties for the `password` configurations         |
 | --------------------- | ------- | ------------------------------------------------------------------------ |
-| confirm               | Boolean | Requires password confirmation for validation. Defaults to `true`        |
-| sendConfirmationEmail | Boolean | Sends the confirmation email after the user changes their password       |
-| sendAddNewUserEmail   | Boolean | Requires password confirmation for validation. Defaults to `true`        |
-| minLength             | Number  | Sets the minimal password length for validation. Defaults to `8`         |
-| enabled               | Boolean | Enables or disables the password field on the client. Defaults to `true` |
+| requireEmailConfirmation | Boolean | Require email confirmation for new registered users. Defaults to `true` |
+| sendPasswordChangesEmail | Boolean | Sends the confirmation email after the user changes their password. Defaults to `true`|
+| minLength                | Number  | Sets the minimal password length for validation. Defaults to `8`         |
+| enabled                  | Boolean | Enables or disables the password field on the client. Defaults to `true` |
 
 Usage example:
 
@@ -372,7 +488,7 @@ export default {
   auth: {
     password: {
       confirm: true,
-      sendConfirmationEmail: true,
+      requireEmailConfirmation: true,
       sendAddNewUserEmail: true,
       minLength: 8,
       enabled: true
@@ -547,8 +663,8 @@ If the error was produced, you need to visit the link shown in the terminal and 
 [opening visual studio code with urls]: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
 [visual studio code url handler]: https://github.com/sysgears/vscode-handler#visual-studio-code-url-handler
 [webpack]: https://webpack.js.org/
-[spinjs]: https://github.com/sysgears/spinjs
-[spinjs documentation]: https://github.com/sysgears/spinjs/blob/master/docs
+[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
+[zen documentation]: https://github.com/sysgears/larix/tree/master/packages/zen/docs
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
 [ant design mobile]: https://mobile.ant.design

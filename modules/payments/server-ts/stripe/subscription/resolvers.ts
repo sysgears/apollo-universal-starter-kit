@@ -1,8 +1,9 @@
+import { ApolloError } from 'apollo-server-errors';
 import Stripe from 'stripe';
 import withAuth from 'graphql-auth';
+
 import { log } from '@gqlapp/core-common';
-import { ApolloError } from 'apollo-server-errors';
-import settings from '../../../../../settings';
+import settings from '@gqlapp/config';
 
 const { plan } = settings.stripe.subscription;
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -28,13 +29,13 @@ export default () => ({
         : null;
     }),
     stripeSubscriptionCard: withAuth(['stripe:view:self'], (obj: any, args: any, context: any) => {
-      return context.StripeSubscription.getCreditCard(context.user.id);
+      return context.StripeSubscription.getCreditCard(context.identity.id);
     })
   },
   Mutation: {
     addStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, { input }: CreditCard, context: any) => {
       try {
-        const { user, stripeSubscription, StripeSubscription } = context;
+        const { identity, stripeSubscription, StripeSubscription } = context;
         const { token, expiryMonth, expiryYear, last4, brand } = input;
         let stripeCustomerId;
         let stripeSourceId;
@@ -45,13 +46,13 @@ export default () => ({
           stripeCustomerId = stripeSubscription.stripeCustomerId;
           stripeSourceId = id;
         } else {
-          const { id, default_source } = await stripe.customers.create({ email: user.email, source: token });
+          const { id, default_source } = await stripe.customers.create({ email: identity.email, source: token });
           stripeCustomerId = id;
           stripeSourceId = default_source;
         }
 
         await StripeSubscription.editSubscription({
-          userId: user.id,
+          userId: identity.id,
           active: false,
           stripeCustomerId,
           stripeSourceId,
@@ -67,7 +68,7 @@ export default () => ({
         });
 
         await StripeSubscription.editSubscription({
-          userId: user.id,
+          userId: identity.id,
           active: true,
           stripeSubscriptionId: newSubscriber.id
         });
@@ -84,13 +85,13 @@ export default () => ({
     updateStripeSubscriptionCard: withAuth(['stripe:update:self'], async (obj: any, args: CreditCard, context: any) => {
       try {
         const { token, expiryMonth, expiryYear, last4, brand } = args.input;
-        const { StripeSubscription, user, stripeSubscription } = context;
+        const { StripeSubscription, identity, stripeSubscription } = context;
 
         await stripe.customers.deleteSource(stripeSubscription.stripeCustomerId, stripeSubscription.stripeSourceId);
         const source = await stripe.customers.createSource(stripeSubscription.stripeCustomerId, { source: token });
 
         await StripeSubscription.editSubscription({
-          userId: user.id,
+          userId: identity.id,
           stripeSourceId: source.id,
           expiryMonth,
           expiryYear,
@@ -109,7 +110,7 @@ export default () => ({
     }),
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {
       const {
-        user,
+        identity,
         stripeSubscription: { stripeSubscriptionId, stripeCustomerId, stripeSourceId },
         StripeSubscription
       } = context;
@@ -119,7 +120,7 @@ export default () => ({
         await stripe.customers.deleteSource(stripeCustomerId, stripeSourceId);
 
         await StripeSubscription.editSubscription({
-          userId: user.id,
+          userId: identity.id,
           active: false,
           stripeSourceId: null,
           stripeSubscriptionId: null,

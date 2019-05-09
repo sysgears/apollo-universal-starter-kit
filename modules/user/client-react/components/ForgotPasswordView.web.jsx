@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
-import { LayoutCenter, PageLayout } from '@gqlapp/look-client-react';
 
-import ForgotPasswordForm from '../components/ForgotPasswordForm';
-import settings from '../../../../settings';
+import { LayoutCenter, PageLayout } from '@gqlapp/look-client-react';
+import settings from '@gqlapp/config';
+
+import ForgotPasswordForm from './ForgotPasswordForm';
 
 const ForgotPasswordView = ({ onSubmit, t, sent }) => {
   const renderMetaData = () => (

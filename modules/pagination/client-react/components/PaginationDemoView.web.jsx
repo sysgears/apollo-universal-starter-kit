@@ -14,7 +14,6 @@ const PaginationDemoView = ({ items, handlePageChange, pagination, t }) => {
       render: renderFunc
     }
   ];
-
   return (
     <div>
       <Table dataSource={items.edges.map(({ node }) => node)} columns={columns} />

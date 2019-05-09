@@ -10,12 +10,12 @@ import 'backend_reload';
 log.info(`Connecting to GraphQL back-end at: ${apiUrl}`);
 
 const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
-  const { createNetLink, link, connectionParams, resolvers, reducers, routes } = modules;
+  const { createNetLink, createLink, connectionParams, resolvers, reducers, routes } = modules;
 
   const client = createApolloClient({
     apiUrl,
     createNetLink,
-    links: link,
+    createLink,
     connectionParams,
     clientResolvers: resolvers
   });

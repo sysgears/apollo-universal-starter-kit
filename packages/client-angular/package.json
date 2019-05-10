@@ -3,10 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "main": "src",
-  "engines": {
-    "node": ">= 6.11.1 <= 10",
-    "yarn": ">= 1.0.0"
-  },
   "scripts": {
     "build": "cross-env NODE_ENV=production zen build",
     "clean": "rimraf build .tmp",

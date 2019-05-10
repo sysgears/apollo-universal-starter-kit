@@ -25,7 +25,7 @@ const Report = ({ t }: ReportProps) => {
 
   return (
     <Query query={ReportQuery}>
-      {({ loading, data }) => {
+      {({ loading, data }: any) => {
         if (loading) {
           return t('loading');
         }

@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "es2017",
+    "lib": ["es2015", "dom", "esnext"]
+  },
+  "include": [
+    "**/typings.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.vue"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

@@ -16,6 +16,7 @@ const config = {
   },
   options: {
     cache: '../../.cache',
+    nodeDebugger: false,
     tsLoaderConfig: { transpileOnly: false, configFile: 'tsconfig.node.json' },
     ssr: true,
     minify: false,

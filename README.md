@@ -13,7 +13,7 @@
 
 ## Official Website
 
-Visit [apollokit.org] to learn about Apollo Universal Starter Kit. You can also test a [demo application] deployed on 
+Visit [apollokit.org] to learn about Apollo Universal Starter Kit. You can also test a [demo application] deployed on
 Heroku.
 
 ## Description
@@ -24,13 +24,13 @@ Apollo Universal Starter Kit is an SEO-friendly, fully configured, modular start
 JavaScript] applications. You can use this kit to create your applications in JavaScript or TypeScript for all major
 platforms &ndash; mobile, web, and server.
 
-Apollo Universal Starter Kit is built with [Apollo], [GraphQL], [React], [Angular], [React Native], [Expo], [Knex.js], 
+Apollo Universal Starter Kit is built with [Apollo], [GraphQL], [React], [Angular], [React Native], [Expo], [Knex.js],
 and [Express] with support for relational databases such as PostgreSQL, MySQL, and SQLite.
 
-[TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla 
+[TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla
 JavaScript (the ES6 and ES7 syntax) and TypeScript when creating your modules.
 
-The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design Mobile], and [NativeBase] to provide 
+The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design Mobile], and [NativeBase] to provide
 great possibilities for styling for your web and mobile applications.
 
 ## Table of Contents
@@ -81,33 +81,33 @@ installing the application dependencies and configuring them, but you're also co
 functionalities over and over again. And you never have time to develop a starter codebase that you can reuse across
 all of your projects.
 
-To relieve you from the burden of configuring the project, developing the application structure, and implementing 
+To relieve you from the burden of configuring the project, developing the application structure, and implementing
 typical features, we created Apollo Universal Starter Kit.
 
 Apollo Universal Starter Kit provides you with a client-server-mobile application that you can employ as a foundation
 for developing new web or mobile projects using popular tools from the JavaScript ecosystem. But our starter kit does so
-much more than just creating a mix of popular JS technologies &mdash; it's powered by a few **custom** libraries and 
-solutions to simplify managing project configurations, creating new modules, building GraphQL queries, and perform many 
+much more than just creating a mix of popular JS technologies &mdash; it's powered by a few **custom** libraries and
+solutions to simplify managing project configurations, creating new modules, building GraphQL queries, and perform many
 other tasks.
 
-One such solution that helps to configure and build Apollo Universal Starter Kit-based projects is [Zen], a custom build 
-tool that configures the project for all the platforms &mdash; web, server, and mobile. With Zen, we drastically reduced 
+One such solution that helps to configure and build Apollo Universal Starter Kit-based projects is [Zen], a custom build
+tool that configures the project for all the platforms &mdash; web, server, and mobile. With Zen, we drastically reduced
 the amount of errors caused by third-party libraries used for building JavaScript projects.
 
 The starter kit also consists of many modules that you can augment and adapt to develop your specific application. Also,
-you can use those prebuilt modules as a reference when implementing basic features for your applications even if you 
+you can use those prebuilt modules as a reference when implementing basic features for your applications even if you
 create them using other technologies.
 
 ### Architecture and Implemented Modules
 
 Among all the approaches to building the application architecture, we opt for the _disposable fractal-based modular
-architecture_. Thanks to it, it's possible to remove any built-in module from Apollo Universal Starter Kit without 
-breaking the application. We recommend that you develop your custom modules with the same idea in mind when using our 
+architecture_. Thanks to it, it's possible to remove any built-in module from Apollo Universal Starter Kit without
+breaking the application. We recommend that you develop your custom modules with the same idea in mind when using our
 starter kit.
 
 Apollo Universal Starter Kit comes with the following modules:
 
-* **Authentication**. Authentication via social networks (Facebook, GitHub, LinkedIn, and Google using OAuth) and 
+* **Authentication**. Authentication via social networks (Facebook, GitHub, LinkedIn, and Google using OAuth) and
 password-based authentication; refreshing a forgotten password
 * **Authorization**. Permission-based authorization with various user roles
 * **Contact Us Form**. Functionality to send messages to the server
@@ -122,7 +122,7 @@ password-based authentication; refreshing a forgotten password
 If you don't want to use the pre-built modules in your project, you can remove them using a [dedicated CLI]. For module
 names, see the names of directories under `modules`.
 
-To learn more about the features and modules available in Apollo Universal Starter Kit, follow to the dedicated section 
+To learn more about the features and modules available in Apollo Universal Starter Kit, follow to the dedicated section
 [Features and Modules].
 
 ## Demo
@@ -157,7 +157,7 @@ cd apollo-universal-starter-kit
 
 **NOTE**: The master branch is not recommended for development. Use it at your own risk.
 
-**NOTE**: If you're going to use Windows to develop with Apollo Universal Starter Kit, you need to additionally enable 
+**NOTE**: If you're going to use Windows to develop with Apollo Universal Starter Kit, you need to additionally enable
 symlinks _before_ you run the project.
 
 For Windows 10:
@@ -167,7 +167,7 @@ For Windows 10:
 * Click the **For Developers** tab
 * In the **Use developer features** window, switch to **Developer Mode**
 
-**NOTE**: You can remove the unnecessary stacks from Apollo Universal Starter Kit by using the CLI. Consult a 
+**NOTE**: You can remove the unnecessary stacks from Apollo Universal Starter Kit by using the CLI. Consult a
 [respective CLI section]. Alternatively, you can use the capabilities of your operating system. For example, by running
 the command below, you can remove all Scala server files:
 
@@ -175,7 +175,7 @@ the command below, you can remove all Scala server files:
 find -name server-scala | xargs rm -rf
 ```
 
-If you don't need the ready-made modules, you can also remove them using the [custom CLI]. 
+If you don't need the ready-made modules, you can also remove them using the [custom CLI].
 
 2. Install the dependencies. Make sure that you use Yarn 1.0.0 or higher.
 
@@ -183,7 +183,7 @@ If you don't need the ready-made modules, you can also remove them using the [cu
 yarn
 ```
 
-You can use NPM instead of Yarn to handle the starter kit dependencies and to run scripts. Throughout the Apollo 
+You can use NPM instead of Yarn to handle the starter kit dependencies and to run scripts. Throughout the Apollo
 Universal Starter Kit documentation, we'll always use Yarn.
 
 3. Seed sample data to the database. The command below will create new tables with sample data in SQLite:
@@ -192,7 +192,7 @@ Universal Starter Kit documentation, we'll always use Yarn.
 yarn seed
 ```
 
-SQLite is a typical default relational database installed in most Linux distributions including Mac OS X; otherwise, 
+SQLite is a typical default relational database installed in most Linux distributions including Mac OS X; otherwise,
 consult [SQLite installation guide].
 
 4. Run the starter kit in development mode:
@@ -201,10 +201,10 @@ consult [SQLite installation guide].
 yarn watch
 ```
 
-The server application will be running on [http://localhost:3000], while the client application will be running on 
+The server application will be running on [http://localhost:3000], while the client application will be running on
 [http://localhost:8080]. The terminal will tell your the exact ports.
 
-For more information about running this starter kit for mobile development or Docker, consult the [Getting Started] 
+For more information about running this starter kit for mobile development or Docker, consult the [Getting Started]
 guide.
 
 ## Project Structure
@@ -212,7 +212,7 @@ guide.
 The project structure presents generally accepted guidelines and patterns for building scalable web and mobile
 applications.
 
-The structure is _fractal_ meaning the available functionality is grouped primarily by feature rather than by file type. 
+The structure is _fractal_ meaning the available functionality is grouped primarily by feature rather than by file type.
 But the current structure isn't prescriptive, and you can change it however you like.
 
 ```
@@ -232,8 +232,8 @@ apollo-universal-starter-kit
 └── tools                       # All build and CLI-related files
 ```
 
-Inside `modules`, you'll find all the prebuilt modules that Apollo Universal Starter Kit comes with. Each module under 
-`modules` contains sub-directories with module implementations for different technologies. For example, if you look up 
+Inside `modules`, you'll find all the prebuilt modules that Apollo Universal Starter Kit comes with. Each module under
+`modules` contains sub-directories with module implementations for different technologies. For example, if you look up
 the module `modules/core`, you'll see the following sub-modules:
 
 ```
@@ -265,6 +265,7 @@ Starter Kit.
 * [Configuring Apollo Universal Starter Kit]
 * [Features and Modules]
 * [Writing Code]
+* [Debugging Code]
 * [Available Scripts]
 * [Frequently Asked Questions]
 * [Project Structure]
@@ -371,6 +372,7 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [respective cli section]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md#selecting-the-technology-stack-with-choosestack
 [features and modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/featuresAndModules.md
 [writing code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/writingCode.md
+[debugging code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/debugging.md
 [apollo universal starter kit cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/cli.md
 [available scripts]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/yarnScripts.md
 [frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/faq.md

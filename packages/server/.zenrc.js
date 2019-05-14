@@ -16,7 +16,10 @@ const config = {
   },
   options: {
     cache: '../../.cache',
+    nodeDebugger: false,
+    tsLoaderConfig: { transpileOnly: false, configFile: 'tsconfig.node.json' },
     ssr: true,
+    minify: false,
     defines: {
       __DEV__: process.env.NODE_ENV !== 'production',
       __SERVER_PORT__: 8080,

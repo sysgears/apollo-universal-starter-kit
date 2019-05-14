@@ -1,8 +1,0 @@
-{
-  "extends": "../../tsconfig.json",
-  "include": [
-    "../../**/typings.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
-}

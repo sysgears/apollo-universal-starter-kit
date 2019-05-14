@@ -1,0 +1,14 @@
+input GoogleExpoLoginInput {
+  id: String!
+  name: String!
+  email: String!
+}
+
+type GoogleExpoLoginPayload {
+  accessToken: String
+  refreshToken: String
+}
+
+extend type Mutation {
+  googleExpoLogin(input: GoogleExpoLoginInput!): GoogleExpoLoginPayload!
+}

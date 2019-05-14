@@ -1,0 +1,6 @@
+mutation googleExpoLogin($input: GoogleExpoLoginInput!) {
+  googleExpoLogin(input: $input) {
+    accessToken
+    refreshToken
+  }
+}

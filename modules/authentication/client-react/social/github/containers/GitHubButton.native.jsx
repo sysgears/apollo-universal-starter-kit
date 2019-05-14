@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { FontAwesome } from '@expo/vector-icons';
 import { lookStyles } from '@gqlapp/look-client-react-native';
 
-import buildRedirectUrlForMobile from '../../../helpers';
+import { buildRedirectUrlForMobile } from '../../../helpers';
 
 const {
   iconWrapper,

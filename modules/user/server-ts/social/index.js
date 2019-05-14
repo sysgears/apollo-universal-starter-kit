@@ -3,6 +3,7 @@ import facebook, { facebookData } from './facebook';
 import github, { githubData } from './github';
 import google, { googleData } from './google';
 import linkedin, { linkedinData } from './linkedIn';
+import googleExpo from './googleExpo';
 
 const social = {
   ...linkedinData,
@@ -11,6 +12,6 @@ const social = {
   ...githubData
 };
 
-export default new AuthModule(facebook, github, google, linkedin, {
+export default new AuthModule(facebook, github, google, linkedin, googleExpo, {
   appContext: { social }
 });

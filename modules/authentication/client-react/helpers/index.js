@@ -1,7 +1,8 @@
 import url from 'url';
 import { Constants } from 'expo';
+import settings from '@gqlapp/config';
 
-export default function buildRedirectUrlForMobile(authType) {
+export const buildRedirectUrlForMobile = authType => {
   const { protocol, hostname, port } = url.parse(__WEBSITE_URL__);
   const expoHostname = `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = process.env.NODE_ENV === 'production' ? hostname : expoHostname;
@@ -9,4 +10,21 @@ export default function buildRedirectUrlForMobile(authType) {
   return `${protocol}//${urlHostname}${port ? ':' + port : ''}/auth/${authType}?expoUrl=${encodeURIComponent(
     Constants.linkingUrl
   )}`;
-}
+};
+
+export const defineLoginWay = (network = 'google', login, expoLogin) => {
+  const {
+    auth: {
+      social: {
+        [network]: { enabled: isLogin },
+        [`${network}Expo`]: { enabled: isExpoLogin }
+      }
+    }
+  } = settings;
+
+  if ((isLogin && isExpoLogin) || isLogin) {
+    return login;
+  } else {
+    return expoLogin;
+  }
+};

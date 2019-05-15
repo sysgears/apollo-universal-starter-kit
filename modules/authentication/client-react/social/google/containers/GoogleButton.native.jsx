@@ -76,7 +76,7 @@ const googleExpoLogin = async client => {
 
 /**
  * Defines and returns a method for processing authorization
- * depending on the configuration
+ * depending on the app settings
  */
 const handleLogin = defineLoginWay('google', googleLogin, googleExpoLogin);
 

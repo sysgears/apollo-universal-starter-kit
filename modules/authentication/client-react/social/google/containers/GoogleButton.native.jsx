@@ -5,18 +5,17 @@ import { Google, WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
 import { lookStyles } from '@gqlapp/look-client-react-native';
-import { setItem } from '@gqlapp/core-common/clientStorage';
 
 import settings from '@gqlapp/config';
 import authentication from '../../../index';
-import { buildRedirectUrlForMobile } from '../../../helpers';
+import { buildRedirectUrlForMobile, defineLoginWay, saveTokens } from '../../../helpers';
 
 import GOOGLE_EXPO_LOGIN from '../graphql/GoogleExpoLogin.graphql';
 
 const {
   auth: {
     social: {
-      googleExpo: { androidClientId }
+      googleExpo: { androidClientId, iosClientId }
     }
   }
 } = settings;
@@ -41,25 +40,20 @@ const googleLogin = () => {
   }
 };
 
-const saveTokens = async ({ accessToken, refreshToken }) => {
-  await setItem('accessToken', accessToken);
-  await setItem('refreshToken', refreshToken);
-};
-
-// const  googleExpoLogin = async() => {
 const googleExpoLogin = async client => {
   try {
     const profile = await Google.logInAsync({
       androidClientId,
+      iosClientId,
       scopes: ['profile', 'email']
     });
 
     if (profile.type === 'success') {
-      console.log('profile --->', profile);
-
       const {
         user: { email, id, name }
       } = profile;
+
+      // Gets accessToken, refreshToken and save them to storage
       const { data } = await client.mutate({
         mutation: GOOGLE_EXPO_LOGIN,
         variables: {
@@ -70,9 +64,8 @@ const googleExpoLogin = async client => {
       if (data && data.googleExpoLogin) {
         const { accessToken, refreshToken } = data.googleExpoLogin;
         await saveTokens({ accessToken, refreshToken });
+        await authentication.doLogin(client);
       }
-
-      await authentication.doLogin(client);
     } else {
       return { cancelled: true };
     }
@@ -81,12 +74,11 @@ const googleExpoLogin = async client => {
   }
 };
 
-// const handleLogin = defineLoginWay('google', googleLogin, googleExpoLogin);
+const handleLogin = defineLoginWay('google', googleLogin, googleExpoLogin);
 
-const GoogleButton = withApollo(data => {
-  const { text, client } = data;
+const GoogleButton = withApollo(({ text, client }) => {
   return (
-    <TouchableOpacity style={styles.buttonContainer} onPress={() => googleExpoLogin(client)}>
+    <TouchableOpacity style={styles.buttonContainer} onPress={() => handleLogin(client)}>
       <View style={styles.btnIconContainer}>
         <FontAwesome name="google-plus-square" size={30} style={{ color: '#fff', marginLeft: 10 }} />
         <View style={styles.separator} />
@@ -98,19 +90,19 @@ const GoogleButton = withApollo(data => {
   );
 });
 
-const GoogleLink = withApollo(({ text }) => {
+const GoogleLink = withApollo(({ text, client }) => {
   return (
-    <TouchableOpacity onPress={googleLogin} style={styles.link}>
+    <TouchableOpacity onPress={() => handleLogin(client)} style={styles.link}>
       <Text style={styles.linkText}>{text}</Text>
     </TouchableOpacity>
   );
 });
 
-const GoogleIcon = () => (
+const GoogleIcon = withApollo(({ client }) => (
   <View style={styles.iconWrapper}>
-    <FontAwesome style={{ color: '#c43832' }} onPress={googleLogin} name="google-plus-square" size={45} />
+    <FontAwesome style={{ color: '#c43832' }} onPress={() => handleLogin(client)} name="google-plus-square" size={45} />
   </View>
-);
+));
 
 class GoogleComponent extends React.Component {
   render() {

@@ -1,5 +1,6 @@
 import url from 'url';
 import { Constants } from 'expo';
+import { setItem } from '@gqlapp/core-common/clientStorage';
 import settings from '@gqlapp/config';
 
 export const buildRedirectUrlForMobile = authType => {
@@ -23,8 +24,13 @@ export const defineLoginWay = (network = 'google', login, expoLogin) => {
   } = settings;
 
   if ((isLogin && isExpoLogin) || isLogin) {
-    return login;
+    return () => login();
   } else {
-    return expoLogin;
+    return client => expoLogin(client);
   }
+};
+
+export const saveTokens = async ({ accessToken, refreshToken }) => {
+  await setItem('accessToken', accessToken);
+  await setItem('refreshToken', refreshToken);
 };

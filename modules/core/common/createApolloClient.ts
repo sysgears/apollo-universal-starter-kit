@@ -12,10 +12,12 @@ import ApolloCacheRouter from 'apollo-cache-router';
 import { hasDirectives } from 'apollo-utilities';
 import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
+import i18n from 'i18next';
 
 import settings from '@gqlapp/config';
 
 import log from './log';
+import { PLATFORM } from '../../../packages/common/utils';
 
 interface CreateApolloClientOptions {
   apiUrl?: string;
@@ -61,7 +63,7 @@ const createApolloClient = ({
   const queryLink = createNetLink
     ? createNetLink(apiUrl, getApolloClient)
     : new BatchHttpLink({
-        uri: apiUrl,
+        uri: settings.i18n.enabled && PLATFORM === 'mobile' ? () => `${apiUrl}?lng=${i18n.language}` : apiUrl,
         credentials: 'include',
         fetch
       });

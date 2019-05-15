@@ -9,7 +9,8 @@ import settings from '@gqlapp/config';
 const beforeware = (app: Express) => {
   if (settings.i18n.enabled) {
     app.use((req: any, res, next) => {
-      const lang = req.universalCookies.get(settings.i18n.cookie) || req.acceptsLanguages(settings.i18n.langList);
+      const lang =
+        req.query.lng || req.universalCookies.get(settings.i18n.cookie) || req.acceptsLanguages(settings.i18n.langList);
       req.universalCookies.set(settings.i18n.cookie, lang);
       req.lng = lang;
       next();

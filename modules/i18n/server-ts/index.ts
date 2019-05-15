@@ -11,6 +11,7 @@ const beforeware = (app: Express) => {
     app.use((req: any, res, next) => {
       const lang = req.universalCookies.get(settings.i18n.cookie) || req.acceptsLanguages(settings.i18n.langList);
       req.universalCookies.set(settings.i18n.cookie, lang);
+      req.lng = lang;
       next();
     });
 

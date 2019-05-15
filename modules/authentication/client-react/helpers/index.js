@@ -13,12 +13,12 @@ export const buildRedirectUrlForMobile = authType => {
   )}`;
 };
 
-export const defineLoginWay = (network = 'google', login, expoLogin) => {
+export const defineLoginWay = (socialNetwork, login, expoLogin) => {
   const {
     auth: {
       social: {
-        [network]: { enabled: isLogin },
-        [`${network}Expo`]: { enabled: isExpoLogin }
+        [socialNetwork]: { enabled: isLogin },
+        [`${socialNetwork}Expo`]: { enabled: isExpoLogin }
       }
     }
   } = settings;

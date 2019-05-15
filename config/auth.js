@@ -56,7 +56,7 @@ export default {
     googleExpo: {
       enabled: true,
       androidClientId: process.env.ANDROID_CLIENTID,
-      iosClientId: ''
+      iosClientId: process.env.IOS_CLIENTID
     }
   }
 };

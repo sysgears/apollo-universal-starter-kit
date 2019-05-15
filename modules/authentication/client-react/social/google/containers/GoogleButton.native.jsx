@@ -74,6 +74,10 @@ const googleExpoLogin = async client => {
   }
 };
 
+/**
+ * Defines and returns a method for processing authorization
+ * depending on the configuration
+ */
 const handleLogin = defineLoginWay('google', googleLogin, googleExpoLogin);
 
 const GoogleButton = withApollo(({ text, client }) => {

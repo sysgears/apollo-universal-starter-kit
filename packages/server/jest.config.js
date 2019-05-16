@@ -1,5 +1,8 @@
 module.exports = {
-  testMatch: ['<rootDir>/modules/**/server-ts/**/*.test.[jt]s?(x)'],
+  testMatch: [
+    '<rootDir>/modules/**/server-ts/**/*.test.[jt]s?(x)',
+    '<rootDir>/modules/**/common-react/**/*.test.[jt]s?(x)'
+  ],
   globalSetup: '<rootDir>/packages/server/src/__tests__/jestSetup.js',
   rootDir: '../..',
   resolver: './packages/server/jest.resolver',

@@ -136,6 +136,7 @@
     "isomorphic-style-loader": "^4.0.0",
     "jest": "^24.8.0",
     "jest-transform-graphql": "^2.1.0",
+    "jest-transform-stub": "^2.0.0",
     "lerna": "^3.4.0",
     "less": "^3.0.2",
     "less-loader": "^4.1.0",

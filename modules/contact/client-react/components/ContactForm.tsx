@@ -14,7 +14,7 @@ interface ContactFormProps {
   onSubmit: (values: ContactForm) => void;
 }
 
-const ContactForm = ({
+const BaseContactForm = ({
   values,
   handleSubmit,
   t,
@@ -62,4 +62,4 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default ContactFormWithFormik(BaseContactForm);

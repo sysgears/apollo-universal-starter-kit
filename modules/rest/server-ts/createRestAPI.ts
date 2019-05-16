@@ -3,15 +3,15 @@ import { GraphQLSchema } from 'graphql';
 import bodyParser from 'body-parser';
 
 import ServerModule from '@gqlapp/module-server-ts';
-import sofa, { OpenAPI } from '@hofstadter-io/sofa-api';
 import settings from '@gqlapp/config';
 
 import swaggerUi from 'swagger-ui-express';
 
 const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModule) => {
   // need to enable explicitly
-  if (settings.rest.enabled) {
+  if (settings.rest.enabled && !__TEST__) {
     // setup the openApi objecct
+    const { default: sofa, OpenAPI } = require('@hofstadter-io/sofa-api');
     const openApi = OpenAPI({
       schema,
       info: {

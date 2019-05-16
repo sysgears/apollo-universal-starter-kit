@@ -45,9 +45,11 @@ const logPageView = (location: any) => {
   ReactGA.pageview(location.pathname);
 };
 
-// Initialize Google Analytics and send events on each location change
-ReactGA.initialize(settings.analytics.ga.trackingId);
-logPageView(window.location);
+if (!__TEST__) {
+  // Initialize Google Analytics and send events on each location change
+  ReactGA.initialize(settings.analytics.ga.trackingId);
+  logPageView(window.location);
+}
 
 history.listen(location => logPageView(location));
 

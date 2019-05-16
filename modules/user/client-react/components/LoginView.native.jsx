@@ -4,9 +4,9 @@ import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { translate } from '@gqlapp/i18n-client-react';
 import { lookStyles } from '@gqlapp/look-client-react-native';
-import { setItem } from '@gqlapp/core-common/clientStorage';
 import authentication from '@gqlapp/authentication-client-react';
 
+import saveTokens from '../helpers/saveTokens';
 import LoginForm from './LoginForm';
 
 class LoginView extends React.PureComponent {
@@ -19,21 +19,10 @@ class LoginView extends React.PureComponent {
   }
 
   handleOpenURL = async ({ url }) => {
-    const dataRegExp = /data=([^#]+)/;
-    if (!url.match(dataRegExp)) return;
-
-    // Extract stringified user string out of the URL
-    const [, data] = url.match(dataRegExp);
-    const decodedData = JSON.parse(decodeURI(data));
     const { client } = this.props;
 
-    if (decodedData.tokens) {
-      await setItem('accessToken', decodedData.tokens.accessToken);
-      await setItem('refreshToken', decodedData.tokens.refreshToken);
-
-      await authentication.doLogin(client);
-    }
-
+    await saveTokens(url);
+    await authentication.doLogin(client);
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();
     }

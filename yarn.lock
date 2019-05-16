@@ -1265,6 +1265,15 @@
     humps "^2.0.1"
     prop-types "^15.5.10"
 
+"@gqlapp/babel-plugin-graphql-tag@^2.2.0":
+  version "2.2.0"
+  resolved "https://registry.yarnpkg.com/@gqlapp/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-2.2.0.tgz#ee839be8e946256b26ec5de5aeaab1a6424f56d6"
+  integrity sha512-BGaV2x8z/XgPrV7a+xIjdBpYx9U76InnB69eLlWPzyIGeQelVqVI89SrJB7+qruJZ9PVIetiuL66KWu070W34Q==
+  dependencies:
+    "@babel/parser" "^7.3.2"
+    babel-literal-to-ast "^2.1.0"
+    debug "^4.1.1"
+
 "@hofstadter-io/sofa-api@^0.3.1":
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/@hofstadter-io/sofa-api/-/sofa-api-0.3.1.tgz#f59b49ff7adff08267cd89c8f95531f79570a32c"
@@ -4335,15 +4344,6 @@ babel-plugin-check-es2015-constants@6.22.0, babel-plugin-check-es2015-constants@
   integrity sha1-NRV7EBQm/S/9PaP3XH0ekYNbv4o=
   dependencies:
     babel-runtime "^6.22.0"
-
-babel-plugin-graphql-tag@^2.2.0:
-  version "2.2.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-graphql-tag/-/babel-plugin-graphql-tag-2.2.0.tgz#3d7186c628a789d89b454bb9299f14641ce723f3"
-  integrity sha512-+5eJCFt0Ap41mwkukfZASuEAC0uaBjKLmjkDIu5MAW4T83G36zNNbKpZQmL2irkHjTdP6lWoxBbkRBt/wts12w==
-  dependencies:
-    "@babel/parser" "^7.3.2"
-    babel-literal-to-ast "^2.1.0"
-    debug "^4.1.1"
 
 babel-plugin-import@^1.7.0:
   version "1.11.0"

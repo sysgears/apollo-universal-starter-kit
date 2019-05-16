@@ -1,6 +1,5 @@
 module.exports = api => {
   const isTest = api.env('test');
-  console.log('we are in client conf', isTest);
   api.cache(true);
   if (isTest) {
     return {

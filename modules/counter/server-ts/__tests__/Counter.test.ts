@@ -1,14 +1,10 @@
-import chai from 'chai';
-
-import { getServer, getApollo } from '@gqlapp/testing-server-ts';
+import { getApollo } from '@gqlapp/testing-server-ts';
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 describe('Counter example API works', () => {
-  let server: any;
   let apollo: any;
 
   beforeAll(() => {
-    server = getServer();
     apollo = getApollo();
   });
 

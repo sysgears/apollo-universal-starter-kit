@@ -12,18 +12,6 @@ describe('Counter example API works', () => {
     apollo = getApollo();
   });
 
-  it('Has GraphiQL endpoint', () => {
-    return chai
-      .request(server)
-      .keepOpen()
-      .get('/graphiql')
-      .set('Accept', 'text/html')
-      .then(res => {
-        res.status.should.be.eql(200);
-        res.body.should.be.eql({});
-      });
-  });
-
   it('Responds to counter get GraphQL query', async () => {
     const result = await apollo.query({ query: COUNTER_QUERY });
 

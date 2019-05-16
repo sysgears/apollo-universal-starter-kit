@@ -110,6 +110,7 @@
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^24.8.0",
+    "babel-plugin-graphql-tag": "^2.2.0",
     "babel-plugin-import": "^1.7.0",
     "babel-preset-minify": "^0.5.0-alpha.5a128fd5",
     "babel-preset-vue": "^2.0.2",

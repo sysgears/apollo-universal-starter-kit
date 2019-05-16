@@ -19,15 +19,13 @@ export const setup = async () => {
   await populateTestDb();
 
   server = await serverPromise;
-
-  global.WebSocket = WebSocket;
-  // // TODO: remove any type after converting the createApolloClient.js file into Typescript
-  apollo = createApolloClient({ apiUrl: `http://localhost:${process.env.PORT}/graphql` } as any);
 };
 
 export const cleanup = () => {
-  // This does not disconnect Apollo Client from server, and we have to use --forceExit for jest
-  apollo.stop();
+  if (apollo) {
+    // This does not disconnect Apollo Client from server, and we have to use --forceExit for jest
+    apollo.stop();
+  }
   knex.destroy();
   if (server) {
     server.close();
@@ -36,4 +34,12 @@ export const cleanup = () => {
 };
 
 export const getServer = () => server;
-export const getApollo = () => apollo;
+export const getApollo = () => {
+  if (!apollo) {
+    global.WebSocket = WebSocket;
+    // TODO: remove any type after converting the createApolloClient.js file into Typescript
+    apollo = createApolloClient({ apiUrl: `http://localhost:${process.env.PORT}/graphql` } as any);
+  }
+
+  return apollo;
+};

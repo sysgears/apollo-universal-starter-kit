@@ -1,6 +1,6 @@
 module.exports = {
   testMatch: ['**/*.test.[jt]s?(x)'],
-  setupFilesAfterEnv: ['<rootDir>/packages/server/src/__tests__/jestSetup.ts'],
+  globalSetup: '<rootDir>/packages/server/src/__tests__/jestSetup.js',
   rootDir: '../..',
   resolver: './packages/server/jest.resolver',
   transform: {

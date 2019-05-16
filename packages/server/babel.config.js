@@ -3,8 +3,12 @@ module.exports = api => {
   api.cache(true);
   if (isTest) {
     return {
-      presets: ['@babel/preset-react', ['@babel/preset-env', { targets: { node: true } }], '@babel/preset-typescript'],
-      plugins: ['@babel/plugin-proposal-class-properties']
+      presets: [
+        '@babel/preset-typescript',
+        '@babel/preset-react',
+        ['@babel/preset-env', { targets: { node: true }, modules: 'commonjs' }]
+      ],
+      plugins: [['@babel/plugin-proposal-class-properties', { loose: true }], 'graphql-tag']
     };
   } else {
     return {

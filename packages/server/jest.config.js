@@ -1,7 +1,8 @@
 module.exports = {
   testMatch: ['**/*.test.[jt]s?(x)'],
-  setupFiles: ['./packages/server/src/__tests__/entry.ts'],
+  setupFilesAfterEnv: ['<rootDir>/packages/server/src/__tests__/jestSetup.ts'],
   rootDir: '../..',
+  resolver: './packages/server/jest.resolver',
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
     '.*': 'babel-jest'

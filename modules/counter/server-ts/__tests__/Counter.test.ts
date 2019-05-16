@@ -1,7 +1,9 @@
+import chai from 'chai';
+
 import { getServer, getApollo } from '@gqlapp/testing-server-ts';
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
-describe('Counter example API', () => {
+describe('Counter example API works', () => {
   let server: any;
   let apollo: any;
 
@@ -10,14 +12,14 @@ describe('Counter example API', () => {
     apollo = getApollo();
   });
 
-  it('has GraphiQL endpoint', () => {
+  it('Has GraphiQL endpoint', () => {
     return chai
       .request(server)
       .keepOpen()
       .get('/graphiql')
       .set('Accept', 'text/html')
       .then(res => {
-        res.should.have.status(200);
+        res.status.should.be.eql(200);
         res.body.should.be.eql({});
       });
   });

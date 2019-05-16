@@ -11,9 +11,9 @@ import { Renderer, click, blur, find, change, updateContent, wait } from '@gqlap
 
 describe('Contact UI works', () => {
   const renderer = new Renderer({});
+  renderer.history.push('/contact');
   const app = renderer.mount();
   const container = app.container;
-  renderer.history.push('/contact');
   const content = updateContent(app.container);
   const contactForm = find(container, 'form[name="contact"]');
   const nameInput = find(contactForm, '[name="name"]');

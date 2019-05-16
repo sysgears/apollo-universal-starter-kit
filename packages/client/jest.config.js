@@ -5,6 +5,7 @@ module.exports = {
   rootDir: '../..',
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
+    'locales[\\/]index.[jt]s': '<rootDir>/jest-transform-i18next',
     '.*': 'babel-jest'
   },
   modulePathIgnorePatterns: ['<rootDir>/modules/chat'],

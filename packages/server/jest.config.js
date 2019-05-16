@@ -8,6 +8,7 @@ module.exports = {
   resolver: './packages/server/jest.resolver',
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
+    'locales[\\/]index.[jt]s': '<rootDir>/jest-transform-i18next',
     '.*': 'babel-jest'
   },
   moduleNameMapper: {

@@ -15,7 +15,7 @@ class BaseModule extends GraphQLModule {
   }
 
   get reducers() {
-    return merge({}, ...this.reducer);
+    return merge({}, ...(this.reducer || []));
   }
 }
 

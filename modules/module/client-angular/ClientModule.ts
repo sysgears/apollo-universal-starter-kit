@@ -15,11 +15,11 @@ class ClientModule extends BaseModule {
   }
 
   get modules(): any {
-    return this.module.map((module: any) => module);
+    return (this.module || []).map((module: any) => module);
   }
 
   get routes(): Routes {
-    return this.route.map((component: Route) => component);
+    return (this.route || []).map((component: Route) => component);
   }
 }
 

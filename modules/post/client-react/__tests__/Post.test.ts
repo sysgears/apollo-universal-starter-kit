@@ -1,5 +1,4 @@
 import chai, { expect } from 'chai';
-import { step } from 'mocha-steps';
 import _ from 'lodash';
 import {
   find,
@@ -19,7 +18,7 @@ import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
 
 chai.should();
 
-const createNode = id => ({
+const createNode = (id: number) => ({
   id,
   title: `Post title ${id}`,
   content: `Post content ${id}`,
@@ -30,7 +29,7 @@ const createNode = id => ({
   __typename: 'Post'
 });
 
-const mutations = {
+const mutations: any = {
   editPost: () => {},
   addComment: () => {},
   editComment: () => {},
@@ -39,7 +38,7 @@ const mutations = {
 
 const mocks = {
   Query: () => ({
-    posts(ignored, { after }) {
+    posts(ignored: any, { after }: any) {
       const totalCount = 4;
       const edges = [];
       const postId = after < 1 ? +after + 1 : +after;
@@ -61,22 +60,22 @@ const mocks = {
         __typename: 'Posts'
       };
     },
-    post(obj, { id }) {
+    post(obj: any, { id }: any) {
       return createNode(id);
     }
   }),
   Mutation: () => ({
-    deletePost: (obj, { id }) => createNode(id),
-    deleteComment: (obj, { input }) => input,
+    deletePost: (obj: any, { id }: any) => createNode(id),
+    deleteComment: (obj: any, { input }: any) => input,
     ...mutations
   })
 };
 
 describe('Posts and comments example UI works', () => {
   const renderer = new Renderer(mocks, {});
-  let app;
-  let container;
-  let content;
+  let app: any;
+  let container: any;
+  let content: any;
 
   beforeEach(() => {
     // Reset spy mutations on each step
@@ -87,7 +86,7 @@ describe('Posts and comments example UI works', () => {
     }
   });
 
-  step('Posts page renders without data with no post message', () => {
+  it('Posts page renders without data with no post message', () => {
     app = renderer.mount();
     container = app.container;
     renderer.history.push('/posts');
@@ -95,28 +94,28 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('There are no posts yet.');
   });
 
-  step('Posts page renders with data', () => {
+  it('Posts page renders with data', () => {
     expect(content.textContent).to.include('Post title 1');
     expect(content.textContent).to.include('Post title 2');
     expect(content.textContent).to.include('2 / 4');
   });
 
-  step('Clicking load more works', () => {
+  it('Clicking load more works', () => {
     const loadMoreButton = find(container, '#load-more');
     click(loadMoreButton);
   });
 
-  step('Clicking load more loads more posts', () => {
+  it('Clicking load more loads more posts', () => {
     expect(content.textContent).to.include('Post title 3');
     expect(content.textContent).to.include('Post title 4');
     expect(content.textContent).to.include('4 / 4');
   });
 
-  step('Check subscribed to post list updates', () => {
+  it('Check subscribed to post list updates', () => {
     expect(renderer.getSubscriptions(POSTS_SUBSCRIPTION)).has.lengthOf(1);
   });
 
-  step('Updates post list on post delete from subscription', () => {
+  it('Updates post list on post delete from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription.next({
       data: {
@@ -132,7 +131,7 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('3 / 3');
   });
 
-  step('Updates post list on post create from subscription', () => {
+  it('Updates post list on post create from subscription', () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
     subscription.next(
       _.cloneDeep({
@@ -150,8 +149,8 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('4 / 4');
   });
 
-  step('Clicking delete optimistically removes post', () => {
-    mutations.deletePost = (obj, { id }) => {
+  it('Clicking delete optimistically removes post', () => {
+    mutations.deletePost = (obj: any, { id }: any) => {
       return createNode(id);
     };
 
@@ -162,29 +161,29 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('3 / 3');
   });
 
-  step('Clicking delete removes the post', () => {
+  it('Clicking delete removes the post', () => {
     expect(content.textContent).to.include('Post title 3');
     expect(content.textContent).to.not.include('Post title 4');
     expect(content.textContent).to.include('3 / 3');
   });
 
-  step('Clicking on post works', () => {
+  it('Clicking on post works', () => {
     const postLinks = findAll(container, '.post-link');
     click(postLinks[postLinks.length - 1]);
   });
 
-  step('Clicking on post opens post form', () => {
+  it('Clicking on post opens post form', () => {
     expect(content.textContent).to.include('Edit Post');
     const postForm = find(container, 'form[name="post"]');
     expect(find(postForm, '[name="title"]').value).to.equal('Post title 3');
     expect(find(postForm, '[name="content"]').value).to.equal('Post content 3');
   });
 
-  step('Check subscribed to post updates', () => {
+  it('Check subscribed to post updates', () => {
     expect(renderer.getSubscriptions(POST_SUBSCRIPTION)).has.lengthOf(1);
   });
 
-  step('Updates post form on post updated from subscription', () => {
+  it('Updates post form on post updated from subscription', () => {
     const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
     subscription.next({
       data: {
@@ -206,8 +205,8 @@ describe('Posts and comments example UI works', () => {
     expect(find(postForm, '[name="content"]').value).to.equal('Post content 204');
   });
 
-  step('Post editing form works', done => {
-    mutations.editPost = (obj, { input }) => {
+  it('Post editing form works', done => {
+    mutations.editPost = (obj: any, { input }: any) => {
       expect(input.id).to.equal(3);
       expect(input.title).to.equal('Post title 33');
       expect(input.content).to.equal('Post content 33');
@@ -221,19 +220,19 @@ describe('Posts and comments example UI works', () => {
     submit(postForm);
   });
 
-  step('Check opening post by URL', () => {
+  it('Check opening post by URL', () => {
     renderer.history.push('/post/3');
   });
 
-  step('Opening post by URL works', () => {
+  it('Opening post by URL works', () => {
     const postForm = find(container, 'form[name="post"]');
     expect(content.textContent).to.include('Edit Post');
     expect(find(postForm, '[name="title"]').value).to.equal('Post title 33');
     expect(find(postForm, '[name="content"]').value).to.equal('Post content 33');
   });
 
-  step('Comment adding works', done => {
-    mutations.addComment = (obj, { input }) => {
+  it('Comment adding works', done => {
+    mutations.addComment = (obj: any, { input }: any) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Post comment 24');
       done();
@@ -245,11 +244,11 @@ describe('Posts and comments example UI works', () => {
     submit(commentForm);
   });
 
-  step('Comment adding works after submit', () => {
+  it('Comment adding works after submit', () => {
     expect(content.textContent).to.include('Post comment 24');
   });
 
-  step('Updates comment form on comment added got from subscription', () => {
+  it('Updates comment form on comment added got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription.next({
       data: {
@@ -270,7 +269,7 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.include('Post comment 3');
   });
 
-  step('Updates comment form on comment deleted got from subscription', () => {
+  it('Updates comment form on comment deleted got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
     subscription.next({
       data: {
@@ -290,7 +289,7 @@ describe('Posts and comments example UI works', () => {
     expect(content.textContent).to.not.include('Post comment 3');
   });
 
-  step('Comment deleting optimistically removes comment', async () => {
+  it('Comment deleting optimistically removes comment', async () => {
     const deleteButtons = findAll(container, '.delete-comment');
     expect(deleteButtons).has.lengthOf(3);
     click(deleteButtons[deleteButtons.length - 1]);
@@ -300,12 +299,12 @@ describe('Posts and comments example UI works', () => {
     });
   });
 
-  step('Clicking comment delete removes the comment', () => {
+  it('Clicking comment delete removes the comment', () => {
     expect(content.textContent).to.not.include('Post comment 24');
     expect(findAll(container, '.delete-comment')).has.lengthOf(2);
   });
-  step('Comment editing works', async done => {
-    mutations.editComment = (obj, { input }) => {
+  it('Comment editing works', async done => {
+    mutations.editComment = (obj: any, { input }: any) => {
       expect(input.postId).to.equal(3);
       expect(input.content).to.equal('Edited comment 2');
       done();
@@ -321,7 +320,7 @@ describe('Posts and comments example UI works', () => {
     submit(commentForm);
   });
 
-  step('Clicking back button takes to post list', async () => {
+  it('Clicking back button takes to post list', async () => {
     expect(content.textContent).to.include('Edited comment 2');
     const backButton = find(container, '#back-button');
     click(backButton);

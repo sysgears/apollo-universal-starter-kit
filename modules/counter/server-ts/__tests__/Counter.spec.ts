@@ -20,7 +20,7 @@ describe('Counter example API works', () => {
       .get('/graphiql')
       .set('Accept', 'text/html')
       .then(res => {
-        res.should.have.status(200);
+        res.status.should.be.eql(200);
         res.body.should.be.eql({});
       });
   });

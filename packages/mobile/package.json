@@ -9,9 +9,9 @@
     "exp": "cross-env NODE_ENV=production zen exp",
     "exp-login": "cross-env NODE_ENV=production zen exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
     "exp-publish": "yarn exp-login && yarn exp -- p --non-interactive",
-    "jest": "cross-env NODE_ENV=jest PORT=7070 jest",
-    "jest:watch": "cross-env NODE_ENV=jest PORT=7070 jest --watch",
-    "test": "yarn tests && yarn lint",
+    "jest": "jest",
+    "jest:watch": "jest --watch",
+    "test": "yarn jest && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
@@ -125,7 +125,7 @@
       "node_modules",
       ".history"
     ],
-    "testRegex": ".*/__tests__/.*\\.jest\\.(js|jsx|ts|tsx)$",
+    "testMatch": ["**/__tests__/**/*\\.jest\\.(js|jsx|ts|tsx)"],
     "rootDir": "../../modules",
     "moduleFileExtensions": [
       "ts",

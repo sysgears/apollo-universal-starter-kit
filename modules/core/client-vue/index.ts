@@ -1,5 +1,6 @@
 import ClientModule from '@gqlapp/module-client-vue';
 import { createApolloClient, apiUrl, log } from '@gqlapp/core-common';
+import settings from '@gqlapp/config';
 
 import createApp from './createApp';
 
@@ -7,7 +8,9 @@ import createApp from './createApp';
 // tslint:disable-next-line
 import 'backend_reload';
 
-log.info(`Connecting to GraphQL back-end at: ${apiUrl}`);
+if (!__TEST__ || settings.logging.level === 'debug') {
+  log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+}
 
 const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   const { createNetLink, createLink, connectionParams, resolvers, reducers, routes } = modules;

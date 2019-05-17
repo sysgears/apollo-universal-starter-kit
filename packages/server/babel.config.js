@@ -1,7 +1,8 @@
 module.exports = api => {
+  const isBabelRegister = api.caller(caller => caller.name === '@babel/register');
   const isTest = api.env('test');
   api.cache(true);
-  if (isTest) {
+  if (isTest || isBabelRegister) {
     return {
       presets: [
         '@babel/preset-typescript',

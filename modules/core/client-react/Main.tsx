@@ -13,7 +13,9 @@ import settings from '@gqlapp/config';
 
 import RedBox from './RedBox';
 
-log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+if (!__TEST__ || settings.logging.level === 'debug') {
+  log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+}
 
 const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = {
   modules: null,

@@ -1,5 +1,12 @@
-require('@babel/register')({ cwd: __dirname + '/..' });
-require('@babel/polyfill');
+const root = __dirname + '/..';
+
+require('@babel/register')({
+  root,
+  cwd: root,
+  configFile: root + '/tools/babel.config.js',
+  extensions: ['.js', '.jsx', '.ts', '.tsx']
+});
+
 const prog = require('caporal');
 const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');

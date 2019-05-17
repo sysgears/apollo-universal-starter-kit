@@ -8,7 +8,7 @@
     "clean": "rimraf build .tmp",
     "tests": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --full-trace \"src/**/*.spec.*\" \"../../modules/**/client-vue/**/*.spec.*\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/client-vue/**/*.spec.*\"",
-    "test": "yarn tests && yarn lint",
+    "test": "yarn jest && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",

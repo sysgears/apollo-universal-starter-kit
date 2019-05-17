@@ -26,7 +26,7 @@
     "exp": "yarn --cwd packages/mobile exp",
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
     "jest": "lerna run jest --stream",
-    "test": "yarn tests && yarn lint",
+    "test": "yarn jest && yarn lint",
     "tests": "lerna run tests --stream",
     "tests:watch": "lerna run tests:watch --stream",
     "lint": "yarn eslint && yarn tslint",

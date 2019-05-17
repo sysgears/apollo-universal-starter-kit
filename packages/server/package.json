@@ -12,7 +12,7 @@
     "start": "node --harmony build",
     "tests": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --include src/__tests__/mochaSetup.ts --full-trace \"src/**/*.spec.*\" \"../../modules/**/server-ts/**/*.spec.*\"",
     "tests:watch": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --include src/__tests__/mochaSetup.ts --full-trace --watch \"src/**/*.spec.*\" \"../../modules/**/server-ts/**/*.spec.*\"",
-    "test": "yarn tests && yarn lint",
+    "test": "yarn jest && yarn lint",
     "jest": "cross-env PORT=7070 jest --forceExit",
     "jest:watch": "cross-env PORT=7070 jest --watch",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",

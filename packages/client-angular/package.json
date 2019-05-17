@@ -6,9 +6,8 @@
   "scripts": {
     "build": "cross-env NODE_ENV=production zen build",
     "clean": "rimraf build .tmp",
-    "tests": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --full-trace \"../../modules/**/client-angular/**/*.spec.*\" \"src/**/*.spec.*\"",
-    "tests:watch": "cross-env NODE_ENV=test PORT=7070 zen test -t 10000 --full-trace --watch \"../../modules/**/client-angular/**/*.spec.*\" \"src/**/*.spec.*\"",
-    "test": "yarn jest && yarn lint",
+    "tests": "echo",
+    "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
@@ -72,9 +71,9 @@
   },
   "devDependencies": {
     "@larix/zen": "^0.1.11",
+    "@types/jest": "^24.0.13",
     "@types/chai": "^4.1.4",
     "@types/lodash": "^4.14.118",
-    "@types/mocha": "^5.2.5",
     "@types/webpack-env": "^1.13.6",
     "angular2-template-loader": "^0.6.2",
     "autoprefixer": "^8.3.0",
@@ -82,9 +81,6 @@
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
     "graphql-tools": "^4.0.4",
-    "mocha": "^5.1.1",
-    "mocha-steps": "^1.1.0",
-    "mochapack": "^1.0.0",
     "rimraf": "^2.6.2"
   },
   "peerDependencies": {

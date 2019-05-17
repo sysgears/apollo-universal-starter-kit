@@ -1,6 +1,5 @@
 // General imports
 import { expect } from 'chai';
-import { step } from 'mocha-steps';
 
 // Components and helpers
 import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
@@ -27,7 +26,7 @@ describe('User UI works', () => {
   let app;
   let content;
 
-  step('User page renders on mount', async () => {
+  it('User page renders on mount', async () => {
     app = renderer.mount();
     await waitForElementRender(app.container, 'a[href="/profile"]');
     renderer.history.push('/profile');

@@ -1,6 +1,5 @@
 import React from 'react';
 import chai from 'chai';
-import { step } from 'mocha-steps';
 
 import { click, find, wait, render, Renderer } from '@gqlapp/testing-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -58,14 +57,14 @@ describe('Client counter example UI works', () => {
     }
   });
 
-  step('Counter section renders with link data', () => {
+  it('Counter section renders with link data', () => {
     app = render(renderer.withApollo(<ApolloLinkStateCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
     content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_LINK_VALUE}.`);
   });
 
-  step('Clicking on increase counter button increases counter', async () => {
+  it('Clicking on increase counter button increases counter', async () => {
     const apolloLinkButton = find(container, '#apollo-link-button');
     await click(apolloLinkButton);
     await wait();

@@ -1,6 +1,5 @@
 import { expect } from 'chai';
 import { ApolloClient } from 'apollo-client';
-import { step } from 'mocha-steps';
 import gql from 'graphql-tag';
 
 import { getApollo } from '@gqlapp/testing-server-ts';
@@ -22,7 +21,7 @@ describe('$Module$ API works', () => {
     apollo = getApollo();
   });
 
-  step('Should send a query to the GraphQL back end', async () => {
+  it('Should send a query to the GraphQL back end', async () => {
     const result = await apollo.query({ query: INTROSPECTION_QUERY });
     expect(result.data).to.have.property('__schema');
   });

@@ -9,9 +9,9 @@
     "exp": "cross-env NODE_ENV=production zen exp",
     "exp-login": "cross-env NODE_ENV=production zen exp login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
     "exp-publish": "yarn exp-login && yarn exp -- p --non-interactive",
-    "jest": "jest",
-    "jest:watch": "jest --watch",
-    "test": "yarn jest && yarn lint",
+    "tests": "jest",
+    "tests:watch": "jest --watch",
+    "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
@@ -84,7 +84,7 @@
   "devDependencies": {
     "@types/expo": "^30.0.0",
     "@types/expo__vector-icons": "^6.2.3",
-    "@types/jest": "^23.3.1",
+    "@types/jest": "^24.0.13",
     "@types/react-native-keyboard-spacer": "^0.4.1",
     "@types/react-navigation": "^3.0.5",
     "@types/react-test-renderer": "^16.0.2",
@@ -103,53 +103,15 @@
     "image-size": "^0.6.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
-    "mocha": "^5.1.1",
-    "mocha-steps": "^1.1.0",
-    "mochapack": "^1.0.0",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "16.5.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.2",
-    "ts-jest": "^23.10.4",
     "ws": "^5.1.1",
     "xdl": "^49.2.0"
   },
   "peerDependencies": {
     "@larix/zen": "^0.1.0",
     "eslint": "*"
-  },
-  "jest": {
-    "verbose": true,
-    "preset": "jest-expo",
-    "testPathIgnorePatterns": [
-      "node_modules",
-      ".history"
-    ],
-    "testMatch": ["**/__tests__/**/*\\.jest\\.(js|jsx|ts|tsx)"],
-    "rootDir": "../../modules",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx"
-    ],
-    "transform": {
-      "^.+\\.jsx?$": "babel-jest",
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "modulePathIgnorePatterns": [
-      "<rootDir>/node_modules/react-native/Libraries/react-native/",
-      "<rootDir>/node_modules/react-native/jest/",
-      "<rootDir>/node_modules/haul/",
-      "<rootDir>/packages/mobile/.expo/"
-    ],
-    "globals": {
-      "__CLIENT__": true,
-      "__SERVER__": false,
-      "__TEST__": true,
-      "ts-jest": {
-        "tsConfig": "tsconfig.jest.json"
-      }
-    }
   }
 }

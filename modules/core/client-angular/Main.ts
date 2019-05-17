@@ -6,7 +6,7 @@ import { ActionReducer, MetaReducer } from '@ngrx/store';
 import { apiUrl, log } from '@gqlapp/core-common';
 import settings from '@gqlapp/config';
 
-if (!__TEST__ || settings.logging.level === 'debug') {
+if (!__TEST__ || settings.app.logging.level === 'debug') {
   log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 }
 

@@ -8,7 +8,7 @@ import createApp from './createApp';
 // tslint:disable-next-line
 import 'backend_reload';
 
-if (!__TEST__ || settings.logging.level === 'debug') {
+if (!__TEST__ || settings.app.logging.level === 'debug') {
   log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 }
 

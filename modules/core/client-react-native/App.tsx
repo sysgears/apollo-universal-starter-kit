@@ -40,7 +40,7 @@ export default class Main extends React.Component<MainProps> {
       clientResolvers: modules.resolvers
     });
 
-    if (!__TEST__ || settings.logging.level === 'debug') {
+    if (!__TEST__ || settings.app.logging.level === 'debug') {
       log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
     }
 

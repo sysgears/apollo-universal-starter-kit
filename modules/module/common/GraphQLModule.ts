@@ -71,14 +71,14 @@ class GraphQLModule extends CommonModule {
    * @returns Apollo Link State client-side resolvers
    */
   get resolvers() {
-    return merge({}, ...this.resolver);
+    return merge({}, ...(this.resolver || []));
   }
 
   /**
    * @returns `subscription-transport-ws` WebSocket connection options
    */
   get connectionParams() {
-    return this.connectionParam;
+    return this.connectionParam || [];
   }
 }
 

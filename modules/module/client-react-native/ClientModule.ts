@@ -32,7 +32,7 @@ class ClientModule extends BaseModule {
    * @returns item list for React Navigation drawer
    */
   get drawerItems() {
-    return merge({}, ...this.drawerItem);
+    return merge({}, ...(this.drawerItem || []));
   }
 }
 

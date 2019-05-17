@@ -1,6 +1,5 @@
 import React from 'react';
 import chai from 'chai';
-import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
 import { translate } from '@gqlapp/i18n-client-react';
@@ -26,14 +25,14 @@ describe('Redux counter example UI works', () => {
     }
   });
 
-  step('Counter section renders with state data', () => {
+  it('Counter section renders with state data', () => {
     app = render(renderer.withApollo(<ReduxCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
     content.textContent.should.has.string(`The current counter value is ${COUNTER_REDUX_VALUE}.`);
   });
 
-  step('Clicking on increase counter button shows optimistic response', () => {
+  it('Clicking on increase counter button shows optimistic response', () => {
     const reduxButton = find(container, '#redux-button');
     click(reduxButton);
     content.textContent.should.has.string(`The current counter value is ${COUNTER_REDUX_VALUE + 1}.`);

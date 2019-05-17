@@ -1,6 +1,5 @@
 import React from 'react';
 import chai from 'chai';
-import { step } from 'mocha-steps';
 import { render } from 'react-testing-library';
 
 import { translate } from '@gqlapp/i18n-client-react';
@@ -42,32 +41,32 @@ describe('Server counter example UI works', () => {
     }
   });
 
-  step('Counter section renders without data', () => {
+  it('Counter section renders without data', () => {
     app = render(renderer.withApollo(<ServerCounterWithI18n />));
     container = app.container;
     content = container.firstChild;
     content.textContent.should.has.string('loading');
   });
 
-  step('Counter section renders with queries data', () => {
+  it('Counter section renders with queries data', () => {
     content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_VALUE}.`);
   });
 
-  step('Clicking on increase counter button shows optimistic response', () => {
+  it('Clicking on increase counter button shows optimistic response', () => {
     const graphQLButton = find(container, '#graphql-button');
     click(graphQLButton);
     content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_VALUE + 1}.`);
   });
 
-  step('Section shows GraphQL response when it arrives after button click', () => {
+  it('Section shows GraphQL response when it arrives after button click', () => {
     content.textContent.should.has.string(`The current counter value is ${INC_COUNTER_VALUE + 1}.`);
   });
 
-  step('Check subscribed to counter updates', () => {
+  it('Check subscribed to counter updates', () => {
     renderer.getSubscriptions(COUNTER_SUBSCRIPTION).should.has.lengthOf(1);
   });
 
-  step('Updates counter on data from subscription', () => {
+  it('Updates counter on data from subscription', () => {
     const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
     subscription.next({
       data: {
@@ -77,7 +76,7 @@ describe('Server counter example UI works', () => {
     content.textContent.should.has.string(`The current counter value is ${COUNTER_SUBSCRIPTION_VALUE}.`);
   });
 
-  step('Unmount section and check unsubscription', () => {
+  it('Unmount section and check unsubscription', () => {
     app.unmount();
     renderer.getSubscriptions(COUNTER_SUBSCRIPTION).should.has.lengthOf(0);
   });

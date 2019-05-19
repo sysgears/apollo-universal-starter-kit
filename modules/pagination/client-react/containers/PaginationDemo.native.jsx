@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 import { lookStyles, Select } from '@gqlapp/look-client-react-native';
 import PaginationDemoView from '../components/PaginationDemoView.native';
-import withDataProvider from '../containers/DataProvider';
+import withDataProvider from './DataProvider';
 
 @translate('pagination')
 class PaginationDemo extends React.Component {

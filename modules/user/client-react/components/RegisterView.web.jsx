@@ -6,7 +6,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText } from '@gqlapp/look-client-react';
 import settings from '@gqlapp/config';
 
-import RegisterForm from '../components/RegisterForm';
+import RegisterForm from './RegisterForm';
 
 const RegisterView = ({ t, onSubmit, isRegistered }) => {
   const renderMetaData = () => (

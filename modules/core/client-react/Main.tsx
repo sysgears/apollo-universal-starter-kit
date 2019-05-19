@@ -4,7 +4,7 @@ import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
 import { createBrowserHistory } from 'history';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 import ReactGA from 'react-ga';
 
 import { apiUrl, createApolloClient, createReduxStore, getStoreReducer, log } from '@gqlapp/core-common';
@@ -13,13 +13,17 @@ import settings from '@gqlapp/config';
 
 import RedBox from './RedBox';
 
-log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+if (!__TEST__ || settings.app.logging.level === 'debug') {
+  log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+}
 
 const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = {
   modules: null,
   client: null,
   store: null
 };
+
+const history = createBrowserHistory();
 
 export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   ref.modules = modules;
@@ -32,21 +36,22 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   });
   if (entryModule.hot && entryModule.hot.data && entryModule.hot.data.store) {
     ref.store = entryModule.hot.data.store;
-    ref.store.replaceReducer(getStoreReducer(ref.modules.reducers));
+    ref.store.replaceReducer(getStoreReducer(history, ref.modules.reducers));
   } else {
-    ref.store = createReduxStore(ref.modules.reducers, {}, ref.client, routerMiddleware(history));
+    ref.store = createReduxStore(ref.modules.reducers, {}, history, routerMiddleware(history));
   }
 };
 
-const history = createBrowserHistory();
 const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
 
-// Initialize Google Analytics and send events on each location change
-ReactGA.initialize(settings.analytics.ga.trackingId);
-logPageView(window.location);
+if (!__TEST__) {
+  // Initialize Google Analytics and send events on each location change
+  ReactGA.initialize(settings.analytics.ga.trackingId);
+  logPageView(window.location);
+}
 
 history.listen(location => logPageView(location));
 

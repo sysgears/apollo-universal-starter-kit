@@ -5,7 +5,7 @@
   "dependencies": {
     "fractal-objects": "^0.10.2"
   },
-  "peerDependencies": {
+  "peerDependenciesMeta": {
     "i18next": "*"
   }
 }

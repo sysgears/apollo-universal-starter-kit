@@ -1,7 +1,7 @@
 import ServerModule from '@gqlapp/module-server-ts';
 
 import ContactsDAO from './sql';
-import schema from './schema.graphql';
+import schema from './schema';
 import createResolvers from './resolvers';
 import resources from './locales';
 import pdf from './pdf';

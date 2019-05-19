@@ -1,5 +1,5 @@
 import { initRenderer } from '@gqlapp/testing-client-react';
-import rootSchema from '@gqlapp/core-server-ts/api/rootSchema.graphql';
+import rootSchema from '@gqlapp/core-server-ts/api/rootSchema';
 
 import clientModules from '..';
 import serverModules from '../../../server/src/modules';

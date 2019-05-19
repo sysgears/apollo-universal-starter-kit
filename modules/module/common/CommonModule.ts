@@ -32,7 +32,7 @@ class CommonModule extends Module {
    * @returns localization for i18next library
    */
   get localizations() {
-    return this.localization;
+    return this.localization || [];
   }
 }
 

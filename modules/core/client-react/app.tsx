@@ -11,7 +11,7 @@ import 'backend_reload';
 import { onAppCreate as onCreateMain, Main, onAppDispose } from './Main';
 
 const renderFunc = __SSR__ ? hydrate : render;
-const root = document.getElementById('root');
+const root = __TEST__ ? document.createElement('div') : document.getElementById('root');
 
 let frontendReloadCount = 0;
 

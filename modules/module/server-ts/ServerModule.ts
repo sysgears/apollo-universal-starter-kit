@@ -88,7 +88,7 @@ class ServerModule extends CommonModule {
    * @returns list of GraphQL schemas exported by the feature module represented by this class
    */
   public get schemas() {
-    return this.schema;
+    return this.schema || [];
   }
 
   /**
@@ -110,7 +110,7 @@ class ServerModule extends CommonModule {
     const appContext = this.appContext;
     let graphqlContext = {};
 
-    for (const createContextFunc of this.createContextFunc) {
+    for (const createContextFunc of this.createContextFunc || []) {
       graphqlContext = merge(
         graphqlContext,
         await createContextFunc({ req, res, connectionParams, webSocket, graphqlContext, appContext })
@@ -127,7 +127,7 @@ class ServerModule extends CommonModule {
    * @returns GraphQL resolvers
    */
   public createResolvers(pubsub: PubSub) {
-    return merge({}, ...this.createResolversFunc.map(createResolvers => createResolvers(pubsub)));
+    return merge({}, ...(this.createResolversFunc.map(createResolvers => createResolvers(pubsub)) || []));
   }
 }
 

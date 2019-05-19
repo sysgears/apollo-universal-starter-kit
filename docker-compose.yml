@@ -11,7 +11,7 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ./:${APP_DIR}
+      - ./:${APP_DIR}:cached
       - ${APP_DIR}/build
       - ${APP_DIR}/node_modules
     working_dir: ${APP_DIR}

@@ -2,7 +2,7 @@ import ServerModule from '@gqlapp/module-server-ts';
 import settings from '@gqlapp/config';
 
 import confirmMiddleware from './confirm';
-import schema from './schema.graphql';
+import schema from './schema';
 import resolvers from './resolvers';
 import scopes from './scopes';
 import User from './sql';

@@ -7,6 +7,6 @@ import ClientModule from '@gqlapp/module-client-react';
 import resources from './locales';
 
 export default new ClientModule(counters, {
-  route: [<Route exact path="/" component={Counter} />],
+  route: [<Route exact path={__TEST__ ? '/counter' : '/'} component={Counter} />],
   localization: [{ ns: 'counter', resources }]
 });

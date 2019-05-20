@@ -1,4 +1,0 @@
-extend type Query {
-  #excelReport
-  excel: [Int]
-}

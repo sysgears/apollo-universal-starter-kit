@@ -1,7 +1,5 @@
 input GoogleExpoLoginInput {
-  id: String!
-  name: String!
-  email: String!
+  accessToken: String!
 }
 
 type GoogleExpoLoginPayload {

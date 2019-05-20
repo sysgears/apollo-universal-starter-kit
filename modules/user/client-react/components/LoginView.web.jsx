@@ -6,7 +6,7 @@ import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText, Button 
 import authentication from '@gqlapp/authentication-client-react';
 import settings from '@gqlapp/config';
 
-import saveTokens from '../helpers/saveTokens';
+import getAndSaveTokensFromUrl from '../helpers/getAndSaveTokensFromUrl';
 import LoginForm from './LoginForm';
 
 const LoginView = ({ onSubmit, t, isRegistered, hideModal, history, client }) => {
@@ -21,7 +21,11 @@ const LoginView = ({ onSubmit, t, isRegistered, hideModal, history, client }) =>
   }, []);
 
   const checkTokensRedirectToProfile = async () => {
-    await saveTokens(search, client);
+    // Checks exists data in link
+    const dataRegExp = /data=([^#]+)/;
+    if (!search.match(dataRegExp)) return;
+
+    await getAndSaveTokensFromUrl(search);
     await authentication.doLogin(client);
     history.push('profile');
   };

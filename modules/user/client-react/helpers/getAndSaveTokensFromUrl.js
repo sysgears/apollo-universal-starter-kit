@@ -1,8 +1,8 @@
 import { setItem } from '@gqlapp/core-common/clientStorage';
 
-const saveTokens = async url => {
+const getAndSaveTokensFromUrl = async url => {
+  // Checks exists data in url
   const dataRegExp = /data=([^#]+)/;
-
   if (!url.match(dataRegExp)) return;
 
   // Extract stringified user string out of the URL
@@ -15,4 +15,4 @@ const saveTokens = async url => {
   }
 };
 
-export default saveTokens;
+export default getAndSaveTokensFromUrl;

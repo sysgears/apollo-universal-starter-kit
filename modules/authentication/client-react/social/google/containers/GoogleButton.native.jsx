@@ -42,22 +42,16 @@ const googleLogin = () => {
 
 const googleExpoLogin = async client => {
   try {
-    const profile = await Google.logInAsync({
-      androidClientId,
-      iosClientId,
-      scopes: ['profile', 'email']
+    const { accessToken, type } = await Google.logInAsync({
+      clientId: Platform.OS === 'ios' ? iosClientId : androidClientId
     });
 
-    if (profile.type === 'success') {
-      const {
-        user: { email, id, name }
-      } = profile;
-
+    if (type === 'success') {
       // Gets accessToken, refreshToken and save them to storage
       const { data } = await client.mutate({
         mutation: GOOGLE_EXPO_LOGIN,
         variables: {
-          input: { id, name, email }
+          input: { accessToken }
         }
       });
 

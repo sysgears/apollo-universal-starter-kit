@@ -6,7 +6,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { lookStyles } from '@gqlapp/look-client-react-native';
 import authentication from '@gqlapp/authentication-client-react';
 
-import saveTokens from '../helpers/saveTokens';
+import getAndSaveTokensFromUrl from '../helpers/getAndSaveTokensFromUrl';
 import LoginForm from './LoginForm';
 
 class LoginView extends React.PureComponent {
@@ -21,7 +21,12 @@ class LoginView extends React.PureComponent {
   handleOpenURL = async ({ url }) => {
     const { client } = this.props;
 
-    await saveTokens(url);
+    // Checks exists data in url
+    const dataRegExp = /data=([^#]+)/;
+    if (!url.match(dataRegExp)) return;
+
+    await getAndSaveTokensFromUrl(url);
+
     await authentication.doLogin(client);
     if (Platform.OS === 'ios') {
       WebBrowser.dismissBrowser();

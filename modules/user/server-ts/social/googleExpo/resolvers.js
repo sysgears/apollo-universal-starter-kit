@@ -13,15 +13,27 @@ const registerUser = async (id, email) => {
 
 const createGoogleOAuth = async user => User.createGoogleOAuth(user);
 
+const getUserInfo = async accessToken => {
+  return fetch('https://www.googleapis.com/userinfo/v2/me', {
+    headers: { Authorization: `Bearer ${accessToken}` }
+  })
+    .then(response => response.json())
+    .then(({ id, email, name }) => {
+      return { id, email, name };
+    });
+};
+
 export default () => ({
   Mutation: {
     async googleExpoLogin(
       obj,
       {
-        input: { id, name, email }
+        input: { accessToken }
       },
       { req }
     ) {
+      const { id, email, name } = await getUserInfo(accessToken);
+
       let user = await User.getUserByGoogleIdOrEmail(id, email);
 
       if (!user) {

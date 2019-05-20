@@ -1,6 +1,6 @@
 # Apollo Universal Starter Kit Configurations
 
-This section contains information about Apollo Universal Starter Kit configurations. You can follow to various sections 
+This section contains information about Apollo Universal Starter Kit configurations. You can follow to various sections
 by clicking the links below:
 
 * [General Information](#general-information)
@@ -21,16 +21,16 @@ by clicking the links below:
 ## General Information
 
 The main configuration file in Apollo Universal Starter Kit is called `settings.js` and it's stored in the root of the
-project. This file doesn't contain any project properties but _imports_ the configuration files from the `config` 
+project. This file doesn't contain any project properties but _imports_ the configuration files from the `config`
 folder. The starter kit modules use `settings.js` to get the necessary values specified in the `config/*.js` files.
 
-The flow looks similar to this: 
+The flow looks similar to this:
 
 ```
 config/*.js => settings.js => ApplicationFile.js
 ```
 
-If you wish to add specific configurations to your Apollo Universal Starter Kit project, we recommend creating the 
+If you wish to add specific configurations to your Apollo Universal Starter Kit project, we recommend creating the
 configuration file under the `config` folder. Then, you can import the settings in your concrete module as shown in the
 example below:
 
@@ -39,11 +39,11 @@ example below:
 import settings from '../../../../../settings';
 
 // your code
-``` 
+```
 
 ## Apollo Engine
 
-Apollo Universal Starter Kit uses [Apollo Engine] and stores the Engine configurations in the `config/engine.js` file. 
+Apollo Universal Starter Kit uses [Apollo Engine] and stores the Engine configurations in the `config/engine.js` file.
 
 | Property | Type   | Description                                                  |
 | -------- | ------ | ------------------------------------------------------------ |
@@ -51,15 +51,15 @@ Apollo Universal Starter Kit uses [Apollo Engine] and stores the Engine configur
 | logging  | Object | Holds the Apollo Engine properties such as the logging level |
 | level    | String | Sets the `logging` level for Apollo Engine                   |
 
-**NOTE**: we advise against setting the Apollo Engine API key directly in the `config/engine.js` file. Instead, set your 
+**NOTE**: we advise against setting the Apollo Engine API key directly in the `config/engine.js` file. Instead, set your
 Apollo Engine API key in the `packages/server/.env` file as shown in the example below:
- 
+
 ```dotenv
 # Apollo Engine API Key
 APOLLO_ENGINE_API_KEY=your_api_key
 ```
 
-**NOTE**: you can set the `logging` level for Apollo Engine to `'DEBUG'`, `'INFO'`, `'WARN'`, or `'ERROR'`. Consult 
+**NOTE**: you can set the `logging` level for Apollo Engine to `'DEBUG'`, `'INFO'`, `'WARN'`, or `'ERROR'`. Consult
 [Apollo Engine documentation for logging levels].
 
 ## Basic Application Settings
@@ -87,7 +87,7 @@ You can learn more about `stackFragmentFormat` in the following documents:
 
 ## Build Configuration with Zen
 
-Apollo Universal Starter Kit uses [Zen], a custom JavaScript library, to configure and create builds of the web, server, 
+Apollo Universal Starter Kit uses [Zen], a custom JavaScript library, to configure and create builds of the web, server,
 and React Native mobile applications using just one bundler &mdash; [webpack]. You can change various build
 configurations in the `.spinrc.js` files:
 
@@ -97,23 +97,23 @@ configurations in the `.spinrc.js` files:
 * `packages/server/.zenrc.js` contains Zen settings for the Node.js application
 * `packages/mobile/.zenrc.js` contains Zen settings for the React Native mobile app
 
-Consult the [Zen documentation] for more information on how you can work with Zen in your Apollo Universal Starter Kit 
+Consult the [Zen documentation] for more information on how you can work with Zen in your Apollo Universal Starter Kit
 projects.
 
 ## Built-In UI Libraries
 
-Apollo Universal Starter Kit uses various UI libraries for the three clients. 
+Apollo Universal Starter Kit uses various UI libraries for the three clients.
 
-With React, you can use either [Twitter Bootstrap] or [Ant Design]. For the React Native mobile app, you can use [Ant 
+With React, you can use either [Twitter Bootstrap] or [Ant Design]. For the React Native mobile app, you can use [Ant
 Design Mobile] or [NativeBase]. The Angular app comes with Angular Material, and the Vue client also uses Bootstrap.
 
-By default, Apollo Universal Starter Kit enables Twitter Bootstrap for the React and Vue clients and NativeBase for the 
-mobile app. Angular uses the Material library. 
+By default, Apollo Universal Starter Kit enables Twitter Bootstrap for the React and Vue clients and NativeBase for the
+mobile app. Angular uses the Material library.
 
-You can enable Ant Design styles for React by changing the module `look` exports: 
+You can enable Ant Design styles for React by changing the module `look` exports:
 
-* To use Ant Design instead of Twitter Bootstrap, uncomment the respective export for Ant Design and comment out the 
-export for Bootstrap in the `modules/look/client-react/look.ts` file: 
+* To use Ant Design instead of Twitter Bootstrap, uncomment the respective export for Ant Design and comment out the
+export for Bootstrap in the `modules/look/client-react/look.ts` file:
 
 ```javascript
 // export * from './ui-bootstrap';
@@ -132,19 +132,19 @@ export * from './ui-antd-mobile';
 
 ## Database
 
-Apollo Universal Starter Kit supports SQL databases (the commonest examples are PostgreSQL, MySQL, and SQLite; the 
+Apollo Universal Starter Kit supports SQL databases (the commonest examples are PostgreSQL, MySQL, and SQLite; the
 latter is used by default by the starter kit). The database configurations are located in the `config/db.js` file.
 
-To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to `config/db.js` file. 
+To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to `config/db.js` file.
 `packages/server/.env` file:
 
-* `DB_TYPE`. Use `mysql` for MySQL or `pg` for PostgreSQL. If you don't set this property, SQLite will be used by 
+* `DB_TYPE`. Use `mysql` for MySQL or `pg` for PostgreSQL. If you don't set this property, SQLite will be used by
 default
 * `DB_HOST`, you can use `localhost` for development mode.
 * `DB_USER`, database username
 * `DB_PASSWORD`, database password
 * `DB_DATABASE`, the database to which the application will connect
-* `DB_SOCKET_PATH`, the socket path 
+* `DB_SOCKET_PATH`, the socket path
 * `DB_SSL`, use the SSL certificate to connect with SSL
 
 **NOTE**: we advise against setting the environment variables directly in the configurations. Instead, set the variables
@@ -188,12 +188,12 @@ i18next library to implement internationalization for all the platforms &ndash; 
 | fallbackLng      | Object        | Sets the default language. Defaults to `'en-US'`                         |
 | cookie           | String        | Sets the name for the cookie to store the language. Defaults to `'lang'` |
 
-**NOTE**: the `langList` and `fallbackLng` properties are used by i18next. Consult the [i18next documentation] for more 
+**NOTE**: the `langList` and `fallbackLng` properties are used by i18next. Consult the [i18next documentation] for more
 information. The `cookie` property is used by [i18next-express-middleware].
 
 ## Mailer
 
-Apollo Universal Starter Kit uses [Nodemailer] to provide the emailing functionality. The Nodemailer configurations are 
+Apollo Universal Starter Kit uses [Nodemailer] to provide the emailing functionality. The Nodemailer configurations are
 stored in the `config/mailer.js` file.
 
 To make the mailer module work, you need to specify these data in `packages/server/.env`:
@@ -211,7 +211,7 @@ To make the mailer module work, you need to specify these data in `packages/serv
 | user     | String | Sets the user emails address. Defaults to `olgv7abv3lcmipb7@ethereal.email` |
 | pass     | String | Sets the password for authenticating the requests                           |
 
-**NOTE**: we advise against setting the values directly in the `config/mailer.js` file. Instead, set the Nodemailer 
+**NOTE**: we advise against setting the values directly in the `config/mailer.js` file. Instead, set the Nodemailer
 properties in the `packages/server/.env` file as shown in the example below:
 
 ```dotenv
@@ -232,16 +232,16 @@ To configure the mobile chat module, follow to the dedicated section:
 
 ## Pagination
 
-You can change the pagination settings in the `config/pagination.js` file. Apollo Universal Starter Kit lets you 
+You can change the pagination settings in the `config/pagination.js` file. Apollo Universal Starter Kit lets you
 configure pagination for the client-side application and for the mobile app separately.
 
 Apollo Universal Starter Kit implements the relay- and cursor-based pagination types:
 
-* The relay pagination provides the **Load More** button. By clicking **Load More**, the user tell the application to 
+* The relay pagination provides the **Load More** button. By clicking **Load More**, the user tell the application to
 load a number of the new items asynchronously and show them in the same page.
 
-* The standard pagination is cursor-based: the items are shown page by page, and the user needs to navigate between 
-pages to see the items. You can learn more about the cursor-based pagination in the [dedicated Apollo blog post]. 
+* The standard pagination is cursor-based: the items are shown page by page, and the user needs to navigate between
+pages to see the items. You can learn more about the cursor-based pagination in the [dedicated Apollo blog post].
 
 ### Pagination Settings for the Client-Side Application
 
@@ -281,10 +281,10 @@ export default {
 
 ## Server Side Rendering
 
-Apollo Universal Starter Kit supports Server Side Rendering (SSR), and this features is enabled by default for both 
-Express server application and React client app. 
+Apollo Universal Starter Kit supports Server Side Rendering (SSR), and this features is enabled by default for both
+Express server application and React client app.
 
-**NOTE**: SSR is disabled by default for the **Angular application** in `packages/client-angular` because the current 
+**NOTE**: SSR is disabled by default for the **Angular application** in `packages/client-angular` because the current
 Angular app implementation doesn't support SSR.
 
 If you want to disable SSR for React and Express applications, you need to change a dedicated SpinJS setting in two
@@ -326,7 +326,7 @@ Concerning the React application, SSR can be disabled in two ways:
 
 The second option gives you more flexibility, because no matter the value of `config.options.ssr`, the value of the
 `process.env.DISABLE_SSR` takes precedence.
- 
+
 In `package/client/.zenrc.js`, you may notice an additional check of the value of `DISABLE_SSR`:
 
 ```js
@@ -352,7 +352,7 @@ if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
 If you don't set `process.env.DISABLE_SSR`, then change the `config.options.ssr` directly.
 
 Disabling SSR for the React application is useful when you need to run the client application alone without running the
-Express application. Otherwise, if you disable building the Express application and run the React app with SSR, the 
+Express application. Otherwise, if you disable building the Express application and run the React app with SSR, the
 frontend will never load (note the message `web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...`):
 
 ```sh
@@ -373,8 +373,8 @@ client: web-webpack debug still waiting for tcp:localhost:8080 after 10000ms...
 client: web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...
 ```
 
-Apollo Universal Starter Kit has a script `watch-client` that runs _only_ the client application, which is why SSR must 
-be disabled (otherwise, the application won't be loaded). 
+Apollo Universal Starter Kit has a script `watch-client` that runs _only_ the client application, which is why SSR must
+be disabled (otherwise, the application won't be loaded).
 
 This is what the command looks like:
 
@@ -396,14 +396,14 @@ To configure the Stripe subscription module, follow to the dedicated section:
 
 ## Upload Module
 
-The upload module configuration is located in the `config/upload.js` file. Currently, you can only change the folder for 
+The upload module configuration is located in the `config/upload.js` file. Currently, you can only change the folder for
 the uploaded files.
 
 | Property  | Type   | Description                                     |
 | --------- | ------ | ----------------------------------------------- |
 | uploadDir | String | Sets the upload directory. Defaults to `public` |
 
-**NOTE**: the path to the upload directory is resolved from `packages/server`. If you set the `uploadDir` property to 
+**NOTE**: the path to the upload directory is resolved from `packages/server`. If you set the `uploadDir` property to
 `uploads`, the uploaded files will be located under `packages/server/uploads`. The upload directory is automatically
 generated when you upload a file to the server.
 
@@ -413,13 +413,13 @@ You can configure authentication for your Apollo Universal Starter Kit-based app
 
 ### `secret`
 
-Sets `AUTH_SECRET` for development and production modes. 
+Sets `AUTH_SECRET` for development and production modes.
 
-`AUTH_SECRET` is the secret string used for signing the authentication tokens on the server if user sessions are 
-controlled by JWT. If you're using the session-based authentication, `AUTH_SECRET` is used to validate the secret 
+`AUTH_SECRET` is the secret string used for signing the authentication tokens on the server if user sessions are
+controlled by JWT. If you're using the session-based authentication, `AUTH_SECRET` is used to validate the secret
 encryption key and private key for sessions.
 
-You need to add the `AUTH_SECRET` string into the `packages/server/.env` file. Find the following line and add your 
+You need to add the `AUTH_SECRET` string into the `packages/server/.env` file. Find the following line and add your
 secret string (typically, an alphanumeric sequence of random characters) instead of `"secret"`:
 
 ```dotenv
@@ -429,12 +429,12 @@ AUTH_SECRET=secret, change for production
 
 ### `auth`
 
-Contains authentication properties such as the type of authentication, the password and certificate details, as well as 
+Contains authentication properties such as the type of authentication, the password and certificate details, as well as
 the social authentication properties for Facebook, GitHub, LinkedIn, and Google.
 
 #### `access`
 
-Configures the authentication methods. By default, Apollo Universal Starter Kit uses both JSON Web Token and 
+Configures the authentication methods. By default, Apollo Universal Starter Kit uses both JSON Web Token and
 session-based authentication mechanisms.
 
 **Usage Example**
@@ -454,7 +454,7 @@ export default {
     }
   }
 }
-``` 
+```
 
 **Session Properties**
 
@@ -472,7 +472,7 @@ export default {
 
 #### `password`
 
-Configures the password validation and other settings for the server-side and client-side validation. 
+Configures the password validation and other settings for the server-side and client-side validation.
 
 | password              | Object  | Contains the global properties for the `password` configurations         |
 | --------------------- | ------- | ------------------------------------------------------------------------ |
@@ -499,7 +499,7 @@ export default {
 
 #### `certificate`
 
-Configures your application for using Secure Sockets Layer (SSL). 
+Configures your application for using Secure Sockets Layer (SSL).
 
 | certificate           | Object  | Contains the global properties for the SSL certificate          |
 | --------------------- | ------- | --------------------------------------------------------------- |
@@ -534,22 +534,22 @@ The `facebook` property contains configurations for Facebook authentication impl
 | scope         | Array<String> | Sets the Facebook app scope                                                   |
 | profileFields | Array<String> | Sets the profile fields that Facebook returns upon the authentication request |
 
-**NOTE**: To enable authentication with Facebook, set `auth.facebook.enabled` to `true`. Also, add the 
+**NOTE**: To enable authentication with Facebook, set `auth.facebook.enabled` to `true`. Also, add the
 `FACEBOOK_CLIENTID` and `FACEBOOK_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
 FACEBOOK_CLIENTID="set to your Facebook client ID"
 FACEBOOK_CLIENTSECRET="set to your Facebook client secret"
-``` 
+```
 
-To get the client ID and client secret values, you need to register with [Facebook Apps]. Consult [Connect Your App to 
+To get the client ID and client secret values, you need to register with [Facebook Apps]. Consult [Connect Your App to
 Facebook] for details.
 
-**NOTE**: When you create a Facebook application with Facebook Apps, you need to enter the correct **absolute** callback 
+**NOTE**: When you create a Facebook application with Facebook Apps, you need to enter the correct **absolute** callback
 URL into the **Valid OAuth redirect URIs** field.
 
-The `auth.facebook.callbackURL` property stores the relative callback URL `/auth/facebook/callback`, which gets 
-concatenated with `http://localhost:3000/` in development mode. The absolute callback URL for Facebook Login is 
+The `auth.facebook.callbackURL` property stores the relative callback URL `/auth/facebook/callback`, which gets
+concatenated with `http://localhost:3000/` in development mode. The absolute callback URL for Facebook Login is
 `http://localhost:3000/auth/facebook/callback`, and you need to add this URL to Facebook Login for development mode.
 
 #### `github`
@@ -564,7 +564,7 @@ The `github` property contains configurations for GitHub authentication implemen
 | callbackURL  | String        | Sets the GitHub app callback URL                         |
 | scope        | Array<String> | Sets the [GitHub OAuth apps scopes]                      |
 
-**NOTE**: To enable authentication with GitHub, set `auth.github.enabled` to `true`. Also, add the `GITHUB_CLIENTID` and 
+**NOTE**: To enable authentication with GitHub, set `auth.github.enabled` to `true`. Also, add the `GITHUB_CLIENTID` and
 `GITHUB_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
@@ -572,14 +572,14 @@ GITHUB_CLIENTID="Use your GitHub client ID"
 GITHUB_CLIENTSECRET="Use your GitHub client secret"
 ```
 
-To get the client ID and client secret values, you need to register with [GitHub OAuth Apps]. Consult [Connect Your App 
+To get the client ID and client secret values, you need to register with [GitHub OAuth Apps]. Consult [Connect Your App
 to GitHub] for details.
 
-**NOTE**: When you create a GitHub application with GitHub OAuth Apps, you need to enter the correct **absolute** 
-callback URL into the **Authorization callback URL** input field. 
+**NOTE**: When you create a GitHub application with GitHub OAuth Apps, you need to enter the correct **absolute**
+callback URL into the **Authorization callback URL** input field.
 
-The `auth.github.callbackURL` property stores the relative callback URL `/auth/github/callback`, which gets concatenated 
-with `http://localhost:3000/`. The absolute callback URL for GitHub is `http://localhost:3000/auth/github/callback`, and 
+The `auth.github.callbackURL` property stores the relative callback URL `/auth/github/callback`, which gets concatenated
+with `http://localhost:3000/`. The absolute callback URL for GitHub is `http://localhost:3000/auth/github/callback`, and
 you need to add this URL to your app in [GitHub OAuth Apps] settings for development mode.
 
 #### `linkedin`
@@ -594,7 +594,7 @@ The `linkedin` property contains configurations for LinkedIn authentication impl
 | callbackURL  | String        | Sets the LinkedIn app callback URL                         |
 | scope        | Array<String> | Sets [LinkedIn application permissions]                    |
 
-**NOTE**: To enable authentication with LinkedIn, set `auth.linkedin.enabled` to `true`. Also, add the 
+**NOTE**: To enable authentication with LinkedIn, set `auth.linkedin.enabled` to `true`. Also, add the
 `LINKEDIN_CLIENTID` and `LINKEDIN_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
@@ -602,15 +602,15 @@ LINKEDIN_CLIENTID="Use your LinkedIn client ID"
 LINKEDIN_CLIENTSECRET="Use your LinkedIn client secret"
 ```
 
-To get the client ID and client secret values from LinkedIn, you need to register with [LinkedIn OAuth Apps]. Consult 
+To get the client ID and client secret values from LinkedIn, you need to register with [LinkedIn OAuth Apps]. Consult
 [Connect Your App to LinkedIn] for details.
 
-**NOTE**: When you create a LinkedIn application with LinkedIn OAuth Apps, you need to enter the correct **absolute** 
-callback URL into the **Authorized Redirect URLs** input field. 
+**NOTE**: When you create a LinkedIn application with LinkedIn OAuth Apps, you need to enter the correct **absolute**
+callback URL into the **Authorized Redirect URLs** input field.
 
-The `auth.linkedin.callbackURL` property stores the relative callback URL `/auth/linkedin/callback`, which gets 
-concatenated with `http://localhost:3000/`. The absolute callback URL for LinkedIn is 
-`http://localhost:3000/auth/linkedin/callback`, and you need to add this URL to your app in [LinkedIn OAuth Apps] 
+The `auth.linkedin.callbackURL` property stores the relative callback URL `/auth/linkedin/callback`, which gets
+concatenated with `http://localhost:3000/`. The absolute callback URL for LinkedIn is
+`http://localhost:3000/auth/linkedin/callback`, and you need to add this URL to your app in [LinkedIn OAuth Apps]
 settings for development mode.
 
 #### `google`
@@ -625,7 +625,7 @@ The `google` property contains configurations for Google authentication implemen
 | callbackURL  | String        | Sets the Google app callback URL                         |
 | scope        | Array<String> | Sets the [Google auth scopes]                            |
 
-**NOTE**: To enable authentication with Google, set `auth.google.enabled` to `true`. Also, add the `GOOLGE_CLIENTID` and 
+**NOTE**: To enable authentication with Google, set `auth.google.enabled` to `true`. Also, add the `GOOLGE_CLIENTID` and
 `GOOLGE_CLIENTSECRET` values into the `packages/server/.env` file:
 
 ```dotenv
@@ -633,32 +633,32 @@ GOOLGE_CLIENTID="Use your Google client ID"
 GOOLGE_CLIENTSECRET="Use your Google client secret"
 ```
 
-To get the client ID and client secret values from Google, you need to register with [Google Identity Platform]. Consult 
+To get the client ID and client secret values from Google, you need to register with [Google Identity Platform]. Consult
 [Connect Your App to Google] for details.
 
-**NOTE**: When you create a Google application with Google Identity Platform, you need to enter the correct **absolute** 
-callback URL into the **Authorized redirect URIs** input field. 
+**NOTE**: When you create a Google application with Google Identity Platform, you need to enter the correct **absolute**
+callback URL into the **Authorized redirect URIs** input field.
 
-The `auth.google.callbackURL` property points to the relative callback URL `/auth/google/callback`, which gets 
-concatenated with `http://localhost:3000/`. The absolute callback URL for Google is 
-`http://localhost:3000/auth/google/callback`, and you need to add this URL to your app in Google Identity Platform 
+The `auth.google.callbackURL` property points to the relative callback URL `/auth/google/callback`, which gets
+concatenated with `http://localhost:3000/`. The absolute callback URL for Google is
+`http://localhost:3000/auth/google/callback`, and you need to add this URL to your app in Google Identity Platform
 settings for development mode.
 
-**NOTE**: You may also need to activate the Google+ API to be able to authenticate with Google. Otherwise, you may see 
-the error `ServerError: Access Not Configured. Google+ API has not been used in project 245355975001 before or it is 
+**NOTE**: You may also need to activate the Google+ API to be able to authenticate with Google. Otherwise, you may see
+the error `ServerError: Access Not Configured. Google+ API has not been used in project 245355975001 before or it is
 disabled.` (Instead of `245355975001` the error will contain the actual number of your project.)
 
 You can also view the error in the console:
 
 ```
 name: 'GooglePlusAPIError',
-message: 'Access Not Configured. Google+ API has not been used in project 245355975001 before or it is disabled. Enable 
-it by visiting https://console.developers.google.com/apis/api/plus.googleapis.com/overview?project=245355975001 then 
+message: 'Access Not Configured. Google+ API has not been used in project 245355975001 before or it is disabled. Enable
+it by visiting https://console.developers.google.com/apis/api/plus.googleapis.com/overview?project=245355975001 then
 retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.',
 code: 403 }
 ```
- 
-If the error was produced, you need to visit the link shown in the terminal and activate Google+ for your application. 
+
+If the error was produced, you need to visit the link shown in the terminal and activate Google+ for your application.
 
 [opening visual studio code with urls]: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
 [visual studio code url handler]: https://github.com/sysgears/vscode-handler#visual-studio-code-url-handler
@@ -684,9 +684,9 @@ If the error was produced, you need to visit the link shown in the terminal and 
 [nodemailer]: https://nodemailer.com/about/
 [general options]: https://nodemailer.com/smtp/#general-options
 [authentication]: https://nodemailer.com/smtp/#authentication
-[docs/modules/mobileChat.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/mobileChat.md
+[docs/modules/mobileChat.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Mobile%20Chat.md
 [dedicated apollo blog post]: https://blog.apollographql.com/understanding-pagination-rest-graphql-and-relay-b10f835549e7
-[docs/modules/stripeSubscription.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/stripeSubscription.md
+[docs/modules/stripeSubscription.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
 [passport-facebook]: https://github.com/jaredhanson/passport-facebook
 [facebook apps]: https://developers.facebook.com/apps
 [connect your app to facebook]: https://auth0.com/docs/connections/social/facebook

@@ -1,7 +1,7 @@
 import { AuthModule } from '@gqlapp/authentication-server-ts';
 import settings from '@gqlapp/config';
 
-import schema from './schema.graphql';
+import schema from './schema';
 import resolvers from './resolvers';
 
 export default (settings.auth.social.googleExpo.enabled && !__TEST__

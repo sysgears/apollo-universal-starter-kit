@@ -15,16 +15,12 @@ const LoginView = ({ onSubmit, t, isRegistered, hideModal, history, client }) =>
   } = history;
 
   useEffect(() => {
-    if (search && search.includes('data')) {
+    if (search && search.includes('data=') && search.includes('tokens')) {
       checkTokensRedirectToProfile();
     }
   }, []);
 
   const checkTokensRedirectToProfile = async () => {
-    // Checks exists data in link
-    const dataRegExp = /data=([^#]+)/;
-    if (!search.match(dataRegExp)) return;
-
     await getAndSaveTokensFromUrl(search);
     await authentication.doLogin(client);
     history.push('profile');

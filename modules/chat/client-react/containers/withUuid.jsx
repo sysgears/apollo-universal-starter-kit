@@ -1,7 +1,7 @@
 import React from 'react';
 import uuid from 'uuid';
 
-import { getItem, setItem } from '@gqlapp/core-common';
+import { getItem, setItem } from '@gqlapp/core-common/clientStorage';
 
 export default Component => {
   return class WithUuid extends React.Component {

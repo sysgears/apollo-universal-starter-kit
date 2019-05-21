@@ -17,13 +17,12 @@ export const defineLoginWay = (socialNetwork, login, expoLogin) => {
   const {
     auth: {
       social: {
-        [socialNetwork]: { enabled: isLogin },
-        [`${socialNetwork}Expo`]: { enabled: isExpoLogin }
+        [socialNetwork]: { enabled: isWebLogin }
       }
     }
   } = settings;
 
-  if ((isLogin && isExpoLogin) || isLogin) {
+  if (isWebLogin) {
     return () => login();
   } else {
     return client => expoLogin(client);

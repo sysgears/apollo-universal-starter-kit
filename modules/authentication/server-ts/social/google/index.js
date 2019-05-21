@@ -7,7 +7,7 @@ import AuthModule from '../AuthModule';
 
 const {
   enabled,
-  passport: { clientID, clientSecret, scope, callbackURL }
+  redirect: { clientID, clientSecret, scope, callbackURL }
 } = settings.auth.social.google;
 
 const middleware = (app, { social }) => {

@@ -1,6 +1,5 @@
 import url from 'url';
 import { Constants } from 'expo';
-import { setItem } from '@gqlapp/core-common/clientStorage';
 import settings from '@gqlapp/config';
 
 export const buildRedirectUrlForMobile = authType => {
@@ -13,18 +12,13 @@ export const buildRedirectUrlForMobile = authType => {
   )}`;
 };
 
-export const defineLoginWay = (socialNetwork, passportLogin, expoLogin) => {
+export const defineLoginWay = (socialNetwork, redirectLogin, apiCallLogin) => {
   const {
     auth: {
       social: {
-        [socialNetwork]: { mobileType }
+        [socialNetwork]: { mobileTypeAuth }
       }
     }
   } = settings;
-  return mobileType === 'expo' ? client => expoLogin(client) : () => passportLogin();
-};
-
-export const saveTokens = async ({ accessToken, refreshToken }) => {
-  await setItem('accessToken', accessToken);
-  await setItem('refreshToken', refreshToken);
+  return mobileTypeAuth === 'apiCall' ? client => apiCallLogin(client) : () => redirectLogin();
 };

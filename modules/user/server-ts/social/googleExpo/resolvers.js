@@ -60,7 +60,7 @@ export default () => ({
 
       const tokens = await access.grantAccess(user, req, user.passwordHash);
 
-      return { ...tokens };
+      return { tokens };
     }
   }
 });

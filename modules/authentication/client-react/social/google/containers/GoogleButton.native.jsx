@@ -8,7 +8,7 @@ import { lookStyles } from '@gqlapp/look-client-react-native';
 
 import settings from '@gqlapp/config';
 import authentication from '../../../index';
-import { buildRedirectUrlForMobile, defineLoginWay, saveTokens } from '../../../helpers';
+import { buildRedirectUrlForMobile, defineLoginWay } from '../../../helpers';
 
 import GOOGLE_EXPO_LOGIN from '../graphql/GoogleExpoLogin.graphql';
 
@@ -23,7 +23,7 @@ const {
   btnText
 } = lookStyles;
 
-const googlePassportLogin = () => {
+const redirectLogin = () => {
   const url = buildRedirectUrlForMobile('google');
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
@@ -32,12 +32,12 @@ const googlePassportLogin = () => {
   }
 };
 
-const googleExpoLogin = async client => {
+const apiCallLogin = async client => {
   const {
     auth: {
       social: {
         google: {
-          expo: { androidClientId, iosClientId }
+          apiCall: { androidClientId, iosClientId }
         }
       }
     }
@@ -50,18 +50,14 @@ const googleExpoLogin = async client => {
 
     if (type === 'success') {
       // Gets accessToken, refreshToken and save them to storage
-      const { data } = await client.mutate({
+      await client.mutate({
         mutation: GOOGLE_EXPO_LOGIN,
         variables: {
           input: { accessToken }
         }
       });
 
-      if (data && data.googleExpoLogin) {
-        const { accessToken, refreshToken } = data.googleExpoLogin;
-        await saveTokens({ accessToken, refreshToken });
-        await authentication.doLogin(client);
-      }
+      await authentication.doLogin(client);
     } else {
       return { cancelled: true };
     }
@@ -74,7 +70,7 @@ const googleExpoLogin = async client => {
  * Defines and returns a method for processing authorization
  * depending on the app settings
  */
-const handleLogin = defineLoginWay('google', googlePassportLogin, googleExpoLogin);
+const handleLogin = defineLoginWay('google', redirectLogin, apiCallLogin);
 
 const GoogleButton = withApollo(({ text, client }) => {
   return (

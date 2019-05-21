@@ -5,9 +5,12 @@ export default gql`
     accessToken: String!
   }
 
-  type GoogleExpoLoginPayload {
+  type ExpoTokens {
     accessToken: String
     refreshToken: String
+  }
+  type GoogleExpoLoginPayload {
+    tokens: ExpoTokens!
   }
 
   extend type Mutation {

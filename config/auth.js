@@ -47,15 +47,21 @@ export default {
       scope: ['r_emailaddress', 'r_basicprofile']
     },
     google: {
+      // The mobile app has two methods to make an authorization:
+      // - "redirect" - realized via the passport library,
+      // - "apiCall" - realized via the Expo Server side APIs
+      // For switch authorization method need to change "mobileTypeAuth"
+      // by default "redirect"
+      // The web app using only the "redirect" method
       enabled: false,
-      mobileType: 'passport',
-      passport: {
+      mobileTypeAuth: 'redirect',
+      redirect: {
         clientID: process.env.GOOGLE_CLIENTID,
         clientSecret: process.env.GOOGLE_CLIENTSECRET,
         callbackURL: '/auth/google/callback',
         scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
       },
-      expo: {
+      apiCall: {
         androidClientId: process.env.ANDROID_CLIENTID,
         iosClientId: process.env.IOS_CLIENTID
       }

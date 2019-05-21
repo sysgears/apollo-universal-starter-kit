@@ -4,6 +4,8 @@ import settings from '@gqlapp/config';
 import schema from './schema';
 import resolvers from './resolvers';
 
-export default (settings.auth.social.googleExpo.enabled && !__TEST__
+const isExpo = settings.auth.social.google.enabled && settings.auth.social.google.mobileType === 'expo';
+
+export default (isExpo && !__TEST__
   ? new AuthModule({ schema: [schema], createResolversFunc: [resolvers] })
   : undefined);

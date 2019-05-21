@@ -5,7 +5,10 @@ import settings from '@gqlapp/config';
 
 import AuthModule from '../AuthModule';
 
-const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.google;
+const {
+  enabled,
+  passport: { clientID, clientSecret, scope, callbackURL }
+} = settings.auth.social.google;
 
 const middleware = (app, { social }) => {
   if (!enabled || __TEST__) {

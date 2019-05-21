@@ -13,20 +13,15 @@ export const buildRedirectUrlForMobile = authType => {
   )}`;
 };
 
-export const defineLoginWay = (socialNetwork, login, expoLogin) => {
+export const defineLoginWay = (socialNetwork, passportLogin, expoLogin) => {
   const {
     auth: {
       social: {
-        [socialNetwork]: { enabled: isWebLogin }
+        [socialNetwork]: { mobileType }
       }
     }
   } = settings;
-
-  if (isWebLogin) {
-    return () => login();
-  } else {
-    return client => expoLogin(client);
-  }
+  return mobileType === 'expo' ? client => expoLogin(client) : () => passportLogin();
 };
 
 export const saveTokens = async ({ accessToken, refreshToken }) => {

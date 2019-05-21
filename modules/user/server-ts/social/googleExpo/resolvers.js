@@ -20,6 +20,9 @@ const getUserInfo = async accessToken => {
     .then(response => response.json())
     .then(({ id, email, name }) => {
       return { id, email, name };
+    })
+    .catch(e => {
+      throw e;
     });
 };
 

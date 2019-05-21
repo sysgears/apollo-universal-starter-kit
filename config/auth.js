@@ -48,15 +48,17 @@ export default {
     },
     google: {
       enabled: false,
-      clientID: process.env.GOOGLE_CLIENTID,
-      clientSecret: process.env.GOOGLE_CLIENTSECRET,
-      callbackURL: '/auth/google/callback',
-      scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
-    },
-    googleExpo: {
-      enabled: true,
-      androidClientId: process.env.ANDROID_CLIENTID,
-      iosClientId: process.env.IOS_CLIENTID
+      mobileType: 'passport',
+      passport: {
+        clientID: process.env.GOOGLE_CLIENTID,
+        clientSecret: process.env.GOOGLE_CLIENTSECRET,
+        callbackURL: '/auth/google/callback',
+        scope: ['https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
+      },
+      expo: {
+        androidClientId: process.env.ANDROID_CLIENTID,
+        iosClientId: process.env.IOS_CLIENTID
+      }
     }
   }
 };

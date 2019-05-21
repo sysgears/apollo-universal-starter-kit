@@ -13,14 +13,6 @@ import { buildRedirectUrlForMobile, defineLoginWay, saveTokens } from '../../../
 import GOOGLE_EXPO_LOGIN from '../graphql/GoogleExpoLogin.graphql';
 
 const {
-  auth: {
-    social: {
-      googleExpo: { androidClientId, iosClientId }
-    }
-  }
-} = settings;
-
-const {
   iconWrapper,
   linkText,
   link,
@@ -31,7 +23,7 @@ const {
   btnText
 } = lookStyles;
 
-const googleLogin = () => {
+const googlePassportLogin = () => {
   const url = buildRedirectUrlForMobile('google');
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(url);
@@ -41,6 +33,16 @@ const googleLogin = () => {
 };
 
 const googleExpoLogin = async client => {
+  const {
+    auth: {
+      social: {
+        google: {
+          expo: { androidClientId, iosClientId }
+        }
+      }
+    }
+  } = settings;
+
   try {
     const { accessToken, type } = await Google.logInAsync({
       clientId: Platform.OS === 'ios' ? iosClientId : androidClientId
@@ -72,7 +74,7 @@ const googleExpoLogin = async client => {
  * Defines and returns a method for processing authorization
  * depending on the app settings
  */
-const handleLogin = defineLoginWay('google', googleLogin, googleExpoLogin);
+const handleLogin = defineLoginWay('google', googlePassportLogin, googleExpoLogin);
 
 const GoogleButton = withApollo(({ text, client }) => {
   return (

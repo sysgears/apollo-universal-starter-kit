@@ -1,4 +1,4 @@
-# Frequently Asked Questions about Apollo Universal Starter Kit 
+# Frequently Asked Questions about Apollo Universal Starter Kit
 
 In this section, you'll find answers on the following frequently asked questions:
 
@@ -31,16 +31,16 @@ Whenever you want to receive updates, first run:
 
 ```bash
 git fetch upstream
-``` 
+```
 
 Then run when you are in the master branch of your project:
-```bash 
+```bash
 git merge upstream/stable
 ```
 
 ## How do I use a custom GraphQL back end?
 
-To set your custom GraphQL back end endpoint, change the URL in `packages/server/.zenrc.js` for the 
+To set your custom GraphQL back end endpoint, change the URL in `packages/server/.zenrc.js` for the
 `config.options.define.__API_URL__` property:
 
 ```javascript
@@ -61,7 +61,7 @@ const config = {
 ```
 
 We recommend that you still run the back-end code provided by the starter kit to use the server-side rendering (SSR).
-You can also turn off SSR if you don't use the starter kit back end. Set the `config.options.ssr` to `false` in 
+You can also turn off SSR if you don't use the starter kit back end. Set the `config.options.ssr` to `false` in
 `packages/server/.zenrc.js`:
 
 ```javascript
@@ -131,10 +131,10 @@ More information: [Server Side Rendering with Apollo Universal Starter Kit].
 
 ## How do I use a different database instead of SQLite?
 
-You can almost all relational database management systems that use SQL and are supported by [Knex] such as PostgreSQL, 
+You can almost all relational database management systems that use SQL and are supported by [Knex] such as PostgreSQL,
 MySQL, MSSQL, MariaDB, SQLite3, and Oracle.
 
-Apollo Universal Starter Kit is database-agnostic. You can any other databases if they support a JavaScript client 
+Apollo Universal Starter Kit is database-agnostic. You can any other databases if they support a JavaScript client
 provided by Knex. This way you can create a simple connector and export it normally in place of the Knex connector.
 
 Reference: [#525](https://github.com/sysgears/apollo-universal-starter-kit/issues/525)
@@ -175,7 +175,7 @@ export default {
   }
 };
 ```
- 
+
 ## How do I add support for a custom domain name in the local development environment?
 
 First, modify the host file in the following way:
@@ -214,29 +214,29 @@ iOS platforms. If the logic for these two platforms is different, use `.android.
 Android, and `.ios.tsx` for iOS.
 
 For example, here's how the files may be called for the Storage module:
- 
+
 * `storage.tsx` for the web and server platforms
 * `storage.native.tsx` for the mobile app for files with the same logic
 * `storage.android.tsx` for the custom logic for the Android platform
 * `storage.ios.tsx` for the custom logic for the iOS platform  
 
-Apollo Universal Starter Kit uses Webpack to build the code for all the platforms &ndash; server, web, Android, and iOS. 
-The starter kit uses the [`resolve.extensions`] Webpack property to understand which files should be used for generating 
+Apollo Universal Starter Kit uses Webpack to build the code for all the platforms &ndash; server, web, Android, and iOS.
+The starter kit uses the [`resolve.extensions`] Webpack property to understand which files should be used for generating
 a specific platform bundle when there are several files with the same name but different extensions.
 
 ## How do I always keep my Apollo Starter Kit project up-to-date?
 
 The best way for keeping your Apollo Universal Starter Kit project always up-to-date is to configure a remote repository
-that points to the upstream of the original repository. 
+that points to the upstream of the original repository.
 
-You can consult [Configuring a Remote for a Fork] documentation on GitHub. Using this feature, you can easily pull in 
+You can consult [Configuring a Remote for a Fork] documentation on GitHub. Using this feature, you can easily pull in
 the latest changes made to this kit. For that, consult the [Syncing a Fork].
 
-If you intend to make significant changes to existing modules, we suggest you copy and rename the modules, to limit the 
+If you intend to make significant changes to existing modules, we suggest you copy and rename the modules, to limit the
 amount of merge conflicts to a minimum.
 
 [knex]: https://knexjs.org/
 [`resolve.extensions`]: https://webpack.js.org/configuration/resolve/#resolve-extensions
-[server side rendering with apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/configuration.md#server-side-rendering
+[server side rendering with apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Configuration.md#server-side-rendering
 [configuring a remote for a fork]: https://help.github.com/articles/configuring-a-remote-for-a-fork/
 [syncing a fork]: https://help.github.com/articles/syncing-a-fork/

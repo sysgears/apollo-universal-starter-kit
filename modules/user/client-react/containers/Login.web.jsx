@@ -24,7 +24,7 @@ const Login = props => {
       setIsRegistered(true);
     }
     setIsReady(true);
-  }, []);
+  }, [search]);
 
   const hideModal = () => {
     setIsRegistered(false);

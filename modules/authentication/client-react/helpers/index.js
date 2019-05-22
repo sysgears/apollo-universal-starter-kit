@@ -16,9 +16,9 @@ export const defineLoginWay = (socialNetwork, redirectLogin, apiCallLogin) => {
   const {
     auth: {
       social: {
-        [socialNetwork]: { mobileTypeAuth }
+        [socialNetwork]: { mobileAuthType }
       }
     }
   } = settings;
-  return mobileTypeAuth === 'apiCall' ? client => apiCallLogin(client) : () => redirectLogin();
+  return mobileAuthType === 'apiCall' ? client => apiCallLogin(client) : () => redirectLogin();
 };

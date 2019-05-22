@@ -14,8 +14,10 @@ const LoginView = ({ onSubmit, t, isRegistered, hideModal, history, client }) =>
     location: { search }
   } = history;
 
+  const dataRegExp = /data=([^#]+)/;
+
   useEffect(() => {
-    if (search && search.includes('data=') && search.includes('tokens')) {
+    if (search && dataRegExp.test(search)) {
       checkTokensRedirectToProfile();
     }
   }, []);

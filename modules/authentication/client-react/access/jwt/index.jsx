@@ -54,7 +54,7 @@ const JWTLink = getApolloClient =>
           sub = forward(operation).subscribe({
             next: result => {
               const promise = (async () => {
-                if (operation.operationName.toLowerCase().includes('login')) {
+                if (/login|googleExpoLogin/.test(operation.operationName)) {
                   if (!!result.data && result.data[operation.operationName].tokens) {
                     const {
                       data: {

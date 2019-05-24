@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
       table.string('password_hash');
       table.string('role').defaultTo('user');
       table.boolean('is_active').defaultTo(false);
+      table.integer('auth_salt').defaultTo(1);
       table.timestamps(false, true);
     }),
     knex.schema.createTable('user_profile', table => {

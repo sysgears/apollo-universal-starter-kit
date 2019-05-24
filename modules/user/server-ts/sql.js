@@ -113,6 +113,7 @@ class User {
           'u.username',
           'u.password_hash',
           'u.role',
+          'u.auth_salt',
           'u.is_active',
           'u.email',
           'up.first_name',
@@ -364,6 +365,12 @@ class User {
         .leftJoin('user_profile AS up', 'up.user_id', 'u.id')
         .first()
     );
+  }
+
+  async increaseAuthSalt(userId) {
+    return knex('user')
+      .where('id', '=', userId)
+      .increment('auth_salt', 1);
   }
 }
 const userDAO = new User();

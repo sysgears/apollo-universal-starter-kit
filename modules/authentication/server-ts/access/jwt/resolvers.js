@@ -29,7 +29,7 @@ export default () => ({
 
       const identity = await getIdentity(decodedToken.id);
       const hash = getHash ? await getHash(decodedToken.id) : '';
-      const refreshSecret = settings.auth.secret + hash;
+      const refreshSecret = settings.auth.secret + hash + identity.authSalt;
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);

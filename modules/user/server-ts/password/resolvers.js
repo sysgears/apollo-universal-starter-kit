@@ -140,6 +140,9 @@ export default () => ({
       }
       if (user) {
         await User.updatePassword(user.id, reset.password);
+
+        await User.increaseAuthSalt(user.id);
+
         const url = `${__WEBSITE_URL__}/profile`;
         if (mailer && settings.auth.password.sendPasswordChangesEmail) {
           mailer.sendMail({

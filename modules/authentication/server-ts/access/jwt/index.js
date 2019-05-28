@@ -9,7 +9,7 @@ import schema from './schema';
 import AccessModule from '../AccessModule';
 
 const grant = async (identity, req, hash = '') => {
-  const refreshSecret = settings.auth.secret + hash;
+  const refreshSecret = settings.auth.secret + hash + identity.authSalt;
   const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret, req.t);
 
   return {
@@ -28,11 +28,13 @@ const getCurrentIdentity = async ({ req }) => {
   }
 };
 
-const createContextFunc = async ({ req, graphqlContext }) => {
+const createContextFunc = async ({ req, graphqlContext, appContext }) => {
+  const { getIdentity, getHash } = appContext;
+
   try {
     const identity = graphqlContext.identity || (await getCurrentIdentity({ req }));
 
-    return { identity };
+    return { identity, getIdentity, getHash };
   } catch (e) {
     throw new AuthenticationError(e);
   }

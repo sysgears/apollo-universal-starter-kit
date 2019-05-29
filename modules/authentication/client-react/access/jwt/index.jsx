@@ -6,6 +6,7 @@ import settings from '@gqlapp/config';
 import AccessModule from '../AccessModule';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
+import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
@@ -29,6 +30,18 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
+};
+
+const logoutFromAllDevices = async client => {
+  const accessToken = await getItem('accessToken');
+  const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { accessToken: accessToken } });
+
+  if (data && data.logoutFromAllDevices) {
+    const { accessToken, refreshToken } = data.logoutFromAllDevices;
+    await saveTokens({ accessToken, refreshToken });
+  } else {
+    await removeTokens();
+  }
 };
 
 const JWTLink = getApolloClient =>
@@ -131,6 +144,7 @@ const JWTLink = getApolloClient =>
 export default (settings.auth.jwt.enabled
   ? new AccessModule({
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
-      logout: [removeTokens]
+      logout: [removeTokens],
+      logoutFromAllDevices: [logoutFromAllDevices]
     })
   : undefined);

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 
 import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout } from '@gqlapp/look-client-react';
+import { LayoutCenter, Card, CardGroup, CardTitle, CardText, PageLayout, Button } from '@gqlapp/look-client-react';
 import settings from '@gqlapp/config';
 
 const renderMetaData = t => {
@@ -22,7 +22,7 @@ const renderMetaData = t => {
   );
 };
 
-const ProfileView = ({ currentUserLoading, currentUser, t }) => {
+const ProfileView = ({ currentUserLoading, currentUser, logoutFromAllDevices, t }) => {
   if (currentUserLoading && !currentUser) {
     return (
       <PageLayout>
@@ -63,6 +63,7 @@ const ProfileView = ({ currentUserLoading, currentUser, t }) => {
           <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
             {t('profile.editProfileText')}
           </Link>
+          <Button onClick={logoutFromAllDevices}>Logout from all devices</Button>
         </LayoutCenter>
       </PageLayout>
     );

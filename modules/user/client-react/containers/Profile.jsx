@@ -1,21 +1,28 @@
 // React
 import React from 'react';
-
-// Apollo
-import { graphql, compose } from 'react-apollo';
-
-// Components
+import { Query } from 'react-apollo';
+import authentication from '@gqlapp/authentication-client-react';
 import ProfileView from '../components/ProfileView';
 
 import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 
-const Profile = props => <ProfileView {...props} />;
+const logoutFromAllDevices = async client => {
+  await authentication.doLogoutFromAllDevices(client);
+};
 
-export default compose(
-  graphql(CURRENT_USER_QUERY, {
-    props({ data: { loading, error, currentUser } }) {
+const Profile = () => (
+  <Query query={CURRENT_USER_QUERY}>
+    {({ data: { loading, error, currentUser }, client }) => {
       if (error) throw new Error(error);
-      return { loading, currentUser };
-    }
-  })
-)(Profile);
+      return (
+        <ProfileView
+          loading={loading}
+          currentUser={currentUser}
+          logoutFromAllDevices={() => logoutFromAllDevices(client)}
+        />
+      );
+    }}
+  </Query>
+);
+
+export default Profile;

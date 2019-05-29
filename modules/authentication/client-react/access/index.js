@@ -21,6 +21,10 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
+const logoutFromAllDevices = async client => {
+  await resetApolloCacheAndRerenderApp(client);
+};
+
 class PageReloader extends React.Component {
   constructor(props) {
     super(props);
@@ -53,5 +57,6 @@ AuthPageReloader.propTypes = {
 export default new AccessModule(jwt, session, {
   dataRootComponent: [AuthPageReloader],
   login: [login],
-  logout: [logout]
+  logout: [logout],
+  logoutFromAllDevices: [logoutFromAllDevices]
 });

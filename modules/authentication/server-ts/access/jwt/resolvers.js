@@ -43,6 +43,24 @@ export default () => ({
         accessToken,
         refreshToken
       };
+    },
+    async logoutFromAllDevices(obj, { accessToken: token }, { updateAuthSalt, getHash, getIdentity }) {
+      const {
+        identity: { id }
+      } = jwt.decode(token);
+
+      await updateAuthSalt(id);
+
+      const updatedIdentity = await getIdentity(id);
+
+      const hash = getHash ? await getHash(id) : '';
+      const refreshSecret = `${settings.auth.secret}${hash}${updatedIdentity.authSalt}`;
+      const [accessToken, refreshToken] = await createTokens(updatedIdentity, settings.auth.secret, refreshSecret);
+
+      return {
+        accessToken,
+        refreshToken
+      };
     }
   }
 });

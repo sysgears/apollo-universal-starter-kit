@@ -369,7 +369,7 @@ class User {
     );
   }
 
-  async increaseAuthSalt(userId) {
+  async updateAuthSalt(userId) {
     return knex('user')
       .where('id', '=', userId)
       .increment('auth_salt', 1);

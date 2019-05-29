@@ -18,6 +18,8 @@ const getIdentity = (id, serial = '') => {
   return User.getUser(id);
 };
 
+const updateAuthSalt = id => User.updateAuthSalt(id);
+
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
 const createContextFunc = ({ graphqlContext: { identity } }) => ({
@@ -29,6 +31,7 @@ const createContextFunc = ({ graphqlContext: { identity } }) => ({
 });
 
 const appContext = {
+  updateAuthSalt,
   getIdentity,
   getHash
 };

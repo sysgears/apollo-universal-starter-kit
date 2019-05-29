@@ -29,12 +29,12 @@ const getCurrentIdentity = async ({ req }) => {
 };
 
 const createContextFunc = async ({ req, graphqlContext, appContext }) => {
-  const { getIdentity, getHash } = appContext;
+  const { getIdentity, getHash, updateAuthSalt } = appContext;
 
   try {
     const identity = graphqlContext.identity || (await getCurrentIdentity({ req }));
 
-    return { identity, getIdentity, getHash };
+    return { identity, getIdentity, getHash, updateAuthSalt };
   } catch (e) {
     throw new AuthenticationError(e);
   }

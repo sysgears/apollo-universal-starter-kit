@@ -6,6 +6,7 @@ fragment UserInfo on User {
   role
   isActive
   email
+  authSalt
   profile {
     ...UserProfileInfo
   }

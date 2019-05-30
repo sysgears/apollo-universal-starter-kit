@@ -1,0 +1,5 @@
+subscription onLogoutFromAllDevicess($token: String!) {
+  subscriptionLogoutFromAllDevices(token: $token) {
+    token
+  }
+}

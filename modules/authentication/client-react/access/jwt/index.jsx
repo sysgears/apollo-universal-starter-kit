@@ -1,3 +1,8 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+
+import { Subscription, withApollo } from 'react-apollo';
+
 import { ApolloLink, Observable } from 'apollo-link';
 
 import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
@@ -7,6 +12,7 @@ import AccessModule from '../AccessModule';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';
+import SUBSCRIPTION_LOGOUT from './graphql/LogoutFromAllDevicessSubscription.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
@@ -30,18 +36,6 @@ const saveTokens = async ({ accessToken, refreshToken }) => {
 const removeTokens = async () => {
   await removeItem('accessToken');
   await removeItem('refreshToken');
-};
-
-const logoutFromAllDevices = async client => {
-  const accessToken = await getItem('accessToken');
-  const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { accessToken: accessToken } });
-
-  if (data && data.logoutFromAllDevices) {
-    const { accessToken, refreshToken } = data.logoutFromAllDevices;
-    await saveTokens({ accessToken, refreshToken });
-  } else {
-    await removeTokens();
-  }
 };
 
 const JWTLink = getApolloClient =>
@@ -141,8 +135,55 @@ const JWTLink = getApolloClient =>
     });
   });
 
+const logoutFromAllDevices = async client => {
+  const accessToken = await getItem('accessToken');
+  const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { accessToken: accessToken } });
+  if (data && data.logoutFromAllDevices) {
+    const { accessToken, refreshToken } = data.logoutFromAllDevices;
+    await saveTokens({ accessToken, refreshToken });
+  } else {
+    await removeTokens();
+  }
+};
+
+class DataRootComponent extends React.Component {
+  state = {
+    token: ''
+  };
+
+  async componentDidMount() {
+    const token = await getItem('accessToken');
+    this.setState({ token });
+  }
+
+  removeTokensAndClearStore = async client => {
+    await removeTokens();
+    await client.clearStore();
+  };
+
+  render() {
+    const { token } = this.state;
+    return (
+      <Subscription subscription={SUBSCRIPTION_LOGOUT} variables={{ token }}>
+        {({ data }) => {
+          if (data) {
+            this.removeTokensAndClearStore(this.props.client);
+          }
+          return this.props.children;
+        }}
+      </Subscription>
+    );
+  }
+}
+
+DataRootComponent.propTypes = {
+  client: PropTypes.object,
+  children: PropTypes.node
+};
+
 export default (settings.auth.jwt.enabled
   ? new AccessModule({
+      dataRootComponent: [withApollo(DataRootComponent)],
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens],
       logoutFromAllDevices: [logoutFromAllDevices]

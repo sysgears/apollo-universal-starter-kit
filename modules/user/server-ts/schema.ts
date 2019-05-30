@@ -8,6 +8,7 @@ export default gql`
     isActive: Boolean
     email: String!
     profile: UserProfile
+    authSalt: Int
     auth: UserAuth
   }
 

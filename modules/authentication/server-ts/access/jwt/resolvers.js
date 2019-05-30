@@ -1,3 +1,4 @@
+import { withFilter } from 'graphql-subscriptions';
 import jwt from 'jsonwebtoken';
 import { AuthenticationError } from 'apollo-server-errors';
 
@@ -5,7 +6,9 @@ import settings from '@gqlapp/config';
 
 import createTokens from './createTokens';
 
-export default () => ({
+const LOGOUT_SUBSCRIPTION = 'LOGOUT_SUBSCRIPTION';
+
+export default pubsub => ({
   Mutation: {
     async refreshTokens(
       obj,
@@ -57,10 +60,33 @@ export default () => ({
       const refreshSecret = `${settings.auth.secret}${hash}${updatedIdentity.authSalt}`;
       const [accessToken, refreshToken] = await createTokens(updatedIdentity, settings.auth.secret, refreshSecret);
 
+      pubsub.publish(LOGOUT_SUBSCRIPTION, {
+        subscriptionLogoutFromAllDevices: {
+          token: accessToken
+        }
+      });
+
       return {
         accessToken,
         refreshToken
       };
+    }
+  },
+  Subscription: {
+    subscriptionLogoutFromAllDevices: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(LOGOUT_SUBSCRIPTION),
+        (payload, variables) => {
+          const {
+            subscriptionLogoutFromAllDevices: { token: pToken }
+          } = payload;
+          const { token: vToken } = variables;
+
+          const { identity: pIdentity } = jwt.decode(pToken);
+          const { identity: vIdentity } = jwt.decode(vToken);
+          return pIdentity.id === vIdentity.id;
+        }
+      )
     }
   }
 });

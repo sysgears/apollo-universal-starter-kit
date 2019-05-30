@@ -138,7 +138,7 @@ latter is used by default by the starter kit). The database configurations are l
 To be able to use PostgreSQL or MySQL, you only need to add necessary environment variables to `config/db.js` file.
 `packages/server/.env` file:
 
-* `DB_TYPE`. Use `mysql` for MySQL or `pg` for PostgreSQL. If you don't set this property, SQLite will be used by
+* `DB_CLIENT`. Use `mysql` for MySQL or `pg` for PostgreSQL. If you don't set this property, SQLite will be used by
 default
 * `DB_HOST`, you can use `localhost` for development mode.
 * `DB_USER`, database username
@@ -152,7 +152,7 @@ in the `packages/server/.env` file:
 
 ```dotenv
 # Database
-DB_TYPE="use mysql or pg or leave empty"
+DB_CLIENT="use mysql or pg or leave empty"
 DB_HOST=
 DB_SOCKET_PATH=
 DB_USER=

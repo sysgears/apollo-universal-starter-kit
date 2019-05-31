@@ -62,7 +62,7 @@ export default pubsub => ({
 
       pubsub.publish(LOGOUT_SUBSCRIPTION, {
         subscriptionLogoutFromAllDevices: {
-          token: accessToken
+          token
         }
       });
 
@@ -84,7 +84,7 @@ export default pubsub => ({
 
           const { identity: pIdentity } = jwt.decode(pToken);
           const { identity: vIdentity } = jwt.decode(vToken);
-          return pIdentity.id === vIdentity.id;
+          return pIdentity.id === vIdentity.id && pToken !== vToken;
         }
       )
     }

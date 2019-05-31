@@ -16,7 +16,7 @@ const renderProfileItem = (title, value, idx) => (
   </CardItem>
 );
 
-const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
+const ProfileView = ({ currentUserLoading, currentUser, navigation, logoutFromAllDevices, t }) => {
   const profileItems = currentUser
     ? [
         {
@@ -62,6 +62,9 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, t }) => {
           >
             <Text style={styles.linkText}>{t('profile.editProfileText')}</Text>
           </TouchableOpacity>
+          <TouchableOpacity style={styles.linkWrapper} onPress={logoutFromAllDevices}>
+            <Text style={styles.linkText}>Logout from all devices</Text>
+          </TouchableOpacity>
         </ScrollView>
       )}
     </View>
@@ -90,6 +93,7 @@ ProfileView.propTypes = {
   currentUserLoading: PropTypes.bool,
   currentUser: PropTypes.object,
   navigation: PropTypes.object,
+  logoutFromAllDevices: PropTypes.func,
   t: PropTypes.func
 };
 

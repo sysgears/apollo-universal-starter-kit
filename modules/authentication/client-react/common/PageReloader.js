@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-export default class CompReloader extends React.Component {
+export default class PageReloader extends React.Component {
   state = { key: 1 };
 
-  reloadComp = () => {
+  reloadPage = () => {
     this.setState({ key: this.setState + 1 });
   };
 
@@ -13,6 +13,6 @@ export default class CompReloader extends React.Component {
   }
 }
 
-CompReloader.propTypes = {
+PageReloader.propTypes = {
   children: PropTypes.node
 };

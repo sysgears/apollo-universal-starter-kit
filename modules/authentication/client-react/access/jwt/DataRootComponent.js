@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { Subscription, withApollo } from 'react-apollo';
 
 import { getItem } from '@gqlapp/core-common/clientStorage';
-import { removeTokens } from '../helpers';
+import { removeTokens } from './helpers';
 
-import CompReloader from './CompReloader';
+import PageReloader from '../../common/PageReloader';
 
-import SUBSCRIPTION_LOGOUT from '../graphql/LogoutFromAllDevicessSubscription.graphql';
+import SUBSCRIPTION_LOGOUT from './graphql/LogoutFromAllDevicessSubscription.graphql';
 
 class DataRootComponent extends React.Component {
   state = {
@@ -22,10 +22,10 @@ class DataRootComponent extends React.Component {
     this.setState({ token });
   }
 
-  removeTokensAndClearStore = async client => {
+  onReloadPage = async client => {
     await removeTokens();
     await client.clearStore();
-    this.ref.current.reloadComp();
+    this.ref.current.reloadPage();
   };
 
   render() {
@@ -34,9 +34,9 @@ class DataRootComponent extends React.Component {
       <Subscription subscription={SUBSCRIPTION_LOGOUT} variables={{ token }}>
         {({ data, loading }) => {
           if (data && !loading) {
-            this.removeTokensAndClearStore(this.props.client);
+            this.onReloadPage(this.props.client);
           }
-          return <CompReloader ref={this.ref}>{this.props.children}</CompReloader>;
+          return <PageReloader ref={this.ref}>{this.props.children}</PageReloader>;
         }}
       </Subscription>
     );

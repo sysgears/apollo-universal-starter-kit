@@ -6,7 +6,7 @@ import { saveTokens, removeTokens } from './helpers';
 
 import AccessModule from '../AccessModule';
 
-import DataRootComponent from './components/DataRootComponent';
+import DataRootComponent from './DataRootComponent';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';

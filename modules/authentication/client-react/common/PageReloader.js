@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid';
 
 export default class PageReloader extends React.Component {
-  state = { key: 1 };
+  state = { key: uuid.v4() };
 
   reloadPage = () => {
-    this.setState({ key: this.setState + 1 });
+    this.setState({ key: uuid.v4() });
   };
 
   render() {

@@ -1,18 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-
-import { Subscription, withApollo } from 'react-apollo';
-
 import { ApolloLink, Observable } from 'apollo-link';
 
-import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
+import { getItem } from '@gqlapp/core-common/clientStorage';
 import settings from '@gqlapp/config';
+import { saveTokens, removeTokens } from './helpers';
 
 import AccessModule from '../AccessModule';
 
+import DataRootComponent from './components/DataRootComponent';
+
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';
-import SUBSCRIPTION_LOGOUT from './graphql/LogoutFromAllDevicessSubscription.graphql';
 
 const setJWTContext = async operation => {
   const accessToken = await getItem('accessToken');
@@ -26,16 +23,6 @@ const setJWTContext = async operation => {
     ...context,
     headers
   }));
-};
-
-const saveTokens = async ({ accessToken, refreshToken }) => {
-  await setItem('accessToken', accessToken);
-  await setItem('refreshToken', refreshToken);
-};
-
-const removeTokens = async () => {
-  await removeItem('accessToken');
-  await removeItem('refreshToken');
 };
 
 const JWTLink = getApolloClient =>
@@ -146,44 +133,9 @@ const logoutFromAllDevices = async client => {
   }
 };
 
-class DataRootComponent extends React.Component {
-  state = {
-    token: ''
-  };
-
-  async componentDidMount() {
-    const token = await getItem('accessToken');
-    this.setState({ token });
-  }
-
-  removeTokensAndClearStore = async client => {
-    await removeTokens();
-    await client.clearStore();
-  };
-
-  render() {
-    const { token } = this.state;
-    return (
-      <Subscription subscription={SUBSCRIPTION_LOGOUT} variables={{ token }}>
-        {({ data }) => {
-          if (data) {
-            this.removeTokensAndClearStore(this.props.client);
-          }
-          return this.props.children;
-        }}
-      </Subscription>
-    );
-  }
-}
-
-DataRootComponent.propTypes = {
-  client: PropTypes.object,
-  children: PropTypes.node
-};
-
 export default (settings.auth.jwt.enabled
   ? new AccessModule({
-      dataRootComponent: [withApollo(DataRootComponent)],
+      dataRootComponent: [DataRootComponent],
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens],
       logoutFromAllDevices: [logoutFromAllDevices]

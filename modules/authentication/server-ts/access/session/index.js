@@ -6,13 +6,13 @@ import AccessModule from '../AccessModule';
 import schema from './schema';
 import resolvers from './resolvers';
 
-const grant = async ({ id }, req) => {
-  const session = { ...req.session, id };
+const grant = async ({ id, authSalt }, req) => {
+  const session = { ...req.session, id, authSalt };
   req.session = writeSession(req, session);
 };
 
 const getCurrentIdentity = async ({ req, getIdentity }) => {
-  if (req && req.session.id) {
+  if (req && req.session.id && req.session.authSalt) {
     return getIdentity(req.session.id);
   }
 };
@@ -34,14 +34,14 @@ const attachSession = req => {
 };
 
 const createContextFunc = async ({ req, graphqlContext, appContext }) => {
-  const { getIdentity } = appContext;
+  const { getIdentity, updateAuthSalt } = appContext;
 
   attachSession(req);
 
   if (getIdentity) {
     const identity = graphqlContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
-    return { identity };
+    return { identity, updateAuthSalt };
   }
 };
 

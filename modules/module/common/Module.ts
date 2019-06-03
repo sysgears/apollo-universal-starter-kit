@@ -10,7 +10,7 @@ export interface ModuleShape {
    * A hook called on the very start of the application,
    * right after all the feature modules are imported.
    */
-  onAppCreate?: Array<(modules: Module, entryModule: NodeModule) => void>;
+  onAppCreate?: Array<(modules: Module, entryModule: NodeModule) => Promise<any>>;
 }
 
 /**
@@ -52,9 +52,11 @@ class Module {
    *    during development. `module.hot` is not available, when application code is built for
    *    production mode.
    */
-  public createApp(entryModule: NodeModule) {
+  public async createApp(entryModule: NodeModule) {
     if (this.onAppCreate) {
-      this.onAppCreate.forEach(callback => callback(this, entryModule));
+      for (const callback of this.onAppCreate) {
+        await callback(this, entryModule);
+      }
     }
   }
 }

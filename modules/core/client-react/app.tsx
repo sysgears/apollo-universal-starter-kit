@@ -30,7 +30,7 @@ const initWebpackHMR = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
-const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   initWebpackHMR(modules, entryModule);
   onCreateMain(modules, entryModule);
   renderApp({ key: frontendReloadCount });

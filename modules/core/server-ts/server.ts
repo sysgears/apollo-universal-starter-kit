@@ -18,7 +18,7 @@ const ref: { modules: ServerModule; resolve: (server: http.Server) => void } = {
 
 export const serverPromise: Promise<http.Server> = new Promise(resolve => (ref.resolve = resolve));
 
-export const createServer = (modules: ServerModule, entryModule: NodeModule) => {
+export const createServer = async (modules: ServerModule, entryModule: NodeModule) => {
   try {
     ref.modules = modules;
 

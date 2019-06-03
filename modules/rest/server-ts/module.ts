@@ -9,6 +9,6 @@ const ref: { modules: ServerModule } = { modules: null };
 const middleware = (app: Express) => createRestAPI(app, createSchema(ref.modules), ref.modules);
 
 export default new ServerModule({
-  onAppCreate: [(modules: ServerModule) => (ref.modules = modules)],
+  onAppCreate: [async (modules: ServerModule) => (ref.modules = modules)],
   middleware: [middleware]
 });

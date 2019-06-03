@@ -35,7 +35,7 @@ interface EditMessageParams {
 
 const ref: { modules: ServerModule } = { modules: null };
 
-export const onAppCreate = (modules: ServerModule) => (ref.modules = modules);
+export const onAppCreate = async (modules: ServerModule) => (ref.modules = modules);
 
 export default (pubsub: PubSub) => ({
   Query: {

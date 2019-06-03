@@ -13,7 +13,7 @@ interface AwakeInDevAppState {
   isReady: boolean;
 }
 
-export default (modules: ClientModule) => {
+export default async (modules: ClientModule) => {
   // we don't want this to require transformation
   class AwakeInDevApp extends React.Component<AwakeInDevAppProps, AwakeInDevAppState> {
     constructor(props: AwakeInDevAppProps) {

@@ -9,7 +9,7 @@ import MenuItem from './MenuItem';
 
 const ref = { modules: null };
 
-export const onAppCreate = modules => (ref.modules = modules);
+export const onAppCreate = async modules => (ref.modules = modules);
 
 class NavBar extends React.Component {
   state = {

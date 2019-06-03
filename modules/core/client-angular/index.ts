@@ -18,7 +18,7 @@ import 'backend_reload';
 
 import { MainComponent, metaReducers } from './Main';
 
-const createApp = (modules: ClientModule) => {
+const createApp = async (modules: ClientModule) => {
   const client = createApolloClient({
     apiUrl,
     createNetLink: modules.createNetLink,

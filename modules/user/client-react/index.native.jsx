@@ -256,5 +256,5 @@ export default new ClientModule({
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
   dataRootComponent: [DataRootComponent],
-  onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
+  onAppCreate: [async modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

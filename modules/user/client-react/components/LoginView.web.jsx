@@ -20,7 +20,7 @@ const LoginView = ({ onSubmit, t, isRegistered, hideModal, history, client }) =>
     if (search && dataRegExp.test(search)) {
       checkTokensRedirectToProfile();
     }
-  }, [checkTokensRedirectToProfile, dataRegExp, search]);
+  }, []);
 
   const checkTokensRedirectToProfile = async () => {
     await getAndSaveTokensFromUrl(search);

@@ -4,5 +4,6 @@ export default gql`
   extend type Mutation {
     # Logout user
     logout: String
+    logoutFromAllDevices: String
   }
 `;

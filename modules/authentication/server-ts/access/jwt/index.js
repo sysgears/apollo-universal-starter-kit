@@ -9,7 +9,7 @@ import schema from './schema';
 import AccessModule from '../AccessModule';
 
 const grant = async (identity, req, hash = '') => {
-  const refreshSecret = settings.auth.secret + hash + identity.authSalt;
+  const refreshSecret = settings.auth.secret + hash;
   const [accessToken, refreshToken] = await createTokens(identity, settings.auth.secret, refreshSecret, req.t);
 
   return {

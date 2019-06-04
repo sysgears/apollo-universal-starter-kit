@@ -15,12 +15,12 @@ class DataRootComponent extends React.Component {
     token: ''
   };
 
-  ref = React.createRef();
-
   async componentDidMount() {
     const token = await getItem('accessToken');
     this.setState({ token });
   }
+
+  ref = React.createRef();
 
   onReloadPage = async client => {
     await removeTokens();

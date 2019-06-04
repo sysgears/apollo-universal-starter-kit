@@ -1,5 +1,6 @@
 import { withFilter } from 'graphql-subscriptions';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 import { AuthenticationError } from 'apollo-server-errors';
 
 import settings from '@gqlapp/config';
@@ -7,6 +8,10 @@ import settings from '@gqlapp/config';
 import createTokens from './createTokens';
 
 const LOGOUT_SUBSCRIPTION = 'LOGOUT_SUBSCRIPTION';
+
+const createHash = (hash, authSalt = 1) => {
+  return bcrypt.hash(`${hash}${authSalt}`, 12) || false;
+};
 
 export default pubsub => ({
   Mutation: {
@@ -31,8 +36,10 @@ export default pubsub => ({
       }
 
       const identity = await getIdentity(decodedToken.id);
-      const hash = getHash ? await getHash(decodedToken.id) : '';
-      const refreshSecret = settings.auth.secret + hash + identity.authSalt;
+      const identityHash = getHash ? await getHash(decodedToken.id) : '';
+      const hash = createHash(identityHash, identity.authSalt);
+
+      const refreshSecret = settings.auth.secret + hash;
 
       try {
         jwt.verify(inputRefreshToken, refreshSecret);
@@ -55,9 +62,10 @@ export default pubsub => ({
       await updateAuthSalt(id);
 
       const updatedIdentity = await getIdentity(id);
+      const identityHash = getHash ? await getHash(id) : '';
+      const hash = createHash(identityHash, updatedIdentity.authSalt);
 
-      const hash = getHash ? await getHash(id) : '';
-      const refreshSecret = `${settings.auth.secret}${hash}${updatedIdentity.authSalt}`;
+      const refreshSecret = `${settings.auth.secret}${hash}`;
       const [accessToken, refreshToken] = await createTokens(updatedIdentity, settings.auth.secret, refreshSecret);
 
       pubsub.publish(LOGOUT_SUBSCRIPTION, {

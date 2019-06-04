@@ -9,7 +9,7 @@ import settings from '@gqlapp/config';
 
 import User from '../sql';
 
-const createPasswordHash = password => bcrypt.hash(password, 12) || false;
+const createPasswordHash = (password, authSalt = 1) => bcrypt.hash(`${password}${authSalt}`, 12) || false;
 
 const validateUserPassword = async (user, password, t) => {
   if (!user) {
@@ -41,7 +41,9 @@ export default () => ({
       const errors = await validateUserPassword(user, password, req.t);
       if (!isEmpty(errors)) throw new UserInputError('Failed valid user password', { errors });
       const tokens = await access.grantAccess(user, req, user.passwordHash);
-      return { user, tokens };
+
+      const { authSalt, ...userWithoutAuthSalt } = user;
+      return { user: userWithoutAuthSalt, tokens };
     },
     async register(obj, { input }, { mailer, User, req }) {
       const { t } = req;
@@ -84,7 +86,8 @@ export default () => ({
           log.info(`Sent registration confirmation email to: ${user.email}`);
         });
       }
-      return { user };
+      const { authSalt, ...userWithoutAuthSalt } = user;
+      return { user: userWithoutAuthSalt };
     },
     async forgotPassword(obj, { input }, { User, mailer }) {
       try {

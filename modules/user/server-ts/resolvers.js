@@ -20,6 +20,12 @@ const createPasswordHash = password => {
   return bcrypt.hash(password, 12) || false;
 };
 
+const getUser = async (User, id) => {
+  const user = await User.getUser(id);
+  const { authSalt, ...userWithoutAuthSalt } = user;
+  return userWithoutAuthSalt;
+};
+
 export default pubsub => ({
   Query: {
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
@@ -28,7 +34,7 @@ export default pubsub => ({
     user: withAuth(['user:view:self'], (obj, { id }, { identity, User, req: { t } }) => {
       if (identity.id === id || identity.role === 'admin') {
         try {
-          return { user: User.getUser(id) };
+          return { user: getUser(User, id) };
         } catch (e) {
           return { errors: e };
         }
@@ -38,7 +44,7 @@ export default pubsub => ({
     }),
     currentUser(obj, args, { User, identity }) {
       if (identity) {
-        return User.getUser(identity.id);
+        return getUser(User, identity.id);
       } else {
         return null;
       }
@@ -109,7 +115,7 @@ export default pubsub => ({
         }
 
         try {
-          const user = await User.getUser(createdUserId);
+          const user = await getUser(User, createdUserId);
 
           if (mailer && password.requireEmailConfirmation && !emailExists) {
             // async email
@@ -201,7 +207,7 @@ export default pubsub => ({
         }
 
         try {
-          const user = await User.getUser(input.id);
+          const user = await getUser(User, input.id);
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'UPDATED',
@@ -223,7 +229,7 @@ export default pubsub => ({
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === id;
 
-        const user = await User.getUser(id);
+        const user = await getUser(User, id);
         if (!user) {
           throw new Error(t('user:userIsNotExisted'));
         }

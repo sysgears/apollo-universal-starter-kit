@@ -5,11 +5,12 @@ export async function onAuthenticationSuccess(req, res) {
   const user = await User.getUserWithPassword(req.user.id);
   const redirectUrl = req.query.state;
   const tokens = await access.grantAccess(user, req, user.passwordHash);
+  const stringifyTokens = `${tokens ? '?data=' + JSON.stringify({ tokens }) : ''}`;
 
   if (redirectUrl) {
-    res.redirect(redirectUrl + (tokens ? '?data=' + JSON.stringify({ tokens }) : ''));
+    res.redirect(`${redirectUrl}${stringifyTokens}`);
   } else {
-    res.redirect('/profile');
+    res.redirect(`/login${stringifyTokens}`);
   }
 }
 

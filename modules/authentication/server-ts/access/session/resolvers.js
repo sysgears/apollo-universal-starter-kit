@@ -1,6 +1,9 @@
+import { withFilter } from 'graphql-subscriptions';
 import { writeSession } from './sessions';
 
-export default () => ({
+const LOGOUT_SUBSCRIPTION = 'LOGOUT_SUBSCRIPTION';
+
+export default pubsub => ({
   Mutation: {
     logout(obj, args, { req }) {
       const session = { ...req.session };
@@ -13,7 +16,19 @@ export default () => ({
 
       await updateAuthSalt(session.id);
 
+      pubsub.publish(LOGOUT_SUBSCRIPTION, { session });
+
       req.session = writeSession(req, { ...session, authSalt: session.authSalt + 1 });
+    }
+  },
+  Subscription: {
+    subscriptionLogoutFromAllDevices: {
+      subscribe: withFilter(
+        () => pubsub.asyncIterator(LOGOUT_SUBSCRIPTION),
+        () => {
+          return true;
+        }
+      )
     }
   }
 });

@@ -6,4 +6,8 @@ export default gql`
     logout: String
     logoutFromAllDevices: String
   }
+
+  extend type Subscription {
+    subscriptionLogoutFromAllDevices: String
+  }
 `;

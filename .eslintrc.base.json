@@ -38,6 +38,7 @@
     "fetch": true,
     "window": true,
     "document": true,
+    "__CDN_URL__": true,
     "__DEV__": true,
     "__TEST__": true,
     "__CLIENT__": true,

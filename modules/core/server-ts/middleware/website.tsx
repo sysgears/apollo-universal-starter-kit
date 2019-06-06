@@ -119,6 +119,11 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   } else {
     if (__DEV__ || !assetMap) {
       assetMap = JSON.parse(fs.readFileSync(path.join(__FRONTEND_BUILD_DIR__, 'assets.json')).toString());
+      if (!__DEV__ && __CDN_URL__) {
+        for (const key of Object.keys(assetMap)) {
+          assetMap[key] = __CDN_URL__ + assetMap[key];
+        }
+      }
     }
 
     const sheet = new ServerStyleSheet();

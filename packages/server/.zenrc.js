@@ -34,6 +34,7 @@ config.options.devProxy = config.options.ssr;
 if (process.env.NODE_ENV === 'production') {
   config.options.defines.__SERVER_PORT__ = 8080;
   config.options.defines.__WEBSITE_URL__ = '"https://apollo-universal-starter-kit.herokuapp.com"';
+  config.options.defines.__CDN_URL__ = '""'; // If you use CDN, enter CDN endpoint URL between quotes
 }
 
 const extraDefines = {

@@ -4,6 +4,7 @@ import { createStackNavigator } from 'react-navigation';
 import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
+import { DataRootComponent as AuthDataRootComponent } from '@gqlapp/authentication-client-react';
 
 import resolvers from './resolvers';
 import resources from './locales';
@@ -17,6 +18,8 @@ import Register from './containers/Register';
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
+
+import { withLoadedUser } from './containers/Auth';
 
 export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
 
@@ -255,6 +258,6 @@ export default new ClientModule({
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
-  dataRootComponent: [DataRootComponent],
+  dataRootComponent: [DataRootComponent, withLoadedUser(AuthDataRootComponent)],
   onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

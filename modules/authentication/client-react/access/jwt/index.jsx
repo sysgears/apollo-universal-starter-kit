@@ -122,10 +122,7 @@ const JWTLink = getApolloClient =>
   });
 
 const logoutFromAllDevices = async client => {
-  // const accessToken = await getItem('accessToken');
   const deviceId = createDeviceId();
-
-  // TODO Auth: accessToken replace on deviceId
   const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { deviceId } });
   if (data && data.logoutFromAllDevices) {
     const { accessToken, refreshToken } = data.logoutFromAllDevices;

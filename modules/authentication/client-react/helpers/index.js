@@ -1,5 +1,5 @@
 import url from 'url';
-import { Constants } from 'expo';
+import Constants from 'expo-constants';
 
 export default function buildRedirectUrlForMobile(authType) {
   const { protocol, hostname, port } = url.parse(__WEBSITE_URL__);

@@ -54,10 +54,8 @@ export default pubsub => ({
         refreshToken
       };
     },
-    async logoutFromAllDevices(obj, { accessToken: token }, { updateAuthSalt, getHash, getIdentity }) {
-      const {
-        identity: { id }
-      } = jwt.decode(token);
+    async logoutFromAllDevices(obj, { deviceId }, { identity, updateAuthSalt, getHash, getIdentity }) {
+      const { id } = identity;
 
       await updateAuthSalt(id);
 
@@ -69,9 +67,8 @@ export default pubsub => ({
       const [accessToken, refreshToken] = await createTokens(updatedIdentity, settings.auth.secret, refreshSecret);
 
       pubsub.publish(LOGOUT_SUBSCRIPTION, {
-        subscriptionLogoutFromAllDevices: {
-          token
-        }
+        deviceId,
+        id
       });
 
       return {
@@ -85,14 +82,12 @@ export default pubsub => ({
       subscribe: withFilter(
         () => pubsub.asyncIterator(LOGOUT_SUBSCRIPTION),
         (payload, variables) => {
+          const { deviceId: pDeviceId, id: pId } = payload;
           const {
-            subscriptionLogoutFromAllDevices: { token: pToken }
-          } = payload;
-          const { token: vToken } = variables;
+            input: { deviceId: vDeviceId, id: vId }
+          } = variables;
 
-          const { identity: pIdentity } = jwt.decode(pToken);
-          const { identity: vIdentity } = jwt.decode(vToken);
-          return pIdentity.id === vIdentity.id && pToken !== vToken;
+          return pId === vId && pDeviceId !== vDeviceId;
         }
       )
     }

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Subscription, withApollo } from 'react-apollo';
 
-import { getItem } from '@gqlapp/core-common/clientStorage';
 import { removeTokens } from './helpers';
+import createDeviceId from '../../common/createDeviceId';
 
 import PageReloader from '../../common/PageReloader';
 
@@ -12,12 +12,24 @@ import SUBSCRIPTION_LOGOUT from './graphql/LogoutFromAllDevicessSubscription.gra
 
 class DataRootComponent extends React.Component {
   state = {
-    token: ''
+    userId: '',
+    deviceId: createDeviceId()
   };
 
-  async componentDidMount() {
-    const token = await getItem('accessToken');
-    this.setState({ token });
+  componentDidMount() {
+    if (this.props.currentUser) {
+      this.setState({
+        userId: this.props.currentUser.id
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!prevProps.currentUser && this.props.currentUser) {
+      this.setState({
+        userId: this.props.currentUser.id
+      });
+    }
   }
 
   ref = React.createRef();
@@ -29,11 +41,17 @@ class DataRootComponent extends React.Component {
   };
 
   render() {
-    const { token } = this.state;
+    const { userId, deviceId } = this.state;
+
+    const input = {
+      deviceId,
+      ...(userId && { id: userId })
+    };
+
     return (
-      <Subscription subscription={SUBSCRIPTION_LOGOUT} variables={{ token }}>
-        {({ data, loading }) => {
-          if (data && !loading) {
+      <Subscription subscription={SUBSCRIPTION_LOGOUT} variables={{ input }}>
+        {({ loading }) => {
+          if (!loading) {
             this.onReloadPage(this.props.client);
           }
           return <PageReloader ref={this.ref}>{this.props.children}</PageReloader>;
@@ -45,7 +63,8 @@ class DataRootComponent extends React.Component {
 
 DataRootComponent.propTypes = {
   client: PropTypes.object,
-  children: PropTypes.node
+  children: PropTypes.node,
+  currentUser: PropTypes.object
 };
 
 export default withApollo(DataRootComponent);

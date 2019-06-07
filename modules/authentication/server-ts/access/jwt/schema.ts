@@ -4,15 +4,15 @@ export default gql`
   extend type Mutation {
     # Refresh user tokens
     refreshTokens(refreshToken: String!): Tokens!
-    logoutFromAllDevices(accessToken: String!): Tokens!
+    logoutFromAllDevices(deviceId: String!): Tokens!
   }
 
   extend type Subscription {
-    subscriptionLogoutFromAllDevices(token: String!): LogoutPayload
+    subscriptionLogoutFromAllDevices(input: LogoutSubscriptionInput): String
   }
 
-  # Payload for Subscription
-  type LogoutPayload {
-    token: String
+  input LogoutSubscriptionInput {
+    id: Int
+    deviceId: String!
   }
 `;

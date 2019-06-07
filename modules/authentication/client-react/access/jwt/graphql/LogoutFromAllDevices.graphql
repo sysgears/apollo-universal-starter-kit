@@ -1,5 +1,5 @@
-mutation logoutFromAllDevices($accessToken: String!) {
-  logoutFromAllDevices(accessToken: $accessToken) {
+mutation logoutFromAllDevices($deviceId: String!) {
+  logoutFromAllDevices(deviceId: $deviceId) {
     accessToken
     refreshToken
   }

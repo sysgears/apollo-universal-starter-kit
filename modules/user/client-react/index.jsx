@@ -5,9 +5,11 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 
+import { DataRootComponent as AuthDataRootComponent } from '@gqlapp/authentication-client-react';
 import resolvers from './resolvers';
 import resources from './locales';
 import DataRootComponent from './containers/DataRootComponent';
+
 import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
@@ -96,7 +98,7 @@ export default new ClientModule({
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
-  dataRootComponent: [DataRootComponent],
+  dataRootComponent: [DataRootComponent, withLoadedUser(AuthDataRootComponent)],
   // eslint-disable-next-line react/display-name
   rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
 });

@@ -3,10 +3,9 @@ import { ApolloLink, Observable } from 'apollo-link';
 import { getItem } from '@gqlapp/core-common/clientStorage';
 import settings from '@gqlapp/config';
 import { saveTokens, removeTokens } from './helpers';
+import createDeviceId from '../../common/createDeviceId';
 
 import AccessModule from '../AccessModule';
-
-import DataRootComponent from './DataRootComponent';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 import LOGOUT_FROM_ALL_DEVICES from './graphql/LogoutFromAllDevices.graphql';
@@ -123,8 +122,11 @@ const JWTLink = getApolloClient =>
   });
 
 const logoutFromAllDevices = async client => {
-  const accessToken = await getItem('accessToken');
-  const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { accessToken: accessToken } });
+  // const accessToken = await getItem('accessToken');
+  const deviceId = createDeviceId();
+
+  // TODO Auth: accessToken replace on deviceId
+  const { data } = await client.mutate({ mutation: LOGOUT_FROM_ALL_DEVICES, variables: { deviceId } });
   if (data && data.logoutFromAllDevices) {
     const { accessToken, refreshToken } = data.logoutFromAllDevices;
     await saveTokens({ accessToken, refreshToken });
@@ -135,7 +137,6 @@ const logoutFromAllDevices = async client => {
 
 export default (settings.auth.jwt.enabled
   ? new AccessModule({
-      dataRootComponent: [DataRootComponent],
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens],
       logoutFromAllDevices: [logoutFromAllDevices]

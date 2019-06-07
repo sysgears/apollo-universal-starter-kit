@@ -23,19 +23,16 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
-const logoutFromAllDevices = async client => {
-  await resetApolloCacheAndRerenderApp(client);
-};
-
 const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
 
 AuthPageReloader.propTypes = {
   children: PropTypes.node
 };
 
+export { default as DataRootComponent } from './jwt/DataRootComponent';
+
 export default new AccessModule(jwt, session, {
   dataRootComponent: [AuthPageReloader],
   login: [login],
-  logout: [logout],
-  logoutFromAllDevices: [logoutFromAllDevices]
+  logout: [logout]
 });

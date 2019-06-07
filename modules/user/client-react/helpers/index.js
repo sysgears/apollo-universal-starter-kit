@@ -1,5 +1,5 @@
 import url from 'url';
-import { Constants } from 'expo';
+import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 
 export default function buildRedirectUrlForMobile(authType) {

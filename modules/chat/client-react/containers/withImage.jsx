@@ -1,5 +1,7 @@
 import React from 'react';
-import { Constants, FileSystem, ImagePicker, Permissions } from 'expo';
+import Constants from 'expo-constants';
+import * as FileSystem from 'expo-file-system';
+import { ImagePicker, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
@@ -10,13 +12,10 @@ import settings from '@gqlapp/config';
 
 import ModalNotify from '../components/ModalNotify';
 
-const {
-  manifest: { bundleUrl }
-} = Constants;
 const { protocol, port, hostname } = url.parse(__API_URL__);
-const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
-  port ? ':' + port : ''
-}`;
+const serverUrl = `${protocol}//${
+  hostname === 'localhost' ? url.parse(Constants.manifest.bundleUrl).hostname : hostname
+}${port ? ':' + port : ''}`;
 
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 

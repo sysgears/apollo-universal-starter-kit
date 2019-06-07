@@ -12,7 +12,7 @@ if (!__TEST__ || settings.app.logging.level === 'debug') {
   log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
 }
 
-const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   const { createNetLink, createLink, connectionParams, resolvers, reducers, routes } = modules;
 
   const client = createApolloClient({

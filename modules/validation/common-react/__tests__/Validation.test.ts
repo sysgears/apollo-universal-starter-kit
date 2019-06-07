@@ -20,7 +20,9 @@ import {
   Schema
 } from '../validation';
 
-new CommonModule(i18n, validation).createApp(module);
+(async () => {
+  await new CommonModule(i18n, validation).createApp(module);
+})();
 
 describe('Check if validation works', () => {
   it('Validator "required"  works correctly', () => {

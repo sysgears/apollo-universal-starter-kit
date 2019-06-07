@@ -25,7 +25,7 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ appContext }) => {
+const onAppCreate = async ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, appContext.social.google.verifyCallback));
   }

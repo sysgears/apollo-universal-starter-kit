@@ -1,7 +1,7 @@
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import extractFiles from 'extract-files';
+import { extractFiles } from 'extract-files';
 import { cloneDeep } from 'lodash';
 
 export default uri =>

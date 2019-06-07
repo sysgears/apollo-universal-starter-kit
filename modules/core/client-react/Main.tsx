@@ -25,7 +25,7 @@ const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = 
 
 const history = createBrowserHistory();
 
-export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+export const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   ref.modules = modules;
   ref.client = createApolloClient({
     apiUrl,

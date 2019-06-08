@@ -375,7 +375,6 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [debugging code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Debugging.md
 [apollo universal starter kit cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/CLI.md
 [available scripts]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Yarn%20Scripts.md
-[frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/FAQ.md
 [stripe payments]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
 [mobile chat]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Mobile%20Chat.md
 [project structure]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Project%20Structure.md
@@ -384,6 +383,6 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
-[faq]: https://github.com/sysgears/apollo-universal-starter-kit/wiki/Frequently-Asked-Questions
+[faq]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/FAQ.md
 [sysgears]: https://sysgears.com
 [skype]: http://hatscripts.com/addskype?sysgears

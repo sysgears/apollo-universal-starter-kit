@@ -8,6 +8,7 @@ export default pubsub => ({
     logout(obj, args, { req }) {
       const session = { ...req.session };
       delete session.id;
+      delete session.authSalt;
 
       req.session = writeSession(req, session);
     },

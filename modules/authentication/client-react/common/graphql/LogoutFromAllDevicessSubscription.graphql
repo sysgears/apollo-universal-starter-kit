@@ -1,0 +1,3 @@
+subscription onLogoutFromAllDevicess($input: LogoutSubscriptionInput!) {
+  subscriptionLogoutFromAllDevices(input: $input)
+}

@@ -11,12 +11,15 @@ export default pubsub => ({
 
       req.session = writeSession(req, session);
     },
-    async logoutFromAllDevices(obj, args, { req, updateAuthSalt }) {
+    async logoutFromAllDevices(obj, { deviceId }, { req, updateAuthSalt }) {
       const session = { ...req.session };
 
       await updateAuthSalt(session.id);
 
-      pubsub.publish(LOGOUT_SUBSCRIPTION, { session });
+      pubsub.publish(LOGOUT_SUBSCRIPTION, {
+        deviceId,
+        id: session.id
+      });
 
       req.session = writeSession(req, { ...session, authSalt: session.authSalt + 1 });
     }
@@ -25,8 +28,13 @@ export default pubsub => ({
     subscriptionLogoutFromAllDevices: {
       subscribe: withFilter(
         () => pubsub.asyncIterator(LOGOUT_SUBSCRIPTION),
-        () => {
-          return true;
+        (payload, variables) => {
+          const { deviceId: pDeviceId, id: pId } = payload;
+          const {
+            input: { deviceId: vDeviceId, id: vId }
+          } = variables;
+
+          return pId === vId && pDeviceId !== vDeviceId;
         }
       )
     }

@@ -132,7 +132,7 @@ const logoutFromAllDevices = async client => {
   }
 };
 
-export default (settings.auth.jwt.enabled
+export default (settings.auth.jwt.enabled && !settings.auth.session.enabled
   ? new AccessModule({
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens],

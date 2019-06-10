@@ -41,7 +41,7 @@ const createContextFunc = async ({ req, graphqlContext, appContext }) => {
 };
 
 export default new AccessModule(
-  settings.auth.jwt.enabled
+  settings.auth.jwt.enabled && !settings.auth.session.enabled
     ? {
         grant: [grant],
         schema: [schema],

@@ -63,7 +63,7 @@ const ProfileView = ({ currentUserLoading, currentUser, logoutFromAllDevices, t 
           <Link className="mt-2 btn user-link" to={`/users/${currentUser.id}`}>
             {t('profile.editProfileText')}
           </Link>
-          <Button onClick={logoutFromAllDevices}>Logout from all devices</Button>
+          <Button onClick={logoutFromAllDevices}>{t('profile.logoutFromAllDevices')}</Button>
         </LayoutCenter>
       </PageLayout>
     );

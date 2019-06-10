@@ -63,7 +63,7 @@ const ProfileView = ({ currentUserLoading, currentUser, navigation, logoutFromAl
             <Text style={styles.linkText}>{t('profile.editProfileText')}</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.linkWrapper} onPress={logoutFromAllDevices}>
-            <Text style={styles.linkText}>Logout from all devices</Text>
+            <Text style={styles.linkText}>{t('profile.logoutFromAllDevices')}</Text>
           </TouchableOpacity>
         </ScrollView>
       )}

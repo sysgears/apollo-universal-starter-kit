@@ -55,6 +55,7 @@
     "loadMsg": "Загрузка...",
     "errorMsg": "Нет текущего пользователя",
     "editProfileText": "Редактировать профиль",
+    "logoutFromAllDevices": "Выйти со всех устройст",
     "card": {
       "title": "Профиль",
       "group": {

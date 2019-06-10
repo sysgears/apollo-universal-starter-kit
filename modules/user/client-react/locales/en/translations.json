@@ -55,6 +55,7 @@
     "loadMsg": "Loading...",
     "errorMsg": "No current user is logged in",
     "editProfileText": "Edit Profile",
+    "logoutFromAllDevices": "Logout from all devices",
     "card": {
       "title": "Profile",
       "group": {

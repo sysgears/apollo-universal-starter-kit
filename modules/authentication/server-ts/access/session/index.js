@@ -11,7 +11,7 @@ const grant = async ({ id, authSalt }, req) => {
   req.session = writeSession(req, session);
 };
 
-const getCurrentIdentity = async ({ req, res, getIdentity }) => {
+const getCurrentIdentity = async ({ req, getIdentity }) => {
   if (req && req.session.id && req.session.authSalt) {
     const identity = await getIdentity(req.session.id);
     if (identity && identity.authSalt === req.session.authSalt) {
@@ -21,8 +21,6 @@ const getCurrentIdentity = async ({ req, res, getIdentity }) => {
     delete req.session.userId;
     delete req.session.authSalt;
     writeSession(req, req.session);
-
-    res.status(401).send;
   }
   return null;
 };
@@ -43,13 +41,13 @@ const attachSession = req => {
   }
 };
 
-const createContextFunc = async ({ req, res, graphqlContext, appContext }) => {
+const createContextFunc = async ({ req, graphqlContext, appContext }) => {
   const { getIdentity, updateAuthSalt } = appContext;
 
   attachSession(req);
 
   if (getIdentity) {
-    const identity = graphqlContext.identity || (await getCurrentIdentity({ req, res, getIdentity }));
+    const identity = graphqlContext.identity || (await getCurrentIdentity({ req, getIdentity }));
 
     return { identity, updateAuthSalt };
   }

@@ -1,18 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import settings from '@gqlapp/config';
-
 import jwt from './jwt';
 import session from './session';
 
 import AccessModule from './AccessModule';
 
 import PageReloader from '../common/PageReloader';
-import DataRootComponentJWT from './jwt/DataRootComponent';
-import DataRootComponentSession from './session/DataRootComponent';
-
-const DataRootComponent = settings.auth.session.enabled ? DataRootComponentSession : DataRootComponentJWT;
 
 const ref = React.createRef();
 
@@ -35,7 +29,7 @@ AuthPageReloader.propTypes = {
   children: PropTypes.node
 };
 
-export { DataRootComponent };
+export { default as DataRootComponent } from '../common/DataRootComponent';
 
 export default new AccessModule(jwt, session, {
   dataRootComponent: [AuthPageReloader],

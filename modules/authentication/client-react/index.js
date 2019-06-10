@@ -5,6 +5,6 @@ export { default as GoogleButton } from './social/google';
 export { default as GitHubButton } from './social/github';
 export { default as FacebookButton } from './social/facebook';
 export { default as LOGOUT } from './access/session/graphql/Logout.graphql';
-export { default as DataRootComponent } from './common/DataRootComponent';
+export { DataRootComponent } from './access';
 
 export default authentication;

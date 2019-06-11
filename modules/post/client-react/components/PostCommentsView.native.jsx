@@ -16,54 +16,45 @@ import { SwipeAction } from '@gqlapp/look-client-react-native';
 
 import PostCommentForm from './PostCommentForm';
 
-class PostCommentsView extends React.PureComponent {
-  static propTypes = {
-    postId: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
-    comment: PropTypes.object,
-    addComment: PropTypes.func.isRequired,
-    editComment: PropTypes.func.isRequired,
-    deleteComment: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
+const PostCommentsView = ({
+  postId,
+  comment,
+  deleteComment,
+  addComment,
+  editComment,
+  comments,
+  onCommentSelect,
+  t
+}) => {
+  const keyExtractor = item => `${item.id}`;
 
-  keyExtractor = item => `${item.id}`;
+  const renderItemIOS = ({ item: { id, content } }) => (
+    <SwipeAction
+      onPress={() => onCommentSelect({ id: id, content: content })}
+      right={{
+        text: t('comment.btn.del'),
+        onPress: () => onCommentDelete(comment, deleteComment, onCommentSelect, id)
+      }}
+    >
+      {content}
+    </SwipeAction>
+  );
 
-  renderItemIOS = ({ item: { id, content } }) => {
-    const { comment, deleteComment, onCommentSelect, t } = this.props;
-    return (
-      <SwipeAction
-        onPress={() => onCommentSelect({ id: id, content: content })}
-        right={{
-          text: t('comment.btn.del'),
-          onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
-        }}
-      >
-        {content}
-      </SwipeAction>
-    );
-  };
+  const renderItemAndroid = ({ item: { id, content } }) => (
+    <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
+      <View style={styles.postWrapper}>
+        <Text style={styles.text}>{content}</Text>
+        <TouchableOpacity
+          style={styles.iconWrapper}
+          onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
+        >
+          <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+        </TouchableOpacity>
+      </View>
+    </TouchableWithoutFeedback>
+  );
 
-  renderItemAndroid = ({ item: { id, content } }) => {
-    const { deleteComment, onCommentSelect, comment } = this.props;
-    return (
-      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
-        <View style={styles.postWrapper}>
-          <Text style={styles.text}>{content}</Text>
-          <TouchableOpacity
-            style={styles.iconWrapper}
-            onPress={() => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)}
-          >
-            <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
-          </TouchableOpacity>
-        </View>
-      </TouchableWithoutFeedback>
-    );
-  };
-
-  onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
+  const onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
     if (comment.id === id) {
       onCommentSelect({ id: null, content: '' });
     }
@@ -71,7 +62,7 @@ class PostCommentsView extends React.PureComponent {
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
+  const onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -82,27 +73,37 @@ class PostCommentsView extends React.PureComponent {
     Keyboard.dismiss();
   };
 
-  render() {
-    const { postId, comment, addComment, editComment, comments, onCommentSelect, t } = this.props;
-    const renderItem = Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS;
+  const renderItem = Platform.OS === 'android' ? renderItemAndroid : renderItemIOS;
 
-    return (
-      <View style={styles.container}>
-        <Text style={styles.title}>{t('comment.title')}</Text>
-        <PostCommentForm
-          postId={postId}
-          onSubmit={this.onSubmit(comment, postId, addComment, editComment, onCommentSelect)}
-          comment={comment}
-        />
-        {comments.length > 0 && (
-          <View style={styles.list} keyboardDismissMode="on-drag">
-            <FlatList data={comments} keyExtractor={this.keyExtractor} renderItem={renderItem} />
-          </View>
-        )}
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>{t('comment.title')}</Text>
+      <PostCommentForm
+        postId={postId}
+        onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect)}
+        comment={comment}
+      />
+      {comments.length > 0 && (
+        <View style={styles.list} keyboardDismissMode="on-drag">
+          <FlatList data={comments} keyExtractor={keyExtractor} renderItem={renderItem} />
+        </View>
+      )}
+    </View>
+  );
+};
+
+PostCommentsView.propTypes = {
+  item: PropTypes.object,
+  postId: PropTypes.number.isRequired,
+  comments: PropTypes.array.isRequired,
+  comment: PropTypes.object,
+  addComment: PropTypes.func.isRequired,
+  editComment: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired,
+  onCommentSelect: PropTypes.func.isRequired,
+  t: PropTypes.func
+};
 
 export default translate('post')(PostCommentsView);
 

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src",
   "scripts": {
-    "build": "cross-env NODE_ENV=production zen build",
+    "build": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",
     "tests": "jest",
     "tests:watch": "jest --watch",
@@ -12,7 +12,7 @@
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "zen watch",
+    "watch": "webpack-dev-server",
     "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli",
     "storybook": "start-storybook -p 6006",
@@ -107,7 +107,6 @@
     "@storybook/addon-links": "^5.1.1",
     "@storybook/addons": "^5.1.1",
     "@storybook/react": "^5.1.1",
-    "@types/storybook__react": "^4.0.0",
     "@types/chai": "^4.1.4",
     "@types/jest": "^24.0.13",
     "@types/jsdom": "^12.2.0",
@@ -119,6 +118,7 @@
     "@types/react-redux": "^5.0.0",
     "@types/react-router-dom": "^4.2.7",
     "@types/react-stripe-elements": "^1.1.7",
+    "@types/storybook__react": "^4.0.0",
     "@types/styled-components": "^4.1.14",
     "@types/webpack-env": "^1.13.6",
     "apollo-utilities": "^1.0.3",
@@ -136,7 +136,8 @@
     "react-test-renderer": "16.8.3",
     "react-testing-library": "^3.0.2",
     "request": "^2.83.0",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "webpack-cli": "^3.3.4"
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^10.0.1",
@@ -155,7 +156,6 @@
     "uuid": "^3.3.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0",
     "eslint": "*"
   },
   "browserslist": {

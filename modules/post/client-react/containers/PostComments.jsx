@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import update from 'immutability-helper';
@@ -68,83 +68,47 @@ const writePostToCache = (cache, post, postId) =>
     }
   });
 
-class PostComments extends React.Component {
-  static propTypes = {
-    postId: PropTypes.number.isRequired,
-    comments: PropTypes.array.isRequired,
-    comment: PropTypes.object.isRequired,
-    onCommentSelect: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
-  };
-
-  constructor(props) {
-    super(props);
-    this.subscription = null;
-  }
-
-  componentDidMount() {
-    this.initCommentListSubscription();
-  }
-
-  componentDidUpdate(prevProps) {
-    let prevPostId = prevProps.postId || null;
-    // Check if props have changed and, if necessary, stop the subscription
-    if (this.subscription && this.props.postId !== prevPostId) {
-      this.subscription();
-      this.subscription = null;
-    }
-    this.initCommentListSubscription();
-  }
-
-  componentWillUnmount() {
-    this.props.onCommentSelect({ id: null, content: '' });
-
-    if (this.subscription) {
-      // unsubscribe
-      this.subscription();
-      this.subscription = null;
-    }
-  }
-
-  initCommentListSubscription() {
-    if (!this.subscription) {
-      this.subscribeToCommentList(this.props.postId);
-    }
-  }
-
-  subscribeToCommentList = postId => {
-    const { subscribeToMore } = this.props;
-
-    this.subscription = subscribeToMore({
-      document: COMMENT_SUBSCRIPTION,
-      variables: { postId },
-      updateQuery: (
-        prev,
-        {
-          subscriptionData: {
-            data: {
-              commentUpdated: { mutation, id, node }
-            }
+const subscribeToCommentList = (subscribeToMore, postId) =>
+  subscribeToMore({
+    document: COMMENT_SUBSCRIPTION,
+    variables: { postId },
+    updateQuery: (
+      prev,
+      {
+        subscriptionData: {
+          data: {
+            commentUpdated: { mutation, id, node }
           }
         }
-      ) => {
-        let newResult = prev;
-
-        if (mutation === 'CREATED') {
-          newResult = onAddComment(prev, node);
-        } else if (mutation === 'DELETED') {
-          newResult = onDeleteComment(prev, id);
-        }
-
-        return newResult;
       }
-    });
-  };
+    ) => {
+      let newResult = prev;
+      if (mutation === 'CREATED') {
+        newResult = onAddComment(prev, node);
+      } else if (mutation === 'DELETED') {
+        newResult = onDeleteComment(prev, id);
+      }
 
-  render() {
-    return <PostCommentsView {...this.props} />;
-  }
-}
+      return newResult;
+    }
+  });
+
+const PostComments = props => {
+  useEffect(() => {
+    const { postId } = props;
+    const subscribe = subscribeToCommentList(props.subscribeToMore, postId);
+    return () => subscribe();
+  });
+  return <PostCommentsView {...props} />;
+};
+
+PostComments.propTypes = {
+  postId: PropTypes.number.isRequired,
+  comments: PropTypes.array.isRequired,
+  comment: PropTypes.object.isRequired,
+  onCommentSelect: PropTypes.func.isRequired,
+  subscribeToMore: PropTypes.func.isRequired
+};
 
 const PostCommentsWithApollo = compose(
   graphql(ADD_COMMENT, {

@@ -16,53 +16,59 @@ import { SwipeAction } from '@gqlapp/look-client-react-native';
 
 import PostCommentForm from './PostCommentForm';
 
-const PostCommentsView = ({
-  postId,
-  comment,
-  deleteComment,
-  addComment,
-  editComment,
-  comments,
-  onCommentSelect,
-  t
-}) => {
+const onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
+  if (comment.id === id) {
+    onCommentSelect({ id: null, content: '' });
+  }
+
+  deleteComment(id);
+};
+
+const ItemIOS = ({ comment, deleteComment, onCommentSelect, t }, { item: { id, content } }) => (
+  <SwipeAction
+    onPress={() => onCommentSelect({ id: id, content: content })}
+    right={{
+      text: t('comment.btn.del'),
+      onPress: () => onCommentDelete(comment, deleteComment, onCommentSelect, id)
+    }}
+  >
+    {content}
+  </SwipeAction>
+);
+
+ItemIOS.propTypes = {
+  comment: PropTypes.object,
+  deleteComment: PropTypes.func.isRequired,
+  onCommentSelect: PropTypes.func.isRequired,
+  t: PropTypes.func
+};
+
+const ItemAndroid = ({ deleteComment, onCommentSelect, comment }, { item: { id, content } }) => (
+  <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
+    <View style={styles.postWrapper}>
+      <Text style={styles.text}>{content}</Text>
+      <TouchableOpacity
+        style={styles.iconWrapper}
+        onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
+      >
+        <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+      </TouchableOpacity>
+    </View>
+  </TouchableWithoutFeedback>
+);
+
+ItemAndroid.propTypes = {
+  comment: PropTypes.object,
+  deleteComment: PropTypes.func.isRequired,
+  onCommentSelect: PropTypes.func.isRequired
+};
+
+const PostCommentsView = props => {
+  const { postId, comment, comments, addComment, editComment, onCommentSelect, t } = props;
+
   const keyExtractor = item => `${item.id}`;
 
-  const renderItemIOS = ({ item: { id, content } }) => (
-    <SwipeAction
-      onPress={() => onCommentSelect({ id: id, content: content })}
-      right={{
-        text: t('comment.btn.del'),
-        onPress: () => onCommentDelete(comment, deleteComment, onCommentSelect, id)
-      }}
-    >
-      {content}
-    </SwipeAction>
-  );
-
-  const renderItemAndroid = ({ item: { id, content } }) => (
-    <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
-      <View style={styles.postWrapper}>
-        <Text style={styles.text}>{content}</Text>
-        <TouchableOpacity
-          style={styles.iconWrapper}
-          onPress={() => onCommentDelete(comment, deleteComment, onCommentSelect, id)}
-        >
-          <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
-  );
-
-  const onCommentDelete = (comment, deleteComment, onCommentSelect, id) => {
-    if (comment.id === id) {
-      onCommentSelect({ id: null, content: '' });
-    }
-
-    deleteComment(id);
-  };
-
-  const onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
+  const onSubmit = values => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -73,16 +79,12 @@ const PostCommentsView = ({
     Keyboard.dismiss();
   };
 
-  const renderItem = Platform.OS === 'android' ? renderItemAndroid : renderItemIOS;
+  const renderItem = Platform.OS === 'android' ? item => ItemAndroid(props, item) : item => ItemIOS(props, item);
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{t('comment.title')}</Text>
-      <PostCommentForm
-        postId={postId}
-        onSubmit={onSubmit(comment, postId, addComment, editComment, onCommentSelect)}
-        comment={comment}
-      />
+      <PostCommentForm postId={postId} onSubmit={onSubmit} comment={comment} />
       {comments.length > 0 && (
         <View style={styles.list} keyboardDismissMode="on-drag">
           <FlatList data={comments} keyExtractor={keyExtractor} renderItem={renderItem} />

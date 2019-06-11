@@ -66,6 +66,8 @@ const PostList = props => {
     }
   };
 
+  const renderItem = Platform.OS === 'android' ? item => ItemAndroid(props, item) : item => ItemIOS(props, item);
+
   if (loading) {
     return <Loading text={t('post.loadMsg')} />;
   } else if (posts && !posts.totalCount) {
@@ -78,7 +80,7 @@ const PostList = props => {
           data={posts.edges}
           style={styles.list}
           keyExtractor={item => `${item.node.id}`}
-          renderItem={Platform.OS === 'android' ? item => ItemAndroid(props, item) : item => ItemIOS(props, item)}
+          renderItem={renderItem}
           onEndReachedThreshold={0.5}
           onEndReached={handleScrollEvent}
         />

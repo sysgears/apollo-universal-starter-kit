@@ -1,20 +1,8 @@
-import React from 'react';
 import { graphql } from 'react-apollo';
 
 import PostAddView from '../components/PostAddView';
 
 import ADD_POST from '../graphql/AddPost.graphql';
-
-class PostAdd extends React.Component {
-  constructor(props) {
-    super(props);
-    this.subscription = null;
-  }
-
-  render() {
-    return <PostAddView {...this.props} />;
-  }
-}
 
 export default graphql(ADD_POST, {
   props: ({ ownProps: { history, navigation }, mutate }) => ({
@@ -42,4 +30,4 @@ export default graphql(ADD_POST, {
       }
     }
   })
-})(PostAdd);
+})(PostAddView);

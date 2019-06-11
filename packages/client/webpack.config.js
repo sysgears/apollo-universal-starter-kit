@@ -3,10 +3,10 @@ const webpack = require('webpack');
 const path = require('path');
 const waitOn = require('wait-on');
 
+const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const webpackPort = 3000;
 let ssr = true;
@@ -92,15 +92,7 @@ module.exports = {
       { test: /\.graphqls/, use: { loader: 'raw-loader', options: {} } },
       { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader', options: {} }] },
       {
-        test: /\.tsx?$/,
-        use: [
-          { loader: 'cache-loader', options: { cacheDirectory: '../../.cache/cache-loader' } },
-          { loader: 'thread-loader', options: { workers: 7 } },
-          { loader: 'ts-loader', options: { transpileOnly: true, happyPackMode: true, experimentalWatchApi: true } }
-        ]
-      },
-      {
-        test: /\.jsx?$/,
+        test: /\.[jt]sx?$/,
         exclude: /node_modules\/(?!@gqlapp)/,
         use: {
           loader: 'heroku-babel-loader',
@@ -162,10 +154,12 @@ module.exports = {
       'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     }),
     new ManifestPlugin({ fileName: 'assets.json' }),
-    new ForkTsCheckerWebpackPlugin({
-      tsconfig: path.resolve(__dirname, 'tsconfig.json'),
-      checkSyntacticErrors: true
-    })
+    new HardSourceWebpackPlugin(),
+    new HardSourceWebpackPlugin.ExcludeModulePlugin([
+      {
+        test: /mini-css-extract-plugin[\\/]dist[\\/]loader/
+      }
+    ])
   ]),
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {

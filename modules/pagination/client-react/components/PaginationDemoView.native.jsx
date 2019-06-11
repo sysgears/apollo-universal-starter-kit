@@ -4,81 +4,65 @@ import { View, ScrollView, FlatList, StyleSheet, Text } from 'react-native';
 import { Pagination } from '@gqlapp/look-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 
-class PaginationDemoView extends React.Component {
-  render() {
-    const { items, handlePageChange, renderItem, pagination, t } = this.props;
+const PaginationDemoView = props => {
+  const { items, handlePageChange, renderItem, pagination, t } = props;
 
-    const renderHeader = t => {
-      return <Text style={styles.title}>{t}</Text>;
-    };
+  const renderHeader = () => <Text style={styles.title}>{t('list.column.title')}</Text>;
 
-    const handleScrollEvent = () => {
-      if (this.allowDataLoad) {
-        if (items.pageInfo.hasNextPage) {
-          this.allowDataLoad = false;
-          return handlePageChange('relay', null);
-        }
-      }
-    };
-
-    const titleTexti18n = t('list.column.title');
-    this.allowDataLoad = true;
-    return pagination === 'standard' ? (
-      <View style={styles.container}>
-        <View style={styles.listContainer}>
-          <FlatList
-            data={items.edges}
-            style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
-            renderItem={renderItem}
-            ListHeaderComponent={renderHeader(titleTexti18n)}
-          />
-        </View>
-        <View style={styles.pagination}>
-          <Pagination
-            totalPages={Math.ceil(items.totalCount / items.limit)}
-            handlePageChange={handlePageChange}
-            pagination={pagination}
-            loadMoreText={t('list.btn.more')}
-            hasNextPage={items.pageInfo.hasNextPage}
-          />
-        </View>
-      </View>
-    ) : pagination === 'relay' ? (
-      <View style={styles.container}>
-        <ScrollView>
-          <FlatList
-            data={items.edges}
-            style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
-            renderItem={renderItem}
-            ListHeaderComponent={renderHeader(titleTexti18n)}
-          />
-          <Pagination
-            totalPages={Math.ceil(items.totalCount / items.limit)}
-            handlePageChange={handlePageChange}
-            pagination={pagination}
-            loadMoreText={t('list.btn.more')}
-            hasNextPage={items.pageInfo.hasNextPage}
-          />
-        </ScrollView>
-      </View>
-    ) : (
-      <View style={styles.container}>
+  return pagination === 'standard' ? (
+    <View style={styles.container}>
+      <View style={styles.listContainer}>
         <FlatList
           data={items.edges}
-          ref={ref => (this.listRef = ref)}
           style={styles.list}
           keyExtractor={item => `${item.node.id}`}
           renderItem={renderItem}
-          ListHeaderComponent={renderHeader(titleTexti18n)}
-          onEndReachedThreshold={0.5}
-          onEndReached={handleScrollEvent}
+          ListHeaderComponent={renderHeader()}
         />
       </View>
-    );
-  }
-}
+      <View style={styles.pagination}>
+        <Pagination
+          totalPages={Math.ceil(items.totalCount / items.limit)}
+          handlePageChange={handlePageChange}
+          pagination={pagination}
+          loadMoreText={t('list.btn.more')}
+          hasNextPage={items.pageInfo.hasNextPage}
+        />
+      </View>
+    </View>
+  ) : pagination === 'relay' ? (
+    <View style={styles.container}>
+      <ScrollView>
+        <FlatList
+          data={items.edges}
+          style={styles.list}
+          keyExtractor={item => `${item.node.id}`}
+          renderItem={renderItem}
+          ListHeaderComponent={renderHeader()}
+        />
+        <Pagination
+          totalPages={Math.ceil(items.totalCount / items.limit)}
+          handlePageChange={handlePageChange}
+          pagination={pagination}
+          loadMoreText={t('list.btn.more')}
+          hasNextPage={items.pageInfo.hasNextPage}
+        />
+      </ScrollView>
+    </View>
+  ) : (
+    <View style={styles.container}>
+      <FlatList
+        data={items.edges}
+        style={styles.list}
+        keyExtractor={item => `${item.node.id}`}
+        renderItem={renderItem}
+        ListHeaderComponent={renderHeader()}
+        onEndReachedThreshold={0.5}
+        onEndReached={() => handlePageChange('relay', null)}
+      />
+    </View>
+  );
+};
 
 PaginationDemoView.propTypes = {
   t: PropTypes.func,

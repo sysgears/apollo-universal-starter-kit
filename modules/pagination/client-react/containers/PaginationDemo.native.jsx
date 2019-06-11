@@ -1,28 +1,35 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 import { lookStyles, Select } from '@gqlapp/look-client-react-native';
 import PaginationDemoView from '../components/PaginationDemoView.native';
-import withDataProvider from './DataProvider';
+import useDataProvider from './DataProvider';
 
-@translate('pagination')
-class PaginationDemo extends React.Component {
-  static propTypes = {
-    t: PropTypes.func,
-    items: PropTypes.object,
-    loadData: PropTypes.func
+const Item = ({
+  item: {
+    node: { title }
+  }
+}) => (
+  <TouchableOpacity style={styles.postWrapper}>
+    <Text style={styles.text}>{title}</Text>
+  </TouchableOpacity>
+);
+
+Item.propTypes = {
+  item: PropTypes.object
+};
+
+const PaginationDemo = ({ t }) => {
+  const [pagination, setPagination] = useState('standard');
+  const { items, loadData } = useDataProvider();
+
+  const onPaginationTypeChange = itemValue => {
+    setPagination(itemValue);
+    loadData(0, items.limit);
   };
 
-  state = { pagination: 'standard' };
-
-  onPaginationTypeChange = itemValue => {
-    const { loadData, items } = this.props;
-    this.setState({ pagination: itemValue }, loadData(0, items.limit));
-  };
-
-  handlePageChange = (pagination, pageNumber) => {
-    const { loadData, items } = this.props;
+  const handlePageChange = (pagination, pageNumber) => {
     if (pagination === 'relay') {
       loadData(items.pageInfo.endCursor, 'add');
     } else {
@@ -30,55 +37,46 @@ class PaginationDemo extends React.Component {
     }
   };
 
-  renderItem = ({
-    item: {
-      node: { title }
-    }
-  }) => {
-    return (
-      <TouchableOpacity style={styles.postWrapper}>
-        <Text style={styles.text}>{title}</Text>
-      </TouchableOpacity>
-    );
-  };
+  const options = [
+    { value: 'standard', label: t('list.title.standard') },
+    { value: 'relay', label: t('list.title.relay') },
+    { value: 'scroll', label: t('list.title.scroll') }
+  ];
 
-  render() {
-    const { t, items } = this.props;
-    const { pagination } = this.state;
-    const options = [
-      { value: 'standard', label: t('list.title.standard') },
-      { value: 'relay', label: t('list.title.relay') },
-      { value: 'scroll', label: t('list.title.scroll') }
-    ];
-    return (
-      <View style={styles.container}>
-        <View style={styles.itemContainer}>
-          <View style={[styles.itemAction, styles.itemSelect]}>
-            <Select
-              icon
-              iconName="caret-down"
-              mode="dropdown"
-              data={options}
-              selectedValue={pagination}
-              onChange={this.onPaginationTypeChange}
-              okText={t('list.select.ok')}
-              dismissText={t('list.select.dismiss')}
-              cols={1}
-            />
-          </View>
-        </View>
-        {items && (
-          <PaginationDemoView
-            items={items}
-            handlePageChange={this.handlePageChange}
-            renderItem={this.renderItem}
-            pagination={pagination}
+  return (
+    <View style={styles.container}>
+      <View style={styles.itemContainer}>
+        <View style={[styles.itemAction, styles.itemSelect]}>
+          <Select
+            icon
+            iconName="caret-down"
+            mode="dropdown"
+            data={options}
+            selectedValue={pagination}
+            onChange={onPaginationTypeChange}
+            okText={t('list.select.ok')}
+            dismissText={t('list.select.dismiss')}
+            cols={1}
           />
-        )}
+        </View>
       </View>
-    );
-  }
-}
+      {items && (
+        <PaginationDemoView
+          items={items}
+          handlePageChange={handlePageChange}
+          renderItem={Item}
+          pagination={pagination}
+        />
+      )}
+    </View>
+  );
+};
+
+PaginationDemo.propTypes = {
+  t: PropTypes.func,
+  items: PropTypes.object,
+  loadData: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -109,6 +107,4 @@ const styles = StyleSheet.create({
   }
 });
 
-const PaginationDemoWithData = withDataProvider(PaginationDemo);
-
-export default PaginationDemoWithData;
+export default translate('pagination')(PaginationDemo);

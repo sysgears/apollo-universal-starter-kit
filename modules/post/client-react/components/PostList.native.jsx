@@ -5,90 +5,96 @@ import { StyleSheet, Text, Platform, TouchableOpacity, View, FlatList } from 're
 import { translate } from '@gqlapp/i18n-client-react';
 import { SwipeAction, Loading } from '@gqlapp/look-client-react-native';
 
-class PostList extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    posts: PropTypes.object,
-    navigation: PropTypes.object,
-    deletePost: PropTypes.func.isRequired,
-    loadData: PropTypes.func.isRequired,
-    t: PropTypes.func
-  };
-
-  renderItemIOS = ({
+const ItemIOS = (
+  { deletePost, navigation, t },
+  {
     item: {
       node: { id, title }
     }
-  }) => {
-    const { deletePost, navigation, t } = this.props;
-    return (
-      <SwipeAction
-        onPress={() => navigation.navigate('PostEdit', { id })}
-        right={{
-          text: t('list.btn.del'),
-          onPress: () => deletePost(id)
-        }}
-      >
-        {title}
-      </SwipeAction>
-    );
-  };
+  }
+) => (
+  <SwipeAction
+    onPress={() => navigation.navigate('PostEdit', { id })}
+    right={{
+      text: t('list.btn.del'),
+      onPress: () => deletePost(id)
+    }}
+  >
+    {title}
+  </SwipeAction>
+);
 
-  renderItemAndroid = ({
+ItemIOS.propTypes = {
+  navigation: PropTypes.object,
+  deletePost: PropTypes.func,
+  t: PropTypes.func
+};
+
+const ItemAndroid = (
+  { deletePost, navigation },
+  {
     item: {
       node: { id, title }
     }
-  }) => {
-    const { deletePost, navigation } = this.props;
-    return (
-      <TouchableOpacity style={styles.postWrapper} onPress={() => navigation.navigate('PostEdit', { id })}>
-        <Text style={styles.text}>{title}</Text>
-        <TouchableOpacity style={styles.iconWrapper} onPress={() => deletePost(id)}>
-          <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
-        </TouchableOpacity>
-      </TouchableOpacity>
-    );
-  };
+  }
+) => (
+  <TouchableOpacity style={styles.postWrapper} onPress={() => navigation.navigate('PostEdit', { id })}>
+    <Text style={styles.text}>{title}</Text>
+    <TouchableOpacity style={styles.iconWrapper} onPress={() => deletePost(id)}>
+      <FontAwesome name="trash" size={20} style={{ color: '#3B5998' }} />
+    </TouchableOpacity>
+  </TouchableOpacity>
+);
 
-  handleScrollEvent = () => {
+ItemAndroid.propTypes = {
+  navigation: PropTypes.object,
+  deletePost: PropTypes.func
+};
+
+const PostList = props => {
+  const { loading, posts, loadData, t } = props;
+  let allowDataLoad = false;
+
+  const handleScrollEvent = () => {
     const {
-      posts: {
-        pageInfo: { endCursor, hasNextPage }
-      },
-      loading,
-      loadData
-    } = this.props;
+      pageInfo: { endCursor, hasNextPage }
+    } = posts;
 
-    if (this.allowDataLoad && !loading && hasNextPage) {
-      this.allowDataLoad = false;
+    if (allowDataLoad && !loading && hasNextPage) {
+      allowDataLoad = false;
       return loadData(endCursor + 1, 'add');
     }
   };
 
-  render() {
-    const { loading, posts, t } = this.props;
-    if (loading) {
-      return <Loading text={t('post.loadMsg')} />;
-    } else if (posts && !posts.totalCount) {
-      return <Loading text={t('post.noPostsMsg')} />;
-    } else {
-      this.allowDataLoad = true;
-      return (
-        <View style={styles.container}>
-          <FlatList
-            data={posts.edges}
-            ref={ref => (this.listRef = ref)}
-            style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
-            renderItem={Platform.OS === 'android' ? this.renderItemAndroid : this.renderItemIOS}
-            onEndReachedThreshold={0.5}
-            onEndReached={this.handleScrollEvent}
-          />
-        </View>
-      );
-    }
+  if (loading) {
+    return <Loading text={t('post.loadMsg')} />;
+  } else if (posts && !posts.totalCount) {
+    return <Loading text={t('post.noPostsMsg')} />;
+  } else {
+    allowDataLoad = true;
+    return (
+      <View style={styles.container}>
+        <FlatList
+          data={posts.edges}
+          style={styles.list}
+          keyExtractor={item => `${item.node.id}`}
+          renderItem={Platform.OS === 'android' ? item => ItemAndroid(props, item) : item => ItemIOS(props, item)}
+          onEndReachedThreshold={0.5}
+          onEndReached={handleScrollEvent}
+        />
+      </View>
+    );
   }
-}
+};
+
+PostList.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  posts: PropTypes.object,
+  navigation: PropTypes.object,
+  deletePost: PropTypes.func.isRequired,
+  loadData: PropTypes.func.isRequired,
+  t: PropTypes.func
+};
 
 export default translate('post')(PostList);
 

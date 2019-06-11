@@ -134,7 +134,9 @@ module.exports = {
   mode: process.env.NODE_ENV || 'development',
   performance: { hints: false },
   plugins: (process.env.NODE_ENV !== 'production'
-    ? [new webpack.HotModuleReplacementPlugin(), new WaitOnWebpackPlugin('tcp:localhost:8080')]
+    ? [new webpack.HotModuleReplacementPlugin()].concat(
+        typeof STORYBOOK_MODE === 'undefined' ? [new WaitOnWebpackPlugin('tcp:localhost:8080')] : []
+      )
     : [
         new MiniCSSExtractPlugin({
           chunkFilename: '[name].[id].[chunkhash].css',

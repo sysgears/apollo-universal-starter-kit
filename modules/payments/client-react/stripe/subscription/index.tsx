@@ -20,7 +20,7 @@ const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFu
   </NavLink>
 ));
 
-export default (settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
+export default settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
   ? new ClientModule({
       route: [
         <AuthRoute exact role="user" path="/add-subscription" component={AddSubscription} />,
@@ -47,4 +47,4 @@ export default (settings.stripe.subscription.enabled && settings.stripe.subscrip
       scriptsInsert: ['https://js.stripe.com/v3/'],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

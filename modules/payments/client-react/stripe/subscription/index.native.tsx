@@ -14,7 +14,7 @@ import UpdateCreditCard from './containers/UpdateCreditCard';
 
 const HeaderTitleWithI18n = translate('stripeSubscription')(HeaderTitle);
 
-export default (settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
+export default settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
   ? new ClientModule({
       drawerItem: [
         {
@@ -76,4 +76,4 @@ export default (settings.stripe.subscription.enabled && settings.stripe.subscrip
       ],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

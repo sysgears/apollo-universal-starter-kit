@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
@@ -9,23 +9,19 @@ import authentication from '@gqlapp/authentication-client-react';
 
 import LoginForm from './LoginForm';
 
-class LoginView extends React.PureComponent {
-  componentDidMount() {
-    Linking.addEventListener('url', this.handleOpenURL);
-  }
+const LoginView = ({ client, navigation, onSubmit, t }) => {
+  useEffect(() => {
+    Linking.addEventListener('url', handleOpenURL);
+    return () => Linking.removeEventListener('url', handleOpenURL);
+  }, []);
 
-  componentWillUnmount() {
-    Linking.removeEventListener('url', this.handleOpenURL);
-  }
-
-  handleOpenURL = async ({ url }) => {
+  const handleOpenURL = async ({ url }) => {
     const dataRegExp = /data=([^#]+)/;
     if (!url.match(dataRegExp)) return;
 
     // Extract stringified user string out of the URL
     const [, data] = url.match(dataRegExp);
     const decodedData = JSON.parse(decodeURI(data));
-    const { client } = this.props;
 
     if (decodedData.tokens) {
       await setItem('accessToken', decodedData.tokens.accessToken);
@@ -39,26 +35,23 @@ class LoginView extends React.PureComponent {
     }
   };
 
-  renderAvailableLogins = () => (
+  const renderAvailableLogins = () => (
     <View style={styles.examplesArea}>
-      <Text style={styles.title}>{this.props.t('login.cardTitle')}:</Text>
+      <Text style={styles.title}>{t('login.cardTitle')}:</Text>
       <Text style={styles.exampleText}>admin@example.com: admin123</Text>
       <Text style={styles.exampleText}>user@example.com: user1234</Text>
     </View>
   );
 
-  render() {
-    const { navigation, onSubmit } = this.props;
-    return (
-      <View style={styles.container}>
-        <View style={styles.examplesContainer}>{this.renderAvailableLogins()}</View>
-        <View style={styles.loginContainer}>
-          <LoginForm onSubmit={onSubmit} navigation={navigation} />
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.examplesContainer}>{renderAvailableLogins()}</View>
+      <View style={styles.loginContainer}>
+        <LoginForm onSubmit={onSubmit} navigation={navigation} />
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {

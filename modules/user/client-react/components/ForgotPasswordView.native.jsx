@@ -4,21 +4,16 @@ import { StyleSheet, View } from 'react-native';
 
 import ForgotPasswordForm from './ForgotPasswordForm';
 
-class ForgotPasswordView extends React.PureComponent {
-  static propTypes = {
-    onSubmit: PropTypes.func,
-    sent: PropTypes.bool
-  };
+const ForgotPasswordView = ({ onSubmit, sent }) => (
+  <View style={styles.forgotPassContainer}>
+    <ForgotPasswordForm onSubmit={onSubmit} sent={sent} />
+  </View>
+);
 
-  render() {
-    const { onSubmit, sent } = this.props;
-    return (
-      <View style={styles.forgotPassContainer}>
-        <ForgotPasswordForm onSubmit={onSubmit} sent={sent} />
-      </View>
-    );
-  }
-}
+ForgotPasswordView.propTypes = {
+  onSubmit: PropTypes.func,
+  sent: PropTypes.bool
+};
 
 const styles = StyleSheet.create({
   forgotPassContainer: {

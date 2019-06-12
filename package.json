@@ -5,9 +5,6 @@
   "engines": {
     "yarn": ">= 1.0.0"
   },
-  "cacheDirectories": [
-    ".cache"
-  ],
   "scripts": {
     "build": "lerna run build --stream",
     "clean": "lerna run clean --stream",

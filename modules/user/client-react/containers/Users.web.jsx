@@ -10,7 +10,7 @@ import settings from '@gqlapp/config';
 
 import UsersFilterView from '../components/UsersFilterView';
 import UsersListView from '../components/UsersListView';
-import { useUsersWithSubscription } from './withSubscription';
+import useUsersWithSubscription from './withSubscription';
 import {
   withFilterUpdating,
   withOrderByUpdating,

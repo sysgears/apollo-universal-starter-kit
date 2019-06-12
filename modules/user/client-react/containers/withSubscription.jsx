@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { Subscription } from 'react-apollo';
+import { useEffect, useState } from 'react';
 
 import USERS_SUBSCRIPTION from '../graphql/UsersSubscription.graphql';
 
-export const useUsersWithSubscription = (subscribeToMore, filter) => {
+const useUsersWithSubscription = (subscribeToMore, filter) => {
   const [usersUpdated, setUsersUpdated] = useState(null);
 
   useEffect(() => {
@@ -32,25 +30,4 @@ export const useUsersWithSubscription = (subscribeToMore, filter) => {
   return usersUpdated;
 };
 
-export default Component => {
-  const UsersWithSubscription = props => {
-    const { filter } = props;
-    return (
-      <Subscription subscription={USERS_SUBSCRIPTION} variables={{ filter }}>
-        {({ data, loading }) => {
-          if (!loading && data.usersUpdated) {
-            return <Component {...props} usersUpdated={data.usersUpdated} />;
-          }
-
-          return <Component {...props} />;
-        }}
-      </Subscription>
-    );
-  };
-
-  UsersWithSubscription.propTypes = {
-    filter: PropTypes.object
-  };
-
-  return UsersWithSubscription;
-};
+export default useUsersWithSubscription;

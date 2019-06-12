@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'react-apollo';
 
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';
-import withSubscription from './withSubscription';
+
+import useUsersWithSubscription from './withSubscription';
+
 import {
   updateUsersState,
   withFilterUpdating,
@@ -15,40 +17,36 @@ import {
   withUsersState
 } from './UserOperations';
 
-class Users extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const Users = props => {
+  const { updateQuery, subscribeToMore, filter } = props;
+  const usersUpdated = useUsersWithSubscription(subscribeToMore, filter);
 
-  componentDidUpdate() {
-    const { usersUpdated, updateQuery } = this.props;
+  useEffect(() => {
     if (usersUpdated) {
       updateUsersState(usersUpdated, updateQuery);
     }
-  }
+  });
 
-  render() {
-    const isOpenFilter = !!this.props.navigation.getParam('isOpenFilter');
-    return (
-      <View style={styles.container}>
-        {isOpenFilter && (
-          <View style={styles.filterContainer}>
-            <UsersFilter {...this.props} />
-          </View>
-        )}
-        <View style={styles.usersListContainer}>
-          <UsersList {...this.props} />
+  const isOpenFilter = !!props.navigation.getParam('isOpenFilter');
+  return (
+    <View style={styles.container}>
+      {isOpenFilter && (
+        <View style={styles.filterContainer}>
+          <UsersFilter {...props} />
         </View>
+      )}
+      <View style={styles.usersListContainer}>
+        <UsersList {...props} />
       </View>
-    );
-  }
-}
+    </View>
+  );
+};
 
 Users.propTypes = {
   navigation: PropTypes.object,
-  usersUpdated: PropTypes.object,
   updateQuery: PropTypes.func,
-  loading: PropTypes.bool
+  subscribeToMore: PropTypes.func,
+  filter: PropTypes.object
 };
 
 const styles = StyleSheet.create({
@@ -76,6 +74,5 @@ export default compose(
   withUsers,
   withUsersDeleting,
   withOrderByUpdating,
-  withFilterUpdating,
-  withSubscription
+  withFilterUpdating
 )(Users);

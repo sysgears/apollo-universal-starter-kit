@@ -1,5 +1,5 @@
-import { createAppContainer, createDrawerNavigator } from 'react-navigation';
 import React from 'react';
+import { createAppContainer, createDrawerNavigator } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
 import { compose } from 'react-apollo';
@@ -7,34 +7,25 @@ import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
 import { withUser } from './Auth';
 
-class UserScreenNavigator extends React.Component {
-  static propTypes = {
-    currentUser: PropTypes.object,
-    context: PropTypes.object,
-    currentUserLoading: PropTypes.bool.isRequired,
-    routeConfigs: PropTypes.object
-  };
+const isRerender = (prevProps, nextProps) => {
+  const { currentUserLoading, currentUser } = prevProps;
+  /**
+   * After a user edits the profile the CurrentUser being updated in the State as well.
+   * That leads to the Navigator re-rendering and, as a result, takes the user back to the initial route.
+   * In order to let the user get back to his/her profile we need to prevent the Navigator
+   * re-render action after profile was edited
+   */
+  return (
+    !currentUserLoading &&
+    currentUser &&
+    nextProps.currentUser &&
+    currentUser.id === nextProps.currentUser.id &&
+    currentUser.role === nextProps.currentUser.role
+  );
+};
 
-  shouldComponentUpdate(nextProps) {
-    const { currentUserLoading, currentUser } = this.props;
-    /**
-     * After a user edits the profile the CurrentUser being updated in the State as well.
-     * That leads to the Navigator re-rendering and, as a result, takes the user back to the initial route.
-     * In order to let the user get back to his/her profile we need to prevent the Navigator
-     * re-render action after profile was edited
-     */
-    return !(
-      !currentUserLoading &&
-      currentUser &&
-      nextProps.currentUser &&
-      currentUser.id === nextProps.currentUser.id &&
-      currentUser.role === nextProps.currentUser.role
-    );
-  }
-
-  navItemsFilter = () => {
-    const { currentUser, currentUserLoading, routeConfigs } = this.props;
-
+const UserScreenNavigator = React.memo(({ currentUser, currentUserLoading, routeConfigs }) => {
+  const navItemsFilter = () => {
     const userFilter = value => {
       if (!value.userInfo) return true;
       const { showOnLogin, role } = value.userInfo;
@@ -46,26 +37,28 @@ class UserScreenNavigator extends React.Component {
     return pickBy(routeConfigs, currentUser && !currentUserLoading ? userFilter : guestFilter);
   };
 
-  getInitialRoute = () => {
-    const { currentUser } = this.props;
-    return currentUser ? 'Profile' : 'Counter';
-  };
+  const getInitialRoute = () => (currentUser ? 'Profile' : 'Counter');
 
-  render() {
-    const MainScreenNavigatorComponent = createAppContainer(
-      createDrawerNavigator(
-        { ...this.navItemsFilter() },
-        {
-          // eslint-disable-next-line
-        contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
-          initialRouteName: this.getInitialRoute()
-        }
-      )
-    );
+  const MainScreenNavigatorComponent = createAppContainer(
+    createDrawerNavigator(
+      { ...navItemsFilter() },
+      {
+        // eslint-disable-next-line
+        contentComponent: data => <DrawerComponent {...data} drawerItems={routeConfigs} />,
+        initialRouteName: getInitialRoute()
+      }
+    )
+  );
 
-    return <MainScreenNavigatorComponent />;
-  }
-}
+  return <MainScreenNavigatorComponent />;
+}, isRerender);
+
+UserScreenNavigator.propTypes = {
+  currentUser: PropTypes.object,
+  context: PropTypes.object,
+  currentUserLoading: PropTypes.bool.isRequired,
+  routeConfigs: PropTypes.object
+};
 
 const drawerNavigator = routeConfigs => {
   const withRoutes = Component => {

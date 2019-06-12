@@ -39,7 +39,7 @@ const middleware = (app: Express) => {
   app.post(webhookUrl, webhookMiddleware);
 };
 
-export default (enabled
+export default enabled
   ? new ServerModule({
       schema: [schema],
       createResolversFunc: [createResolvers],
@@ -48,4 +48,4 @@ export default (enabled
       middleware: [middleware],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

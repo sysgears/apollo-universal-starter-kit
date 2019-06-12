@@ -9,7 +9,7 @@ export default {
   name: 'Button',
   props: {
     size: String,
-    variant: String,
+    variant: String
   },
   methods: {
     click(e: any) {

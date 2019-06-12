@@ -1,1 +1,1 @@
-export default (__TEST__ ? {} : require('./module').default);
+export default __TEST__ ? {} : require('./module').default;

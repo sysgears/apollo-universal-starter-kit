@@ -40,6 +40,6 @@ export const githubData = {
   }
 };
 
-export default (settings.auth.social.github.enabled && !__TEST__
+export default settings.auth.social.github.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

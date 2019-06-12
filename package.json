@@ -10,7 +10,7 @@
     "clean": "lerna run clean --stream",
     "start": "lerna run --scope=server start --stream",
     "watch": "lerna run --scope={server,client} --parallel watch --stream",
-    "watch:vue": "zen -d client -e vue watch",
+    "watch:vue": "cross-env DISABLE_SSR=true lerna run --scope={server,client-vue} --parallel watch --stream",
     "watch:angular": "zen -d client -e angular watch",
     "watch:android": "zen -e android -d client -d ios watch",
     "watch:ios": "zen -e ios -d client -d android watch",

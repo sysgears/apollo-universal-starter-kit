@@ -7,6 +7,8 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackPort = 3000;
 let ssr = true;
@@ -93,7 +95,11 @@ const config = {
           options: { babelrc: true, rootMode: 'upward-optional' }
         }
       },
-      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } }
+      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } },
+      {
+        test: /\.vue$/,
+        use: { loader: 'vue-loader' }
+      }
     ],
     unsafeCache: false
   },
@@ -113,7 +119,10 @@ const config = {
       '.ts',
       '.tsx',
       '.json'
-    ]
+    ],
+    alias: {
+      vue$: 'vue/dist/vue.esm.js'
+    }
   },
   watchOptions: { ignored: /build/ },
   output: {
@@ -149,6 +158,8 @@ const config = {
       'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     }),
     new ManifestPlugin({ fileName: 'assets.json' }),
+    new VueLoaderPlugin(),
+    new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),
     new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
     new HardSourceWebpackPlugin.ExcludeModulePlugin([
       {
@@ -167,9 +178,6 @@ const config = {
     historyApiFallback: true,
     port: webpackPort,
     writeToDisk: pathname => pathname.endsWith('assets.json'),
-    proxy: {
-      '!(/sockjs-node/**/*|/*.hot-update.{json,js})': { target: 'http://localhost:8080', logLevel: 'info', ws: true }
-    },
     disableHostCheck: true
   }
 };

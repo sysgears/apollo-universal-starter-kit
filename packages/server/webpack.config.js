@@ -7,7 +7,11 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 
-const ssr = true;
+let ssr = true;
+
+if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
+  ssr = false;
+}
 
 const config = {
   entry: {
@@ -35,7 +39,7 @@ const config = {
       {
         test: /\.css$/,
         use: [
-          { loader: 'isomorphic-style-loader', options: {} },
+          { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { sourceMap: true } }
         ]
@@ -43,7 +47,7 @@ const config = {
       {
         test: /\.scss$/,
         use: [
-          { loader: 'isomorphic-style-loader', options: {} },
+          { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
           { loader: 'sass-loader', options: { sourceMap: true } }
@@ -52,14 +56,14 @@ const config = {
       {
         test: /\.less$/,
         use: [
-          { loader: 'isomorphic-style-loader', options: {} },
+          { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
           { loader: 'less-loader', options: { javascriptEnabled: true, sourceMap: true } }
         ]
       },
-      { test: /\.graphqls/, use: { loader: 'raw-loader', options: {} } },
-      { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader', options: {} }] },
+      { test: /\.graphqls/, use: { loader: 'raw-loader' } },
+      { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader' }] },
       {
         test: /\.[tj]sx?$/,
         use: {
@@ -67,7 +71,7 @@ const config = {
           options: { babelrc: true, rootMode: 'upward-optional' }
         }
       },
-      { test: /locales/, use: { loader: '@alienfast/i18next-loader', options: {} } }
+      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } }
     ],
     unsafeCache: false
   },
@@ -107,7 +111,7 @@ const config = {
           onBuildEnd: ['nodemon build --watch false']
         })
       ]
-    : []
+    : [new webpack.DefinePlugin({})]
   ).concat([
     new CleanWebpackPlugin('build'),
     new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: true }),
@@ -120,10 +124,14 @@ const config = {
       'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
       __SERVER_PORT__: 8080,
       __API_URL__: '"/graphql"',
-      __WEBSITE_URL__: '"http://localhost:3000"',
-      __FRONTEND_BUILD_DIR__: '"../client/build"'
+      __WEBSITE_URL__:
+        process.env.NODE_ENV !== 'production'
+          ? '"http://localhost:3000"'
+          : '"https://apollo-universal-starter-kit.herokuapp.com"',
+      __CDN_URL__: process.env.NODE_ENV !== 'production' ? '""' : '""', // If you use CDN, enter CDN endpoint URL between quotes
+      __FRONTEND_BUILD_DIR__: `"${path.resolve('../client/build')}"`
     }),
-    new HardSourceWebpackPlugin()
+    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') })
   ]),
   target: 'node',
   externals: [

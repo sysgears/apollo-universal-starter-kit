@@ -47,8 +47,7 @@
     "__PERSIST_GQL__": true,
     "__API_URL__": true,
     "__WEBSITE_URL__": true,
-    "__FRONTEND_BUILD_DIR__": true,
-    "__DLL_BUILD_DIR__": true
+    "__FRONTEND_BUILD_DIR__": true
   },
   "plugins": ["react", "react-hooks", "json", "import", "prettier"],
   "settings": {

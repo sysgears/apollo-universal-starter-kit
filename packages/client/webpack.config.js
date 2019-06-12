@@ -37,7 +37,7 @@ class WaitOnWebpackPlugin {
   }
 }
 
-module.exports = {
+const config = {
   entry: {
     index: ['raf/polyfill', '@babel/polyfill', './src/index.ts']
   },
@@ -93,10 +93,10 @@ module.exports = {
       { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader', options: {} }] },
       {
         test: /\.[jt]sx?$/,
-        exclude: /node_modules\/(?!@gqlapp)/,
+        exclude: /node_modules(?![\\/]@gqlapp).*/,
         use: {
           loader: 'heroku-babel-loader',
-          options: { babelrc: true, cacheDirectory: '../../.cache/babel-loader', rootMode: 'upward-optional' }
+          options: { babelrc: true, rootMode: 'upward-optional' }
         }
       },
       { test: /locales/, use: { loader: '@alienfast/i18next-loader', options: {} } }
@@ -122,7 +122,6 @@ module.exports = {
     ]
   },
   watchOptions: { ignored: /build/ },
-  bail: false,
   output: {
     pathinfo: false,
     filename: '[name].[hash].js',
@@ -149,7 +148,7 @@ module.exports = {
       __CLIENT__: true,
       __SERVER__: false,
       __SSR__: ssr,
-      __DEV__: true,
+      __DEV__: process.env.NODE_ENV !== 'production',
       __TEST__: false,
       'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
       __API_URL__: '"/graphql"',
@@ -180,3 +179,5 @@ module.exports = {
     disableHostCheck: true
   }
 };
+
+module.exports = config;

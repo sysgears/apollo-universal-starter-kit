@@ -7,7 +7,7 @@
     "node": ">= 8 <= 10"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production zen build",
+    "build": "cross-env NODE_ENV=production webpack --progress",
     "clean": "rimraf build .tmp",
     "start": "node --harmony build",
     "test": "yarn tests && yarn lint",
@@ -19,7 +19,7 @@
     "seed": "yarn migrate && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "watch": "zen watch",
+    "watch": "webpack --watch",
     "heroku-postbuild": "yarn build && yarn seed && yarn stripe:setup",
     "cli": "node ../../tools/cli",
     "stripe:setup": "node ../../modules/payments/server-ts/stripe/subscription/cli/stripeSetup"
@@ -138,12 +138,12 @@
   "devDependencies": {
     "@types/chai": "^4.1.4",
     "@types/chai-http": "^3.0.5",
-    "@types/jest": "^24.0.13",
     "@types/graphql-iso-date": "^3.3.0",
     "@types/graphql-resolve-batch": "^1.1.1",
     "@types/humps": "^1.1.2",
     "@types/i18next": "^8.4.4",
     "@types/i18next-express-middleware": "^0.0.33",
+    "@types/jest": "^24.0.13",
     "@types/knex": "^0.14.20",
     "@types/mkdirp": "^0.5.2",
     "@types/nodemailer": "^4.6.2",
@@ -161,6 +161,7 @@
     "ip": "^1.1.5",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
+    "nodemon": "^1.19.1",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "16.8.3",
     "request": "^2.83.0",

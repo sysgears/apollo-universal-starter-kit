@@ -14,7 +14,11 @@ module.exports = api => {
   } else {
     return {
       compact: false,
-      presets: ['@babel/preset-react', ['@babel/preset-env', { targets: { node: true }, modules: false }]],
+      presets: [
+        '@babel/preset-typescript',
+        '@babel/preset-react',
+        ['@babel/preset-env', { targets: { node: true }, modules: false }]
+      ],
       plugins: [
         '@babel/plugin-transform-destructuring',
         '@babel/plugin-transform-runtime',

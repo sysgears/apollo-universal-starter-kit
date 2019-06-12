@@ -40,6 +40,6 @@ export const facebookData = {
   }
 };
 
-export default (settings.auth.social.facebook.enabled && !__TEST__
+export default settings.auth.social.facebook.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

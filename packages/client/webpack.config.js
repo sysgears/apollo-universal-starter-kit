@@ -7,6 +7,7 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackPort = 3000;
 let ssr = true;
@@ -136,26 +137,30 @@ const config = {
           filename: `[name].[chunkhash].css`
         })
       ]
-  ).concat([
-    new CleanWebpackPlugin('build'),
-    new webpack.DefinePlugin({
-      __CLIENT__: true,
-      __SERVER__: false,
-      __SSR__: ssr,
-      __DEV__: process.env.NODE_ENV !== 'production',
-      __TEST__: false,
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
-      __API_URL__: '"/graphql"',
-      'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
-    }),
-    new ManifestPlugin({ fileName: 'assets.json' }),
-    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
-    new HardSourceWebpackPlugin.ExcludeModulePlugin([
-      {
-        test: /mini-css-extract-plugin[\\/]dist[\\/]loader/
-      }
+  )
+    .concat([
+      new CleanWebpackPlugin('build'),
+      new webpack.DefinePlugin({
+        __CLIENT__: true,
+        __SERVER__: false,
+        __SSR__: ssr,
+        __DEV__: process.env.NODE_ENV !== 'production',
+        __TEST__: false,
+        'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
+        __API_URL__: '"/graphql"',
+        'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY
+          ? `"${process.env.STRIPE_PUBLIC_KEY}"`
+          : undefined
+      }),
+      new ManifestPlugin({ fileName: 'assets.json' }),
+      new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
+      new HardSourceWebpackPlugin.ExcludeModulePlugin([
+        {
+          test: /mini-css-extract-plugin[\\/]dist[\\/]loader/
+        }
+      ])
     ])
-  ]),
+    .concat(ssr ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]),
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
     hot: true,
@@ -167,9 +172,17 @@ const config = {
     historyApiFallback: true,
     port: webpackPort,
     writeToDisk: pathname => pathname.endsWith('assets.json'),
-    proxy: {
-      '!(/sockjs-node/**/*|/*.hot-update.{json,js})': { target: 'http://localhost:8080', logLevel: 'info', ws: true }
-    },
+    ...(ssr
+      ? {
+          proxy: {
+            '!(/sockjs-node/**/*|/*.hot-update.{json,js})': {
+              target: 'http://localhost:8080',
+              logLevel: 'info',
+              ws: true
+            }
+          }
+        }
+      : {}),
     disableHostCheck: true
   }
 };

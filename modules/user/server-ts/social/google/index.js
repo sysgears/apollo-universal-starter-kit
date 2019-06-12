@@ -59,6 +59,6 @@ export const googleData = {
   }
 };
 
-export default (settings.auth.social.google.enabled && !__TEST__
+export default settings.auth.social.google.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

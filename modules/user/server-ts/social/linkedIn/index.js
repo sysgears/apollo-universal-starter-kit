@@ -40,6 +40,6 @@ export const linkedinData = {
   }
 };
 
-export default (settings.auth.social.linkedin.enabled && !__TEST__
+export default settings.auth.social.linkedin.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

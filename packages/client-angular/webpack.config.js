@@ -7,8 +7,8 @@ const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const webpackPort = 3000;
 
@@ -36,7 +36,7 @@ class WaitOnWebpackPlugin {
 
 const config = {
   entry: {
-    index: ['raf/polyfill', '@babel/polyfill', './src/index.ts']
+    index: ['raf/polyfill', '@babel/polyfill', './src/angular-polyfill.ts', './src/index.ts']
   },
   name: 'web',
   module: {
@@ -83,18 +83,35 @@ const config = {
       { test: /\.graphqls/, use: { loader: 'raw-loader' } },
       { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader' }] },
       {
-        test: /\.[jt]sx?$/,
+        test: /\.jsx?$/,
         exclude: /node_modules(?![\\/]@gqlapp).*/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { babelrc: true, rootMode: 'upward-optional' }
+          },
+          { loader: 'angular2-template-loader' }
+        ]
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /node_modules(?![\\/]@gqlapp).*/,
+        use: [
+          { loader: 'thread-loader', options: { workers: 7 } },
+          { loader: 'ts-loader', options: { transpileOnly: true, happyPackMode: true, experimentalWatchApi: true } }
+        ]
+      },
+      {
+        test: /[\\/]@angular[\\/]core[\\/].+\.js$/,
+        parser: { system: true }
+      },
+      {
+        test: /\.html$/,
         use: {
-          loader: 'babel-loader',
-          options: { babelrc: true, rootMode: 'upward-optional' }
+          loader: 'html-loader'
         }
       },
-      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } },
-      {
-        test: /\.vue$/,
-        use: { loader: 'vue-loader' }
-      }
+      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } }
     ],
     unsafeCache: false
   },
@@ -114,10 +131,7 @@ const config = {
       '.ts',
       '.tsx',
       '.json'
-    ],
-    alias: {
-      vue$: 'vue/dist/vue.esm.js'
-    }
+    ]
   },
   watchOptions: { ignored: /build/ },
   output: {
@@ -141,6 +155,17 @@ const config = {
         })
       ]
   ).concat([
+    new webpack.ContextReplacementPlugin(
+      /**
+       * Override the initial configuration for ContextReplacementPlugin.
+       * The argument /angular[\\\/]core[\\\/]@angular/ causes several war
+       * See https://prnt.sc/lezevh
+       *
+       * It's necessary to remove the @angular part and fix the issue by e
+       * the proper module.rules.Rule for @angular/core/*.js files(see abo
+       */
+      /angular[\\/]core/
+    ),
     new CleanWebpackPlugin('build'),
     new webpack.DefinePlugin({
       __CLIENT__: true,
@@ -153,14 +178,17 @@ const config = {
       'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
     }),
     new ManifestPlugin({ fileName: 'assets.json' }),
-    new VueLoaderPlugin(),
     new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),
     new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
     new HardSourceWebpackPlugin.ExcludeModulePlugin([
       {
         test: /mini-css-extract-plugin[\\/]dist[\\/]loader/
       }
-    ])
+    ]),
+    new ForkTsCheckerWebpackPlugin({
+      tsconfig: path.resolve(__dirname, 'tsconfig.json'),
+      checkSyntacticErrors: true
+    })
   ]),
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {

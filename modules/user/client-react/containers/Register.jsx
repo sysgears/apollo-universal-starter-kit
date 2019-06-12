@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 
@@ -9,44 +9,34 @@ import settings from '@gqlapp/config';
 import RegisterView from '../components/RegisterView';
 import REGISTER from '../graphql/Register.graphql';
 
-class Register extends React.Component {
-  state = {
-    isRegistered: false
-  };
+const Register = props => {
+  const { t, register, history, navigation } = props;
 
-  onSubmit = async values => {
-    const { t, register, navigation } = this.props;
+  const [isRegistered, setIsRegistered] = useState(false);
 
+  const onSubmit = async values => {
     try {
       await register(values);
       if (!settings.auth.password.requireEmailConfirmation) {
-        navigation.goBack();
+        if (history) {
+          history.push('/login');
+        } else if (navigation) {
+          navigation.goBack();
+        }
       } else {
-        this.setState({ isRegistered: true });
+        setIsRegistered(true);
       }
     } catch (e) {
       throw new FormError(t('reg.errorMsg'), e);
     }
   };
 
-  hideModal = () => {
-    this.props.navigation.goBack();
-  };
-
-  toggleModal = () => {
-    this.setState(prevState => ({ isRegistered: !prevState.isRegistered }));
-  };
-
-  render() {
-    const { isRegistered } = this.state;
-    return (
-      <RegisterView {...this.props} isRegistered={isRegistered} hideModal={this.hideModal} onSubmit={this.onSubmit} />
-    );
-  }
-}
+  return <RegisterView {...props} isRegistered={isRegistered} onSubmit={onSubmit} />;
+};
 
 Register.propTypes = {
   register: PropTypes.func,
+  history: PropTypes.object,
   t: PropTypes.func,
   navigation: PropTypes.object
 };

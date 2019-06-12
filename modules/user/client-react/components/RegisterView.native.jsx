@@ -5,22 +5,14 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import RegisterForm from './RegisterForm';
 
-class RegisterView extends React.PureComponent {
-  static propTypes = {
-    onSubmit: PropTypes.func,
-    isRegistered: PropTypes.bool,
-    hideModal: PropTypes.func,
-    t: PropTypes.func
-  };
-
-  renderModal = () => {
-    const { t, hideModal } = this.props;
+const RegisterView = ({ onSubmit, isRegistered, t, navigation }) => {
+  const renderModal = () => {
     return (
       <View style={styles.modalWrapper}>
         <Text style={styles.modalTitle}>{t('reg.confirmationMsgTitle')}</Text>
         <Text style={styles.modalBody}>{t('reg.confirmationMsgBody')}</Text>
         <View style={styles.button}>
-          <Button onPress={hideModal} type={primary}>
+          <Button onPress={() => navigation.goBack()} type={primary}>
             {t('reg.confirmationBtn')}
           </Button>
         </View>
@@ -28,13 +20,15 @@ class RegisterView extends React.PureComponent {
     );
   };
 
-  render() {
-    const { onSubmit, isRegistered } = this.props;
-    return (
-      <View style={styles.container}>{isRegistered ? this.renderModal() : <RegisterForm onSubmit={onSubmit} />}</View>
-    );
-  }
-}
+  return <View style={styles.container}>{isRegistered ? renderModal() : <RegisterForm onSubmit={onSubmit} />}</View>;
+};
+
+RegisterView.propTypes = {
+  onSubmit: PropTypes.func,
+  isRegistered: PropTypes.bool,
+  navigation: PropTypes.object,
+  t: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

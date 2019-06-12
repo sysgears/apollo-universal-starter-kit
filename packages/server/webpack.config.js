@@ -67,7 +67,7 @@ const config = {
       {
         test: /\.[tj]sx?$/,
         use: {
-          loader: 'heroku-babel-loader',
+          loader: 'babel-loader',
           options: { babelrc: true, rootMode: 'upward-optional' }
         }
       },

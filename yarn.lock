@@ -11129,16 +11129,6 @@ header-case@^1.0.0:
     no-case "^2.2.0"
     upper-case "^1.1.3"
 
-heroku-babel-loader@^8.0.4:
-  version "8.0.4"
-  resolved "https://registry.yarnpkg.com/heroku-babel-loader/-/heroku-babel-loader-8.0.4.tgz#675eebb014c72f75e2ed02a8d027611851119db7"
-  integrity sha512-HsKCc+AUt/c8p2i72cZMESs8NHC/UeXR5k6WMmQgw/wsVTalTL3DxaDxiXISS+md0jpb+jDG/gH2OBjS4njRFw==
-  dependencies:
-    find-cache-dir "^1.0.0"
-    loader-utils "^1.0.2"
-    mkdirp "^0.5.1"
-    util.promisify "^1.0.0"
-
 highlight.js@~9.12.0:
   version "9.12.0"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-9.12.0.tgz#e6d9dbe57cbefe60751f02af336195870c90c01e"

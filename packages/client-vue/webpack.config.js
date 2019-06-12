@@ -91,7 +91,7 @@ const config = {
         test: /\.[jt]sx?$/,
         exclude: /node_modules(?![\\/]@gqlapp).*/,
         use: {
-          loader: 'heroku-babel-loader',
+          loader: 'babel-loader',
           options: { babelrc: true, rootMode: 'upward-optional' }
         }
       },

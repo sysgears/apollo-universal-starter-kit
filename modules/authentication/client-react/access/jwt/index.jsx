@@ -128,9 +128,9 @@ const JWTLink = getApolloClient =>
     });
   });
 
-export default (settings.auth.jwt.enabled
+export default settings.auth.jwt.enabled
   ? new AccessModule({
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens]
     })
-  : undefined);
+  : undefined;

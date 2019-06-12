@@ -12,7 +12,6 @@
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
     "watch": "webpack-dev-server",
-    "heroku-postbuild": "yarn build",
     "cli": "node ../../tools/cli"
   },
   "repository": {

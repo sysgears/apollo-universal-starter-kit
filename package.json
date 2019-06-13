@@ -2,10 +2,6 @@
   "name": "apollo-universal-starter-kit",
   "private": true,
   "version": "1.0.0",
-  "cacheDirectories": [
-    "node_modules",
-    ".cache"
-  ],
   "engines": {
     "yarn": ">= 1.0.0"
   },

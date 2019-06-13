@@ -6,7 +6,7 @@
   "scripts": {
     "clean": "rimraf build .expo .tmp",
     "exp-login": "cross-env NODE_ENV=production expo login -u $EXP_USERNAME -p $EXP_PASSWORD --non-interactive",
-    "exp-publish": "yarn expo-login && yarn expo -- p --non-interactive",
+    "exp-publish": "yarn exp-login && yarn expo -- p --non-interactive",
     "tests": "jest",
     "tests:watch": "jest --watch",
     "test": "yarn tests && yarn lint",
@@ -16,7 +16,7 @@
     "watch": "expo start",
     "watch:android": "expo start --android",
     "watch:ios": "expo start --ios",
-    "heroku-postbuild": "yarn build && yarn exp-publish",
+    "heroku-postbuild": "yarn exp-publish",
     "postinstall": "expo-yarn-workspaces postinstall",
     "cli": "node ../../tools/cli"
   },

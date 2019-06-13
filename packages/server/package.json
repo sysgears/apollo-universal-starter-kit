@@ -172,7 +172,6 @@
     "ws": "^5.1.1"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0",
     "eslint": "*"
   },
   "resolutions": {

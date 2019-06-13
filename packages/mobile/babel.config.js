@@ -22,21 +22,8 @@ module.exports = api => {
   } else {
     return {
       compact: false,
-      presets: ['module:metro-react-native-babel-preset'],
-      plugins: [
-        'haul/src/utils/fixRequireIssues',
-        ['styled-components', { ssr: true }],
-        ['import', { libraryName: 'antd-mobile' }],
-        [
-          'babel-plugin-module-resolver',
-          {
-            alias: {
-              'react-native-vector-icons': '@expo/vector-icons'
-            }
-          }
-        ],
-        ['@babel/plugin-proposal-decorators', { legacy: true }]
-      ],
+      presets: ['babel-preset-expo'],
+      plugins: [['styled-components', { ssr: true }], ['import', { libraryName: 'antd-mobile' }]],
       env: {
         production: {
           compact: true

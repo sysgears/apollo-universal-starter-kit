@@ -17,23 +17,59 @@ import {
   lookStyles
 } from '@gqlapp/look-client-react-native';
 
-const UsersFilterView = props => {
-  const [showModal, setShowModal] = useState(false);
+const Arrow = (name, orderBy) => {
+  if (orderBy && orderBy.column === name) {
+    if (orderBy.order === 'desc') {
+      return <FontAwesome name="long-arrow-up" size={16} style={styles.iconStyle} />;
+    } else {
+      return <FontAwesome name="long-arrow-down" size={16} style={styles.iconStyle} />;
+    }
+  } else {
+    return <FontAwesome name="arrows-v" size={16} style={styles.iconStyle} />;
+  }
+};
+
+const OrderByModal = ({ isVisible, setShowModal, onOrderBy, t }) => {
   const [orderBy, setOrderBy] = useState({
     column: '',
     order: ''
   });
 
-  const renderOrderByArrow = name => {
-    if (orderBy && orderBy.column === name) {
-      if (orderBy.order === 'desc') {
-        return <FontAwesome name="long-arrow-up" size={16} style={styles.iconStyle} />;
-      } else {
-        return <FontAwesome name="long-arrow-down" size={16} style={styles.iconStyle} />;
-      }
-    } else {
-      return <FontAwesome name="arrows-v" size={16} style={styles.iconStyle} />;
+  const orderByParams = [
+    {
+      label: t('users.column.name'),
+      value: 'username'
+    },
+    {
+      label: t('users.column.email'),
+      value: 'email'
+    },
+    {
+      label: t('users.column.role'),
+      value: 'role'
+    },
+    {
+      label: t('users.column.active'),
+      value: 'isActive'
     }
+  ];
+
+  const handleOnOrderBy = () => {
+    onOrderBy(orderBy);
+    setShowModal(false);
+  };
+
+  const renderListItem = (label, value, idx) => {
+    return (
+      <ListItem key={idx} onPress={() => handleOrderBy(value)}>
+        <View style={styles.itemContainer}>
+          <View style={styles.itemTitle}>
+            <Text>{label}</Text>
+          </View>
+          <View style={styles.itemAction}>{Arrow(value, orderBy)}</View>
+        </View>
+      </ListItem>
+    );
   };
 
   const handleOrderBy = name => {
@@ -52,105 +88,61 @@ const UsersFilterView = props => {
     setOrderBy({ column: name, order });
   };
 
-  const renderListItem = (label, value, idx) => {
-    return (
-      <ListItem key={idx} onPress={() => handleOrderBy(value)}>
-        <View style={styles.itemContainer}>
-          <View style={styles.itemTitle}>
-            <Text>{label}</Text>
-          </View>
-          <View style={styles.itemAction}>{renderOrderByArrow(value)}</View>
-        </View>
-      </ListItem>
-    );
-  };
-
-  const renderModalChildren = () => {
-    const { orderBy, t } = props;
-
-    const orderByParams = [
-      {
-        label: t('users.column.name'),
-        value: 'username'
-      },
-      {
-        label: t('users.column.email'),
-        value: 'email'
-      },
-      {
-        label: t('users.column.role'),
-        value: 'role'
-      },
-      {
-        label: t('users.column.active'),
-        value: 'isActive'
-      }
-    ];
-    return (
+  return (
+    <Modal
+      isVisible={isVisible}
+      onSwipe={() => setShowModal(false)}
+      onBackdropPress={() => setShowModal(false)}
+      swipeDirection="left"
+    >
       <View>
         <View style={styles.listWrapper}>
           <List>{orderByParams.map((item, idx) => renderListItem(item.label, item.value, idx))}</List>
         </View>
         <View style={styles.buttonWrapper}>
-          <Button type={success} onPress={onOrderBy}>
+          <Button type={success} onPress={handleOnOrderBy}>
             {t('users.btnModalSubmit')}
           </Button>
         </View>
         <View style={styles.buttonWrapper}>
-          <Button
-            type={danger}
-            onPress={() => {
-              setShowModal(!showModal);
-              setOrderBy(orderBy);
-            }}
-          >
+          <Button type={danger} onPress={() => setShowModal(false)}>
             {t('users.btnModalClose')}
           </Button>
         </View>
       </View>
-    );
-  };
+    </Modal>
+  );
+};
 
-  const onOrderBy = () => {
-    props.onOrderBy(orderBy);
-    setShowModal(false);
-  };
+OrderByModal.propTypes = {
+  isVisible: PropTypes.bool,
+  onOrderBy: PropTypes.func,
+  setShowModal: PropTypes.func,
+  t: PropTypes.func
+};
 
-  const handleSearch = text => {
-    const { onSearchTextChange } = props;
-    onSearchTextChange(text);
-  };
-
-  const handleRole = value => {
-    const { onRoleChange } = props;
-    onRoleChange(value);
-  };
-
-  const handleIsActive = () => {
-    const {
-      onIsActiveChange,
-      filter: { isActive }
-    } = props;
-    onIsActiveChange(!isActive);
-  };
-
-  const onChangeTextDelayed = debounce(handleSearch, 500);
-
-  const {
-    filter: { role, isActive },
-    t
-  } = props;
-
+const UsersFilterView = ({
+  t,
+  onOrderBy,
+  onSearchTextChange,
+  onRoleChange,
+  onIsActiveChange,
+  filter: { role, isActive }
+}) => {
   const options = [
     { value: '', label: t('users.list.item.role.all') },
     { value: 'user', label: t('users.list.item.role.user') },
     { value: 'admin', label: t('users.list.item.role.admin') }
   ];
 
+  const [showModal, setShowModal] = useState(false);
+
+  const handleSearch = debounce(text => onSearchTextChange(text), 500);
+
   return (
     <View style={styles.container}>
       <View style={{ flex: 1 }}>
-        <SearchBar placeholder={t('users.list.item.search')} onChangeText={onChangeTextDelayed} />
+        <SearchBar placeholder={t('users.list.item.search')} onChangeText={handleSearch} />
       </View>
       <View style={styles.itemContainer}>
         <Text style={styles.itemTitle}>{t('users.list.item.role.label')}</Text>
@@ -162,7 +154,7 @@ const UsersFilterView = props => {
             mode="dropdown"
             data={options}
             selectedValue={role}
-            onChange={value => handleRole(value)}
+            onChange={value => onRoleChange(value)}
             okText={t('users.select.okText')}
             dismissText={t('users.select.dismissText')}
             cols={1}
@@ -173,7 +165,7 @@ const UsersFilterView = props => {
       <View style={styles.itemContainer}>
         <Text style={styles.itemTitle}>{t('users.column.active')}</Text>
         <View style={styles.itemAction}>
-          <Switch onChange={handleIsActive} value={isActive} />
+          <Switch onChange={() => onIsActiveChange(!isActive)} value={isActive} />
         </View>
       </View>
       <TouchableOpacity style={styles.itemContainer} onPress={() => setShowModal(true)}>
@@ -182,14 +174,7 @@ const UsersFilterView = props => {
           <FontAwesome name="sort" size={25} style={styles.iconStyle} />
         </View>
       </TouchableOpacity>
-      <Modal
-        isVisible={showModal}
-        onSwipe={() => setShowModal(false)}
-        onBackdropPress={() => setShowModal(false)}
-        swipeDirection="left"
-      >
-        {renderModalChildren()}
-      </Modal>
+      <OrderByModal isVisible={showModal} setShowModal={setShowModal} onOrderBy={onOrderBy} t={t} />
     </View>
   );
 };

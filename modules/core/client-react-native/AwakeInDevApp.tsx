@@ -4,8 +4,9 @@ import * as Font from 'expo-font';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import React from 'react';
 import { View } from 'react-native';
-import App from './App';
 import ClientModule from '@gqlapp/module-client-react-native';
+
+import App from './App';
 
 interface AwakeInDevAppProps {
   exp: any;
@@ -26,9 +27,9 @@ export default async (modules: ClientModule) => {
 
     public async componentDidMount() {
       await Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-        Ionicons: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf')
+        Roboto: require('../../../node_modules/native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('../../../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+        Ionicons: require('../../../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf')
       });
 
       this.setState({ isReady: true });

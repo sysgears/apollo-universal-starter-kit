@@ -97,7 +97,6 @@
     "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0",
     "eslint": "*"
   },
   "browserslist": {

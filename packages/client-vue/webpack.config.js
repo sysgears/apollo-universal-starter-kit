@@ -12,6 +12,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackPort = 3000;
 
+const buildConfig = require('./build.config');
+
 class WaitOnWebpackPlugin {
   constructor(waitOnUrl) {
     this.waitOnUrl = waitOnUrl;
@@ -36,7 +38,7 @@ class WaitOnWebpackPlugin {
 
 const config = {
   entry: {
-    index: ['raf/polyfill', '@babel/polyfill', './src/index.ts']
+    index: ['raf/polyfill', 'core-js/stable', 'regenerator-runtime/runtime', './src/index.ts']
   },
   name: 'web',
   module: {
@@ -142,16 +144,7 @@ const config = {
       ]
   ).concat([
     new CleanWebpackPlugin('build'),
-    new webpack.DefinePlugin({
-      __CLIENT__: true,
-      __SERVER__: false,
-      __SSR__: false,
-      __DEV__: process.env.NODE_ENV !== 'production',
-      __TEST__: false,
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
-      __API_URL__: '"/graphql"',
-      'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY ? `"${process.env.STRIPE_PUBLIC_KEY}"` : undefined
-    }),
+    new webpack.DefinePlugin({ ...buildConfig }),
     new ManifestPlugin({ fileName: 'assets.json' }),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),

@@ -16,7 +16,6 @@
     "watch": "expo start",
     "watch:android": "expo start --android",
     "watch:ios": "expo start --ios",
-    "heroku-postbuild": "yarn exp-publish",
     "postinstall": "expo-yarn-workspaces postinstall",
     "cli": "node ../../tools/cli"
   },

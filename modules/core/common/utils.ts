@@ -52,10 +52,10 @@ export const traceMethodCalls = (obj: any) => {
 const getPlatform = () => {
   if (typeof document !== 'undefined') {
     return 'web';
-  } else if (typeof window === 'undefined') {
-    return 'server';
-  } else {
+  } else if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
     return 'mobile';
+  } else {
+    return 'server';
   }
 };
 

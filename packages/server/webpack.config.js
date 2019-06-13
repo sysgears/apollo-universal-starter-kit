@@ -7,17 +7,12 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 
-let ssr = true;
-
-if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
-  ssr = false;
-}
+const buildConfig = require('./build.config');
 
 const config = {
   entry: {
     index: (process.env.NODE_ENV !== 'production' ? ['webpack/hot/poll?200'] : []).concat([
       'raf/polyfill',
-      '@babel/polyfill',
       './src/index.ts'
     ])
   },
@@ -115,22 +110,7 @@ const config = {
   ).concat([
     new CleanWebpackPlugin('build'),
     new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: true }),
-    new webpack.DefinePlugin({
-      __CLIENT__: false,
-      __SERVER__: true,
-      __SSR__: ssr,
-      __DEV__: process.env.NODE_ENV !== 'production',
-      __TEST__: false,
-      'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
-      __SERVER_PORT__: 8080,
-      __API_URL__: '"/graphql"',
-      __WEBSITE_URL__:
-        process.env.NODE_ENV !== 'production'
-          ? '"http://localhost:3000"'
-          : '"https://apollo-universal-starter-kit.herokuapp.com"',
-      __CDN_URL__: process.env.NODE_ENV !== 'production' ? '""' : '""', // If you use CDN, enter CDN endpoint URL between quotes
-      __FRONTEND_BUILD_DIR__: `"${path.resolve('../client/build')}"`
-    }),
+    new webpack.DefinePlugin({ ...buildConfig }),
     new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') })
   ]),
   target: 'node',

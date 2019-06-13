@@ -11,6 +11,9 @@
     },
     "android": {
       "package": "com.sysgears.apollokit"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js"
     }
   }
 }

@@ -16,7 +16,7 @@ interface ContactFormProps {
   onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 }
 
-const ContactForm = ({
+const ContactFormComponent = ({
   values,
   handleSubmit,
   t,
@@ -113,4 +113,4 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default ContactFormWithFormik(ContactFormComponent);

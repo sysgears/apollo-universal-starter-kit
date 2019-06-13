@@ -23,7 +23,11 @@ module.exports = api => {
     return {
       compact: false,
       presets: ['babel-preset-expo'],
-      plugins: [['styled-components', { ssr: true }], ['import', { libraryName: 'antd-mobile' }]],
+      plugins: [
+        'transform-inline-environment-variables',
+        ['styled-components', { ssr: true }],
+        ['import', { libraryName: 'antd-mobile' }]
+      ],
       env: {
         production: {
           compact: true

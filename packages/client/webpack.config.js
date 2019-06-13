@@ -10,11 +10,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackPort = 3000;
-let ssr = true;
 
-if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
-  ssr = false;
-}
+const buildConfig = require('./build.config');
 
 class WaitOnWebpackPlugin {
   constructor(waitOnUrl) {
@@ -140,18 +137,7 @@ const config = {
   )
     .concat([
       new CleanWebpackPlugin('build'),
-      new webpack.DefinePlugin({
-        __CLIENT__: true,
-        __SERVER__: false,
-        __SSR__: ssr,
-        __DEV__: process.env.NODE_ENV !== 'production',
-        __TEST__: false,
-        'process.env.NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`,
-        __API_URL__: '"/graphql"',
-        'process.env.STRIPE_PUBLIC_KEY': process.env.STRIPE_PUBLIC_KEY
-          ? `"${process.env.STRIPE_PUBLIC_KEY}"`
-          : undefined
-      }),
+      new webpack.DefinePlugin({ ...buildConfig }),
       new ManifestPlugin({ fileName: 'assets.json' }),
       new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
       new HardSourceWebpackPlugin.ExcludeModulePlugin([
@@ -160,7 +146,9 @@ const config = {
         }
       ])
     ])
-    .concat(ssr ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]),
+    .concat(
+      buildConfig.__SSR__ ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]
+    ),
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
     hot: true,
@@ -172,7 +160,7 @@ const config = {
     historyApiFallback: true,
     port: webpackPort,
     writeToDisk: pathname => pathname.endsWith('assets.json'),
-    ...(ssr
+    ...(buildConfig.__SSR__
       ? {
           proxy: {
             '!(/sockjs-node/**/*|/*.hot-update.{json,js})': {

@@ -1,10 +1,5 @@
 try {
-  global.__SERVER__ = false;
-  global.__CLIENT__ = true;
-  global.__SSR__ = false;
-  global.__TEST__ = false;
-  global.__API_URL__ = 'http://localhost:8080/graphql';
-  global.__WEBSITE_URL__ = 'http://localhost:8080';
+  Object.assign(global, require('../build.config'));
 
   // tslint:disable-next-line
   const modules = require('./modules').default;

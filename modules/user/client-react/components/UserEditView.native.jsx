@@ -7,35 +7,31 @@ import { Loading } from '@gqlapp/look-client-react-native';
 import UserForm from './UserForm';
 import { withLoadedUser } from '../containers/Auth';
 
-class UserEditView extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    user: PropTypes.object,
-    currentUser: PropTypes.object,
-    t: PropTypes.func,
-    onSubmit: PropTypes.func
-  };
-
-  render() {
-    const { loading, user, t, currentUser } = this.props;
-
-    if (loading && !user) {
-      return <Loading text={t('userEdit.loadMsg')} />;
-    } else {
-      const isNotSelf = !user || (user && user.id !== currentUser.id);
-      return (
-        <View style={styles.container}>
-          <UserForm
-            onSubmit={this.props.onSubmit}
-            shouldDisplayRole={isNotSelf}
-            shouldDisplayActive={isNotSelf}
-            initialValues={user || {}}
-          />
-        </View>
-      );
-    }
+const UserEditView = ({ loading, user, t, currentUser, onSubmit }) => {
+  if (loading && !user) {
+    return <Loading text={t('userEdit.loadMsg')} />;
+  } else {
+    const isNotSelf = !user || (user && user.id !== currentUser.id);
+    return (
+      <View style={styles.container}>
+        <UserForm
+          onSubmit={onSubmit}
+          shouldDisplayRole={isNotSelf}
+          shouldDisplayActive={isNotSelf}
+          initialValues={user || {}}
+        />
+      </View>
+    );
   }
-}
+};
+
+UserEditView.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  user: PropTypes.object,
+  currentUser: PropTypes.object,
+  t: PropTypes.func,
+  onSubmit: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

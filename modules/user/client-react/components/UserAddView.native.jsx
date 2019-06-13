@@ -6,25 +6,16 @@ import { translate } from '@gqlapp/i18n-client-react';
 import UserForm from './UserForm';
 import { withLoadedUser } from '../containers/Auth';
 
-class UserAddView extends React.PureComponent {
-  static propTypes = {
-    t: PropTypes.func,
-    onSubmit: PropTypes.func
-  };
+const UserAddView = ({ onSubmit }) => (
+  <View style={styles.container}>
+    <UserForm onSubmit={onSubmit} initialValues={{}} shouldDisplayRole={true} shouldDisplayActive={true} />
+  </View>
+);
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <UserForm
-          onSubmit={this.props.onSubmit}
-          initialValues={{}}
-          shouldDisplayRole={true}
-          shouldDisplayActive={true}
-        />
-      </View>
-    );
-  }
-}
+UserAddView.propTypes = {
+  t: PropTypes.func,
+  onSubmit: PropTypes.func
+};
 
 const styles = StyleSheet.create({
   container: {

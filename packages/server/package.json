@@ -7,7 +7,7 @@
     "node": ">= 8 <= 10"
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack --progress",
+    "build": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",
     "start": "node --harmony build",
     "test": "yarn tests && yarn lint",

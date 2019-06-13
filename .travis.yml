@@ -1,15 +1,14 @@
 language: node_js
 node_js:
 - '10'
-cache:
-  yarn: true
-  directories:
-    - node_modules/.cache
+cache: yarn
 dist: xenial
 os:
 - linux
 script:
 - yarn test
+before_deploy:
+- rm -rf node_modules
 deploy:
   provider: heroku
   api_key:

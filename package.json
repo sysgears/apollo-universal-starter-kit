@@ -2,6 +2,10 @@
   "name": "apollo-universal-starter-kit",
   "private": true,
   "version": "1.0.0",
+  "cacheDirectories": [
+    "node_modules",
+    ".cache"
+  ],
   "engines": {
     "yarn": ">= 1.0.0"
   },
@@ -30,7 +34,7 @@
     "lint": "yarn eslint && yarn tslint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json .",
     "tslint": "tslint --fix -p tsconfig.json -c tslint.json",
-    "heroku-postbuild": "lerna run heroku-postbuild --stream",
+    "heroku-postbuild": "lerna run --parallel heroku-postbuild --stream",
     "precommit": "lint-staged",
     "postinstall": "opencollective postinstall"
   },

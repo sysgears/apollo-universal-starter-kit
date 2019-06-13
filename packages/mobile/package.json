@@ -51,6 +51,7 @@
     "apollo-logger": "^0.3.2",
     "apollo-upload-client": "^10.0.0",
     "expo": "^33.0.0",
+    "expo-cli": "^2.19.5",
     "expo-constants": "^5.0.1",
     "expo-file-system": "^5.0.1",
     "expo-font": "^5.0.1",

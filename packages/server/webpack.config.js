@@ -13,7 +13,6 @@ const config = {
   entry: {
     index: (process.env.NODE_ENV !== 'production' ? ['webpack/hot/poll?200'] : []).concat([
       'raf/polyfill',
-      '@babel/polyfill',
       './src/index.ts'
     ])
   },

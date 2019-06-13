@@ -55,7 +55,6 @@
   "author": "SysGears INC",
   "license": "MIT",
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@gqlapp/core-common": "^0.1.0",

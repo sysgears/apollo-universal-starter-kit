@@ -38,7 +38,13 @@ class WaitOnWebpackPlugin {
 
 const config = {
   entry: {
-    index: ['raf/polyfill', '@babel/polyfill', './src/angular-polyfill.ts', './src/index.ts']
+    index: [
+      'raf/polyfill',
+      'core-js/stable',
+      'regenerator-runtime/runtime',
+      './src/angular-polyfill.ts',
+      './src/index.ts'
+    ]
   },
   name: 'web',
   module: {

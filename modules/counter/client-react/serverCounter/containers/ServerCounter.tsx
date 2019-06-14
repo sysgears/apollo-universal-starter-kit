@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Mutation, Query } from 'react-apollo';
 import update from 'immutability-helper';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
+import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 
 interface ButtonProps {
   counterAmount: number;
@@ -47,6 +47,31 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
   </Mutation>
 );
 
+const subscribeToCount = (subscribeToMore: (opts: any) => any): any => {
+  return subscribeToMore({
+    document: COUNTER_SUBSCRIPTION,
+    variables: {},
+    updateQuery: (
+      prev: any,
+      {
+        subscriptionData: {
+          data: {
+            counterUpdated: { amount }
+          }
+        }
+      }: any
+    ) => {
+      return update(prev, {
+        serverCounter: {
+          amount: {
+            $set: amount
+          }
+        }
+      });
+    }
+  });
+};
+
 interface CounterProps {
   t: TranslateFunction;
   subscribeToMore: (opts: any) => any;
@@ -54,73 +79,20 @@ interface CounterProps {
   counter: any;
 }
 
-class ServerCounter extends React.Component<CounterProps> {
-  private subscription: any;
+const ServerCounter = (props: CounterProps) => {
+  const { t, counter, loading, subscribeToMore } = props;
 
-  constructor(props: CounterProps) {
-    super(props);
-    this.subscription = null;
-  }
+  useEffect(() => {
+    const subscribe = subscribeToCount(subscribeToMore);
+    return () => subscribe();
+  });
 
-  public componentDidMount() {
-    if (!this.props.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  // remove when Renderer is overwritten
-  public componentDidUpdate(prevProps: CounterProps) {
-    if (!prevProps.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription();
-    }
-  }
-
-  public subscribeToCount() {
-    this.subscription = this.props.subscribeToMore({
-      document: COUNTER_SUBSCRIPTION,
-      variables: {},
-      updateQuery: (
-        prev: any,
-        {
-          subscriptionData: {
-            data: {
-              counterUpdated: { amount }
-            }
-          }
-        }: any
-      ) => {
-        return update(prev, {
-          serverCounter: {
-            amount: {
-              $set: amount
-            }
-          }
-        });
-      }
-    });
-  }
-
-  public render() {
-    const { t, counter, loading } = this.props;
-    return (
-      <ServerCounterView t={t} counter={counter} loading={loading}>
-        <IncreaseButton t={t} counterAmount={1} counter={counter} />
-      </ServerCounterView>
-    );
-  }
-}
+  return (
+    <ServerCounterView t={t} counter={counter} loading={loading}>
+      <IncreaseButton t={t} counterAmount={1} counter={counter} />
+    </ServerCounterView>
+  );
+};
 
 const ServerCounterWithQuery = (props: any) => (
   <Query query={COUNTER_QUERY}>

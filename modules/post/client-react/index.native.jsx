@@ -32,33 +32,12 @@ PostListHeaderRight.propTypes = {
   t: PropTypes.func
 };
 
-class PostListScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
-    headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: (
-      <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-    ),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
-
-  render() {
-    return <Post navigation={this.props.navigation} />;
-  }
-}
-
-PostListScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
 const PostEditTitle = ({ t }) => (
   <Text style={styles.subTitle}>
     {t(`post.label.edit`)} {t('post.label.post')}
   </Text>
 );
 PostEditTitle.propTypes = {
-  navigation: PropTypes.object,
   t: PropTypes.func
 };
 
@@ -68,45 +47,38 @@ const PostAddTitle = ({ t }) => (
   </Text>
 );
 PostAddTitle.propTypes = {
-  navigation: PropTypes.object,
   t: PropTypes.func
 };
 
-class PostEditScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(PostEditTitle, { navigation }),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
-
-  render() {
-    return <PostEdit navigation={this.props.navigation} />;
-  }
-}
-PostEditScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-class PostAddScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(PostAddTitle, { navigation }),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
-
-  render() {
-    return <PostAdd navigation={this.props.navigation} />;
-  }
-}
-
-PostAddScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
 const PostNavigator = createStackNavigator({
-  PostList: { screen: PostListScreen },
-  PostEdit: { screen: PostEditScreen },
-  PostAdd: { screen: PostAddScreen }
+  PostList: {
+    screen: Post,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
+      headerRight: withI18N(PostListHeaderRight, { navigation }),
+      headerLeft: (
+        <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+      ),
+      headerStyle: styles.header,
+      headerForceInset: {}
+    })
+  },
+  PostEdit: {
+    screen: PostEdit,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: withI18N(PostEditTitle, { navigation }),
+      headerStyle: styles.header,
+      headerForceInset: {}
+    })
+  },
+  PostAdd: {
+    screen: PostAdd,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: withI18N(PostAddTitle, { navigation }),
+      headerStyle: styles.header,
+      headerForceInset: {}
+    })
+  }
 });
 
 const styles = StyleSheet.create({

@@ -57,21 +57,18 @@ const FacebookIcon = () => (
   </View>
 );
 
-class FacebookComponent extends React.Component {
-  render() {
-    const { type, text } = this.props;
-    switch (type) {
-      case 'button':
-        return <FacebookButton text={text} />;
-      case 'link':
-        return <FacebookLink text={text} />;
-      case 'icon':
-        return <FacebookIcon />;
-      default:
-        return <FacebookButton text={text} />;
-    }
+const FacebookComponent = ({ type, text }) => {
+  switch (type) {
+    case 'button':
+      return <FacebookButton text={text} />;
+    case 'link':
+      return <FacebookLink text={text} />;
+    case 'icon':
+      return <FacebookIcon />;
+    default:
+      return <FacebookButton text={text} />;
   }
-}
+};
 
 FacebookComponent.propTypes = {
   client: PropTypes.object,

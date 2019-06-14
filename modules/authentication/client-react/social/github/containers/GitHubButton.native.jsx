@@ -56,21 +56,18 @@ const GitHubIcon = () => (
   </View>
 );
 
-class GitHubComponent extends React.Component {
-  render() {
-    const { type, text } = this.props;
-    switch (type) {
-      case 'button':
-        return <GitHubButton text={text} />;
-      case 'link':
-        return <GitHubLink text={text} />;
-      case 'icon':
-        return <GitHubIcon />;
-      default:
-        return <GitHubButton text={text} />;
-    }
+const GitHubComponent = ({ type, text }) => {
+  switch (type) {
+    case 'button':
+      return <GitHubButton text={text} />;
+    case 'link':
+      return <GitHubLink text={text} />;
+    case 'icon':
+      return <GitHubIcon />;
+    default:
+      return <GitHubButton text={text} />;
   }
-}
+};
 
 GitHubComponent.propTypes = {
   client: PropTypes.object,

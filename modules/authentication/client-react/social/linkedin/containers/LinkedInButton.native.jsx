@@ -56,21 +56,18 @@ const LinkedInIcon = () => (
   </View>
 );
 
-class LinkedInComponent extends React.Component {
-  render() {
-    const { type, text } = this.props;
-    switch (type) {
-      case 'button':
-        return <LinkedInButton text={text} />;
-      case 'link':
-        return <LinkedInLink text={text} />;
-      case 'icon':
-        return <LinkedInIcon />;
-      default:
-        return <LinkedInButton text={text} />;
-    }
+const LinkedInComponent = ({ type, text }) => {
+  switch (type) {
+    case 'button':
+      return <LinkedInButton text={text} />;
+    case 'link':
+      return <LinkedInLink text={text} />;
+    case 'icon':
+      return <LinkedInIcon />;
+    default:
+      return <LinkedInButton text={text} />;
   }
-}
+};
 
 LinkedInComponent.propTypes = {
   client: PropTypes.object,

@@ -56,21 +56,18 @@ const GoogleIcon = () => (
   </View>
 );
 
-class GoogleComponent extends React.Component {
-  render() {
-    const { type, text } = this.props;
-    switch (type) {
-      case 'button':
-        return <GoogleButton text={text} />;
-      case 'link':
-        return <GoogleLink text={text} />;
-      case 'icon':
-        return <GoogleIcon />;
-      default:
-        return <GoogleButton text={text} />;
-    }
+const GoogleComponent = ({ type, text }) => {
+  switch (type) {
+    case 'button':
+      return <GoogleButton text={text} />;
+    case 'link':
+      return <GoogleLink text={text} />;
+    case 'icon':
+      return <GoogleIcon />;
+    default:
+      return <GoogleButton text={text} />;
   }
-}
+};
 
 GoogleComponent.propTypes = {
   client: PropTypes.object,

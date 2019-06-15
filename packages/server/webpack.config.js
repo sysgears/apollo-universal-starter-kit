@@ -106,11 +106,17 @@ const config = {
           onBuildEnd: ['nodemon build --watch false']
         })
       ]
-    : [new webpack.DefinePlugin({})]
+    : []
   ).concat([
     new CleanWebpackPlugin('build'),
     new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: true }),
-    new webpack.DefinePlugin({ ...buildConfig }),
+    new webpack.DefinePlugin(
+      Object.assign(
+        ...Object.entries(buildConfig).map(([k, v]) => ({
+          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`
+        }))
+      )
+    ),
     new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') })
   ]),
   target: 'node',

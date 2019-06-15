@@ -175,9 +175,13 @@ const config = {
       /angular[\\/]core/
     ),
     new CleanWebpackPlugin('build'),
-    new webpack.DefinePlugin({
-      ...buildConfig
-    }),
+    new webpack.DefinePlugin(
+      Object.assign(
+        ...Object.entries(buildConfig).map(([k, v]) => ({
+          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`
+        }))
+      )
+    ),
     new ManifestPlugin({ fileName: 'assets.json' }),
     new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),
     new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),

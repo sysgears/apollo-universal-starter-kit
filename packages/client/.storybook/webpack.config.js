@@ -5,6 +5,7 @@ module.exports = async ({ config, mode }) => {
   const result = { ...config };
   result.module = webpackConfig.module;
   result.resolve = webpackConfig.resolve;
+  result.watchOptions = webpackConfig.watchOptions;
   result.plugins = [...config.plugins, ...webpackConfig.plugins];
   return result;
 };

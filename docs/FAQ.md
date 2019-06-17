@@ -40,10 +40,10 @@ git merge upstream/stable
 
 ## How do I use a custom GraphQL back end?
 
-To set your custom GraphQL back end endpoint, set `API_URL` environment variable or change URL in `packages/server/build.config.js` for the `__API_URL__` property:
+To set your custom GraphQL back end endpoint, set `BACKEND_API_URL` environment variable or change URL in `packages/server/build.config.js` for the `__API_URL__` property:
 
 ```javascript
-__API_URL__: process.env.API_URL || '/graphql', // set the full URL to the external GraphQL API e.g. https://
+__API_URL__: process.env.BACKEND_API_URL || 'https://my-custom-domain/graphql', // set the full URL to the external GraphQL API e.g. https://
 ```
 
 We recommend that you still run the back-end code provided by the starter kit to use the server-side rendering (SSR).

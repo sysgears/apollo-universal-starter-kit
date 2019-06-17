@@ -1,4 +1,5 @@
 import express from 'express';
+import compression from 'compression';
 import path from 'path';
 import { GraphQLSchema } from 'graphql';
 
@@ -14,6 +15,10 @@ export const createServerApp = (schema: GraphQLSchema, modules: ServerModule) =>
   const app = express();
   // Don't rate limit heroku
   app.enable('trust proxy');
+
+  if (!__DEV__) {
+    app.use(compression());
+  }
 
   (modules.beforeware || []).forEach(applyBeforeware => applyBeforeware(app, modules.appContext));
   (modules.middleware || []).forEach(applyMiddleware => applyMiddleware(app, modules.appContext));

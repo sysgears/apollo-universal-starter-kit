@@ -7,6 +7,7 @@ module.exports = api => {
       presets: ['@babel/preset-typescript', '@babel/preset-react', ['@babel/preset-env', { modules: 'commonjs' }]],
       plugins: [
         '@babel/plugin-transform-destructuring',
+        ['@babel/plugin-transform-for-of', { loose: true }],
         '@babel/plugin-transform-regenerator',
         '@babel/plugin-transform-runtime',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
@@ -21,6 +22,7 @@ module.exports = api => {
       presets: ['@babel/preset-typescript', '@babel/preset-react', ['@babel/preset-env', { modules: false }]],
       plugins: [
         '@babel/plugin-transform-destructuring',
+        ['@babel/plugin-transform-for-of', { loose: true }],
         '@babel/plugin-transform-regenerator',
         '@babel/plugin-transform-runtime',
         ['@babel/plugin-proposal-decorators', { legacy: true }],

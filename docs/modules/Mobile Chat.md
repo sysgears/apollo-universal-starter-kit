@@ -1,10 +1,10 @@
 # Apollo Universal Starter Kit &ndash; Mobile Chat
 
-Apollo Universal Starter Kit comes with the mobile chat module, which you can use as a starting point for creating a 
-mobile chat in your React Native app. The mobile chat implementation in the starter kit is based on 
+Apollo Universal Starter Kit comes with the mobile chat module, which you can use as a starting point for creating a
+mobile chat in your React Native app. The mobile chat implementation in the starter kit is based on
 [React Native Gifted Chat].
 
-The server-side and client-side components of the mobile chat module are located in the `packages/server/src/modules/chat` 
+The server-side and client-side components of the mobile chat module are located in the `packages/server/src/modules/chat`
 and `packages/client/src/modules/chat` directories respectively.
 
 ## Getting Started
@@ -31,7 +31,7 @@ cd apollo-universal-starter-kit
     * For iOS, set `config.builders.ios.enabled` to true
 
 Consult the example below:
- 
+
 ```javascript
 const config = {
   builders: {
@@ -62,14 +62,14 @@ const config = {
 4. Run `yarn seed` from the root to create the default data in the database.
 
 **NOTE**: If you're already using the starter kit, and your project is already connected to a database, the `yarn seed`
-command will overwrite the data that was already created in the database. In order not to overwrite the data, you need 
+command will overwrite the data that was already created in the database. In order not to overwrite the data, you need
 to run `yarn migrate` from the `packages/server/` directory instead of `yarn seed`.
 
 5. Run `yarn watch` to launch the project. It may take a couple of minutes to build and run the project the first time.
 
 6. Scan the QR code(s) that will be shown in the terminal with your Android or iOS device (or both).
 
-7. In the mobile app, tap on the **Menu** icon. In the menu, tap **Chat** and start sending your messages. To start a 
+7. In the mobile app, tap on the **Menu** icon. In the menu, tap **Chat** and start sending your messages. To start a
 dialog in the mobile chat, you can run the Apollo Universal Starter Kit project on the other device.
 
 ## Available Features
@@ -86,16 +86,16 @@ The mobile chat provides the following features:
 
 ### Access Rights Management for Users
 
-The current implementation of the mobile chat has two types of users &ndash; the anonymous user and the registered user. 
+The current implementation of the mobile chat has two types of users &ndash; the anonymous user and the registered user.
 
-If the user isn’t logged in, he or she will be able to chat as _anonymous user_, and the user's messages are labelled 
-accordingly. Alternately, if the user has logged in, the user's messages are signed with the username. 
+If the user isn’t logged in, he or she will be able to chat as _anonymous user_, and the user's messages are labelled
+accordingly. Alternately, if the user has logged in, the user's messages are signed with the username.
 
-Authorization in the mobile chat is configured in such a way that a _logged-in user_ can’t edit or delete messages that 
-he or she sent as _anonymous user_ from the same mobile device. And vice versa, the _anonymous_ user isn't authorized to 
+Authorization in the mobile chat is configured in such a way that a _logged-in user_ can’t edit or delete messages that
+he or she sent as _anonymous user_ from the same mobile device. And vice versa, the _anonymous_ user isn't authorized to
 change or delete the messages sent by a _logged-in_ user from the same device.
 
-The mobile app uses the Universally Unique Identifier to differentiate which messages are sent by a non-authenticated 
+The mobile app uses the Universally Unique Identifier to differentiate which messages are sent by a non-authenticated
 user.
 
 You can test this functionality with the following demo users in Apollo Universal Starter Kit:
@@ -105,26 +105,26 @@ You can test this functionality with the following demo users in Apollo Universa
 
 ### Loading Messages as a Batch
 
-Users can view all the messages that were sent via the mobile chat, but the chat doesn't load all of the messages in one 
+Users can view all the messages that were sent via the mobile chat, but the chat doesn't load all of the messages in one
 go. Instead, the chat can load up to 50 messages at once as a batch.
 
-The chat loads up to 50 latest messages by default. If there are more than 50 messages, the older messages can be loaded 
-only if you specifically requested them. You can scroll to the top of the chat and tap **Load More** to get the older 
+The chat loads up to 50 latest messages by default. If there are more than 50 messages, the older messages can be loaded
+only if you specifically requested them. You can scroll to the top of the chat and tap **Load More** to get the older
 messages.
 
 You can change the limit for messages to load in the [mobile chat configurations](#mobile-chat-configurations).
 
 ### How Images Are Stored on a Mobile Device
 
-The mobile app caches all the images that users send via the chat in their device's cache. 
+The mobile app caches all the images that users send via the chat in their device's cache.
 
-When a user sends an image via the mobile chat, the image is copied and saved in the device's cache, and is immediately 
+When a user sends an image via the mobile chat, the image is copied and saved in the device's cache, and is immediately
 shown to the sender. If the user re-sizes or crops the image before sending, the device will store the
 _modified image_ to the cache (the original image stays unchanged.)
 
-When an image is sent via the chat, the other users are first notified that an image was loaded, and the mobile app 
-checks whether that image was already loaded before. Put simply, the app searches for the image in the device's cache. 
-If the image was found, then it's loaded directly from cache thus economizing the network traffic. Otherwise, the image 
+When an image is sent via the chat, the other users are first notified that an image was loaded, and the mobile app
+checks whether that image was already loaded before. Put simply, the app searches for the image in the device's cache.
+If the image was found, then it's loaded directly from cache thus economizing the network traffic. Otherwise, the image
 is loaded via the network.
 
 Before the image is loaded to the mobile chat, the users first see the pre-loader icon, and only after that the image is
@@ -132,7 +132,7 @@ shown.
 
 ### How Images Are Stored by the App
 
-The images sent via the mobile chat are stored as _plain files_ in the Apollo Universal Starter Kit project in the 
+The images sent via the mobile chat are stored as _plain files_ in the Apollo Universal Starter Kit project in the
 directory `packages/server/public/`. You can change the directory for images in the `config/chat.js` configuration file.
 
 ## Mobile Chat Configurations
@@ -164,4 +164,4 @@ To deploy the Apollo Universal Starter Kit mobile app with chat, consult the [De
 [ios]: https://itunes.apple.com/ru/app/expo-client/id982107779?mt=8
 [gifted chat documentation]: https://github.com/FaridSafi/react-native-gifted-chat#props
 [expo documentation on imagepicker]: https://docs.expo.io/versions/latest/sdk/imagepicker
-[Deployment]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md
+[Deployment]: /docs/deployment.md

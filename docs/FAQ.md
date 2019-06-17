@@ -40,92 +40,18 @@ git merge upstream/stable
 
 ## How do I use a custom GraphQL back end?
 
-To set your custom GraphQL back end endpoint, change the URL in `packages/server/.zenrc.js` for the
-`config.options.define.__API_URL__` property:
+To set your custom GraphQL back end endpoint, set `API_URL` environment variable or change URL in `packages/server/build.config.js` for the `__API_URL__` property:
 
 ```javascript
-const url = require('url');
-
-const config = {
-  // code is omitted
-  options: {
-    // other options are omitted
-    defines: {
-      __DEV__: process.env.NODE_ENV !== 'production',
-      __SERVER_PORT__: 8080,
-      __API_URL__: '"/graphql"', // set the full URL to the external GraphQL API e.g. https://example.com/graphql
-      __WEBSITE_URL__: '"http://localhost:3000"'
-    }
-  }
-};
+__API_URL__: process.env.API_URL || '/graphql', // set the full URL to the external GraphQL API e.g. https://
 ```
 
 We recommend that you still run the back-end code provided by the starter kit to use the server-side rendering (SSR).
-You can also turn off SSR if you don't use the starter kit back end. Set the `config.options.ssr` to `false` in
-`packages/server/.zenrc.js`:
-
-```javascript
-const url = require('url');
-
-const config = {
-  // other code is omitted
-  options: {
-    // other options are omitted
-    ssr: true // set to false if you don't need Apollo Starter Kit back end
-  }
-};
-```
-
-Reference: [#585](https://github.com/sysgears/apollo-universal-starter-kit/issues/585)
+You can also turn off SSR if you don't use the starter kit back end. Set the environmet variable `SSR` to `false` or edit root `build.config.js`:
 
 ## How do I disable Server Side Rendering?
 
-To disable Server Side Rendering (SSR), change a dedicated SpinJS setting in `.zenrc.js` files:
-
-* For the Express application, set `config.options.ssr` to `false` in `packages/server/.zenrc.js`
-* For the React application, set `config.options.ssr` to `false` in `packages/client/.zenrc.js`
-
-**NOTE**: If you're going to disable SSR, you must disable it in **both** packages &ndash; `server` and `client`!
-
-Disabling SSR in the `server` package:
-
-```js
-// File packages/server/.zenrc.js
-
-const config = {
-  builders: {
-    // ...
-    stack: ['server'],
-  },
-  options: {
-    // SSR is now disabled for server
-    // Remember to disable SSR for the client in package/client/.sprinrc.js
-    ssr: false,
-    // ...
-  }
-};
-// ...
-```
-
-Similarly, you can turn off SSR in the `client` package:
-
-```js
-// File packages/client/.zenrc.js
-
-const config = {
-  builders: {
-    web: {
-      // ...
-      stack: ['web'],
-    },
-  },
-  options: {
-    // SSR is now disabled for client
-    // Remember to disable SSR for the server in package/server/.zenrc.js
-    ssr: false,
-  }
-};
-```
+To disable Server Side Rendering (SSR), change set environment variable `SSR` to `false` or edit root `build.config.js`
 
 More information: [Server Side Rendering with Apollo Universal Starter Kit].
 
@@ -210,7 +136,7 @@ When you develop a native mobile app, we also recommend that you follow the nami
 | ios      | packages/mobile/ | `.ios.tsx`, `.ios.jsx`, `.ios.ts`, `.ios.js`, `.json`                 |
 
 Notice that you should use the `.native.tsx` and similar extensions for files with the same logic for both Android and
-iOS platforms. If the logic for these two platforms is different, use `.android.tsx` (and similar extensions) for  
+iOS platforms. If the logic for these two platforms is different, use `.android.tsx` (and similar extensions) for
 Android, and `.ios.tsx` for iOS.
 
 For example, here's how the files may be called for the Storage module:
@@ -218,7 +144,7 @@ For example, here's how the files may be called for the Storage module:
 * `storage.tsx` for the web and server platforms
 * `storage.native.tsx` for the mobile app for files with the same logic
 * `storage.android.tsx` for the custom logic for the Android platform
-* `storage.ios.tsx` for the custom logic for the iOS platform  
+* `storage.ios.tsx` for the custom logic for the iOS platform
 
 Apollo Universal Starter Kit uses Webpack to build the code for all the platforms &ndash; server, web, Android, and iOS.
 The starter kit uses the [`resolve.extensions`] Webpack property to understand which files should be used for generating
@@ -237,6 +163,6 @@ amount of merge conflicts to a minimum.
 
 [knex]: https://knexjs.org/
 [`resolve.extensions`]: https://webpack.js.org/configuration/resolve/#resolve-extensions
-[server side rendering with apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Configuration.md#server-side-rendering
+[server side rendering with apollo universal starter kit]: /docs/Configuration.md#server-side-rendering
 [configuring a remote for a fork]: https://help.github.com/articles/configuring-a-remote-for-a-fork/
 [syncing a fork]: https://help.github.com/articles/syncing-a-fork/

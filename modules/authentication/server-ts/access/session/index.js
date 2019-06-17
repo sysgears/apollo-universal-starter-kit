@@ -3,7 +3,7 @@ import settings from '@gqlapp/config';
 
 import { writeSession, createSession, readSession } from './sessions';
 import AccessModule from '../AccessModule';
-import schema from './schema';
+import schema from './schema.graphql';
 import resolvers from './resolvers';
 
 const grant = async ({ id }, req) => {

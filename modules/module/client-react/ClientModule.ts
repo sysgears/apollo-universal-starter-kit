@@ -11,10 +11,6 @@ export interface ClientModuleShape extends BaseModuleShape {
   navItem?: Array<React.ReactElement<any>>;
   // Top right navigation links
   navItemRight?: Array<React.ReactElement<any>>;
-  // URL list to 3rd party css styles
-  stylesInsert?: string[];
-  // URL list to 3rd party js scripts
-  scriptsInsert?: string[];
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -65,20 +61,6 @@ class ClientModule extends BaseModule {
           key: component.key || idx + items.length
         })
     );
-  }
-
-  /**
-   * @returns URL list to 3rd party css styles
-   */
-  get stylesInserts() {
-    return this.stylesInsert || [];
-  }
-
-  /**
-   * @returns URL list to 3rd party js scripts
-   */
-  get scriptsInserts() {
-    return this.scriptsInsert || [];
   }
 }
 

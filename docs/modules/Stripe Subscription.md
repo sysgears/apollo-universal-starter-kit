@@ -1,17 +1,17 @@
 # Apollo Universal Starter Kit Payments Module with Stripe
 
-The Apollo Universal Starter Kit payments module is a great starting point when you want to charge users for access to 
+The Apollo Universal Starter Kit payments module is a great starting point when you want to charge users for access to
 paid features or services available through your application. With the starter kit payments module, you can develop the
 _recurring billing_ functionality more rapidly than if you would have started from scratch.
 
-The payment module is based on a popular payment processor [Stripe], and the module provides an example of using [Stripe 
-subscriptions] in a real production application. Moreover, the payments module also implements specific functionality to 
-help you simulate a real production-ready payment service in _development mode_ as well thanks to [stripe-local], a 
+The payment module is based on a popular payment processor [Stripe], and the module provides an example of using [Stripe
+subscriptions] in a real production application. Moreover, the payments module also implements specific functionality to
+help you simulate a real production-ready payment service in _development mode_ as well thanks to [stripe-local], a
 simple JavaScript library.
 
-The payments module code is located under the `packages/server/src/modules/payments/stripe/` directory. (When talking 
-about the payments module files, we'll omit the long `packages/server/src/modules/payments/` part for brevity, and will 
-simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a respective file or 
+The payments module code is located under the `packages/server/src/modules/payments/stripe/` directory. (When talking
+about the payments module files, we'll omit the long `packages/server/src/modules/payments/` part for brevity, and will
+simply start the path with `stripe/`. If a path doesn't start with `stripe/`, you should look for a respective file or
 directory **from the project root**.)
 
 ### Running the App in Development Mode
@@ -28,7 +28,7 @@ export default {
 };
 ```
 
-3. Replace `process.env.STRIPE_PUBLIC_KEY` with your Stripe publishable key for **development mode** in 
+3. Replace `process.env.STRIPE_PUBLIC_KEY` with your Stripe publishable key for **development mode** in
 `config/stripe/subscription.js`:
 
 ```javascript
@@ -45,9 +45,9 @@ export default {
 STRIPE_SECRET_KEY="your_Stripe_secret_key"
 ```
 
-**NOTE**: In `packages/server/.env`, you'll also see the `STRIPE_ENDPOINT_SECRET` environment variable. You don't need 
-to set this variable to run the application in development mode. You need to specify `STRIPE_ENDPOINT_SECRET` only when 
-you're deploying your Apollo Starter Kit-based application. For more information about deployment, consult the 
+**NOTE**: In `packages/server/.env`, you'll also see the `STRIPE_ENDPOINT_SECRET` environment variable. You don't need
+to set this variable to run the application in development mode. You need to specify `STRIPE_ENDPOINT_SECRET` only when
+you're deploying your Apollo Starter Kit-based application. For more information about deployment, consult the
 [deployment section](#deployment-with-apollo-starter-kit-subscription-module).
 
 5. Run `yarn stripe:setup` from the root project directory.
@@ -61,23 +61,23 @@ configured in the `config/stripe/subscription.js` file.
 yarn seed && yarn watch
 ```
 
-**NOTE**: If you're already using Apollo Universal Starter Kit, we recommend that you run `yarn migrate` instead of 
+**NOTE**: If you're already using Apollo Universal Starter Kit, we recommend that you run `yarn migrate` instead of
 `yarn seed`. Otherwise, the data that's already stored in the database will be overwritten.
 
-7. Sign in to the application with the email `user@example.com` and password `user1234`. 
+7. Sign in to the application with the email `user@example.com` and password `user1234`.
 
-(Apollo Universal Starter Kit provides two demo users; their login details can be found on the `/login` page in the 
+(Apollo Universal Starter Kit provides two demo users; their login details can be found on the `/login` page in the
 application. You can also create a new user to subscribe.)
 
-8. Visit the `/subscriber-page` page and subscribe. The subscription page provides a few test credit cards that you can 
+8. Visit the `/subscriber-page` page and subscribe. The subscription page provides a few test credit cards that you can
 use to test Stripe subscription.
 
-9. Once the payment is processed, visit `/subscriber-page` again to view the secret number. The subscription information 
+9. Once the payment is processed, visit `/subscriber-page` again to view the secret number. The subscription information
 is available on the `/profile` page.
 
 ## Implemented Stripe Subscription Features
 
-The payments module in Apollo Universal Starter Kit provides a few features to help you build your specific payments 
+The payments module in Apollo Universal Starter Kit provides a few features to help you build your specific payments
 functionality upon them for your particular application.
 
 Currently, Apollo Universal Starter Kit includes the following payments features:
@@ -95,8 +95,8 @@ Currently, Apollo Universal Starter Kit includes the following payments features
 
 ## Webhook
 
-The Apollo Starter Kit payments module uses our custom webhook middleware for Express to handle requests from Stripe and 
-to notify users about any changes to their subscription. You can have a look at the `stripe/subscription/webhook.ts` 
+The Apollo Starter Kit payments module uses our custom webhook middleware for Express to handle requests from Stripe and
+to notify users about any changes to their subscription. You can have a look at the `stripe/subscription/webhook.ts`
 file for the code that manages requests and notifies users about subscription changes.
 
 Currently, Apollo Universal Starter Kit supports two Stripe events:
@@ -107,30 +107,30 @@ Stripe and updates the database. After that, an email is sent to the user to con
 
 ## Simulation of Full Subscription Functionality in Development Mode
 
-If you've already used Stripe, you might know that Stripe doesn't allow you to get subscription information if you're 
+If you've already used Stripe, you might know that Stripe doesn't allow you to get subscription information if you're
 running the application in development mode.
 
-In a production application, upon any changes of the subscription status, Stripe sends requests to the endpoint &ndash; 
-a webhook &ndash; that you registered with Stripe. These requests typically contain data about the subscription 
+In a production application, upon any changes of the subscription status, Stripe sends requests to the endpoint &ndash;
+a webhook &ndash; that you registered with Stripe. These requests typically contain data about the subscription
 cancellation or payment failure, and you need to handle these events in your production application.
 
 The described flow, however, is only possible in a production application with a _real domain_.
 
-When you work on your application in development mode, Stripe simply can't send any data to `localhost:port` (in fact, 
+When you work on your application in development mode, Stripe simply can't send any data to `localhost:port` (in fact,
 Stripe still sends requests to the webhook that you registered, but the requests will never reach your application).
 
 Therefore, in order to get full subscription functionality &ndash; to be able to test various payment problems in
 development mode &ndash; we integrated a small library _stripe-local_ into the Apollo Starter Kit payments module.
 
 stripe-local sends requests to Stripe every 15 seconds to verify if any new events were registered when you tried to
-subscribe in development mode. If there are any new events, stripe-local will get them and send them to your application 
+subscribe in development mode. If there are any new events, stripe-local will get them and send them to your application
 on `localhost:port`. Simply put, you can consider stripe-local as a _proxy_ between your application and Stripe.
 
 ![Notification flow between Stripe and your application in development flow with the stripe-local library](https://user-images.githubusercontent.com/21691607/54425396-e5690700-471d-11e9-8e5f-dcca07513509.png)
 
 ### Configuring stripe-local
 
-You can change the [stripe-local options] in the `stripe/subscription/index.ts` file. As shown in the example below, you 
+You can change the [stripe-local options] in the `stripe/subscription/index.ts` file. As shown in the example below, you
 can add the stripe-local properties to the object attribute passed to `stripeLocal()`:
 
 ```javascript
@@ -149,7 +149,7 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
 
 ## Subscription Module Settings
 
-To use the payments module, you need to add your Stripe keys into the `packages/server/.env` file and configure the 
+To use the payments module, you need to add your Stripe keys into the `packages/server/.env` file and configure the
 module in the `config/stripe/subscription.js` file.
 
 First, add your Stripe secret and endpoint keys to the `packages/server/.env` file:
@@ -160,11 +160,11 @@ STRIPE_SECRET_KEY=
 STRIPE_ENDPOINT_SECRET=
 ```
 
-To configure the payments module, you can change the settings listed in the table below in 
+To configure the payments module, you can change the settings listed in the table below in
 `config/stripe/subscription.js`:
 
 | Property       | Value   | Purpose                                                                     |
-| -------------- | ------- | --------------------------------------------------------------------------- |            
+| -------------- | ------- | --------------------------------------------------------------------------- |
 | enabled        | Boolean | Enables or disables the payments module. Defaults to `false`                |
 | webhookUrl     | String  | Stores the URL for the webhook that you registered with Stripe              |
 | publicKey      | String  | Stores the [publishable key] generated by Stripe for your application       |
@@ -173,32 +173,32 @@ To configure the payments module, you can change the settings listed in the tabl
 
 ## Deployment with Apollo Starter Kit Payments Module
 
-1. Create a [webhook endpoint] in the [Stripe dashboard]. The webhook URLs that are set in the Stripe dashboard and in 
+1. Create a [webhook endpoint] in the [Stripe dashboard]. The webhook URLs that are set in the Stripe dashboard and in
 the `config/stripe/subscription.js` file must be the same.
 
-By default, `webhookUrl` is set to `/stripe/webhook` in `config/stripe/subscription.js`, therefore, in the Stripe 
-dashboard you need to set the webhook endpoint to `https://your-website-name.com/stripe/webhook`. Otherwise, use your 
+By default, `webhookUrl` is set to `/stripe/webhook` in `config/stripe/subscription.js`, therefore, in the Stripe
+dashboard you need to set the webhook endpoint to `https://your-website-name.com/stripe/webhook`. Otherwise, use your
 own URLs.
 
 2. Add your live publishable key from Stripe into `config/stripe/subscription.js`.
 
 3. Add your live secret key from Stripe into `packages/server/.env`.
 
-4. Add the Stripe secret endpoint key from your Stripe webhook ([webhook signatures]) in `packages/server/.env` to 
+4. Add the Stripe secret endpoint key from your Stripe webhook ([webhook signatures]) in `packages/server/.env` to
 prevent fraudulent webhooks from being processed.
 
-5. Run `yarn stripe:setup` from the root directory of Apollo Starter kit to create a subscription plan and product. The 
+5. Run `yarn stripe:setup` from the root directory of Apollo Starter kit to create a subscription plan and product. The
 default plan and product are configured in the `config/stripe/subscription.js` file.
 
 6. [Deploy your application].
 
 ## Deployment to Heroku
 
-1. Create a [webhook endpoint] in [Stripe Dashboard]. The webhook URLs that are set in the Stripe dashboard and the 
+1. Create a [webhook endpoint] in [Stripe Dashboard]. The webhook URLs that are set in the Stripe dashboard and the
 `config/stripe/subscription.js` file must be the same.
 
-By default, `webhookUrl` is set to `/stripe/webhook` in `config/stripe/subscription.js`. Therefore, in the Stripe 
-dashboard you need to set the webhook endpoint to `https://your-website-name.com/stripe/webhook`. Otherwise, use your 
+By default, `webhookUrl` is set to `/stripe/webhook` in `config/stripe/subscription.js`. Therefore, in the Stripe
+dashboard you need to set the webhook endpoint to `https://your-website-name.com/stripe/webhook`. Otherwise, use your
 own URLs.
 
 2. Add your live publishable key, secret key, and secret endpoint key from Stripe to your deployment configuration
@@ -210,10 +210,10 @@ own URLs.
 | STRIPE_SECRET_KEY       | 'your_secret_key'          |
 | STRIPE_ENDPOINT_SECRET  | 'your_secret_endpoint_key' |
 
-`STRIPE_ENDPOINT_SECRET` is the secret endpoint key that's necessary to prevent fraudulent webhooks from being 
+`STRIPE_ENDPOINT_SECRET` is the secret endpoint key that's necessary to prevent fraudulent webhooks from being
 processed. You can consult [webhook signatures] for more information about the secret endpoint key.
 
-**NOTE**: The command `yarn stripe:setup` will be run automatically by [Heroku] to create a subscription plan and 
+**NOTE**: The command `yarn stripe:setup` will be run automatically by [Heroku] to create a subscription plan and
 product using the Stripe API. The default plan and product are configured in the `config/stripe/subscription.js` file.
 
 3. [Deploy your application].
@@ -234,5 +234,5 @@ product using the Stripe API. The default plan and product are configured in the
 [webhook endpoint]: https://stripe.com/docs/webhooks
 [heroku dashboard]: https://dashboard.heroku.com/apps
 [webhook signatures]: https://stripe.com/docs/webhooks/signatures
-[deploy your application]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/deployment.md
+[deploy your application]: /docs/deployment.md
 [heroku]: https://heroku.com

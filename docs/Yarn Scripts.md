@@ -99,31 +99,6 @@ Migrates the sample database. The command updates the database according to the 
 Rolls back the sample database to the previous state. The command simply cancels the last migration created with
 `yarn migrate`.
 
-### `yarn exp`
-
-Runs the `exp` Expo command.
-
-**NOTE**: Apollo Universal Starter Kit uses the `exp` command, not the [`expo`] command that was recently suggested
-for use by Expo SDK. Currently, Expo allows you to use both `exp` and `expo`, but **the starter kit supports only
-`exp`**!
-
-In the starter kit, the command `yarn exp` is basically a wrapper around the `exp` command from the Expo SDK. `exp` in
-the starter kit is in fact run by the [Zen] library, which creates the React Native app builds using [webpack] and
-[Haul CLI] **instead** of the [Metro bundler].
-
-The `yarn exp` command in the starter kit supports only the following `exp` (Expo CLI) commands:
-
-* `build:android` or `ba`
-* `build:ios` or `bi`
-* `publish` or `p`
-
-To learn more about these Expo commands, consult the official [Expo CLI documentation].
-
-### `yarn exp-publish`
-
-Runs the mobile app in development mode and watches your changes to the starter kit code. Upon any changes made to the
-app, the bundle will be updated and reloaded thanks to hot code reload.                                                        
-
 ### `yarn jest`
 
 Runs the tests for the mobile app using Jest, a Facebook utility for running unit tests for React Native apps. You can
@@ -180,9 +155,8 @@ When formatting the code isn't possible, however, the changes won't be committed
 lines where issues were found) will be shown in the console.
 
 [lerna]: https://lernajs.io/
-[cli guide]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/CLI.md
+[cli guide]: /docs/tools/CLI.md
 [`expo`]: https://docs.expo.io/versions/latest/workflow/expo-cli
-[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
 [webpack]: https://webpack.js.org/
 [haul cli]: https://github.com/callstack/haul
 [metro bundler]: https://facebook.github.io/metro/

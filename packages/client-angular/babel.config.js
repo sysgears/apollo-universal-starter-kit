@@ -3,6 +3,7 @@ module.exports = {
   presets: [['@babel/preset-env', { modules: false }]],
   plugins: [
     '@babel/plugin-transform-destructuring',
+    ['@babel/plugin-transform-for-of', { loose: true }],
     '@babel/plugin-transform-regenerator',
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true }],

@@ -6,6 +6,7 @@ module.exports = api => {
     plugins: [
       '@babel/plugin-transform-modules-commonjs',
       '@babel/plugin-transform-destructuring',
+      ['@babel/plugin-transform-for-of', { loose: true }],
       '@babel/plugin-transform-regenerator',
       '@babel/plugin-transform-runtime',
       ['@babel/plugin-proposal-decorators', { legacy: true }],

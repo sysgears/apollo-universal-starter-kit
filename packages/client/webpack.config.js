@@ -159,6 +159,12 @@ const config = {
     .concat(
       buildConfig.__SSR__ ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]
     ),
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: true
+  },
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
     hot: true,

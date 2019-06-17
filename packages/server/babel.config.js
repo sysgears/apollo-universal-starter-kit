@@ -10,8 +10,7 @@ module.exports = api => {
         ['@babel/preset-env', { targets: { node: true }, modules: 'commonjs' }]
       ],
       plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        '@loadable/babel-plugin',
+        'babel-plugin-dynamic-import-node',
         ['@babel/plugin-proposal-class-properties', { loose: true }],
         'babel-plugin-import-graphql'
       ]
@@ -25,7 +24,7 @@ module.exports = api => {
         ['@babel/preset-env', { targets: { node: true }, modules: false }]
       ],
       plugins: [
-        '@babel/plugin-syntax-dynamic-import',
+        'babel-plugin-dynamic-import-node',
         '@loadable/babel-plugin',
         '@babel/plugin-transform-destructuring',
         '@babel/plugin-transform-runtime',

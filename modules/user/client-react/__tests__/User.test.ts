@@ -28,8 +28,8 @@ describe('User UI works', () => {
 
   it('User page renders on mount', async () => {
     app = renderer.mount();
-    await waitForElementRender(app.container, 'a[href="/profile"]');
     renderer.history.push('/profile');
+    await waitForElementRender(app.container, 'a[href="/profile"]');
     content = updateContent(app.container);
     // tslint:disable-next-line:no-unused-expression
     expect(content).to.not.be.empty;

@@ -58,7 +58,6 @@ const Html = ({ content, state, css, headElements, helmet }: HtmlProps) => (
       <link rel="shortcut icon" href={`${assetMap['favicon.ico']}`} />
       <meta name="msapplication-config" content={`${assetMap['browserconfig.xml']}`} />
       <meta name="theme-color" content="#ffffff" />
-      {!__DEV__ && <link rel="stylesheet" type="text/css" href={`${assetMap['index.css']}`} />}
       {!!css && css}
     </head>
     <body {...helmet.bodyAttributes.toComponent()}>

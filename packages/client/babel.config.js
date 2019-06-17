@@ -6,8 +6,7 @@ module.exports = api => {
       compact: false,
       presets: ['@babel/preset-typescript', '@babel/preset-react', ['@babel/preset-env', { modules: 'commonjs' }]],
       plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        '@loadable/babel-plugin',
+        'babel-plugin-dynamic-import-node',
         '@babel/plugin-transform-destructuring',
         ['@babel/plugin-transform-for-of', { loose: true }],
         '@babel/plugin-transform-regenerator',

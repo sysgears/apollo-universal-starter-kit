@@ -1,7 +1,16 @@
 /* tslint:disable:no-unused-expression*/
 import { expect } from 'chai';
 
-import { Renderer, click, blur, find, change, updateContent, wait } from '@gqlapp/testing-client-react';
+import {
+  Renderer,
+  click,
+  blur,
+  find,
+  change,
+  updateContent,
+  wait,
+  waitForElementRender
+} from '@gqlapp/testing-client-react';
 
 /**
  * *NOTICE*
@@ -9,19 +18,34 @@ import { Renderer, click, blur, find, change, updateContent, wait } from '@gqlap
  * validation messages on the next tick of the JavaScript event loop. You can use the 'wait()' function to do that.
  */
 
-describe('Contact UI works', () => {
+describe('Contact UI works', async () => {
   const renderer = new Renderer({});
   renderer.history.push('/contact');
-  const app = renderer.mount();
-  const container = app.container;
-  const content = updateContent(app.container);
-  const contactForm = find(container, 'form[name="contact"]');
-  const nameInput = find(contactForm, '[name="name"]');
-  const emailInput = find(contactForm, '[name="email"]');
-  const contentInput = find(contactForm, '[name="content"]');
-  const submitButton = find(contactForm, 'button.btn-primary');
+  let app: any;
+  let content: any;
+  let contactForm: any;
+  let nameInput: any;
+  let emailInput: any;
+  let contentInput: any;
+  let submitButton: any;
 
-  it('Contact page renders on mount', () => {
+  beforeAll(async () => {
+    app = renderer.mount();
+    renderer.history.push('/contact');
+    await waitForElementRender(app.container, 'form[name="contact"]');
+  });
+
+  beforeEach(() => {
+    content = updateContent(app.container);
+    contactForm = find(app.container, 'form[name="contact"]');
+    nameInput = find(contactForm, '[name="name"]');
+    emailInput = find(contactForm, '[name="email"]');
+    contentInput = find(contactForm, '[name="content"]');
+    submitButton = find(contactForm, 'button.btn-primary');
+  });
+
+  it('Contact page renders on mount', async () => {
+    await waitForElementRender(app.container, 'h1');
     expect(content).to.not.be.empty;
   });
 

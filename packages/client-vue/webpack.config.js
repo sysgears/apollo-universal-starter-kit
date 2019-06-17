@@ -154,7 +154,9 @@ const config = {
     new ManifestPlugin({ fileName: 'assets.json' }),
     new VueLoaderPlugin(),
     new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),
-    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
+    new HardSourceWebpackPlugin({
+      cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`)
+    }),
     new HardSourceWebpackPlugin.ExcludeModulePlugin([
       {
         test: /mini-css-extract-plugin[\\/]dist[\\/]loader/

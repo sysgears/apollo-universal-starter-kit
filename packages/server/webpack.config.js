@@ -117,7 +117,9 @@ const config = {
         }))
       )
     ),
-    new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') })
+    new HardSourceWebpackPlugin({
+      cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`)
+    })
   ]),
   target: 'node',
   externals: [

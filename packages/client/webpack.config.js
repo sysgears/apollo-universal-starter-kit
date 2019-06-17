@@ -8,6 +8,7 @@ const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
 const ManifestPlugin = require('webpack-manifest-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 const webpackPort = 3000;
 
@@ -145,16 +146,25 @@ const config = {
         )
       ),
       new ManifestPlugin({ fileName: 'assets.json' }),
-      new HardSourceWebpackPlugin({ cacheDirectory: path.join(__dirname, '../../node_modules/.cache/hard-source') }),
+      new HardSourceWebpackPlugin({
+        cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`)
+      }),
       new HardSourceWebpackPlugin.ExcludeModulePlugin([
         {
           test: /mini-css-extract-plugin[\\/]dist[\\/]loader/
         }
-      ])
+      ]),
+      new LoadablePlugin()
     ])
     .concat(
       buildConfig.__SSR__ ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]
     ),
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+    runtimeChunk: true
+  },
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
     hot: true,
@@ -165,7 +175,7 @@ const config = {
     noInfo: true,
     historyApiFallback: true,
     port: webpackPort,
-    writeToDisk: pathname => pathname.endsWith('assets.json'),
+    writeToDisk: pathname => /(assets.json|loadable-stats.json)$/.test(pathname),
     ...(buildConfig.__SSR__
       ? {
           proxy: {

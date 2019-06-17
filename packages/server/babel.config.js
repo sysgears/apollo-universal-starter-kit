@@ -9,7 +9,7 @@ module.exports = api => {
         '@babel/preset-react',
         ['@babel/preset-env', { targets: { node: true }, modules: 'commonjs' }]
       ],
-      plugins: [['@babel/plugin-proposal-class-properties', { loose: true }], '@gqlapp/graphql-tag']
+      plugins: [['@babel/plugin-proposal-class-properties', { loose: true }], 'babel-plugin-import-graphql']
     };
   } else {
     return {

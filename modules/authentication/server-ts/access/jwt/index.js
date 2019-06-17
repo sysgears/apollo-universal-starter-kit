@@ -5,7 +5,7 @@ import settings from '@gqlapp/config';
 
 import createTokens from './createTokens';
 import resolvers from './resolvers';
-import schema from './schema';
+import schema from './schema.graphql';
 import AccessModule from '../AccessModule';
 
 const grant = async (identity, req, hash = '') => {

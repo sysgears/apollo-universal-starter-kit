@@ -104,7 +104,6 @@
     "@babel/preset-typescript": "^7.0.0",
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@gqlapp/babel-plugin-graphql-tag": "^2.2.0",
     "autoprefixer": "^9.5.0",
     "babel-core": "^7.0.0-0",
     "babel-eslint": "^10.0.1",

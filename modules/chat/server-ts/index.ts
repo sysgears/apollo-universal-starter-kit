@@ -1,6 +1,6 @@
 import Chat from './sql';
 
-import schema from './schema';
+import schema from './schema.graphql';
 import createResolvers, { onAppCreate } from './resolvers';
 import ServerModule from '@gqlapp/module-server-ts';
 import resources from './locales';

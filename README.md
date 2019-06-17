@@ -62,7 +62,6 @@ great possibilities for styling for your web and mobile applications.
 * Fractal modular architecture that's easy to support and extend
 * The possibility to create modules in TypeScript _and_ JavaScript at the same time
 * No need to develop [typical features](#architecture-and-implemented-modules) for your applications
-* Zero project configuration thanks to [Zen], a builder for JavaScript projects
 
 #### I am a Project Manager
 
@@ -89,10 +88,6 @@ for developing new web or mobile projects using popular tools from the JavaScrip
 much more than just creating a mix of popular JS technologies &mdash; it's powered by a few **custom** libraries and
 solutions to simplify managing project configurations, creating new modules, building GraphQL queries, and perform many
 other tasks.
-
-One such solution that helps to configure and build Apollo Universal Starter Kit-based projects is [Zen], a custom build
-tool that configures the project for all the platforms &mdash; web, server, and mobile. With Zen, we drastically reduced
-the amount of errors caused by third-party libraries used for building JavaScript projects.
 
 The starter kit also consists of many modules that you can augment and adapt to develop your specific application. Also,
 you can use those prebuilt modules as a reference when implementing basic features for your applications even if you
@@ -348,7 +343,6 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [nativebase]: https://nativebase.io
 [apollokit.org]: https://apollokit.org
 [demo application]: https://apollo-universal-starter-kit.herokuapp.com
-[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
 [react native gifted chat]: https://github.com/FaridSafi/react-native-gifted-chat
 [deployed on heroku]: https://apollo-universal-starter-kit.herokuapp.com
 [this demo on Expo.io]: https://expo.io/@sysgears/apollo-universal-starter-kit
@@ -361,28 +355,28 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [sqlite installation guide]: http://www.sqlitetutorial.net/download-install-sqlite/
 [http://localhost:3000]: http://localhost:3000
 [http://localhost:8080]: http://localhost:8080
-[getting started]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Getting%20Started.md
-[installing and running apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Getting%20Started.md#installing-and-running-apollo-universal-starter-kit
-[running the mobile app with expo]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Getting%20Started.md#running-the-mobile-app-with-expo
-[running the starter kit in a mobile simulator]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Getting%20Started.md#running-the-starter-kit-in-a-mobile-simulator
-[running apollo universal starter kit with docker]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Docker.md
-[deploying apollo universal starter kit to production]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Deployment.md
-[configuring apollo universal starter kit]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Configuration.md
-[dedicated cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/CLI.md#deleting-features-with-deletemodule
-[respective cli section]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/CLI.md#selecting-the-technology-stack-with-choosestack
-[features and modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Features%20and%20Modules.md
-[writing code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Writing%20Code.md
-[debugging code]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Debugging.md
-[apollo universal starter kit cli]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/tools/CLI.md
-[available scripts]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Yarn%20Scripts.md
-[stripe payments]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
-[mobile chat]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Mobile%20Chat.md
-[project structure]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Project%20Structure.md
-[importing modules]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Importing%20Modules.md
+[getting started]: /docs/Getting%20Started.md
+[installing and running apollo universal starter kit]: /docs/Getting%20Started.md#installing-and-running-apollo-universal-starter-kit
+[running the mobile app with expo]: /docs/Getting%20Started.md#running-the-mobile-app-with-expo
+[running the starter kit in a mobile simulator]: /docs/Getting%20Started.md#running-the-starter-kit-in-a-mobile-simulator
+[running apollo universal starter kit with docker]: /docs/Docker.md
+[deploying apollo universal starter kit to production]: /docs/Deployment.md
+[configuring apollo universal starter kit]: /docs/Configuration.md
+[dedicated cli]: /docs/tools/CLI.md#deleting-features-with-deletemodule
+[respective cli section]: /docs/tools/CLI.md#selecting-the-technology-stack-with-choosestack
+[features and modules]: /docs/Features%20and%20Modules.md
+[writing code]: /docs/Writing%20Code.md
+[debugging code]: /docs/Debugging.md
+[apollo universal starter kit cli]: /docs/tools/CLI.md
+[available scripts]: /docs/Yarn%20Scripts.md
+[stripe payments]: /docs/modules/Stripe%20Subscription.md
+[mobile chat]: /docs/modules/Mobile%20Chat.md
+[project structure]: /docs/Project%20Structure.md
+[importing modules]: /docs/Importing%20Modules.md
 [sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues
 [wiki]: https://github.com/sysgears/apollo-universal-starter-kit/wiki
-[faq]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/FAQ.md
+[faq]: /docs/FAQ.md
 [sysgears]: https://sysgears.com
 [skype]: http://hatscripts.com/addskype?sysgears

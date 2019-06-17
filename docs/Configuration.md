@@ -6,7 +6,7 @@ by clicking the links below:
 * [General Information](#general-information)
 * [Apollo Engine](#apollo-engine)
 * [Basic Application Settings](#basic-application-settings)
-* [Build Configuration with Zen](#build-configuration-with-zen)
+* [Build Configuration](#build-configuration)
 * [Built-In UI Libraries](#built-in-ui-libraries)
 * [Database](#database)
 * [Internationalization](#internationalization)
@@ -85,20 +85,9 @@ You can learn more about `stackFragmentFormat` in the following documents:
 | debugSQL      | Boolean | Logs the SQL commands that are executed on the back end. Defaults to `false`   |
 | apolloLogging | Boolean | Logs all Apollo operations in the development environment. Defaults to `false` |
 
-## Build Configuration with Zen
+## Build Configuration
 
-Apollo Universal Starter Kit uses [Zen], a custom JavaScript library, to configure and create builds of the web, server,
-and React Native mobile applications using just one bundler &mdash; [webpack]. You can change various build
-configurations in the `.spinrc.js` files:
-
-* `packages/client/.zenrc.js` contains Zen settings for the React application
-* `packages/client-angular/.zenrc.js` contains Zen settings for the Angular application
-* `packages/client-vue/.zenrc.js` contains Zen settings for the Vue application
-* `packages/server/.zenrc.js` contains Zen settings for the Node.js application
-* `packages/mobile/.zenrc.js` contains Zen settings for the React Native mobile app
-
-Consult the [Zen documentation] for more information on how you can work with Zen in your Apollo Universal Starter Kit
-projects.
+Apollo Universal Starter Kit contains build-time settings in a  `build.config.js`. These files are located in `packages/*/build.config.js` plus global build-time settings are located in `<monorepoRoot>/build.config.js`. These files are evaluated during build-phase. They typically give precedence to environment variables and if those are not set use default values.
 
 ## Built-In UI Libraries
 
@@ -295,98 +284,17 @@ If you want to disable SSR for React and Express applications, you need to chang
 
 **NOTE**: If you're going to disable SSR, do this in **both** `server` and `client` packages!
 
-### Disabling SSR for Express
+### Disabling SSR
 
-Disabling SSR in the Express application is done this way:
+You can disable SSR mode either by settings environment variable `SSR` to `false` during build.
+For example `SSR=false yarn build` or if you want to disable SSR by default you can edit root
+`build.config.js`. Change the line:
 
-```js
-// File packages/server/.zenrc.js
+`__SSR__: (process.env.SSR || 'true') === 'true'`
 
-const config = {
-  builders: {
-    // ...
-    stack: ['server'],
-  },
-  options: {
-    // SSR is now disabled for server
-    // Remember to also set config.options.ssr to false in package/client/.sprinrc.js
-    ssr: false, // Disables SSR
-    // ...
-  }
-};
-// ...
-```
+to
 
-### Disabling SSR for React
-
-Concerning the React application, SSR can be disabled in two ways:
-
-1. You can set the property `config.options.ssr` to `false` in `packages/client/.zenrc.js`.
-2. You can set the environment variable `process.env.DISABLE_SSR` to `true` when running the application.
-
-The second option gives you more flexibility, because no matter the value of `config.options.ssr`, the value of the
-`process.env.DISABLE_SSR` takes precedence.
-
-In `package/client/.zenrc.js`, you may notice an additional check of the value of `DISABLE_SSR`:
-
-```js
-const url = require('url');
-
-const config = {
-  builders: {
-    // ...
-  },
-  options: {
-    // ...
-    ssr: true,
-    // ...
-  }
-};
-
-// SSR will be disabled if process.env.DISABLE_SSR is true and even if config.options.ssr is also true
-if (process.env.DISABLE_SSR && process.env.DISABLE_SSR !== 'false') {
-  config.options.ssr = false;
-}
-```
-
-If you don't set `process.env.DISABLE_SSR`, then change the `config.options.ssr` directly.
-
-Disabling SSR for the React application is useful when you need to run the client application alone without running the
-Express application. Otherwise, if you disable building the Express application and run the React app with SSR, the
-frontend will never load (note the message `web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...`):
-
-```sh
-λ yarn watch-client
-yarn run v1.13.0
-$ cross-env DISABLE_SSR=true lerna run --scope=client watch --stream
-lerna notice cli v3.10.6
-lerna info versioning independent
-lerna info filter [ 'client' ]
-lerna info Executing command in 1 package: "yarn run watch"
-client: $ spin watch
-client: spin info Version 0.4.182
-client: Starting type checking service...
-client: Using 1 worker with 2048MB memory limit
-client: web-webpack info Webpack dev server listening on http://localhost:3000
-client: web-webpack debug waiting for tcp:localhost:8080
-client: web-webpack debug still waiting for tcp:localhost:8080 after 10000ms...
-client: web-webpack debug still waiting for tcp:localhost:8080 after 20001ms...
-```
-
-Apollo Universal Starter Kit has a script `watch-client` that runs _only_ the client application, which is why SSR must
-be disabled (otherwise, the application won't be loaded).
-
-This is what the command looks like:
-
-```json
-{
-  "scripts": {
-    "watch-client": "yarn cross-env DISABLE_SSR=true lerna run --scope=client watch --stream"
-  }
-}
-```
-
-To enable SSR again, you need to set `config.options.ssr` to `true` in _both_ server and client packages.
+`__SSR__: (process.env.SSR || 'false') === 'true'`
 
 ## Stripe Subscription
 
@@ -663,8 +571,6 @@ If the error was produced, you need to visit the link shown in the terminal and 
 [opening visual studio code with urls]: https://code.visualstudio.com/docs/editor/command-line#_opening-vs-code-with-urls
 [visual studio code url handler]: https://github.com/sysgears/vscode-handler#visual-studio-code-url-handler
 [webpack]: https://webpack.js.org/
-[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
-[zen documentation]: https://github.com/sysgears/larix/tree/master/packages/zen/docs
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
 [ant design mobile]: https://mobile.ant.design
@@ -684,9 +590,9 @@ If the error was produced, you need to visit the link shown in the terminal and 
 [nodemailer]: https://nodemailer.com/about/
 [general options]: https://nodemailer.com/smtp/#general-options
 [authentication]: https://nodemailer.com/smtp/#authentication
-[docs/modules/mobileChat.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Mobile%20Chat.md
+[docs/modules/mobileChat.md]: /docs/modules/Mobile%20Chat.md
 [dedicated apollo blog post]: https://blog.apollographql.com/understanding-pagination-rest-graphql-and-relay-b10f835549e7
-[docs/modules/stripeSubscription.md]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
+[docs/modules/stripeSubscription.md]: /docs/modules/Stripe%20Subscription.md
 [passport-facebook]: https://github.com/jaredhanson/passport-facebook
 [facebook apps]: https://developers.facebook.com/apps
 [connect your app to facebook]: https://auth0.com/docs/connections/social/facebook

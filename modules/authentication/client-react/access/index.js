@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import jwt from './jwt';
@@ -6,11 +6,11 @@ import session from './session';
 
 import AccessModule from './AccessModule';
 
-const ref = React.createRef();
+let reloadPage = () => null;
 
 const resetApolloCacheAndRerenderApp = async client => {
   await client.clearStore();
-  ref.current.reloadPage();
+  reloadPage();
 };
 
 const login = async client => {
@@ -21,37 +21,19 @@ const logout = async client => {
   await resetApolloCacheAndRerenderApp(client);
 };
 
-class PageReloader extends React.Component {
-  constructor(props) {
-    super(props);
-    this.props = props;
-  }
+const PageReloader = ({ children }) => {
+  const [key, setKey] = useState(1);
+  reloadPage = () => setKey(key + 1);
 
-  state = {
-    key: 1
-  };
-
-  reloadPage() {
-    this.setState({ key: this.state.key + 1 });
-  }
-
-  render() {
-    return React.cloneElement(this.props.children, { key: this.state.key });
-  }
-}
+  return React.cloneElement(children, { key });
+};
 
 PageReloader.propTypes = {
   children: PropTypes.node
 };
 
-const AuthPageReloader = ({ children }) => <PageReloader ref={ref}>{children}</PageReloader>;
-
-AuthPageReloader.propTypes = {
-  children: PropTypes.node
-};
-
 export default new AccessModule(jwt, session, {
-  dataRootComponent: [AuthPageReloader],
+  dataRootComponent: [PageReloader],
   login: [login],
   logout: [logout]
 });

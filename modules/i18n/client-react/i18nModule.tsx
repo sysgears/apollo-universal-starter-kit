@@ -24,22 +24,17 @@ const langPicker =
 
 interface Props {
   req: any;
+  children?: any;
 }
 
-class RootComponent extends React.Component<Props> {
-  constructor(props: Props) {
-    super(props);
-
-    if (this.props.req) {
-      const lang = this.props.req.universalCookies.get(settings.i18n.cookie);
-      i18next.changeLanguage(lang);
-    }
+const RootComponent = (props: Props) => {
+  if (props.req) {
+    const lang = props.req.universalCookies.get(settings.i18n.cookie);
+    i18next.changeLanguage(lang);
   }
 
-  public render() {
-    return <I18nProvider i18n={i18next}>{this.props.children}</I18nProvider>;
-  }
-}
+  return <I18nProvider i18n={i18next}>{props.children}</I18nProvider>;
+};
 
 export default (settings.i18n.enabled
   ? new ClientModule(commonI18n, langPicker, {

@@ -1,40 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
 
 import { PLATFORM } from '@gqlapp/core-common';
 
-class FieldAdapter extends Component {
-  static propTypes = {
-    formik: PropTypes.object.isRequired,
-    component: PropTypes.func,
-    onChangeText: PropTypes.func,
-    onChange: PropTypes.func,
-    onBlur: PropTypes.func,
-    name: PropTypes.string.isRequired,
-    value: PropTypes.string,
-    defaultValue: PropTypes.string,
-    checked: PropTypes.bool,
-    defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool
-  };
+const FieldAdapter = props => {
+  const { formik, onChange, onChangeText, onBlur, name, component, defaultValue, defaultChecked, disabled } = props;
+  let { value, checked } = props;
 
-  constructor(props) {
-    super(props);
-    this.props = props;
-  }
-
-  onChange = e => {
-    const { onChange } = this.props;
+  const handleOnChange = e => {
     if (onChange) {
       onChange(e.target.value, e);
     } else {
-      this.props.formik.handleChange(e);
+      formik.handleChange(e);
     }
   };
 
-  onBlur = e => {
-    const { formik, onBlur, name } = this.props;
+  const handleOnBlur = e => {
     if (onBlur) {
       onBlur(e);
     } else {
@@ -46,8 +28,7 @@ class FieldAdapter extends Component {
     }
   };
 
-  onChangeText = value => {
-    const { formik, onChangeText, onChange, name } = this.props;
+  const handleOnChangeText = value => {
     if (onChange && !onChangeText) {
       onChange(value);
     } else if (onChangeText) {
@@ -57,35 +38,45 @@ class FieldAdapter extends Component {
     }
   };
 
-  render() {
-    const { formik, component, name, defaultValue, defaultChecked, disabled } = this.props;
-    let { value, checked } = this.props;
-    value = value || '';
-    checked = checked || false;
-    const meta = {
-      touched: formik.touched[name],
-      error: formik.errors[name]
-    };
+  value = value || '';
+  checked = checked || false;
+  const meta = {
+    touched: formik.touched[name],
+    error: formik.errors[name]
+  };
 
-    const input = {
-      onBlur: this.onBlur,
-      name,
-      value,
-      checked,
-      defaultValue,
-      defaultChecked,
-      disabled
-    };
+  const input = {
+    onBlur: handleOnBlur,
+    name,
+    value,
+    checked,
+    defaultValue,
+    defaultChecked,
+    disabled
+  };
 
-    const changeEventHandler = PLATFORM === 'mobile' ? 'onChangeText' : 'onChange';
-    input[changeEventHandler] = this[changeEventHandler];
+  const changeEventHandler = PLATFORM === 'mobile' ? handleOnChangeText : handleOnChange;
+  input[PLATFORM === 'mobile' ? 'onChangeText' : 'onChange'] = changeEventHandler;
 
-    return React.createElement(component, {
-      ...this.props,
-      input,
-      meta
-    });
-  }
-}
+  return React.createElement(component, {
+    ...props,
+    input,
+    meta
+  });
+};
+
+FieldAdapter.propTypes = {
+  formik: PropTypes.object.isRequired,
+  component: PropTypes.func,
+  onChangeText: PropTypes.func,
+  onChange: PropTypes.func,
+  onBlur: PropTypes.func,
+  name: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  defaultValue: PropTypes.string,
+  checked: PropTypes.bool,
+  defaultChecked: PropTypes.bool,
+  disabled: PropTypes.bool
+};
 
 export default connect(FieldAdapter);

@@ -4,9 +4,7 @@ import { View, ScrollView, FlatList, StyleSheet, Text } from 'react-native';
 import { Pagination } from '@gqlapp/look-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 
-const PaginationDemoView = props => {
-  const { items, handlePageChange, renderItem, pagination, t } = props;
-
+const PaginationDemoView = ({ items, handlePageChange, renderItem, pagination, t }) => {
   const renderHeader = () => <Text style={styles.title}>{t('list.column.title')}</Text>;
 
   return pagination === 'standard' ? (

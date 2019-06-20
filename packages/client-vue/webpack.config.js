@@ -165,6 +165,7 @@ const config = {
   ]),
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
+    host: '0.0.0.0',
     hot: true,
     publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },

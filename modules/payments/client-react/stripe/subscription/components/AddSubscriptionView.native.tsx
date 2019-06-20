@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
@@ -15,43 +15,40 @@ interface AddSubscriptionViewProps {
   error: string | null;
 }
 
-export default class AddSubscriptionView extends React.Component<AddSubscriptionViewProps> {
-  private scrollViewRef: any;
+const AddSubscriptionView = (props: AddSubscriptionViewProps) => {
+  const { t } = props;
+  const ref = useRef(null);
 
-  public render() {
-    const { t } = this.props;
-
-    return (
-      <View style={styles.container}>
-        <ScrollView style={styles.container} ref={ref => (this.scrollViewRef = ref)}>
-          <View style={styles.textWrapper}>
-            <Text style={styles.infoText}>{t('add.description')}</Text>
-          </View>
-          <View style={styles.textWrapper}>
-            <Text style={styles.infoText}>{t('add.product')}</Text>
-          </View>
-          <View style={styles.textWrapper}>
-            <Text style={styles.infoText}>
-              {t('add.price')} {settings.stripe.subscription.plan.amount / 100}
-            </Text>
-          </View>
-          <View style={styles.cardFormWrapper}>
-            <SubscriptionCardForm {...this.props} buttonName={t('add.btn')} />
-          </View>
-        </ScrollView>
-        <KeyboardSpacer
-          onToggle={() => {
-            /**
-             * This functionality demonstrates how to prevent covering the inputs when the keyboard pops up.
-             * Main scroll container is carolling down after popping up the keyboard.
-             */
-            setTimeout(() => this.scrollViewRef.scrollToEnd({ animated: true }), 0);
-          }}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.container}>
+      <ScrollView style={styles.container} ref={ref}>
+        <View style={styles.textWrapper}>
+          <Text style={styles.infoText}>{t('add.description')}</Text>
+        </View>
+        <View style={styles.textWrapper}>
+          <Text style={styles.infoText}>{t('add.product')}</Text>
+        </View>
+        <View style={styles.textWrapper}>
+          <Text style={styles.infoText}>
+            {t('add.price')} {settings.stripe.subscription.plan.amount / 100}
+          </Text>
+        </View>
+        <View style={styles.cardFormWrapper}>
+          <SubscriptionCardForm {...props} buttonName={t('add.btn')} />
+        </View>
+      </ScrollView>
+      <KeyboardSpacer
+        onToggle={() => {
+          /**
+           * This functionality demonstrates how to prevent covering the inputs when the keyboard pops up.
+           * Main scroll container is carolling down after popping up the keyboard.
+           */
+          setTimeout(() => ref.current.scrollToEnd({ animated: true }), 0);
+        }}
+      />
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -69,3 +66,5 @@ const styles = StyleSheet.create({
     margin: 10
   }
 });
+
+export default AddSubscriptionView;

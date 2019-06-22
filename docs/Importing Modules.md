@@ -45,3 +45,24 @@ can use it by importing necessary classes or components with ES6 `import`.
 
 [yarn documentation]: https://yarnpkg.com/lang/en/docs/workspaces/
 [webpack dependency management]: https://webpack.js.org/guides/dependency-management/
+
+## Modules with custom namespaces
+
+Within your module's `package.json`,
+you can change the namespace from `@gqlapp` to something like:
+
+```json
+{
+  "name": "@my-namespace/my-module-server-ts",
+  "version": "0.1.0",
+  "private": true
+}
+```
+
+To use a custom npm namespace
+
+1. Change the namespace in the `package.json` file
+2. Run ApolloKit like: `MODULENAME_REGEX="(@my-namespace|@gqlapp|client|webpack\/hot\/poll)" yarn watch`
+
+`(@gqlapp|client|webpack\/hot\/poll)` is the default.
+

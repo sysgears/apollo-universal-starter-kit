@@ -9,6 +9,9 @@ const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const buildConfig = require('./build.config');
 
+const modulenameRegexValue = process.env.MODULENAME_REGEX ? `${process.env.MODULENAME_REGEX}` : "(@gqlapp|client|webpack\/hot\/poll)";
+const modulenameRegex = new RegExp(`${modulenameRegexValue}`);
+
 const config = {
   entry: {
     index: (process.env.NODE_ENV !== 'production' ? ['webpack/hot/poll?200'] : []).concat([
@@ -126,7 +129,7 @@ const config = {
     nodeExternals(),
     nodeExternals({
       modulesDir: path.resolve(__dirname, '../../node_modules'),
-      whitelist: [/(@gqlapp|client|webpack\/hot\/poll)/]
+      whitelist: [modulenameRegex]
     })
   ],
   node: { __dirname: true, __filename: true },

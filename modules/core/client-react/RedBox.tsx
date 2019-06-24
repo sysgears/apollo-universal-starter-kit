@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ErrorStackParser from 'error-stack-parser';
 import { StackFrame } from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
@@ -8,40 +8,33 @@ import settings from '@gqlapp/config';
 const format = (fmt: string, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, index: number) => (typeof args[index] !== 'undefined' ? args[index] : match));
 
-interface RedBoxState {
-  mapped: boolean;
-}
-
 interface RedBoxProps {
   error?: Error;
 }
 
-export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
-  constructor(props: RedBoxProps) {
-    super(props);
-    this.state = { mapped: false };
-  }
+const RedBox = ({ error }: RedBoxProps) => {
+  const { file, linkToFile, redbox, message, stack: styleStack, frame: frameStyle } = styles;
 
-  public componentDidMount() {
-    if (!this.state.mapped && !__TEST__) {
-      mapStackTrace(this.props.error.stack, (mappedStack: string[]) => {
+  const [mapped, setMapped] = useState(false);
+
+  useEffect(() => {
+    if (!mapped && !__TEST__) {
+      mapStackTrace(error.stack, (mappedStack: string[]) => {
         const processStack = __DEV__
           ? fetch('/servdir')
               .then((res: any) => res.text())
               .then((servDir: string) => mappedStack.map((frame: string) => frame.replace('webpack:///', servDir)))
           : Promise.resolve(mappedStack);
         processStack.then((stack: string[]) => {
-          this.props.error.stack = stack.join('\n');
-          this.setState({ mapped: true });
+          error.stack = stack.join('\n');
+          setMapped(true);
         });
       });
     }
-  }
+  }, []);
 
-  public renderFrames(frames: StackFrame[]) {
-    const { frame: frameStyle, file, linkToFile } = styles;
-
-    return frames.map((frame: StackFrame, index: number) => {
+  const renderFrames = (framesData: StackFrame[]) => {
+    return framesData.map((frame: StackFrame, index: number) => {
       const text: string = `at ${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
       const url: string = format(
         settings.app.stackFragmentFormat,
@@ -61,40 +54,35 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
         </div>
       );
     });
-  }
+  };
 
-  public render() {
-    const error: Error = this.props.error;
-    const { redbox, message, stack, frame } = styles;
-    let frames: any;
-
-    try {
-      if (error.message.indexOf('\n    at ') >= 0) {
-        // We probably have stack in our error message
-        // a trick used by our errorMiddleware to pass error stack
-        // when GraphQL context creation failed, use that stack
-        error.stack = error.message;
-        error.message = error.stack.split('\n')[0];
-      }
-      frames = this.renderFrames(ErrorStackParser.parse(error));
-    } catch (e) {
-      frames = (
-        <div style={frame} key={0}>
-          <div>Failed to parse stack trace. Stack trace information unavailable.</div>
-        </div>
-      );
+  let frames: any;
+  try {
+    if (error.message.indexOf('\n    at ') >= 0) {
+      // We probably have stack in our error message
+      // a trick used by our errorMiddleware to pass error stack
+      // when GraphQL context creation failed, use that stack
+      error.stack = error.message;
+      error.message = error.stack.split('\n')[0];
     }
-
-    return (
-      <div style={redbox}>
-        <div style={message}>
-          {error.name}: {error.message}
-        </div>
-        <div style={stack}>{frames}</div>
+    frames = renderFrames(ErrorStackParser.parse(error));
+  } catch (e) {
+    frames = (
+      <div style={frameStyle} key={0}>
+        <div>Failed to parse stack trace. Stack trace information unavailable.</div>
       </div>
     );
   }
-}
+
+  return (
+    <div style={redbox}>
+      <div style={message}>
+        {error.name}: {error.message}
+      </div>
+      <div style={styleStack}>{frames}</div>
+    </div>
+  );
+};
 
 const styles: any = {
   redbox: {
@@ -134,3 +122,5 @@ const styles: any = {
     color: 'rgba(255, 255, 255, 0.7)'
   }
 };
+
+export default RedBox;

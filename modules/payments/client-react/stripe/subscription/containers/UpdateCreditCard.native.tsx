@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { isApolloError } from 'apollo-client';
 import { StripeProvider } from 'react-stripe-elements';
@@ -22,17 +22,11 @@ interface UpdateCreditCardProps {
 }
 
 // react-stripe-elements will not render on the server.
-class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: string]: any }> {
-  constructor(props: UpdateCreditCardProps) {
-    super(props);
-    this.state = {
-      submitting: false
-    };
-  }
+const UpdateCreditCard = ({ t, history, navigation }: UpdateCreditCardProps) => {
+  const [submitting, setSubmitting] = useState(false);
 
-  public onSubmit = (updateCard: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
-    this.setState({ submitting: true });
-    const { t, history, navigation } = this.props;
+  const onSubmit = (updateCard: any) => async (creditCardInput: CreditCardInput, stripe?: any) => {
+    setSubmitting(true);
     let preparedCreditCard;
 
     try {
@@ -41,12 +35,10 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
 
       await updateCard({ variables: { input: preparedCreditCard } });
 
-      this.setState({ submitting: false });
+      setSubmitting(false);
       history ? history.push('/profile') : navigation.navigate('Profile');
     } catch (e) {
-      this.setState({
-        submitting: false
-      });
+      setSubmitting(false);
       if (isApolloError(e)) {
         if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
           throw new FormError(t('stripeError'), e);
@@ -59,26 +51,23 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
     }
   };
 
-  public render() {
-    const { t } = this.props;
-    return (
-      <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
-        {updateCard => {
-          return (
-            <Fragment>
-              {__CLIENT__ && PLATFORM === 'web' ? (
-                <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
-                  <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
-                </StripeProvider>
-              ) : (
-                <UpdateCreditCardView submitting={this.state.submitting} onSubmit={this.onSubmit(updateCard)} t={t} />
-              )}
-            </Fragment>
-          );
-        }}
-      </Mutation>
-    );
-  }
-}
+  return (
+    <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
+      {updateCard => {
+        return (
+          <>
+            {__CLIENT__ && PLATFORM === 'web' ? (
+              <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
+                <UpdateCreditCardView submitting={submitting} onSubmit={onSubmit(updateCard)} t={t} />
+              </StripeProvider>
+            ) : (
+              <UpdateCreditCardView submitting={submitting} onSubmit={onSubmit(updateCard)} t={t} />
+            )}
+          </>
+        );
+      }}
+    </Mutation>
+  );
+};
 
 export default translate('stripeSubscription')(UpdateCreditCard);

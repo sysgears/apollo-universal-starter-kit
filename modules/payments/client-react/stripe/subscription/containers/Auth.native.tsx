@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useEffect } from 'react';
 
 import { withStripeSubscription } from './withStripeSubscription';
 
@@ -15,19 +15,16 @@ interface SubscriptionAuthRouterProps {
  * SubscriptionAuthRouter protects routes only for users with subscription,
  * redirect to add subscription screen otherwise.
  */
-class SubscriptionAuthRouter extends React.Component<SubscriptionAuthRouterProps> {
-  public componentDidUpdate() {
-    const { loading, navigation, stripeSubscription } = this.props;
+const SubscriptionAuthRouter = (props: SubscriptionAuthRouterProps) => {
+  const { component: Component, loading, navigation, stripeSubscription, ...restProps } = props;
 
+  useEffect(() => {
     if (!loading && stripeSubscription && !stripeSubscription.active && navigation) {
       navigation.push('AddSubscription');
     }
-  }
+  });
 
-  public render() {
-    const { component: Component, loading, stripeSubscription, ...props } = this.props;
-    return !loading && stripeSubscription && stripeSubscription.active ? <Component {...props} /> : null;
-  }
-}
+  return !loading && stripeSubscription && stripeSubscription.active ? <Component {...restProps} /> : null;
+};
 
 export default withStripeSubscription(SubscriptionAuthRouter);

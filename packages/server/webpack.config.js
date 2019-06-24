@@ -9,8 +9,8 @@ const WebpackShellPlugin = require('webpack-shell-plugin');
 
 const buildConfig = require('./build.config');
 
-const modulenameRegexValue = process.env.MODULENAME_REGEX ? `${process.env.MODULENAME_REGEX}` : "(@gqlapp|client|webpack\/hot\/poll)";
-const modulenameRegex = new RegExp(`${modulenameRegexValue}`);
+const modulenameExtra = process.env.MODULENAME_EXTRA ? `${process.env.MODULENAME_EXTRA}|` : '';
+const modulenameRegex = new RegExp(`(${modulenameExtra}@gqlapp|client|webpack/hot/poll)`);
 
 const config = {
   entry: {

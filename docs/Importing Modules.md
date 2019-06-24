@@ -48,6 +48,9 @@ can use it by importing necessary classes or components with ES6 `import`.
 
 ## Modules with custom namespaces
 
+You may want to use your own NPM namespace for developing modules.
+The following will show you how to do this within the apollokit build system.
+
 Within your module's `package.json`,
 you can change the namespace from `@gqlapp` to something like:
 
@@ -59,10 +62,14 @@ you can change the namespace from `@gqlapp` to something like:
 }
 ```
 
-To use a custom npm namespace
+Then, to use a custom npm namespace
 
 1. Change the namespace in the `package.json` file
-2. Run ApolloKit like: `MODULENAME_REGEX="(@my-namespace|@gqlapp|client|webpack\/hot\/poll)" yarn watch`
+1. Run ApolloKit like: `MODULENAME_EXTRA="@my-namespace" yarn watch`
+1. You can add multiple, extra namespaces by: `MODULENAME_EXTRA="@my-namespace|@my-other-ns"`
 
-`(@gqlapp|client|webpack\/hot\/poll)` is the default.
+Notes:
+
+- You may have to rerun yarn to pickup new modules
+- This is implemented in each packages' webpack.config.js
 

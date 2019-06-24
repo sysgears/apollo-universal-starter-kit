@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { CreditCardInput } from 'react-native-credit-card-input';
 import { Button, primary } from '@gqlapp/look-client-react-native';
@@ -11,43 +11,32 @@ interface SubscriptionCardFormViewProps {
   error: string | null;
 }
 
-export default class SubscriptionCardFormView extends React.Component<SubscriptionCardFormViewProps, any> {
-  constructor(props: SubscriptionCardFormViewProps) {
-    super(props);
-    this.state = { cardInfo: { valid: false } };
-  }
+const SubscriptionCardFormView = ({ onSubmit, submitting, buttonName, error }: SubscriptionCardFormViewProps) => {
+  const [cardInfo, setCardInfo] = useState({ valid: false });
 
-  public render() {
-    const { onSubmit, submitting, buttonName, error } = this.props;
-
-    return (
+  return (
+    <View>
       <View>
-        <View>
-          <CreditCardInput requiresName onChange={(cardInfo: any) => this.setState({ cardInfo })} />
-        </View>
-        <View style={styles.buttonWrapper}>
-          <Button
-            color={primary}
-            disabled={!this.state.cardInfo.valid || submitting}
-            onClick={() => onSubmit(this.state.cardInfo)}
-          >
-            {buttonName}
-          </Button>
-          {error && (
-            <View style={styles.alertWrapper}>
-              <View style={styles.alertIconWrapper}>
-                <FontAwesome name="exclamation-circle" size={20} style={{ color: '#c22' }} />
-              </View>
-              <View style={styles.alertTextWrapper}>
-                <Text style={styles.alertText}>{error}</Text>
-              </View>
-            </View>
-          )}
-        </View>
+        <CreditCardInput requiresName onChange={(data: any) => setCardInfo(data)} />
       </View>
-    );
-  }
-}
+      <View style={styles.buttonWrapper}>
+        <Button color={primary} disabled={!cardInfo.valid || submitting} onClick={() => onSubmit(cardInfo)}>
+          {buttonName}
+        </Button>
+        {error && (
+          <View style={styles.alertWrapper}>
+            <View style={styles.alertIconWrapper}>
+              <FontAwesome name="exclamation-circle" size={20} style={{ color: '#c22' }} />
+            </View>
+            <View style={styles.alertTextWrapper}>
+              <Text style={styles.alertText}>{error}</Text>
+            </View>
+          </View>
+        )}
+      </View>
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -85,3 +74,5 @@ const styles = StyleSheet.create({
     marginTop: 10
   }
 });
+
+export default SubscriptionCardFormView;

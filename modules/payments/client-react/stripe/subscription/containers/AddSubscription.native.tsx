@@ -1,5 +1,5 @@
 import { isApolloError } from 'apollo-client';
-import React, { Fragment, useState } from 'react';
+import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { StripeProvider } from 'react-stripe-elements';
 
@@ -63,7 +63,7 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
     >
       {addSubscription => {
         return (
-          <Fragment>
+          <>
             {/* Stripe elements should render only for web*/}
             {__CLIENT__ && PLATFORM === 'web' ? (
               <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
@@ -72,7 +72,7 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
             ) : (
               <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
             )}
-          </Fragment>
+          </>
         );
       }}
     </Mutation>

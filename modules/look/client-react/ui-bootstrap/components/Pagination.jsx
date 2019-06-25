@@ -8,18 +8,24 @@ import {
 
 import Button from './Button';
 
-const Pagination = props => {
+const Pagination = ({
+  itemsPerPage,
+  handlePageChange,
+  hasNextPage,
+  pagination,
+  total,
+  loadMoreText,
+  defaultPageSize
+}) => {
   const [pageNumber, setPageNumber] = useState(1);
 
   const onItemClick = pageNumber => {
-    const { handlePageChange, pagination } = props;
     setPageNumber(pageNumber);
     handlePageChange(pagination, pageNumber);
   };
 
   const showPreviousPage = e => {
     e.preventDefault();
-    const { handlePageChange, pagination } = props;
     if (pageNumber > 1) {
       setPageNumber(prevPageNumber => {
         const newPageNumber = prevPageNumber - 1;
@@ -31,7 +37,6 @@ const Pagination = props => {
 
   const showNextPage = (e, pagesArray) => {
     e.preventDefault();
-    const { handlePageChange, pagination } = props;
     if (pageNumber < pagesArray.length) {
       setPageNumber(prevPageNumber => {
         const newPageNumber = prevPageNumber + 1;
@@ -60,7 +65,6 @@ const Pagination = props => {
     ));
   };
 
-  const { itemsPerPage, handlePageChange, hasNextPage, pagination, total, loadMoreText, defaultPageSize } = props;
   if (pagination === 'relay') {
     return hasNextPage ? (
       <div>

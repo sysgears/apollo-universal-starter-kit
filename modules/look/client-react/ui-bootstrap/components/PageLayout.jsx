@@ -17,29 +17,24 @@ const Footer = styled.footer`
   height: ${footerHeight};
 `;
 
-class PageLayout extends React.Component {
-  render() {
-    const { children, navBar } = this.props;
-    return (
-      <section className="d-flex flex-column flex-grow-1">
-        {__SERVER__ && __DEV__ && (
-          <Helmet>
-            <style type="text/css">{styles._getCss()}</style>
-          </Helmet>
-        )}
-        <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
-          <section className="d-flex flex-column no-print">{navBar !== false && <NavBar />}</section>
-          <Container id="content">{children}</Container>
-        </section>
-        <Footer className="d-flex flex-shrink-0 justify-content-center no-print">
-          <span>
-            &copy; {new Date().getFullYear()}. {settings.app.name}.
-          </span>
-        </Footer>
-      </section>
-    );
-  }
-}
+const PageLayout = ({ children, navBar }) => (
+  <section className="d-flex flex-column flex-grow-1">
+    {__SERVER__ && __DEV__ && (
+      <Helmet>
+        <style type="text/css">{styles._getCss()}</style>
+      </Helmet>
+    )}
+    <section className="d-flex flex-column flex-grow-1 flex-shrink-0">
+      <section className="d-flex flex-column no-print">{navBar !== false && <NavBar />}</section>
+      <Container id="content">{children}</Container>
+    </section>
+    <Footer className="d-flex flex-shrink-0 justify-content-center no-print">
+      <span>
+        &copy; {new Date().getFullYear()}. {settings.app.name}.
+      </span>
+    </Footer>
+  </section>
+);
 
 PageLayout.propTypes = {
   children: PropTypes.node,

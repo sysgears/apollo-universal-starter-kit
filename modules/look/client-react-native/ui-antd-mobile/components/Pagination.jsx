@@ -1,50 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Pagination as ADPagination, Button } from 'antd-mobile-rn';
 import { Text } from 'react-native';
 
-export default class Pagination extends React.Component {
-  static propTypes = {
-    totalPages: PropTypes.number,
-    handlePageChange: PropTypes.func,
-    pagination: PropTypes.string,
-    loadMoreText: PropTypes.string,
-    hasNextPage: PropTypes.bool
+const Pagination = ({ pagination, handlePageChange, totalPages, hasNextPage, loadMoreText }) => {
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const onPageChange = pageNumber => {
+    setPageNumber(pageNumber);
+    handlePageChange(pagination, pageNumber);
   };
 
-  state = { pageNumber: 1, pagination: this.props.pagination };
+  const onPressLoadMore = () => {
+    handlePageChange(pagination, null);
+  };
 
-  static getDerivedStateFromProps(nextProps, prevState) {
-    return nextProps.pagination !== prevState.pagination ? { pageNumber: 1, pagination: nextProps.pagination } : null;
+  if (pagination === 'standard') {
+    return (
+      <ADPagination
+        total={totalPages}
+        current={pageNumber}
+        locale={{ prevText: '<', nextText: '>' }}
+        onChange={pageNumber => onPageChange(pageNumber)}
+      />
+    );
+  } else {
+    return hasNextPage ? (
+      <Button type="primary" onClick={onPressLoadMore}>
+        <Text>{loadMoreText}</Text>
+      </Button>
+    ) : null;
   }
+};
 
-  onPageChange = pageNumber => {
-    const { pagination, handlePageChange } = this.props;
-    this.setState({ pageNumber: pageNumber }, handlePageChange(pagination, pageNumber));
-  };
+Pagination.propTypes = {
+  totalPages: PropTypes.number,
+  handlePageChange: PropTypes.func,
+  pagination: PropTypes.string,
+  loadMoreText: PropTypes.string,
+  hasNextPage: PropTypes.bool
+};
 
-  onPressLoadMore = () => {
-    this.props.handlePageChange(this.props.pagination, null);
-  };
-
-  render() {
-    const { pageNumber } = this.state;
-    const { totalPages, pagination, hasNextPage, loadMoreText } = this.props;
-    if (pagination === 'standard') {
-      return (
-        <ADPagination
-          total={totalPages}
-          current={pageNumber}
-          locale={{ prevText: '<', nextText: '>' }}
-          onChange={pageNumber => this.onPageChange(pageNumber)}
-        />
-      );
-    } else {
-      return hasNextPage ? (
-        <Button type="primary" onClick={this.onPressLoadMore}>
-          <Text>{loadMoreText}</Text>
-        </Button>
-      ) : null;
-    }
-  }
-}
+export default Pagination;

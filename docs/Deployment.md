@@ -30,24 +30,28 @@ run the project.
 NODE_ENV=production yarn seed
 ```
 
-4. Replace the default server port and website URL in `packages/server/.zenrc.js` to match your production setup:
+4. Set `SERVER_PORT` and `WEBSITE_URL` environment variables to match your production setup or edit
+`packages/server/build.config.js`:
 
 ```javascript
-config.options.defines.__SERVER_PORT__ = 8080; // Change to the production port
-config.options.defines.__WEBSITE_URL__ = '"https://your-website-name.com"'; // Change to the production domain
+const config = ...;
+
+if (process.env.NODE_ENV === 'production') {
+  config.__SERVER_PORT__ = 8080; // Change to the production port
+  config.__WEBSITE_URL__ = '"https://your-website-name.com"'; // Change to the production domain
+}
 ```
 
-5. If you need to run the mobile app, set the `__API_URL__` and `__WEBSITE_URL__` properties in
-`packages/mobile/.zenrc.js`:
+5. If you need to run the mobile app, set `API_URL` and `WEBSITE_URL` environment variables to match your production setup or edit `packages/mobile/build.config.js`:
 
 ```javascript
-// Other configurations for the mobile app are omitted for brevity
+const config = ...;
 
 if (process.env.NODE_ENV === 'production') {
   // Other settings are omitted for brevity
   // Change the following two lines
-  config.options.defines.__API_URL__ = '"https://your-website-name.com/graphql"';
-  config.options.defines.__WEBSITE_URL__ = '"https://your-website-name.com"';
+  config.__API_URL__ = '"https://your-website-name.com/graphql"';
+  config.__WEBSITE_URL__ = '"https://your-website-name.com"';
   // Other settings are omitted for brevity
 }
 ```
@@ -102,16 +106,7 @@ Click the name of your application in the list and then follow to the `Settings`
 | --------------- | ----- |
 | YARN_PRODUCTION | false |
 
-**NOTE**: If you don't need the mobile app when deploying to Heroku, open the file `packages/mobile/.zenrc.js` and set
-both `config.builders.android.enabled` and `config.builders.ios.enabled` to `false` as shown in the example below:
-
-```javascript
-if (process.env.NODE_ENV === 'production') {
-    config.builders.android.enabled = false;
-    config.builders.ios.enabled = false;
-    // Other code is omitted for brevity
-}
-```
+**NOTE**: If you don't need the mobile app when deploying to Heroku, rename `heroku-postbuild` script in `packages/mobile/package.json` to something else, so that Heroku doesn't find and run it:
 
 However, if you want to deploy a mobile app, first create an account on [Expo]. Additionally, you need to set these
 three variables in Heroku Dashboard:
@@ -132,42 +127,28 @@ the validation link will be sent to Ethereal, _not_ to the real users.
 | EMAIL_PASSWORD | examplePassword            |
 | EMAIL_USER     | example@example.com        |
 
-6. Set a proper value for the server website URL in `packages/server/.zenrc.js` to match your production setup.
+6. Set a proper value for the server website URL in `WEBSITE_URL` environment variable or inside `packages/server/build.config.js` to match your production setup.
 
-* If you're deploying your application on Heroku without a custom domain name, the production URL will look similar to
-this:
-
-```javascript
-config.options.defines.__WEBSITE_URL__ = '"https://application-name.herokuapp.com"';
-```
+* If you're deploying your application on Heroku without a custom domain name, the production URL will look similar to this: `https://application-name.herokuapp.com`
 
 `application-name` is the name of your application you've generated at the step 4 (creation of an app with the Heroku
 CLI).
 
-* If you're using a custom domain, the production URL will look like this:
+* If you're using a custom domain, the production URL will look like this: `https://domain-example.com`
 
-```javascript
-config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
-```
 
 Remember to add the custom domain in [Heroku Dashboard]. Select your application from the list, and then follow to the
-`Settings` tab. Scroll to the button **Add domain** and add your domain.  
+`Settings` tab. Scroll to the button **Add domain** and add your domain.
 
-7. If you're deploying your mobile app to Expo, you need to connect the app to the back-end URL. To do that, edit the
-`packages/mobile/.zenrc.js` file:
-
-* If you're deploying your app on Heroku without a custom domain name, the production URLs will look like this:
+7. If you're deploying your mobile app to Expo, you need to connect the app to the back-end URL. To do that set `API_URL` and `WEBSITE_URL` environment variable or edit `packages/mobile/build.config.js`:
 
 ```javascript
-config.options.defines.__API_URL__ = '"https://application-name.herokuapp.com/graphql"';
-config.options.defines.__WEBSITE_URL__ = '"https://application-name.herokuapp.com"';
-```
+const config = ...;
 
-* If you're using a custom domain, the production URLs will look like this:
-
-```javascript
-config.options.defines.__API_URL__ = '"http://domain-example.com/graphql"';
-config.options.defines.__WEBSITE_URL__ = '"http://domain-example.com"';
+if (process.env.NODE_ENV === 'production') {
+  config.__API_URL__ = '"https://application-name.herokuapp.com/graphql"';
+  config.__WEBSITE_URL__ = '"https://application-name.herokuapp.com"';
+}
 ```
 
 8. Configure other Apollo Starter Kit modules such as [the Stripe module] if necessary.
@@ -189,42 +170,29 @@ available on [Expo.io].
 
 ## Publishing a Mobile App
 
-1. Compile your project for production:
+1. Run the following command to publish your mobile app:
 
 ```bash
-yarn build
-```
-
-2. Run the following command to publish your mobile app:
-
-```bash
-yarn exp publish
+yarn expo publish
 ```
 
 ## Building a Standalone Mobile App for Google Play or App Store
 
-1. Compile your project for production:
+1. Run the command below to build a signed `.apk` for Android:
 
 ```bash
-yarn build
-```
-
-2. Run the command below to build a signed `.apk` for Android:
-
-```bash
-yarn exp ba
+yarn expo ba
 ```
 
 You need to run the command below to build a signed `.iap` for iOS:
 
 ```bash
-yarn exp bi
+yarn expo bi
 ```
 
-3. Run `yarn exp bs` to get the status and links for signed standalone mobile apps when the build finishes.
+3. Run `yarn expo bs` to get the status and links for signed standalone mobile apps when the build finishes.
 
-For more details refer to Building Standalone Apps in [the Expo documentation], but use `yarn exp ..` instead of
-`exp ...` command.
+For more details refer to Building Standalone Apps in [the Expo documentation].
 
 [heroku]: https://heroku.com
 [heroku cli]: https://devcenter.heroku.com/articles/heroku-cli#download-and-install
@@ -232,6 +200,6 @@ For more details refer to Building Standalone Apps in [the Expo documentation], 
 [heroku dashboard]: https://dashboard.heroku.com/apps
 [expo]: https://expo.io
 [ethereal]: https://ethereal.email/
-[the stripe module]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
+[the stripe module]: /docs/modules/Stripe%20Subscription.md
 [expo.io]: https://expo.io
 [the expo documentation]: https://docs.expo.io/versions/latest/

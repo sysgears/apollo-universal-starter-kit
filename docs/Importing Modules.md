@@ -45,3 +45,31 @@ can use it by importing necessary classes or components with ES6 `import`.
 
 [yarn documentation]: https://yarnpkg.com/lang/en/docs/workspaces/
 [webpack dependency management]: https://webpack.js.org/guides/dependency-management/
+
+## Modules with custom namespaces
+
+You may want to use your own NPM namespace for developing modules.
+The following will show you how to do this within the apollokit build system.
+
+Within your module's `package.json`,
+you can change the namespace from `@gqlapp` to something like:
+
+```json
+{
+  "name": "@my-namespace/my-module-server-ts",
+  "version": "0.1.0",
+  "private": true
+}
+```
+
+Then, to use a custom npm namespace
+
+1. Change the namespace in the `package.json` file
+1. Run ApolloKit like: `MODULENAME_EXTRA="@my-namespace" yarn watch`
+1. You can add multiple, extra namespaces by: `MODULENAME_EXTRA="@my-namespace|@my-other-ns"`
+
+Notes:
+
+- You may have to rerun yarn to pickup new modules
+- This is implemented in each packages' webpack.config.js
+

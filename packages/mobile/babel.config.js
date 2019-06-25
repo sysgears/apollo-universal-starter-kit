@@ -11,6 +11,7 @@ module.exports = api => {
       ],
       plugins: [
         '@babel/plugin-transform-destructuring',
+        ['@babel/plugin-transform-for-of', { loose: true }],
         '@babel/plugin-transform-regenerator',
         '@babel/plugin-transform-runtime',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
@@ -22,20 +23,11 @@ module.exports = api => {
   } else {
     return {
       compact: false,
-      presets: ['module:metro-react-native-babel-preset'],
+      presets: ['babel-preset-expo'],
       plugins: [
-        'haul/src/utils/fixRequireIssues',
+        'transform-inline-environment-variables',
         ['styled-components', { ssr: true }],
-        ['import', { libraryName: 'antd-mobile' }],
-        [
-          'babel-plugin-module-resolver',
-          {
-            alias: {
-              'react-native-vector-icons': '@expo/vector-icons'
-            }
-          }
-        ],
-        ['@babel/plugin-proposal-decorators', { legacy: true }]
+        ['import', { libraryName: 'antd-mobile' }]
       ],
       env: {
         production: {

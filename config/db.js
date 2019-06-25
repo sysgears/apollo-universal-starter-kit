@@ -1,5 +1,3 @@
-const path = require('path');
-
 const db = {
   client: process.env.DB_CLIENT || 'sqlite3',
   connection: {
@@ -13,6 +11,8 @@ const db = {
     charset: 'utf8'
   }
 };
+
+const path = require('path');
 
 if (process.env.NODE_ENV === 'test') {
   db.client = 'sqlite3';

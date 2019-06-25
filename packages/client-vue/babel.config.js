@@ -1,8 +1,10 @@
 module.exports = {
   compact: false,
-  presets: ['babel-preset-vue', ['@babel/preset-env', { modules: false }]],
+  presets: ['babel-preset-vue', '@babel/preset-typescript', ['@babel/preset-env', { modules: false }]],
   plugins: [
+    '@babel/transform-typescript',
     '@babel/plugin-transform-destructuring',
+    ['@babel/plugin-transform-for-of', { loose: true }],
     '@babel/plugin-transform-regenerator',
     '@babel/plugin-transform-runtime',
     ['@babel/plugin-proposal-decorators', { legacy: true }],

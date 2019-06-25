@@ -1,5 +1,6 @@
 import React, { ComponentType } from 'react';
 import { Redirect } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
 import { PageLayout } from '@gqlapp/look-client-react';
 
 import { withStripeSubscription } from './withStripeSubscription';
@@ -26,13 +27,16 @@ const SubscriptionAuthRouter = ({
   // empty screen when stripe subscription info is loading
   // Important: You don't need to include page layout inside protected routes!
   return (
-    <PageLayout>
-      {!loading && stripeSubscription && stripeSubscription.active ? (
-        <Component {...props} />
-      ) : !loading && stripeSubscription && !stripeSubscription.active ? (
-        <Redirect to="/add-subscription" />
-      ) : null}
-    </PageLayout>
+    <Helmet>
+      <script src="https://js.stripe.com/v3/" type="text/javascript" />
+      <PageLayout>
+        {!loading && stripeSubscription && stripeSubscription.active ? (
+          <Component {...props} />
+        ) : !loading && stripeSubscription && !stripeSubscription.active ? (
+          <Redirect to="/add-subscription" />
+        ) : null}
+      </PageLayout>
+    </Helmet>
   );
 };
 

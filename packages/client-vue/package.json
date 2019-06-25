@@ -4,15 +4,14 @@
   "version": "1.0.0",
   "main": "src",
   "scripts": {
-    "build": "cross-env NODE_ENV=production zen build",
+    "build": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",
     "tests": "echo",
     "test": "yarn tests && yarn lint",
     "eslint": "eslint --fix --ext js --ext jsx --ext json src",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "lint": "yarn eslint && yarn tslint",
-    "watch": "zen watch",
-    "heroku-postbuild": "yarn build",
+    "watch": "webpack-dev-server",
     "cli": "node ../../tools/cli"
   },
   "repository": {
@@ -98,7 +97,6 @@
     "rimraf": "^2.6.2"
   },
   "peerDependencies": {
-    "@larix/zen": "^0.1.0",
     "eslint": "*"
   },
   "browserslist": {

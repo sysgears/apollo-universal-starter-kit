@@ -4,7 +4,7 @@ import { Text, Platform, View } from 'react-native';
 import { ActionSheet } from 'native-base';
 import SimplePicker from 'react-native-simple-picker';
 
-import { HeaderTitle } from '../..';
+import HeaderTitle from '../../HeaderTitle';
 
 const LanguagePicker = ({ i18n }) => {
   const [currentLang, setCurrentLang] = useState(i18n.language);

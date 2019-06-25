@@ -77,21 +77,19 @@ describe('Posts and comments example UI works', () => {
   let container: any;
   let content: any;
 
-  beforeEach(() => {
+  beforeAll(async () => {
+    app = renderer.mount();
+    renderer.history.push('/posts');
+    await waitForElementRender(app.container, 'h2');
+  });
+
+  beforeEach(async () => {
     // Reset spy mutations on each step
     Object.keys(mutations).forEach(key => delete mutations[key]);
     if (app) {
       container = app.container;
       content = updateContent(container);
     }
-  });
-
-  it('Posts page renders without data with no post message', () => {
-    app = renderer.mount();
-    container = app.container;
-    renderer.history.push('/posts');
-    content = updateContent(container);
-    expect(content.textContent).to.include('There are no posts yet.');
   });
 
   it('Posts page renders with data', () => {

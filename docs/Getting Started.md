@@ -53,119 +53,39 @@ yarn seed
 yarn watch
 ```
 
-After running `yarn watch`, your default browser will automatically open the web application at [http://localhost:3000/]. 
-You can start changing the application code, and the changes will be applied immediately thanks to the live reload. You 
-can also open the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see 
+After running `yarn watch`, your default browser will automatically open the web application at [http://localhost:3000/].
+You can start changing the application code, and the changes will be applied immediately thanks to the live reload. You
+can also open the app in multiple tabs and test it: Increase the counter or add a new post or comment, and you'll see
 that all opened tabs are updated simultaneously.
 
-**NOTE**: Apollo Universal Starter Kit provides two client-side applications. One application is built with React and
-runs by default; the other is built with Angular and is disabled by default.
+**NOTE**: Apollo Universal Starter Kit provides React, Angular and Vue frontends.
 
-If you want to develop your web application using Angular instead of React, you need to enable the Angular application 
-and disable the React application. 
+To run Angular frontend execute:
+`yarn watch:android`
 
-To run the Angular application, do the following:
-
-1. Open the `packages/client/.zenrc.js` file and set the `builders.web.enabled` to `false` (the default value is set to 
-`true`):
-
-```javascript
-const url = require('url');
-
-const config = {
-  builders: {
-    web: {
-      //...
-      enabled: true // Set to false to disable the React application
-    },
-    test: {
-      //...
-    }
-  },
-  options: {
-    //...
-  }
-};
-//...
-```
-
-2. Open the `packages/client-angular/.zenrc.js` file and set the `builders.web.enabled` to true (the default value is
-set to `false`):
-
-```javascript
-const url = require('url');
-
-const config = {
-  builders: {
-    web: {
-      //...
-      enabled: false // Set to true to enable the Angular application
-    },
-    test: {
-      //...
-    }
-  },
-  options: {
-    //...
-  }
-};
-//...
-```
-
-**NOTE**: both Angular and React applications run on the same port; therefore, if you run them at the same time, 
-only one of them (most likely, the React application) will be actually running.
+To run Vue frontend execute:
+`yarn watch:vue`
 
 ## Running the Mobile App with Expo
 
 1. Install the Expo Client app on [your Android] or [iOS device].
 
-2. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
-`packages/mobile/.zenrc.js` configuration file:
-
-    * Set `builders.android.enabled` to `true` to build the mobile app for an Android
-    * Set `builders.ios.enabled` to `true` to run the mobile app for iOS
-
-Example:
-```javascript
-const url = require('url');
-
-const config = {
-  builders: {
-    android: {
-      entry: './src/index.ts',
-      buildDir: 'build/android',
-      dllBuildDir: 'build/android/dll',
-      stack: ['react-native', 'android'],
-      defines: {
-        __CLIENT__: true
-      },
-      enabled: false // Set to true to run the app on Android
-    },
-    ios: {
-      entry: './src/index.ts',
-      buildDir: 'build/ios',
-      dllBuildDir: 'build/ios/dll',
-      stack: ['react-native', 'ios'],
-      defines: {
-        __CLIENT__: true
-      },
-      enabled: false // Set to true to run the app on iOS
-    },
-  },
-}
-  //...other configurations are omitted.
-```
-
-3. Create data in the database (if you've already run Apollo Universal Starter Kit before, skip this step):
+2. Create data in the database (if you've already run Apollo Universal Starter Kit before, skip this step):
 
 ```bash
 yarn seed
 ```
 
-4. Launch the project:
+3. Launch the project:
 
 ```bash
-yarn watch
+yarn watch:android
+```
+
+or
+
+```bash
+yarn watch:ios
 ```
 
 **NOTE**: It may take up to a minute or more to build the mobile version of the app. The next runs will be much faster.
@@ -205,52 +125,15 @@ simulator when you run the Apollo Universal Starter Kit project for mobile.
 **NOTE**: use the username on you development computer instead of the `/username/` part in `PATH`, for example,
 `"/home/johndoe/Android/Sdk/platform-tools:$PATH"`.
 
-6. Activate building the mobile app code for Android or iOS (or both) in the application properties in the
-`packages/mobile/.zenrc.js` configuration file:
-
-    * Set `builders.android.enabled` to `true` to build the mobile app for an Android
-    * Set `builders.ios.enabled` to `true` to run the mobile app for iOS
-
-Example:
-```javascript
-const url = require('url');
-
-const config = {
-  builders: {
-    android: {
-      entry: './src/index.ts',
-      buildDir: 'build/android',
-      dllBuildDir: 'build/android/dll',
-      stack: ['react-native', 'android'],
-      defines: {
-        __CLIENT__: true
-      },
-      enabled: false // Set to true to run the app on Android
-    },
-    ios: {
-      entry: './src/index.ts',
-      buildDir: 'build/ios',
-      dllBuildDir: 'build/ios/dll',
-      stack: ['react-native', 'ios'],
-      defines: {
-        __CLIENT__: true
-      },
-      enabled: false // Set to true to run the app on iOS
-    },
-  },
-};
-  //...other configurations are omitted.
-```
-
-7. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
+6. Launch your virtual phone from AVD Manager: open the **Tools** menu and click **AVD Manager**. In the list of
 available virtual devices, run the one you created.
 
-8. Launch the starter kit with `yarn watch`.
+7. Launch the starter kit with `yarn watch:android` or `yarn watch:ios`.
 
 **NOTE**: If you're launching the starter kit for the first time, you may need to first run `yarn seed` to generate
-sample data. After that, you can start the app with `yarn watch`.
+sample data.
 
-9. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
+8. The Expo Client app will automatically start. You don't need to additionally install Expo Client on the virtual
 smartphone.
 
 **NOTE**: It may take up to a minute or two to build and run the mobile app on Android for the first time. The next runs

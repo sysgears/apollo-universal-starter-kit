@@ -12,10 +12,6 @@ import { StoreModule, Store } from '@ngrx/store';
 import { apiUrl, createApolloClient, log } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-angular';
 
-// Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
-// tslint:disable-next-line
-import 'backend_reload';
-
 import { MainComponent, metaReducers } from './Main';
 
 const createApp = async (modules: ClientModule) => {
@@ -92,13 +88,6 @@ const createApp = async (modules: ClientModule) => {
   // boot on document ready
   bootloader(main);
 };
-
-if (__DEV__ && module.hot) {
-  module.hot.accept('backend_reload', () => {
-    log.debug('Reloading front-end');
-    window.location.reload();
-  });
-}
 
 export default new ClientModule({
   onAppCreate: [createApp]

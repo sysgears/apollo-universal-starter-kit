@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
@@ -15,7 +15,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "skipLibCheck": true
   },
   "include": [

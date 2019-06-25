@@ -10,7 +10,6 @@ module.exports = {
   },
   modulePathIgnorePatterns: ['<rootDir>/modules/chat'],
   moduleNameMapper: {
-    backend_reload: 'jest-transform-stub',
     '^.+\\.(css|less|scss)$': 'babel-jest'
   },
   globals: {

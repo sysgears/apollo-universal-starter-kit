@@ -4,7 +4,6 @@ export * from './ui-native-base';
 // export * from './ui-antd-mobile';
 
 export { lookStyles };
-export { default as RenderField } from './RenderField';
 export { default as Loading } from './Loading';
 export { default as Modal } from './Modal';
 export { default as HeaderTitle } from './HeaderTitle';

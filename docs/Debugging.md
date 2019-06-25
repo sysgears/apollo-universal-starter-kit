@@ -2,15 +2,7 @@
 
 ## Debugging NodeJS backend server
 
-To debug NodeJS backend server you should enable running NodeJS backend with `inspect` protocol enabled. This is done by modifying `packages/server/.zenrc.js` and changing `nodeDebugger` to `true`
-inside `config -> options`. When you restart the kit after this change you should start seeing
-the following line in the terminal:
-`server-webpack info Spawning node --inspect=9229 ...`
-
-Watch out for the port number, `zen` tries to run on default port for `inspect` protocol, which is
-`9229`, but if this port is used by some other node process, it will use the next free available
-port `9230`, `9231`, etc. You might need to do adjustments to debugger settings you use if this is
-the case.
+To debug NodeJS backend server you should enable running NodeJS backend with `inspect` protocol enabled. This is done by modifying `packages/server/webpack.config.js` and adding `--inspect` option to `nodemon`: `onBuildEnd: ['nodemon --inspect build --watch false']`
 
 You are ready to debug your NodeJS server.
 
@@ -69,13 +61,3 @@ Activate Expo Developer Menu:
   - In Andorid Emulator via `Ctrl+M`
 Then select `Debug JS Remotely`. New Tab will be opened in Chrome browser. Activate dev tools on this tab and click `Sources`, then navigate into `webpack://` and find the source file where you want to set breakpoint.
 
-### Debugging via Visual Studio Code
-
-We need to find a way how to do this.
-
-## Debugging @larix/zen
-
-`@larix/zen` is used to build all the packages inside the kit. To debug it you should pass `--inspect`
-parameter to node args and maybe `--inspect-brk`. Example command might look like this:
-`node --inspect --inspect-brk node_modules/.bin/zen watch`
-Then you use the same approaches to attach to running NodeJS process described in backend debugging sections above.

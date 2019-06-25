@@ -101,22 +101,6 @@ for the client application, but for the server application as well. Using webpac
 powerful features such as conditional compilation, embedding non-JavaScript and CSS files into the code, hot code
 reloading, and other convenient functionalities.
 
-## Webpack and Expo for Mobile Frontend
-
-To ensure that the code can be shared among all the Apollo Starter Kit packages &ndash; client, server, and mobile
-&ndash; we set up webpack to build the bundles for React Native mobile app with the help of [Haul CLI]. Haul CLI and
-webpack are coordinated with [Zen] to replace [Metro], a Facebook custom bundler for React Native apps.
-
-The created React Native bundles use [Expo], which allows you avoid using additional tools for compiling the native
-code. Consequently, it's simpler to develop native mobile applications with the starter kit.
-
-## Generation of Webpack DLL Vendor Bundles
-
-We set up the starter kit to ensure that _webpack vendor DLL bundle_ is generated and updated automatically for all the
-non-development dependencies. We ensured that webpack processes vendor libraries only when they were actually changed,
-not on every change. This approach boosts the speed for cold project start in development mode and for hot code
-reloading even if the number of dependencies is very large.
-
 ## Hot Code Reload and Live Code Reload
 
 Automatic code reloading for the server is done using webpack. When webpack prepares hot patches on the filesystem, the
@@ -179,13 +163,13 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [i18next]: https://www.i18next.com
 [optimistic ui]: https://www.apollographql.com/docs/react/features/optimistic-ui.html
 [stripe]: https://stripe.com
-[payments module documentation]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/modules/Stripe%20Subscription.md
+[payments module documentation]: /docs/modules/Stripe%20Subscription.md
 [graphql-subscriptions]: https://github.com/apollographql/graphql-subscriptions
 [graphql cursor pagination]: https://medium.com/@gethylgeorge/infinite-scrolling-in-react-using-apollo-and-react-virtualized-graphql-cursor-pagination-bf80617a8a1a#.jkmmu9qz8
 [relay-style cursor pagination]: http://dev.apollodata.com/react/pagination.html#relay-cursors
 [knex]: http://knexjs.org
 [debug sql]: https://spin.atomicobject.com/2017/03/27/timing-queries-knexjs-nodejs/
-[apollo universal starter kit configurations]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/Configuration.md
+[apollo universal starter kit configurations]: /docs/Configuration.md
 [twitter bootstrap]: http://getbootstrap.com
 [styled components]: https://www.styled-components.com/
 [nativebase]: https://nativebase.io
@@ -194,7 +178,6 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [react google analytics]: https://github.com/react-ga/react-ga
 [webpack]: https://webpack.js.org/
 [haul cli]: https://github.com/callstack-io/haul
-[zen]: https://github.com/sysgears/larix/tree/master/packages/zen
 [metro]: https://facebook.github.io/metro/
 [expo]: https://expo.io
 [webpack-dev-server]: https://webpack.js.org/configuration/dev-server/

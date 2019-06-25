@@ -1,20 +1,9 @@
 language: node_js
 node_js:
 - '10'
-cache:
-  directories:
-  - "$HOME/.cache/yarn"
-  - ".cache"
-dist: trusty
+cache: yarn
+dist: xenial
 os:
 - linux
 script:
 - yarn test
-before_deploy: rm -rf node_modules
-deploy:
-  provider: heroku
-  api_key:
-    secure: sIe+wFvt7N8njuB8xtZzgFOZzla9UmlIz+0h84JRGyG4kE8VqIiqRlU3lXwGBWEIoKsIEIX4o3EHsRVIRplxw8oMRrfokwxQ9ZUtQP24MTJ4bevT8ypvhulEhUYGNtO16rFze8aslxaUlJUKz6ewHawK0ytpJQBMXfoeQuWVXOK6cv3Wa2ZG8D7WSoKEPtj6ZYhI180lcN0RP0+m+uOEPvhAvRStfyjPwmuQDp/aVnTlO/mhmOG/FVzAjeugyAwGEil9Ah5/fikkxy8dajGCU1O7YmgasnOrAuuDLno9ue1WOi0squzVqHgmkrTMJ1ckRml+MYH0q5SQSzGyigmSzeT9vg1jKrw0eMQxOArvu68KHWwcYn7cd9BkBWk+o43xuooAxsY3r98n0UHl2dxLd94ZngWNb/rWFFDEzDm417ltNXctdefbX9z64yl75IO/AMaXeiAzp9Gh+puz2UN+9+wRVAC2oZ6ITYIxjDKridmsyMWxURzgkatDAQupy9PaOG8AJSuDQMgTTyEXPYr+uWxVSioEODpOmO6hS4UiQ/TEa/yt/eB6tZVCiUY0waxx7sfF9DiaaF/U9W4HLHqTvMN6AOcWQJjMcemTvyH75xMN/n4Fc2xAT54ky7EvT6WyQMceNrCiAN6rghhkrOM5x4nHHGUokf63N4mTCtzjytQ=
-  app: apollo-universal-starter-kit
-  on:
-    repo: sysgears/apollo-universal-starter-kit

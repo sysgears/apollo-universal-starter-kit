@@ -1,11 +1,11 @@
 import React from 'react';
+import loadable from '@loadable/component';
 
 import ClientModule from '../ClientModule';
 import translate, { TranslateFunction } from '../../i18n';
 
 import { Route, NavLink } from 'react-router-dom';
 import { MenuItem } from '../../modules/common/components/web';
-import $Module$ from './containers/$Module$';
 import resources from './locales';
 
 const NavLinkWithI18n = translate('$module$')(({ t }: { t: TranslateFunction }) => (
@@ -15,7 +15,7 @@ const NavLinkWithI18n = translate('$module$')(({ t }: { t: TranslateFunction }) 
 ));
 
 export default new ClientModule({
-  route: [<Route exact path="/$module$" component={$Module$} />],
+  route: [<Route exact path="/$module$" component={loadable(() => import('./containers/$Module$').then(c => c.default))} />],
   navItem: [
     <MenuItem key="/$module$">
       <NavLinkWithI18n />

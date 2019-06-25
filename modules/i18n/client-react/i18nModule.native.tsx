@@ -34,10 +34,10 @@ const langPicker =
       })
     : undefined;
 
-export default (settings.i18n.enabled
+export default settings.i18n.enabled
   ? new ClientModule(commonI18n, langPicker, {
       localization: [{ ns: 'i18n', resources }],
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [() => <I18nProvider i18n={i18next} />]
     })
-  : undefined);
+  : undefined;

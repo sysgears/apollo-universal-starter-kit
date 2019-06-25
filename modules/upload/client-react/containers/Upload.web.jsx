@@ -15,7 +15,7 @@ const Upload = props => {
     try {
       await uploadFiles(files);
     } catch (e) {
-      setError({ error: e.message });
+      setError(e.message);
     }
   };
 
@@ -23,7 +23,7 @@ const Upload = props => {
     try {
       await removeFile(id);
     } catch (e) {
-      setError({ error: e.message });
+      setError(e.message);
     }
   };
 

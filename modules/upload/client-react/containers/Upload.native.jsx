@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, compose } from 'react-apollo';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -7,48 +7,36 @@ import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
-class Upload extends React.Component {
-  propTypes = {
-    uploadFiles: PropTypes.func,
-    removeFile: PropTypes.func
-  };
+const Upload = props => {
+  const { uploadFiles, removeFile } = props;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      error: null
-    };
-  }
+  const [error, setError] = useState(null);
 
-  handleUploadFiles = async files => {
-    const { uploadFiles } = this.props;
+  const handleUploadFiles = async files => {
     try {
       await uploadFiles(files);
     } catch (e) {
-      this.setState({ error: e.message });
+      setError(e.message);
     }
   };
 
-  handleRemoveFile = async id => {
-    const { removeFile } = this.props;
+  const handleRemoveFile = async id => {
     try {
       await removeFile(id);
     } catch (e) {
-      this.setState({ error: e.message });
+      setError(e.message);
     }
   };
 
-  render() {
-    return (
-      <UploadView
-        {...this.props}
-        error={this.state.error}
-        handleRemoveFile={this.handleRemoveFile}
-        handleUploadFiles={this.handleUploadFiles}
-      />
-    );
-  }
-}
+  return (
+    <UploadView {...props} error={error} handleRemoveFile={handleRemoveFile} handleUploadFiles={handleUploadFiles} />
+  );
+};
+
+Upload.propTypes = {
+  uploadFiles: PropTypes.func,
+  removeFile: PropTypes.func
+};
 
 export default compose(
   graphql(FILES_QUERY, {

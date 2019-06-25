@@ -8,6 +8,7 @@ const config = {
     babelTransformerPath: require.resolve('./custom-transformer')
   },
   resolver: {
+    ...baseConfig.resolver,
     sourceExts: ['jsx', 'js', 'json', 'ts', 'tsx', 'graphql', 'gql']
   }
 };

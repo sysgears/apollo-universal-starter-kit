@@ -189,7 +189,6 @@
   "resolutions": {
     "fbjs": "^1.0.0",
     "kleur": "^3.0.3",
-    "ant-design-palettes": "npm:@ant-design/colors",
     "immutability-helper": "2.8.1",
     "graphql": "14.1.1",
     "iterall": "^1.2.2",

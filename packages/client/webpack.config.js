@@ -14,6 +14,9 @@ const webpackPort = 3000;
 
 const buildConfig = require('./build.config');
 
+const modulenameExtra = process.env.MODULENAME_EXTRA ? `${process.env.MODULENAME_EXTRA}|` : '';
+const modulenameRegex = new RegExp(`node_modules(?![\\/](${modulenameExtra}@gqlapp)).*`);
+
 class WaitOnWebpackPlugin {
   constructor(waitOnUrl) {
     this.waitOnUrl = waitOnUrl;
@@ -86,7 +89,7 @@ const config = {
       { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader' }] },
       {
         test: /\.[jt]sx?$/,
-        exclude: /node_modules(?![\\/]@gqlapp).*/,
+        exclude: modulenameRegex,
         use: {
           loader: 'babel-loader',
           options: { babelrc: true, rootMode: 'upward-optional' }
@@ -169,6 +172,7 @@ const config = {
   devServer: {
     host: '0.0.0.0',
     hot: true,
+    public: `localhost:${webpackPort}`,
     publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     open: true,

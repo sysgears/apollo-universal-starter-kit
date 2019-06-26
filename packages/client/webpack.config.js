@@ -172,6 +172,7 @@ const config = {
   devServer: {
     host: '0.0.0.0',
     hot: true,
+    public: `localhost:${webpackPort}`,
     publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     open: true,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { View, KeyboardAvoidingView, Clipboard, Platform } from 'react-native';
 import { GiftedChat, Send } from 'react-native-gifted-chat';
@@ -11,48 +11,37 @@ import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
 import ModalNotify from '../components/ModalNotify';
 
-export default class extends React.Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    t: PropTypes.func,
-    error: PropTypes.string,
-    messages: PropTypes.object,
-    addMessage: PropTypes.func,
-    deleteMessage: PropTypes.func,
-    editMessage: PropTypes.func,
-    loadData: PropTypes.func.isRequired,
-    currentUser: PropTypes.object,
-    uuid: PropTypes.string,
-    pickImage: PropTypes.func,
-    allowImages: PropTypes.bool
-  };
+const Chat = ({
+  addMessage,
+  editMessage,
+  uuid,
+  t,
+  deleteMessage,
+  allowImages,
+  loadData,
+  messages,
+  currentUser,
+  loading,
+  pickImage
+}) => {
+  let allowDataLoad = true;
 
-  constructor(props) {
-    super(props);
-    this.subscription = null;
-    this.gc = React.createRef();
-  }
-
-  state = {
+  const gc = useRef(null);
+  const [state, setState] = useState({
     message: '',
     isEdit: false,
     messageInfo: null,
     isQuoted: false,
     quotedMessage: null,
     notify: null
+  });
+
+  const setMessageState = text => {
+    setState({ ...state, message: text });
   };
 
-  static getDerivedStateFromProps({ error }) {
-    return error ? { notify: error } : null;
-  }
-
-  setMessageState = text => {
-    this.setState({ message: text });
-  };
-
-  onSend = (messages = []) => {
-    const { isEdit, messageInfo, message, quotedMessage } = this.state;
-    const { addMessage, editMessage, uuid } = this.props;
+  const onSend = (messages = []) => {
+    const { isEdit, messageInfo, message, quotedMessage } = state;
     const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
     const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
@@ -62,8 +51,14 @@ export default class extends React.Component {
         text: message,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
         uuid
-      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
-      this.setState({ isEdit: false });
+      }).then(res =>
+        setState({
+          ...state,
+          message: '',
+          isEdit: false,
+          notify: res && res.error ? res.error : null
+        })
+      );
     } else {
       const {
         text = null,
@@ -81,14 +76,19 @@ export default class extends React.Component {
         quotedId,
         quotedMessage: quotedMessage ? quotedMessage : defQuote,
         attachment
-      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
-
-      this.setState({ isQuoted: false, quotedMessage: null });
+      }).then(res =>
+        setState({
+          ...state,
+          isQuoted: false,
+          quotedMessage: null,
+          message: '',
+          notify: res && res.error ? res.error : null
+        })
+      );
     }
   };
 
-  onLongPress = ({ actionSheet }, currentMessage, id) => {
-    const { t, deleteMessage } = this.props;
+  const onLongPress = ({ actionSheet }, currentMessage, id) => {
     const { _id: messageId, text, user } = currentMessage;
     const options = [t('msg.btn.copy'), t('msg.btn.reply')];
 
@@ -103,114 +103,120 @@ export default class extends React.Component {
           break;
 
         case 1:
-          this.setQuotedState(currentMessage);
+          setQuotedState(currentMessage);
           break;
 
         case 2:
-          this.setEditState(currentMessage);
+          setEditState(currentMessage);
           break;
 
         case 3:
-          deleteMessage(messageId).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+          deleteMessage(messageId).then(res => setState({ ...state, notify: res && res.error ? res.error : null }));
           break;
       }
     });
   };
 
-  setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
-    this.setState({ isEdit: true, message: text, messageInfo: { id, text, createdAt, userId, username, quotedId } });
-    this.gc.focusTextInput();
+  const setEditState = ({ _id: id, text, createdAt, quotedId, user: { _id: userId, name: username } }) => {
+    setState({
+      ...state,
+      isEdit: true,
+      message: text,
+      messageInfo: { id, text, createdAt, userId, username, quotedId }
+    });
+    gc.current.focusTextInput();
   };
 
-  setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
-    this.setState({ isQuoted: true, quotedMessage: { id, text, path, filename, username } });
-    this.gc.focusTextInput();
+  const setQuotedState = ({ _id: id, text, path, filename, user: { name: username } }) => {
+    setState({ ...state, isQuoted: true, quotedMessage: { id, text, path, filename, username } });
+    gc.current.focusTextInput();
   };
 
-  renderChatFooter = () => {
-    if (this.state.isQuoted) {
-      const { quotedMessage } = this.state;
-      return <ChatFooter {...quotedMessage} undoQuote={this.clearQuotedState} />;
+  const clearQuotedState = () => setState({ ...state, isQuoted: false, quotedMessage: null });
+
+  const renderChatFooter = () => {
+    const { quotedMessage, isQuoted } = state;
+    if (isQuoted) {
+      return <ChatFooter {...quotedMessage} undoQuote={clearQuotedState} />;
     }
   };
 
-  clearQuotedState = () => {
-    this.setState({ isQuoted: false, quotedMessage: null });
-  };
+  const renderCustomView = chatProps => <CustomView {...chatProps} allowImages={allowImages} />;
 
-  renderCustomView = chatProps => {
-    const { allowImages } = this.props;
-    return <CustomView {...chatProps} allowImages={allowImages} />;
-  };
+  const renderSend = chatProps => <Send {...chatProps} label={t('input.btn')} />;
 
-  renderSend = chatProps => {
-    const { t } = this.props;
-    return <Send {...chatProps} label={t('input.btn')} />;
-  };
-
-  renderCustomActions = chatProps => {
-    const { allowImages } = this.props;
+  const renderCustomActions = chatProps => {
     if (allowImages) {
-      return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
+      return <RenderCustomActions {...chatProps} pickImage={pickImage} />;
     }
   };
 
-  onLoadEarlier = () => {
+  const onLoadEarlier = () => {
     const {
-      messages: {
-        pageInfo: { endCursor }
-      },
-      loadData
-    } = this.props;
+      pageInfo: { endCursor, hasNextPage }
+    } = messages;
 
-    if (this.allowDataLoad) {
-      if (this.props.messages.pageInfo.hasNextPage) {
-        this.allowDataLoad = false;
+    if (allowDataLoad) {
+      if (hasNextPage) {
+        allowDataLoad = false;
         return loadData(endCursor + 1, 'add');
       }
     }
   };
 
-  renderModal = () => {
-    const { notify } = this.state;
+  const renderModal = () => {
+    const { notify } = state;
     if (notify) {
-      return <ModalNotify notify={notify} callback={() => this.setState({ notify: null })} />;
+      return <ModalNotify notify={notify} callback={() => setState({ ...state, notify: null })} />;
     }
   };
 
-  render() {
-    const { currentUser, uuid, messages, loading, t } = this.props;
-    const { message } = this.state;
-
-    if (loading) {
-      return <Loading text={t('loading')} />;
-    }
-
-    this.allowDataLoad = true;
-    const edges = messages ? messages.edges : [];
-    const { id = uuid, username = null } = currentUser ? currentUser : {};
-    return (
-      <View style={{ flex: 1 }}>
-        {this.renderModal()}
-        <GiftedChat
-          {...settings.chat.giftedChat}
-          ref={gc => (this.gc = gc)}
-          text={message}
-          onInputTextChanged={text => this.setMessageState(text)}
-          placeholder={t('input.text')}
-          messages={edges}
-          renderSend={this.renderSend}
-          onSend={this.onSend}
-          loadEarlier={messages ? messages.totalCount > messages.edges.length : false}
-          onLoadEarlier={this.onLoadEarlier}
-          user={{ _id: id, name: username }}
-          renderChatFooter={this.renderChatFooter}
-          renderCustomView={this.renderCustomView}
-          renderActions={this.renderCustomActions}
-          onLongPress={(context, currentMessage) => this.onLongPress(context, currentMessage, id)}
-        />
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
-      </View>
-    );
+  if (loading) {
+    return <Loading text={t('loading')} />;
   }
-}
+
+  const { message } = state;
+  const edges = messages ? messages.edges : [];
+  const { id = uuid, username = null } = currentUser ? currentUser : {};
+
+  return (
+    <View style={{ flex: 1 }}>
+      {renderModal()}
+      <GiftedChat
+        {...settings.chat.giftedChat}
+        ref={gc}
+        text={message}
+        onInputTextChanged={text => setMessageState(text)}
+        placeholder={t('input.text')}
+        messages={edges}
+        renderSend={renderSend}
+        onSend={onSend}
+        loadEarlier={messages ? messages.totalCount > messages.edges.length : false}
+        onLoadEarlier={onLoadEarlier}
+        user={{ _id: id, name: username }}
+        renderChatFooter={renderChatFooter}
+        renderCustomView={renderCustomView}
+        renderActions={renderCustomActions}
+        onLongPress={(context, currentMessage) => onLongPress(context, currentMessage, id)}
+      />
+      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? null : 'padding'} keyboardVerticalOffset={120} />
+    </View>
+  );
+};
+
+Chat.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  t: PropTypes.func,
+  error: PropTypes.string,
+  messages: PropTypes.object,
+  addMessage: PropTypes.func,
+  deleteMessage: PropTypes.func,
+  editMessage: PropTypes.func,
+  loadData: PropTypes.func.isRequired,
+  currentUser: PropTypes.object,
+  uuid: PropTypes.string,
+  pickImage: PropTypes.func,
+  allowImages: PropTypes.bool
+};
+
+export default Chat;

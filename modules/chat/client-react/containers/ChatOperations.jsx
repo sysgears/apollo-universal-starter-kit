@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
@@ -113,23 +113,15 @@ const writeMsgsToCache = (cache, messages) =>
     }
   });
 
-class ChatOperations extends React.Component {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    messages: PropTypes.object,
-    messagesUpdated: PropTypes.object,
-    updateQuery: PropTypes.func,
-    loadData: PropTypes.func.isRequired
-  };
-
-  componentDidUpdate() {
-    const { messagesUpdated, updateQuery } = this.props;
+const ChatOperations = props => {
+  const { messagesUpdated, updateQuery } = props;
+  useEffect(() => {
     if (messagesUpdated) {
-      this.updateMessagesState(messagesUpdated, updateQuery);
+      updateMessagesState(messagesUpdated, updateQuery);
     }
-  }
+  });
 
-  updateMessagesState = (messagesUpdated, updateQuery) => {
+  const updateMessagesState = (messagesUpdated, updateQuery) => {
     const { mutation, node } = messagesUpdated;
     updateQuery(prev => {
       switch (mutation) {
@@ -144,11 +136,16 @@ class ChatOperations extends React.Component {
       }
     });
   };
+  return <Chat {...props} />;
+};
 
-  render() {
-    return <Chat {...this.props} />;
-  }
-}
+ChatOperations.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  messages: PropTypes.object,
+  messagesUpdated: PropTypes.object,
+  updateQuery: PropTypes.func,
+  loadData: PropTypes.func.isRequired
+};
 
 export default compose(
   graphql(MESSAGES_QUERY, {

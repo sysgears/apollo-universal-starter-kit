@@ -4,16 +4,17 @@ import { FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 const RenderCustomActions = props => {
-  const { pickImage } = props;
+  const { pickImage, onSend } = props;
   return (
-    <TouchableOpacity style={styles.container} onPress={() => pickImage(props)}>
+    <TouchableOpacity style={styles.container} onPress={() => pickImage(onSend)}>
       <FontAwesome name="photo" size={30} style={styles.icon} />
     </TouchableOpacity>
   );
 };
 
 RenderCustomActions.propTypes = {
-  pickImage: PropTypes.func
+  pickImage: PropTypes.func,
+  onSend: PropTypes.func
 };
 
 const styles = StyleSheet.create({

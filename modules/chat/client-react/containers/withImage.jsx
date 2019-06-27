@@ -118,7 +118,7 @@ export default Component => {
       return true;
     };
 
-    pickImage = async ({ onSend }) => {
+    pickImage = async onSend => {
       const { t } = this.props;
       if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(settings.chat.image.imagePicker);

@@ -145,9 +145,9 @@ const Chat = ({
 
   const renderSend = chatProps => <Send {...chatProps} label={t('input.btn')} />;
 
-  const renderCustomActions = chatProps => {
+  const renderCustomActions = ({ onSend }) => {
     if (allowImages) {
-      return <RenderCustomActions {...chatProps} pickImage={pickImage} />;
+      return <RenderCustomActions onSend={onSend} pickImage={pickImage} />;
     }
   };
 

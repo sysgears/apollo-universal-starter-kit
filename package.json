@@ -188,6 +188,7 @@
   },
   "resolutions": {
     "fbjs": "^1.0.0",
+    "hard-source-webpack-plugin": "https://github.com/conorh/hard-source-webpack-plugin",
     "kleur": "^3.0.3",
     "immutability-helper": "2.8.1",
     "graphql": "14.1.1",

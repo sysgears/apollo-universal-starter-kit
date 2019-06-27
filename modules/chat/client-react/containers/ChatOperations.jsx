@@ -6,7 +6,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { withUser } from '@gqlapp/user-client-react';
 import settings from '@gqlapp/config';
 
-import withUuid from './withUuid';
+import useUuid from './useUuid';
 import Chat from './Chat';
 import withImage from './withImage';
 import withMessagesFormatter from './withMessagesFormatter';
@@ -114,12 +114,13 @@ const writeMsgsToCache = (cache, messages) =>
   });
 
 const ChatOperations = props => {
+  const uuid = useUuid();
   const { messagesUpdated, updateQuery } = props;
   useEffect(() => {
     if (messagesUpdated) {
       updateMessagesState(messagesUpdated, updateQuery);
     }
-  });
+  }, [messagesUpdated]);
 
   const updateMessagesState = (messagesUpdated, updateQuery) => {
     const { mutation, node } = messagesUpdated;
@@ -136,7 +137,7 @@ const ChatOperations = props => {
       }
     });
   };
-  return <Chat {...props} />;
+  return <Chat uuid={uuid} {...props} />;
 };
 
 ChatOperations.propTypes = {
@@ -286,7 +287,6 @@ export default compose(
     })
   }),
   translate('chat'),
-  withUuid,
   withUser,
   withImage,
   withMessagesFormatter,

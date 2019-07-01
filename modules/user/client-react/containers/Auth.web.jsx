@@ -7,11 +7,12 @@ import { withLoadedUser } from './AuthBase';
 const AuthRoute = withLoadedUser(
   ({ currentUser, role, redirect = '/login', redirectOnLoggedIn, component: Component, ...rest }) => {
     const RenderComponent = props => {
-      // The users is not logged in
-      if (redirectOnLoggedIn && currentUser) {
-        return <Redirect to={{ pathname: redirect }} />;
+      // redirect logged in users
+      if (redirectOnLoggedIn) {
+        return currentUser ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} {...rest} />;
       }
-
+      
+      // redirect users unlogged or without sufficient permissions
       return isRoleMatch(role, currentUser) ? (
         <Component currentUser={currentUser} {...props} {...rest} />
       ) : (

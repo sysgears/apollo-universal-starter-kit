@@ -20,13 +20,11 @@ const styles = StyleSheet.create({
   }
 });
 
-export default class Intro extends Component {
-  public render() {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>This is a React Native snapshot test.</Text>
-      </View>
-    );
-  }
-}
+const Intro = () => (
+  <View style={styles.container}>
+    <Text style={styles.welcome}>Welcome to React Native!</Text>
+    <Text style={styles.instructions}>This is a React Native snapshot test.</Text>
+  </View>
+);
+
+export default Intro;

@@ -15,7 +15,7 @@ const webpackPort = 3000;
 const buildConfig = require('./build.config');
 
 const modulenameExtra = process.env.MODULENAME_EXTRA ? `${process.env.MODULENAME_EXTRA}|` : '';
-const modulenameRegex = new RegExp(`node_modules(?![\\/](${modulenameExtra}@gqlapp)).*`);
+const modulenameRegex = new RegExp(`node_modules(?![\\\\/](${modulenameExtra}@gqlapp)).*`);
 
 class WaitOnWebpackPlugin {
   constructor(waitOnUrl) {
@@ -172,6 +172,7 @@ const config = {
   devServer: {
     host: '0.0.0.0',
     hot: true,
+    public: `localhost:${webpackPort}`,
     publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     open: true,

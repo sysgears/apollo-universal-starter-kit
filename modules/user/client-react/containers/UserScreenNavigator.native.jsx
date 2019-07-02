@@ -1,3 +1,5 @@
+/* eslint-disable react/display-name */
+
 import React from 'react';
 import { createAppContainer, createDrawerNavigator } from 'react-navigation';
 import PropTypes from 'prop-types';

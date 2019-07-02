@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
 import { ImagePicker, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
-import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
+import { Loading } from '@gqlapp/look-client-react-native';
 import settings from '@gqlapp/config';
 
 import ModalNotify from '../components/ModalNotify';
@@ -18,62 +19,29 @@ const serverUrl = `${protocol}//${
 }${port ? ':' + port : ''}`;
 
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
+const allowImages = settings.chat.allowImages;
 
-export default Component => {
-  return class MessageImage extends React.Component {
-    static propTypes = {
-      messages: PropTypes.object,
-      t: PropTypes.func
-    };
+const withImage = Component => {
+  const WithImage = props => {
+    const { messages, t } = props;
 
-    state = {
-      edges: [],
-      endCursor: 0,
-      allowImages: settings.chat.allowImages,
-      notify: null
-    };
+    const [notify, setNotify] = useState(null);
+    const [edges, setEdges] = useState([]);
 
-    static getDerivedStateFromProps({ messages }, { allowImages, edges: stateEdges, endCursor }) {
+    useEffect(() => {
       if (allowImages && messages) {
-        const { edges } = messages;
-        if (!stateEdges.length) {
-          return { edges };
-        }
-        const addImageToNode = (node, { node: currentNode }) => {
-          const quotedMessage = { ...node.quotedMessage, image: currentNode.quotedMessage.image };
-          return { ...node, image: currentNode.image, quotedMessage };
-        };
-
-        return {
-          endCursor: stateEdges.length > edges.length ? messages.pageInfo.endCursor : endCursor,
-          edges: edges.map(({ node, cursor }) => {
-            const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
-            return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
-          })
-        };
+        checkImages(messages.edges);
       }
-      return null;
-    }
+    }, [messages]);
 
-    componentDidMount() {
-      this.checkImages();
-    }
-
-    componentDidUpdate() {
-      this.checkImages();
-    }
-
-    checkImages = () => {
-      const { edges, endCursor } = this.state;
-      if (edges.length && (!endCursor || endCursor < this.props.messages.pageInfo.endCursor)) {
-        const newEdges = edges.filter(
-          ({ node: { path, image, quotedMessage } }) => (path && !image) || (quotedMessage.path && !quotedMessage.image)
-        );
-        if (newEdges.length) this.downloadImages(newEdges);
-      }
+    const checkImages = edges => {
+      const newEdges = edges.filter(
+        ({ node: { path, image, quotedMessage } }) => (path && !image) || (quotedMessage.path && !quotedMessage.image)
+      );
+      if (newEdges.length) downloadImages(newEdges);
     };
 
-    downloadImages = async newMessages => {
+    const downloadImages = async newMessages => {
       const { getInfoAsync, makeDirectoryAsync, readDirectoryAsync, downloadAsync } = FileSystem;
       const { isDirectory } = await getInfoAsync(imageDir);
       if (!isDirectory) await makeDirectoryAsync(imageDir);
@@ -85,27 +53,27 @@ export default Component => {
               return downloadAsync(serverUrl + '/' + path, imageDir + filename);
             }
           })
-        ).then(() => this.addImagesToEdge(node.id));
+        );
       });
+
+      addImagesToEdge(newMessages);
     };
 
-    addImagesToEdge = async id => {
-      const { edges } = this.state;
-      this.setState({
-        endCursor: this.props.messages.pageInfo.endCursor,
-        edges: edges.map(({ node, cursor }) => {
-          if (node.id === id) {
-            const { quotedMessage: quoted, filename } = node;
-            const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
-            return { cursor, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
-          } else {
-            return { node, cursor };
-          }
-        })
+    const addImagesToEdge = newMessages => {
+      const newEdges = newMessages.map(msg => {
+        const { quotedMessage: quoted, filename } = msg.node;
+        const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
+        return { ...msg, node: { ...msg.node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
       });
+
+      const mergedMsgs = messages.edges.map(msg => {
+        return newEdges.find(({ node: { id: newId } }) => msg.node.id === newId) || msg;
+      });
+
+      setEdges(mergedMsgs);
     };
 
-    checkPermission = async (type, skip) => {
+    const checkPermission = async (type, skip) => {
       if (skip === Platform.OS) {
         return true;
       }
@@ -118,9 +86,8 @@ export default Component => {
       return true;
     };
 
-    pickImage = async onSend => {
-      const { t } = this.props;
-      if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
+    const pickImage = async onSend => {
+      if (await checkPermission(Permissions.CAMERA_ROLL, 'android')) {
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(settings.chat.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);
@@ -131,36 +98,46 @@ export default Component => {
             const imageData = new ReactNativeFile({ uri, type, name });
             onSend({ attachment: imageData });
           } else {
-            this.setState({ notify: t('attachment.errorMsg') });
+            setNotify(t('attachment.errorMsg'));
           }
         }
       } else {
-        this.setState({ notify: t('permission.errorMsg') });
+        setNotify(t('permission.errorMsg'));
       }
     };
 
-    renderModal = () => {
-      const { notify } = this.state;
+    const renderModal = () => {
       if (notify) {
-        return <ModalNotify notify={notify} callback={() => this.setState({ notify: null })} />;
+        return <ModalNotify notify={notify} callback={() => setNotify(null)} />;
       }
     };
 
-    render() {
-      const { allowImages, edges } = this.state;
-      const { messages } = this.props;
-      const newProps = {
-        allowImages,
-        messages: edges.length ? { ...messages, edges } : messages,
-        pickImage: this.pickImage
-      };
+    const newProps = {
+      allowImages,
+      messages: edges.length ? { ...messages, edges } : messages,
+      pickImage
+    };
 
-      return (
-        <View style={{ flex: 1 }}>
-          <Component {...this.props} {...newProps} />
-          {this.renderModal()}
-        </View>
-      );
-    }
+    return (
+      <View style={{ flex: 1 }}>
+        {edges.length > 0 ? (
+          <>
+            <Component {...props} {...newProps} />
+            {renderModal()}
+          </>
+        ) : (
+          <Loading text="Loading..." />
+        )}
+      </View>
+    );
   };
+
+  WithImage.propTypes = {
+    messages: PropTypes.object,
+    t: PropTypes.func
+  };
+
+  return WithImage;
 };
+
+export default withImage;

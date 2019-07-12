@@ -10,7 +10,9 @@ const WebpackShellPlugin = require('webpack-shell-plugin');
 const buildConfig = require('./build.config');
 
 const modulenameExtra = process.env.MODULENAME_EXTRA ? `${process.env.MODULENAME_EXTRA}|` : '';
-const modulenameRegex = new RegExp(`(${modulenameExtra}@gqlapp|client|webpack/hot/poll|\\.css$)`);
+const modulenameRegex = new RegExp(
+  `(${modulenameExtra}@gqlapp|client|webpack/hot/poll)|(\\.(css|less|scss|png|ico|jpg|gif|xml|woff|woff2|otf|ttf|eot|svg)(\\?[0-9a-z]+)?$)`
+);
 
 const config = {
   entry: {
@@ -27,11 +29,11 @@ const config = {
         use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.woff(2)?(\?[0-9a-z]+)?$/,
         use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
       },
       {
-        test: /\.(otf|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(otf|ttf|eot|svg)(\?[0-9a-z]+)?$/,
         use: { loader: 'file-loader', options: { name: '[hash].[ext]' } }
       },
       {

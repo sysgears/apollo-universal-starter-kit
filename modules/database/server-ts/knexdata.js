@@ -1,43 +1,65 @@
-import * as tmp from 'tmp';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as glob from 'glob';
+import * as path from 'path';
 
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
-tmp.setGracefulCleanup();
-
-const migrationTmpDir = tmp.dirSync({ unsafeCleanup: true });
-const seedTmpDir = tmp.dirSync({ unsafeCleanup: true });
-const symlinkFiles = (dirList, symLinkDir) =>
-  dirList.forEach(dir => {
-    const files = fs.readdirSync(dir);
-    files.forEach(file => {
-      const target = path.resolve(path.join(dir, file));
-      const symlink = path.join(symLinkDir, file);
-      if (!fs.existsSync(symlink) && fs.statSync(target).isFile()) {
-        fs.symlinkSync(target, symlink);
-      }
-    });
-  });
+// This code gathers migrations and seeds from all modules into two fake directories
+// /module-migrations - contains all the migrations from all modules
+// /module-seeds - contains all the seeds from all modules
+// This hack is needed because knex do not support multiple dirs for migrations and seeds
+// at the moment. When knex will support multiple dirs for migrations and seeds this hack can be removed
+const fs = require('fs');
+const Module = require('module');
 
 const modulesDir = path.isAbsolute(__dirname) ? path.join(__dirname, '../..') : path.resolve('../../modules');
+const virtualDirs = {
+  [path.resolve('/module-migrations')]: glob.sync(path.join(modulesDir, '**/migrations')),
+  [path.resolve('/module-seeds')]: glob.sync(path.join(modulesDir, '**/seeds'))
+};
+const virtualFiles = {};
 
-// Find and symlink all application modules migrations and seeds into tmp dirs
-const migrationDirs = glob.sync(path.join(modulesDir, '**/migrations'));
-const seedDirs = glob.sync(path.join(modulesDir, '**/seeds'));
+const realResolve = Module._resolveFilename;
+Module._resolveFilename = function fakeResolve(request, parent) {
+  const normRequest = request.replace(/\\/g, '/');
+  if (virtualFiles[normRequest]) {
+    return virtualFiles[normRequest];
+  } else {
+    const result = realResolve(request, parent);
+    return result;
+  }
+};
 
-symlinkFiles(migrationDirs, migrationTmpDir.name);
-symlinkFiles(seedDirs, seedTmpDir.name);
+for (const virtualDir of Object.keys(virtualDirs)) {
+  const realDirs = virtualDirs[virtualDir];
+  for (const realDir of realDirs) {
+    const realFiles = fs.readdirSync(realDir);
+    for (const file of realFiles) {
+      virtualFiles[path.join(virtualDir, file).replace(/\\/g, '/')] = path.join(realDir, file);
+    }
+  }
+}
+
+const origReaddir = fs.readdir;
+fs.readdir = function() {
+  const path = arguments[0];
+  if (virtualDirs[path]) {
+    let files = [];
+    for (const dir of virtualDirs[path]) {
+      files = files.concat(fs.readdirSync(dir));
+    }
+    arguments[arguments.length == 2 ? 1 : 2](null, files);
+  }
+  origReaddir.apply(fs, arguments);
+};
 
 const envSettings = {
   [process.env.NODE_ENV || 'development']: {
     ...settings.db,
     seeds: {
-      directory: seedTmpDir.name
+      directory: '/module-seeds' // fake dir created virtually by tools/knex
     },
     migrations: {
-      directory: migrationTmpDir.name
+      directory: '/module-migrations' // fake dir created virtually by tools/knex
     },
     useNullAsDefault: true
   }

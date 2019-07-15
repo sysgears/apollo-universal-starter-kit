@@ -1,6 +1,8 @@
 import passport from 'passport';
 import FacebookStrategy from 'passport-facebook';
-import settings from '../../../../../settings';
+
+import settings from '@gqlapp/config';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, profileFields, enabled } = settings.auth.social.facebook;
@@ -23,7 +25,7 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ appContext }) => {
+const onAppCreate = async ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
       new FacebookStrategy(

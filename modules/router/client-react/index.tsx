@@ -8,5 +8,5 @@ const Router = () => <Switch>{ref.modules.routes}</Switch>;
 
 export default new ClientModule({
   router: <Router />,
-  onAppCreate: [(modules: ClientModule) => (ref.modules = modules)]
+  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)]
 });

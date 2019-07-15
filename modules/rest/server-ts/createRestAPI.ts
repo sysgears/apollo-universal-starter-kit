@@ -4,10 +4,9 @@ import bodyParser from 'body-parser';
 
 import ServerModule from '@gqlapp/module-server-ts';
 import sofa, { OpenAPI } from '@hofstadter-io/sofa-api';
+import settings from '@gqlapp/config';
 
 import swaggerUi from 'swagger-ui-express';
-
-import settings from '../../../settings';
 
 const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModule) => {
   // need to enable explicitly

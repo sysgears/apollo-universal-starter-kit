@@ -1,8 +1,9 @@
 import { ApolloLink, Observable } from 'apollo-link';
+
 import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
+import settings from '@gqlapp/config';
 
 import AccessModule from '../AccessModule';
-import settings from '../../../../../settings';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 
@@ -127,9 +128,9 @@ const JWTLink = getApolloClient =>
     });
   });
 
-export default (settings.auth.jwt.enabled
+export default settings.auth.jwt.enabled
   ? new AccessModule({
       createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
       logout: [removeTokens]
     })
-  : undefined);
+  : undefined;

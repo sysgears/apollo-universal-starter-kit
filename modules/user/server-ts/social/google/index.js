@@ -1,9 +1,11 @@
 import { pick } from 'lodash';
+
 import { AuthModule } from '@gqlapp/authentication-server-ts';
+import settings from '@gqlapp/config';
+
 import { onAuthenticationSuccess } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
-import settings from '../../../../../settings';
 
 const registerUser = async ({ id, emails: [{ value }] }) => {
   return User.register({
@@ -57,6 +59,6 @@ export const googleData = {
   }
 };
 
-export default (settings.auth.social.google.enabled && !__TEST__
+export default settings.auth.social.google.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

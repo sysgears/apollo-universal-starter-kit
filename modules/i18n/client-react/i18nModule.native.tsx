@@ -1,12 +1,13 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
+
 import ClientModule from '@gqlapp/module-client-react-native';
 import commonI18n from '@gqlapp/i18n-common-react';
-
 import { LanguagePicker, Root } from '@gqlapp/look-client-react-native';
+import settings from '@gqlapp/config';
+
 import resources from './locales';
-import settings from '../../../settings';
 
 const I18nProvider = ({ i18n, children }: any) => {
   return (
@@ -33,10 +34,10 @@ const langPicker =
       })
     : undefined;
 
-export default (settings.i18n.enabled
+export default settings.i18n.enabled
   ? new ClientModule(commonI18n, langPicker, {
       localization: [{ ns: 'i18n', resources }],
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [() => <I18nProvider i18n={i18next} />]
     })
-  : undefined);
+  : undefined;

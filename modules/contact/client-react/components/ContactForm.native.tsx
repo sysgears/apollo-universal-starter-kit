@@ -8,15 +8,7 @@ import { validate } from '@gqlapp/validation-common-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
-import {
-  RenderField,
-  FormView,
-  Button,
-  Modal,
-  danger,
-  success
-} from '../../../../packages/client/src/modules/common/components/native';
-import { placeholderColor, submit } from '../../../../packages/client/src/modules/common/components/native/styles';
+import { RenderField, FormView, Button, Modal, danger, success, lookStyles } from '@gqlapp/look-client-react-native';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {
@@ -24,7 +16,7 @@ interface ContactFormProps {
   onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
 }
 
-const ContactForm = ({
+const ContactFormComponent = ({
   values,
   handleSubmit,
   t,
@@ -49,7 +41,7 @@ const ContactForm = ({
           type="text"
           placeholder={t('form.field.name')}
           value={values.name}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="email"
@@ -58,7 +50,7 @@ const ContactForm = ({
           placeholder={t('form.field.email')}
           value={values.email}
           keyboardType="email-address"
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
         <Field
           name="content"
@@ -66,10 +58,10 @@ const ContactForm = ({
           type="textarea"
           placeholder={t('form.field.content')}
           value={values.content}
-          placeholderTextColor={placeholderColor}
+          placeholderTextColor={lookStyles.placeholderColor}
         />
       </View>
-      <View style={styles.submit}>
+      <View style={lookStyles.submit}>
         <Button onPress={handleSubmit}>{t('form.btnSubmit')}</Button>
       </View>
     </View>
@@ -97,7 +89,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignSelf: 'stretch'
   },
-  submit
+  submit: lookStyles.submit
 });
 
 const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
@@ -121,4 +113,4 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default ContactFormWithFormik(ContactFormComponent);

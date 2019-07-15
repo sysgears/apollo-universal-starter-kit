@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
-import { Button } from '@gqlapp/look-client-react';
+import { Button } from '@gqlapp/look-client-react-native';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface CancelSubscriptionViewProps {

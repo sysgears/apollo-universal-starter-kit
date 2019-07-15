@@ -3,7 +3,7 @@ import ErrorStackParser from 'error-stack-parser';
 import { StackFrame } from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
 
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
 const format = (fmt: string, ...args: any[]) =>
   fmt.replace(/{(\d+)}/g, (match: any, index: number) => (typeof args[index] !== 'undefined' ? args[index] : match));
@@ -23,7 +23,7 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
   }
 
   public componentDidMount() {
-    if (!this.state.mapped) {
+    if (!this.state.mapped && !__TEST__) {
       mapStackTrace(this.props.error.stack, (mappedStack: string[]) => {
         const processStack = __DEV__
           ? fetch('/servdir')

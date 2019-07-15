@@ -1,6 +1,7 @@
 import React from 'react';
 import uuid from 'uuid';
-import { getItem, setItem } from '../../../../packages/client/src/modules/common/clientStorage';
+
+import { clientStorage } from '@gqlapp/core-common';
 
 export default Component => {
   return class WithUuid extends React.Component {
@@ -9,9 +10,9 @@ export default Component => {
     };
 
     componentDidMount() {
-      getItem('uuid').then(res => {
+      clientStorage.getItem('uuid').then(res => {
         this.setState({ uuid: res || uuid.v4() });
-        if (!res) setItem('uuid', this.state.uuid);
+        if (!res) clientStorage.setItem('uuid', this.state.uuid);
       });
     }
 

@@ -2,10 +2,12 @@ import bcrypt from 'bcryptjs';
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import { UserInputError } from 'apollo-server-errors';
+
 import { access } from '@gqlapp/authentication-server-ts';
 import { log } from '@gqlapp/core-common';
+import settings from '@gqlapp/config';
+
 import User from '../sql';
-import settings from '../../../../settings';
 
 const createPasswordHash = password => bcrypt.hash(password, 12) || false;
 
@@ -36,12 +38,9 @@ export default () => ({
       { req }
     ) {
       const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
-
       const errors = await validateUserPassword(user, password, req.t);
       if (!isEmpty(errors)) throw new UserInputError('Failed valid user password', { errors });
-
       const tokens = await access.grantAccess(user, req, user.passwordHash);
-
       return { user, tokens };
     },
     async register(obj, { input }, { mailer, User, req }) {
@@ -51,28 +50,22 @@ export default () => ({
       if (userExists) {
         errors.username = t('user:auth.password.usernameIsExisted');
       }
-
       const emailExists = await User.getUserByEmail(input.email);
       if (emailExists) {
         errors.email = t('user:auth.password.emailIsExisted');
       }
-
       if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
-
       let userId = 0;
       if (!emailExists) {
         const passwordHash = await createPasswordHash(input.password);
         const isActive = !settings.auth.password.requireEmailConfirmation;
         [userId] = await User.register({ ...input, isActive }, passwordHash);
-
         // if user has previously logged with facebook auth
       } else {
         await User.updatePassword(emailExists.userId, input.password);
         userId = emailExists.userId;
       }
-
       const user = await User.getUser(userId);
-
       if (mailer && settings.auth.password.requireEmailConfirmation && !emailExists) {
         // async email
         jwt.sign({ identity: pick(user, 'id') }, settings.auth.secret, { expiresIn: '1d' }, (err, emailToken) => {
@@ -91,14 +84,12 @@ export default () => ({
           log.info(`Sent registration confirmation email to: ${user.email}`);
         });
       }
-
       return { user };
     },
     async forgotPassword(obj, { input }, { User, mailer }) {
       try {
         const localAuth = pick(input, 'email');
         const user = await User.getUserByEmail(localAuth.email);
-
         if (user && mailer) {
           // async email
           jwt.sign(
@@ -133,18 +124,14 @@ export default () => ({
       }
     ) {
       const errors = {};
-
       const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
       if (reset.password !== reset.passwordConfirmation) {
         errors.password = t('user:auth.password.passwordsIsNotMatch');
       }
-
       if (reset.password.length < settings.auth.password.minLength) {
         errors.password = t('user:auth.password.passwordLength', { length: settings.auth.password.minLength });
       }
-
       if (!isEmpty(errors)) throw new UserInputError('Failed reset password', { errors });
-
       const token = Buffer.from(reset.token, 'base64').toString();
       const { email, password } = jwt.verify(token, settings.auth.secret);
       const user = await User.getUserByEmail(email);
@@ -154,7 +141,6 @@ export default () => ({
       if (user) {
         await User.updatePassword(user.id, reset.password);
         const url = `${__WEBSITE_URL__}/profile`;
-
         if (mailer && settings.auth.password.sendPasswordChangesEmail) {
           mailer.sendMail({
             from: `${settings.app.name} <${process.env.EMAIL_USER}>`,

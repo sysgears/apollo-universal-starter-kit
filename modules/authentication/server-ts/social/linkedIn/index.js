@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { Strategy as LinkedInStrategy } from 'passport-linkedin-oauth2';
-import settings from '../../../../../settings';
+
+import settings from '@gqlapp/config';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.linkedin;
@@ -23,7 +25,7 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ appContext }) => {
+const onAppCreate = async ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(
       new LinkedInStrategy({ clientID, clientSecret, callbackURL, scope }, appContext.social.linkedin.verifyCallback)

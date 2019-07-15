@@ -5,12 +5,15 @@
     "icon": "../../app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
-    "sdkVersion": "32.0.0",
+    "sdkVersion": "33.0.0",
     "ios": {
       "bundleIdentifier": "com.sysgears.apollokit"
     },
     "android": {
       "package": "com.sysgears.apollokit"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js"
     }
   }
 }

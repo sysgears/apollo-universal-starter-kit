@@ -1,7 +1,8 @@
 import React from 'react';
 
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+
 import $Module$View from '../components/$Module$View';
-import translate, { TranslateFunction } from '../../../i18n';
 
 interface $Module$Props {
   t: TranslateFunction;

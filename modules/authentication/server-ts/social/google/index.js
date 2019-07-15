@@ -1,6 +1,8 @@
 import passport from 'passport';
 import { OAuth2Strategy as GoogleStrategy } from 'passport-google-oauth';
-import settings from '../../../../../settings';
+
+import settings from '@gqlapp/config';
+
 import AuthModule from '../AuthModule';
 
 const { clientID, clientSecret, scope, callbackURL, enabled } = settings.auth.social.google;
@@ -23,7 +25,7 @@ const middleware = (app, { social }) => {
   );
 };
 
-const onAppCreate = ({ appContext }) => {
+const onAppCreate = async ({ appContext }) => {
   if (enabled && !__TEST__) {
     passport.use(new GoogleStrategy({ clientID, clientSecret, callbackURL }, appContext.social.google.verifyCallback));
   }

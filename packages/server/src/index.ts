@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import modules from './modules';
 
-modules.createApp(module);
+(async () => {
+  await modules.createApp(module);
+})();
 
 export default modules;

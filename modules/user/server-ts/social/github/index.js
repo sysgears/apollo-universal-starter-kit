@@ -1,10 +1,11 @@
 import { pick } from 'lodash';
+
 import { AuthModule } from '@gqlapp/authentication-server-ts';
+import settings from '@gqlapp/config';
+
 import { onAuthenticationSuccess, registerUser } from '../shared';
 import User from '../../sql';
-
 import resolvers from './resolvers';
-import settings from '../../../../../settings';
 
 const createGithubAuth = async user => User.createGithubAuth(user);
 
@@ -39,6 +40,6 @@ export const githubData = {
   }
 };
 
-export default (settings.auth.social.github.enabled && !__TEST__
+export default settings.auth.social.github.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

@@ -4,7 +4,11 @@ import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'rea
 import { WebBrowser } from 'expo';
 import { withApollo } from 'react-apollo';
 import { FontAwesome } from '@expo/vector-icons';
-import {
+import { lookStyles } from '@gqlapp/look-client-react-native';
+
+import buildRedirectUrlForMobile from '../../../helpers';
+
+const {
   iconWrapper,
   linkText,
   link,
@@ -13,9 +17,7 @@ import {
   btnIconContainer,
   btnTextContainer,
   btnText
-} from '@gqlapp/look-client-react-native/styles';
-
-import buildRedirectUrlForMobile from '../../../helpers';
+} = lookStyles;
 
 const googleLogin = () => {
   const url = buildRedirectUrlForMobile('google');

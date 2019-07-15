@@ -1,21 +1,21 @@
 import { createStore, combineReducers, applyMiddleware, Store, Reducer, DeepPartial, Middleware } from 'redux';
-import { routerReducer } from 'react-router-redux';
+import { connectRouter } from 'connected-react-router';
 import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 
-export const getStoreReducer = (reducers: any) =>
+export const getStoreReducer = (history: any, reducers: any) =>
   combineReducers({
-    router: routerReducer,
+    router: connectRouter(history),
     ...reducers
   });
 
 const createReduxStore = (
   reducers: Reducer,
   initialState: DeepPartial<any>,
-  client?: any,
+  history: any,
   routerMiddleware?: Middleware
 ): Store => {
   return createStore(
-    getStoreReducer(reducers),
+    getStoreReducer(history, reducers),
     initialState, // initial state
     routerMiddleware ? composeWithDevTools(applyMiddleware(routerMiddleware)) : undefined
   );

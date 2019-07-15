@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { compose, graphql } from 'react-apollo';
 import { pick } from 'lodash';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
+import settings from '@gqlapp/config';
+
 import UserEditView from '../components/UserEditView';
+import UserFormatter from '../helpers/UserFormatter';
 
 import USER_QUERY from '../graphql/UserQuery.graphql';
 import EDIT_USER from '../graphql/EditUser.graphql';
-import settings from '../../../../settings';
-import UserFormatter from '../helpers/UserFormatter';
 
 const UserEdit = props => {
   const { user, editUser, t, history, navigation } = props;

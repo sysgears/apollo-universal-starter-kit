@@ -3,7 +3,8 @@ import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigat
 
 import ClientModule from '@gqlapp/module-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
-import { HeaderTitle, IconButton } from '../../../packages/client/src/modules/common/components/native';
+import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
+
 import Chat from './containers/ChatOperations';
 import resources from './locales';
 
@@ -20,7 +21,8 @@ export default new ClientModule({
               headerTitle: <HeaderTitleWithI18n style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              )
+              ),
+              headerForceInset: {}
             })
           }
         }),

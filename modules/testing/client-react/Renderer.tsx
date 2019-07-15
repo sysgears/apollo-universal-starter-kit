@@ -3,7 +3,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloLink, Observable, Operation } from 'apollo-link';
 import { addTypenameToDocument } from 'apollo-utilities';
 import { Router, Switch } from 'react-router-dom';
-import createHistory, { MemoryHistory } from 'history/createMemoryHistory';
+import { createMemoryHistory, MemoryHistory } from 'history';
 import { JSDOM } from 'jsdom';
 import { makeExecutableSchema, addMockFunctionsToSchema } from 'graphql-tools';
 import { combineReducers, createStore, Store } from 'redux';
@@ -14,19 +14,20 @@ import { ApolloClient } from 'apollo-client';
 import { createApolloClient } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
 
-const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
-(global as any).document = dom.window.document;
-(global as any).window = dom.window;
-// Needed by Formik >= 1.x
-(global as any).HTMLButtonElement = dom.window.HTMLButtonElement;
-(global as any).navigator = dom.window.navigator;
+if (!process.env.JEST_WORKER_ID) {
+  const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
+  (global as any).document = dom.window.document;
+  (global as any).window = dom.window;
+  // Needed by Formik >= 1.x
+  (global as any).HTMLButtonElement = dom.window.HTMLButtonElement;
+  (global as any).navigator = dom.window.navigator;
+  process.on('uncaughtException', ex => {
+    console.error('Uncaught error', ex.stack);
+  });
+}
 
 // tslint:disable-next-line
 const { render } = require('./testUtils');
-
-process.on('uncaughtException', ex => {
-  console.error('Uncaught error', ex.stack);
-});
 
 const ref: { clientModules: ClientModule; typeDefs: DocumentNode[] } = { clientModules: null, typeDefs: null };
 
@@ -166,7 +167,7 @@ export class Renderer {
       reduxState || {}
     );
 
-    const history = createHistory();
+    const history = createMemoryHistory();
 
     this.client = client;
     this.store = store;

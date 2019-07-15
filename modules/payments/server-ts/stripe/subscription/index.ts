@@ -1,10 +1,10 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 import stripeLocal from 'stripe-local';
+
 import ServerModule from '@gqlapp/module-server-ts';
 import { log } from '@gqlapp/core-common';
-
-import settings from '../../../../../settings';
+import settings from '@gqlapp/config';
 
 import StripeSubscriptionDAO from './sql';
 import schema from './schema.graphql';
@@ -39,7 +39,7 @@ const middleware = (app: Express) => {
   app.post(webhookUrl, webhookMiddleware);
 };
 
-export default (enabled
+export default enabled
   ? new ServerModule({
       schema: [schema],
       createResolversFunc: [createResolvers],
@@ -48,4 +48,4 @@ export default (enabled
       middleware: [middleware],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

@@ -1,16 +1,17 @@
 import React, { Fragment } from 'react';
 import { Mutation } from 'react-apollo';
+import { isApolloError } from 'apollo-client';
 import { StripeProvider } from 'react-stripe-elements';
+
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { PLATFORM } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
-import { isApolloError } from 'apollo-client';
-import UpdateCreditCardView from '../components/UpdateCreditCardView';
+import settings from '@gqlapp/config';
 
 import UPDATE_CREDIT_CARD from '../graphql/UpdateCreditCard.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
-import settings from '../../../../../../settings';
+import UpdateCreditCardView from '../components/UpdateCreditCardView';
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';
 

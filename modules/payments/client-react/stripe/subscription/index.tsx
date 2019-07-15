@@ -1,18 +1,17 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import loadable from '@loadable/component';
+
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
+import settings from '@gqlapp/config';
 
-import settings from '../../../../../settings';
-
-import SubscriptionAuthRouter from './containers/Auth';
 import resources from './locales';
-import AddSubscription from './containers/AddSubscription';
-import SubscriberPage from './containers/SubscriberPage';
-import UpdateCreditCard from './containers/UpdateCreditCard';
 
 const { AuthRoute, IfLoggedIn } = require('@gqlapp/user-client-react');
+
+const SubscriptionAuthRouter = loadable(() => import('./containers/Auth').then(c => c.default));
 
 const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/subscriber-page" className="nav-link" activeClassName="active">
@@ -20,21 +19,36 @@ const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFu
   </NavLink>
 ));
 
-export default (settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
+export default settings.stripe.subscription.enabled && settings.stripe.subscription.publicKey
   ? new ClientModule({
       route: [
-        <AuthRoute exact role="user" path="/add-subscription" component={AddSubscription} />,
+        <AuthRoute
+          exact
+          role="user"
+          path="/add-subscription"
+          component={loadable(() => import('./containers/AddSubscription').then(c => c.default))}
+        />,
         <AuthRoute
           exact
           role="user"
           path="/subscriber-page"
-          component={(props: any) => <SubscriptionAuthRouter {...props} component={SubscriberPage} />}
+          component={(props: any) => (
+            <SubscriptionAuthRouter
+              {...props}
+              component={loadable(() => import('./containers/SubscriberPage').then(c => c.default))}
+            />
+          )}
         />,
         <AuthRoute
           exact
           role="user"
           path="/update-credit-card"
-          component={(props: any) => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />}
+          component={(props: any) => (
+            <SubscriptionAuthRouter
+              {...props}
+              component={loadable(() => import('./containers/UpdateCreditCard').then(c => c.default))}
+            />
+          )}
         />
       ],
       navItem: [
@@ -44,7 +58,6 @@ export default (settings.stripe.subscription.enabled && settings.stripe.subscrip
           </MenuItem>
         </IfLoggedIn>
       ],
-      scriptsInsert: ['https://js.stripe.com/v3/'],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

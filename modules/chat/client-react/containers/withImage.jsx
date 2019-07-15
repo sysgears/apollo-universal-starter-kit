@@ -1,21 +1,21 @@
 import React from 'react';
-import { Constants, FileSystem, ImagePicker, Permissions } from 'expo';
+import Constants from 'expo-constants';
+import * as FileSystem from 'expo-file-system';
+import { ImagePicker, Permissions } from 'expo';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
 import PropTypes from 'prop-types';
 import { View, Platform } from 'react-native';
 
-import chatConfig from '../../../../config/chat';
+import settings from '@gqlapp/config';
+
 import ModalNotify from '../components/ModalNotify';
 
-const {
-  manifest: { bundleUrl }
-} = Constants;
 const { protocol, port, hostname } = url.parse(__API_URL__);
-const serverUrl = `${protocol}//${hostname === 'localhost' ? url.parse(bundleUrl).hostname : hostname}${
-  port ? ':' + port : ''
-}`;
+const serverUrl = `${protocol}//${
+  hostname === 'localhost' ? url.parse(Constants.manifest.bundleUrl).hostname : hostname
+}${port ? ':' + port : ''}`;
 
 const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
 
@@ -29,7 +29,7 @@ export default Component => {
     state = {
       edges: [],
       endCursor: 0,
-      allowImages: chatConfig.allowImages,
+      allowImages: settings.chat.allowImages,
       notify: null
     };
 
@@ -121,11 +121,11 @@ export default Component => {
     pickImage = async ({ onSend }) => {
       const { t } = this.props;
       if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
-        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(chatConfig.image.imagePicker);
+        const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(settings.chat.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);
           const reg = /[^\\/]*\.\w+$/;
-          if (size <= chatConfig.image.maxSize && reg.test(uri)) {
+          if (size <= settings.chat.image.maxSize && reg.test(uri)) {
             const type = mime.lookup(uri);
             const name = uri.match(reg)[0];
             const imageData = new ReactNativeFile({ uri, type, name });

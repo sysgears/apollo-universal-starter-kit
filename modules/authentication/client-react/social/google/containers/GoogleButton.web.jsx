@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withApollo } from 'react-apollo';
-import faGooglePlusSquare from '@fortawesome/fontawesome-free-brands/faGooglePlusSquare';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { faGooglePlusSquare } from '@fortawesome/free-brands-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@gqlapp/look-client-react';
 import './GoogleButton.css';
 

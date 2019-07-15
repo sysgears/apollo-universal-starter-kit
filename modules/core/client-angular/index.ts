@@ -8,18 +8,13 @@ import { HttpLinkModule } from 'apollo-angular-link-http';
 import { RouterModule } from '@angular/router';
 import { take } from 'rxjs/operators';
 import { StoreModule, Store } from '@ngrx/store';
-import { apiUrl } from '@gqlapp/core-common';
+
+import { apiUrl, createApolloClient, log } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-angular';
 
-// Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
-// tslint:disable-next-line
-import 'backend_reload';
-
-import createApolloClient from '../../../packages/common/createApolloClient';
 import { MainComponent, metaReducers } from './Main';
-import log from '../../../packages/common/log';
 
-const createApp = (modules: ClientModule) => {
+const createApp = async (modules: ClientModule) => {
   const client = createApolloClient({
     apiUrl,
     createNetLink: modules.createNetLink,
@@ -93,13 +88,6 @@ const createApp = (modules: ClientModule) => {
   // boot on document ready
   bootloader(main);
 };
-
-if (__DEV__ && module.hot) {
-  module.hot.accept('backend_reload', () => {
-    log.debug('Reloading front-end');
-    window.location.reload();
-  });
-}
 
 export default new ClientModule({
   onAppCreate: [createApp]

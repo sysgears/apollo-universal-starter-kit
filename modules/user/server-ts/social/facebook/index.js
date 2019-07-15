@@ -1,9 +1,11 @@
 import { pick } from 'lodash';
+
 import { AuthModule } from '@gqlapp/authentication-server-ts';
+import settings from '@gqlapp/config';
+
 import { onAuthenticationSuccess, registerUser } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
-import settings from '../../../../../settings';
 
 const createFacebookAuth = async user => User.createFacebookAuth(user);
 
@@ -38,6 +40,6 @@ export const facebookData = {
   }
 };
 
-export default (settings.auth.social.facebook.enabled && !__TEST__
+export default settings.auth.social.facebook.enabled && !__TEST__
   ? new AuthModule({ createResolversFunc: [resolvers] })
-  : undefined);
+  : undefined;

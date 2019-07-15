@@ -1,15 +1,16 @@
-import * as Expo from 'expo';
+import * as Localization from 'expo-localization';
+import * as SecureStore from 'expo-secure-store';
 
 const LanguageDetector = {
   type: 'languageDetector',
   async: true, // flags below detection to be async
   detect: async (callback: (lang: string) => string) => {
-    const lng = await Expo.SecureStore.getItemAsync('i18nextLng');
-    return callback(lng || (await (Expo as any).Localization.getLocalizationAsync()).locale.replace('_', '-'));
+    const lng = await SecureStore.getItemAsync('i18nextLng');
+    return callback(lng || (await Localization.getLocalizationAsync()).locale.replace('_', '-'));
   },
   init: () => {},
   cacheUserLanguage: async (lng: string) => {
-    Expo.SecureStore.setItemAsync('i18nextLng', lng);
+    SecureStore.setItemAsync('i18nextLng', lng);
   }
 };
 

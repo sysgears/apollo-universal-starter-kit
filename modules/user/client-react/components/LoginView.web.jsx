@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 
 import { LayoutCenter, PageLayout, Card, CardGroup, CardTitle, CardText, Button } from '@gqlapp/look-client-react';
+import settings from '@gqlapp/config';
 
 import LoginForm from './LoginForm';
-import settings from '../../../../settings';
 
 const LoginView = ({ onSubmit, t, isRegistered, hideModal }) => {
   const renderMetaData = () => (

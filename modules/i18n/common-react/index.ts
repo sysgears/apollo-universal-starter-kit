@@ -1,6 +1,8 @@
 import i18next, { i18n as I18N, Resource } from 'i18next';
+
 import CommonModule from '@gqlapp/module-common';
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
+
 import './init';
 
 /**
@@ -22,6 +24,6 @@ const addResourcesI18n = (i18n: I18N, resources: Array<{ ns: string; resources: 
 
 export default (settings.i18n.enabled &&
   new CommonModule({
-    onAppCreate: [(modules: CommonModule) => addResourcesI18n(i18next, modules.localizations)]
+    onAppCreate: [async (modules: CommonModule) => addResourcesI18n(i18next, modules.localizations)]
   })) ||
   undefined;

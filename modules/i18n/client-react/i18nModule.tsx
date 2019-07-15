@@ -1,24 +1,26 @@
 import React from 'react';
 import { default as i18next } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
+
 import ClientModule from '@gqlapp/module-client-react';
 import commonI18n from '@gqlapp/i18n-common-react';
-
 import { MenuItem, LanguagePicker } from '@gqlapp/look-client-react';
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
 const I18nProvider = ({ i18n, children }: any) => {
   return <I18nextProvider i18n={i18n}>{children}</I18nextProvider>;
 };
 
+const LangPickerNav = () => (
+  <MenuItem key="languagePicker" className="menu-center">
+    <LanguagePicker i18n={i18next} />
+  </MenuItem>
+);
+
 const langPicker =
   settings.i18n.enabled && settings.i18n.langPickerRender
     ? new ClientModule({
-        navItemRight: [
-          <MenuItem key="languagePicker" className="menu-center">
-            <LanguagePicker i18n={i18next} />
-          </MenuItem>
-        ]
+        navItemRight: [<LangPickerNav />]
       })
     : undefined;
 
@@ -41,10 +43,10 @@ class RootComponent extends React.Component<Props> {
   }
 }
 
-export default (settings.i18n.enabled
+export default settings.i18n.enabled
   ? new ClientModule(commonI18n, langPicker, {
       appContext: { i18n: true },
       // eslint-disable-next-line react/display-name
       rootComponentFactory: [req => <RootComponent req={req} />]
     })
-  : undefined);
+  : undefined;

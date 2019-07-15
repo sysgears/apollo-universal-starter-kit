@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withFormik } from 'formik';
 import { isEmpty } from 'lodash';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
 import { Form, RenderField, RenderSelect, RenderCheckBox, Option, Button, Alert } from '@gqlapp/look-client-react';
-
-import settings from '../../../../settings';
+import settings from '@gqlapp/config';
 
 const userFormSchema = {
   username: [required, minLength(3)],

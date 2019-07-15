@@ -1,5 +1,7 @@
 import { isEmpty } from 'lodash';
-import settings from '../../../../../../settings';
+
+import settings from '@gqlapp/config';
+
 import { CreditCardInput } from '../types';
 
 /**

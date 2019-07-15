@@ -4,7 +4,7 @@ import { Text, Platform, View } from 'react-native';
 import { ActionSheet } from 'native-base';
 import SimplePicker from 'react-native-simple-picker';
 
-import { HeaderTitle } from '../..';
+import HeaderTitle from '../../HeaderTitle';
 
 export default class LanguagePicker extends React.Component {
   constructor(props) {
@@ -49,6 +49,8 @@ export default class LanguagePicker extends React.Component {
           </Text>
           {Platform.OS === 'ios' && (
             <SimplePicker
+              confirmText={i18n.t('i18n:btnConfirm')}
+              cancelText={i18n.t('i18n:btnCancel')}
               ref={el => (this.pickerRef = el)}
               options={langs.map(lang => lang.slice(0, 2).toUpperCase())}
               onSubmit={lang => this.changeLang(langs.filter(lng => lng.indexOf(lang) > -1)[0] || lang)}

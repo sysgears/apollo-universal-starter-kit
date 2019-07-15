@@ -3,19 +3,19 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { Store } from 'redux';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
-import { ConnectedRouter, routerMiddleware } from 'react-router-redux';
+import { createBrowserHistory } from 'history';
+import { ConnectedRouter, routerMiddleware } from 'connected-react-router';
 import ReactGA from 'react-ga';
-import { apiUrl } from '@gqlapp/core-common';
+
+import { apiUrl, createApolloClient, createReduxStore, getStoreReducer, log } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
+import settings from '@gqlapp/config';
 
 import RedBox from './RedBox';
-import createApolloClient from '../../../packages/common/createApolloClient';
-import createReduxStore, { getStoreReducer } from '../../../packages/common/createReduxStore';
-import log from '../../../packages/common/log';
-import settings from '../../../settings';
 
-log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+if (!__TEST__ || settings.app.logging.level === 'debug') {
+  log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+}
 
 const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = {
   modules: null,
@@ -23,7 +23,9 @@ const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = 
   store: null
 };
 
-export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+const history = createBrowserHistory();
+
+export const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   ref.modules = modules;
   ref.client = createApolloClient({
     apiUrl,
@@ -34,21 +36,22 @@ export const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
   });
   if (entryModule.hot && entryModule.hot.data && entryModule.hot.data.store) {
     ref.store = entryModule.hot.data.store;
-    ref.store.replaceReducer(getStoreReducer(ref.modules.reducers));
+    ref.store.replaceReducer(getStoreReducer(history, ref.modules.reducers));
   } else {
-    ref.store = createReduxStore(ref.modules.reducers, {}, ref.client, routerMiddleware(history));
+    ref.store = createReduxStore(ref.modules.reducers, {}, history, routerMiddleware(history));
   }
 };
 
-const history = createHistory();
 const logPageView = (location: any) => {
   ReactGA.set({ page: location.pathname });
   ReactGA.pageview(location.pathname);
 };
 
-// Initialize Google Analytics and send events on each location change
-ReactGA.initialize(settings.analytics.ga.trackingId);
-logPageView(window.location);
+if (!__TEST__) {
+  // Initialize Google Analytics and send events on each location change
+  ReactGA.initialize(settings.analytics.ga.trackingId);
+  logPageView(window.location);
+}
 
 history.listen(location => logPageView(location));
 

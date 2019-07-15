@@ -8,7 +8,6 @@ import authentication from '@gqlapp/authentication-client-react';
 
 import LoginView from '../components/LoginView';
 
-import CURRENT_USER_QUERY from '../graphql/CurrentUserQuery.graphql';
 import LOGIN from '../graphql/Login.graphql';
 
 const Login = props => {
@@ -25,7 +24,7 @@ const Login = props => {
       setIsRegistered(true);
     }
     setIsReady(true);
-  }, []);
+  }, [search]);
 
   const hideModal = () => {
     setIsRegistered(false);
@@ -40,7 +39,6 @@ const Login = props => {
     }
 
     await authentication.doLogin(client);
-    await client.writeQuery({ query: CURRENT_USER_QUERY, data: { currentUser: login.user } });
     history.push('/profile');
   };
 

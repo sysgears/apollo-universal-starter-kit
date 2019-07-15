@@ -1,9 +1,12 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { Layout } from 'antd';
 
+import settings from '@gqlapp/config';
+
 import NavBar from './NavBar';
-import settings from '../../../../../settings';
+import styles from '../styles/styles.less';
 
 const { Header, Content, Footer } = Layout;
 
@@ -17,6 +20,11 @@ class PageLayout extends React.Component {
           <Header className="no-print">
             <NavBar />
           </Header>
+        )}
+        {__SERVER__ && __DEV__ && (
+          <Helmet>
+            <style type="text/css">{styles._getCss()}</style>
+          </Helmet>
         )}
         <Content id="content" style={{ background: '#fff', padding: 24 }}>
           {children}

@@ -8,7 +8,9 @@ import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 
 const CreditCardInfo = ({ t }: { t: TranslateFunction }) => (
   <Query query={CREDIT_CARD_QUERY} fetchPolicy="network-only">
-    {({ loading, data }) => <CreditCardInfoView loading={loading} t={t} creditCard={data.stripeSubscriptionCard} />}
+    {({ loading, data }: any) => (
+      <CreditCardInfoView loading={loading} t={t} creditCard={data.stripeSubscriptionCard} />
+    )}
   </Query>
 );
 

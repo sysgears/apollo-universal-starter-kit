@@ -11748,10 +11748,10 @@ graphql-anywhere@^4.1.0-alpha.0:
     ts-invariant "^0.3.2"
     tslib "^1.9.3"
 
-graphql-auth@0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.3.tgz#1e3e2aa3022da093465af7febe3fd534c0b4d55b"
-  integrity sha512-HHHwehYLJbaiQd0Uon2nhklI/ha4SP9VfUGRZc4mU78l3Sr1ty0skeYa5SPyiToXMf9c5NmxuQ6e9Z7hkmvcTA==
+graphql-auth@0.2.6:
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/graphql-auth/-/graphql-auth-0.2.6.tgz#993948468719b8cc5d8854a5eb3f3c021b3a2595"
+  integrity sha512-o1LnZNMhUdULM7p0oNHO7LCLtOHBUU2lvaGSILb0Ap0/ofYO6Z6yCtciWAaruxjF/SFF96HmFrx3VT9DzEQiDw==
 
 graphql-extensions@0.7.4:
   version "0.7.4"
@@ -20087,7 +20087,6 @@ react-native-webview@5.8.1:
 
 "react-native@https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz":
   version "0.59.8"
-  uid "970a32631977dbe7158f024abc23e4c0c0975058"
   resolved "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz#970a32631977dbe7158f024abc23e4c0c0975058"
   dependencies:
     "@babel/runtime" "^7.0.0"

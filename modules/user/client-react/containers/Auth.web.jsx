@@ -11,7 +11,7 @@ const AuthRoute = withLoadedUser(
       if (redirectOnLoggedIn) {
         return currentUser ? <Redirect to={{ pathname: redirect }} /> : <Component {...props} {...rest} />;
       }
-      
+
       // redirect users unlogged or without sufficient permissions
       return isRoleMatch(role, currentUser) ? (
         <Component currentUser={currentUser} {...props} {...rest} />

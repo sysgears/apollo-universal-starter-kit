@@ -353,7 +353,7 @@ class ListView extends React.Component {
           </Col>
           {showBatchFields && [
             <Col span={2} key="batchDelete" style={{ paddingTop: '3px' }}>
-              <Popconfirm title="Sure to delete?" onConfirm={this.handleDeleteMany} target={'batch-delete-button'}>
+              <Popconfirm title="Sure to delete?" onConfirm={this.handleDeleteMany}>
                 <Button color="primary" disabled={!hasSelected} loading={loading && !data}>
                   Delete
                 </Button>

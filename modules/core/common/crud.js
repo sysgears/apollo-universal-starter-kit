@@ -76,9 +76,9 @@ export const pickInputFields = ({ schema, values, data = null, formType = 'form'
             }
           } else if (hasTypeOf(Boolean)) {
             if (values[key] === 'true') {
-              inputValues[key] = true;
+              inputValues[key] = 'true';
             } else if (values[key] === 'false') {
-              inputValues[key] = false;
+              inputValues[key] = 'false';
             } else {
               inputValues[key] = '';
             }
@@ -233,9 +233,9 @@ export const mergeFilter = (filter, defaults, schema) => {
     const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
     if (hasTypeOf(Boolean)) {
       if (mergeFilter[key] === 'true') {
-        mergeFilter[key] = true;
+        mergeFilter[key] = 'true';
       } else if (filter[key] === 'false') {
-        mergeFilter[key] = false;
+        mergeFilter[key] = 'false';
       }
     }
   }

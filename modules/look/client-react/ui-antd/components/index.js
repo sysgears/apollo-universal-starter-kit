@@ -41,4 +41,6 @@ export { default as DatePicker } from './DatePicker';
 export { default as RenderCellSelectQuery } from './RenderCellSelectQuery';
 export { default as Collapse } from './Collapse';
 export { default as Panel } from './Panel';
+export { default as Progress } from './Progress';
+export { default as Tooltip } from './Tooltip';
 export { onAppCreate } from './PageLayout';

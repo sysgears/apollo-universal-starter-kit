@@ -318,11 +318,11 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
     if (formType === 'filter') {
       dateFields.push(
         <Field
-          name={`${prefix}${key}_lte`}
-          key={`${key}_lte`}
+          name={`${prefix}${key}_gte`}
+          key={`${key}_gte`}
           component={component}
           schema={type}
-          value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
+          value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
           type={inputType}
           style={style}
           label={`From ${startCase(key)}`}
@@ -334,11 +334,11 @@ const createFormField = (schema, key, type, values, formItemLayout, formType, ha
       );
       dateFields.push(
         <Field
-          name={`${prefix}${key}_gte`}
-          key={`${key}_gte`}
+          name={`${prefix}${key}_lte`}
+          key={`${key}_lte`}
           component={component}
           schema={type}
-          value={values[`${key}_gte`] ? values[`${key}_gte`] : ''}
+          value={values[`${key}_lte`] ? values[`${key}_lte`] : ''}
           type={inputType}
           style={style}
           label={`To ${startCase(key)}`}

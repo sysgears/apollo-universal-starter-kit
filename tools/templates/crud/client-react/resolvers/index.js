@@ -69,7 +69,7 @@ const resolvers = {
     update$Module$Filter: (_, { filter }, { cache }) => {
       const { $module$State } = cache.readQuery({ query: $MODULE$_STATE_QUERY });
       const new$Module$State = update($module$State, {
-        filter: { $merge: mergeFilter(filter, defaults, $Module$Schema) }
+        filter: { $merge: mergeFilter(filter, defaultFilters, $Module$Schema) }
       });
 
       cache.writeData({

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 
-import { PageLayout } from '@gqlapp/look-client-react';
+import { PageLayout, Button } from '@gqlapp/look-client-react';
 import FormView from './FormView';
 import settings from '../../../../settings';
 
@@ -42,7 +42,7 @@ class EditView extends React.PureComponent {
         <PageLayout>
           {this.renderMetaData(title)}
           <Link id="back-button" to={`/${link}`}>
-            Back
+            <Button>Back</Button>
           </Link>
           <h2>
             {data ? 'Edit' : 'Create'} {title}

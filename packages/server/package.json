@@ -89,7 +89,7 @@
     "express": "^4.16.2",
     "filesize": "^3.5.11",
     "graphql": "^14.1.1",
-    "graphql-auth": "0.2.3",
+    "graphql-auth": "0.2.6",
     "graphql-iso-date": "^3.5.0",
     "graphql-parse-fields": "^1.2.0",
     "graphql-resolve-batch": "^1.0.2",

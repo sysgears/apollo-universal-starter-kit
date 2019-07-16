@@ -3,23 +3,19 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 import { withFormik } from 'formik';
+
 import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { translate } from '@gqlapp/i18n-client-react';
-import { RenderField, Button, primary, FormView } from '@gqlapp/look-client-react-native';
-import { placeholderColor, submit } from '@gqlapp/look-client-react-native/styles';
+import { RenderField, Button, primary, FormView, lookStyles } from '@gqlapp/look-client-react-native';
 import { required, minLength, validate } from '@gqlapp/validation-common-react';
-
-import FacebookButton from '../auth/facebook';
-import GoogleButton from '../auth/google';
-import GitHubButton from '../auth/github';
-import LinkedInButton from '../auth/linkedin';
-import settings from '../../../../settings';
+import { LinkedInButton, GoogleButton, GitHubButton, FacebookButton } from '@gqlapp/authentication-client-react';
+import settings from '@gqlapp/config';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.user.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)]
 };
-const { facebook, linkedin, google, github } = settings.user.auth;
+const { github, facebook, linkedin, google } = settings.auth.social;
 
 const renderSocialButtons = (buttonsLength, t) => {
   return buttonsLength > 2 ? (
@@ -56,7 +52,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
                 type="text"
                 keyboardType="email-address"
                 placeholder={t('mobile.login.usernameOrEmail.placeholder')}
-                placeholderTextColor={placeholderColor}
+                placeholderTextColor={lookStyles.placeholderColor}
                 value={values.usernameOrEmail}
               />
               <Field
@@ -67,7 +63,7 @@ const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
                 type="password"
                 secureTextEntry={true}
                 placeholder={t('mobile.login.pass.placeholder')}
-                placeholderTextColor={placeholderColor}
+                placeholderTextColor={lookStyles.placeholderColor}
                 value={values.password}
               />
             </View>
@@ -118,7 +114,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     flex: 9
   },
-  submit,
+  submit: lookStyles.submit,
   buttonsGroup: {
     flex: 1,
     paddingTop: 10

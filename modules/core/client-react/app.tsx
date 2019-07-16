@@ -1,16 +1,13 @@
 import * as React from 'react';
 import { hydrate, render } from 'react-dom';
+
 import ClientModule from '@gqlapp/module-client-react';
+import { log } from '@gqlapp/core-common';
 
-// Virtual module, generated in-memory by spinjs, contains count of backend rebuilds
-// tslint:disable-next-line
-import 'backend_reload';
-
-import log from '../../../packages/common/log';
 import { onAppCreate as onCreateMain, Main, onAppDispose } from './Main';
 
 const renderFunc = __SSR__ ? hydrate : render;
-const root = document.getElementById('root');
+const root = __TEST__ ? document.createElement('div') : document.getElementById('root');
 
 let frontendReloadCount = 0;
 
@@ -29,7 +26,7 @@ const initWebpackHMR = (modules: ClientModule, entryModule: NodeModule) => {
   }
 };
 
-const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
+const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   initWebpackHMR(modules, entryModule);
   onCreateMain(modules, entryModule);
   renderApp({ key: frontendReloadCount });
@@ -37,11 +34,6 @@ const onAppCreate = (modules: ClientModule, entryModule: NodeModule) => {
 
 if (__DEV__ && module.hot) {
   module.hot.accept();
-
-  module.hot.accept('backend_reload', () => {
-    log.debug('Reloading front-end');
-    window.location.reload();
-  });
 }
 
 export default new ClientModule({ onAppCreate: [onAppCreate] });

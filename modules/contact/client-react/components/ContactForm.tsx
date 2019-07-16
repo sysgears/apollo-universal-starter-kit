@@ -4,7 +4,8 @@ import { isFormError } from '@gqlapp/forms-client-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { validate } from '@gqlapp/validation-common-react';
-import Field from '../../../../packages/client/src/utils/FieldAdapter';
+import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
+
 import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
 import { ContactForm } from '../types';
 
@@ -13,7 +14,7 @@ interface ContactFormProps {
   onSubmit: (values: ContactForm) => void;
 }
 
-const ContactForm = ({
+const BaseContactForm = ({
   values,
   handleSubmit,
   t,
@@ -61,4 +62,4 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
   displayName: 'ContactUsForm' // helps with React DevTools
 });
 
-export default ContactFormWithFormik(ContactForm);
+export default ContactFormWithFormik(BaseContactForm);

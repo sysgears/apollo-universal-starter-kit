@@ -1,10 +1,10 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
 import stripeLocal from 'stripe-local';
+
 import ServerModule from '@gqlapp/module-server-ts';
 import { log } from '@gqlapp/core-common';
-
-import settings from '../../../../../settings';
+import settings from '@gqlapp/config';
 
 import StripeSubscriptionDAO from './sql';
 import schema from './schema.graphql';
@@ -26,9 +26,9 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   });
 }
 
-const createContext = async ({ context: { user } }: any) => ({
+const createContextFunc = async ({ graphqlContext: { identity } }: any) => ({
   StripeSubscription,
-  stripeSubscription: user ? await StripeSubscription.getSubscription(user.id) : null
+  stripeSubscription: identity ? await StripeSubscription.getSubscription(identity.id) : null
 });
 
 const beforeware = (app: Express) => {
@@ -39,13 +39,13 @@ const middleware = (app: Express) => {
   app.post(webhookUrl, webhookMiddleware);
 };
 
-export default (enabled
+export default enabled
   ? new ServerModule({
       schema: [schema],
       createResolversFunc: [createResolvers],
-      createContextFunc: [createContext],
+      createContextFunc: [createContextFunc],
       beforeware: [beforeware],
       middleware: [middleware],
       localization: [{ ns: 'stripeSubscription', resources }]
     })
-  : undefined);
+  : undefined;

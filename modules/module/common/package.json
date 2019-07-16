@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "prefab": "modules/module/common",
   "dependencies": {
-    "fractal-objects": "^0.10.0"
+    "fractal-objects": "^0.10.2"
   },
-  "peerDependencies": {
+  "peerDependenciesMeta": {
     "i18next": "*"
   }
 }

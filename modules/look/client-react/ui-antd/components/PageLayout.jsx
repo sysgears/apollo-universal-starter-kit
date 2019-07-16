@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+import settings from '@gqlapp/config';
 
 import { Row, Col, MenuItem, Icon } from './index';
-import settings from '../../../../../settings';
 
 const ref = { modules: null };
 

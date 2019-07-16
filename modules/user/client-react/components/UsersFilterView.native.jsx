@@ -13,9 +13,9 @@ import {
   success,
   danger,
   Modal,
-  Button
+  Button,
+  lookStyles
 } from '@gqlapp/look-client-react-native';
-import { itemAction, itemContainer, itemTitle } from '@gqlapp/look-client-react-native/styles';
 
 class UsersFilterView extends React.PureComponent {
   static propTypes = {
@@ -215,9 +215,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 15
   },
-  itemAction,
-  itemContainer,
-  itemTitle,
+  itemAction: lookStyles.itemAction,
+  itemContainer: lookStyles.itemContainer,
+  itemTitle: lookStyles.itemTitle,
   itemSelect: {
     flex: 2
   },

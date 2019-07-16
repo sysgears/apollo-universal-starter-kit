@@ -5,7 +5,8 @@ import {
   PaginationItem as RSPaginationItem,
   PaginationLink as RSPaginationLink
 } from 'reactstrap';
-import { Button } from '../components';
+
+import Button from './Button';
 
 export default class Pagination extends React.Component {
   static propTypes = {

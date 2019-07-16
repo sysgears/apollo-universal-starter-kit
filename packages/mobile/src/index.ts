@@ -1,7 +1,11 @@
 try {
+  Object.assign(global, require('../build.config'));
+
   // tslint:disable-next-line
   const modules = require('./modules').default;
-  modules.createApp(module);
+  (async () => {
+    await modules.createApp(module);
+  })();
 } catch (e) {
   if (typeof ErrorUtils !== 'undefined') {
     (ErrorUtils as any).reportFatalError(e);

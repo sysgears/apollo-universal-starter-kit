@@ -3,11 +3,12 @@ import { Title, Meta } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { filter, map, mergeMap } from 'rxjs/operators';
 import { ActionReducer, MetaReducer } from '@ngrx/store';
-import { apiUrl } from '@gqlapp/core-common';
+import { apiUrl, log } from '@gqlapp/core-common';
+import settings from '@gqlapp/config';
 
-import log from '../../../packages/common/log';
-
-log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+if (!__TEST__ || settings.app.logging.level === 'debug') {
+  log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+}
 
 function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state: any, action: any) => {

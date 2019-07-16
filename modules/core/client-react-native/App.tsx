@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import url from 'url';
 
 import ClientModule from '@gqlapp/module-client-react-native';
-import log from '../../../packages/common/log';
-import createApolloClient from '../../../packages/common/createApolloClient';
+import { createApolloClient, log } from '@gqlapp/core-common';
+import settings from '@gqlapp/config';
 
 const { protocol, pathname, port } = url.parse(__API_URL__);
 
@@ -40,7 +40,9 @@ export default class Main extends React.Component<MainProps> {
       clientResolvers: modules.resolvers
     });
 
-    log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+    if (!__TEST__ || settings.app.logging.level === 'debug') {
+      log.info(`Connecting to GraphQL backend at: ${apiUrl}`);
+    }
 
     return modules.getWrappedRoot(
       <Provider store={store}>

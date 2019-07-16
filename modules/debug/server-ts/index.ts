@@ -1,7 +1,8 @@
 import now from 'performance-now';
+
 import { knex } from '@gqlapp/database-server-ts';
 import { log } from '@gqlapp/core-common';
-import settings from '../../../settings';
+import settings from '@gqlapp/config';
 
 interface EventQuery {
   __knexQueryUid: string;

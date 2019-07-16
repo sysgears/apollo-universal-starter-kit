@@ -1,21 +1,14 @@
 import React from 'react';
 import { CookiesProvider } from 'react-cookie';
 import { NavLink, withRouter } from 'react-router-dom';
+import loadable from '@loadable/component';
 import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 
-import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
-import ProfileView from './components/ProfileView';
-import Users from './containers/Users';
-import UserEdit from './containers/UserEdit';
-import UserAdd from './containers/UserAdd';
-import Register from './containers/Register';
-import Login from './containers/Login';
-import ForgotPassword from './containers/ForgotPassword';
-import ResetPassword from './containers/ResetPassword';
+import DataRootComponent from './containers/DataRootComponent';
 
 import { AuthRoute, IfLoggedIn, IfNotLoggedIn, withLoadedUser, withLogout } from './containers/Auth';
 
@@ -24,24 +17,27 @@ const ProfileName = withLoadedUser(({ currentUser }) =>
 );
 
 const LogoutLink = withRouter(
-  withLogout(({ logout, history }) => (
-    <a
-      href="javascript:void(0)"
-      onClick={e => {
-        e.preventDefault();
-        (async () => {
-          await logout();
-          history.push('/');
-        })();
-      }}
-      className="nav-link"
-    >
-      Logout
-    </a>
-  ))
+  withLogout(
+    translate('user')(({ logout, history, t }) => (
+      <a
+        href="javascript:void(0)"
+        onClick={e => {
+          e.preventDefault();
+          (async () => {
+            await logout();
+            history.push('/');
+          })();
+        }}
+        className="nav-link"
+      >
+        {t('navLink.logout')}
+      </a>
+    ))
+  )
 );
 
 export * from './containers/Auth';
+export { default as LOGIN } from './graphql/Login.graphql';
 
 const NavLinkUsersWithI18n = translate('user')(({ t }) => (
   <NavLink to="/users" className="nav-link" activeClassName="active">
@@ -54,24 +50,62 @@ const NavLinkLoginWithI18n = translate('user')(({ t }) => (
   </NavLink>
 ));
 
-export default new ClientModule(access, {
+export default new ClientModule({
   route: [
-    <AuthRoute exact path="/profile" role={['user', 'admin']} redirect="/login" component={ProfileView} />,
-    <AuthRoute exact path="/users" redirect="/profile" role="admin" component={Users} />,
-    <AuthRoute exact path="/users/new" role={['admin']} component={UserAdd} />,
-    <AuthRoute path="/users/:id" redirect="/profile" role={['user', 'admin']} component={UserEdit} />,
-    <AuthRoute exact path="/register" redirectOnLoggedIn redirect="/profile" component={Register} />,
+    <AuthRoute
+      exact
+      path="/profile"
+      role={['user', 'admin']}
+      redirect="/login"
+      component={loadable(() => import('./containers/Profile').then(c => c.default))}
+    />,
+    <AuthRoute
+      exact
+      path="/users"
+      redirect="/profile"
+      role="admin"
+      component={loadable(() => import('./containers/Users').then(c => c.default))}
+    />,
+    <AuthRoute
+      exact
+      path="/users/new"
+      role={['admin']}
+      component={loadable(() => import('./containers/UserAdd').then(c => c.default))}
+    />,
+    <AuthRoute
+      path="/users/:id"
+      redirect="/profile"
+      role={['user', 'admin']}
+      component={loadable(() => import('./containers/UserEdit').then(c => c.default))}
+    />,
+    <AuthRoute
+      exact
+      path="/register"
+      redirectOnLoggedIn
+      redirect="/profile"
+      component={loadable(() => import('./containers/Register').then(c => c.default))}
+    />,
     <AuthRoute
       exact
       path="/login"
       redirectOnLoggedIn
       redirect="/"
-      component={withRouter(({ history }) => (
-        <Login onLogin={() => history.push('/profile')} />
-      ))}
+      component={loadable(() => import('./containers/Login').then(c => c.default))}
     />,
-    <AuthRoute exact path="/forgot-password" redirectOnLoggedIn redirect="/profile" component={ForgotPassword} />,
-    <AuthRoute exact path="/reset-password/:token" redirectOnLoggedIn redirect="/profile" component={ResetPassword} />
+    <AuthRoute
+      exact
+      path="/forgot-password"
+      redirectOnLoggedIn
+      redirect="/profile"
+      component={loadable(() => import('./containers/ForgotPassword').then(c => c.default))}
+    />,
+    <AuthRoute
+      exact
+      path="/reset-password/:token"
+      redirectOnLoggedIn
+      redirect="/profile"
+      component={loadable(() => import('./containers/ResetPassword').then(c => c.default))}
+    />
   ],
   navItem: [
     <IfLoggedIn key="/users" role="admin">
@@ -101,6 +135,7 @@ export default new ClientModule(access, {
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
+  dataRootComponent: [DataRootComponent],
   // eslint-disable-next-line react/display-name
   rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
 });

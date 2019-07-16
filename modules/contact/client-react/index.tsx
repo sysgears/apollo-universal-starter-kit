@@ -1,10 +1,10 @@
 import React from 'react';
 import { Route, NavLink } from 'react-router-dom';
+import loadable from '@loadable/component';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
-import Contact from './containers/Contact';
 import resources from './locales';
 
 const NavLinkWithI18n = translate('contact')(({ t }: { t: TranslateFunction }) => (
@@ -14,7 +14,9 @@ const NavLinkWithI18n = translate('contact')(({ t }: { t: TranslateFunction }) =
 ));
 
 export default new ClientModule({
-  route: [<Route exact path="/contact" component={Contact} />],
+  route: [
+    <Route exact path="/contact" component={loadable(() => import('./containers/Contact').then(c => c.default))} />
+  ],
   navItem: [
     <MenuItem key="/contact">
       <NavLinkWithI18n />

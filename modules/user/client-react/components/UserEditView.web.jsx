@@ -2,33 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { PageLayout } from '@gqlapp/look-client-react';
+import settings from '@gqlapp/config';
 
 import UserForm from './UserForm';
-import settings from '../../../../settings';
 
-class UserEditView extends React.PureComponent {
-  static propTypes = {
-    loading: PropTypes.bool.isRequired,
-    user: PropTypes.object,
-    currentUser: PropTypes.object,
-    errors: PropTypes.array,
-    history: PropTypes.object,
-    t: PropTypes.func,
-    onSubmit: PropTypes.func
-  };
+const UserEditView = ({ loading, user, t, currentUser, onSubmit }) => {
+  const isNotSelf = !user || (user && user.id !== currentUser.id);
 
-  state = {};
-
-  static getDerivedStateFromProps(nextProps) {
-    if (!nextProps.loading && nextProps.errors && nextProps.errors.length) {
-      nextProps.history.push('/profile');
-    }
-    return null;
-  }
-
-  renderMetaData = t => (
+  const renderMetaData = () => (
     <Helmet
       title={`${settings.app.name} - ${t('userEdit.title')}`}
       meta={[
@@ -40,22 +24,14 @@ class UserEditView extends React.PureComponent {
     />
   );
 
-  render() {
-    const { loading, user, t, currentUser, onSubmit } = this.props;
-
-    if (loading && !user) {
-      return (
-        <PageLayout>
-          {this.renderMetaData(t)}
-          <div className="text-center">{t('userEdit.loadMsg')}</div>
-        </PageLayout>
-      );
-    } else {
-      const isNotSelf = !user || (user && user.id !== currentUser.id);
-      return (
-        <PageLayout>
-          {this.renderMetaData(t)}
-          <Link id="back-button" to={user && user.role === 'admin' ? '/users' : '/profile'}>
+  return (
+    <PageLayout>
+      {renderMetaData()}
+      {loading && !user ? (
+        <div className="text-center">{t('userEdit.loadMsg')}</div>
+      ) : (
+        <>
+          <Link id="back-button" to={currentUser && currentUser.role === 'admin' ? '/users' : '/profile'}>
             Back
           </Link>
           <h2>
@@ -67,10 +43,18 @@ class UserEditView extends React.PureComponent {
             shouldDisplayActive={isNotSelf}
             initialValues={user}
           />
-        </PageLayout>
-      );
-    }
-  }
-}
+        </>
+      )}
+    </PageLayout>
+  );
+};
+
+UserEditView.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  user: PropTypes.object,
+  currentUser: PropTypes.object,
+  t: PropTypes.func,
+  onSubmit: PropTypes.func
+};
 
 export default translate('user')(UserEditView);

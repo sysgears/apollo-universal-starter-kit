@@ -3,8 +3,8 @@ import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
 import ServerModule from '@gqlapp/module-server-ts';
 import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
+import settings from '@gqlapp/config';
 
-import settings from '../../../settings';
 import ChatDAO, { Message, Identifier } from './sql';
 
 const MESSAGES_SUBSCRIPTION = 'messages_subscription';
@@ -35,7 +35,7 @@ interface EditMessageParams {
 
 const ref: { modules: ServerModule } = { modules: null };
 
-export const onAppCreate = (modules: ServerModule) => (ref.modules = modules);
+export const onAppCreate = async (modules: ServerModule) => (ref.modules = modules);
 
 export default (pubsub: PubSub) => ({
   Query: {
@@ -74,7 +74,7 @@ export default (pubsub: PubSub) => ({
       const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
-      const fileSystemStorage: FileSystemStorage = ref.modules.context.fileSystemStorage;
+      const fileSystemStorage: FileSystemStorage = ref.modules.appContext.fileSystemStorage;
 
       if (!fileSystemStorage) {
         throw new Error(t('chat:messageNotAdded'));
@@ -90,7 +90,7 @@ export default (pubsub: PubSub) => ({
     },
     async deleteMessage(obj: any, { id }: Identifier, { Chat, req }: ChatContext) {
       const { t } = req;
-      const fileSystemStorage: FileSystemStorage = ref.modules.context.fileSystemStorage;
+      const fileSystemStorage: FileSystemStorage = ref.modules.appContext.fileSystemStorage;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);
       const isDeleted = await Chat.deleteMessage(id);

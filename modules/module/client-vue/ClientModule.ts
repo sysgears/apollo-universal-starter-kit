@@ -14,7 +14,7 @@ class ClientModule extends BaseModule {
   }
 
   get routes(): RouteConfig[] {
-    return this.route;
+    return this.route || [];
   }
 }
 

@@ -18,6 +18,8 @@
     "dot-notation": 0,
     "no-console": 0,
     "react/jsx-key": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
     "semi": 2,
     "react/sort-comp": 1,
     "prettier/prettier": [
@@ -30,12 +32,13 @@
     ]
   },
   "env": {
-    "mocha": true
+    "jest": true
   },
   "globals": {
     "fetch": true,
     "window": true,
     "document": true,
+    "__CDN_URL__": true,
     "__DEV__": true,
     "__TEST__": true,
     "__CLIENT__": true,
@@ -45,9 +48,9 @@
     "__API_URL__": true,
     "__WEBSITE_URL__": true,
     "__FRONTEND_BUILD_DIR__": true,
-    "__DLL_BUILD_DIR__": true
+    "__STRIPE_PUBLIC_KEY__": true
   },
-  "plugins": ["react", "json", "import", "prettier"],
+  "plugins": ["react", "react-hooks", "json", "import", "prettier"],
   "settings": {
     "react": {
       "version": "16.3"

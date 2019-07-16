@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Menu, Row, Col } from 'antd';
-import MenuItem from './MenuItem';
 
-import settings from '../../../../../settings';
+import settings from '@gqlapp/config';
+
+import MenuItem from './MenuItem';
 
 const ref = { modules: null };
 
-export const onAppCreate = modules => (ref.modules = modules);
+export const onAppCreate = async modules => (ref.modules = modules);
 
 class NavBar extends React.Component {
   state = {

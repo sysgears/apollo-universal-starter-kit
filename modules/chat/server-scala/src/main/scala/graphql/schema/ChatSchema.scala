@@ -163,7 +163,7 @@ class ChatSchema @Inject()(
       resolve = sc => {
         val endCursor = sc.args.arg[Int]("endCursor")
         messagePubSubService
-          .subscribe(Seq(ADD_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE), Seq(EndCursor(endCursor)))
+          .subscribe(Seq(ADD_MESSAGE, EDIT_MESSAGE, DELETE_MESSAGE), Seq(EndCursor(endCursor)))(sc.ctx)
           .map(
             action =>
               action.map(event => {

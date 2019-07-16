@@ -5,9 +5,9 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
 
-import access from './access';
 import resolvers from './resolvers';
 import resources from './locales';
+import DataRootComponent from './containers/DataRootComponent';
 import UserScreenNavigator from './containers/UserScreenNavigator';
 import Profile from './containers/Profile';
 import Login from './containers/Login';
@@ -18,10 +18,15 @@ import Users from './containers/Users';
 import UserEdit from './containers/UserEdit';
 import UserAdd from './containers/UserAdd';
 
+export { default as CURRENT_USER_QUERY } from './graphql/CurrentUserQuery.graphql';
+
 class LoginScreen extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     headerTitle: <HeaderTitleWithI18n i18nKey="navLink.signIn" style="subTitle" />,
-    headerLeft: <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    headerLeft: (
+      <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+    ),
+    headerForceInset: {}
   });
 
   render() {
@@ -35,7 +40,8 @@ LoginScreen.propTypes = {
 
 class ForgotPasswordScreen extends React.Component {
   static navigationOptions = () => ({
-    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.forgotPassword" style="subTitle" />,
+    headerForceInset: {}
   });
   render() {
     return <ForgotPassword navigation={this.props.navigation} />;
@@ -48,7 +54,8 @@ ForgotPasswordScreen.propTypes = {
 
 class RegisterScreen extends React.Component {
   static navigationOptions = () => ({
-    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />
+    headerTitle: <HeaderTitleWithI18n i18nKey="navLink.register" style="subTitle" />,
+    headerForceInset: {}
   });
   render() {
     return <Register navigation={this.props.navigation} />;
@@ -146,7 +153,7 @@ const MainScreenNavigator = () => {
   return <Navigator />;
 };
 
-export default new ClientModule(access, {
+export default new ClientModule({
   drawerItem: [
     {
       Profile: {
@@ -157,13 +164,15 @@ export default new ClientModule(access, {
               headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
               headerLeft: (
                 <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              )
+              ),
+              headerForceInset: {}
             })
           },
           ProfileEdit: {
             screen: ProfilerEditScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />,
+              headerForceInset: {}
             })
           }
         }),
@@ -203,19 +212,22 @@ export default new ClientModule(access, {
                     navigation.setParams({ isOpenFilter: !isOpenFilter });
                   }}
                 />
-              )
+              ),
+              headerForceInset: {}
             })
           },
           UserEdit: {
             screen: UserEditScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
+              headerForceInset: {}
             })
           },
           UserAdd: {
             screen: UserAddScreen,
             navigationOptions: () => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />
+              headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
+              headerForceInset: {}
             })
           }
         }),
@@ -243,5 +255,6 @@ export default new ClientModule(access, {
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
-  onAppCreate: [modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
+  dataRootComponent: [DataRootComponent],
+  onAppCreate: [async modules => (ref.navigator = UserScreenNavigator(modules.drawerItems))]
 });

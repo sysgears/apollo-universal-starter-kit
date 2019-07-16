@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
 import { WebBrowser } from 'expo';
 import { translate } from '@gqlapp/i18n-client-react';
-import { placeholderColor } from '@gqlapp/look-client-react-native/styles';
+import { lookStyles } from '@gqlapp/look-client-react-native';
 import { setItem } from '@gqlapp/core-common/clientStorage';
-import authentication from '../access/index';
+import authentication from '@gqlapp/authentication-client-react';
 
 import LoginForm from './LoginForm';
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   examplesArea: {
     borderWidth: 0.5,
     borderRadius: 5,
-    borderColor: placeholderColor,
+    borderColor: lookStyles.placeholderColor,
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: '#e3e3e3',
@@ -85,12 +85,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     textAlign: 'center',
-    color: placeholderColor
+    color: lookStyles.placeholderColor
   },
   exampleText: {
     fontSize: 14,
     fontWeight: '400',
-    color: placeholderColor
+    color: lookStyles.placeholderColor
   },
   loginContainer: {
     flex: 3

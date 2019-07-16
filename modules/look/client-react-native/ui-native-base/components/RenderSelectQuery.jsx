@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
 import { View, Text, StyleSheet } from 'react-native';
 import { schemaQueries } from '@gqlapp/core-client-react';
-import { RenderSelect } from './index';
+import RenderSelect from './RenderSelect';
 import InputItemStyles from '../styles/InputItem';
 
 const LIMIT = 20;

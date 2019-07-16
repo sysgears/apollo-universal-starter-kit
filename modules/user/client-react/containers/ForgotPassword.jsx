@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
@@ -8,20 +8,13 @@ import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
 
-class ForgotPassword extends React.Component {
-  static propTypes = {
-    forgotPassword: PropTypes.func,
-    t: PropTypes.func
-  };
+const ForgotPassword = props => {
+  const { forgotPassword, t } = props;
 
-  state = {
-    sent: false
-  };
+  const [sent, setSent] = useState(false);
 
-  onSubmit = async values => {
-    const { forgotPassword, t } = this.props;
-
-    this.setState({ sent: true });
+  const onSubmit = async values => {
+    setSent(true);
     try {
       await forgotPassword(values);
     } catch (e) {
@@ -29,12 +22,13 @@ class ForgotPassword extends React.Component {
     }
   };
 
-  render() {
-    const { sent } = this.state;
+  return <ForgotPasswordView {...props} sent={sent} onSubmit={onSubmit} />;
+};
 
-    return <ForgotPasswordView {...this.props} sent={sent} onSubmit={this.onSubmit} />;
-  }
-}
+ForgotPassword.propTypes = {
+  forgotPassword: PropTypes.func,
+  t: PropTypes.func
+};
 
 const ForgotPasswordWithApollo = compose(
   translate('user'),

@@ -2,11 +2,11 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Container, Navbar, Nav, NavItem } from 'reactstrap';
 
-import settings from '../../../../../settings';
+import settings from '@gqlapp/config';
 
 const ref = { modules: null };
 
-export const onAppCreate = modules => (ref.modules = modules);
+export const onAppCreate = async modules => (ref.modules = modules);
 
 const NavBar = () => (
   <Navbar color="faded" light>

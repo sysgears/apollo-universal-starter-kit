@@ -1,6 +1,7 @@
 import { groupBy, findIndex } from 'lodash';
 import { decamelize } from 'humps';
-import settings from '../../../../settings';
+
+import settings from '@gqlapp/config';
 
 export const returnId = knexTable => (settings.db.client === 'sqlite3' ? knexTable : knexTable.returning('id'));
 

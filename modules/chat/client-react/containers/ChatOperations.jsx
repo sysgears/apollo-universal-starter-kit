@@ -4,8 +4,8 @@ import { compose, graphql } from 'react-apollo/index';
 import update from 'immutability-helper';
 import { translate } from '@gqlapp/i18n-client-react';
 import { withUser } from '@gqlapp/user-client-react';
+import settings from '@gqlapp/config';
 
-import chatConfig from '../../../../config/chat';
 import withUuid from './withUuid';
 import Chat from './Chat';
 import withImage from './withImage';
@@ -16,8 +16,6 @@ import MESSAGES_QUERY from '../graphql/MessagesQuery.graphql';
 import ADD_MESSAGE from '../graphql/AddMessage.graphql';
 import DELETE_MESSAGE from '../graphql/DeleteMessage.graphql';
 import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
-
-const { limit } = chatConfig;
 
 const onAddMessage = (prev, node) => {
   // ignore if duplicate
@@ -100,13 +98,13 @@ const onEditMessage = (prev, node) => {
 const getMsgsFromCache = cache =>
   cache.readQuery({
     query: MESSAGES_QUERY,
-    variables: { limit, after: 0 }
+    variables: { limit: settings.chat.limit, after: 0 }
   });
 
 const writeMsgsToCache = (cache, messages) =>
   cache.writeQuery({
     query: MESSAGES_QUERY,
-    variables: { limit, after: 0 },
+    variables: { limit: settings.chat.limit, after: 0 },
     data: {
       messages: {
         ...messages,
@@ -157,7 +155,7 @@ export default compose(
     options: () => {
       return {
         fetchPolicy: 'network-only',
-        variables: { limit, after: 0 }
+        variables: { limit: settings.chat.limit, after: 0 }
       };
     },
     props: ({ data }) => {

@@ -1,9 +1,10 @@
 import Stripe from 'stripe';
 import { TranslationFunction } from 'i18next';
+
 import { mailer } from '@gqlapp/mailer-server-ts';
+import settings from '@gqlapp/config';
 
 import StripeSubscriptionDAO from './sql';
-import settings from '../../../../../settings';
 
 const { User } = require('@gqlapp/user-server-ts');
 const StripeSubscription = new StripeSubscriptionDAO();

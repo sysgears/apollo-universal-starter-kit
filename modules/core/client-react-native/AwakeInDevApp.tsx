@@ -1,8 +1,12 @@
-import * as Expo from 'expo';
+import { AppLoading, registerRootComponent } from 'expo';
+import Constants from 'expo-constants';
+import * as Font from 'expo-font';
+import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import React from 'react';
 import { View } from 'react-native';
-import App from './App';
 import ClientModule from '@gqlapp/module-client-react-native';
+
+import App from './App';
 
 interface AwakeInDevAppProps {
   exp: any;
@@ -13,7 +17,7 @@ interface AwakeInDevAppState {
   isReady: boolean;
 }
 
-export default (modules: ClientModule) => {
+export default async (modules: ClientModule) => {
   // we don't want this to require transformation
   class AwakeInDevApp extends React.Component<AwakeInDevAppProps, AwakeInDevAppState> {
     constructor(props: AwakeInDevAppProps) {
@@ -22,10 +26,10 @@ export default (modules: ClientModule) => {
     }
 
     public async componentDidMount() {
-      await Expo.Font.loadAsync({
-        Roboto: require('native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-        Ionicons: require('@expo/vector-icons/fonts/Ionicons.ttf')
+      await Font.loadAsync({
+        Roboto: require('../../../node_modules/native-base/Fonts/Roboto.ttf'),
+        Roboto_medium: require('../../../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+        Ionicons: require('../../../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf')
       });
 
       this.setState({ isReady: true });
@@ -33,7 +37,7 @@ export default (modules: ClientModule) => {
 
     public render() {
       if (!this.state.isReady) {
-        return <Expo.AppLoading startAsync={null} onError={null} onFinish={null} />;
+        return <AppLoading startAsync={null} onError={null} onFinish={null} />;
       }
 
       return React.createElement(
@@ -41,14 +45,26 @@ export default (modules: ClientModule) => {
         {
           style: {
             flex: 1,
-            marginTop: Expo.Constants.statusBarHeight
+            marginTop: Constants.statusBarHeight
           }
         },
         React.createElement(App, { ...this.props, modules }),
-        React.createElement(process.env.NODE_ENV === 'development' ? Expo.KeepAwake : View)
+        React.createElement(View)
       );
+    }
+
+    public _activate() {
+      if (process.env.NODE_ENV === 'development') {
+        activateKeepAwake();
+      }
+    }
+
+    public _deactivate() {
+      if (process.env.NODE_ENV === 'development') {
+        deactivateKeepAwake();
+      }
     }
   }
 
-  Expo.registerRootComponent(AwakeInDevApp);
+  registerRootComponent(AwakeInDevApp);
 };

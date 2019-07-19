@@ -57,6 +57,9 @@
   "dependencies": {
     "@babel/preset-env": "^7.0.0",
     "@babel/register": "^7.0.0",
+    "@domain-schema/core": "^0.0.34",
+    "@domain-schema/graphql": "^0.0.33",
+    "@domain-schema/knex": "^0.0.35",
     "@gqlapp/core-common": "^0.1.0",
     "@gqlapp/database-server-ts": "^0.1.0",
     "@gqlapp/testing-server-ts": "^0.1.0",

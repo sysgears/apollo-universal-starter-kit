@@ -27,8 +27,11 @@ function addModule({ logger, packageName, moduleName, old }) {
   const params = { logger, packageName, moduleName, modulePackageName, templatesPath, old };
 
   copyTemplates(params);
-  mergeWithModules(params);
-  if (!old) addDependency(params);
+  if (packageName !== 'common') {
+    mergeWithModules(params);
+    if (!old) addDependency(params);
+  }
+  addSymlink(moduleName, modulePackageName);
 
   logger.info(chalk.green(`✔ New module ${moduleName} for package ${packageName} successfully created!`));
 }
@@ -112,8 +115,6 @@ function addDependency({ moduleName, modulePackageName, packageName, old }) {
       )
     )
     .to(packagePath);
-
-  addSymlink(moduleName, modulePackageName);
 }
 
 module.exports = addModule;

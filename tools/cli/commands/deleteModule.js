@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const {
   getModulePackageName,
   computeModulePath,
@@ -8,6 +9,8 @@ const {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
+  deleteFromFileWithExports,
   removeSymlink,
   runPrettier
 } = require('../helpers/util');
@@ -27,8 +30,12 @@ function deleteModule({ logger, packageName, moduleName, old }) {
 
   if (fs.existsSync(modulePath)) {
     deleteTemplates(params);
-    removeFromModules(params);
-    if (!old) removeDependency(params);
+
+    if (packageName !== 'common') {
+      removeFromModules(params);
+      if (!old) removeDependency(params);
+    }
+    removeSymlink(moduleName, modulePackageName);
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
   } else {
@@ -118,7 +125,13 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
     )
     .to(packagePath);
 
-  removeSymlink(moduleName, modulePackageName);
+  const Module = pascalize(moduleName);
+  const fileName = 'generatedSchemas.js';
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, fileName, old);
+  if (fs.existsSync(generatedSchemaPath)) {
+    const schema = `${Module}Schema`;
+    deleteFromFileWithExports(generatedSchemaPath, schema);
+  }
 }
 
 module.exports = deleteModule;

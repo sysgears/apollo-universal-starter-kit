@@ -12,7 +12,7 @@ const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config
  * @returns {string} - package name based on the command option --old ('client-react', 'server-ts' etc.)
  */
 const getModulePackageName = (packageName, old) => {
-  return `${packageName}${old ? '' : packageName === 'server' ? '-ts' : '-react'}`;
+  return `${packageName}${old ? '' : packageName === 'common' ? '' : packageName === 'server' ? '-ts' : '-react'}`;
 };
 
 /**
@@ -47,6 +47,12 @@ function renameFiles(destinationPath, moduleName) {
   shell.cd(destinationPath);
 
   // rename files
+  const timestamp = new Date().getTime();
+  shell.ls('-Rl', '.').forEach(entry => {
+    if (entry.isFile()) {
+      shell.mv(entry.name, entry.name.replace('T_Module', `${timestamp}_Module`));
+    }
+  });
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
       shell.mv(entry.name, entry.name.replace('Module', Module));
@@ -133,6 +139,19 @@ function computeModulePackageName(moduleName, packageName, old) {
  */
 function computePackagePath(packageName) {
   return `${BASE_PATH}/packages/${packageName}/package.json`;
+}
+
+/**
+ * Gets the computed path for generated module list.
+ *
+ * @param packageName - The application package ([client|server])
+ * @param fileName - File name of generated module
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - Return the computed path
+ */
+function computeGeneratedSchemasPath(packageName, fileName, old) {
+  const modulePackageName = getModulePackageName(packageName, old);
+  return `${BASE_PATH}/modules/core/${modulePackageName}/${fileName}`;
 }
 
 /**
@@ -228,6 +247,50 @@ function deleteStackDir(stackDirList) {
   });
 }
 
+/**
+ *
+ * @param pathToFileWithExports
+ * @param exportName
+ * @param importString
+ */
+function updateFileWithExports({ pathToFileWithExports, exportName, importString }) {
+  const exportGraphqlContainer = `\nexport default {\n  ${exportName}\n};\n`;
+
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedContainerData = fs.readFileSync(pathToFileWithExports);
+    const generatedContainer = generatedContainerData.toString().trim();
+    if (generatedContainer.length > 1) {
+      const index = generatedContainer.lastIndexOf("';");
+      const computedIndex = index >= 0 ? index + 3 : false;
+      if (computedIndex) {
+        let computedGeneratedContainer =
+          generatedContainer.slice(0, computedIndex) +
+          importString +
+          generatedContainer.slice(computedIndex, generatedContainer.length);
+        computedGeneratedContainer = computedGeneratedContainer.replace(/(,|)\s};/g, `,\n  ${exportName}\n};`);
+        return fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
+      }
+    }
+    return fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
+  }
+}
+
+/**
+ *
+ * @param pathToFileWithExports
+ * @param exportName
+ */
+function deleteFromFileWithExports(pathToFileWithExports, exportName) {
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedElementData = fs.readFileSync(pathToFileWithExports);
+    const reg = `(\\n\\s\\s${exportName}(.|)|import (${exportName}|{ ${exportName} }).+;\\n+(?!ex))`;
+    const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(pathToFileWithExports, generatedElement);
+
+    runPrettier(pathToFileWithExports);
+  }
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -239,11 +302,14 @@ module.exports = {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
   addSymlink,
   removeSymlink,
   runPrettier,
   moveToDirectory,
   deleteDir,
   getPathsSubdir,
-  deleteStackDir
+  deleteStackDir,
+  updateFileWithExports,
+  deleteFromFileWithExports
 };

@@ -479,7 +479,7 @@ export class Crud {
           const foundValue = value.type.keys().find(key => {
             return value.type.values[key].sortBy;
           });
-          column = `${tableName}.${foundValue ? foundValue.sortBy : 'name'}`;
+          column = `${tableName}.${foundValue ? foundValue : 'name'}`;
         } else {
           column = `${this.getTableName()}.${decamelize(column)}`;
         }
@@ -502,11 +502,11 @@ export class Crud {
           if (hasTypeOf(Date)) {
             if (filter[`${filterKey}_lte`]) {
               const filterValue_lte = moment(filter[`${filterKey}_lte`]).format(dateFormat);
-              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '>=', `${filterValue_lte}`);
+              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_lte}`);
             }
             if (filter[`${filterKey}_gte`]) {
               const filterValue_gte = moment(filter[`${filterKey}_gte`]).format(dateFormat);
-              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '<=', `${filterValue_gte}`);
+              _this.andWhere(`${tableName}.${decamelize(filterKey)}`, '>=', `${filterValue_gte}`);
             }
           } else if (hasTypeOf(Boolean)) {
             if (_.has(filter, filterKey)) {
@@ -543,7 +543,7 @@ export class Crud {
       for (const key of schema.keys()) {
         const value = schema.values[key];
         const isArray = value.type.constructor === Array;
-        if (isArray && filter[key]) {
+        if (isArray && !_.isEmpty(filter[key])) {
           const type = value.type[0];
           const fieldName = decamelize(key);
           const prefix = type.__.tablePrefix ? type.__.tablePrefix : '';
@@ -625,7 +625,12 @@ export class Crud {
     const tableName = this.getTableName();
     baseQuery.where(function() {
       Object.keys(where).map(key => {
-        this.andWhere(`${tableName}.${decamelize(key)}`, '=', where[key]);
+        if (key.endsWith('_in')) {
+          const keyIn = key.substring(0, key.length - 3);
+          this.whereIn(`${tableName}.${decamelize(keyIn)}`, where[key]);
+        } else {
+          this.andWhere(`${tableName}.${decamelize(key)}`, '=', where[key]);
+        }
       });
     });
 
@@ -693,6 +698,13 @@ export class Crud {
 
       return await this.get({ where: { id } }, info);
     } catch (e) {
+      await ctx.Log.create({
+        type: 'error',
+        module: this.getTableName(),
+        action: 'create',
+        message: JSON.stringify(e),
+        userId: ctx.user.id
+      });
       return { errors: e };
     }
   }
@@ -744,13 +756,20 @@ export class Crud {
 
       return await this.get(args, info);
     } catch (e) {
+      await ctx.Log.create({
+        type: 'error',
+        module: this.getTableName(),
+        action: 'update',
+        message: JSON.stringify(e),
+        userId: ctx.user.id
+      });
       return { errors: e };
     }
   }
 
   _delete({ where }) {
     return knex(this.getFullTableName())
-      .where(where)
+      .where(decamelizeKeys(where))
       .del();
   }
 

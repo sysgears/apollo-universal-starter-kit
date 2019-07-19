@@ -2,7 +2,7 @@
 # yarn lockfile v1
 
 
-"@alienfast/i18next-loader@^1.0.15", "@alienfast/i18next-loader@^1.0.16":
+"@alienfast/i18next-loader@^1.0.15":
   version "1.0.18"
   resolved "https://registry.yarnpkg.com/@alienfast/i18next-loader/-/i18next-loader-1.0.18.tgz#517d91c6eb356559c1615c9c9d7008a4d75d7f9b"
   integrity sha512-qQ+Q/F3RghtTXOef994XBG78OwWjETzIUnnIzYaj1H268jBmCMvQJcDp2rvaOxTElXKEiofsrXaq/EX74oCPEA==

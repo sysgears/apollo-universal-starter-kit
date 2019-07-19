@@ -1,10 +1,13 @@
 import React from 'react';
+import Helmet from 'react-helmet';
 import PropTypes from 'prop-types';
 import { withRouter, NavLink } from 'react-router-dom';
 import { Layout, Menu } from 'antd';
+
 import settings from '@gqlapp/config';
 
 import { Row, Col, MenuItem, Icon } from './index';
+import styles from '../styles/styles.less';
 
 const ref = { modules: null };
 
@@ -91,6 +94,11 @@ class PageLayout extends React.Component {
                 </Col>
               </Row>
             </Header>
+          )}
+          {__SERVER__ && __DEV__ && (
+            <Helmet>
+              <style type="text/css">{styles._getCss()}</style>
+            </Helmet>
           )}
           <Content id="content" style={{ background: '#fff', padding: 24 }}>
             {children}

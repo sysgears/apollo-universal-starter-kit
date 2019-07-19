@@ -20,12 +20,10 @@ function updateModule({ logger, packageName, moduleName, old }) {
 
     // pascalize
     const Module = pascalize(moduleName);
-    //const modulePath = `${BASE_PATH}/packages/server/src/modules/${moduleName}`;
     const modulePackageName = getModulePackageName(packageName, old);
     const destinationPath = computeModulePath(modulePackageName, old, moduleName);
 
     if (fs.existsSync(destinationPath)) {
-      console.log('Module:', Module);
       // get module schema
       const schema = schemas.default[`${Module}Schema`];
 

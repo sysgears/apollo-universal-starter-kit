@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const { pascalize } = require('humps');
 
 const { getModulePackageName, computeModulePath } = require('../helpers/util');
-// const schemas = require('../../../modules/core/common/generatedSchemas');
+const schemas = require('../../../modules/core/common/generatedSchemas');
 
 /**
  * Update module schema.
@@ -27,8 +27,9 @@ function updateModule({ logger, packageName, moduleName, old }) {
     if (fs.existsSync(destinationPath)) {
       console.log('Module:', Module);
       // get module schema
-      /*const schema = schemas.default[`${Module}Schema`];
-
+      const schema = schemas.default[`${Module}Schema`];
+      console.log('schema:', schema.keys());
+      /*
       // schema file
       const file = `schema.graphql`;
 

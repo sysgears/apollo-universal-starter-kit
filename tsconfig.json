@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "es6",
+    "module": "esnext",
     "moduleResolution": "node",
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowJs": true,
+    "noEmit": true,
     "noUnusedLocals": true,
     "jsx": "react",
     "lib": ["es2015", "dom", "esnext"],
@@ -14,17 +15,16 @@
     "suppressImplicitAnyIndexErrors": true,
     "allowSyntheticDefaultImports": true,
     "pretty": true,
-    "removeComments": true,
+    "removeComments": false,
     "skipLibCheck": true
   },
   "include": [
+    "**/typings.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "**/*.vue"
   ],
-  "awesomeTypescriptLoaderOptions": {
-    "reportFiles": [
-      "**/*.ts",
-      "**/*.tsx"
-    ]
-  }
+  "exclude": [
+    "node_modules"
+  ]
 }

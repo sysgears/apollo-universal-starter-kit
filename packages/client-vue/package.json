@@ -1,0 +1,115 @@
+{
+  "name": "client-vue",
+  "private": true,
+  "version": "1.0.0",
+  "main": "src",
+  "scripts": {
+    "build": "cross-env NODE_ENV=production webpack",
+    "clean": "rimraf build .tmp",
+    "tests": "echo",
+    "test": "yarn tests && yarn lint",
+    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
+    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
+    "lint": "yarn eslint && yarn tslint",
+    "watch": "webpack-dev-server",
+    "cli": "node ../../tools/cli"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit"
+  },
+  "bugs": {
+    "url": "https://github.com/sysgears/apollo-universal-starter-kit/issues"
+  },
+  "homepage": "https://github.com/sysgears/apollo-universal-starter-kit",
+  "keywords": [
+    "apollo",
+    "universal",
+    "starter",
+    "graphql",
+    "vue",
+    "vuex"
+  ],
+  "author": "SysGears INC",
+  "license": "MIT",
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.8.1",
+    "@fortawesome/free-brands-svg-icons": "^5.8.1",
+    "@gqlapp/core-client-vue": "^0.1.0",
+    "@gqlapp/counter-client-vue": "^0.1.0",
+    "@gqlapp/module-client-vue": "^0.1.0",
+    "apollo-cache-inmemory": "^1.4.2",
+    "apollo-cache-router": "^1.1.6",
+    "apollo-client": "^2.4.7",
+    "apollo-link": "^1.0.6",
+    "apollo-link-batch-http": "^1.2.11",
+    "apollo-link-context": "^1.0.7",
+    "apollo-link-state": "^0.4.1",
+    "apollo-link-ws": "^1.0.3",
+    "apollo-logger": "^0.3.2",
+    "apollo-upload-client": "^10.0.0",
+    "babel-polyfill": "^6.26.0",
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.19",
+    "error-stack-parser": "^2.0.1",
+    "extract-files": "^5.0.0",
+    "filesize": "^3.5.11",
+    "graphql": "^14.1.1",
+    "graphql-iso-date": "^3.5.0",
+    "graphql-tag": "^2.6.0",
+    "history": "^4.7.2",
+    "i18next": "^11.2.3",
+    "immutability-helper": "^2.6.2",
+    "jwt-decode": "^2.2.0",
+    "lodash": "^4.17.4",
+    "minilog": "^3.1.0",
+    "prop-types": "^15.6.0",
+    "sourcemapped-stacktrace": "^1.1.8",
+    "subscriptions-transport-ws": "^0.9.4",
+    "vue": "^2.5.22",
+    "vue-apollo": "^3.0.0-beta.27",
+    "vue-router": "^3.0.2",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.4",
+    "@types/jest": "^24.0.13",
+    "@types/jsdom": "^12.2.0",
+    "@types/lodash": "^4.14.112",
+    "@types/webpack-env": "^1.13.6",
+    "apollo-utilities": "^1.0.3",
+    "autoprefixer": "^8.3.0",
+    "babel-helper-vue-jsx-merge-props": "^2.0.3",
+    "babel-plugin-jsx-event-modifiers": "^2.0.5",
+    "babel-plugin-jsx-v-model": "^2.0.3",
+    "babel-plugin-syntax-jsx": "^6.18.0",
+    "babel-plugin-transform-vue-jsx": "^3.7.0",
+    "babel-preset-vue": "^2.0.2",
+    "chai": "^4.1.2",
+    "chai-http": "^4.0.0",
+    "cross-env": "^5.1.1",
+    "dom-testing-library": "^3.13.0",
+    "graphql-tools": "^4.0.4",
+    "jsdom": "^11.5.1",
+    "mkdirp": "^0.5.1",
+    "request": "^2.83.0",
+    "rimraf": "^2.6.2"
+  },
+  "peerDependencies": {
+    "eslint": "*"
+  },
+  "browserslist": {
+    "development": [
+      "last 2 chrome versions",
+      "last 2 firefox versions",
+      "last 2 edge versions"
+    ],
+    "production": [
+      ">1%",
+      "last 4 versions",
+      "Firefox ESR",
+      "not ie < 11"
+    ]
+  }
+}

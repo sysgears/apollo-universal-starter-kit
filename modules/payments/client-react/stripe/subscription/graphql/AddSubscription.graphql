@@ -1,0 +1,7 @@
+#import "./Subscription.graphql"
+
+mutation addStripeSubscription($input: StripeSubscriptionInput!) {
+  addStripeSubscription(input: $input) {
+    ...StripeSubscription
+  }
+}

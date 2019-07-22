@@ -1,7 +1,13 @@
-/* eslint import/no-extraneous-dependencies: 0 */
-require('dotenv/config');
-require('babel-register')({ presets: ['env'] });
-require('babel-polyfill');
-const config = require('./knexdata');
+const path = require('path');
 
-module.exports = config;
+const root = path.resolve(__dirname + '/../..');
+
+require('@babel/register')({
+  root,
+  cwd: root,
+  configFile: root + '/packages/server/babel.config.js',
+  extensions: ['.js', '.jsx', '.ts', '.tsx']
+});
+require('dotenv/config');
+
+module.exports = require('@gqlapp/database-server-ts/knexdata');

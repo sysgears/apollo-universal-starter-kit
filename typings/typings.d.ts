@@ -1,8 +1,7 @@
 /// <reference types="mocha" />
 
 declare module '*.graphql' {
-  // tslint:disable-next-line
-  import { DocumentNode } from "graphql";
+  import { DocumentNode } from 'graphql';
 
   const value: DocumentNode;
   export = value;
@@ -18,7 +17,19 @@ declare module '*.scss' {
   export = value;
 }
 
-declare module 'mocha-steps' {
-  var step: Mocha.TestFunction;
-  var xstep: Mocha.TestFunction;
+declare module '@gqlapp/user-server-ts' {
+  const scopes: any;
+  const User: any;
+  export = { scopes, User };
 }
+
+declare module '@gqlapp/authentication-client-react' {
+  const authentication: any;
+  export = authentication;
+}
+declare module "*.vue" {
+  import Vue from "vue";
+  export default Vue;
+}
+
+declare module "extract-files";

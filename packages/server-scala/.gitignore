@@ -1,0 +1,8 @@
+/.history
+/.ensime
+/.ensime_cache
+/.idea
+*/target/*
+/.vscode
+target/
+*.log

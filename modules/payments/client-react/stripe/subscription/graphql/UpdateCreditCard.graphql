@@ -1,0 +1,3 @@
+mutation updateStripeSubscriptionCard($input: StripeSubscriptionInput!) {
+  updateStripeSubscriptionCard(input: $input)
+}

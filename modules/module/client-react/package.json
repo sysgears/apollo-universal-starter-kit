@@ -1,0 +1,8 @@
+{
+  "name": "@gqlapp/module-client-react",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@gqlapp/module-common": "^0.1.0"
+  }
+}

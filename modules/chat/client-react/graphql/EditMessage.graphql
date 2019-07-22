@@ -1,0 +1,7 @@
+#import "./Message.graphql"
+
+mutation editMessage($input: EditMessageInput!) {
+  editMessage(input: $input) {
+    ...MessageInfo
+  }
+}

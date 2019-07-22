@@ -1,3 +1,0 @@
-mutation updateStripeSubscriptionCard($input: StripeSubscribtionInput!) {
-  updateStripeSubscriptionCard(input: $input)
-}

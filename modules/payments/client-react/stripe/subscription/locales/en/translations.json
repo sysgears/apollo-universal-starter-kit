@@ -1,0 +1,50 @@
+{
+  "navLink": "Subscription",
+  "title": "Subscription",
+  "loading": "loading...",
+  "serverError": "Server error. Try again later.",
+  "stripeError": "Payment service error. Try again later.",
+  "creditCardError": "The credit card data is invalid. Please enter valid data.",
+
+  "subscriptionProfile":{
+    "noSubscription": "You haven't subscribed yet.",
+    "title": "Subscription Info"
+  },
+
+  "creditCard": {
+    "title": "Credit Card Data",
+    "text": {
+      "card": "card",
+      "expires": "expires on"
+    },
+    "name": "Name on card",
+    "info": "Payment Info"
+  },
+
+  "add": {
+    "title": "Subscription",
+    "btn": "Subscribe",
+    "description": "Apollo Universal Starter Kit provides a basic example of Stripe-based subscription. The starter kit also implements the payment functionality to imitate a real production payment service in development mode.",
+    "product": "To get a magic number, you need to subscribe.",
+    "price": "Monthly subscription price: $",
+    "creditCard": "Credit Card",
+    "testCreditCards": "Test credit cards"
+    },
+
+  "cancel": {
+    "title": "Cancel Subscription",
+    "btn": "Cancel subscription"
+  },
+
+  "subscriberPage": {
+    "title": "Subscription Page",
+    "msg": "Your magic number is"
+  },
+
+  "update": {
+    "title": "Update Credit Card Details",
+    "errorMsg": "Update failed!",
+    "subTitle": "Update Credit Card Details",
+    "btn": "Update card"
+  }
+}

@@ -3,8 +3,7 @@ import chai, { expect } from 'chai';
 import CURRENT_USER_QUERY from '@gqlapp/user-client-react/graphql/CurrentUserQuery.graphql';
 import USER_QUERY from '@gqlapp/user-client-react/graphql/UserQuery.graphql';
 import { getApollo } from '@gqlapp/testing-server-ts';
-
-import { login, logout } from '../testHelpers';
+import { TestHelper as AuthHelper } from '@gqlapp/authentication-server-ts';
 
 describe('User API works', () => {
   let apollo: any;
@@ -19,13 +18,13 @@ describe('User API works', () => {
   });
 
   it('Signing in as ordinary user works', async () => {
-    await login('user', 'user1234');
+    await AuthHelper.login('user', 'user1234');
     const result = await apollo.query({ query: CURRENT_USER_QUERY });
     expect(result.data.currentUser.username).to.equal('user');
   });
 
   it('Signing out as ordinary user works', async () => {
-    await logout();
+    await AuthHelper.logout();
     const result = await apollo.query({ query: CURRENT_USER_QUERY });
     expect(result.data).to.deep.equal({ currentUser: null });
   });
@@ -50,10 +49,10 @@ describe('User API works', () => {
 
   describe('Tests with authenticated user', () => {
     beforeEach(async () => {
-      await login('user', 'user1234');
+      await AuthHelper.login('user', 'user1234');
     });
     afterEach(async () => {
-      await logout();
+      await AuthHelper.logout();
     });
 
     it('Can query own user profile', async () => {
@@ -72,10 +71,10 @@ describe('User API works', () => {
 
   describe('Tests with authenticated admin', () => {
     beforeEach(async () => {
-      await login('admin', 'admin123');
+      await AuthHelper.login('admin', 'admin123');
     });
     afterEach(async () => {
-      await logout();
+      await AuthHelper.logout();
     });
 
     it('Can query own user profile', async () => {

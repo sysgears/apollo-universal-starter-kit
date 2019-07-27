@@ -5,7 +5,7 @@ const path = require('path');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const NodemonPlugin = require('nodemon-webpack-plugin');
 
 const buildConfig = require('./build.config');
 
@@ -105,12 +105,7 @@ const config = {
   mode: process.env.NODE_ENV || 'development',
   performance: { hints: false },
   plugins: (process.env.NODE_ENV !== 'production'
-    ? [
-        new webpack.HotModuleReplacementPlugin(),
-        new WebpackShellPlugin({
-          onBuildEnd: ['nodemon build --watch false']
-        })
-      ]
+    ? [new webpack.HotModuleReplacementPlugin(), new NodemonPlugin()]
     : []
   ).concat([
     new CleanWebpackPlugin('build'),

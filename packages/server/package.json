@@ -168,6 +168,7 @@
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.19.1",
+    "nodemon-webpack-plugin": "^4.0.8",
     "react-addons-test-utils": "^16.0.0-alpha.3",
     "react-test-renderer": "16.8.3",
     "request": "^2.83.0",

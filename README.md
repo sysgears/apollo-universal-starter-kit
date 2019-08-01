@@ -373,7 +373,7 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [mobile chat]: /docs/modules/Mobile%20Chat.md
 [project structure]: /docs/Project%20Structure.md
 [importing modules]: /docs/Importing%20Modules.md
-[frequently asked questions]: https://github.com/sysgears/apollo-universal-starter-kit/blob/master/docs/FAQ.md
+[frequently asked questions]: /docs/FAQ.md
 [sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues

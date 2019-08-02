@@ -5,12 +5,14 @@ const path = require('path');
 const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const NodeHmrPlugin = require('node-hmr-plugin');
 
 const buildConfig = require('./build.config');
 
 const modulenameExtra = process.env.MODULENAME_EXTRA ? `${process.env.MODULENAME_EXTRA}|` : '';
-const modulenameRegex = new RegExp(`(${modulenameExtra}@gqlapp|client|webpack/hot/poll)`);
+const modulenameRegex = new RegExp(
+  `(${modulenameExtra}@gqlapp|client|webpack/hot/poll)|(\\.(css|less|scss|png|ico|jpg|gif|xml|woff|woff2|otf|ttf|eot|svg)(\\?[0-9a-z]+)?$)`
+);
 
 const config = {
   entry: {
@@ -27,11 +29,11 @@ const config = {
         use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
       },
       {
-        test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.woff(2)?(\?[0-9a-z]+)?$/,
         use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
       },
       {
-        test: /\.(otf|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(otf|ttf|eot|svg)(\?[0-9a-z]+)?$/,
         use: { loader: 'file-loader', options: { name: '[hash].[ext]' } }
       },
       {
@@ -103,12 +105,7 @@ const config = {
   mode: process.env.NODE_ENV || 'development',
   performance: { hints: false },
   plugins: (process.env.NODE_ENV !== 'production'
-    ? [
-        new webpack.HotModuleReplacementPlugin(),
-        new WebpackShellPlugin({
-          onBuildEnd: ['nodemon build --watch false']
-        })
-      ]
+    ? [new webpack.HotModuleReplacementPlugin(), new NodeHmrPlugin({ cmd: '{app}', restartOnExitCodes: [250] })]
     : []
   ).concat([
     new CleanWebpackPlugin('build'),

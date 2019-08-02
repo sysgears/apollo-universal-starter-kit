@@ -12,7 +12,7 @@ import settings from '@gqlapp/config';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(8)]
+  password: [required, minLength(settings.auth.password.minLength)]
 };
 const { github, facebook, linkedin, google } = settings.auth.social;
 

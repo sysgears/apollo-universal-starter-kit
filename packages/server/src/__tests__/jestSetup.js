@@ -8,6 +8,8 @@ require('@babel/register')({
 });
 
 require.extensions['.scss'] = () => {};
+require.extensions['.css'] = () => {};
+require.extensions['.less'] = () => {};
 
 Object.assign(global, require('../../jest.config').globals);
 

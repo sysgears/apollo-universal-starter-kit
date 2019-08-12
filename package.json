@@ -155,7 +155,7 @@
     "sass-loader": "^7.1.0",
     "shelljs": "^0.8.1",
     "source-list-map": "^2.0.0",
-    "style-loader": "^0.24.0",
+    "style-loader": "^1.0.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "ts-loader": "^4.5.0",

@@ -54,7 +54,7 @@
     "error-stack-parser": "^2.0.1",
     "extract-files": "^5.0.0",
     "filesize": "^3.5.11",
-    "graphql": "^14.1.1",
+    "graphql": "^14.3.1",
     "graphql-iso-date": "^3.5.0",
     "graphql-tag": "^2.6.0",
     "history": "^4.7.2",

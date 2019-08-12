@@ -2,7 +2,8 @@ import { createAppContainer, createDrawerNavigator } from 'react-navigation';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
-import { compose } from 'react-apollo';
+
+import { compose } from '@gqlapp/core-common';
 import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
 import { withUser } from './Auth';

@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { View } from 'react-native';
-import { compose } from 'react-apollo';
+
+import { compose } from '@gqlapp/core-common';
 import { HeaderTitle } from '@gqlapp/look-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 

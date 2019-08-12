@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
-import { translate } from '@gqlapp/i18n-client-react';
+import { graphql } from 'react-apollo';
 
+import { compose } from '@gqlapp/core-common';
+import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
+
 import ResetPasswordView from '../components/ResetPasswordView';
+
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
 const ResetPassword = props => {

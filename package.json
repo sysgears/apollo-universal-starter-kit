@@ -155,7 +155,7 @@
     "sass-loader": "^7.1.0",
     "shelljs": "^0.8.1",
     "source-list-map": "^2.0.0",
-    "style-loader": "^0.23.0",
+    "style-loader": "^0.24.0",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "ts-loader": "^4.5.0",
@@ -191,7 +191,7 @@
     "hard-source-webpack-plugin": "https://github.com/conorh/hard-source-webpack-plugin",
     "kleur": "^3.0.3",
     "immutability-helper": "2.8.1",
-    "graphql": "14.1.1",
+    "graphql": "14.3.1",
     "iterall": "^1.2.2",
     "upath": "^1.1.0",
     "watchpack": "https://github.com/Globegitter/watchpack"

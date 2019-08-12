@@ -30,13 +30,9 @@ interface CounterProps {
 
 const ClientCounter = ({ t }: CounterProps) => (
   <Query query={COUNTER_QUERY_CLIENT}>
-    {({
-      data: {
-        clientCounter: { amount }
-      }
-    }: any) => {
-      return (
-        <ClientCounterView text={t('text', { amount })}>
+    {({ data, loading }: any) => {
+      return loading ? null : (
+        <ClientCounterView text={t('text', { amount: data.clientCounter.amount })}>
           <IncreaseButton t={t} counterAmount={1} />
         </ClientCounterView>
       );

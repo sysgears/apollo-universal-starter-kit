@@ -8,8 +8,8 @@ export const useUsersWithSubscription = (subscribeToMore, filter) => {
   const [usersUpdated, setUsersUpdated] = useState(null);
 
   useEffect(() => {
-    const subscribe = subscribeToUsers();
-    return () => subscribe();
+    const unsubscribe = subscribeToUsers();
+    return () => unsubscribe();
   });
 
   const subscribeToUsers = () => {

@@ -16,10 +16,6 @@ const allEdges = generateEdgesArray(47);
 export const useDataProvider = () => {
   const [items, setItems] = useState(null);
 
-  useEffect(() => {
-    loadData(0, 'replace');
-  }, [loadData]);
-
   const loadData = useCallback(
     (offset, dataDelivery) => {
       const newEdges = allEdges.slice(offset, offset + itemsNumber);
@@ -39,6 +35,10 @@ export const useDataProvider = () => {
     },
     [items]
   );
+
+  useEffect(() => {
+    loadData(0, 'replace');
+  });
 
   return { items, loadData };
 };

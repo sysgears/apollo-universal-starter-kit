@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
+
+import { compose } from '@gqlapp/core-common';
 
 import PostCommentsView from '../components/PostCommentsView';
 

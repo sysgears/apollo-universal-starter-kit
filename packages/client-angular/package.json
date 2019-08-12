@@ -62,7 +62,7 @@
     "apollo-link-ws": "^1.0.17",
     "apollo-logger": "^0.3.2",
     "apollo-upload-client": "^10.0.1",
-    "graphql": "^14.1.1",
+    "graphql": "^14.3.1",
     "minilog": "^3.1.0",
     "rxjs": "^6.5.2",
     "subscriptions-transport-ws": "^0.9.4",

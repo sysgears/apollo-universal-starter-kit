@@ -1,10 +1,11 @@
 import React from 'react';
-import { Mutation, Query } from 'react-apollo';
-import update from 'immutability-helper';
+import { useMutation, useQuery, useSubscription, useApolloClient } from '@apollo/react-hooks';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
+
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
+
+import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
 
 interface ButtonProps {
   counterAmount: number;
@@ -12,127 +13,74 @@ interface ButtonProps {
   counter: any;
 }
 
-const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => (
-  <Mutation mutation={ADD_COUNTER}>
-    {(mutate: any) => {
-      const addServerCounter = (amount: number) => () =>
-        mutate({
-          variables: { amount },
-          optimisticResponse: {
-            __typename: 'Mutation',
-            addServerCounter: {
-              __typename: 'Counter',
-              amount: counter.amount + 1
-            }
-          },
-          update: (cache: any, { data }: any) => {
-            const newAmount = data.addServerCounter.amount;
+const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
+  const [increaseCounter] = useMutation(ADD_COUNTER, {
+    update: (cache: any, { data }: any) => {
+      const newAmount = data.addServerCounter.amount;
 
-            cache.writeQuery({
-              query: COUNTER_QUERY,
-              data: {
-                serverCounter: {
-                  amount: newAmount,
-                  __typename: 'Counter'
-                }
-              }
-            });
+      cache.writeQuery({
+        query: COUNTER_QUERY,
+        data: {
+          serverCounter: {
+            amount: newAmount,
+            __typename: 'Counter'
           }
-        });
+        }
+      });
+    }
+  });
 
-      const onClickHandler = () => addServerCounter(counterAmount);
+  const onClickHandler = (): any =>
+    increaseCounter({
+      variables: { amount: counterAmount },
+      optimisticResponse: {
+        __typename: 'Mutation',
+        addServerCounter: {
+          __typename: 'Counter',
+          amount: counter.amount + 1
+        }
+      }
+    });
 
-      return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
-    }}
-  </Mutation>
-);
+  return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler} />;
+};
 
-interface CounterProps {
+interface ServerCounterProps {
   t: TranslateFunction;
-  subscribeToMore: (opts: any) => any;
-  loading: boolean;
-  counter: any;
 }
 
-class ServerCounter extends React.Component<CounterProps> {
-  private subscription: any;
+const ServerCounter = ({ t }: ServerCounterProps) => {
+  const client = useApolloClient();
 
-  constructor(props: CounterProps) {
-    super(props);
-    this.subscription = null;
-  }
+  const { loading: messageLoading, data: messageData } = useSubscription(COUNTER_SUBSCRIPTION);
 
-  public componentDidMount() {
-    if (!this.props.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  // remove when Renderer is overwritten
-  public componentDidUpdate(prevProps: CounterProps) {
-    if (!prevProps.loading) {
-      // Subscribe or re-subscribe
-      if (!this.subscription) {
-        this.subscribeToCount();
-      }
-    }
-  }
-
-  public componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription();
-    }
-  }
-
-  public subscribeToCount() {
-    this.subscription = this.props.subscribeToMore({
-      document: COUNTER_SUBSCRIPTION,
-      variables: {},
-      updateQuery: (
-        prev: any,
-        {
-          subscriptionData: {
-            data: {
-              counterUpdated: { amount }
-            }
-          }
-        }: any
-      ) => {
-        return update(prev, {
-          serverCounter: {
-            amount: {
-              $set: amount
-            }
-          }
-        });
+  if (!messageLoading) {
+    client.writeQuery({
+      query: COUNTER_QUERY,
+      data: {
+        serverCounter: {
+          amount: messageData.counterUpdated.amount,
+          __typename: 'Counter'
+        }
       }
     });
   }
 
-  public render() {
-    const { t, counter, loading } = this.props;
-    return (
-      <ServerCounterView t={t} counter={counter} loading={loading}>
-        <IncreaseButton t={t} counterAmount={1} counter={counter} />
-      </ServerCounterView>
-    );
+  const {
+    error,
+    data: { serverCounter },
+    loading
+  } = useQuery(COUNTER_QUERY);
+
+  if (error) {
+    throw new Error(String(error));
   }
-}
 
-const ServerCounterWithQuery = (props: any) => (
-  <Query query={COUNTER_QUERY}>
-    {({ loading, error, data, subscribeToMore }: any) => {
-      if (error) {
-        throw new Error(String(error));
-      }
-      return (
-        <ServerCounter {...props} loading={loading} subscribeToMore={subscribeToMore} counter={data.serverCounter} />
-      );
-    }}
-  </Query>
-);
+  return (
+    <ServerCounterView t={t} counter={serverCounter} loading={loading}>
+      <IncreaseButton t={t} counterAmount={1} counter={serverCounter} />
+    </ServerCounterView>
+  );
+};
 
-export default translate('serverCounter')(ServerCounterWithQuery);
+export default translate('serverCounter')(ServerCounter);

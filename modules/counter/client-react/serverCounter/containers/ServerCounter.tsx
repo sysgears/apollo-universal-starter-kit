@@ -1,19 +1,17 @@
 import React from 'react';
 import { useMutation, useQuery, useSubscription, useApolloClient } from '@apollo/react-hooks';
 
-import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-
 import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
-import { ServerCounterView, ServerCounterButton } from '../components/ServerCounterView';
+import IncreaseButton from '../components/IncreaseButton';
+import ServerCounterView from '../components/ServerCounterView';
 
 interface ButtonProps {
-  counterAmount: number;
-  t: TranslateFunction;
+  increaseAmount: number;
   counter: any;
 }
 
-const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
+const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
   const [increaseCounter] = useMutation(ADD_COUNTER, {
     update: (cache: any, { data }: any) => {
       const newAmount = data.addServerCounter.amount;
@@ -32,7 +30,7 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
 
   const onClickHandler = (): any =>
     increaseCounter({
-      variables: { amount: counterAmount },
+      variables: { amount: increaseAmount },
       optimisticResponse: {
         __typename: 'Mutation',
         addServerCounter: {
@@ -42,14 +40,10 @@ const IncreaseButton = ({ counterAmount, t, counter }: ButtonProps) => {
       }
     });
 
-  return <ServerCounterButton text={t('btnLabel')} onClick={onClickHandler} />;
+  return <IncreaseButton text="btnLabel" onClick={onClickHandler} />;
 };
 
-interface ServerCounterProps {
-  t: TranslateFunction;
-}
-
-const ServerCounter = ({ t }: ServerCounterProps) => {
+const ServerCounter = () => {
   const client = useApolloClient();
 
   const { loading: messageLoading, data: messageData } = useSubscription(COUNTER_SUBSCRIPTION);
@@ -77,10 +71,10 @@ const ServerCounter = ({ t }: ServerCounterProps) => {
   }
 
   return (
-    <ServerCounterView t={t} counter={serverCounter} loading={loading}>
-      <IncreaseButton t={t} counterAmount={1} counter={serverCounter} />
+    <ServerCounterView counter={serverCounter} loading={loading}>
+      <IncreaseButtonContainer increaseAmount={1} counter={serverCounter} />
     </ServerCounterView>
   );
 };
 
-export default translate('serverCounter')(ServerCounter);
+export default ServerCounter;

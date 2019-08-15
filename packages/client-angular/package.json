@@ -60,12 +60,12 @@
     "apollo-link-context": "^1.0.17",
     "apollo-link-state": "^0.4.2",
     "apollo-link-ws": "^1.0.17",
-    "apollo-logger": "^0.3.2",
+    "apollo-logger": "^0.3.3",
     "apollo-upload-client": "^10.0.1",
     "graphql": "^14.3.1",
     "minilog": "^3.1.0",
     "rxjs": "^6.5.2",
-    "subscriptions-transport-ws": "^0.9.4",
+    "subscriptions-transport-ws": "^0.9.16",
     "zone.js": "^0.9.1"
   },
   "devDependencies": {

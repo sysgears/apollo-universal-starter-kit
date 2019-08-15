@@ -62,7 +62,7 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.2",
+    "apollo-logger": "^0.3.3",
     "apollo-upload-client": "^10.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.3.1",
@@ -101,7 +101,7 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^4.3.1",
-    "subscriptions-transport-ws": "^0.9.4"
+    "subscriptions-transport-ws": "^0.9.16"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.1.8",

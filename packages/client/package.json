@@ -62,7 +62,7 @@
     "apollo-link-context": "^1.0.7",
     "apollo-link-state": "^0.4.1",
     "apollo-link-ws": "^1.0.3",
-    "apollo-logger": "^0.3.2",
+    "apollo-logger": "^0.3.3",
     "apollo-upload-client": "^10.0.0",
     "babel-polyfill": "^6.26.0",
     "bootstrap": "^4.3.1",
@@ -101,7 +101,7 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^4.3.1",
-    "subscriptions-transport-ws": "^0.9.4"
+    "subscriptions-transport-ws": "^0.9.16"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.1.8",
@@ -144,9 +144,9 @@
   "optionalDependencies": {
     "@expo/vector-icons": "^10.0.1",
     "antd-mobile-rn": "^2.2.1",
-    "expo": "^33.0.0",
-    "native-base": "^2.3.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-33.0.0.tar.gz",
+    "expo": "^34.0.4",
+    "native-base": "^2.13.4",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.4.3",
@@ -154,7 +154,7 @@
     "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",
     "react-native-simple-picker": "^3.1.1",
-    "react-navigation": "^3.11.0",
+    "react-navigation": "^3.11.1",
     "uuid": "^3.3.2"
   },
   "peerDependencies": {

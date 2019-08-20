@@ -40,7 +40,7 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
       }
     });
 
-  return <IncreaseButton text="btnLabel" onClick={onClickHandler} />;
+  return <IncreaseButton onClick={onClickHandler} />;
 };
 
 const ServerCounter = () => {

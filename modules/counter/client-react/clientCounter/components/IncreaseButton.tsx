@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
-import { Button, primary } from '@gqlapp/look-client-react-native';
+import { Button } from '@gqlapp/look-client-react';
 
 interface ButtonProps {
   onClick: () => any;
@@ -9,9 +9,9 @@ interface ButtonProps {
 }
 
 const IncreaseButton = ({ onClick, t }: ButtonProps) => (
-  <Button type={primary} onPress={onClick}>
+  <Button color="primary" onClick={onClick}>
     {t('btnLabel')}
   </Button>
 );
 
-export default translate('serverCounter')(IncreaseButton);
+export default translate('clientCounter')(IncreaseButton);

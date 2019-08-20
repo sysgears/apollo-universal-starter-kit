@@ -14,4 +14,4 @@ const IncreaseButton = ({ onClick, t }: ButtonProps) => (
   </Button>
 );
 
-export default translate('serverCounter')(IncreaseButton);
+export default translate('clientCounter')(IncreaseButton);

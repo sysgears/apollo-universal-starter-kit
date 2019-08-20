@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '@gqlapp/look-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -9,24 +9,27 @@ const Section = styled.section`
 `;
 
 interface ViewProps {
-  text: string;
   children: any;
+  t: TranslateFunction;
+  counter: any;
+  loading: boolean;
 }
 
-export const ClientCounterView = ({ text, children }: ViewProps) => (
-  <Section>
-    <p>{text}</p>
-    {children}
-  </Section>
-);
+const ClientCounterView = ({ children, t, counter, loading }: ViewProps) => {
+  if (loading) {
+    return (
+      <Section>
+        <div className="text-center">{t('loading')}</div>
+      </Section>
+    );
+  } else {
+    return (
+      <Section>
+        <p>{t('text', { amount: counter.amount })}</p>
+        {children}
+      </Section>
+    );
+  }
+};
 
-interface ButtonProps {
-  onClick: () => any;
-  text: string;
-}
-
-export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button id="apollo-link-button" color="primary" onClick={onClick}>
-    {text}
-  </Button>
-);
+export default translate('clientCounter')(ClientCounterView);

@@ -5,13 +5,12 @@ import { Button } from '@gqlapp/look-client-react';
 
 interface ButtonProps {
   onClick: () => any;
-  text: string;
   t: TranslateFunction;
 }
 
-const IncreaseButton = ({ onClick, text, t }: ButtonProps) => (
+const IncreaseButton = ({ onClick, t }: ButtonProps) => (
   <Button id="increase-button" color="primary" onClick={onClick}>
-    {t(text)}
+    {t('btnLabel')}
   </Button>
 );
 

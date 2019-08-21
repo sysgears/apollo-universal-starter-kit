@@ -190,7 +190,6 @@
     "opencollective": "^1.0.3"
   },
   "resolutions": {
-    "@expo/vector-icons": "https://github.com/sysgears/vector-icons#master",
     "fbjs": "^1.0.0",
     "hard-source-webpack-plugin": "https://github.com/conorh/hard-source-webpack-plugin",
     "kleur": "^3.0.3",

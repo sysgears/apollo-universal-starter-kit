@@ -146,7 +146,7 @@
     "@expo/vector-icons": "^10.0.1",
     "antd-mobile-rn": "^2.3.3",
     "expo": "^34.0.4",
-    "native-base": "~2.12.0",
+    "native-base": "^2.13.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",

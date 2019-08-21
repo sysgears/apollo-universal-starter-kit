@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'formik';
+import { get as getPath } from 'lodash';
 
 import { PLATFORM } from '@gqlapp/core-common';
 
@@ -63,8 +64,8 @@ class FieldAdapter extends Component {
     value = value || '';
     checked = checked || false;
     const meta = {
-      touched: formik.touched[name],
-      error: formik.errors[name]
+      touched: getPath(formik.touched, name),
+      error: getPath(formik.errors, name)
     };
 
     const input = {

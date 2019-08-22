@@ -35,8 +35,8 @@ export const useDataProvider = () => {
     },
     [items]
   );
-
-  useEffect(() => {
+  const useMountEffect = fn => useEffect(fn, []);
+  useMountEffect(() => {
     loadData(0, 'replace');
   });
 

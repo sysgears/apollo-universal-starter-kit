@@ -1,6 +1,6 @@
 import React from 'react';
 import chai from 'chai';
-import { render } from 'react-testing-library';
+import { render } from '@testing-library/react';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import { click, find, Renderer } from '@gqlapp/testing-client-react';

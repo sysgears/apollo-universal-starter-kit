@@ -99,11 +99,14 @@ describe('Contact UI works', async () => {
   });
 
   it('Form is not submitted with not valid data', async () => {
+    app = renderer.mount();
+    renderer.history.push('/contact');
+    await waitForElementRender(app.container, 'form[name="contact"]');
     change(nameInput, { target: { name: 'name', value: '' } });
     change(emailInput, { target: { name: 'email', value: 'admin' } });
     change(contentInput, { target: { name: 'content', value: 'test' } });
     click(submitButton);
-    await wait(() => expect(content.textContent).to.not.include('Thank you for contacting us!'));
+    await wait(() => expect(content.textContent).to.include('Invalid email address'));
   });
 
   it('Form is submitted with valid data', async () => {

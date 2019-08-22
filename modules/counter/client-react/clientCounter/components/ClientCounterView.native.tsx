@@ -1,21 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextStyle } from 'react-native';
 
-import { Button, primary } from '@gqlapp/look-client-react-native';
+import { Loading } from '@gqlapp/look-client-react-native';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface ViewProps {
-  text: string;
   children: any;
+  t: TranslateFunction;
+  counter: any;
+  loading: boolean;
 }
 
-export const ClientCounterView = ({ text, children }: ViewProps) => (
-  <View>
-    <View style={styles.element}>
-      <Text style={styles.box as TextStyle}>{text}</Text>
-    </View>
-    {children}
-  </View>
-);
+export const ClientCounterView = ({ children, counter, t, loading }: ViewProps) => {
+  if (loading) {
+    return <Loading text={t('loading')} />;
+  } else {
+    return (
+      <View>
+        <View style={styles.element}>
+          <Text style={styles.box as TextStyle}>{t('text', { amount: counter.amount })}</Text>
+        </View>
+        {children}
+      </View>
+    );
+  }
+};
 
 const styles = StyleSheet.create({
   element: {
@@ -26,15 +35,5 @@ const styles = StyleSheet.create({
     marginBottom: 5
   }
 });
-interface ButtonProps {
-  onClick: () => any;
-  text: string;
-}
 
-export const ClientCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button type={primary} onPress={onClick}>
-    {text}
-  </Button>
-);
-
-export default ClientCounterView;
+export default translate('clientCounter')(ClientCounterView);

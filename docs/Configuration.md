@@ -93,8 +93,7 @@ Apollo Universal Starter Kit contains build-time settings in a  `build.config.js
 
 Apollo Universal Starter Kit uses various UI libraries for the three clients.
 
-With React, you can use either [Twitter Bootstrap] or [Ant Design]. For the React Native mobile app, you can use [Ant
-Design Mobile] or [NativeBase]. The Angular app comes with Angular Material, and the Vue client also uses Bootstrap.
+With React, you can use either [Twitter Bootstrap] or [Ant Design]. For the React Native mobile app, you can use [NativeBase]. The Angular app comes with Angular Material, and the Vue client also uses Bootstrap.
 
 By default, Apollo Universal Starter Kit enables Twitter Bootstrap for the React and Vue clients and NativeBase for the
 mobile app. Angular uses the Material library.
@@ -107,16 +106,6 @@ export for Bootstrap in the `modules/look/client-react/look.ts` file:
 ```javascript
 // export * from './ui-bootstrap';
 export * from './ui-antd';
-```
-
-For the React Native mobile app, change the exports this way:
-
-* To use Ant Design Mobile instead of NativeBase, uncomment the Ant Design Mobile export and comment out the NativeBase
-export in the `modules/look/client-react-native/index.ts` file:
-
-```javascript
-// export * from './ui-native-base';
-export * from './ui-antd-mobile';
 ```
 
 ## Database
@@ -573,7 +562,6 @@ If the error was produced, you need to visit the link shown in the terminal and 
 [webpack]: https://webpack.js.org/
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
-[ant design mobile]: https://mobile.ant.design
 [nativebase]: https://nativebase.io/
 [connection uris]: https://www.postgresql.org/docs/10/static/libpq-connect.html
 [secure tcp/ip connections with ssl]: https://www.postgresql.org/docs/9.1/ssl-tcp.html

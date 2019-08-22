@@ -4,7 +4,7 @@ import { Text, Platform, View } from 'react-native';
 import { ActionSheet } from 'native-base';
 import SimplePicker from 'react-native-simple-picker';
 
-import HeaderTitle from '../../HeaderTitle';
+import { HeaderTitle } from '../../common';
 
 export default class LanguagePicker extends React.Component {
   constructor(props) {

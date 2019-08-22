@@ -30,8 +30,8 @@ and [Express] with support for relational databases such as PostgreSQL, MySQL, a
 [TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla
 JavaScript (the ES6 and ES7 syntax) and TypeScript when creating your modules.
 
-The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design Mobile], and [NativeBase] to provide
-great possibilities for styling for your web and mobile applications.
+The starter kit also integrates [Twitter Bootstrap], [Ant Design], and [NativeBase]
+to provide great possibilities for styling for your web and mobile applications.
 
 ## Table of Contents
 
@@ -339,7 +339,6 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [typescript]: https://www.typescriptlang.org/
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
-[ant design mobile]: https://mobile.ant.design
 [nativebase]: https://nativebase.io
 [apollokit.org]: https://apollokit.org
 [demo application]: https://apollo-universal-starter-kit.herokuapp.com

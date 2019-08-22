@@ -85,8 +85,7 @@ The starter kit provides great styling possibilities by integrating a few generi
 The demo web application uses the Sass version of [Twitter Bootstrap]. To help you style the React components, the
 starter kit was integrated with [Styled Components]. The React Native mobile application uses [NativeBase].
 
-Additionally, you can use [Ant Design] instead of Twitter Bootstrap for the React application, and [Ant Design Mobile]
-instead of NativeBase for the mobile app.
+Additionally, you can use [Ant Design] instead of Twitter Bootstrap for the React application.
 
 The Vue client also uses Bootstrap, while Angular is integrated with Angular Material.
 
@@ -174,7 +173,6 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [styled components]: https://www.styled-components.com/
 [nativebase]: https://nativebase.io
 [ant design]: https://ant.design
-[ant design mobile]: https://mobile.ant.design
 [react google analytics]: https://github.com/react-ga/react-ga
 [webpack]: https://webpack.js.org/
 [haul cli]: https://github.com/callstack-io/haul

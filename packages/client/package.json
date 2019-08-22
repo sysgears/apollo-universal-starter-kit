@@ -143,7 +143,6 @@
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^10.0.1",
-    "antd-mobile-rn": "^2.3.3",
     "expo": "^34.0.4",
     "native-base": "^2.13.5",
     "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",

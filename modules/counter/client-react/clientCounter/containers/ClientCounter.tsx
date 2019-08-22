@@ -1,43 +1,39 @@
 import React from 'react';
-import { Mutation, Query, MutationFn } from 'react-apollo';
+import { useMutation, useQuery } from '@apollo/react-hooks';
 
-import { ClientCounterButton, ClientCounterView } from '../components/ClientCounterView';
+import IncreaseButton from '../components/IncreaseButton';
+import ClientCounterView from '../components/ClientCounterView';
 import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@gqlapp/counter-common';
-import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface ButtonProps {
-  counterAmount: number;
-  t: TranslateFunction;
+  increaseAmount: number;
+  counter: any;
 }
 
-const IncreaseButton = ({ counterAmount, t }: ButtonProps): any => (
-  <Mutation mutation={ADD_COUNTER_CLIENT}>
-    {(mutate: MutationFn) => {
-      const addClientCounter = (amount: any) => () => {
-        const { value }: any = mutate({ variables: { amount } });
-        return value;
-      };
+const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
+  const [increaseCounter] = useMutation(ADD_COUNTER_CLIENT);
 
-      const onClickHandler = () => addClientCounter(counterAmount);
-      return <ClientCounterButton text={t('btnLabel')} onClick={onClickHandler()} />;
-    }}
-  </Mutation>
-);
+  const onClickHandler = (): any => increaseCounter({ variables: { amount: increaseAmount } });
 
-interface CounterProps {
-  t: TranslateFunction;
-}
+  return <IncreaseButton onClick={onClickHandler} />;
+};
 
-const ClientCounter = ({ t }: CounterProps) => (
-  <Query query={COUNTER_QUERY_CLIENT}>
-    {({ data, loading }: any) => {
-      return loading ? null : (
-        <ClientCounterView text={t('text', { amount: data.clientCounter.amount })}>
-          <IncreaseButton t={t} counterAmount={1} />
-        </ClientCounterView>
-      );
-    }}
-  </Query>
-);
+const ClientCounter = () => {
+  const {
+    error,
+    data: { clientCounter },
+    loading
+  } = useQuery(COUNTER_QUERY_CLIENT);
 
-export default translate('clientCounter')(ClientCounter);
+  if (error) {
+    throw new Error(String(error));
+  }
+
+  return (
+    <ClientCounterView counter={clientCounter} loading={loading}>
+      <IncreaseButtonContainer increaseAmount={1} counter={clientCounter} />
+    </ClientCounterView>
+  );
+};
+
+export default ClientCounter;

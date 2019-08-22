@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
@@ -10,21 +10,23 @@ interface CounterProps {
   reduxCount: number;
 }
 
-const ReduxCounter = ({ t, onReduxIncrement, reduxCount }: CounterProps) => (
-  <ReduxCounterView text={t('text', { reduxCount })}>
-    <ReduxCounterButton text={t('btnLabel')} onClick={onReduxIncrement(1)} />
-  </ReduxCounterView>
-);
+const ReduxCounter = ({ t }: CounterProps) => {
+  const reduxCount = useSelector((state: any) => state.counter.reduxCount);
+  const dispatch = useDispatch();
 
-export default connect(
-  (state: any) => ({ reduxCount: state.counter.reduxCount }),
-  (dispatch: any) => ({
-    onReduxIncrement(value: number): () => void {
-      return () =>
-        dispatch({
-          type: 'COUNTER_INCREMENT',
-          value: Number(value)
-        });
-    }
-  })
-)(translate('reduxCounter')(ReduxCounter));
+  const onReduxIncrement = (incrementAmount: number): (() => void) => {
+    return () =>
+      dispatch({
+        type: 'COUNTER_INCREMENT',
+        value: Number(incrementAmount)
+      });
+  };
+
+  return (
+    <ReduxCounterView text={t('text', { reduxCount })}>
+      <ReduxCounterButton text={t('btnLabel')} onClick={onReduxIncrement(1)} />
+    </ReduxCounterView>
+  );
+};
+
+export default translate('reduxCounter')(ReduxCounter);

@@ -69,7 +69,7 @@
     "minilog": "^3.1.0",
     "native-base": "^2.13.5",
     "prop-types": "^15.6.0",
-    "react": "16.8.3",
+    "react": "16.9.0",
     "react-apollo": "^3.0.0",
     "react-debounce-input": "^3.1.0",
     "react-i18next": "^7.6.0",
@@ -113,7 +113,7 @@
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "react-addons-test-utils": "^16.0.0-alpha.3",
-    "react-test-renderer": "16.8.3",
+    "react-test-renderer": "16.9.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.2",
     "ws": "^5.1.1"

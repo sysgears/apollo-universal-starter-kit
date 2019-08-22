@@ -38,7 +38,7 @@ export const useDataProvider = () => {
 
   useEffect(() => {
     loadData(0, 'replace');
-  });
+  }, [loadData]);
 
   return { items, loadData };
 };

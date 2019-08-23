@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { graphql, compose, withApollo } from 'react-apollo';
+import { graphql, withApollo } from 'react-apollo';
+
+import { compose } from '@gqlapp/core-common';
 import { translate } from '@gqlapp/i18n-client-react';
 import { FormError } from '@gqlapp/forms-client-react';
-
 import authentication from '@gqlapp/authentication-client-react';
 
 import LoginView from '../components/LoginView';

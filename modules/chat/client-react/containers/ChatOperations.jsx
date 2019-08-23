@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo/index';
+import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
+
+import { compose } from '@gqlapp/core-common';
 import { translate } from '@gqlapp/i18n-client-react';
 import { withUser } from '@gqlapp/user-client-react';
 import settings from '@gqlapp/config';

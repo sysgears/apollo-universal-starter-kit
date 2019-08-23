@@ -30,8 +30,8 @@ and [Express] with support for relational databases such as PostgreSQL, MySQL, a
 [TypeScript] is our language of choice and we use it across the entire project. However, you can freely mix vanilla
 JavaScript (the ES6 and ES7 syntax) and TypeScript when creating your modules.
 
-The starter kit also integrates [Twitter Bootstrap], [Ant Design], [Ant Design Mobile], and [NativeBase] to provide
-great possibilities for styling for your web and mobile applications.
+The starter kit also integrates [Twitter Bootstrap], [Ant Design], and [NativeBase]
+to provide great possibilities for styling for your web and mobile applications.
 
 ## Table of Contents
 
@@ -282,7 +282,7 @@ Modules
 * [Gitter channel] &ndash; ask questions, find answers, and participate in general discussions
 * [GitHub issues] &ndash; submit issues and send feature requests
 * [Wiki] &ndash; read documentation for the usage scenarios of the starter kit; edit the documentation
-* [FAQ] &ndash; consult the Frequently Asked Questions section in Wiki
+* [FAQ] &ndash; consult the Frequently Asked Questions section
 
 ### Commercial Support
 
@@ -339,7 +339,6 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [typescript]: https://www.typescriptlang.org/
 [twitter bootstrap]: http://getbootstrap.com
 [ant design]: https://ant.design
-[ant design mobile]: https://mobile.ant.design
 [nativebase]: https://nativebase.io
 [apollokit.org]: https://apollokit.org
 [demo application]: https://apollo-universal-starter-kit.herokuapp.com
@@ -373,6 +372,7 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [mobile chat]: /docs/modules/Mobile%20Chat.md
 [project structure]: /docs/Project%20Structure.md
 [importing modules]: /docs/Importing%20Modules.md
+[frequently asked questions]: /docs/FAQ.md
 [sysgears (cyprus) limited]: http://sysgears.com
 [gitter channel]: https://gitter.im/sysgears/apollo-fullstack-starter-kit
 [github issues]: https://github.com/sysgears/apollo-universal-starter-kit/issues

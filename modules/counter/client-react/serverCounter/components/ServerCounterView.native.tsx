@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Text, View, TextStyle } from 'react-native';
 
-import { Button, Loading, primary } from '@gqlapp/look-client-react-native';
-import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { Loading } from '@gqlapp/look-client-react-native';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 interface ViewProps {
   t: TranslateFunction;
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   }
 });
 
-export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
+const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
   if (loading) {
     return <Loading text={t('loading')} />;
   } else {
@@ -36,13 +36,4 @@ export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) 
   }
 };
 
-interface ButtonProps {
-  onClick: () => any;
-  text: string;
-}
-
-export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button type={primary} onPress={onClick}>
-    {text}
-  </Button>
-);
+export default translate('serverCounter')(ServerCounterView);

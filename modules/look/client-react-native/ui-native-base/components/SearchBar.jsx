@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Item, Input, Icon } from 'native-base';
-import { placeholderColor } from '../../styles';
+import { placeholderColor } from '../../common/styles';
 
 const SearchBar = ({ onChange, onChangeText, ...props }) => {
   return (

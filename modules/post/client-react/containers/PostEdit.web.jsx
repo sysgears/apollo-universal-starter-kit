@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { compose, graphql } from 'react-apollo';
+import { graphql } from 'react-apollo';
+
+import { compose } from '@gqlapp/core-common';
 
 import PostEditView from '../components/PostEditView';
 

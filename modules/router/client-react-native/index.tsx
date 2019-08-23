@@ -8,6 +8,7 @@ const ref: { navigator: NavigationContainer } = { navigator: null };
 
 const MainScreenNavigator = () => {
   const Navigator = ref.navigator;
+
   return <Navigator />;
 };
 

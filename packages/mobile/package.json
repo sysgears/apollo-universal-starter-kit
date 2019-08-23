@@ -49,7 +49,7 @@
     "apollo-logger": "^0.3.3",
     "apollo-upload-client": "^10.0.0",
     "expo": "^34.0.3",
-    "expo-cli": "~2.11.0",
+    "expo-cli": "^3.0.10",
     "expo-constants": "^6.0.0",
     "expo-file-system": "^6.0.2",
     "expo-font": "^6.0.1",

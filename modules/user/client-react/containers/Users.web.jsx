@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
-import { compose } from 'react-apollo';
 
+import { compose } from '@gqlapp/core-common';
 import { translate } from '@gqlapp/i18n-client-react';
 import { Button, PageLayout } from '@gqlapp/look-client-react';
 import settings from '@gqlapp/config';
@@ -21,7 +21,8 @@ import {
 } from './UserOperations';
 
 const Users = props => {
-  const { t, updateQuery, subscribeToMore, filter } = props;
+  const { t, updateQuery, subscribeToMore } = props;
+  const filter = { isActive: true };
   const usersUpdated = useUsersWithSubscription(subscribeToMore, filter);
 
   useEffect(() => {
@@ -50,9 +51,9 @@ const Users = props => {
         <Button color="primary">{t('users.btn.add')}</Button>
       </Link>
       <hr />
-      <UsersFilterView {...props} />
+      <UsersFilterView {...props} filter={filter} />
       <hr />
-      <UsersListView {...props} />
+      <UsersListView {...props} filter={filter} />
     </PageLayout>
   );
 };

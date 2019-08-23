@@ -53,7 +53,7 @@ describe('Server counter example UI works', () => {
   });
 
   it('Clicking on increase counter button shows optimistic response', () => {
-    const graphQLButton = find(container, '#graphql-button');
+    const graphQLButton = find(container, '#increase-button');
     click(graphQLButton);
     content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_VALUE + 1}.`);
   });

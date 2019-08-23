@@ -1,8 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Button } from '@gqlapp/look-client-react';
-import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
 const Section = styled.section`
   margin-bottom: 30px;
@@ -16,7 +15,7 @@ interface ViewProps {
   loading: boolean;
 }
 
-export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
+const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
   if (loading) {
     return (
       <Section>
@@ -33,13 +32,4 @@ export const ServerCounterView = ({ t, children, counter, loading }: ViewProps) 
   }
 };
 
-interface ButtonProps {
-  onClick: () => any;
-  text: string;
-}
-
-export const ServerCounterButton = ({ onClick, text }: ButtonProps) => (
-  <Button id="graphql-button" color="primary" onClick={onClick}>
-    {text}
-  </Button>
-);
+export default translate('serverCounter')(ServerCounterView);

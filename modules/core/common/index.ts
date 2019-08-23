@@ -8,3 +8,4 @@ export { default as countries } from './ISOCountries';
 export * from './createReduxStore';
 export * from './utils';
 export * from './crud';
+export { flowRight as compose } from 'lodash';

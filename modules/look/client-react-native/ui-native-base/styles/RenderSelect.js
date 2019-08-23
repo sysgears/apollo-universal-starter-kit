@@ -1,4 +1,4 @@
-import { itemContainer, itemAction, itemTitle } from '../../styles';
+import { itemContainer, itemAction, itemTitle } from '../../common/styles';
 
 const RenderSelectStyles = {
   container: {

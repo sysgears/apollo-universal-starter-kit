@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import PropTypes from 'prop-types';
-import { compose } from 'react-apollo';
+
+import { compose } from '@gqlapp/core-common';
 
 import UsersList from '../components/UsersListView';
 import UsersFilter from '../components/UsersFilterView';

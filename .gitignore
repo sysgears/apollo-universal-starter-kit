@@ -15,3 +15,4 @@ public
 *.iml
 .npmrc
 swagger.yml
+deploy.sh

@@ -1,7 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 
-import { click, wait, render, Renderer, waitForElement } from '@gqlapp/testing-client-react';
+import { act, fireEvent, render, wait, waitForElement } from '@testing-library/react';
+import { Renderer } from '@gqlapp/testing-client-react';
 
 import ClientCounter from '../containers/ClientCounter';
 
@@ -53,9 +53,10 @@ describe('Client counter example UI works', () => {
   });
 
   it('Clicking on increase counter button increases counter', async () => {
+    const apolloLinkButton = dom.getByTestId('apollo-link-button');
+
     act(() => {
-      const apolloLinkButton = dom.getByTestId('apollo-link-button');
-      click(apolloLinkButton);
+      fireEvent.click(apolloLinkButton);
     });
 
     await wait(() => {

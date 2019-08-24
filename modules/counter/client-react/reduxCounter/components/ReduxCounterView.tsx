@@ -26,7 +26,7 @@ interface ButtonProps {
 }
 
 export const ReduxCounterButton = ({ onClick, text }: ButtonProps): any => (
-  <Button id="redux-button" color="primary" onClick={onClick}>
+  <Button data-testid="redux-button" color="primary" onClick={onClick}>
     {text}
   </Button>
 );

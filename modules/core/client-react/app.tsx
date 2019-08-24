@@ -29,7 +29,9 @@ const initWebpackHMR = (modules: ClientModule, entryModule: NodeModule) => {
 const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
   initWebpackHMR(modules, entryModule);
   onCreateMain(modules, entryModule);
-  renderApp({ key: frontendReloadCount });
+  if (!__TEST__) {
+    renderApp({ key: frontendReloadCount });
+  }
 };
 
 if (__DEV__ && module.hot) {

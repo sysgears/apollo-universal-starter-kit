@@ -26,26 +26,26 @@ const mocks = {
 
 describe('Server counter example UI works', () => {
   const renderer = new Renderer(mocks, {});
-  let app: any;
+  let dom: any;
 
   it('Counter section renders without data', async () => {
     act(() => {
-      app = render(renderer.withApollo(<ServerCounter />));
+      dom = render(renderer.withApollo(<ServerCounter />));
     });
-    await waitForElement(() => app.getByText('loading'));
+    await waitForElement(() => dom.getByText('loading'));
   });
 
   it('Counter section renders with queries data', async () => {
-    await waitForElement(() => app.getByText(new RegExp(`The current counter value is ${COUNTER_APOLLO_VALUE}.`)));
+    await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_APOLLO_VALUE}.`)));
   });
 
   it('Section shows GraphQL response when it arrives after button click', async () => {
     act(() => {
-      const graphQLButton = app.getByTestId('increase-button');
+      const graphQLButton = dom.getByTestId('increase-button');
       click(graphQLButton);
     });
 
-    await waitForElement(() => app.getByText(new RegExp(`The current counter value is ${INC_COUNTER_VALUE + 1}.`)));
+    await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${INC_COUNTER_VALUE + 1}.`)));
   });
 
   it('Check subscribed to counter updates', () => {
@@ -61,14 +61,12 @@ describe('Server counter example UI works', () => {
         }
       });
     });
-    await waitForElement(() =>
-      app.getByText(new RegExp(`The current counter value is ${COUNTER_SUBSCRIPTION_VALUE}.`))
-    );
+    await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_SUBSCRIPTION_VALUE}.`)));
   });
 
   it('Unmount section and check unsubscription', async () => {
     act(() => {
-      app.unmount();
+      dom.unmount();
     });
 
     await wait(() => {

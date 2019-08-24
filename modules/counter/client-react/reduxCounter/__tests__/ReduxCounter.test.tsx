@@ -1,8 +1,7 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { render } from '@testing-library/react';
 
-import { click, Renderer, waitForElement } from '@gqlapp/testing-client-react';
+import { act, fireEvent, render, waitForElement } from '@testing-library/react';
+import { Renderer } from '@gqlapp/testing-client-react';
 
 import ReduxCounter from '../containers/ReduxCounter';
 
@@ -20,9 +19,10 @@ describe('Redux counter example UI works', () => {
   });
 
   it('Clicking on increase counter button shows optimistic response', async () => {
+    const reduxButton = dom.getByTestId('redux-button');
+
     act(() => {
-      const reduxButton = dom.getByTestId('redux-button');
-      click(reduxButton);
+      fireEvent.click(reduxButton);
     });
 
     await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_REDUX_VALUE + 1}.`)));

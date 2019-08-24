@@ -1,8 +1,8 @@
 import React from 'react';
-import { act } from 'react-dom/test-utils';
 
-import { render } from '@testing-library/react';
-import { click, Renderer, waitForElement, wait } from '@gqlapp/testing-client-react';
+import { act, fireEvent, render, waitForElement, wait } from '@testing-library/react';
+
+import { Renderer } from '@gqlapp/testing-client-react';
 import { COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
 
 import ServerCounter from '../containers/ServerCounter';
@@ -40,9 +40,10 @@ describe('Server counter example UI works', () => {
   });
 
   it('Section shows GraphQL response when it arrives after button click', async () => {
+    const graphQLButton = dom.getByTestId('increase-button');
+
     act(() => {
-      const graphQLButton = dom.getByTestId('increase-button');
-      click(graphQLButton);
+      fireEvent.click(graphQLButton);
     });
 
     await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${INC_COUNTER_VALUE + 1}.`)));
@@ -53,14 +54,16 @@ describe('Server counter example UI works', () => {
   });
 
   it('Updates counter on data from subscription', async () => {
+    const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
+
     act(() => {
-      const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
       subscription.next({
         data: {
           counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
         }
       });
     });
+
     await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_SUBSCRIPTION_VALUE}.`)));
   });
 

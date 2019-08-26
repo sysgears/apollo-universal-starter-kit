@@ -1,6 +1,7 @@
 module.exports = {
   testMatch: ['<rootDir>/modules/**/client-react/**/*.test.[jt]s?(x)'],
   setupFilesAfterEnv: ['<rootDir>/packages/client/src/__tests__/entry.ts'],
+  setupFiles: ['@testing-library/react/dont-cleanup-after-each'],
   moduleFileExtensions: ['js', 'web.js', 'json', 'jsx', 'web.jsx', 'ts', 'tsx', 'node'],
   rootDir: '../..',
   transform: {

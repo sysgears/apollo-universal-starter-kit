@@ -1,5 +1,5 @@
 import i18n from 'i18next';
-import { reactI18nextModule } from 'react-i18next';
+import { initReactI18next } from 'react-i18next';
 
 import { PLATFORM } from '@gqlapp/core-common';
 import settings from '@gqlapp/config';
@@ -34,5 +34,5 @@ if (settings.i18n.enabled) {
     i18n.use(LanguageDetector);
   }
 
-  i18n.use(reactI18nextModule).init(I18N_CONFIG);
+  i18n.use(initReactI18next).init(I18N_CONFIG);
 }

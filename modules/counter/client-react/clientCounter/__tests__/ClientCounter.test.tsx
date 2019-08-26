@@ -1,12 +1,9 @@
 import React from 'react';
-import chai from 'chai';
 
-import { click, find, wait, render, Renderer } from '@gqlapp/testing-client-react';
-import { translate } from '@gqlapp/i18n-client-react';
+import { act, fireEvent, render, wait, waitForElement } from '@testing-library/react';
+import { Renderer } from '@gqlapp/testing-client-react';
 
 import ClientCounter from '../containers/ClientCounter';
-
-chai.should();
 
 const COUNTER_APOLLO_LINK_VALUE = 20;
 const INCREMENT = 1;
@@ -45,29 +42,25 @@ const resolvers = {
 describe('Client counter example UI works', () => {
   const renderer = new Renderer({}, {}, resolvers);
 
-  let app: any;
-  let container: any;
-  let content;
-  const ApolloLinkStateCounterWithI18n = translate('counter')(ClientCounter);
+  let dom: any;
 
-  beforeEach(() => {
-    if (app) {
-      container = app.container;
-      content = container.firstChild;
-    }
-  });
+  it('Counter section renders with link data', async () => {
+    act(() => {
+      dom = render(renderer.withApollo(<ClientCounter />));
+    });
 
-  it('Counter section renders with link data', () => {
-    app = render(renderer.withApollo(<ApolloLinkStateCounterWithI18n />));
-    container = app.container;
-    content = container.firstChild;
-    content.textContent.should.has.string(`The current counter value is ${COUNTER_APOLLO_LINK_VALUE}.`);
+    await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_APOLLO_LINK_VALUE}.`)));
   });
 
   it('Clicking on increase counter button increases counter', async () => {
-    const apolloLinkButton = find(container, '#apollo-link-button');
-    await click(apolloLinkButton);
-    await wait();
-    mockedCache.data.clientCounter.amount.should.to.equal(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
+    const apolloLinkButton = dom.getByTestId('apollo-link-button');
+
+    act(() => {
+      fireEvent.click(apolloLinkButton);
+    });
+
+    await wait(() => {
+      expect(mockedCache.data.clientCounter.amount).toEqual(COUNTER_APOLLO_LINK_VALUE + INCREMENT);
+    });
   });
 });

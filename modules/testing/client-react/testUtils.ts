@@ -9,16 +9,8 @@ const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></h
 (global as any).navigator = dom.window.navigator;
 
 /* tslint:disable no-var-requires */
-const { prettyDOM } = require('dom-testing-library');
-const {
-  render,
-  renderIntoDocument,
-  Simulate,
-  wait,
-  waitForElement,
-  fireEvent,
-  cleanup
-} = require('react-testing-library');
+const { prettyDOM } = require('@testing-library/dom');
+const { render, renderIntoDocument, wait, waitForElement, fireEvent, cleanup } = require('@testing-library/react');
 
 const find = (container: any, selector: any) => {
   return container.querySelector(selector);
@@ -45,19 +37,19 @@ const waitForElementRender = async (container: any, selector: any): Promise<any>
 };
 
 const click = (element: any) => {
-  Simulate.click(element, { button: 0 });
+  fireEvent.click(element, { button: 0 });
 };
 
 const change = (element: any, value: any) => {
-  Simulate.change(element, value);
+  fireEvent.change(element, value);
 };
 
 const submit = (element: any) => {
-  Simulate.submit(element);
+  fireEvent.submit(element);
 };
 
 const blur = (element: any) => {
-  Simulate.blur(element);
+  fireEvent.blur(element);
 };
 
 const updateContent = (container: any) => {

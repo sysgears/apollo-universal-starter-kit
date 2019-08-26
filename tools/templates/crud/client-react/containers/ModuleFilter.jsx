@@ -1,7 +1,7 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { FilterView } from '@gqlapp/core-client-react';
-import { removeTypename } from '@gqlapp/core-common';
+import { compose, removeTypename } from '@gqlapp/core-common';
 
 import { $Module$Schema } from '@gqlapp/$-module$-server-ts/schema';
 

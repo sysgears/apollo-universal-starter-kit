@@ -1,9 +1,10 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import update from 'immutability-helper';
 import PropTypes from 'prop-types';
 import { ListView } from '@gqlapp/core-client-react';
 import { removeTypename, removeEmpty, updateEntry, deleteEntry } from '@gqlapp/core-common';
+import { compose } from '@gqlapp/core-common';
 
 import { $Module$Schema } from '@gqlapp/$-module$-server-ts/schema';
 

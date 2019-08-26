@@ -1,6 +1,7 @@
 import React from 'react';
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 
+import { compose } from '@gqlapp/core-common';
 import { EditView } from '@gqlapp/core-client-react';
 import { $Module$Schema } from '@gqlapp/$-module$-server-ts/schema';
 import $MODULE$_QUERY from '../graphql/$Module$Query.graphql';

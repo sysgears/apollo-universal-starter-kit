@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, fireEvent, render, wait, waitForElement } from '@testing-library/react';
+import { act, fireEvent, render, wait, waitForElement, RenderResult } from '@testing-library/react';
 import { Renderer } from '@gqlapp/testing-client-react';
 
 import ClientCounter from '../containers/ClientCounter';
@@ -42,7 +42,7 @@ const resolvers = {
 describe('Client counter example UI works', () => {
   const renderer = new Renderer({}, {}, resolvers);
 
-  let dom: any;
+  let dom: RenderResult;
 
   it('Counter section renders with link data', async () => {
     act(() => {
@@ -53,7 +53,7 @@ describe('Client counter example UI works', () => {
   });
 
   it('Clicking on increase counter button increases counter', async () => {
-    const apolloLinkButton = dom.getByTestId('apollo-link-button');
+    const apolloLinkButton = dom.getByText('Increase Apollo Link State counter');
 
     act(() => {
       fireEvent.click(apolloLinkButton);

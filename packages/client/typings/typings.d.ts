@@ -14,3 +14,9 @@ interface Window {
 declare module 'react-native-credit-card-input';
 declare module 'sourcemapped-stacktrace';
 declare module 'minilog';
+
+// Fix VS Code auto-import issue with console:
+// https://stackoverflow.com/questions/53279182/vscode-imports-import-console-requireconsole-automatically
+declare module 'console' {
+  export = typeof import("console");
+}

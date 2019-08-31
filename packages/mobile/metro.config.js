@@ -18,9 +18,6 @@ const config = {
         keep_fnames: true
       }
     }
-  },
-  resolver: {
-    sourceExts: ['jsx', 'js', 'json', 'ts', 'tsx', 'graphql', 'gql']
   }
 };
 

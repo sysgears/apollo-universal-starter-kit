@@ -9,7 +9,7 @@ interface ButtonProps {
 }
 
 const IncreaseButton = ({ onClick, t }: ButtonProps) => (
-  <Button id="apollo-link-button" color="primary" onClick={onClick}>
+  <Button color="primary" onClick={onClick}>
     {t('btnLabel')}
   </Button>
 );

@@ -25,9 +25,7 @@ const UserAddView = ({ t, onSubmit }) => {
   return (
     <PageLayout>
       {renderMetaData()}
-      <Link id="back-button" to="/users">
-        Back
-      </Link>
+      <Link to="/users">Back</Link>
       <h2>
         {t('userEdit.form.titleCreate')} {t('userEdit.form.title')}
       </h2>

@@ -41,7 +41,7 @@ const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile
       width: 50,
       render(text, record) {
         return (
-          <Button color="primary" size="sm" className="delete-button" onClick={() => handleRemoveFile(record.id)}>
+          <Button color="primary" size="sm" onClick={() => handleRemoveFile(record.id)}>
             {t('table.btnDel')}
           </Button>
         );

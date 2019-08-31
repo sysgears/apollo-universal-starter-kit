@@ -44,9 +44,7 @@ const PostEditView = ({ loading, post, match, location, subscribeToMore, editPos
     return (
       <PageLayout>
         {renderMetaData()}
-        <Link id="back-button" to="/posts">
-          {t('post.btn.back')}
-        </Link>
+        <Link to="/posts">{t('post.btn.back')}</Link>
         <h2>
           {t(`post.label.edit`)} {t('post.label.post')}
         </h2>

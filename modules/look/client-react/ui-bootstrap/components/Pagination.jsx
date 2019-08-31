@@ -98,7 +98,7 @@ export default class Pagination extends React.Component {
               ({itemsPerPage} / {total})
             </small>
           </div>
-          <Button id="load-more" color="primary" onClick={() => handlePageChange(pagination, null)}>
+          <Button color="primary" onClick={() => handlePageChange(pagination, null)}>
             {loadMoreText}
           </Button>
         </div>

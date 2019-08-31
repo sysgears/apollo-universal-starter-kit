@@ -122,7 +122,7 @@ function computeRootModulesPath(moduleName) {
  * @returns {string} - Return the computed path
  */
 function computeModulePackageName(moduleName, packageName, old) {
-  return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName)}-${packageName}`;
+  return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName, { separator: '-' })}-${packageName}`;
 }
 
 /**
@@ -144,7 +144,7 @@ function computePackagePath(packageName) {
 function addSymlink(packageName, modulePackageName) {
   fs.symlinkSync(
     `${BASE_PATH}/modules/${packageName}/${modulePackageName}`,
-    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`
+    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName, { separator: '-' })}-${modulePackageName}`
   );
 }
 
@@ -155,7 +155,9 @@ function addSymlink(packageName, modulePackageName) {
  * @param modulePackageName - The name of the package of a new module ([client-react|server-ts] etc.)
  */
 function removeSymlink(packageName, modulePackageName) {
-  fs.unlinkSync(`${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName)}-${modulePackageName}`);
+  fs.unlinkSync(
+    `${BASE_PATH}/node_modules/@gqlapp/${decamelize(packageName, { separator: '-' })}-${modulePackageName}`
+  );
 }
 
 /**

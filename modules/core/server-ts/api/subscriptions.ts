@@ -1,4 +1,4 @@
-import { SubscriptionServer } from 'subscriptions-transport-ws';
+import { SubscriptionServer, ConnectionContext } from 'subscriptions-transport-ws';
 import { execute, subscribe, GraphQLSchema } from 'graphql';
 import { Server } from 'http';
 import ServerModule from '@gqlapp/module-server-ts';
@@ -12,11 +12,23 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
       schema,
       execute,
       subscribe,
-      onConnect: (connectionParams: any, webSocket: any) =>
-        modules.createContext(null, null, connectionParams, webSocket),
+      onConnect: async (connectionParams: any, webSocket: any, ctx: ConnectionContext) => {
+        try {
+          return {
+            ...(await modules.createContext(null, null, connectionParams, webSocket)),
+            wsCtx: ctx
+          };
+        } catch (e) {
+          log.error(e);
+        }
+      },
       onOperation: async (message: any, params: any, webSocket: any) => {
-        params.context = await modules.createContext(null, null, message.payload, webSocket);
-        return params;
+        try {
+          params.context = await modules.createContext(null, null, message.payload, webSocket);
+          return params;
+        } catch (e) {
+          log.error(e);
+        }
       }
     },
     {

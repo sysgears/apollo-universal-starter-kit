@@ -5,6 +5,7 @@ import { Express } from 'express';
 import { ConnectionParamsOptions } from 'subscriptions-transport-ws';
 import { IResolvers } from 'graphql-tools';
 import CommonModule, { CommonModuleShape } from '@gqlapp/module-common';
+import { IncomingMessage } from 'http';
 
 /**
  * A function to create GraphQL context
@@ -20,7 +21,7 @@ type CreateContextFunc = (props: CreateContextFuncProps) => { [key: string]: any
  */
 interface CreateContextFuncProps {
   // HTTP request
-  req: Request;
+  req: IncomingMessage;
   // HTTP response
   res: Response;
   // `subscriptions-transport-ws` WebSocket connection params
@@ -102,7 +103,7 @@ class ServerModule extends CommonModule {
    * @returns GraphQL context
    */
   public async createContext(
-    req: Request,
+    req: IncomingMessage,
     res: Response,
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket

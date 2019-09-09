@@ -1,13 +1,15 @@
 import url from 'url';
 import Constants from 'expo-constants';
+import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
-import { WebBrowser } from 'expo';
+
 import { FontAwesome } from '@expo/vector-icons';
 
 const createAuthRedirectUrl = (authUrl: string): string => {
   const { protocol, hostname, port } = url.parse(__WEBSITE_URL__);
-  const expoHostname = `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
+  // Both iOS Simulator and Node backend on iOS use localhost, so no need to use nip.io in this case
+  const expoHostname = hostname === 'localhost' ? `localhost` : `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = __DEV__ ? expoHostname : hostname;
 
   return `${protocol}//${urlHostname}${port ? ':' + port : ''}${authUrl}?expoUrl=${encodeURIComponent(
@@ -119,7 +121,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#3769ae',
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: 15
   },
   separator: {
     height: 30,

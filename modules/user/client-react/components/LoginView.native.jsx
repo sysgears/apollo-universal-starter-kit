@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, View, Text, Linking, Platform } from 'react-native';
-import { WebBrowser } from 'expo';
+import * as WebBrowser from 'expo-web-browser';
+
 import { translate } from '@gqlapp/i18n-client-react';
 import { lookStyles } from '@gqlapp/look-client-react-native';
 import { setItem } from '@gqlapp/core-common/clientStorage';

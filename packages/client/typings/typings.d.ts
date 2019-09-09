@@ -20,3 +20,12 @@ declare module 'minilog';
 declare module 'console' {
   export = typeof import("console");
 }
+
+declare module '@fortawesome/react-fontawesome' {
+  import ReactFontawesome from '@fortawesome/react-fontawesome';
+  import React from 'react';
+
+  type IconProps = React.DOMAttributes<SVGSVGElement> & ReactFontawesome.Props;
+
+  export function FontAwesomeIcon(props: IconProps): JSX.Element
+}

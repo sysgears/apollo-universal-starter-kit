@@ -25,7 +25,7 @@ export default pubsub => ({
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
       return User.getUsers(orderBy, filter);
     }),
-    user: withAuth(['user:view:self'], (obj, { id }, { identity, User, req: { t } }) => {
+    user: withAuth(['user:view:self'], (obj, { id }, { User, req: { identity, t } }) => {
       if (identity.id === id || identity.role === 'admin') {
         try {
           return { user: User.getUser(id) };
@@ -36,7 +36,14 @@ export default pubsub => ({
 
       throw new Error(t('user:accessDenied'));
     }),
-    currentUser(obj, args, { User, identity }) {
+    currentUser(
+      obj,
+      args,
+      {
+        User,
+        req: { identity }
+      }
+    ) {
       if (identity) {
         return User.getUser(identity.id);
       } else {
@@ -69,7 +76,7 @@ export default pubsub => ({
   },
   Mutation: {
     addUser: withAuth(
-      (obj, { input }, { identity }) => {
+      (obj, { input }, { req: { identity } }) => {
         return identity.id !== input.id ? ['user:create'] : ['user:create:self'];
       },
       async (obj, { input }, { User, req: { universalCookies, t }, mailer, req }) => {
@@ -143,10 +150,10 @@ export default pubsub => ({
       }
     ),
     editUser: withAuth(
-      (obj, args, { identity }) => {
+      (obj, args, { req: { identity } }) => {
         return identity.id !== args.input.id ? ['user:update'] : ['user:update:self'];
       },
-      async (obj, { input }, { User, identity, req: { t }, mailer }) => {
+      async (obj, { input }, { User, req: { identity, t }, mailer }) => {
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === input.id;
 
@@ -216,10 +223,10 @@ export default pubsub => ({
       }
     ),
     deleteUser: withAuth(
-      (obj, args, { identity }) => {
+      (obj, args, { req: { identity } }) => {
         return identity.id !== args.id ? ['user:delete'] : ['user:delete:self'];
       },
-      async (obj, { id }, { identity, User, req: { t } }) => {
+      async (obj, { id }, { User, req: { identity, t } }) => {
         const isAdmin = () => identity.role === 'admin';
         const isSelf = () => identity.id === id;
 

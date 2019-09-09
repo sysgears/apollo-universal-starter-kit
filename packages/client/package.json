@@ -57,7 +57,7 @@
     "antd": "^3.19.8",
     "apollo-cache-inmemory": "1.4.2",
     "apollo-cache-router": "^1.1.6",
-    "apollo-client": "^2.4.7",
+    "apollo-client": "^2.6.4",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "^1.2.11",
     "apollo-link-context": "^1.0.7",
@@ -102,7 +102,8 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^4.3.1",
-    "subscriptions-transport-ws": "^0.9.16"
+    "subscriptions-transport-ws": "^0.9.16",
+    "use-react-router": "^1.0.7"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.1.8",

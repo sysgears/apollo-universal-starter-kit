@@ -20,11 +20,11 @@ const getIdentity = (id, serial = '') => {
 
 const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
 
-const createContextFunc = ({ graphqlContext: { identity } }) => ({
+const createContextFunc = ({ req }) => ({
   User,
   auth: {
-    isAuthenticated: !!identity,
-    scope: identity && identity.role ? scopes[identity.role] : null
+    isAuthenticated: req && req.identity,
+    scope: req && req.identity && req.identity.role ? scopes[req.identity.role] : null
   }
 });
 

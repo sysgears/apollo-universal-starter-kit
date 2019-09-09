@@ -1,13 +1,15 @@
 import url from 'url';
 import Constants from 'expo-constants';
+import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
-import { WebBrowser } from 'expo';
+
+import { log } from '@gqlapp/core-common';
 import { FontAwesome } from '@expo/vector-icons';
 
 const createAuthRedirectUrl = (authUrl: string): string => {
   const { protocol, hostname, port } = url.parse(__WEBSITE_URL__);
-  const expoHostname = `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
+  const expoHostname = Platform.OS === 'ios' ? `localhost` : `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = __DEV__ ? expoHostname : hostname;
 
   return `${protocol}//${urlHostname}${port ? ':' + port : ''}${authUrl}?expoUrl=${encodeURIComponent(
@@ -17,6 +19,7 @@ const createAuthRedirectUrl = (authUrl: string): string => {
 
 const redirectToSocialLogin = (authUrl: string) => {
   const absUrl = createAuthRedirectUrl(authUrl);
+  log.debug('Social login URL', absUrl);
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(absUrl);
   } else {
@@ -119,7 +122,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#3769ae',
-    borderRadius: 4
+    borderRadius: 4,
+    marginBottom: 15
   },
   separator: {
     height: 30,

@@ -41,7 +41,7 @@
     "@expo/vector-icons": "^10.0.1",
     "apollo-cache-inmemory": "1.4.2",
     "apollo-cache-router": "^1.1.6",
-    "apollo-client": "^2.4.7",
+    "apollo-client": "^2.6.4",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "^1.2.11",
     "apollo-link-state": "^0.4.1",

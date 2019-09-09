@@ -4,12 +4,12 @@ import * as WebBrowser from 'expo-web-browser';
 import React from 'react';
 import { View, StyleSheet, Linking, TouchableOpacity, Text, Platform } from 'react-native';
 
-import { log } from '@gqlapp/core-common';
 import { FontAwesome } from '@expo/vector-icons';
 
 const createAuthRedirectUrl = (authUrl: string): string => {
   const { protocol, hostname, port } = url.parse(__WEBSITE_URL__);
-  const expoHostname = Platform.OS === 'ios' ? `localhost` : `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
+  // Both iOS Simulator and Node backend on iOS use localhost, so no need to use nip.io in this case
+  const expoHostname = hostname === 'localhost' ? `localhost` : `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = __DEV__ ? expoHostname : hostname;
 
   return `${protocol}//${urlHostname}${port ? ':' + port : ''}${authUrl}?expoUrl=${encodeURIComponent(
@@ -19,7 +19,6 @@ const createAuthRedirectUrl = (authUrl: string): string => {
 
 const redirectToSocialLogin = (authUrl: string) => {
   const absUrl = createAuthRedirectUrl(authUrl);
-  log.debug('Social login URL', absUrl);
   if (Platform.OS === 'ios') {
     WebBrowser.openBrowserAsync(absUrl);
   } else {

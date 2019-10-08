@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { graphql, withApollo } from 'react-apollo';
+import queryString from 'query-string';
 
 import { compose } from '@gqlapp/core-common';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -13,7 +14,7 @@ import LoginView from '../components/LoginView';
 import LOGIN from '../graphql/Login.graphql';
 
 const Login = props => {
-  const { t, login, client, history } = props;
+  const { t, login, client, history, location } = props;
   const {
     location: { search }
   } = props.history;
@@ -41,7 +42,9 @@ const Login = props => {
     }
 
     await authentication.doLogin(client);
-    history.push('/profile');
+
+    const params = queryString.parse(location.search);
+    history.push(params.redirectBack ? params.redirectBack : '/profile');
   };
 
   return (
@@ -55,7 +58,8 @@ Login.propTypes = {
   login: PropTypes.func,
   t: PropTypes.func,
   client: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
+  location: PropTypes.object
 };
 
 const LoginWithApollo = compose(

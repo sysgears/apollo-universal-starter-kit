@@ -106,7 +106,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   context.pageNotFound === true ? res.status(404) : res.status(200);
 
   if (context.url) {
-    res.writeHead(301, { Location: context.url });
+    res.writeHead(307, { Location: context.url });
     res.end();
   } else {
     if (__DEV__ || !assetMap) {

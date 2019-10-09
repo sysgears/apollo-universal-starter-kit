@@ -138,7 +138,9 @@ class User {
   }
 
   register({ username, email, role = 'user', isActive }, passwordHash) {
-    return knex('user').insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
+    return knex('user')
+      .returning('id')
+      .insert(decamelizeKeys({ username, email, role, passwordHash, isActive }));
   }
 
   createFacebookAuth({ id, displayName, userId }) {

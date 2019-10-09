@@ -7,11 +7,8 @@ import { withLoadedUser } from './AuthBase';
 const AuthRoute = withLoadedUser(
   ({ currentUser, role, redirect = '/login', redirectOnLoggedIn, component: Component, ...rest }) => {
     const RenderComponent = props => {
-      const redirectBack = props.location.search
-        ? props.location.search
-        : props.location.pathname
-        ? `?redirectBack=${props.location.pathname}`
-        : '';
+      const redirectBack =
+        props.location.search || (props.location.pathname ? `?redirectBack=${props.location.pathname}` : '');
 
       // redirect logged in users
       if (redirectOnLoggedIn) {

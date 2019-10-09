@@ -106,13 +106,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   context.pageNotFound === true ? res.status(404) : res.status(200);
 
   if (context.url) {
-    const redirectBack =
-      context.location && context.location.state && context.location.state.from && context.location.state.from.search
-        ? context.location.state.from.search
-        : context.location.state.from.pathname
-        ? `?redirectBack=${context.location.state.from.pathname}`
-        : '';
-    res.writeHead(307, { Location: context.url + redirectBack });
+    res.writeHead(307, { Location: context.url });
     res.end();
   } else {
     if (__DEV__ || !assetMap) {

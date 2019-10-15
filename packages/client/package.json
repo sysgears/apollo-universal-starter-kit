@@ -82,6 +82,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
+    "query-string": "^6.8.3",
     "react": "16.9.0",
     "react-apollo": "^3.0.0",
     "react-art": "^16.9.0",

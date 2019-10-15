@@ -1619,13 +1619,13 @@
     "@expo/spawn-async" "^1.5.0"
     exec-async "^2.2.0"
 
-"@expo/react-native-action-sheet@^1.0.1":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-1.1.2.tgz#4c2f9b8190678799552e83134a975ec370a694d9"
-  integrity sha512-//2EvHVBFVGSAzuJvG0I1UoQVzGJBo2f1CkO+RMnEWdR0FeWYmV7+pCThIroL1czRm/oOtoMxiGS6FgXt6QgVA==
+"@expo/react-native-action-sheet@^3.1.0":
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/@expo/react-native-action-sheet/-/react-native-action-sheet-3.2.0.tgz#1254adf0f633f557dfc343324fb7e39f293badf4"
+  integrity sha512-fpHLhSvhG6/oxH5r25SyeZ4Q/t0/vCqHCBObT7KgnxOxzp2kxMcF3nqAjsd2a/i1CB4lQaiabfYTzpeFmZkFfw==
   dependencies:
-    hoist-non-react-statics "^2.2.2"
-    prop-types "^15.5.10"
+    "@types/hoist-non-react-statics" "^3.3.1"
+    hoist-non-react-statics "^3.3.0"
 
 "@expo/schemer@^1.2.1":
   version "1.2.5"
@@ -3718,7 +3718,7 @@
   resolved "https://registry.yarnpkg.com/@types/history/-/history-4.7.2.tgz#0e670ea254d559241b6eeb3894f8754991e73220"
   integrity sha512-ui3WwXmjTaY73fOQ3/m3nnajU/Orhi6cEu5rzX+BrAAJxa3eITXZ5ch9suPqtM03OWhAHhPSyBGCN4UKoxO20Q==
 
-"@types/hoist-non-react-statics@^3.3.0":
+"@types/hoist-non-react-statics@^3.3.0", "@types/hoist-non-react-statics@^3.3.1":
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/@types/hoist-non-react-statics/-/hoist-non-react-statics-3.3.1.tgz#1124aafe5118cb591977aeb1ceaaed1070eb039f"
   integrity sha512-iMIqiko6ooLrTh1joXodJK5X9xeEALT1kM5G3ZLhD3hszxBdIEd5C75U834D9mLcINgD4OyZf5uQXjkuYydWvA==
@@ -5765,13 +5765,6 @@ babel-plugin-add-react-displayname@^0.0.5:
   version "0.0.5"
   resolved "https://registry.yarnpkg.com/babel-plugin-add-react-displayname/-/babel-plugin-add-react-displayname-0.0.5.tgz#339d4cddb7b65fd62d1df9db9fe04de134122bd5"
   integrity sha1-M51M3be2X9YtHfnbn+BN4TQSK9U=
-
-babel-plugin-check-es2015-constants@6.22.0:
-  version "6.22.0"
-  resolved "https://registry.yarnpkg.com/babel-plugin-check-es2015-constants/-/babel-plugin-check-es2015-constants-6.22.0.tgz#35157b101426fd2ffd3da3f75c7d1e91835bbf8a"
-  integrity sha1-NRV7EBQm/S/9PaP3XH0ekYNbv4o=
-  dependencies:
-    babel-runtime "^6.22.0"
 
 babel-plugin-dynamic-import-node@2.2.0:
   version "2.2.0"
@@ -8256,7 +8249,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.3, create-react-class@^15.6.0, create-react-class@^15.6.2, create-react-class@^15.6.3:
+create-react-class@^15.5.3, create-react-class@^15.6.2, create-react-class@^15.6.3:
   version "15.6.3"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.3.tgz#2d73237fb3f970ae6ebe011a9e66f46dbca80036"
   integrity sha512-M+/3Q6E6DLO6Yx3OwrWjwHBnvfXXYA7W+dFjt/ZDBemHO1DDZhsalX/NUtnTYclN6GfnBDRh4qRHjcDHmlJBJg==
@@ -15402,7 +15395,7 @@ md5.js@^1.3.4:
     inherits "^2.0.1"
     safe-buffer "^5.1.2"
 
-md5@2.2.1, md5@^2.2.1:
+md5@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/md5/-/md5-2.2.1.tgz#53ab38d5fe3c8891ba465329ea23fac0540126f9"
   integrity sha1-U6s41f48iJG6RlMp6iP6wFQBJvk=
@@ -18870,15 +18863,6 @@ promzard@^0.3.0:
   dependencies:
     read "1"
 
-prop-types@15.6.1:
-  version "15.6.1"
-  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.1.tgz#36644453564255ddda391191fb3a125cbdf654ca"
-  integrity sha512-4ec7bY1Y66LymSUOH/zARVYObB23AT2h8cf6e/O6ZALB/N0sqZFEx7rq6EYPX2MkOdKORuooI/H5k9TlR4q7kQ==
-  dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
-
 prop-types@15.7.2, prop-types@15.x, prop-types@^15, prop-types@^15.0.0, prop-types@^15.5.0, prop-types@^15.5.10, prop-types@^15.5.4, prop-types@^15.5.6, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.5.9, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
@@ -20042,33 +20026,22 @@ react-native-gesture-handler@^1.3.0:
     invariant "^2.2.2"
     prop-types "^15.5.10"
 
-react-native-gifted-chat@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/react-native-gifted-chat/-/react-native-gifted-chat-0.4.3.tgz#25b4da866c802e407c06e589495f421f7dcdf70a"
-  integrity sha512-OPTfncSP4NDxrme5cOjSg6z2cjuMMvnPk65XgyE0GhCr02kLUDOQVH/HYFQtMNBsdrtzY7zLM7E+J8cAsmIH1w==
+react-native-gifted-chat@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-native-gifted-chat/-/react-native-gifted-chat-0.11.0.tgz#b392be8b60a9eaf9263c7575263b2aa6a5479d7b"
+  integrity sha512-nJzr+w9jpwzqMpg2HjZClDsDRITVobVM2TQRv8l62V5kgALoWcwlIZaxwj4vZgVhJwsDu2VMbBNT9mvCWnNm/A==
   dependencies:
-    "@expo/react-native-action-sheet" "^1.0.1"
-    md5 "2.2.1"
+    "@expo/react-native-action-sheet" "^3.1.0"
     moment "^2.19.0"
-    prop-types "15.6.1"
+    prop-types "15.7.2"
     react-native-communications "2.2.1"
-    react-native-invertible-scroll-view "^1.1.0"
+    react-native-iphone-x-helper "^1.2.0"
     react-native-lightbox "^0.7.0"
-    react-native-parsed-text "^0.0.20"
-    shallowequal "1.0.2"
-    uuid "3.2.1"
+    react-native-maps "~0.25.0"
+    react-native-parsed-text "https://github.com/EvanBacon/react-native-parsed-text.git"
+    uuid "3.3.3"
 
-react-native-invertible-scroll-view@^1.1.0:
-  version "1.1.1"
-  resolved "https://registry.yarnpkg.com/react-native-invertible-scroll-view/-/react-native-invertible-scroll-view-1.1.1.tgz#43039037e6537dc8c4f29baae1cd1a223bc25d81"
-  integrity sha512-qjb0OoloibCQSxo36BlaUxQgJBRElAgzdmJqwDAqoqc1bOrc2b7h2ijDivz+R/oaOCzg8WV1vcK1yukhBtt4Dg==
-  dependencies:
-    create-react-class "^15.6.0"
-    prop-types "^15.5.10"
-    react-clone-referenced-element "^1.0.1"
-    react-native-scrollable-mixin "^1.0.1"
-
-react-native-iphone-x-helper@^1.0.3:
+react-native-iphone-x-helper@^1.0.3, react-native-iphone-x-helper@^1.2.0:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"
   integrity sha512-/VbpIEp8tSNNHIvstuA3Swx610whci1Zpc9mqNkqn14DkMbw+ORviln2u0XyHG1kPvvwTNGZY6QpeFwxYaSdbQ==
@@ -20098,6 +20071,11 @@ react-native-maps@*:
   resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.24.2.tgz#19974f967cb0c2e24dab74ca879118e0932571b2"
   integrity sha512-1iNIDikp2dkCG+8DguaEviYZiMSYyvwqYT7pO2YTZvuFRDSc/P9jXMhTUnSh4wNDlEeQ47OJ09l0pwWVBZ7wxg==
 
+react-native-maps@~0.25.0:
+  version "0.25.0"
+  resolved "https://registry.yarnpkg.com/react-native-maps/-/react-native-maps-0.25.0.tgz#81bc51eb50e33811a9e1c345cc48869413ead67d"
+  integrity sha512-PFJuW1pt+HnnnN0m0OGk29RSvICFVkK/DScX6cUk0SuCSN2DAHx0y6y57lZyYXcYqU4J4usNpfxgp/ccjASDiw==
+
 react-native-mime-types@^2.2.1:
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/react-native-mime-types/-/react-native-mime-types-2.2.1.tgz#a9760e9916e4e7df03512c60516668f23543f2c0"
@@ -20113,12 +20091,10 @@ react-native-modal@^5.4.0:
     prop-types "^15.6.1"
     react-native-animatable "^1.2.4"
 
-react-native-parsed-text@^0.0.20:
-  version "0.0.20"
-  resolved "https://registry.yarnpkg.com/react-native-parsed-text/-/react-native-parsed-text-0.0.20.tgz#7bd35fec88c3ca0eb0e8250a98e24092b4ee7fef"
-  integrity sha512-n77hYu64Tr3oclzIXBXXaiLh1WbMKdA2Y0x6bX/yqwxAM4afcObENY5VrNB+EsTBJBEDqrypA9D1p2cLEIHkuQ==
+"react-native-parsed-text@git+https://github.com/EvanBacon/react-native-parsed-text.git":
+  version "0.0.22"
+  resolved "git+https://github.com/EvanBacon/react-native-parsed-text.git#24939951b13a8223882c74610d758903eed652ab"
   dependencies:
-    babel-plugin-check-es2015-constants "6.22.0"
     prop-types "^15.5.10"
 
 react-native-reanimated@~1.2.0:
@@ -20137,11 +20113,6 @@ react-native-safe-area-view@^0.14.1:
   version "1.0.0-alpha.22"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.22.tgz#7a120377b52aa9bbb94d0b8541a014026be9289b"
   integrity sha512-kSyAt0AeVU6N7ZonfV6dP6iZF8B7Bce+tk3eujXhzBGsLg0VSLnU7uE9VqJF0xdQrHR91ZjGgVMieo/8df9KTA==
-
-react-native-scrollable-mixin@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/react-native-scrollable-mixin/-/react-native-scrollable-mixin-1.0.1.tgz#34a32167b64248594154fd0d6a8b03f22740548e"
-  integrity sha1-NKMhZ7ZCSFlBVP0NaosD8idAVI4=
 
 react-native-simple-picker@^3.1.1:
   version "3.1.1"
@@ -21769,11 +21740,6 @@ shallow-equal@^1.0.0, shallow-equal@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/shallow-equal/-/shallow-equal-1.2.0.tgz#fd828d2029ff4e19569db7e19e535e94e2d1f5cc"
   integrity sha512-Z21pVxR4cXsfwpMKMhCEIO1PCi5sp7KEp+CmOpBQ+E8GpHwKOw2sEzk7sgblM3d/j4z4gakoWEoPcjK0VJQogA==
-
-shallowequal@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/shallowequal/-/shallowequal-1.0.2.tgz#1561dbdefb8c01408100319085764da3fcf83f8f"
-  integrity sha512-zlVXeVUKvo+HEv1e2KQF/csyeMKx2oHvatQ9l6XjCUj3agvC8XGf6R9HvIPDSmp8FNPvx7b5kaEJTRi7CqxtEw==
 
 shallowequal@1.1.0, shallowequal@^1.0.1, shallowequal@^1.0.2, shallowequal@^1.1.0:
   version "1.1.0"
@@ -24048,15 +24014,15 @@ uuid@3.0.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.0.0.tgz#6728fc0459c450d796a99c31837569bdf672d728"
   integrity sha1-Zyj8BFnEUNeWqZwxg3VpvfZy1yg=
 
-uuid@3.2.1:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.2.1.tgz#12c528bb9d58d0b9265d9a2f6f0fe8be17ff1f14"
-  integrity sha512-jZnMwlb9Iku/O3smGWvZhauCf6cvvpKi4BKRiliS3cxnI+Gz9j5MEpTz2UFuXiKPJocb7gnsLHwiS05ige5BEA==
-
 uuid@3.3.2, uuid@^3.0.0, uuid@^3.0.1, uuid@^3.1.0, uuid@^3.2.1, uuid@^3.3.2:
   version "3.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
+
+uuid@3.3.3:
+  version "3.3.3"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.3.tgz#4568f0216e78760ee1dbf3a4d2cf53e224112866"
+  integrity sha512-pW0No1RGHgzlpHJO1nsVrHKpOEIxkGg1xB+v0ZmdNH5OAeAwzAVrCnI2/6Mtx+Uys6iaylxa+D3g4j63IKKjSQ==
 
 uuid@^2.0.1:
   version "2.0.3"

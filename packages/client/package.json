@@ -146,9 +146,9 @@
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^10.0.1",
-    "expo": "^34.0.4",
+    "expo": "^35.0.0",
     "native-base": "^2.13.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.4.3",

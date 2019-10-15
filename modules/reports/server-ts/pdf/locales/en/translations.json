@@ -1,7 +1,7 @@
 {
-  "title": "This is title of the report",
-  "database": "You can create table with data from database",
-  "orderedList": "Here is example of ordered list",
-  "unorderedList": "And unordered list",
-  "image": "To add an image you have to provide path to an image, width and height"
+  "title": "This is a title of the report",
+  "database": "You can create a table with data from the database",
+  "orderedList": "Here's an example of an ordered list",
+  "unorderedList": "And here's an unordered list",
+  "image": "To add an image, provide a path to an image and the width and height values in pixels"
 }

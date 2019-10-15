@@ -16,11 +16,15 @@ const AuthRoute = withLoadedUser(
       }
 
       // redirect users unlogged or without sufficient permissions
-      return isRoleMatch(role, currentUser) ? (
-        <Component currentUser={currentUser} {...props} {...rest} />
-      ) : (
-        <Redirect to={redirect + redirectBack} />
-      );
+      if (currentUser) {
+        return isRoleMatch(role, currentUser) ? (
+          <Component currentUser={currentUser} {...props} {...rest} />
+        ) : (
+          <Redirect to={redirect} />
+        );
+      } else {
+        return <Redirect to={redirect + redirectBack} />;
+      }
     };
 
     RenderComponent.propTypes = {

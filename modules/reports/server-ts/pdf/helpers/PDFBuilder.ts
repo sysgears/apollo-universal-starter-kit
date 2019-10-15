@@ -1,13 +1,7 @@
 import PdfPrinter from 'pdfmake';
 import { Content, Style } from 'pdfmake/build/pdfmake';
 import fonts from './fonts/Roboto/';
-
-interface UserContact {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-}
+import { UserContact } from '../../models/user-contact';
 
 export default class PDFBuilder {
   private printer = new PdfPrinter(fonts);

@@ -5,7 +5,7 @@
     "icon": "../../app.png",
     "version": "1.0.0",
     "slug": "apollo-universal-starter-kit",
-    "sdkVersion": "34.0.0",
+    "sdkVersion": "35.0.0",
     "ios": {
       "bundleIdentifier": "com.sysgears.apollokit"
     },
@@ -14,7 +14,7 @@
     },
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["jsx", "js", "json", "ts", "tsx", "graphql", "gql"]
+      "sourceExts": ["native.tsx", "native.jsx", "native.ts", "native.js", "jsx", "js", "json", "ts", "tsx", "graphql", "gql"]
     }
   }
 }

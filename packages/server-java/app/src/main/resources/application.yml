@@ -1,0 +1,42 @@
+graphiql:
+    enabled: true
+    endpoint:
+        subscriptions: /graphql
+    mapping: /graphiql
+
+graphql:
+    servlet:
+        async-mode-enabled: true
+        enabled: true
+        exception-handlers-enabled: true
+        mapping: /graphql
+        maxQueryComplexity: 1000
+        maxQueryDepth: 15
+        subscriptions:
+            apollo:
+                keep-alive-enabled: false
+            websocket:
+                path: /graphql
+
+server:
+    address: 127.0.0.1
+    port: 8080
+
+spring:
+    datasource:
+        driverClassName: org.h2.Driver
+        password: ''
+        url: jdbc:h2:mem:apollo
+        username: sa
+    h2:
+        console:
+            enabled: true
+            path: /h2-console
+    jpa:
+        hibernate:
+            ddl-auto: update
+        open-in-view: false
+        properties:
+            hibernate:
+                dialect: org.hibernate.dialect.H2Dialect
+        show-sql: true

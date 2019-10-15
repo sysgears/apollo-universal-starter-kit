@@ -1,0 +1,69 @@
+# Post
+type Post {
+    id: Int!
+    title: String!
+    content: String!
+    comments: [Comment]
+}
+
+# Comment
+type Comment {
+    id: Int!
+    content: String!
+}
+
+extend type Query {
+    # Retrive a post entity by its id
+    post(id: Int!): Post
+}
+
+extend type Mutation {
+    # Create a new post
+    addPost(input: AddPostInput!): Post
+    # Delete a post
+    deletePost(id: Int!): Post
+    # Edit a post
+    editPost(input: EditPostInput!): Post
+    # Add a comment to a post
+    addComment(input: AddCommentInput!): Comment
+    # Delete a comment
+    deleteComment(input: DeleteCommentInput!): Comment
+    # Edit a comment
+    editComment(input: EditCommentInput!): Comment
+}
+
+# CRUD payloads
+# Input for addPost Mutation
+input AddPostInput {
+    title: String!
+    content: String!
+}
+
+# Input for editPost Mutation
+input EditPostInput {
+    id: Int!
+    title: String!
+    content: String!
+}
+
+# Input for addComment Mutation
+input AddCommentInput {
+    content: String!
+    # Needed for commentUpdated Subscription filter
+    postId: Int!
+}
+
+# Input for editComment Mutation
+input DeleteCommentInput {
+    id: Int!
+    # Needed for commentUpdated Subscription filter
+    postId: Int!
+}
+
+# Input for deleteComment Mutation
+input EditCommentInput {
+    id: Int!
+    content: String!
+    # Needed for commentUpdated Subscription filter
+    postId: Int!
+}

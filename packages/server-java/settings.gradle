@@ -1,0 +1,6 @@
+include ':app', ':core', ':counter', ':user', ':post'
+
+project(':core').projectDir = new File('../../modules/core/server-java')
+project(':counter').projectDir = new File('../../modules/counter/server-java')
+project(':user').projectDir = new File('../../modules/user/server-java')
+project(':post').projectDir = new File('../../modules/post/server-java')

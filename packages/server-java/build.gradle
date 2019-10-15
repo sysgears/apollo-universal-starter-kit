@@ -1,0 +1,131 @@
+buildscript {
+
+	ext {
+		springBootPlugin = 'org.springframework.boot:spring-boot-gradle-plugin'
+		springBootVersion = '2.1.3.RELEASE'
+		ltgtPlugin = 'net.ltgt.gradle:gradle-apt-plugin'
+		ltgtVersion = '0.21'
+	}
+
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+
+	dependencies {
+		classpath("${springBootPlugin}:${springBootVersion}")
+		classpath("${ltgtPlugin}:${ltgtVersion}")
+	}
+}
+
+subprojects {
+	apply plugin: 'java'
+	apply plugin: 'org.springframework.boot'
+	apply plugin: 'io.spring.dependency-management'
+	apply plugin: 'net.ltgt.apt'
+	apply plugin: 'application'
+
+	sourceCompatibility = JavaVersion.VERSION_11
+	targetCompatibility = JavaVersion.VERSION_11
+
+	repositories {
+		jcenter()
+		mavenCentral()
+	}
+
+	jar {
+		enabled=true
+	}
+
+	bootJar {
+		launchScript()
+		mainClassName = 'graphql.App'
+		classifier = 'boot'
+	}
+
+	dependencies {
+		//SpringBoot
+		implementation 'org.springframework.boot:spring-boot-starter-web'
+		implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+		testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+		//GraphQL
+		implementation 'com.graphql-java-kickstart:graphql-java-tools:5.5.1'
+		implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:5.7.0'
+		implementation 'com.graphql-java-kickstart:graphiql-spring-boot-autoconfigure:5.7.0'
+		testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:5.7.0'
+
+		implementation 'io.reactivex.rxjava2:rxjava:2.2.7'
+
+		//H2 DataBase
+		implementation 'com.h2database:h2:1.4.198'
+		
+		// https://projectlombok.org
+		implementation 'org.projectlombok:lombok:1.18.6'
+		annotationProcessor 'org.projectlombok:lombok:1.18.6'
+
+		//DotEnv support
+		implementation 'io.github.cdimascio:java-dotenv:5.0.0'
+
+		//JUnit
+		testImplementation('org.junit.jupiter:junit-jupiter:5.4.1')
+		testImplementation 'org.mockito:mockito-junit-jupiter:2.25.1'
+		testImplementation 'org.mockito:mockito-core:2.25.1'
+
+		testImplementation project(':app')
+	}
+
+	task wrapper(type: Wrapper) {
+		gradleVersion = '5.2.1'
+	}
+
+	test {
+		useJUnitPlatform()
+		testLogging {
+			// set options for log level LIFECYCLE
+			events "passed", "skipped", "failed"
+			exceptionFormat "short"
+
+			// set options for log level DEBUG
+			debug {
+				events "started", "skipped", "failed"
+				exceptionFormat "full"
+			}
+
+			// remove standard output/error logging from --info builds
+			// by assigning only 'failed' and 'skipped' events
+			info.events = ["failed", "skipped"]
+		}
+	}
+}
+
+project(':app') {
+	//REQUIRED
+	dependencies {
+		implementation project(':counter')
+        implementation project(':user')
+        implementation project(':post')
+    }
+}
+
+project(':counter') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}
+
+project(':user') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}
+
+project(':post') {
+	//REQUIRED
+	dependencies {
+		implementation project(':core')
+	}
+}

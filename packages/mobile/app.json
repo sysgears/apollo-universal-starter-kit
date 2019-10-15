@@ -14,7 +14,7 @@
     },
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": ["native.tsx", "natixe.jsx", "native.ts", "native.js", "jsx", "js", "json", "ts", "tsx", "graphql", "gql"]
+      "sourceExts": ["native.tsx", "native.jsx", "native.ts", "native.js", "jsx", "js", "json", "ts", "tsx", "graphql", "gql"]
     }
   }
 }

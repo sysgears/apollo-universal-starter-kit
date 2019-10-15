@@ -2,7 +2,7 @@
 
 ## Debugging NodeJS backend server
 
-To debug NodeJS backend server you should enable running NodeJS backend with `inspect` protocol enabled. This is done by modifying `packages/server/webpack.config.js` and adding `--inspect` option to `nodemon`: `onBuildEnd: ['nodemon --inspect build --watch false']`
+To debug NodeJS backend server you should enable running NodeJS backend with `inspect` protocol enabled. This is done by modifying `packages/server/webpack.config.js` and adding `--inspect` option to NodeHmrPlugin `cmd`: `--inspect {app}`. The {app} is replaced with actual path to the compiled bundle.
 
 You are ready to debug your NodeJS server.
 

@@ -25,7 +25,9 @@ const createContextFunc = ({ req }) => ({
   auth: {
     isAuthenticated: req && req.identity,
     scope: req && req.identity && req.identity.role ? scopes[req.identity.role] : null
-  }
+  },
+  getIdentity,
+  getHash
 });
 
 const appContext = {

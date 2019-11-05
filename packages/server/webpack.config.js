@@ -131,6 +131,7 @@ const config = {
   ],
   node: { __dirname: true, __filename: true },
   optimization: {
+    concatenateModules: false,
     minimize: false
   }
 };

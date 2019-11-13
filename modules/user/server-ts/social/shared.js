@@ -19,7 +19,6 @@ export const registerUser = async ({ id, username, displayName, emails: [{ value
   return User.register({
     username: username || displayName,
     email: value,
-    password: id,
     isActive: true
   },
    passwordHash

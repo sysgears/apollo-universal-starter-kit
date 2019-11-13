@@ -14,10 +14,10 @@ class AccessModule extends ServerModule {
   }
 
   get grantAccess() {
-    return async (identity: any, req: Request, passwordHash: string) => {
+    return async (identity: any, req: Request, identityId: string) => {
       let result = {};
       for (const grant of this.grant) {
-        result = merge(result, await grant(identity, req, passwordHash));
+        result = merge(result, await grant(identity, req, identityId));
       }
       return result;
     };

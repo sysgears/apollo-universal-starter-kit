@@ -12,6 +12,7 @@ const addModuleCommand = require('./cli/commands/addModule');
 const deleteModuleCommand = require('./cli/commands/deleteModule');
 const chooseTemplateCommand = require('./cli/commands/chooseTemplate');
 const deleteStackCommand = require('./cli/commands/deleteStack');
+const updateSchemaCommand = require('./cli/commands/updateSchema');
 
 const CommandInvoker = require('./cli/CommandInvoker');
 
@@ -19,7 +20,8 @@ const commandInvoker = new CommandInvoker(
   addModuleCommand,
   deleteModuleCommand,
   chooseTemplateCommand,
-  deleteStackCommand
+  deleteStackCommand,
+  updateSchemaCommand
 );
 
 prog
@@ -55,6 +57,10 @@ List of technologies [react, angular, vue, scala, node]`
 
   .action(({ stackList }, { list }, logger) => {
     commandInvoker.runDeleteStack(stackList, logger, list);
-  });
+  })
+  // Update schema
+  .command('updateschema', 'Update Module Schema')
+  .argument('<moduleName>', 'Module name')
+  .action((args, options, logger) => commandInvoker.runUpdateSchema(args, options, logger));
 
 prog.parse(process.argv);

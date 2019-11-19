@@ -4,6 +4,7 @@ export * from './net';
 export { default as log } from './log';
 export { default as createApolloClient } from './createApolloClient';
 export { default as createReduxStore } from './createReduxStore';
+export { default as schemas } from './generatedSchemas';
 export * from './createReduxStore';
 export * from './utils';
 export { flowRight as compose } from 'lodash';

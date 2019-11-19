@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const {
   getModulePackageName,
   computeModulePath,
@@ -8,6 +9,8 @@ const {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
+  deleteFromFileWithExports,
   removeSymlink,
   runPrettier
 } = require('../helpers/util');
@@ -27,7 +30,10 @@ function deleteModule({ logger, packageName, moduleName, old }) {
 
   if (fs.existsSync(modulePath)) {
     deleteTemplates(params);
-    removeFromModules(params);
+
+    if (packageName !== 'common') {
+      removeFromModules(params);
+    }
     if (!old) removeDependency(params);
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));
@@ -95,28 +101,37 @@ function removeFromModules({ logger, moduleName, packageName, modulePackageName,
  * Removes the module from the dependencies list.
  */
 function removeDependency({ moduleName, packageName, modulePackageName, old }) {
-  // Get package content
-  const packagePath = computePackagePath(packageName);
-  const packageContent = `` + fs.readFileSync(packagePath);
+  if (packageName !== 'common') {
+    // Get package content
+    const packagePath = computePackagePath(packageName);
+    const packageContent = `` + fs.readFileSync(packagePath);
 
-  // Extract dependencies
-  const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
-  const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+    // Extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
 
-  // Remove package
-  const dependenciesWithoutDeleted = dependencies
-    .split(',')
-    .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
+    // Remove package
+    const dependenciesWithoutDeleted = dependencies
+      .split(',')
+      .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
 
-  // Remove module from package list
-  shell
-    .ShellString(
-      packageContent.replace(
-        RegExp(dependenciesRegExp, 'g'),
-        `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+    // Remove module from package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesWithoutDeleted}},\n  "devDependencies"`
+        )
       )
-    )
-    .to(packagePath);
+      .to(packagePath);
+  }
+  const Module = pascalize(moduleName);
+  const fileName = 'generatedSchemas.js';
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, fileName, old);
+  if (fs.existsSync(generatedSchemaPath)) {
+    const schema = `${Module}Schema`;
+    deleteFromFileWithExports(generatedSchemaPath, schema);
+  }
 
   removeSymlink(moduleName, modulePackageName);
 }

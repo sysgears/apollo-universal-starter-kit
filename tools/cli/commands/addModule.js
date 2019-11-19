@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize, decamelize } = require('humps');
 const {
   getModulePackageName,
   getTemplatesPath,
@@ -10,6 +11,8 @@ const {
   getModulesEntryPoint,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
+  updateFileWithExports,
   addSymlink,
   runPrettier
 } = require('../helpers/util');
@@ -27,7 +30,9 @@ function addModule({ logger, packageName, moduleName, old }) {
   const params = { logger, packageName, moduleName, modulePackageName, templatesPath, old };
 
   copyTemplates(params);
-  mergeWithModules(params);
+  if (packageName !== 'common') {
+    mergeWithModules(params);
+  }
   if (!old) addDependency(params);
 
   logger.info(chalk.green(`✔ New module ${moduleName} for package ${packageName} successfully created!`));
@@ -90,28 +95,44 @@ function mergeWithModules({ logger, moduleName, modulePackageName, packageName, 
  * Adds new module as a dependency.
  */
 function addDependency({ moduleName, modulePackageName, packageName, old }) {
-  // Get package content
-  const packagePath = computePackagePath(packageName);
-  const packageContent = `${fs.readFileSync(packagePath)}`;
+  if (packageName !== 'common') {
+    // Get package content
+    const packagePath = computePackagePath(packageName);
+    const packageContent = `${fs.readFileSync(packagePath)}`;
 
-  // Extract dependencies
-  const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
-  const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
+    // Extract dependencies
+    const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
+    const [, dependencies] = dependenciesRegExp.exec(packageContent) || ['', ''];
 
-  // Insert package and sort
-  const dependenciesSorted = dependencies.split(',');
-  dependenciesSorted.push(`\n    "${computeModulePackageName(moduleName, modulePackageName, old)}": "^1.0.0"`);
-  dependenciesSorted.sort();
+    // Insert package and sort
+    const dependenciesSorted = dependencies.split(',');
+    dependenciesSorted.push(`\n    "${computeModulePackageName(moduleName, modulePackageName, old)}": "^1.0.0"`);
+    dependenciesSorted.sort();
 
-  // Add module to package list
-  shell
-    .ShellString(
-      packageContent.replace(
-        RegExp(dependenciesRegExp, 'g'),
-        `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
+    // Add module to package list
+    shell
+      .ShellString(
+        packageContent.replace(
+          RegExp(dependenciesRegExp, 'g'),
+          `"dependencies": {${dependenciesSorted}},\n  "devDependencies"`
+        )
       )
-    )
-    .to(packagePath);
+      .to(packagePath);
+  }
+
+  // Adds new schema to generated schemas list.
+  const Module = pascalize(moduleName);
+  const schema = `${Module}Schema`;
+  const fileName = 'generatedSchemas.js';
+  const options = {
+    pathToFileWithExports: computeGeneratedSchemasPath(packageName, fileName, old),
+    exportName: schema,
+    importString: `import { ${schema} } from '@gqlapp/${decamelize(moduleName, {
+      separator: '-'
+    })}-${modulePackageName}/schema';\n`
+  };
+  updateFileWithExports(options);
+  runPrettier(options.pathToFileWithExports);
 
   addSymlink(moduleName, modulePackageName);
 }

@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import uuidv4 from 'uuid';
-import { camelize, decamelizeKeys, camelizeKeys } from 'humps';
+import { decamelize, decamelizeKeys, camelize, camelizeKeys } from 'humps';
 import { log } from '@gqlapp/core-common';
+import knexnest from 'knexnest';
+import parseFields from 'graphql-parse-fields';
 
 import knex from './connector';
-
-import { orderedFor } from './helpers';
-
+import { selectBy, orderedFor } from './helpers';
 import selectAdapter from './select';
 
 export function createWithIdGenAdapter(options) {
@@ -401,4 +401,33 @@ export function deleteRelationAdapter(options) {
       throw e;
     }
   };
+}
+
+export class Crud {
+  getTableName() {
+    return decamelize(this.schema.__.tableName ? this.schema.__.tableName : this.schema.name);
+  }
+
+  getFullTableName() {
+    return `${this.schema.__.tablePrefix}${this.getTableName()}`;
+  }
+
+  getSchema() {
+    return this.schema;
+  }
+
+  getBaseQuery() {
+    return knex(`${this.getFullTableName()} as ${this.getTableName()}`);
+  }
+
+  _findMany(_, info) {
+    const select = selectBy(this.schema, info, false);
+    const queryBuilder = select(this.getBaseQuery());
+
+    return knexnest(queryBuilder);
+  }
+
+  findMany(args, info) {
+    return this._findMany(args, parseFields(info));
+  }
 }

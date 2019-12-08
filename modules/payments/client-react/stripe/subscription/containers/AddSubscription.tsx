@@ -55,8 +55,10 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
   };
 
   return (
-    <Helmet>
-      <script src="https://js.stripe.com/v3/" type="text/javascript" />
+    <>
+      <Helmet>
+        <script src="https://js.stripe.com/v3/" type="text/javascript" />
+      </Helmet>
       <Mutation
         mutation={ADD_SUBSCRIPTION}
         update={(cache: ApolloCache<any>, { data: { addStripeSubscription } }: any) => {
@@ -75,13 +77,13 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
                   <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
                 </StripeProvider>
               ) : (
-                <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
-              )}
+                  <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
+                )}
             </Fragment>
           );
         }}
       </Mutation>
-    </Helmet>
+    </>
   );
 };
 

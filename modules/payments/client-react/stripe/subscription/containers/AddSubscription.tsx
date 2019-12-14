@@ -77,8 +77,8 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
                   <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
                 </StripeProvider>
               ) : (
-                  <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
-                )}
+                <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />
+              )}
             </Fragment>
           );
         }}

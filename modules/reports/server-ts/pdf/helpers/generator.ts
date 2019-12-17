@@ -1,12 +1,6 @@
 import { TranslationFunction } from 'i18next';
 import PDFBuilder from './PDFBuilder';
-
-interface UserContact {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-}
+import { UserContact } from '../../models/user-contact';
 
 function createPDF(contacts: UserContact[], t: TranslationFunction) {
   const pdf = new PDFBuilder();

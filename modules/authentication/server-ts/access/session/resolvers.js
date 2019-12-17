@@ -6,6 +6,7 @@ export default () => ({
       const session = { ...req.session };
 
       delete session.id;
+      delete req.identity;
 
       req.session = writeSession(req, session);
     }

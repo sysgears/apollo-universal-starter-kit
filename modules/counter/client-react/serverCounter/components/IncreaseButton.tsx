@@ -9,7 +9,7 @@ interface ButtonProps {
 }
 
 const IncreaseButton = ({ onClick, t }: ButtonProps) => (
-  <Button data-testid="increase-button" color="primary" onClick={onClick}>
+  <Button color="primary" onClick={onClick}>
     {t('btnLabel')}
   </Button>
 );

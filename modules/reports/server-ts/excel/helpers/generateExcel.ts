@@ -1,11 +1,5 @@
 import * as xl from 'excel4node';
-
-interface UserContact {
-  id: number;
-  name: string;
-  phone: string;
-  email: string;
-}
+import { UserContact } from '../../models/user-contact';
 
 const wb = new xl.Workbook();
 const options = {

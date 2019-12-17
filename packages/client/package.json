@@ -57,7 +57,7 @@
     "antd": "^3.19.8",
     "apollo-cache-inmemory": "1.4.2",
     "apollo-cache-router": "^1.1.6",
-    "apollo-client": "^2.4.7",
+    "apollo-client": "^2.6.4",
     "apollo-link": "^1.0.6",
     "apollo-link-batch-http": "^1.2.11",
     "apollo-link-context": "^1.0.7",
@@ -82,6 +82,7 @@
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
     "prop-types": "^15.6.0",
+    "query-string": "^6.8.3",
     "react": "16.9.0",
     "react-apollo": "^3.0.0",
     "react-art": "^16.9.0",
@@ -102,7 +103,8 @@
     "redux-devtools-extension": "^2.13.2",
     "sourcemapped-stacktrace": "^1.1.8",
     "styled-components": "^4.3.1",
-    "subscriptions-transport-ws": "^0.9.16"
+    "subscriptions-transport-ws": "^0.9.16",
+    "use-react-router": "^1.0.7"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^5.1.8",
@@ -144,12 +146,12 @@
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^10.0.1",
-    "expo": "^34.0.4",
+    "expo": "^35.0.0",
     "native-base": "^2.13.5",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-34.0.0.tar.gz",
+    "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",
-    "react-native-gifted-chat": "^0.4.3",
+    "react-native-gifted-chat": "^0.11.0",
     "react-native-keyboard-spacer": "^0.4.1",
     "react-native-mime-types": "^2.2.1",
     "react-native-modal": "^5.4.0",

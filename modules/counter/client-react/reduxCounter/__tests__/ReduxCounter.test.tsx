@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, fireEvent, render, waitForElement } from '@testing-library/react';
+import { act, fireEvent, render, waitForElement, RenderResult } from '@testing-library/react';
 import { Renderer } from '@gqlapp/testing-client-react';
 
 import ReduxCounter from '../containers/ReduxCounter';
@@ -9,7 +9,8 @@ const COUNTER_REDUX_VALUE = 1;
 
 describe('Redux counter example UI works', () => {
   const renderer = new Renderer({}, {});
-  let dom: any;
+
+  let dom: RenderResult;
 
   it('Counter section renders with state data', async () => {
     act(() => {
@@ -19,7 +20,7 @@ describe('Redux counter example UI works', () => {
   });
 
   it('Clicking on increase counter button shows optimistic response', async () => {
-    const reduxButton = dom.getByTestId('redux-button');
+    const reduxButton = dom.getByText('Increase Redux counter');
 
     act(() => {
       fireEvent.click(reduxButton);

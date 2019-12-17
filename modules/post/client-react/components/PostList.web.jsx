@@ -23,18 +23,14 @@ const PostList = ({ loading, posts, t, loadData, deletePost }) => {
       title: t('list.column.title'),
       dataIndex: 'title',
       key: 'title',
-      render: (text, record) => (
-        <Link className="post-link" to={`/post/${record.id}`}>
-          {text}
-        </Link>
-      )
+      render: (text, record) => <Link to={`/post/${record.id}`}>{text}</Link>
     },
     {
       title: t('list.column.actions'),
       key: 'actions',
       width: 50,
       render: (text, record) => (
-        <Button color="primary" size="sm" className="delete-button" onClick={() => deletePost(record.id)}>
+        <Button color="primary" size="sm" onClick={() => deletePost(record.id)}>
           {t('post.btn.del')}
         </Button>
       )

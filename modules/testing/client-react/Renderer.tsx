@@ -10,6 +10,7 @@ import { combineReducers, createStore, Store } from 'redux';
 import { graphql, print, getOperationAST, DocumentNode, GraphQLSchema } from 'graphql';
 import { Provider } from 'react-redux';
 import { ApolloClient } from 'apollo-client';
+import { render, RenderResult } from '@testing-library/react';
 
 import { createApolloClient } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
@@ -25,9 +26,6 @@ if (!process.env.JEST_WORKER_ID) {
     console.error('Uncaught error', ex.stack);
   });
 }
-
-// tslint:disable-next-line
-const { render } = require('./testUtils');
 
 const ref: { clientModules: ClientModule; typeDefs: DocumentNode[] } = { clientModules: null, typeDefs: null };
 
@@ -187,7 +185,7 @@ export class Renderer {
     return this.mockLink._getSubscriptions(query, variables);
   }
 
-  public mount() {
+  public mount(): RenderResult {
     return render(
       this.withApollo(
         ref.clientModules.getWrappedRoot(

@@ -129,10 +129,11 @@ const config = {
       whitelist: [modulenameRegex]
     })
   ],
-  node: { __dirname: true, __filename: true },
   optimization: {
+    concatenateModules: false,
     minimize: false
-  }
+  },
+  node: { __dirname: true, __filename: true }
 };
 
 module.exports = config;

@@ -1,7 +1,7 @@
 /*eslint-disable no-unused-vars*/
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Platform } from 'react-native';
-import { WebBrowser } from 'expo';
+import * as WebBrowser from 'expo-web-browser';
 import PropTypes from 'prop-types';
 
 import { StripeSubscriptionProfile } from '@gqlapp/payments-client-react';

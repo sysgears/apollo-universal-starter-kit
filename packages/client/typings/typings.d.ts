@@ -14,3 +14,18 @@ interface Window {
 declare module 'react-native-credit-card-input';
 declare module 'sourcemapped-stacktrace';
 declare module 'minilog';
+
+// Fix VS Code auto-import issue with console:
+// https://stackoverflow.com/questions/53279182/vscode-imports-import-console-requireconsole-automatically
+declare module 'console' {
+  export = typeof import("console");
+}
+
+declare module '@fortawesome/react-fontawesome' {
+  import ReactFontawesome from '@fortawesome/react-fontawesome';
+  import React from 'react';
+
+  type IconProps = React.DOMAttributes<SVGSVGElement> & ReactFontawesome.Props;
+
+  export function FontAwesomeIcon(props: IconProps): JSX.Element
+}

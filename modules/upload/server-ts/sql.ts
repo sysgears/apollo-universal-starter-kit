@@ -1,4 +1,4 @@
-import { knex } from '@gqlapp/database-server-ts';
+import { Model } from 'objection';
 
 interface File {
   name: string;
@@ -7,25 +7,37 @@ interface File {
   size: number;
 }
 
-export default class Upload {
+// Upload model.
+export default class Upload extends Model {
+  static get jsonSchema() {
+    return {
+      type: 'object',
+
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string' },
+        type: { type: 'string' },
+        path: { type: 'string' },
+        size: { type: 'integer' }
+      }
+    };
+  }
+
+  public static tableName = 'upload';
+
   public files() {
-    return knex('upload').select('*');
+    return Upload.query();
   }
 
   public file(id: number) {
-    return knex('upload')
-      .select('*')
-      .where({ id })
-      .first();
+    return Upload.query().findById(id);
   }
 
   public saveFiles(files: [File]) {
-    return knex('upload').insert(files);
+    return Upload.query().insertGraph(files);
   }
 
   public deleteFile(id: number) {
-    return knex('upload')
-      .where({ id })
-      .del();
+    return Upload.query().deleteById(id);
   }
 }

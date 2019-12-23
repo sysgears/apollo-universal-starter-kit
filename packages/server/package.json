@@ -3,9 +3,6 @@
   "private": true,
   "version": "1.0.0",
   "main": "src",
-  "engines": {
-    "node": ">= 8 <= 12"
-  },
   "scripts": {
     "build": "cross-env NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",

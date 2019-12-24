@@ -26,9 +26,9 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   });
 }
 
-const createContextFunc = async ({ graphqlContext: { identity } }: any) => ({
+const createContextFunc = async ({ req }: any) => ({
   StripeSubscription,
-  stripeSubscription: identity ? await StripeSubscription.getSubscription(identity.id) : null
+  stripeSubscription: req && req.identity ? await StripeSubscription.getSubscription(req.identity.id) : null
 });
 
 const beforeware = (app: Express) => {

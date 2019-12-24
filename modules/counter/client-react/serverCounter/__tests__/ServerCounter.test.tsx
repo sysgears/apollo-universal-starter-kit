@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { act, fireEvent, render, waitForElement, wait } from '@testing-library/react';
+import { act, fireEvent, render, waitForElement, wait, RenderResult } from '@testing-library/react';
 
 import { Renderer } from '@gqlapp/testing-client-react';
 import { COUNTER_SUBSCRIPTION } from '@gqlapp/counter-common';
@@ -26,7 +26,8 @@ const mocks = {
 
 describe('Server counter example UI works', () => {
   const renderer = new Renderer(mocks, {});
-  let dom: any;
+
+  let dom: RenderResult;
 
   it('Counter section renders without data', async () => {
     act(() => {
@@ -40,7 +41,7 @@ describe('Server counter example UI works', () => {
   });
 
   it('Section shows GraphQL response when it arrives after button click', async () => {
-    const graphQLButton = dom.getByTestId('increase-button');
+    const graphQLButton = dom.getByText('Increase server counter');
 
     act(() => {
       fireEvent.click(graphQLButton);

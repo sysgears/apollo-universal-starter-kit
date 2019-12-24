@@ -167,7 +167,7 @@ For Windows 10:
 the command below, you can remove all Scala server files:
 
 ```bash
-find -name server-scala | xargs rm -rf
+find . -name server-scala | xargs rm -rf
 ```
 
 If you don't need the ready-made modules, you can also remove them using the [custom CLI].

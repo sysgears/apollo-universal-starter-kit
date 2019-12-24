@@ -12,13 +12,11 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const createContextFunc = async ({ req, graphqlContext, appContext }) => {
+const createContextFunc = async ({ req, appContext }) => {
   const { getIdentity } = appContext;
 
   if (getIdentity) {
-    const identity = graphqlContext.identity || (await getCurrentIdentity({ req, getIdentity }));
-
-    return { identity };
+    req.identity = req.identity || (await getCurrentIdentity({ req, getIdentity }));
   }
 };
 

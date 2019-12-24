@@ -1,7 +1,8 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import * as FileSystem from 'expo-file-system';
-import { ImagePicker, Permissions } from 'expo';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';

@@ -46,9 +46,9 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
 const ServerCounter = () => {
   const client = useApolloClient();
 
-  const { loading: messageLoading, data: messageData } = useSubscription(COUNTER_SUBSCRIPTION);
+  const { data: messageData } = useSubscription(COUNTER_SUBSCRIPTION);
 
-  if (!messageLoading) {
+  if (messageData) {
     client.writeQuery({
       query: COUNTER_QUERY,
       data: {

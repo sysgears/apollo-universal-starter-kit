@@ -1,22 +1,10 @@
-import chai, { expect } from 'chai';
-import _ from 'lodash';
-import {
-  find,
-  findAll,
-  updateContent,
-  click,
-  change,
-  submit,
-  wait,
-  waitForElementRender,
-  Renderer
-} from '@gqlapp/testing-client-react';
+import { act, fireEvent, wait, waitForElement, RenderResult } from '@testing-library/react';
+
+import { Renderer } from '@gqlapp/testing-client-react';
 
 import POSTS_SUBSCRIPTION from '../graphql/PostsSubscription.graphql';
 import POST_SUBSCRIPTION from '../graphql/PostSubscription.graphql';
 import COMMENT_SUBSCRIPTION from '../graphql/CommentSubscription.graphql';
-
-chai.should();
 
 const createNode = (id: number) => ({
   id,
@@ -73,66 +61,68 @@ const mocks = {
 
 describe('Posts and comments example UI works', () => {
   const renderer = new Renderer(mocks, {});
-  let app: any;
-  let container: any;
-  let content: any;
+
+  let dom: RenderResult;
 
   beforeAll(async () => {
-    app = renderer.mount();
-    renderer.history.push('/posts');
-    await waitForElementRender(app.container, 'h2');
-  });
+    dom = renderer.mount();
 
-  beforeEach(async () => {
-    // Reset spy mutations on each step
-    Object.keys(mutations).forEach(key => delete mutations[key]);
-    if (app) {
-      container = app.container;
-      content = updateContent(container);
-    }
+    act(() => {
+      renderer.history.push('/posts');
+    });
+
+    await waitForElement(() => dom.getByText('Posts'));
   });
 
   it('Posts page renders with data', () => {
-    expect(content.textContent).to.include('Post title 1');
-    expect(content.textContent).to.include('Post title 2');
-    expect(content.textContent).to.include('2 / 4');
+    expect(dom.getByText('Post title 1')).toBeDefined();
+    expect(dom.getByText('Post title 2')).toBeDefined();
+    expect(dom.getByText(RegExp(/2[\s]*\/[\s]*4/))).toBeDefined();
   });
 
-  it('Clicking load more works', () => {
-    const loadMoreButton = find(container, '#load-more');
-    click(loadMoreButton);
-  });
+  it('Clicking load more loads more posts', async () => {
+    act(() => {
+      const loadMoreButton = dom.getByText(RegExp('Load more'));
+      fireEvent.click(loadMoreButton);
+    });
 
-  it('Clicking load more loads more posts', () => {
-    expect(content.textContent).to.include('Post title 3');
-    expect(content.textContent).to.include('Post title 4');
-    expect(content.textContent).to.include('4 / 4');
+    await wait(() => {
+      expect(dom.getByText('Post title 3')).toBeDefined();
+      expect(dom.getByText('Post title 4')).toBeDefined();
+      expect(dom.getByText(RegExp(/4[\s]*\/[\s]*4/))).toBeDefined();
+    });
   });
 
   it('Check subscribed to post list updates', () => {
-    expect(renderer.getSubscriptions(POSTS_SUBSCRIPTION)).has.lengthOf(1);
+    expect(renderer.getSubscriptions(POSTS_SUBSCRIPTION)).toHaveLength(1);
   });
 
-  it('Updates post list on post delete from subscription', () => {
+  it('Updates post list on post delete from subscription', async () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription.next({
-      data: {
-        postsUpdated: {
-          mutation: 'DELETED',
-          node: createNode(2),
-          __typename: 'UpdatePostPayload'
+
+    act(() => {
+      subscription.next({
+        data: {
+          postsUpdated: {
+            mutation: 'DELETED',
+            node: createNode(2),
+            __typename: 'UpdatePostPayload'
+          }
         }
-      }
+      });
     });
 
-    expect(content.textContent).to.not.include('Post title 2');
-    expect(content.textContent).to.include('3 / 3');
+    await wait(() => {
+      expect(dom.queryByText('Post title 2')).toBeNull();
+      expect(dom.getByText(RegExp(/3[\s]*\/[\s]*3/))).toBeDefined();
+    });
   });
 
-  it('Updates post list on post create from subscription', () => {
+  it('Updates post list on post create from subscription', async () => {
     const subscription = renderer.getSubscriptions(POSTS_SUBSCRIPTION)[0];
-    subscription.next(
-      _.cloneDeep({
+
+    act(() => {
+      subscription.next({
         data: {
           postsUpdated: {
             mutation: 'CREATED',
@@ -140,193 +130,230 @@ describe('Posts and comments example UI works', () => {
             __typename: 'UpdatePostPayload'
           }
         }
-      })
-    );
+      });
+    });
 
-    expect(content.textContent).to.include('Post title 2');
-    expect(content.textContent).to.include('4 / 4');
+    await wait(() => {
+      expect(dom.getByText('Post title 2')).toBeDefined();
+      expect(dom.getByText(RegExp(/4[\s]*\/[\s]*4/))).toBeDefined();
+    });
   });
 
-  it('Clicking delete optimistically removes post', () => {
+  it('Clicking delete removes the post', async () => {
     mutations.deletePost = (obj: any, { id }: any) => {
       return createNode(id);
     };
 
-    const deleteButtons = findAll(container, '.delete-button');
-    expect(deleteButtons).has.lengthOf(4);
-    click(deleteButtons[deleteButtons.length - 1]);
-    expect(content.textContent).to.not.include('Post title 4');
-    expect(content.textContent).to.include('3 / 3');
+    const deleteButtons = dom.getAllByText('Delete');
+    expect(deleteButtons).toHaveLength(4);
+
+    act(() => {
+      fireEvent.click(deleteButtons[deleteButtons.length - 1]);
+    });
+
+    await wait(() => {
+      expect(dom.getByText('Post title 3')).toBeDefined();
+      expect(dom.queryByText('Post title 4')).toBeNull();
+      expect(dom.getByText(RegExp(/3[\s]*\/[\s]*3/))).toBeDefined();
+    });
   });
 
-  it('Clicking delete removes the post', () => {
-    expect(content.textContent).to.include('Post title 3');
-    expect(content.textContent).to.not.include('Post title 4');
-    expect(content.textContent).to.include('3 / 3');
-  });
+  it('Clicking on post opens post form', async () => {
+    const post3 = dom.getByText('Post title 3');
 
-  it('Clicking on post works', () => {
-    const postLinks = findAll(container, '.post-link');
-    click(postLinks[postLinks.length - 1]);
-  });
+    act(() => {
+      fireEvent.click(post3);
+    });
 
-  it('Clicking on post opens post form', () => {
-    expect(content.textContent).to.include('Edit Post');
-    const postForm = find(container, 'form[name="post"]');
-    expect(find(postForm, '[name="title"]').value).to.equal('Post title 3');
-    expect(find(postForm, '[name="content"]').value).to.equal('Post content 3');
+    await wait(() => {
+      expect(dom.getByDisplayValue('Post title 3')).toBeDefined();
+      expect(dom.getByDisplayValue('Post content 3')).toBeDefined();
+      expect(dom.getByText(/Edit[\s]*Post/)).toBeDefined();
+    });
   });
 
   it('Check subscribed to post updates', () => {
-    expect(renderer.getSubscriptions(POST_SUBSCRIPTION)).has.lengthOf(1);
+    expect(renderer.getSubscriptions(POST_SUBSCRIPTION)).toHaveLength(1);
   });
 
-  it('Updates post form on post updated from subscription', () => {
+  it('Updates post form when post updated from subscription', async () => {
     const subscription = renderer.getSubscriptions(POST_SUBSCRIPTION)[0];
-    subscription.next({
-      data: {
-        postUpdated: {
-          mutation: 'UPDATED',
-          id: 3,
-          node: {
+
+    act(() => {
+      subscription.next({
+        data: {
+          postUpdated: {
+            mutation: 'UPDATED',
             id: 3,
-            title: 'Post title 203',
-            content: 'Post content 204',
-            __typename: 'Post'
-          },
-          __typename: 'UpdatePostPayload'
+            node: {
+              id: 3,
+              title: 'Post title 203',
+              content: 'Post content 204',
+              __typename: 'Post'
+            },
+            __typename: 'UpdatePostPayload'
+          }
         }
-      }
+      });
     });
-    const postForm = find(container, 'form[name="post"]');
-    expect(find(postForm, '[name="title"]').value).to.equal('Post title 203');
-    expect(find(postForm, '[name="content"]').value).to.equal('Post content 204');
+
+    await wait(() => {
+      expect(dom.getByDisplayValue('Post title 203')).toBeDefined();
+      expect(dom.getByDisplayValue('Post content 204')).toBeDefined();
+    });
   });
 
-  it('Post editing form works', done => {
-    mutations.editPost = (obj: any, { input }: any) => {
-      expect(input.id).to.equal(3);
-      expect(input.title).to.equal('Post title 33');
-      expect(input.content).to.equal('Post content 33');
-      done();
-      return input;
-    };
+  it('Opening post by URL works', async () => {
+    act(() => {
+      renderer.history.push('/post/4');
+    });
 
-    const postForm = find(container, 'form[name="post"]');
-    change(find(postForm, '[name="title"]'), { target: { name: 'title', value: 'Post title 33' } });
-    change(find(postForm, '[name="content"]'), { target: { name: 'content', value: 'Post content 33' } });
-    submit(postForm);
+    await wait(() => {
+      expect(dom.getByText(/Edit[\s]+Post/)).toBeDefined();
+      expect(dom.getByDisplayValue('Post title 4')).toBeDefined();
+      expect(dom.getByDisplayValue('Post content 4')).toBeDefined();
+    });
   });
 
-  it('Check opening post by URL', () => {
-    renderer.history.push('/post/3');
+  it('Post editing form works', async () => {
+    let values: any;
+
+    mutations.editPost = (obj: any, { input }: any) => (values = input);
+
+    // FIXME: `act` should be enabled here and below, when `formik` will support it correctly
+    // act(() => {
+    fireEvent.change(dom.getByPlaceholderText('Title'), { target: { value: 'Post title 44' } });
+    fireEvent.change(dom.getByPlaceholderText('Content'), { target: { value: 'Post content 44' } });
+    fireEvent.click(dom.getByText('Update'));
+    // });
+
+    await wait(() => {
+      expect(values.id).toEqual(4);
+      expect(values.title).toEqual('Post title 44');
+      expect(values.content).toEqual('Post content 44');
+    });
   });
 
-  it('Opening post by URL works', () => {
-    const postForm = find(container, 'form[name="post"]');
-    expect(content.textContent).to.include('Edit Post');
-    expect(find(postForm, '[name="title"]').value).to.equal('Post title 33');
-    expect(find(postForm, '[name="content"]').value).to.equal('Post content 33');
-  });
+  it('Comment adding works', async () => {
+    let values: any;
 
-  it('Comment adding works', done => {
-    mutations.addComment = (obj: any, { input }: any) => {
-      expect(input.postId).to.equal(3);
-      expect(input.content).to.equal('Post comment 24');
-      done();
-      return input;
-    };
+    mutations.addComment = (obj: any, { input }: any) => (values = input);
 
-    const commentForm = find(container, 'form[name="comment"]');
-    change(find(commentForm, '[name="content"]'), { target: { name: 'content', value: 'Post comment 24' } });
-    submit(commentForm);
-  });
+    act(() => {
+      renderer.history.push('/post/4');
+    });
 
-  it('Comment adding works after submit', () => {
-    expect(content.textContent).to.include('Post comment 24');
+    await wait(() => {
+      expect(dom.getByText(/Edit[\s]+Post/)).toBeDefined();
+    });
+
+    fireEvent.change(dom.getByPlaceholderText('Comment'), { target: { value: 'Post comment 24' } });
+    fireEvent.click(dom.getByText('Save'));
+
+    await wait(() => {
+      expect(values.postId).toEqual(4);
+      expect(values.content).toEqual('Post comment 24');
+      expect(dom.getByText('Post comment 24')).toBeDefined();
+    });
   });
 
   it('Updates comment form on comment added got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
-    subscription.next({
-      data: {
-        commentUpdated: {
-          mutation: 'CREATED',
-          id: 3003,
-          postId: 3,
-          node: {
+
+    act(() => {
+      subscription.next({
+        data: {
+          commentUpdated: {
+            mutation: 'CREATED',
             id: 3003,
-            content: 'Post comment 3',
-            __typename: 'Comment'
-          },
-          __typename: 'UpdateCommentPayload'
+            postId: 3,
+            node: {
+              id: 3003,
+              content: 'Post comment 3',
+              __typename: 'Comment'
+            },
+            __typename: 'UpdateCommentPayload'
+          }
         }
-      }
+      });
     });
 
-    expect(content.textContent).to.include('Post comment 3');
+    expect(dom.getByText('Post comment 3')).toBeDefined();
   });
 
   it('Updates comment form on comment deleted got from subscription', () => {
     const subscription = renderer.getSubscriptions(COMMENT_SUBSCRIPTION)[0];
-    subscription.next({
-      data: {
-        commentUpdated: {
-          mutation: 'DELETED',
-          id: 3003,
-          postId: 3,
-          node: {
+
+    act(() => {
+      subscription.next({
+        data: {
+          commentUpdated: {
+            mutation: 'DELETED',
             id: 3003,
-            content: 'Post comment 3',
-            __typename: 'Comment'
-          },
-          __typename: 'UpdateCommentPayload'
+            postId: 3,
+            node: {
+              id: 3003,
+              content: 'Post comment 3',
+              __typename: 'Comment'
+            },
+            __typename: 'UpdateCommentPayload'
+          }
         }
-      }
+      });
     });
-    expect(content.textContent).to.not.include('Post comment 3');
+
+    expect(dom.queryByText('Post comment 3')).toBeNull();
   });
 
-  it('Comment deleting optimistically removes comment', async () => {
-    const deleteButtons = findAll(container, '.delete-comment');
-    expect(deleteButtons).has.lengthOf(3);
-    click(deleteButtons[deleteButtons.length - 1]);
+  it('Comment deleting removes comment', async () => {
+    const deleteButtons = dom.getAllByText('Delete');
+    expect(deleteButtons).toHaveLength(3);
+
+    act(() => {
+      fireEvent.click(deleteButtons[deleteButtons.length - 1]);
+    });
+
     await wait(() => {
-      expect(content.textContent).to.not.include('Post comment 24');
-      expect(findAll(container, '.delete-comment')).has.lengthOf(2);
+      expect(dom.queryByText('Post comment 24')).toBeNull();
+      expect(dom.getAllByText('Delete')).toHaveLength(2);
     });
   });
 
-  it('Clicking comment delete removes the comment', () => {
-    expect(content.textContent).to.not.include('Post comment 24');
-    expect(findAll(container, '.delete-comment')).has.lengthOf(2);
-  });
-  it('Comment editing works', async done => {
-    mutations.editComment = (obj: any, { input }: any) => {
-      expect(input.postId).to.equal(3);
-      expect(input.content).to.equal('Edited comment 2');
-      done();
-      return input;
-    };
-    const editButtons = findAll(container, '.edit-comment');
-    expect(editButtons).has.lengthOf(2);
-    click(editButtons[editButtons.length - 1]);
-    await wait(() => app.getByPlaceholderText('Comment'));
-    const commentForm = find(container, 'form[name="comment"]');
-    expect(find(commentForm, '[name="content"]').value).to.equal('Post comment 2');
-    change(find(commentForm, '[name="content"]'), { target: { name: 'content', value: 'Edited comment 2' } });
-    submit(commentForm);
+  it('Comment editing works', async () => {
+    let values: any;
+
+    mutations.editComment = (obj: any, { input }: any) => (values = input);
+
+    const editButtons = dom.getAllByText('Edit');
+    expect(dom.getByText('Post comment 2'));
+    expect(editButtons).toHaveLength(2);
+
+    act(() => {
+      fireEvent.click(editButtons[editButtons.length - 1]);
+    });
+
+    await waitForElement(() => dom.getByDisplayValue('Post comment 2'));
+
+    fireEvent.change(dom.getByDisplayValue('Post comment 2'), { target: { value: 'Edited comment 2' } });
+    fireEvent.submit(dom.getByText('Save'));
+
+    await wait(() => {
+      expect(values.postId).toEqual(4);
+      expect(values.content).toEqual('Edited comment 2');
+    });
   });
 
   it('Clicking back button takes to post list', async () => {
-    expect(content.textContent).to.include('Edited comment 2');
-    const backButton = find(container, '#back-button');
-    click(backButton);
-    const loadMoreButton = await waitForElementRender(app.container, '#load-more');
-    click(loadMoreButton);
-    await waitForElementRender(app.container, 'a[href="/post/3"]');
-    content = updateContent(container);
-    // change posts query fetching policy, now if present difference in data we will get data from network
-    expect(content.textContent).to.include('Post title 1');
+    const backButton = dom.getByText('Back');
+    act(() => {
+      fireEvent.click(backButton);
+    });
+
+    const loadMoreButton = await waitForElement(() => dom.getByText(RegExp('Load more')));
+    act(() => {
+      fireEvent.click(loadMoreButton);
+    });
+
+    await waitForElement(() => dom.getByText('Post title 1'));
   });
 });

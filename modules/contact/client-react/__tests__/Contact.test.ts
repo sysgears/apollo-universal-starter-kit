@@ -1,16 +1,25 @@
-import { act, fireEvent, waitForElement, wait } from '@testing-library/react';
+import { act, fireEvent, waitForElement, wait, RenderResult } from '@testing-library/react';
 
 import { Renderer } from '@gqlapp/testing-client-react';
 
 describe('Contact UI works', () => {
   const renderer = new Renderer({});
 
-  let dom: any;
+  let dom: RenderResult;
 
   let nameInput: any;
   let emailInput: any;
   let contentInput: any;
   let submitButton: any;
+
+  beforeAll(async () => {
+    act(() => {
+      dom = renderer.mount();
+      renderer.history.push('/contact');
+    });
+
+    await waitForElement(() => dom.getAllByText('Contact Us'));
+  });
 
   beforeEach(() => {
     if (dom) {
@@ -22,12 +31,7 @@ describe('Contact UI works', () => {
   });
 
   it('Contact page renders on mount', async () => {
-    act(() => {
-      dom = renderer.mount();
-      renderer.history.push('/contact');
-    });
-
-    await waitForElement(() => dom.getAllByText('Contact Us'));
+    expect(dom.getAllByText('Contact Us')).toBeDefined();
   });
 
   it('Name validation works', async () => {

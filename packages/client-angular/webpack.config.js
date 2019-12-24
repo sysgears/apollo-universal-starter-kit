@@ -200,6 +200,9 @@ const config = {
       checkSyntacticErrors: true
     })
   ]),
+  optimization: {
+    concatenateModules: false
+  },
   node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
   devServer: {
     host: '0.0.0.0',

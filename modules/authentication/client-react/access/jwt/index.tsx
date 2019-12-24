@@ -1,4 +1,5 @@
-import { ApolloLink, Observable } from 'apollo-link';
+import { ApolloLink, Observable, Operation } from 'apollo-link';
+import { ApolloClient } from 'apollo-client';
 
 import { getItem, setItem, removeItem } from '@gqlapp/core-common/clientStorage';
 import settings from '@gqlapp/config';
@@ -7,7 +8,7 @@ import AccessModule from '../AccessModule';
 
 import REFRESH_TOKENS_MUTATION from './graphql/RefreshTokens.graphql';
 
-const setJWTContext = async operation => {
+const setJWTContext = async (operation: Operation) => {
   const accessToken = await getItem('accessToken');
 
   const headers =
@@ -15,13 +16,18 @@ const setJWTContext = async operation => {
       ? { Authorization: `Bearer ${accessToken}` }
       : {};
 
-  operation.setContext(context => ({
+  operation.setContext((context: Record<string, any>) => ({
     ...context,
     headers
   }));
 };
 
-const saveTokens = async ({ accessToken, refreshToken }) => {
+interface SaveTokenOptions {
+  accessToken: string;
+  refreshToken: string;
+}
+
+const saveTokens = async ({ accessToken, refreshToken }: SaveTokenOptions) => {
   await setItem('accessToken', accessToken);
   await setItem('refreshToken', refreshToken);
 };
@@ -31,13 +37,14 @@ const removeTokens = async () => {
   await removeItem('refreshToken');
 };
 
-const JWTLink = getApolloClient =>
+const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
   new ApolloLink((operation, forward) => {
     return new Observable(observer => {
       const apolloClient = getApolloClient();
 
-      let sub, retrySub;
-      const queue = [];
+      let sub: ZenObservable.Subscription;
+      let retrySub: ZenObservable.Subscription;
+      const queue: Array<Promise<void>> = [];
       (async () => {
         if (
           !settings.auth.session.enabled &&
@@ -122,8 +129,12 @@ const JWTLink = getApolloClient =>
       })();
 
       return () => {
-        if (sub) sub.unsubscribe();
-        if (retrySub) retrySub.unsubscribe();
+        if (sub) {
+          sub.unsubscribe();
+        }
+        if (retrySub) {
+          retrySub.unsubscribe();
+        }
       };
     });
   });

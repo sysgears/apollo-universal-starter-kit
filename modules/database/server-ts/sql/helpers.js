@@ -20,13 +20,17 @@ export const truncateTables = async (knex, Promise, tables) => {
   }
 };
 
-export const orderedFor = (rows, collection, field, singleObject) => {
+export const orderedFor = (rows, collection, field, singleObject, singleField = false) => {
   // return the rows ordered for the collection
   const inGroupsOfField = groupBy(rows, field);
   return collection.map(element => {
     const elementArray = inGroupsOfField[element];
     if (elementArray) {
-      return singleObject ? elementArray[0] : elementArray;
+      return singleObject
+        ? singleField
+          ? elementArray[0][Object.keys(elementArray[0])[0]]
+          : elementArray[0]
+        : elementArray;
     }
     return singleObject ? {} : [];
   });
@@ -157,4 +161,12 @@ export const selectBy = (schema, fields, single = false) => {
 
     return query.select(selectItems);
   };
+};
+
+export const removeTransient = (data, key, value) => {
+  // remove transient field
+  if (value && value.transient) {
+    delete data[key];
+  }
+  return data;
 };

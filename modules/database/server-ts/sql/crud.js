@@ -8,7 +8,7 @@ import moment from 'moment';
 import { FieldError } from '@gqlapp/validation-common-react';
 
 import knex from './connector';
-import { selectBy, orderedFor } from './helpers';
+import { selectBy, orderedFor, removeTransient } from './helpers';
 import selectAdapter from './select';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -485,6 +485,7 @@ export class Crud {
         }
       }
       queryBuilder.orderBy(column, order);
+      queryBuilder.groupBy(`${this.getTableName()}.id`);
     } else {
       queryBuilder.orderBy(`${this.getTableName()}.id`);
     }
@@ -675,6 +676,7 @@ export class Crud {
           nestedEntries.push({ key, data: data[key] });
           delete data[key];
         }
+        data = removeTransient(data, key, value);
       }
 
       if (this.isSortable()) {
@@ -718,6 +720,7 @@ export class Crud {
         nestedEntries.push({ key: value.type[0].name, data: data[key] });
         delete data[key];
       }
+      data = removeTransient(data, key, value);
     }
 
     // create, update, delete nested entries
@@ -744,7 +747,7 @@ export class Crud {
 
     return knex(this.getFullTableName())
       .update(decamelizeKeys(this.normalizeFields(data)))
-      .where(where);
+      .where(decamelizeKeys(where));
   }
 
   async update(args, ctx, info) {
@@ -955,7 +958,11 @@ export class Crud {
             .whereIn('id', ids);
         }
       } else {
-        normalizedData[`${this.getTableName()}.${key}`] = data[key];
+        if (value.type.constructor === Array) {
+          // TODO: Array
+        } else {
+          normalizedData[`${this.getTableName()}.${key}`] = data[key];
+        }
       }
     }
 
@@ -1023,13 +1030,27 @@ export class Crud {
     }
   }
 
-  async getByIds(ids, by, Obj, info, infoCustom = null) {
+  async getByIds(ids, by, Obj, info, infoCustom = null, args = null) {
     info = infoCustom === null ? parseFields(info) : infoCustom;
     const remoteId = by !== 'id' ? `${by}Id` : by;
     info[remoteId] = true;
     const baseQuery = knex(`${Obj.getFullTableName()} as ${Obj.getTableName()}`);
     const select = selectBy(Obj.getSchema(), info, false);
-    const res = await knexnest(select(baseQuery).whereIn(`${Obj.getTableName()}.${decamelize(remoteId)}`, ids));
+
+    const res = await knexnest(
+      select(baseQuery)
+        .whereIn(`${Obj.getTableName()}.${decamelize(remoteId)}`, ids)
+        // add additional filter options on joined table
+        .andWhere(function() {
+          if (!_.isEmpty(args)) {
+            Object.keys(args).forEach(key => {
+              if (key.endsWith('_in')) {
+                this.whereIn(`${Obj.getTableName()}.${decamelize(key.substring(0, key.length - 3))}`, args[key]);
+              }
+            });
+          }
+        })
+    );
     return orderedFor(res, ids, remoteId, false);
   }
 }

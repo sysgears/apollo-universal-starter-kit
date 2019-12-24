@@ -327,11 +327,11 @@ class ListView extends React.Component {
     const title = () => {
       return showCustomActions && customActions && customActions.render ? (
         customActions.render
-      ) : (
+      ) : showCustomActions ? (
         <Link to={`/${link}/0`}>
           <Button color="primary">Add</Button>
         </Link>
-      );
+      ) : null;
     };
 
     const footer = () => {

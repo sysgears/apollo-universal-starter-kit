@@ -12797,9 +12797,9 @@ har-validator@~5.1.0:
     ajv "^6.5.5"
     har-schema "^2.0.0"
 
-hard-source-webpack-plugin@^0.13.1, "hard-source-webpack-plugin@https://github.com/conorh/hard-source-webpack-plugin":
+hard-source-webpack-plugin@^0.13.1, "hard-source-webpack-plugin@https://github.com/sysgears/hard-source-webpack-plugin":
   version "0.13.1"
-  resolved "https://github.com/conorh/hard-source-webpack-plugin#f14b99b2c0ddf73c6988dda8fe6b917e5f09295b"
+  resolved "https://github.com/sysgears/hard-source-webpack-plugin#e447883a9ed3b069f2f75e191e0e3e7e37a23515"
   dependencies:
     chalk "^2.4.1"
     find-cache-dir "^2.0.0"

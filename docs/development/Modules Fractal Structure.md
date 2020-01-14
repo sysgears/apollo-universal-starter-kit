@@ -2,7 +2,7 @@
 
 This section will introduce you to the basic concepts required in order to understand this repository's structure and how to use it. It the long run it will help you both contribute to this repository and use it for your own projects. 
 
-In this part we will cover only basci concepts but not implementational details we actually use in this repository. We will leave that for another section.
+In this part we will cover only basic concepts but not implementation details we actually use in this repository. We will leave that for another section.
 
 # Fractal structure of the repository
 

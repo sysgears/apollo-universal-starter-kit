@@ -22,6 +22,7 @@ import {
 
 const Users = props => {
   const { t, updateQuery, subscribeToMore } = props;
+  console.log('props.filter:', props.filter);
   const filter = { isActive: true };
   const usersUpdated = useUsersWithSubscription(subscribeToMore, filter);
 

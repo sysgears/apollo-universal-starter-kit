@@ -21,9 +21,9 @@ const {
  * @param templatesPath - The path to the templates for a new module
  * @param moduleName - The name of a new module
  */
-function addModule({ logger, packageName, moduleName, old }) {
+function addModule({ logger, packageName, moduleName, old, crud = false }) {
   const modulePackageName = getModulePackageName(packageName, old);
-  const templatesPath = getTemplatesPath(old);
+  const templatesPath = getTemplatesPath(crud, old);
   const params = { logger, packageName, moduleName, modulePackageName, templatesPath, old };
 
   copyTemplates(params);

@@ -11,11 +11,13 @@ class CommandInvoker {
    * @param chooseStack - The function for choosing stack of technologies.
    * @param deleteStack - The function for delete stack of technologies.
    */
-  constructor(addModule, deleteModule, chooseStack, deleteStack) {
+  constructor(addModule, deleteModule, chooseStack, deleteStack, addCrud, updateSchema) {
     this.addModule = addModule;
     this.deleteModule = deleteModule;
     this.chooseStack = chooseStack;
     this.deleteStack = deleteStack;
+    this.addCrud = addCrud;
+    this.updateSchema = updateSchema;
   }
 
   /**
@@ -62,6 +64,20 @@ class CommandInvoker {
    */
   runDeleteStack(args, logger, isShowStackList) {
     this.deleteStack(args, logger, isShowStackList);
+  }
+
+  /**
+   * Runs operation (function) for creating a new CRUD module.
+   */
+  runAddCrud(args, options, logger) {
+    runOperation(this.addCrud, args, options, logger);
+  }
+
+  /**
+   * Runs operation (function) for updating existing module schema.
+   */
+  runUpdateSchema(args, options, logger) {
+    runOperation(this.updateSchema, args, options, logger);
   }
 }
 

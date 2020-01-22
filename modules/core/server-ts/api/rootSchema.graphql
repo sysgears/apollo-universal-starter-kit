@@ -3,6 +3,21 @@ type FieldError {
   message: String!
 }
 
+type PageInfo {
+  totalCount: Int
+  hasNextPage: Boolean
+}
+
+type BatchPayload {
+  count: Int
+  errors: [FieldError!]
+}
+
+input OrderByInput {
+  column: String
+  order: String
+}
+
 type Query {
   dummy: Int
 }

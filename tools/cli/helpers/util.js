@@ -1,8 +1,9 @@
 const shell = require('shelljs');
 const fs = require('fs');
+const DomainSchema = require('@domain-schema/core').default;
 const { pascalize, decamelize } = require('humps');
 const { startCase } = require('lodash');
-const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, BASE_PATH } = require('../config');
+const { MODULE_TEMPLATES, MODULE_TEMPLATES_OLD, CRUD_TEMPLATES, BASE_PATH } = require('../config');
 
 /**
  * Provides a package name for the particular module based on the command option --old .
@@ -18,10 +19,11 @@ const getModulePackageName = (packageName, old) => {
 /**
  * Provides a path to the module templates.
  *
+ * @param crud - The flag that describes if the command invoked for crud template structure or not
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - path to the templates
  */
-const getTemplatesPath = old => (old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
+const getTemplatesPath = (crud, old) => (crud ? CRUD_TEMPLATES : old ? MODULE_TEMPLATES_OLD : MODULE_TEMPLATES);
 
 /**
  * Copies the templates to the destination directory.
@@ -47,6 +49,12 @@ function renameFiles(destinationPath, moduleName) {
   shell.cd(destinationPath);
 
   // rename files
+  const timestamp = new Date().getTime();
+  shell.ls('-Rl', '.').forEach(entry => {
+    if (entry.isFile()) {
+      shell.mv(entry.name, entry.name.replace('T_Module', `${timestamp}_Module`));
+    }
+  });
   shell.ls('-Rl', '.').forEach(entry => {
     if (entry.isFile()) {
       shell.mv(entry.name, entry.name.replace('Module', Module));
@@ -133,6 +141,19 @@ function computeModulePackageName(moduleName, packageName, old) {
  */
 function computePackagePath(packageName) {
   return `${BASE_PATH}/packages/${packageName}/package.json`;
+}
+
+/**
+ * Gets the computed path for generated module list.
+ *
+ * @param packageName - The application package ([client|server])
+ * @param fileName - File name of generated module
+ * @param old - The flag that describes if the command invoked for a new structure or not
+ * @returns {string} - Return the computed path
+ */
+function computeGeneratedSchemasPath(packageName, fileName, old) {
+  const modulePackageName = getModulePackageName(packageName, old);
+  return `${BASE_PATH}/modules/core/${modulePackageName}/${fileName}`;
 }
 
 /**
@@ -230,6 +251,84 @@ function deleteStackDir(stackDirList) {
   });
 }
 
+/**
+ *
+ * @param value
+ * @param update
+ * @returns {string}
+ */
+function generateField(value, update = false) {
+  let result = '';
+  const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+  if (hasTypeOf(Boolean)) {
+    result += 'Boolean';
+  } else if (hasTypeOf(DomainSchema.ID)) {
+    result += 'ID';
+  } else if (hasTypeOf(DomainSchema.Int)) {
+    result += 'Int';
+  } else if (hasTypeOf(DomainSchema.Float)) {
+    result += 'Float';
+  } else if (hasTypeOf(String)) {
+    result += 'String';
+  } else if (hasTypeOf(Date)) {
+    result += 'Date';
+  } else if (hasTypeOf(DomainSchema.DateTime)) {
+    result += 'DateTime';
+  } else if (hasTypeOf(DomainSchema.Time)) {
+    result += 'Time';
+  }
+
+  if (!update && !value.optional) {
+    result += '!';
+  }
+
+  return result;
+}
+
+/**
+ *
+ * @param pathToFileWithExports
+ * @param exportName
+ * @param importString
+ */
+function updateFileWithExports({ pathToFileWithExports, exportName, importString }) {
+  const exportGraphqlContainer = `\nexport default {\n  ${exportName}\n};\n`;
+
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedContainerData = fs.readFileSync(pathToFileWithExports);
+    const generatedContainer = generatedContainerData.toString().trim();
+    if (generatedContainer.length > 1) {
+      const index = generatedContainer.lastIndexOf("';");
+      const computedIndex = index >= 0 ? index + 3 : false;
+      if (computedIndex) {
+        let computedGeneratedContainer =
+          generatedContainer.slice(0, computedIndex) +
+          importString +
+          generatedContainer.slice(computedIndex, generatedContainer.length);
+        computedGeneratedContainer = computedGeneratedContainer.replace(/(,|)\s};/g, `,\n  ${exportName}\n};`);
+        return fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
+      }
+    }
+    return fs.writeFileSync(pathToFileWithExports, importString + exportGraphqlContainer);
+  }
+}
+
+/**
+ *
+ * @param pathToFileWithExports
+ * @param exportName
+ */
+function deleteFromFileWithExports(pathToFileWithExports, exportName) {
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedElementData = fs.readFileSync(pathToFileWithExports);
+    const reg = `(\\n\\s\\s${exportName}(.|)|import (${exportName}|{ ${exportName} }).+;\\n+(?!ex))`;
+    const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(pathToFileWithExports, generatedElement);
+
+    runPrettier(pathToFileWithExports);
+  }
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -241,11 +340,15 @@ module.exports = {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
   addSymlink,
   removeSymlink,
   runPrettier,
   moveToDirectory,
   deleteDir,
   getPathsSubdir,
-  deleteStackDir
+  deleteStackDir,
+  generateField,
+  updateFileWithExports,
+  deleteFromFileWithExports
 };

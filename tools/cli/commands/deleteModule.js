@@ -1,6 +1,7 @@
 const shell = require('shelljs');
 const fs = require('fs');
 const chalk = require('chalk');
+const { pascalize } = require('humps');
 const {
   getModulePackageName,
   computeModulePath,
@@ -8,6 +9,8 @@ const {
   computeRootModulesPath,
   computePackagePath,
   computeModulePackageName,
+  computeGeneratedSchemasPath,
+  deleteFromFileWithExports,
   removeSymlink,
   runPrettier
 } = require('../helpers/util');
@@ -119,6 +122,14 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
     .to(packagePath);
 
   removeSymlink(moduleName, modulePackageName);
+
+  const Module = pascalize(moduleName);
+  const fileName = 'generatedSchemas.js';
+  const generatedSchemaPath = computeGeneratedSchemasPath(packageName, fileName, old);
+  if (fs.existsSync(generatedSchemaPath)) {
+    const schema = `${Module}Schema`;
+    deleteFromFileWithExports(generatedSchemaPath, schema);
+  }
 }
 
 module.exports = deleteModule;

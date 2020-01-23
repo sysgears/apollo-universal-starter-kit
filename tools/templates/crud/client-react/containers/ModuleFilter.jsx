@@ -16,12 +16,10 @@ class $Module$Filter extends React.Component {
 
 export default compose(
   graphql($MODULE$_STATE_QUERY, {
-    props({
-      data: {
-        $module$State: { filter }
+    props({ data: { loading, $module$State } }) {
+      if (loading === false) {
+        return removeTypename($module$State.filter);
       }
-    }) {
-      return removeTypename(filter);
     }
   }),
   graphql(UPDATE_FILTER, {

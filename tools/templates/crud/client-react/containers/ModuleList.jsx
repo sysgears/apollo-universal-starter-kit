@@ -97,10 +97,12 @@ export default compose(
   }),
   graphql($MODULE$S_QUERY, {
     options: ({ limit, orderBy, filter }) => {
-      return {
-        fetchPolicy: 'cache-and-network',
-        variables: { limit, orderBy, filter: removeEmpty(filter, $Module$Schema) }
-      };
+      if (limit && orderBy && filter) {
+        return {
+          fetchPolicy: 'cache-and-network',
+          variables: { limit, orderBy, filter: removeEmpty(filter, $Module$Schema) }
+        };
+      }
     },
     props: ({ data: { loading, $module$sConnection, refetch, error, fetchMore, subscribeToMore } }) => {
       const loadMoreRows = limit => {

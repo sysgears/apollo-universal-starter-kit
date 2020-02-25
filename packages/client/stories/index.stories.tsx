@@ -7,9 +7,8 @@ import { createApolloClient } from '@gqlapp/core-common';
 import i18n from '@gqlapp/i18n-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 import clientCounter from '@gqlapp/counter-client-react/clientCounter';
-import CounterModule from '@gqlapp/counter-client-react/CounterModule';
 
-const modules = new ClientModule(i18n, new CounterModule(clientCounter));
+const modules = new ClientModule(i18n, clientCounter);
 (async () => {
   await modules.createApp(module);
 })();

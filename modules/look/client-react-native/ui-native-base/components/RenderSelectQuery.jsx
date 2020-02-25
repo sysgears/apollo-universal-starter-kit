@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { pascalize } from 'humps';
 import { View, Text, StyleSheet } from 'react-native';
-import { schemaQueries } from '@gqlapp/core-client-react';
+import schemaQueries from '../../../client-react/generatedContainers';
 import RenderSelect from './RenderSelect';
 import InputItemStyles from '../styles/InputItem';
 

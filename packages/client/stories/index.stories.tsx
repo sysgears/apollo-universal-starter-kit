@@ -9,9 +9,7 @@ import ClientModule from '@gqlapp/module-client-react';
 import clientCounter from '@gqlapp/counter-client-react/clientCounter';
 
 const modules = new ClientModule(i18n, clientCounter);
-(async () => {
-  await modules.createApp(module);
-})();
+(async () => modules.createApp(module))();
 
 const client = createApolloClient({
   createLink: modules.createLink,

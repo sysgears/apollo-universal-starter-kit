@@ -59,14 +59,9 @@ export default compose(
   translate('user'),
   graphql(USER_QUERY, {
     options: props => {
-      let id = 0;
-      if (props.match) {
-        id = props.match.params.id;
-      } else if (props.navigation) {
-        id = props.navigation.state.params.id;
-      }
+      const id = Number(props.match ? props.match.params.id : props.navigation.state.params.id);
       return {
-        variables: { id: Number(id) }
+        variables: { id }
       };
     },
     props({ data: { loading, user } }) {

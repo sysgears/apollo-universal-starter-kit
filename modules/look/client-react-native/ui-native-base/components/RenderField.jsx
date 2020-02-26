@@ -23,7 +23,9 @@ RenderField.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.object
+  meta: PropTypes.object,
+  touched: PropTypes.any,
+  error: PropTypes.string
 };
 
 export default RenderField;

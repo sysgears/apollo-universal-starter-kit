@@ -1,0 +1,13 @@
+#import "./$Module$.graphql"
+
+query $module$sConnection($limit: Int, $offset: Int, $orderBy: OrderByInput, $filter: $Module$FilterInput) {
+  $module$sConnection(limit: $limit, offset: $offset, orderBy: $orderBy, filter: $filter) {
+    pageInfo {
+      totalCount
+      hasNextPage
+    }
+    edges {
+      ...$Module$Info
+    }
+  }
+}

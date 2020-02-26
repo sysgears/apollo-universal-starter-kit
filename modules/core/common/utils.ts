@@ -63,3 +63,60 @@ const getPlatform = () => {
  * Current platform
  */
 export const PLATFORM = getPlatform();
+
+const removeBySchema = (key: any, obj: any, schema: any) => {
+  if (schema === null) {
+    return obj[key] !== '';
+  } else {
+    const schemaKey = key.endsWith('Id') ? key.substring(0, key.length - 2) : key;
+    if (schema && schema.values[schemaKey] && schema.values[schemaKey].type.isSchema) {
+      return obj[key] !== '' && obj[key] !== null;
+    } else {
+      return obj[key] !== '';
+    }
+  }
+};
+
+export const removeEmpty = (obj: any, schema: any = null) => {
+  return Object.keys(obj)
+    .filter(key => removeBySchema(key, obj, schema))
+    .reduce((redObj, key) => {
+      if (schema && schema.values[key]) {
+        const hasTypeOf = (targetType: any) =>
+          schema.values[key].type === targetType || schema.values[key].type.prototype instanceof targetType;
+        if (schema.values[key].type.constructor === Array) {
+          if (obj[key].create && obj[key].create.length > 0) {
+            const tmpObj = obj[key];
+            tmpObj.create[0] = removeEmpty(obj[key].create[0], schema.values[key].type[0]);
+            redObj[key] = tmpObj;
+          } else if (obj[key].update && obj[key].update.length > 0) {
+            const tmpObj = obj[key];
+            tmpObj.update[0].data = removeEmpty(obj[key].update[0].data, schema.values[key].type[0]);
+            redObj[key] = tmpObj;
+          } else if (schema.values[key].type[0].isSchema) {
+            redObj[key] = removeEmpty(obj[key], schema.values[key].type[0]);
+          } else {
+            redObj[key] = obj[key];
+          }
+        } else if (hasTypeOf(Number)) {
+          redObj[key] = Number(obj[key]);
+        } else if (hasTypeOf(Boolean)) {
+          redObj[key] = obj[key] === 'true' ? true : false;
+        } else {
+          redObj[key] = obj[key];
+        }
+      } else {
+        redObj[key] = obj[key];
+      }
+
+      return redObj;
+    }, {});
+};
+
+export const add3Dots = (str: any, limit: any) => {
+  const dots = '...';
+  if (str.length > limit) {
+    str = str.substring(0, limit) + dots;
+  }
+  return str;
+};

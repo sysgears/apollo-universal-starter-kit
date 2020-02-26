@@ -1,0 +1,13 @@
+#import "./$Module$.graphql"
+
+mutation update$Module$($data: $Module$UpdateInput!, $where: $Module$WhereUniqueInput!) {
+  update$Module$(data: $data, where: $where) {
+    node {
+      ...$Module$Info
+    }
+    errors {
+      field
+      message
+    }
+  }
+}

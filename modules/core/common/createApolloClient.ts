@@ -43,7 +43,7 @@ const createApolloClient = ({
           // Pass all @client queries and @client defaults to localCache
           return localCache;
         } else {
-          // Pass all the other queries to netCache);
+          // Pass all the other queries to netCache
           return netCache;
         }
       }

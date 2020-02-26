@@ -4,6 +4,8 @@ export * from './net';
 export { default as log } from './log';
 export { default as createApolloClient } from './createApolloClient';
 export { default as createReduxStore } from './createReduxStore';
+export { default as countries } from './ISOCountries';
 export * from './createReduxStore';
 export * from './utils';
+export * from './crud';
 export { flowRight as compose } from 'lodash';

@@ -1,0 +1,9 @@
+mutation updateMany$Module$s($data: $Module$UpdateInput!, $where: $Module$WhereInput!) {
+  updateMany$Module$s(data: $data, where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

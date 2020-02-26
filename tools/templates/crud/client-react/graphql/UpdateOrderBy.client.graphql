@@ -1,0 +1,5 @@
+#import "./$Module$State.client.graphql"
+
+mutation update$Module$OrderBy($orderBy: OrderBy$Module$Input!) {
+  update$Module$OrderBy(orderBy: $orderBy) @client
+}

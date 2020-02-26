@@ -24,3 +24,5 @@ export { default as LanguagePicker } from './LanguagePicker';
 export { default as Root } from './Root';
 export { default as Pagination } from './Pagination';
 export { default as RenderField } from './RenderField';
+export { default as RenderSelectQuery } from './RenderSelectQuery';
+export { default as RenderDatePicker } from './RenderDatePicker';

@@ -176,7 +176,7 @@ const config = {
     public: `localhost:${webpackPort}`,
     publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },
-    open: true,
+    open: false,
     quiet: false,
     noInfo: true,
     historyApiFallback: true,

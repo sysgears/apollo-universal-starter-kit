@@ -1,0 +1,9 @@
+mutation deleteMany$Module$s($where: $Module$WhereInput!) {
+  deleteMany$Module$s(where: $where) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

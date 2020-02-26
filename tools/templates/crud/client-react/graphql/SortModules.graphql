@@ -1,0 +1,9 @@
+mutation sort$Module$s($data: [Int!]) {
+  sort$Module$s(data: $data) {
+    count
+    errors {
+      field
+      message
+    }
+  }
+}

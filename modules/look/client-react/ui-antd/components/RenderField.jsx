@@ -4,16 +4,16 @@ import { Form, Input } from 'antd';
 
 const FormItem = Form.Item;
 
-const RenderField = ({ input, label, type, meta: { touched, error }, placeholder }) => {
+const RenderField = ({ input, label, type, inputMode, formItemLayout, meta: { touched, error }, placeholder }) => {
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
   }
 
   return (
-    <FormItem label={label} validateStatus={validateStatus} help={touched && error}>
+    <FormItem label={label} {...formItemLayout} validateStatus={validateStatus} help={touched && error}>
       <div>
-        <Input {...input} placeholder={label || placeholder} type={type} />
+        <Input {...input} placeholder={label || placeholder} type={type} inputMode={inputMode} />
       </div>
     </FormItem>
   );
@@ -24,7 +24,9 @@ RenderField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.object
+  inputMode: PropTypes.string,
+  meta: PropTypes.object,
+  formItemLayout: PropTypes.object
 };
 
 export default RenderField;

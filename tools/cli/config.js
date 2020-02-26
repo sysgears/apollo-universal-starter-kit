@@ -4,6 +4,7 @@ const BASE_PATH = path.resolve(`${__dirname}/../..`);
 const TEMPLATES_DIR = `${BASE_PATH}/tools/templates`;
 const MODULE_TEMPLATES = `${TEMPLATES_DIR}/module`;
 const MODULE_TEMPLATES_OLD = `${TEMPLATES_DIR}/module_old`;
+const CRUD_TEMPLATES = `${TEMPLATES_DIR}/crud`;
 
 const STACK_MAP = {
   client: {
@@ -38,5 +39,6 @@ module.exports = {
   TEMPLATES_DIR,
   MODULE_TEMPLATES,
   MODULE_TEMPLATES_OLD,
-  STACK_MAP
+  STACK_MAP,
+  CRUD_TEMPLATES
 };

@@ -705,7 +705,7 @@ export class Crud {
         module: this.getTableName(),
         action: 'create',
         message: JSON.stringify(e),
-        userId: ctx.user.id
+        userId: ctx.auth.isAuthenticated.id
       });
       return { errors: e };
     }
@@ -764,7 +764,7 @@ export class Crud {
         module: this.getTableName(),
         action: 'update',
         message: JSON.stringify(e),
-        userId: ctx.user.id
+        userId: ctx.auth.isAuthenticated.id
       });
       return { errors: e };
     }

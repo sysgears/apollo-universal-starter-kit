@@ -1,25 +1,26 @@
 import React from 'react';
+import { ApolloProvider } from 'react-apollo';
 import { storiesOf } from '@storybook/react';
+import addons from '@storybook/addons';
 import { action } from '@storybook/addon-actions';
 import { linkTo } from '@storybook/addon-links';
-import { withKnobs, text, number } from '@storybook/addon-knobs';
-import { ApolloProvider } from 'react-apollo';
-import { createApolloClient } from '@gqlapp/core-common';
+import { withKnobs, text } from '@storybook/addon-knobs';
+import { LOCALE_EVENT_NAME } from 'storybook-addon-locale';
+import i18next from 'i18next';
 import i18n from '@gqlapp/i18n-client-react';
+import { createApolloClient } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
 import clientCounter from '@gqlapp/counter-client-react/clientCounter';
+import config from '@gqlapp/config';
 
-const modules = new ClientModule(i18n, clientCounter);
-(async () => modules.createApp(module))();
-
-const client = createApolloClient({
-  createLink: modules.createLink,
-  clientResolvers: modules.resolvers
+// Trigger locale change using  storybook-addon-locale's event emitter
+const channel = addons.getChannel();
+channel.on(LOCALE_EVENT_NAME, l => {
+  i18next.changeLanguage(`${l.locale}`); // fully qualified i18n names apparently needed
 });
 
-const { Button, Welcome } = require('@storybook/react/demo');
-const CounterComponent: React.FC = () => modules.counterComponent;
-
+// Standard storybook Welcome and buttons, but with knobs enabled for text label button.
+const { Welcome, Button } = require('@storybook/react/demo');
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 storiesOf('Button', module)
   .addDecorator(withKnobs)
@@ -34,8 +35,23 @@ storiesOf('Button', module)
       </span>
     </Button>
   ));
-storiesOf('Client Counters', module).add('Apollo Link', () => (
-  <ApolloProvider client={client}>
-    <CounterComponent />
-  </ApolloProvider>
-));
+
+// Client counter with i18n translation & storybook locale addon for language selection
+const clientCounterModule = new ClientModule(i18n, clientCounter);
+(async () => clientCounterModule.createApp(module))();
+const CounterComponent: React.FC = () => clientCounterModule.counterComponent;
+const client = createApolloClient({
+  createLink: clientCounterModule.createLink,
+  clientResolvers: clientCounterModule.resolvers
+});
+storiesOf('Client Counters', module)
+  .addParameters({
+    locales: config.i18n.langList,
+    defaultLocale: config.i18n.langList[0],
+    enableLocaleLockButton: false
+  })
+  .add('Apollo Link', () => (
+    <ApolloProvider client={client}>
+      <CounterComponent />
+    </ApolloProvider>
+  ));

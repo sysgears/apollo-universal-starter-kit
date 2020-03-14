@@ -6,11 +6,16 @@ const db = {
     socketPath: process.env.DB_SOCKET_PATH,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_DATABASE,
-    ssl: process.env.DB_SSL,
     multipleStatements: true,
     charset: 'utf8'
   }
 };
+
+const ssl = (process.env.DB_SSL || '').toLowerCase();
+
+if (['true', 'false'].includes(ssl)) {
+  db.connection.ssl = ssl === 'true' ? true : false;
+}
 
 const path = require('path');
 

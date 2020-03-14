@@ -1,5 +1,6 @@
 export default {
   name: 'Apollo Starter Kit',
+  logo: 'logo.svg', // Loaded via webpack and stored in favicon/common/assets
   logging: {
     level: (process.env.npm_config_argv || '').search(/(watch|start)/) >= 0 ? 'debug' : 'info',
     debugSQL: false,

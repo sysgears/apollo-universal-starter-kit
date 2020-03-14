@@ -21,7 +21,7 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
   const { email }: any = await User.getUser(userId);
 
   mailer.sendMail({
-    from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+    from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
     to: email,
     subject,
     html

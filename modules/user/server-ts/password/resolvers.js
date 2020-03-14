@@ -72,7 +72,7 @@ export default () => ({
           const encodedToken = Buffer.from(emailToken).toString('base64');
           const url = `${__WEBSITE_URL__}/confirmation/${encodedToken}`;
           mailer.sendMail({
-            from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+            from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
             to: user.email,
             subject: 'Confirm Email',
             html: `<p>Hi, ${user.username}!</p>
@@ -101,7 +101,7 @@ export default () => ({
               const encodedToken = Buffer.from(emailToken).toString('base64');
               const url = `${__WEBSITE_URL__}/reset-password/${encodedToken}`;
               mailer.sendMail({
-                from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+                from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Reset Password',
                 html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
@@ -143,7 +143,7 @@ export default () => ({
         const url = `${__WEBSITE_URL__}/profile`;
         if (mailer && settings.auth.password.sendPasswordChangesEmail) {
           mailer.sendMail({
-            from: `${settings.app.name} <${process.env.EMAIL_USER}>`,
+            from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
             to: user.email,
             subject: 'Your Password Has Been Updated',
             html: `<p>As you requested, your account password has been updated.</p>

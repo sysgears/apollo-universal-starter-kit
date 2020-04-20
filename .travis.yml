@@ -7,3 +7,5 @@ os:
 - linux
 script:
 - yarn test
+install:
+  - yarn install --immutable

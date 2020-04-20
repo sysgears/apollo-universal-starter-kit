@@ -2,6 +2,7 @@
 /.history
 /.vscode
 /.cache
+/.yarn
 .tmp
 node_modules
 build

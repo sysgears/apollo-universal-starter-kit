@@ -15,6 +15,21 @@ try {
 const CURRENT_BERRY_FILENAME = !stats ? null : fs.readdirSync(RELEASES_DIR)[0];
 const CURRENT_VERSION = !stats ? null : path.basename(CURRENT_BERRY_FILENAME).slice(0, -path.extname(CURRENT_BERRY_FILENAME).length).replace('yarn-', '');
 
+const launchBerry = () => {
+  const isHeroku = 'HEROKU' in process.env || ('DYNO' in process.env && process.env.HOME === '/app');
+  const args = [];
+  for (const arg of process.argv) {
+    if (arg.indexOf('--production') === 0 || arg.indexOf('--ignore-engines') === 0)
+      continue;
+    else if (arg.indexOf('--frozen-lockfile') === 0)
+      args.push('--immutable');
+    else
+      args.push(arg);
+  }
+  process.argv = args;
+  require(BERRY_FILE);
+}
+
 if (CURRENT_VERSION !== REQUESTED_VERSION) {
   if (CURRENT_BERRY_FILENAME)
     fs.unlinkSync(path.join(RELEASES_DIR, CURRENT_BERRY_FILENAME));
@@ -30,12 +45,12 @@ if (CURRENT_VERSION !== REQUESTED_VERSION) {
   const request = https.get(BERRY_URL, response => {
     response.pipe(file);
     file.on('finish', () => {
-      require(BERRY_FILE);
+      launchBerry();
     });
   }).on('error', err => {
     fs.unlink(BERRY_FILE);
     console.err(err);
   });
 } else {
-  require(BERRY_FILE);
+  launchBerry();
 }

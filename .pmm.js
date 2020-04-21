@@ -17,6 +17,11 @@ const CURRENT_VERSION = !stats ? null : path.basename(CURRENT_BERRY_FILENAME).sl
 
 const launchBerry = () => {
   const args = [];
+  const isHeroku = 'HEROKU' in process.env || ('DYNO' in process.env && process.env.HOME === '/app');
+  if (isHeroku) {
+    process.env.YARN_ENABLE_GLOBAL_CACHE = false;
+    process.env.YARN_ENABLE_MIRROR = false;
+  }
   for (const arg of process.argv) {
     if (arg.indexOf('--production') === 0 || arg.indexOf('--ignore-engines') === 0)
       continue;

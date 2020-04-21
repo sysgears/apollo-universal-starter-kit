@@ -16,7 +16,6 @@ const CURRENT_BERRY_FILENAME = !stats ? null : fs.readdirSync(RELEASES_DIR)[0];
 const CURRENT_VERSION = !stats ? null : path.basename(CURRENT_BERRY_FILENAME).slice(0, -path.extname(CURRENT_BERRY_FILENAME).length).replace('yarn-', '');
 
 const launchBerry = () => {
-  const isHeroku = 'HEROKU' in process.env || ('DYNO' in process.env && process.env.HOME === '/app');
   const args = [];
   for (const arg of process.argv) {
     if (arg.indexOf('--production') === 0 || arg.indexOf('--ignore-engines') === 0)
@@ -27,6 +26,7 @@ const launchBerry = () => {
       args.push(arg);
   }
   process.argv = args;
+  console.log('launching berry', process.argv);
   require(BERRY_FILE);
 }
 

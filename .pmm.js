@@ -1,6 +1,7 @@
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
 
 const REQUESTED_VERSION = require('./package.json').engines.pm.split('@')[1];
 const BERRY_URL = `https://raw.githubusercontent.com/yarnpkg/berry/%40yarnpkg/cli/${REQUESTED_VERSION}/packages/yarnpkg-cli/bin/yarn.js`;
@@ -19,8 +20,7 @@ const launchBerry = () => {
   const args = [];
   const isHeroku = 'HEROKU' in process.env || ('DYNO' in process.env && process.env.HOME === '/app');
   if (isHeroku) {
-    process.env.YARN_ENABLE_GLOBAL_CACHE = false;
-    process.env.YARN_ENABLE_MIRROR = false;
+    process.env.YARN_GLOBAL_FOLDER = path.join(os.tmpdir(), '.yarn/global');
   }
   for (const arg of process.argv) {
     if (arg.indexOf('--production') === 0 || arg.indexOf('--ignore-engines') === 0)

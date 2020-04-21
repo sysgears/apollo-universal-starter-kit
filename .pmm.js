@@ -26,7 +26,7 @@ const launchBerry = () => {
       args.push(arg);
   }
   process.argv = args;
-  console.log('launching berry', process.argv);
+  delete process.env.YARN_PRODUCTION;
   require(BERRY_FILE);
 }
 

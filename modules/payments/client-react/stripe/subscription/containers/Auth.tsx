@@ -27,8 +27,10 @@ const SubscriptionAuthRouter = ({
   // empty screen when stripe subscription info is loading
   // Important: You don't need to include page layout inside protected routes!
   return (
-    <Helmet>
-      <script src="https://js.stripe.com/v3/" type="text/javascript" />
+    <>
+      <Helmet>
+        <script src="https://js.stripe.com/v3/" type="text/javascript" />
+      </Helmet>
       <PageLayout>
         {!loading && stripeSubscription && stripeSubscription.active ? (
           <Component {...props} />
@@ -36,7 +38,7 @@ const SubscriptionAuthRouter = ({
           <Redirect to="/add-subscription" />
         ) : null}
       </PageLayout>
-    </Helmet>
+    </>
   );
 };
 

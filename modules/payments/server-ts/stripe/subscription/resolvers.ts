@@ -29,7 +29,7 @@ export default () => ({
         : null;
     }),
     stripeSubscriptionCard: withAuth(['stripe:view:self'], (obj: any, args: any, context: any) => {
-      return context.StripeSubscription.getCreditCard(context.identity.id);
+      return context.StripeSubscription.getCreditCard(context.req.identity.id);
     })
   },
   Mutation: {

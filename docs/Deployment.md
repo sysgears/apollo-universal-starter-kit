@@ -126,6 +126,9 @@ the validation link will be sent to Ethereal, _not_ to the real users.
 | EMAIL_HOST     | mailboxExample.example.com |
 | EMAIL_PASSWORD | examplePassword            |
 | EMAIL_USER     | example@example.com        |
+| EMAIL_SENDER   | example@example.com        |
+
+By default Apollo Universal Starter Kit uses `EMAIL_SENDER` as the `from` e-mail address for all mail sent. It will fall back to `EMAIL_USER` if `EMAIL_SENDER` is not set.
 
 6. Set a proper value for the server website URL in `WEBSITE_URL` environment variable or inside `packages/server/build.config.js` to match your production setup.
 

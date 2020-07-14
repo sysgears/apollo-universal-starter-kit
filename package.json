@@ -158,14 +158,14 @@
     "sass-loader": "^7.1.0",
     "shelljs": "^0.8.1",
     "source-list-map": "^2.0.0",
-    "style-loader": "^1.0.0",
+    "style-loader": "^1.0.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "ts-loader": "^4.5.0",
     "tslint": "^5.11.0",
     "tslint-config-prettier": "^1.5.0",
     "tslint-plugin-prettier": "^2.0.0",
-    "typescript": "^3.4.5",
+    "typescript": "^3.8.3",
     "uglifyjs-webpack-plugin": "^1.3.0",
     "url-loader": "^1.0.1",
     "vue-loader": "^15.5.1",
@@ -191,13 +191,13 @@
   },
   "resolutions": {
     "fbjs": "^1.0.0",
-    "hard-source-webpack-plugin": "https://github.com/conorh/hard-source-webpack-plugin",
+    "hard-source-webpack-plugin": "https://github.com/sysgears/hard-source-webpack-plugin",
     "kleur": "^3.0.3",
     "immutability-helper": "2.8.1",
     "graphql": "14.3.1",
     "iterall": "^1.2.2",
+    "sharp": "^0.23.4",
     "upath": "^1.1.0",
-    "style-loader": "^1.0.0",
     "watchpack": "https://github.com/Globegitter/watchpack"
   }
 }

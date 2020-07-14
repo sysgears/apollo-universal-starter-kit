@@ -61,7 +61,7 @@ that all opened tabs are updated simultaneously.
 **NOTE**: Apollo Universal Starter Kit provides React, Angular and Vue frontends.
 
 To run Angular frontend execute:
-`yarn watch:android`
+`yarn watch:angular`
 
 To run Vue frontend execute:
 `yarn watch:vue`

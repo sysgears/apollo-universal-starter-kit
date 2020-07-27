@@ -1,0 +1,76 @@
+buildscript {
+    ext {
+        springBootVersion = '2.3.1.RELEASE'
+    }
+    repositories {
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+subprojects {
+    apply plugin: 'idea'
+    apply plugin: 'java'
+    apply plugin: 'io.spring.dependency-management'
+    apply plugin: 'org.springframework.boot'
+
+    group = 'com.sysgears'
+    version = 'release'
+
+    sourceCompatibility = 11
+
+    jar {
+        enabled = true
+    }
+
+    bootJar {
+        launchScript()
+        mainClassName = 'com.sysgears.Application'
+    }
+
+    repositories {
+        mavenCentral()
+        jcenter()
+        maven { url "https://repo.spring.io/milestone" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+
+    dependencies {
+        //Spring Boot
+        implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-actuator'
+        compileOnly 'org.springframework.boot:spring-boot-configuration-processor'
+
+        //Lombok
+        compileOnly "org.projectlombok:lombok:1.18.12"
+        annotationProcessor "org.projectlombok:lombok:1.18.12"
+
+        //H2 DataBase
+        implementation 'com.h2database:h2:1.4.200'
+
+        //GraphQL
+        implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0'
+        runtimeOnly 'com.graphql-java-kickstart:graphiql-spring-boot-starter:7.1.0'
+        implementation 'com.graphql-java-kickstart:graphql-java-tools:6.1.0'
+
+        implementation "io.reactivex.rxjava2:rxjava"
+
+        testImplementation('org.springframework.boot:spring-boot-starter-test') {
+            exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+        }
+    }
+
+    test {
+        useJUnitPlatform()
+    }
+}
+
+project(':app') {
+    dependencies {
+        implementation project(':counter')
+        implementation project(':user')
+    }
+}

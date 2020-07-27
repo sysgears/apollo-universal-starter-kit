@@ -1,0 +1,6 @@
+rootProject.name = 'server-java'
+include ':app', ':core', ':counter', ':user'
+
+project(':core').projectDir = new File('../../modules/core/server-java')
+project(':counter').projectDir = new File('../../modules/counter/server-java')
+project(':user').projectDir = new File('../../modules/user/server-java')

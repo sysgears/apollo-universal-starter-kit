@@ -15,7 +15,7 @@ services:
       - ./packages/server-java/gradle/wrapper:${APP_DIR}/packages/server-java/gradle/wrapper
       - ./packages/server-java/gradlew:${APP_DIR}/packages/server-java/gradlew
     command: >
-      sh -c './gradlew clean bootRun'
+      sh -c 'chmod +x gradlew && ./gradlew clean bootRun'
     #      sh -c './gradlew clean'
     ports:
       - 8080:8080

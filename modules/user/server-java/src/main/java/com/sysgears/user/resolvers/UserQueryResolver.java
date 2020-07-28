@@ -11,7 +11,6 @@ import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +33,6 @@ public class UserQueryResolver implements GraphQLQueryResolver {
         });
     }
 
-    @Transactional
     public CompletableFuture<List<User>> users(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
         return userRepository.findByCriteria(orderBy, filter);
     }

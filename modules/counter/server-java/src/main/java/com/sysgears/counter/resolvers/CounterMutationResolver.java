@@ -23,8 +23,7 @@ public class CounterMutationResolver implements GraphQLMutationResolver {
     public CompletableFuture<Counter> addServerCounter(int amount) {
         log.debug("Updating counter");
         return repository.findById(CounterConstants.ID)
-                .thenApply(
-                        counter -> {
+                .thenApply(counter -> {
                             counter.increaseAmount(amount);
                             repository.save(counter);
                             publisher.publish(counter);

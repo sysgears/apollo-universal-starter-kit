@@ -24,12 +24,11 @@ subprojects {
     jar {
         enabled = true
     }
-
     bootJar {
+        enabled = false
         launchScript()
         mainClassName = 'com.sysgears.Application'
     }
-
     repositories {
         mavenCentral()
         jcenter()
@@ -55,16 +54,22 @@ subprojects {
         implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0'
         runtimeOnly 'com.graphql-java-kickstart:graphiql-spring-boot-starter:7.1.0'
         implementation 'com.graphql-java-kickstart:graphql-java-tools:6.1.0'
+        testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:7.1.0'
 
         implementation "io.reactivex.rxjava2:rxjava"
 
         testImplementation('org.springframework.boot:spring-boot-starter-test') {
             exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
         }
+        testImplementation project(':app')
     }
 
     test {
         useJUnitPlatform()
+        testLogging {
+            events "passed", "skipped", "failed", "standardOut", "standardError"
+        }
+        outputs.upToDateWhen { false }
     }
 }
 
@@ -72,5 +77,8 @@ project(':app') {
     dependencies {
         implementation project(':counter')
         implementation project(':user')
+    }
+    bootJar {
+        enabled = true
     }
 }

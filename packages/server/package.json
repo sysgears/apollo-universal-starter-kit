@@ -112,12 +112,12 @@
     "performance-now": "^2.1.0",
     "pg": "^7.4.0",
     "prop-types": "^15.6.0",
-    "react": "^16.9.0",
+    "react": "^16.11.0",
     "react-apollo": "^3.0.0",
-    "react-art": "^16.9.0",
+    "react-art": "^16.11.0",
     "react-cookie": "^2.2.0",
     "react-debounce-input": "^3.1.0",
-    "react-dom": "^16.9.0",
+    "react-dom": "^16.11.0",
     "react-helmet": "^5.2.1",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.0",
@@ -167,7 +167,7 @@
     "mkdirp": "^0.5.1",
     "nodemon": "^1.19.1",
     "react-addons-test-utils": "^16.0.0-alpha.3",
-    "react-test-renderer": "^16.9.0",
+    "react-test-renderer": "^16.11.0",
     "request": "^2.83.0",
     "resolve-url-loader": "^2.2.1",
     "rimraf": "^2.6.2",
@@ -175,8 +175,5 @@
   },
   "peerDependencies": {
     "eslint": "*"
-  },
-  "resolutions": {
-    "graphql-resolve-batch/graphql": "14.1.1"
   }
 }

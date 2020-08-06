@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const REQUESTED_VERSION = require('./package.json').engines.pm.split('@')[1];
+const REQUESTED_VERSION = require('./package.json').pm.split('@')[1];
 const BERRY_URL = `https://raw.githubusercontent.com/yarnpkg/berry/%40yarnpkg/cli/${REQUESTED_VERSION}/packages/yarnpkg-cli/bin/yarn.js`;
 const YARN_DIR = path.join(__dirname, '.yarn');
 const RELEASES_DIR = path.join(YARN_DIR, 'releases');

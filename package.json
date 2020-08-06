@@ -1,11 +1,11 @@
 {
   "name": "apollo-universal-starter-kit",
   "private": true,
-  "cacheDirectories": ["ignored"],
+  "cacheDirectories": [
+    "ignored"
+  ],
   "version": "1.0.0",
-  "engines": {
-    "pm": "yarn@2.0.0-rc.32"
-  },
+  "pm": "yarn@2.1.1",
   "scripts": {
     "build": "lerna run --scope='{server,client,mobile}' --parallel build --stream",
     "clean": "lerna run clean --stream",

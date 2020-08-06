@@ -6,7 +6,7 @@ const os = require('os');
 const getPluginUrl = plugin => `https://raw.githubusercontent.com/yarnpkg/berry/master/packages/plugin-${plugin}/bin/%40yarnpkg/plugin-${plugin}.js`
 
 const REQUESTED_VERSION = require('./package.json').pm.split('@')[1];
-const PLUGIN_LIST = fs.readFileSync('./.yarnrc.yml', 'utf-8')
+const PLUGIN_LIST = fs.readFileSync(path.join(__dirname, '.yarnrc.yml'), 'utf-8')
   .split('\n')
   .filter(line => line.includes('.yarn/plugins/@yarnpkg/plugin-'))
   .map(line => line.replace(/^.*\.yarn\/plugins\/@yarnpkg\/plugin-(.*)\.cjs$/, '$1'));

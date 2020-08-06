@@ -140,7 +140,7 @@
     "husky": "^1.1.2",
     "ignore-loader": "^0.1.2",
     "isomorphic-style-loader": "^4.0.0",
-    "jest": "^24.8.0",
+    "jest": "^26.2.2",
     "jest-transform-graphql": "^2.1.0",
     "jest-transform-stub": "^2.0.0",
     "lerna": "^3.4.0",
@@ -187,6 +187,7 @@
     "whatwg-fetch": "^2.0.4"
   },
   "dependencies": {
+    "expo": "^38.0.0",
     "inquirer": "^6.2.2",
     "lodash": "^4.17.11",
     "opencollective": "^1.0.3"

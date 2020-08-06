@@ -14,7 +14,7 @@ const BERRY_URL = `https://raw.githubusercontent.com/yarnpkg/berry/%40yarnpkg/cl
 const YARN_DIR = path.join(__dirname, '.yarn');
 const RELEASES_DIR = path.join(YARN_DIR, 'releases');
 const PLUGIN_DIR = path.join(YARN_DIR, 'plugins');
-const BERRY_FILE = path.join(RELEASES_DIR, `yarn-${REQUESTED_VERSION}.js`);
+const BERRY_FILE = path.join(RELEASES_DIR, `yarn-${REQUESTED_VERSION}.cjs`);
 
 let stats;
 try {

@@ -161,8 +161,10 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
+    "eslint": "^5.16.0",
     "glob": "^7.1.4",
     "ip": "^1.1.5",
+    "jest": "^26.2.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "nodemon": "^1.19.1",
@@ -172,8 +174,5 @@
     "resolve-url-loader": "^2.2.1",
     "rimraf": "^2.6.2",
     "ws": "^5.1.1"
-  },
-  "peerDependencies": {
-    "eslint": "*"
   }
 }

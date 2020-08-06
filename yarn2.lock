@@ -14872,15 +14872,15 @@ __metadata:
     chai: ^4.1.2
     chai-http: ^4.0.0
     cross-env: ^5.1.1
+    eslint: ^5.16.0
     graphql: ^14.3.1
     graphql-tools: ^4.0.4
+    jest: ^26.2.2
     minilog: ^3.1.0
     rimraf: ^2.6.2
     rxjs: ^6.5.2
     subscriptions-transport-ws: ^0.9.16
     zone.js: ^0.9.1
-  peerDependencies:
-    eslint: "*"
   languageName: unknown
   linkType: soft
 
@@ -14924,6 +14924,7 @@ __metadata:
     chai-http: ^4.0.0
     cross-env: ^5.1.1
     error-stack-parser: ^2.0.1
+    eslint: ^5.16.0
     extract-files: ^5.0.0
     filesize: ^3.5.11
     graphql: ^14.3.1
@@ -14933,6 +14934,7 @@ __metadata:
     history: ^4.7.2
     i18next: ^11.2.3
     immutability-helper: ^2.6.2
+    jest: ^26.2.2
     jsdom: ^11.5.1
     jwt-decode: ^2.2.0
     lodash: ^4.17.4
@@ -14948,8 +14950,6 @@ __metadata:
     vue-router: ^3.0.2
     vuex: ^3.0.1
     vuex-router-sync: ^5.0.0
-  peerDependencies:
-    eslint: "*"
   languageName: unknown
   linkType: soft
 
@@ -15022,6 +15022,7 @@ __metadata:
     connected-react-router: ^6.5.2
     cross-env: ^5.1.8
     error-stack-parser: ^2.0.1
+    eslint: ^5.16.0
     expo: ^36.0.1
     extract-files: ^5.0.0
     filesize: ^3.5.11
@@ -15033,6 +15034,7 @@ __metadata:
     history: ^4.7.2
     i18next: ^11.2.3
     immutability-helper: ^2.6.2
+    jest: ^26.2.2
     jsdom: ^11.5.1
     jwt-decode: ^2.2.0
     lodash: ^4.17.4
@@ -15079,8 +15081,6 @@ __metadata:
     use-react-router: ^1.0.7
     uuid: ^3.3.2
     webpack-cli: ^3.3.4
-  peerDependencies:
-    eslint: "*"
   dependenciesMeta:
     "@expo/vector-icons":
       optional: true
@@ -15498,17 +15498,17 @@ __metadata:
     apollo-utilities: ^1.0.11
     chai: ^4.1.2
     connected-react-router: ^6.5.2
+    eslint: ^5.16.0
     graphql: ^14.3.1
     i18next: ^11.2.3
     i18next-browser-languagedetector: ^2.1.0
+    jest: ^26.2.2
     lodash: ^4.17.4
     minilog: ^3.1.0
     react-i18next: ^10.12.2
     redux: ^4.0.1
     redux-devtools-extension: ^2.13.2
     subscriptions-transport-ws: ^0.9.16
-  peerDependencies:
-    eslint: "*"
   languageName: unknown
   linkType: soft
 
@@ -28961,6 +28961,7 @@ fsevents@^1.2.7:
     compression: ^1.7.1
     connect: ^3.6.5
     cross-env: ^5.1.1
+    eslint: ^5.16.0
     exp: ^57.2.1
     expo: ^38.0.0
     expo-cli: ^3.23.3
@@ -28984,6 +28985,7 @@ fsevents@^1.2.7:
     i18next: ^11.2.3
     image-size: ^0.6.2
     immutability-helper: ^2.6.2
+    jest: ^26.2.2
     jest-expo: ^38.0.0
     jsdom: ^11.5.1
     lodash: ^4.17.4
@@ -29016,8 +29018,6 @@ fsevents@^1.2.7:
     subscriptions-transport-ws: ^0.9.16
     uuid: ^3.3.2
     ws: ^5.1.1
-  peerDependencies:
-    eslint: "*"
   languageName: unknown
   linkType: soft
 
@@ -37035,6 +37035,7 @@ resolve@^1.17.0:
     cross-env: ^5.1.1
     dotenv: ^5.0.1
     error-stack-parser: ^2.0.1
+    eslint: ^5.16.0
     excel4node: ^1.7.0
     express: ^4.16.2
     filesize: ^3.5.11
@@ -37051,6 +37052,7 @@ resolve@^1.17.0:
     i18next-express-middleware: ^1.1.1
     ip: ^1.1.5
     isomorphic-fetch: ^2.2.1
+    jest: ^26.2.2
     jsdom: ^11.5.1
     jsonwebtoken: ^8.1.0
     knex: ^0.14.2
@@ -37103,8 +37105,6 @@ resolve@^1.17.0:
     universal-cookie-express: ^2.2.0
     uuid: ^3.2.1
     ws: ^5.1.1
-  peerDependencies:
-    eslint: "*"
   languageName: unknown
   linkType: soft
 

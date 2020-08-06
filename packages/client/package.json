@@ -139,7 +139,9 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.8",
+    "eslint": "^5.16.0",
     "graphql-tools": "^4.0.4",
+    "jest": "^26.2.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "react-addons-test-utils": "^16.0.0-alpha.3",
@@ -163,9 +165,6 @@
     "react-native-simple-picker": "^3.1.1",
     "react-navigation": "^3.11.1",
     "uuid": "^3.3.2"
-  },
-  "peerDependencies": {
-    "eslint": "*"
   },
   "browserslist": {
     "development": [

@@ -90,14 +90,13 @@
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
+    "eslint": "^5.16.0",
     "graphql-tools": "^4.0.4",
+    "jest": "^26.2.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",
     "request": "^2.83.0",
     "rimraf": "^2.6.2"
-  },
-  "peerDependencies": {
-    "eslint": "*"
   },
   "browserslist": {
     "development": [

@@ -111,7 +111,6 @@
     "expo-react-native-adapter": "^3.0.1",
     "expo-yarn-workspaces": "^1.2.1",
     "freeport-async": "^1.1.1",
-    "haul": "^1.0.0-rc.9",
     "image-size": "^0.6.2",
     "jsdom": "^11.5.1",
     "mkdirp": "^0.5.1",

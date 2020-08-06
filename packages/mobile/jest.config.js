@@ -2,7 +2,7 @@ module.exports = {
   verbose: true,
   preset: 'jest-expo',
   testPathIgnorePatterns: ['node_modules', '.history'],
-  testMatch: ['<rootDir>/modules/**/client-react/**/*.test.native.[jt]s?(x)'],
+  testMatch: ['<rootDir>/modules/**/*.test.native.[jt]s?(x)'],
   rootDir: '../..',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   modulePathIgnorePatterns: [

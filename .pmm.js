@@ -3,10 +3,17 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+const getPluginUrl = plugin => `https://raw.githubusercontent.com/yarnpkg/berry/master/packages/plugin-${plugin}/bin/%40yarnpkg/plugin-${plugin}.js`
+
 const REQUESTED_VERSION = require('./package.json').pm.split('@')[1];
+const PLUGIN_LIST = fs.readFileSync('./.yarnrc.yml', 'utf-8')
+  .split('\n')
+  .filter(line => line.includes('.yarn/plugins/@yarnpkg/plugin-'))
+  .map(line => line.replace(/^.*\.yarn\/plugins\/@yarnpkg\/plugin-(.*)\.cjs$/, '$1'));
 const BERRY_URL = `https://raw.githubusercontent.com/yarnpkg/berry/%40yarnpkg/cli/${REQUESTED_VERSION}/packages/yarnpkg-cli/bin/yarn.js`;
 const YARN_DIR = path.join(__dirname, '.yarn');
 const RELEASES_DIR = path.join(YARN_DIR, 'releases');
+const PLUGIN_DIR = path.join(YARN_DIR, 'plugins');
 const BERRY_FILE = path.join(RELEASES_DIR, `yarn-${REQUESTED_VERSION}.js`);
 
 let stats;
@@ -35,27 +42,56 @@ const launchBerry = () => {
   require(BERRY_FILE);
 }
 
-if (CURRENT_VERSION !== REQUESTED_VERSION) {
-  if (CURRENT_BERRY_FILENAME)
-    fs.unlinkSync(path.join(RELEASES_DIR, CURRENT_BERRY_FILENAME));
+const downloadFile = async (filePath, url) => {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(filePath);
 
-  if (!fs.existsSync(YARN_DIR))
-    fs.mkdirSync(YARN_DIR);
-
-  if (!fs.existsSync(RELEASES_DIR))
-    fs.mkdirSync(RELEASES_DIR);
-
-  const file = fs.createWriteStream(BERRY_FILE);
-
-  const request = https.get(BERRY_URL, response => {
-    response.pipe(file);
-    file.on('finish', () => {
-      launchBerry();
+    const request = https.get(url, response => {
+      response.pipe(file);
+      file.on('finish', () => {
+        resolve();
+      });
+    }).on('error', err => {
+      fs.unlink(filePath);
+      console.err(err);
+      reject();
     });
-  }).on('error', err => {
-    fs.unlink(BERRY_FILE);
-    console.err(err);
   });
-} else {
-  launchBerry();
 }
+
+const promises = []
+
+if (CURRENT_VERSION !== REQUESTED_VERSION) {
+  if (CURRENT_BERRY_FILENAME) {
+    fs.rmdirSync(RELEASES_DIR, { recursive: true });
+    fs.rmdirSync(PLUGIN_DIR, { recursive: true });
+  }
+
+  fs.mkdirSync(RELEASES_DIR, { recursive: true });
+
+  promises.push(downloadFile(BERRY_FILE, BERRY_URL));
+}
+
+for (const plugin of PLUGIN_LIST) {
+  const pluginPath = path.join(PLUGIN_DIR, '@yarnpkg', `plugin-${plugin}.cjs`)
+  if (!fs.existsSync(pluginPath)) {
+    fs.mkdirSync(path.join(PLUGIN_DIR, '@yarnpkg'), { recursive: true });
+    promises.push(downloadFile(pluginPath, getPluginUrl(plugin)));
+  }
+}
+
+if (PLUGIN_LIST.length === 0) {
+  fs.rmdirSync(PLUGIN_DIR, { recursive: true });
+} else {
+  const entries = fs.readdirSync(path.join(PLUGIN_DIR, '@yarnpkg'));
+  for (const entry of entries) {
+    const pluginName = entry.replace(/plugin-(.*)\.cjs/, '$1');
+    if (!PLUGIN_LIST.includes(pluginName))
+      fs.unlinkSync(path.join(PLUGIN_DIR, '@yarnpkg', `plugin-${pluginName}.cjs`));
+  }
+}
+
+(async () => {
+  await Promise.all(promises);
+  launchBerry();
+})();

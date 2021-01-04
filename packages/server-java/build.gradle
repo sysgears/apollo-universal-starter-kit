@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.3.1.RELEASE'
+        springBootVersion = '2.4.1'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -51,10 +51,10 @@ subprojects {
         implementation 'com.h2database:h2:1.4.200'
 
         //GraphQL
-        implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:7.1.0'
-        runtimeOnly 'com.graphql-java-kickstart:graphiql-spring-boot-starter:7.1.0'
-        implementation 'com.graphql-java-kickstart:graphql-java-tools:6.1.0'
-        testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:7.1.0'
+        implementation 'com.graphql-java-kickstart:graphql-spring-boot-starter:8.1.1'
+        runtimeOnly 'com.graphql-java-kickstart:graphiql-spring-boot-starter:8.1.1'
+        implementation 'com.graphql-java-kickstart:graphql-java-tools:6.3.0'
+        testImplementation 'com.graphql-java-kickstart:graphql-spring-boot-starter-test:8.1.1'
 
         implementation "io.reactivex.rxjava2:rxjava"
 

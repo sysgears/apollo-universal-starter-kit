@@ -3,7 +3,7 @@ COPY ./packages/server-java ./packages/server-java
 COPY ./modules ./modules
 
 WORKDIR ./packages/server-java
-RUN ./gradlew clean bootJar
+RUN ./gradlew clean build
 
 FROM openjdk:11-jre-slim
 WORKDIR /server-java/

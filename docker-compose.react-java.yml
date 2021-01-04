@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   apollo_java_server:
     build:
       context: .
@@ -8,15 +7,11 @@ services:
     environment:
       - JAVA_ENV=development
     container_name: apollo_java_server
-    working_dir: ${APP_DIR}/packages/server-java
     volumes:
       - ./:${APP_DIR}
       - ./modules:${APP_DIR}/modules
       - ./packages/server-java/gradle/wrapper:${APP_DIR}/packages/server-java/gradle/wrapper
       - ./packages/server-java/gradlew:${APP_DIR}/packages/server-java/gradlew
-    command: >
-      sh -c 'chmod +x gradlew && ./gradlew clean bootRun'
-    #      sh -c './gradlew clean'
     ports:
       - 8080:8080
     stdin_open: true
@@ -33,7 +28,7 @@ services:
       - apollo_java_server
     environment:
       - NODE_ENV=development
-      - SERVER_HOST=127.0.0.1:8080
+      - SERVER_HOST=apollo_java_server:8080
     container_name: apollo_client
     tty: true
     stdin_open: true

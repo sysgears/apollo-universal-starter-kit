@@ -1,21 +1,13 @@
 package com.sysgears.user.repository;
 
-import com.sysgears.user.dto.input.FilterUserInput;
-import com.sysgears.user.dto.input.OrderByUserInput;
 import com.sysgears.user.model.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
-public interface UserRepository {
-    Optional<User> findById(int id);
-
+public interface UserRepository extends JpaRepository<User, Integer>, CustomUserRepository {
     CompletableFuture<User> findUserById(int id);
 
-    User save(User user);
-
-    void delete(User user);
-
-    CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter);
+    Optional<User> findById(int id);
 }

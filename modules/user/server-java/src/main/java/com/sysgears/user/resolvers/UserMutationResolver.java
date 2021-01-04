@@ -11,6 +11,7 @@ import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
 import com.sysgears.user.model.UserProfile;
 import com.sysgears.user.model.auth.*;
+import com.sysgears.user.repository.CustomUserRepository;
 import com.sysgears.user.repository.UserRepository;
 import com.sysgears.user.subscription.UserUpdatedEvent;
 import graphql.kickstart.tools.GraphQLMutationResolver;

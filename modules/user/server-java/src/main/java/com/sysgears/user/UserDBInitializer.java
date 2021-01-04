@@ -4,7 +4,7 @@ import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
 import com.sysgears.user.model.UserProfile;
 import com.sysgears.user.model.auth.*;
-import com.sysgears.user.repository.JpaUserRepository;
+import com.sysgears.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
@@ -18,7 +18,7 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class UserDBInitializer {
-    private final JpaUserRepository repository;
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     @EventListener

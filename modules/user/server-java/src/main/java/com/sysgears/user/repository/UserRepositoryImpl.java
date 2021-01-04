@@ -18,29 +18,8 @@ import java.util.concurrent.CompletableFuture;
 
 @Repository
 @RequiredArgsConstructor
-public class DefaultUserRepository implements UserRepository {
+public class UserRepositoryImpl implements CustomUserRepository {
     private final EntityManager entityManager;
-    private final JpaUserRepository jpaUserRepository;
-
-    @Override
-    public Optional<User> findById(int id) {
-        return jpaUserRepository.findById(id);
-    }
-
-    @Override
-    public CompletableFuture<User> findUserById(int id) {
-        return jpaUserRepository.findUserById(id);
-    }
-
-    @Override
-    public User save(User user) {
-        return jpaUserRepository.save(user);
-    }
-
-    @Override
-    public void delete(User user) {
-        jpaUserRepository.delete(user);
-    }
 
     @Override
     public CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {

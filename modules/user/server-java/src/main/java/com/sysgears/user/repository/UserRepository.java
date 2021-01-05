@@ -17,5 +17,7 @@ public interface UserRepository {
 
     void delete(User user);
 
-    CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter);
+    List<User> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter);
+
+    Optional<User> findByUsernameOrAndEmail(String usernameOrEmail);
 }

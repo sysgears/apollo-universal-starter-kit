@@ -33,6 +33,8 @@ graphiql:
   endpoint:
     subscriptions: /graphql
   mapping: /graphiql
+  headers:
+    Authorization: Bearer generated-token
 
 jwt:
   secret: "676918AB4D29BFE59CCB943F3C09F5CC8FB3A8511E23E502B67DE95AB9A9D00C"

@@ -59,7 +59,7 @@ public class UserQueryTest {
     @Test
     void users() throws IOException {
         when(repository.findByCriteria(Optional.empty(), Optional.empty()))
-                .thenReturn(CompletableFuture.completedFuture(Collections.singletonList(user)));
+                .thenReturn(Collections.singletonList(user));
 
         GraphQLResponse response = template.postForResource("query/users.graphql");
 

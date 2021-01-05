@@ -1,9 +1,6 @@
 package com.sysgears.user;
 
 import com.sysgears.user.model.User;
-import com.sysgears.user.model.UserAuth;
-import com.sysgears.user.model.UserProfile;
-import com.sysgears.user.model.auth.*;
 import com.sysgears.user.repository.JpaUserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +9,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.UUID;
+import java.util.List;
 
 @Slf4j
 @Component
@@ -25,21 +22,13 @@ public class UserDBInitializer {
     public void onApplicationStartedEvent(ApplicationStartedEvent event) {
         long count = repository.count();
         if (count == 0) {
-            String encodedPassword = passwordEncoder.encode("qwerty");
-            log.info("Encoded pass: {}", encodedPassword);
-            User user = new User("admin", encodedPassword, "ADMIN", true, "example@sysgears.com");
-            user.setProfile(new UserProfile("John", "Smith"));
-            user.setAuth(
-                    UserAuth.builder()
-                            .certificate(new CertificateAuth(UUID.randomUUID().toString()))
-                            .facebook(new FacebookAuth(UUID.randomUUID().toString(), "facebookAuthName"))
-                            .github(new GithubAuth(UUID.randomUUID().toString(), "githubAuthName"))
-                            .google(new GoogleAuth(UUID.randomUUID().toString(), "googleAuthName"))
-                            .linkedin(new LinkedInAuth(UUID.randomUUID().toString(), "linkedInAuthName"))
-                            .build()
-            );
-            repository.save(user);
-            log.debug("User initialized");
+            String encodedAdminPassword = passwordEncoder.encode("admin123");
+            String encodedUserPassword = passwordEncoder.encode("user1234");
+
+            User admin = new User("admin", encodedAdminPassword, "admin", true, "admin@example.com");
+            User user = new User("user", encodedUserPassword, "user", true, "user@example.com");
+            repository.saveAll(List.of(admin, user));
+            log.debug("Users initialized");
         }
     }
 }

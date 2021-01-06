@@ -1,6 +1,6 @@
 buildscript {
     ext {
-        springBootVersion = '2.4.1'
+        springBootVersion = '2.3.7.RELEASE'
     }
     repositories {
         maven { url "https://plugins.gradle.org/m2/" }
@@ -13,6 +13,7 @@ buildscript {
 subprojects {
     apply plugin: 'idea'
     apply plugin: 'java'
+    apply plugin: 'java-library'
     apply plugin: 'io.spring.dependency-management'
     apply plugin: 'org.springframework.boot'
 
@@ -26,8 +27,6 @@ subprojects {
     }
     bootJar {
         enabled = false
-        launchScript()
-        mainClassName = 'com.sysgears.Application'
     }
     repositories {
         mavenCentral()
@@ -82,5 +81,7 @@ project(':app') {
     }
     bootJar {
         enabled = true
+        launchScript()
+        mainClassName = 'com.sysgears.Application'
     }
 }

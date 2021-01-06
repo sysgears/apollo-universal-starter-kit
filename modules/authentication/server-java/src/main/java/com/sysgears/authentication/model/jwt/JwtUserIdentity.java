@@ -1,8 +1,10 @@
 package com.sysgears.authentication.model.jwt;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class JwtUserIdentity {
     private final int id;
     private final String username;

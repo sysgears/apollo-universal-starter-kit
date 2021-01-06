@@ -27,7 +27,7 @@ public class JwtService implements JwtGenerator, JwtParser {
         return new Tokens(generateAccessToken(identity), generateRefreshToken(identity));
     }
 
-    public Integer getIdFromToken(String token) {
+    public Integer getIdFromAccessToken(String token) {
         return (Integer) Jwts.parserBuilder()
                 .setSigningKey(secretKey)
                 .build()
@@ -35,6 +35,16 @@ public class JwtService implements JwtGenerator, JwtParser {
                 .getBody()
                 .get("identity", Map.class)
                 .get("id");
+    }
+
+    @Override
+    public Integer getIdFromRefreshToken(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("id", Integer.class);
     }
 
     private String generateAccessToken(JwtUserIdentity identity) {

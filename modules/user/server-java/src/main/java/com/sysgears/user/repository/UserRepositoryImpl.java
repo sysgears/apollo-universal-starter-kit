@@ -30,17 +30,22 @@ public class UserRepositoryImpl implements CustomUserRepository {
         List<Predicate> predicates = new ArrayList<>();
 
         filter.ifPresent(filterUserInput -> {
-            filterUserInput.getRole().ifPresent(role -> predicates.add(builder.like(user.get("role"), role)));
-            filterUserInput.getIsActive().ifPresent(isActive -> predicates.add(builder.equal(user.get("isActive"), isActive)));
-            filterUserInput.getSearchText().ifPresent(searchText -> {
-                predicates.add(builder.or((builder.like(user.get("username"), searchText)),
-                        builder.like(user.get("email"), searchText)));
-            });
+            filterUserInput.getRole().filter(s -> !s.isBlank())
+                    .ifPresent(role -> predicates.add(builder.like(user.get("role"), role)));
+            filterUserInput.getIsActive()
+                    .ifPresent(isActive -> predicates.add(builder.equal(user.get("isActive"), isActive)));
+            filterUserInput.getSearchText().filter(s -> !s.isBlank())
+                    .ifPresent(searchText -> predicates.add(builder.or(
+                            builder.like(user.get("username"), searchText),
+                            builder.like(user.get("email"), searchText)
+                    )));
         });
 
         orderBy.ifPresent(orderByUserInput -> {
-            String orderColumn = orderByUserInput.getColumn().orElse("id");
-            if (orderByUserInput.getOrder().isPresent() && orderByUserInput.getOrder().get().toLowerCase().equals("desc")) {
+            String orderColumn = orderByUserInput.getColumn()
+                    .filter(s -> !s.isBlank())
+                    .orElse("id");
+            if (orderByUserInput.getOrder().filter(s -> !s.isBlank()).isPresent() && orderByUserInput.getOrder().get().toLowerCase().equals("desc")) {
                 query.orderBy(builder.desc(user.get(orderColumn)));
             } else {
                 query.orderBy(builder.asc(user.get(orderColumn)));
@@ -48,6 +53,21 @@ public class UserRepositoryImpl implements CustomUserRepository {
         });
         query.where(predicates.toArray(new Predicate[0]));
 
-        return CompletableFuture.supplyAsync(() -> entityManager.createQuery(query).getResultList());
+        return CompletableFuture.supplyAsync(()->entityManager.createQuery(query).getResultList());
+    }
+
+    @Override
+    public Optional<User> findByUsernameOrAndEmail(String usernameOrEmail) {
+        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<User> query = builder.createQuery(User.class);
+
+        Root<User> user = query.from(User.class);
+
+        query.where(builder.or(
+                builder.equal(user.get("username"), usernameOrEmail),
+                builder.equal(user.get("email"), usernameOrEmail)
+        ));
+
+        return Optional.ofNullable(entityManager.createQuery(query).getSingleResult());
     }
 }

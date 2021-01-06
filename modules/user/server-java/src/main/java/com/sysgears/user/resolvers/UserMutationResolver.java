@@ -112,16 +112,15 @@ public class UserMutationResolver implements GraphQLMutationResolver {
 
     @Transactional
     public CompletableFuture<UserPayload> deleteUser(int id) {
-        return repository.findUserById(id)
-                .thenApplyAsync(user -> {
-                    if (user == null) throw new UserNotFoundException(id);
+        return repository.findUserById(id).thenApplyAsync(user -> {
+            if (user == null) throw new UserNotFoundException(id);
 
-                    repository.delete(user);
+            repository.delete(user);
 
-                    publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.DELETE_USER, user));
+            publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.DELETE_USER, user));
 
-                    return new UserPayload(user);
-                });
+            return new UserPayload(user);
+        });
     }
 
     private UserAuth from(AuthInput authInput) {

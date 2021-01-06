@@ -10,4 +10,6 @@ import java.util.concurrent.CompletableFuture;
 
 public interface CustomUserRepository {
     CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter);
+
+    Optional<User> findByUsernameOrAndEmail(String usernameOrEmail);
 }

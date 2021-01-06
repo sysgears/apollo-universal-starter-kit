@@ -49,18 +49,8 @@ public class JwtResolver implements GraphQLMutationResolver {
                 throw new PasswordInvalidException();
             }
 
-            JwtUserIdentity jwtUserIdentity = new JwtUserIdentity(
-                    user.getId(),
-                    user.getUsername(),
-                    user.getPassword(),
-                    user.getRole(),
-                    user.getIsActive(),
-                    user.getEmail(),
-                    user.getProfile() == null ? null : user.getProfile().getFirstName(),
-                    user.getProfile() == null ? null : user.getProfile().getLastName()
-            );
-            Tokens tokens = jwtGenerator.generateTokens(jwtUserIdentity);
-            SecurityContextHolder.getContext().setAuthentication(new JWTPreAuthenticationToken(user, null));
+            Tokens tokens = jwtGenerator.generateTokens(convert(user));
+            SessionUtils.SECURITY_CONTEXT.setAuthentication(new JWTPreAuthenticationToken(user, null));
 
             return new AuthPayload(user, tokens);
         });

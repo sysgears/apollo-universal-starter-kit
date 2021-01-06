@@ -1,8 +1,8 @@
 package com.sysgears.user.config;
 
+import com.sysgears.authentication.utils.SessionUtils;
 import com.sysgears.user.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
         getToken(request)
                 .map(userService::loadUserByToken)
                 .map(user -> new JWTPreAuthenticationToken(user, new WebAuthenticationDetailsSource().buildDetails(request)))
-                .ifPresent(authentication -> SecurityContextHolder.getContext().setAuthentication(authentication));
+                .ifPresent(authentication -> SessionUtils.SECURITY_CONTEXT.setAuthentication(authentication));
         filterChain.doFilter(request, response);
     }
 

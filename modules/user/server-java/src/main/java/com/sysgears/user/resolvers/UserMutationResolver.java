@@ -11,27 +11,24 @@ import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
 import com.sysgears.user.model.UserProfile;
 import com.sysgears.user.model.auth.*;
-import com.sysgears.user.repository.CustomUserRepository;
-import com.sysgears.user.repository.UserRepository;
+import com.sysgears.user.service.UserService;
 import com.sysgears.user.subscription.UserUpdatedEvent;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Component;
 
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class UserMutationResolver implements GraphQLMutationResolver {
-    private final UserRepository repository;
+    private final UserService userService;
     private final Publisher<UserUpdatedEvent> publisher;
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
     public CompletableFuture<UserPayload> addUser(AddUserInput input) {
         User user = new User(
                 input.getUsername(),
@@ -50,16 +47,15 @@ public class UserMutationResolver implements GraphQLMutationResolver {
         input.getAuth()
                 .map(this::from)
                 .ifPresent(user::setAuth);
-        repository.save(user);
+        userService.save(user);
 
         publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.ADD_USER, user));
 
         return CompletableFuture.completedFuture(new UserPayload(user));
     }
 
-    @Transactional
     public CompletableFuture<UserPayload> editUser(EditUserInput input) {
-        return repository.findUserById(input.getId())
+        return userService.findUserById(input.getId())
                 .thenApplyAsync(user -> {
                     if (user == null) throw new UserNotFoundException(input.getId());
 
@@ -102,7 +98,7 @@ public class UserMutationResolver implements GraphQLMutationResolver {
                         input.getAuth().map(this::from).ifPresent(user::setAuth);
                     }
 
-                    repository.save(user);
+                    userService.save(user);
 
                     publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.EDIT_USER, user));
 
@@ -110,12 +106,11 @@ public class UserMutationResolver implements GraphQLMutationResolver {
                 });
     }
 
-    @Transactional
     public CompletableFuture<UserPayload> deleteUser(int id) {
-        return repository.findUserById(id).thenApplyAsync(user -> {
+        return userService.findUserById(id).thenApplyAsync(user -> {
             if (user == null) throw new UserNotFoundException(id);
 
-            repository.delete(user);
+            userService.delete(user);
 
             publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.DELETE_USER, user));
 

@@ -6,10 +6,10 @@ import graphql.kickstart.tools.GraphQLSubscriptionResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class CounterSubscriptionResolver implements GraphQLSubscriptionResolver {
     private final Subscriber<Counter> subscriber;

@@ -7,13 +7,13 @@ import com.sysgears.counter.repository.CounterRepository;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class CounterMutationResolver implements GraphQLMutationResolver {
     private final CounterRepository repository;

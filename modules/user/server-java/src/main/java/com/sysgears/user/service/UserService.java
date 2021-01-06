@@ -1,6 +1,7 @@
 package com.sysgears.user.service;
 
 import com.sysgears.authentication.service.jwt.JwtParser;
+import com.sysgears.authentication.utils.SessionUtils;
 import com.sysgears.user.dto.input.FilterUserInput;
 import com.sysgears.user.dto.input.OrderByUserInput;
 import com.sysgears.user.exception.UserNotFoundException;
@@ -9,7 +10,6 @@ import com.sysgears.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,6 +21,7 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService, AuditorAware<User> {
 
@@ -30,12 +31,12 @@ public class UserService implements UserDetailsService, AuditorAware<User> {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsernameOrAndEmail(username).orElseThrow(UserNotFoundException::new);
+        return userRepository.findByUsernameOrAndEmail(username).join();
     }
 
     @Override
     public Optional<User> getCurrentAuditor() {
-        final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        final Authentication authentication = SessionUtils.SECURITY_CONTEXT.getAuthentication();
 
         if (authentication == null) {
             // no user
@@ -43,7 +44,7 @@ public class UserService implements UserDetailsService, AuditorAware<User> {
         }
 
         if (authentication.getPrincipal() instanceof User) {
-            return Optional.of((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+            return Optional.of((User) SessionUtils.SECURITY_CONTEXT.getAuthentication().getPrincipal());
         } else {
             // anonymous user
             return Optional.empty();
@@ -51,18 +52,26 @@ public class UserService implements UserDetailsService, AuditorAware<User> {
     }
 
     @Transactional(readOnly = true)
-    public User getById(Integer id) {
-        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    @Transactional(readOnly = true)
     public User loadUserByToken(String token) {
-        Integer userId = jwtParser.getIdFromToken(token);
+        Integer userId = jwtParser.getIdFromAccessToken(token);
         return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
     }
 
     @Transactional(readOnly = true)
     public CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
         return userRepository.findByCriteria(orderBy, filter);
+    }
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
+    @Transactional(readOnly = true)
+    public CompletableFuture<User> findUserById(int id) {
+        return userRepository.findUserById(id);
+    }
+
+    public void delete(User user) {
+        userRepository.delete(user);
     }
 }

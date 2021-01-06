@@ -53,11 +53,11 @@ public class UserRepositoryImpl implements CustomUserRepository {
         });
         query.where(predicates.toArray(new Predicate[0]));
 
-        return CompletableFuture.supplyAsync(()->entityManager.createQuery(query).getResultList());
+        return CompletableFuture.supplyAsync(() -> entityManager.createQuery(query).getResultList());
     }
 
     @Override
-    public Optional<User> findByUsernameOrAndEmail(String usernameOrEmail) {
+    public CompletableFuture<User> findByUsernameOrAndEmail(String usernameOrEmail) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
 
@@ -68,6 +68,6 @@ public class UserRepositoryImpl implements CustomUserRepository {
                 builder.equal(user.get("email"), usernameOrEmail)
         ));
 
-        return Optional.ofNullable(entityManager.createQuery(query).getSingleResult());
+        return CompletableFuture.supplyAsync(() -> entityManager.createQuery(query).getSingleResult());
     }
 }

@@ -36,13 +36,7 @@ public class JwtResolver implements GraphQLMutationResolver {
 
     @Transactional(readOnly = true)
     public CompletableFuture<AuthPayload> login(LoginUserInput loginUserInput) {
-        return CompletableFuture.supplyAsync(() -> {
-            Optional<User> userOpt = userRepository.findByUsernameOrAndEmail(loginUserInput.getUsernameOrEmail());
-            if (userOpt.isEmpty()) {
-                throw new UserNotFoundException();
-            }
-
-            User user = userOpt.get();
+        return userRepository.findByUsernameOrAndEmail(loginUserInput.getUsernameOrEmail()).thenApply(user -> {
             boolean matches = passwordEncoder.matches(loginUserInput.getPassword(), user.getPassword());
             if (!matches) {
                 log.debug("Password is invalid");

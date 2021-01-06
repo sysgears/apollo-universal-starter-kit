@@ -25,10 +25,7 @@ public class UserQueryResolver implements GraphQLQueryResolver {
     }
 
     public CompletableFuture<UserPayload> user(int id) {
-        return CompletableFuture.supplyAsync(() -> {
-            User user = userService.getById(id);
-            return new UserPayload(user);
-        });
+        return userService.findUserById(id).thenApply(UserPayload::new);
     }
 
     public CompletableFuture<List<User>> users(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {

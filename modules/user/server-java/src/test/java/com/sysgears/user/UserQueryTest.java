@@ -4,7 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import com.sysgears.user.constant.UserConstants;
+import com.sysgears.authentication.utils.SessionUtils;
+import com.sysgears.user.config.JWTPreAuthenticationToken;
 import com.sysgears.user.dto.UserPayload;
 import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
@@ -16,6 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -28,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Transactional
 public class UserQueryTest {
     @Autowired
     GraphQLTestTemplate template;
@@ -87,8 +90,8 @@ public class UserQueryTest {
         ObjectNode node = mapper.createObjectNode();
         node.put("id", 1);
 
-        when(repository.findById(1))
-                .thenReturn(Optional.of(user));
+        when(repository.findUserById(1))
+                .thenReturn(CompletableFuture.completedFuture(user));
 
         GraphQLResponse response = template.perform("query/user.graphql", node);
 
@@ -109,8 +112,7 @@ public class UserQueryTest {
 
     @Test
     void currentUser() throws IOException {
-        when(repository.findUserById(UserConstants.ID))
-                .thenReturn(CompletableFuture.completedFuture(user));
+        SessionUtils.SECURITY_CONTEXT.setAuthentication(new JWTPreAuthenticationToken(user, null));
 
         GraphQLResponse response = template.postForResource("query/current-user.graphql");
 

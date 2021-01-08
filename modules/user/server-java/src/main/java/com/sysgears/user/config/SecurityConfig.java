@@ -18,6 +18,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @Configuration
 @RequiredArgsConstructor
 // if async mode for graphQL will be disabled, spring security @PreAuthorize can be used
+// graphql-spring-boot-starter from version 8.0.0 use graphql.execution.AsyncExecutionStrategy by default.
 //@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsService userService;

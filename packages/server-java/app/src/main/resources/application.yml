@@ -30,7 +30,6 @@ spring:
 #            enable: true
 graphql:
   servlet:
-    async-mode-enabled: true
     exception-handlers-enabled: true
     cors:
       allowed-origins: "*"
@@ -47,6 +46,9 @@ graphiql:
   mapping: /graphiql
   headers:
     Authorization: Bearer generated-token
+  props:
+    variables:
+      headerEditorEnabled: true
 
 jwt:
   secret: "676918AB4D29BFE59CCB943F3C09F5CC8FB3A8511E23E502B67DE95AB9A9D00C"

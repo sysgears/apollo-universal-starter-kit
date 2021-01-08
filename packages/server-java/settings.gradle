@@ -1,5 +1,5 @@
 rootProject.name = 'server-java'
-include ':app', ':core', ':counter', ':user', ':authentication'
+include ':app', ':core', ':counter', ':user', ':authentication', 'mailer'
 
 project(':core').projectDir = new File('../../modules/core/server-java')
 project(':counter').projectDir = new File('../../modules/counter/server-java')

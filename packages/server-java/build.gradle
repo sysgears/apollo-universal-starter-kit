@@ -78,6 +78,7 @@ project(':app') {
         implementation project(':counter')
         implementation project(':user')
         implementation project(':authentication')
+        implementation project(':mailer')
     }
     bootJar {
         enabled = true

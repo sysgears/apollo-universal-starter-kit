@@ -16,6 +16,18 @@ spring:
     console:
       enabled: true
       path: /h2-console
+#  mail:
+#    host: EMAIL_HOST
+#    port: 587
+#    username: EMAIL_USER
+#    password: EMAIL_PASSWORD
+#    sender: EMAIL_SENDER # todo: no such property in Spring, need to handle manually
+#    properties:
+#      mail:
+#        smtp:
+#          auth: true
+#          starttls:
+#            enable: true
 graphql:
   servlet:
     async-mode-enabled: true

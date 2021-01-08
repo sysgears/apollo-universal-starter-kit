@@ -9,4 +9,8 @@ import java.util.concurrent.CompletableFuture;
 public interface UserRepository extends JpaRepository<User, Integer>, CustomUserRepository {
     @Async
     CompletableFuture<User> findUserById(int id);
+
+    Boolean existsByEmail(String email);
+
+    Boolean existsByUsername(String username);
 }

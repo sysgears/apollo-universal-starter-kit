@@ -10,8 +10,8 @@ import com.sysgears.user.dto.input.ForgotPasswordInput;
 import com.sysgears.user.dto.input.LoginUserInput;
 import com.sysgears.user.dto.input.RegisterUserInput;
 import com.sysgears.user.dto.input.ResetPasswordInput;
-import com.sysgears.user.exception.PasswordInvalidException;
-import com.sysgears.user.exception.UserNotFoundException;
+import com.sysgears.user.exception.LoginFailedException;
+import com.sysgears.user.exception.UserAlreadyExistsException;
 import com.sysgears.user.model.User;
 import com.sysgears.user.service.UserService;
 import com.sysgears.user.util.UserIdentityUtils;
@@ -23,7 +23,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionException;
 
 @Slf4j
 @Component
@@ -40,7 +43,7 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                     boolean matches = passwordEncoder.matches(loginUserInput.getPassword(), user.getPassword());
                     if (!matches) {
                         log.debug("Password is invalid");
-                        throw new PasswordInvalidException();
+                        throw new LoginFailedException(Map.of("password", "Please enter a valid password."));
                     }
 
                     Tokens tokens = jwtGenerator.generateTokens(UserIdentityUtils.convert(user));
@@ -50,10 +53,11 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                 })
                 .exceptionally(throwable -> {
                     if (throwable.getCause() instanceof NoResultException) {
-                        throw new UserNotFoundException("No user with specified email or username.");
+                        log.warn("Specified email or username '{}' is invalid.", loginUserInput.getUsernameOrEmail());
+                        throw new LoginFailedException(Map.of("usernameOrEmail", "Please enter a valid username or e-mail."));
                     } else {
                         log.error("Unexpected error happens when find user with " + loginUserInput.getUsernameOrEmail(), throwable);
-                        throw new RuntimeException(throwable.getCause());
+                        throw (CompletionException) throwable;
                     }
                 });
     }
@@ -70,6 +74,17 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
 
     public CompletableFuture<UserPayload> register(RegisterUserInput input) {
         return CompletableFuture.supplyAsync(() -> {
+            Map<String, String> errors = new HashMap<>();
+            if (userService.existsByEmail(input.getEmail())) {
+                errors.put("email", "E-mail already exists.");
+            }
+            if (userService.existsByUsername(input.getUsername())) {
+                errors.put("username", "Username already exists.");
+            }
+            if (!errors.isEmpty()) {
+                throw new UserAlreadyExistsException(errors);
+            }
+
             User user = new User(
                     input.getUsername(),
                     passwordEncoder.encode(input.getPassword()),

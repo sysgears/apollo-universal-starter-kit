@@ -13,6 +13,7 @@ import com.sysgears.user.util.UserIdentityUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.AuditorAware;
+import org.springframework.lang.NonNull;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -53,6 +54,7 @@ public class UserService implements UserDetailsService, AuditorAware<User>, JwtU
         return userRepository.findByUsernameOrEmail(usernameOrEmail);
     }
 
+    @NonNull
     @Override
     public Optional<User> getCurrentAuditor() {
         final Authentication authentication = SessionUtils.SECURITY_CONTEXT.getAuthentication();
@@ -97,5 +99,15 @@ public class UserService implements UserDetailsService, AuditorAware<User>, JwtU
     @Override
     public Optional<JwtUserIdentity> findById(Integer userId) {
         return userRepository.findById(userId).map(UserIdentityUtils::convert);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean existsByUsername(String username) {
+        return userRepository.existsByUsername(username);
     }
 }

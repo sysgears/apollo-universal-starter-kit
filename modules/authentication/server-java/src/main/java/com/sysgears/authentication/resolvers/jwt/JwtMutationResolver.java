@@ -20,6 +20,9 @@ public class JwtMutationResolver implements GraphQLMutationResolver {
 
     public CompletableFuture<Tokens> refreshTokens(String refreshToken) {
         return CompletableFuture.supplyAsync(() -> {
+            if (refreshToken.isBlank()) {
+                throw new IllegalArgumentException();
+            }
             Integer userId = jwtParser.getIdFromRefreshToken(refreshToken);
             JwtUserIdentity userIdentity = userIdentityService.findById(userId).orElseThrow(RefreshTokenInvalidException::new);
             return jwtGenerator.generateTokens(userIdentity);

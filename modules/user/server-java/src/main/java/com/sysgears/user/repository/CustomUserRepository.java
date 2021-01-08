@@ -13,5 +13,5 @@ public interface CustomUserRepository {
     @Async
     CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter);
 
-    CompletableFuture<User> findByUsernameOrAndEmail(String usernameOrEmail);
+    CompletableFuture<User> findByUsernameOrEmail(String usernameOrEmail);
 }

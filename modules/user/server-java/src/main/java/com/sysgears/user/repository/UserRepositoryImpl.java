@@ -57,7 +57,7 @@ public class UserRepositoryImpl implements CustomUserRepository {
     }
 
     @Override
-    public CompletableFuture<User> findByUsernameOrAndEmail(String usernameOrEmail) {
+    public CompletableFuture<User> findByUsernameOrEmail(String usernameOrEmail) {
         CriteriaBuilder builder = entityManager.getCriteriaBuilder();
         CriteriaQuery<User> query = builder.createQuery(User.class);
 

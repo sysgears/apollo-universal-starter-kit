@@ -38,6 +38,4 @@ extend type Mutation {
   resetPassword(input: ResetPasswordInput!): String
   # Register user
   register(input: RegisterUserInput!): UserPayload!
-  # Refresh user tokens
-  refreshTokens(refreshToken: String!): Tokens!
 }

@@ -2,7 +2,9 @@ package com.sysgears.user.resolvers.password;
 
 import com.sysgears.authentication.model.jwt.Tokens;
 import com.sysgears.authentication.service.jwt.JwtGenerator;
+import com.sysgears.authentication.service.jwt.JwtParser;
 import com.sysgears.authentication.utils.SessionUtils;
+import com.sysgears.mailer.service.EmailService;
 import com.sysgears.user.config.JWTPreAuthenticationToken;
 import com.sysgears.user.dto.AuthPayload;
 import com.sysgears.user.dto.UserPayload;
@@ -35,6 +37,8 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
     private final UserService userService;
     private final PasswordEncoder passwordEncoder;
     private final JwtGenerator jwtGenerator;
+    private final JwtParser jwtParser;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     public CompletableFuture<AuthPayload> login(LoginUserInput loginUserInput) {
@@ -92,7 +96,13 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                     false,
                     input.getEmail());
             User registered = userService.save(user);
-            // todo: send email to activate user.
+
+            emailService.sendRegistrationConfirmEmail(
+                    user.getUsername(),
+                    user.getEmail(),
+                    "/user/confirm?key=" + jwtGenerator.generateVerificationToken(UserIdentityUtils.convert(registered))
+            );
+
             return new UserPayload(registered);
         });
     }

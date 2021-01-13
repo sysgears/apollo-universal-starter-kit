@@ -3,6 +3,7 @@ package com.sysgears.authentication.service.jwt;
 import com.sysgears.authentication.config.JwtConfig;
 import com.sysgears.authentication.model.jwt.JwtUserIdentity;
 import com.sysgears.authentication.model.jwt.Tokens;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +28,16 @@ public class JwtService implements JwtGenerator, JwtParser {
         return new Tokens(generateAccessToken(identity), generateRefreshToken(identity));
     }
 
+    public String generateVerificationToken(JwtUserIdentity identity) {
+        return Jwts.builder()
+                .setSubject(String.valueOf(identity.getId()))
+                .setIssuedAt(Date.from(Instant.now()))
+                .setExpiration(Date.from(Instant.now().plus(jwtConfig.getAccessTokenExpirationInSec(), ChronoUnit.SECONDS)))
+                .setHeaderParam("typ", "JWT")
+                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .compact();
+    }
+
     public Integer getIdFromAccessToken(String token) {
         return (Integer) Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -37,7 +48,6 @@ public class JwtService implements JwtGenerator, JwtParser {
                 .get("id");
     }
 
-    @Override
     public Integer getIdFromRefreshToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(secretKey)
@@ -45,6 +55,15 @@ public class JwtService implements JwtGenerator, JwtParser {
                 .parseClaimsJws(token)
                 .getBody()
                 .get("id", Integer.class);
+    }
+
+    public Integer getIdFromVerificationToken(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(secretKey)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        return Integer.parseInt(claims.getSubject());
     }
 
     private String generateAccessToken(JwtUserIdentity identity) {

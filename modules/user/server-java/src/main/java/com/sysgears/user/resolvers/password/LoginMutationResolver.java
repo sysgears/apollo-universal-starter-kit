@@ -13,7 +13,9 @@ import com.sysgears.user.dto.input.LoginUserInput;
 import com.sysgears.user.dto.input.RegisterUserInput;
 import com.sysgears.user.dto.input.ResetPasswordInput;
 import com.sysgears.user.exception.LoginFailedException;
+import com.sysgears.user.exception.ResetPasswordException;
 import com.sysgears.user.exception.UserAlreadyExistsException;
+import com.sysgears.user.exception.UserNotFoundException;
 import com.sysgears.user.model.User;
 import com.sysgears.user.service.UserService;
 import com.sysgears.user.util.UserIdentityUtils;
@@ -25,6 +27,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.NoResultException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -67,13 +70,40 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
     }
 
     public CompletableFuture<String> forgotPassword(ForgotPasswordInput input) {
-        //todo implement
-        return null;
+        if (!userService.existsByEmail(input.getEmail())) {
+            throw new UserNotFoundException(Map.of("email", "No user with specified email."));
+        }
+
+        return userService.findUserByUsernameOrEmail(input.getEmail()).thenApply(user -> {
+            emailService.sendResetPasswordEmail(
+                    input.getEmail(),
+                    "/user/reset-password?key=" + jwtGenerator.generateVerificationToken(UserIdentityUtils.convert(user))
+            );
+            return null;
+        });
     }
 
     public CompletableFuture<String> resetPassword(ResetPasswordInput input) {
-        //todo implement
-        return null;
+        return CompletableFuture.supplyAsync(() -> {
+            String token = new String(Base64.getDecoder().decode(input.getToken()));
+            return jwtParser.getIdFromVerificationToken(token);
+        })
+                .thenCompose(userService::findUserById)
+                .thenCompose(user -> {
+                    if (user == null) {
+                        throw new UserNotFoundException();
+                    }
+                    if (!input.getPassword().equals(input.getPasswordConfirmation())) {
+                        throw new ResetPasswordException(Map.of("passwordConfirmation", "Must match the field 'password'"));
+                    }
+
+                    user.setPassword(passwordEncoder.encode(input.getPassword()));
+                    userService.save(user);
+
+                    emailService.sendPasswordUpdatedEmail(user.getEmail());
+
+                    return CompletableFuture.completedFuture(null);
+                });
     }
 
     public CompletableFuture<UserPayload> register(RegisterUserInput input) {

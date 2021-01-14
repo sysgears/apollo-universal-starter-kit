@@ -11,6 +11,7 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import javax.mail.internet.MimeMessage;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class DefaultEmailService implements EmailService {
@@ -18,15 +19,19 @@ public class DefaultEmailService implements EmailService {
     private final SpringTemplateEngine templateEngine;
     private final String baseUrl;
     private final String profileRedirectedUrl;
+    private final String emailSender;
+
 
     public DefaultEmailService(JavaMailSender mailSender,
                                SpringTemplateEngine templateEngine,
                                @Value("${app.server.baseUrl}") String baseUrl,
-                               @Value("${app.redirect.profile}") String profileRedirectedUrl) {
+                               @Value("${app.redirect.profile}") String profileRedirectedUrl,
+                               @Value("${spring.mail.username}") String emailSender) {
         this.mailSender = mailSender;
         this.templateEngine = templateEngine;
         this.baseUrl = baseUrl;
         this.profileRedirectedUrl = profileRedirectedUrl;
+        this.emailSender = emailSender;
     }
 
     public void sendRegistrationConfirmEmail(String name, String email, String confirmationPath) {
@@ -41,7 +46,7 @@ public class DefaultEmailService implements EmailService {
 
         String emailBody = templateEngine.process("confirm-registration", context);
 
-        mailSender.send(createMessage(email, "Confirm Email", emailBody));
+        mailSender.send(createMessage(Optional.empty(), email, "Confirm Email", emailBody));
     }
 
     public void sendResetPasswordEmail(String email, String resetPasswordPath) {
@@ -56,23 +61,41 @@ public class DefaultEmailService implements EmailService {
 
         String emailBody = templateEngine.process("reset-password", context);
 
-        mailSender.send(createMessage(email, "Reset Password", emailBody));
+        mailSender.send(createMessage(Optional.empty(), email, "Reset Password", emailBody));
     }
 
     public void sendPasswordUpdatedEmail(String email) {
         Context context = new Context();
-
         context.setVariables(Map.of("followLink", profileRedirectedUrl));
 
         String emailBody = templateEngine.process("password-updated", context);
 
-        mailSender.send(createMessage(email, "Your Password Has Been Updated", emailBody));
+        mailSender.send(createMessage(Optional.empty(), email, "Your Password Has Been Updated", emailBody));
     }
 
     @SneakyThrows
-    public MimeMessage createMessage(String to, String subject, String text) {
+    public void sendContactUsEmail(String name, String email, String content) {
+        Context context = new Context();
+        context.setVariables(Map.of("name", name, "content", content));
+
+        String emailBody = templateEngine.process("contact-us", context);
+
+        mailSender.send(createMessage(Optional.of(email), emailSender, "New email through contact us page", emailBody));
+    }
+
+    @SneakyThrows
+    private MimeMessage createMessage(Optional<String> from, String to, String subject, String text) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper messageHelper = new MimeMessageHelper(message, false, "UTF-8");
+
+        // it will be ignored for gmail
+        // https://stackoverflow.com/a/27420030
+        if (from.isPresent()) {
+            messageHelper.setFrom(from.get());
+        } else {
+            messageHelper.setFrom(emailSender);
+        }
+
         messageHelper.setTo(to);
         messageHelper.setSubject(subject);
         messageHelper.setText(text, true);

@@ -1,8 +1,9 @@
 rootProject.name = 'server-java'
-include ':app', ':core', ':counter', ':user', ':authentication', 'mailer'
+include ':app', ':core', ':counter', ':user', ':authentication', 'mailer', 'contact'
 
 project(':core').projectDir = new File('../../modules/core/server-java')
 project(':counter').projectDir = new File('../../modules/counter/server-java')
 project(':user').projectDir = new File('../../modules/user/server-java')
 project(':authentication').projectDir = new File('../../modules/authentication/server-java')
 project(':mailer').projectDir = new File('../../modules/mailer/server-java')
+project(':contact').projectDir = new File('../../modules/contact/server-java')

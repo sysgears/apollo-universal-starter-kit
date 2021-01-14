@@ -7,4 +7,6 @@ public interface EmailService {
     void sendResetPasswordEmail(String email, String resetPasswordPath);
 
     void sendPasswordUpdatedEmail(String email);
+
+    void sendContactUsEmail(String name, String email, String content);
 }

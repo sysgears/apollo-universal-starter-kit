@@ -16,12 +16,12 @@ spring:
     console:
       enabled: true
       path: /h2-console
+#      Uncomment properties below to use mailer module
 #  mail:
 #    host: EMAIL_HOST
 #    port: 587
 #    username: EMAIL_USER
 #    password: EMAIL_PASSWORD
-#    sender: EMAIL_SENDER # todo: no such property in Spring, need to handle manually
 #    properties:
 #      mail:
 #        smtp:
@@ -54,3 +54,13 @@ jwt:
   secret: "676918AB4D29BFE59CCB943F3C09F5CC8FB3A8511E23E502B67DE95AB9A9D00C"
   access-token-expiration-in-sec: 3600
   refresh-token-expiration-in-sec: 604800
+
+app:
+  server:
+    baseUrl: "localhost:8080"
+  client:
+    baseUrl: "http://localhost:3000"
+  redirect:
+    confirm-registration: "${app.client.baseUrl}/login/?email-verified"
+    reset-password: "${app.client.baseUrl}/reset-password/"
+    profile: "${app.client.baseUrl}/profile"

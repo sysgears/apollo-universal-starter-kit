@@ -16,18 +16,18 @@ spring:
     console:
       enabled: true
       path: /h2-console
-#      Uncomment properties below to use mailer module
-#  mail:
-#    host: EMAIL_HOST
-#    port: 587
-#    username: EMAIL_USER
-#    password: EMAIL_PASSWORD
-#    properties:
-#      mail:
-#        smtp:
-#          auth: true
-#          starttls:
-#            enable: true
+# Fill real host, username and password for working with mailer module
+  mail:
+    host: EMAIL_HOST
+    port: 587
+    username: EMAIL_USER
+    password: EMAIL_PASSWORD
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 graphql:
   servlet:
     exception-handlers-enabled: true

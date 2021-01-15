@@ -80,6 +80,7 @@ project(':app') {
         implementation project(':authentication')
         implementation project(':mailer')
         implementation project(':contact')
+        implementation project(':upload')
     }
     bootJar {
         enabled = true

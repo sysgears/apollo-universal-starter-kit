@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.lang.NonNull;
 
 @Data
-public class Comment {
+public class CommentPayload {
     @NonNull
     private final Integer id;
     @NonNull

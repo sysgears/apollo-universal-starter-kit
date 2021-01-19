@@ -1,9 +1,11 @@
 package com.sysgears.post.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class PostEdges {
-    private Post node;
+    private PostPayload node;
     private Integer cursor;
 }

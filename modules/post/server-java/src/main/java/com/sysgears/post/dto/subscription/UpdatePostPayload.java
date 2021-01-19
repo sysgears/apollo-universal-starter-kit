@@ -1,6 +1,6 @@
 package com.sysgears.post.dto.subscription;
 
-import com.sysgears.post.dto.Post;
+import com.sysgears.post.dto.PostPayload;
 import lombok.Data;
 import org.springframework.lang.NonNull;
 
@@ -10,6 +10,6 @@ public class UpdatePostPayload {
     private final Integer id;
     @NonNull
     private final String mutation;
-    private final Post node;
+    private final PostPayload node;
 
 }

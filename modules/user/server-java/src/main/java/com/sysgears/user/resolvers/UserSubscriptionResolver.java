@@ -8,13 +8,14 @@ import graphql.kickstart.tools.GraphQLSubscriptionResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
 public class UserSubscriptionResolver implements GraphQLSubscriptionResolver {
     private final Subscriber<UserUpdatedEvent> subscriber;

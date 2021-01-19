@@ -29,7 +29,7 @@ public class JwtFilter extends OncePerRequestFilter {
         getToken(request)
                 .map(userService::loadUserByToken)
                 .map(user -> new JWTPreAuthenticationToken(user, new WebAuthenticationDetailsSource().buildDetails(request)))
-                .ifPresent(authentication -> SessionUtils.SECURITY_CONTEXT.setAuthentication(authentication));
+                .ifPresent(SessionUtils.SECURITY_CONTEXT::setAuthentication);
         filterChain.doFilter(request, response);
     }
 

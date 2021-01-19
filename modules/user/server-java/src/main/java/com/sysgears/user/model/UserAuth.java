@@ -21,23 +21,23 @@ public class UserAuth {
     @Column(name = "ID")
     private int id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private CertificateAuth certificate;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private FacebookAuth facebook;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private GoogleAuth google;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private GithubAuth github;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private LinkedInAuth linkedin;
 }

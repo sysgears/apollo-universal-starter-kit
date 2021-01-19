@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 public class CounterQueryResolver implements GraphQLQueryResolver {
     private final CounterRepository repository;
 
-    @Transactional(readOnly = true)
     public CompletableFuture<Counter> serverCounter() {
         log.debug("Get counter");
         return repository.findById(CounterConstants.ID);

@@ -1,4 +1,4 @@
-package com.sysgears.counter.resolvers;
+package com.sysgears.counter.subscription;
 
 import com.sysgears.core.subscription.AbstractPubSubService;
 import com.sysgears.counter.model.Counter;

@@ -1,8 +1,9 @@
 package com.sysgears.counter.constant;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-@UtilityClass
-public class CounterConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class CounterConstants {
     public static final int ID = 1;
 }

@@ -19,7 +19,6 @@ public class CounterMutationResolver implements GraphQLMutationResolver {
     private final CounterRepository repository;
     private final Publisher<Counter> publisher;
 
-    @Transactional
     public CompletableFuture<Counter> addServerCounter(int amount) {
         log.debug("Updating counter");
         return repository.findById(CounterConstants.ID)

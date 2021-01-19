@@ -37,11 +37,11 @@ public class User implements UserDetails {
     @Column(name = "EMAIL", nullable = false)
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private UserProfile profile;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @Fetch(value = FetchMode.JOIN)
     private UserAuth auth;
 

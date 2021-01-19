@@ -58,16 +58,19 @@ public class UserRepositoryImpl implements CustomUserRepository {
 
     @Override
     public CompletableFuture<User> findByUsernameOrEmail(String usernameOrEmail) {
-        CriteriaBuilder builder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<User> query = builder.createQuery(User.class);
+        return CompletableFuture.supplyAsync(() -> {
+            CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 
-        Root<User> user = query.from(User.class);
+            CriteriaQuery<User> query = builder.createQuery(User.class);
 
-        query.where(builder.or(
-                builder.equal(user.get("username"), usernameOrEmail),
-                builder.equal(user.get("email"), usernameOrEmail)
-        ));
+            Root<User> user = query.from(User.class);
 
-        return CompletableFuture.supplyAsync(() -> entityManager.createQuery(query).getSingleResult());
+            query.where(builder.or(
+                    builder.equal(user.get("username"), usernameOrEmail),
+                    builder.equal(user.get("email"), usernameOrEmail)
+            ));
+
+            return entityManager.createQuery(query).getSingleResult();
+        });
     }
 }

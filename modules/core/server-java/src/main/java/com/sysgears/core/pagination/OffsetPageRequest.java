@@ -1,4 +1,4 @@
-package com.sysgears.post.repository;
+package com.sysgears.core.pagination;
 
 import lombok.Data;
 import org.springframework.data.domain.Pageable;

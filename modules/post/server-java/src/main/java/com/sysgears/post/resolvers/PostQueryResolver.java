@@ -2,7 +2,7 @@ package com.sysgears.post.resolvers;
 
 import com.sysgears.post.dto.PostPayload;
 import com.sysgears.post.dto.Posts;
-import com.sysgears.post.repository.OffsetPageRequest;
+import com.sysgears.core.pagination.OffsetPageRequest;
 import com.sysgears.post.service.PostService;
 import graphql.kickstart.tools.GraphQLQueryResolver;
 import lombok.RequiredArgsConstructor;

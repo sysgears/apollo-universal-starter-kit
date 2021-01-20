@@ -82,6 +82,7 @@ project(':app') {
         implementation project(':contact')
         implementation project(':upload')
         implementation project(':post')
+        implementation project(':chat')
     }
     bootJar {
         enabled = true

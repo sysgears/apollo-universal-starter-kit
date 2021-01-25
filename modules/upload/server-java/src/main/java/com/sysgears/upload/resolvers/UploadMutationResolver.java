@@ -22,10 +22,7 @@ public class UploadMutationResolver implements GraphQLMutationResolver {
     }
 
     public boolean removeFile(Integer id) {
-        FileMetadata fileMetadata = fileMetadataRepository.findById(id).orElseThrow(()-> new FileNotFoundException(id));
-
-        fileStorage.deleteFile(fileMetadata.getPath());
-        fileMetadataRepository.deleteById(id);
+        fileService.deleteById(id);
 
         return true;
     }

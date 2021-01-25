@@ -20,7 +20,7 @@ subprojects {
     group = 'com.sysgears'
     version = 'release'
 
-    sourceCompatibility = 11
+    sourceCompatibility = 14
 
     jar {
         enabled = true

@@ -1,9 +1,6 @@
 package com.sysgears.upload.resolvers;
 
-import com.sysgears.upload.exception.FileNotFoundException;
-import com.sysgears.upload.file.FileStorage;
-import com.sysgears.upload.model.FileMetadata;
-import com.sysgears.upload.repository.FileMetadataRepository;
+import com.sysgears.upload.service.FileService;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -14,15 +11,11 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class UploadMutationResolver implements GraphQLMutationResolver {
-    private final FileMetadataRepository fileMetadataRepository;
-    private final FileStorage fileStorage;
+    private final FileService fileService;
 
     public boolean uploadFiles(List<Part> files) {
-        for (Part part : files) {
-            String fileName = part.getSubmittedFileName().replace(" ", "_");
-            String path = fileStorage.writeFile(fileName, part);
-
-            fileMetadataRepository.save(new FileMetadata(fileName, part.getContentType(), part.getSize(), path));
+        for (Part file : files) {
+            fileService.create(file);
         }
 
         return true;

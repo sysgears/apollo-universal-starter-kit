@@ -20,7 +20,7 @@ public class MessageQueryResolver implements GraphQLQueryResolver {
     public CompletableFuture<Messages> messages(Optional<Integer> limit, Optional<Integer> after) {
         return CompletableFuture.supplyAsync(() -> {
             int offset = after.orElse(0);
-            int size = limit.orElse(10);
+            int size = limit.orElse(50);
             Pageable pageRequest = new OffsetPageRequest(offset, size);
 
             return messageService.findAll(pageRequest);
@@ -28,7 +28,6 @@ public class MessageQueryResolver implements GraphQLQueryResolver {
     }
 
     public CompletableFuture<MessagePayload> message(Integer id) {
-        //todo implement
-        return null;
+        return messageService.getById(id);
     }
 }

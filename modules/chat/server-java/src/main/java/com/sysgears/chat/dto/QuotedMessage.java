@@ -1,12 +1,14 @@
 package com.sysgears.chat.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class QuotedMessage {
-    private final Integer id;
-    private final String text;
-    private final String username;
-    private final String filename;
-    private final String path;
+    private Integer id;
+    private String text;
+    private String username;
+    private String filename;
+    private String path;
 }

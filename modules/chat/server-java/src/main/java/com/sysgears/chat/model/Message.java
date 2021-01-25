@@ -31,7 +31,7 @@ public class Message {
 
     @CreatedDate
     @Column(name = "CREATED_AT", updatable = false)
-    private Instant createdAt;
+    private final Instant createdAt = Instant.now();
 
     @Column(name = "USERNAME")
     private String username;

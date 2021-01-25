@@ -1,6 +1,7 @@
 package com.sysgears.chat.service;
 
 import com.sysgears.chat.dto.*;
+import com.sysgears.chat.exception.MessageNotFoundException;
 import com.sysgears.chat.model.Message;
 import com.sysgears.chat.repository.MessageRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,7 @@ public class MessageService {
             messageEdgesList.add(
                     MessageEdges.builder()
                             .cursor((int) (pageable.getOffset() + i))
-                            .node(convert(message))
+                            .node(MessagePayload.from(message))
                             .build()
             );
         }
@@ -47,25 +49,34 @@ public class MessageService {
                 .build();
     }
 
-    private MessagePayload convert(Message message) {
-        QuotedMessage quotedMessage = new QuotedMessage(
-                message.getQuoted().getId(),
-                message.getQuoted().getText(),
-                message.getQuoted().getUsername(),
-                message.getQuoted().getAttachment().getName(),
-                message.getQuoted().getAttachment().getPath()
-        );
-        return new MessagePayload(
-                message.getId(),
-                message.getText(),
-                message.getUserId(),
-                message.getCreatedAt().toString(),
-                message.getUsername(),
-                message.getUuid().toString(),
-                quotedMessage.getId(),
-                message.getAttachment().getName(),
-                message.getAttachment().getPath(),
-                quotedMessage
-        );
+    @Transactional(readOnly = true)
+    public CompletableFuture<MessagePayload> getById(Integer id) {
+        return repository.findMessageById(id).thenApply(message -> {
+            if (message == null) throw new MessageNotFoundException(id);
+
+            return MessagePayload.from(message);
+        });
+    }
+
+    @Transactional(readOnly = true)
+    public Message findById(Integer id) {
+        return repository.findById(id).orElseThrow(() -> new MessageNotFoundException(id));
+    }
+
+    public MessagePayload create(Message message) {
+        final Message created = repository.save(message);
+        return MessagePayload.from(created);
+    }
+
+    public MessagePayload update(Message message) {
+        final Message created = repository.save(message);
+        return MessagePayload.from(created);
+    }
+
+    public Message deleteById(Integer id) {
+        final Message message = findById(id);
+        repository.delete(message);
+
+        return message;
     }
 }

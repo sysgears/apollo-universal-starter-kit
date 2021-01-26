@@ -18,9 +18,9 @@ public class AddUserInput {
     private String password;
     @NonNull
     private String role;
-    private boolean isActive;
     @NonNull
     private String email;
+    private final Boolean isActive = false;
     private final Optional<ProfileInput> profile = Optional.empty();
     private final Optional<AuthInput> auth = Optional.empty();
 }

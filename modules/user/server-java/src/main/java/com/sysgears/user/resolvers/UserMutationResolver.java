@@ -34,7 +34,7 @@ public class UserMutationResolver implements GraphQLMutationResolver {
                 input.getUsername(),
                 passwordEncoder.encode(input.getPassword()),
                 input.getRole(),
-                input.isActive(),
+                input.getIsActive(),
                 input.getEmail()
         );
         input.getProfile().map(profileInput ->

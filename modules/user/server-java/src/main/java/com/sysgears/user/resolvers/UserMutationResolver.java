@@ -30,28 +30,29 @@ public class UserMutationResolver implements GraphQLMutationResolver {
     private final PasswordEncoder passwordEncoder;
 
     public CompletableFuture<UserPayload> addUser(AddUserInput input) {
-        User user = new User(
-                input.getUsername(),
-                passwordEncoder.encode(input.getPassword()),
-                input.getRole(),
-                input.getIsActive(),
-                input.getEmail()
-        );
-        input.getProfile().map(profileInput ->
-                new UserProfile(
-                        profileInput.getFirstName().orElse(""),
-                        profileInput.getLastName().orElse("")
-                )
-        ).ifPresent(user::setProfile);
+        return CompletableFuture.supplyAsync(()-> {
+            User user = new User(
+                    input.getUsername(),
+                    passwordEncoder.encode(input.getPassword()),
+                    input.getRole(),
+                    input.getIsActive(),
+                    input.getEmail()
+            );
+            input.getProfile().map(profileInput ->
+                    new UserProfile(
+                            profileInput.getFirstName().orElse(""),
+                            profileInput.getLastName().orElse("")
+                    )
+            ).ifPresent(user::setProfile);
 
-        input.getAuth()
-                .map(this::from)
-                .ifPresent(user::setAuth);
-        userService.save(user);
+            input.getAuth()
+                    .map(this::from)
+                    .ifPresent(user::setAuth);
+            userService.save(user);
 
-        publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.ADD_USER, user));
-
-        return CompletableFuture.completedFuture(new UserPayload(user));
+            publisher.publish(new UserUpdatedEvent(UserUpdatedEvent.Mutation.ADD_USER, user));
+            return new UserPayload(user);
+        });
     }
 
     public CompletableFuture<UserPayload> editUser(EditUserInput input) {

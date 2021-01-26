@@ -4,33 +4,28 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import com.sysgears.Application;
 import com.sysgears.user.dto.UserPayload;
 import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
-import org.junit.jupiter.api.AfterEach;
+import com.sysgears.user.model.UserProfile;
+import com.sysgears.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Transactional
 public class UserMutationTest {
     @Autowired
-    GraphQLTestTemplate template;
+    private GraphQLTestTemplate template;
     @Autowired
-    UserDBInitializer userDBInitializer;
-
-    @AfterEach
-    void initUser() {
-        userDBInitializer.onApplicationStartedEvent(mock(ApplicationStartedEvent.class));
-    }
+    private UserRepository userRepository;
 
     @Test
     void addUser() throws IOException {
@@ -129,6 +124,42 @@ public class UserMutationTest {
         assertEquals("github", userAuth.getGithub().getDisplayName());
         assertEquals("ln_id", userAuth.getLinkedin().getLnId());
         assertEquals("LinkedIn", userAuth.getLinkedin().getDisplayName());
+    }
+
+    @Test
+    void editUser_with_already_saved_profile_data() throws IOException {
+        final User user = userRepository.findById(1).get();
+        user.setProfile(new UserProfile("James", "Abrams"));
+        userRepository.save(user);
+
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode input = mapper.createObjectNode();
+        ObjectNode node = mapper.createObjectNode();
+        ObjectNode profile = mapper.createObjectNode();
+
+        node.put("id", 1);
+        node.put("username", "admin");
+        node.put("role", "ADMIN");
+        node.put("isActive", true);
+        node.put("email", "admin@sysgears.com");
+
+        profile.put("firstName", "John");
+        profile.put("lastName", "Sinna");
+        node.set("profile", profile);
+
+        input.set("input", node);
+        GraphQLResponse response = template.perform("mutation/edit-user.graphql", input);
+
+        assertTrue(response.isOk());
+        UserPayload payload = response.get("$.data.editUser", UserPayload.class);
+        User createdUser = payload.getUser();
+
+        assertEquals(1, createdUser.getId());
+        assertEquals("admin", createdUser.getUsername());
+        assertEquals("ADMIN", createdUser.getRole());
+        assertTrue(createdUser.getIsActive());
+        assertEquals("admin@sysgears.com", createdUser.getEmail());
+        assertEquals("John Sinna", createdUser.getProfile().getFullName());
     }
 
     @Test

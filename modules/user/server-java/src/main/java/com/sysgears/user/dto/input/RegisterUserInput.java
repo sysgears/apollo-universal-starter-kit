@@ -1,14 +1,18 @@
 package com.sysgears.user.dto.input;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class RegisterUserInput {
     @NonNull
-    private final String username;
+    private String username;
     @NonNull
-    private final String email;
+    private String email;
     @NonNull
-    private final String password;
+    private String password;
 }

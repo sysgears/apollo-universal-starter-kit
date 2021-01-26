@@ -6,11 +6,13 @@ import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class ContactInput {
     @NonNull
-    private final String name;
+    private String name;
     @NonNull
-    private final String email;
+    private String email;
     @NonNull
-    private final String content;
+    private String content;
 }

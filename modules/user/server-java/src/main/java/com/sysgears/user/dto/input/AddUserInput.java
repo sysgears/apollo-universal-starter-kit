@@ -1,22 +1,26 @@
 package com.sysgears.user.dto.input;
 
 import com.sysgears.user.dto.input.auth.AuthInput;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import java.util.Optional;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddUserInput {
     @NonNull
-    private final String username;
+    private String username;
     @NonNull
-    private final String password;
+    private String password;
     @NonNull
-    private final String role;
-    private final boolean isActive;
+    private String role;
+    private boolean isActive;
     @NonNull
-    private final String email;
-    private final Optional<ProfileInput> profile;
-    private final Optional<AuthInput> auth;
+    private String email;
+    private final Optional<ProfileInput> profile = Optional.empty();
+    private final Optional<AuthInput> auth = Optional.empty();
 }

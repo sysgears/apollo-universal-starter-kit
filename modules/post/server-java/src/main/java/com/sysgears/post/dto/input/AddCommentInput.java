@@ -1,12 +1,16 @@
 package com.sysgears.post.dto.input;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddCommentInput {
     @NonNull
-    private final Integer postId;
+    private Integer postId;
     @NonNull
-    private final String content;
+    private String content;
 }

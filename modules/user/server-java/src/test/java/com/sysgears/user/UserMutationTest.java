@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import com.sysgears.Application;
 import com.sysgears.user.dto.UserPayload;
 import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
@@ -12,15 +11,15 @@ import com.sysgears.user.model.UserProfile;
 import com.sysgears.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
+@AutoConfigureTestDatabase
 public class UserMutationTest {
     @Autowired
     private GraphQLTestTemplate template;

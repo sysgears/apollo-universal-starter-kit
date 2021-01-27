@@ -4,31 +4,52 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
+import com.sysgears.authentication.service.jwt.JwtParser;
 import com.sysgears.mailer.service.EmailService;
 import com.sysgears.user.dto.AuthPayload;
 import com.sysgears.user.model.User;
 import com.sysgears.user.repository.UserRepository;
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@Transactional
-@Disabled //todo figure out tests fails when run with coverage and when build project with gradle
+@AutoConfigureTestDatabase
 public class LoginMutationTest {
 	@Autowired
 	private GraphQLTestTemplate template;
+	@Autowired
+	private UserRepository userRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	@MockBean
 	private EmailService emailService;
-	@Autowired
-	UserRepository userRepository;
+	@SpyBean
+	private JwtParser jwtParser;
+
+	private User user;
+	private User admin;
+
+	@BeforeEach
+	void init() {
+		user = userRepository.findByUsernameOrEmail("user").join();
+		admin = userRepository.findByUsernameOrEmail("admin").join();
+	}
 
 	@Test
 	void login_with_username() throws IOException {
@@ -36,22 +57,21 @@ public class LoginMutationTest {
 		ObjectNode input = mapper.createObjectNode();
 		ObjectNode node = mapper.createObjectNode();
 
-		node.put("usernameOrEmail", "user");
+		node.put("usernameOrEmail", user.getUsername());
 		node.put("password", "user1234");
 
 		input.set("input", node);
 		GraphQLResponse response = template.perform("mutation/login.graphql", input);
 
 		assertTrue(response.isOk());
-		System.err.println(response.getRawResponse().getBody());
 		AuthPayload payload = response.get("$.data.login", AuthPayload.class);
 
-		User user = payload.getUser();
-		assertEquals("user", user.getUsername());
-		assertEquals("user", user.getRole());
-		assertTrue(user.getIsActive());
-		assertEquals("user@example.com", user.getEmail());
-		assertNull(user.getProfile());
+		User userActual = payload.getUser();
+		assertEquals(user.getUsername(), userActual.getUsername());
+		assertEquals(user.getRole(), userActual.getRole());
+		assertTrue(userActual.getIsActive());
+		assertEquals(user.getEmail(), userActual.getEmail());
+		assertNull(userActual.getProfile());
 
 		assertNotNull(payload.getTokens().getAccessToken());
 		assertNotNull(payload.getTokens().getRefreshToken());
@@ -63,7 +83,7 @@ public class LoginMutationTest {
 		ObjectNode input = mapper.createObjectNode();
 		ObjectNode node = mapper.createObjectNode();
 
-		node.put("usernameOrEmail", "admin@example.com");
+		node.put("usernameOrEmail", admin.getEmail());
 		node.put("password", "admin123");
 
 		input.set("input", node);
@@ -72,12 +92,12 @@ public class LoginMutationTest {
 		assertTrue(response.isOk());
 		AuthPayload payload = response.get("$.data.login", AuthPayload.class);
 
-		User user = payload.getUser();
-		assertEquals("admin", user.getUsername());
-		assertEquals("admin", user.getRole());
-		assertTrue(user.getIsActive());
-		assertEquals("admin@example.com", user.getEmail());
-		assertNull(user.getProfile());
+		User userActual = payload.getUser();
+		assertEquals(admin.getUsername(), userActual.getUsername());
+		assertEquals(admin.getRole(), userActual.getRole());
+		assertTrue(userActual.getIsActive());
+		assertEquals(admin.getEmail(), userActual.getEmail());
+		assertNull(userActual.getProfile());
 
 		assertNotNull(payload.getTokens().getAccessToken());
 		assertNotNull(payload.getTokens().getRefreshToken());
@@ -106,7 +126,7 @@ public class LoginMutationTest {
 		ObjectNode input = mapper.createObjectNode();
 		ObjectNode node = mapper.createObjectNode();
 
-		node.put("usernameOrEmail", "admin");
+		node.put("usernameOrEmail", admin.getUsername());
 		node.put("password", "supersecret");
 
 		input.set("input", node);
@@ -117,4 +137,111 @@ public class LoginMutationTest {
 		assertEquals("Login failed.", response.get("$.errors[0].message"));
 		assertEquals("Please enter a valid password.", response.get("$.errors[0].extensions.exception.errors.password"));
 	}
+
+	@Test
+	void forgotPassword() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		node.put("email", user.getEmail());
+		input.set("input", node);
+
+		final GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
+
+		assertTrue(response.isOk());
+
+		verify(emailService).sendResetPasswordEmail(eq(user.getEmail()), startsWith("/user/reset-password?key="));
+	}
+
+	@Test
+	void forgotPassword_invalid_email() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		node.put("email", "user+wrong@example.com");
+		input.set("input", node);
+
+		final GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
+
+		assertTrue(response.isOk());
+		assertEquals("No user found", response.get("$.errors[0].message"));
+		assertEquals("No user with specified email.", response.get("$.errors[0].extensions.exception.errors.email"));
+
+		verify(emailService, never()).sendResetPasswordEmail(anyString(), anyString());
+	}
+
+	@Test
+	@Transactional
+	@DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+	void resetPassword() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		String token = "some.verification.token";
+		String password = "newpassword";
+
+		node.put("token", Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8)));
+		node.put("password", password);
+		node.put("passwordConfirmation", password);
+		input.set("input", node);
+
+		doReturn(user.getId()).when(jwtParser).getIdFromVerificationToken(token);
+
+		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		assertTrue(response.isOk());
+
+		final User updatedUser = userRepository.getOne(user.getId());
+		assertTrue(passwordEncoder.matches(password, updatedUser.getPassword()));
+
+		verify(emailService).sendPasswordUpdatedEmail(this.user.getEmail());
+	}
+
+	@Test
+	void resetPassword_user_not_found() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		String token = "some.verification.token";
+		String password = "newpassword";
+
+		node.put("token", Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8)));
+		node.put("password", password);
+		node.put("passwordConfirmation", password);
+		input.set("input", node);
+
+		doReturn(12313).when(jwtParser).getIdFromVerificationToken(token);
+
+		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		assertTrue(response.isOk());
+		assertEquals("No user found", response.get("$.errors[0].message"));
+
+		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());
+	}
+
+	@Test
+	void resetPassword_specified_password_not_matches() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		String token = "some.verification.token";
+		String password = "newpassword";
+
+		node.put("token", Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8)));
+		node.put("password", password);
+		node.put("passwordConfirmation", password + "1");
+		input.set("input", node);
+
+		doReturn(user.getId()).when(jwtParser).getIdFromVerificationToken(token);
+
+		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		assertTrue(response.isOk());
+		assertEquals("Failed reset password", response.get("$.errors[0].message"));
+		assertEquals("Must match the field 'password'", response.get("$.errors[0].extensions.exception.errors.passwordConfirmation"));
+
+		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());	}
 }

@@ -1,4 +1,4 @@
-package com.sysgears.user;
+package com.sysgears.user.resolvers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;

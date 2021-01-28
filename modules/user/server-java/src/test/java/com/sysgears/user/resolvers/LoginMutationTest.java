@@ -1,4 +1,4 @@
-package com.sysgears.user;
+package com.sysgears.user.resolvers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -147,7 +147,7 @@ public class LoginMutationTest {
 		node.put("email", user.getEmail());
 		input.set("input", node);
 
-		final GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
+		GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
 
 		assertTrue(response.isOk());
 
@@ -163,7 +163,7 @@ public class LoginMutationTest {
 		node.put("email", "user+wrong@example.com");
 		input.set("input", node);
 
-		final GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
+		GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
 
 		assertTrue(response.isOk());
 		assertEquals("No user found", response.get("$.errors[0].message"));
@@ -190,10 +190,10 @@ public class LoginMutationTest {
 
 		doReturn(user.getId()).when(jwtParser).getIdFromVerificationToken(token);
 
-		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
 		assertTrue(response.isOk());
 
-		final User updatedUser = userRepository.getOne(user.getId());
+		User updatedUser = userRepository.getOne(user.getId());
 		assertTrue(passwordEncoder.matches(password, updatedUser.getPassword()));
 
 		verify(emailService).sendPasswordUpdatedEmail(this.user.getEmail());
@@ -215,7 +215,7 @@ public class LoginMutationTest {
 
 		doReturn(12313).when(jwtParser).getIdFromVerificationToken(token);
 
-		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
 		assertTrue(response.isOk());
 		assertEquals("No user found", response.get("$.errors[0].message"));
 
@@ -238,10 +238,57 @@ public class LoginMutationTest {
 
 		doReturn(user.getId()).when(jwtParser).getIdFromVerificationToken(token);
 
-		final GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
+		GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
 		assertTrue(response.isOk());
 		assertEquals("Failed reset password", response.get("$.errors[0].message"));
 		assertEquals("Must match the field 'password'", response.get("$.errors[0].extensions.exception.errors.passwordConfirmation"));
 
-		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());	}
+		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());
+	}
+
+	@Test
+	void register() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		String username = "someone";
+		String email = "someone@example.com";
+		node.put("username", username);
+		node.put("email", email);
+		node.put("password", "supersecret");
+
+		input.set("input", node);
+		GraphQLResponse response = template.perform("/mutation/register.graphql", input);
+		assertTrue(response.isOk());
+
+		User registeredUser = response.get("$.data.register.user", User.class);
+		assertTrue(registeredUser.getId() != 0);
+		assertEquals(username, registeredUser.getUsername());
+		assertEquals(email, registeredUser.getEmail());
+		assertEquals("user", registeredUser.getRole());
+		assertFalse(registeredUser.getIsActive());
+
+		verify(emailService).sendRegistrationConfirmEmail(eq(username), eq(email), startsWith("/user/confirm?key="));
+	}
+
+	@Test
+	void register_user_exists() throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		ObjectNode input = mapper.createObjectNode();
+		ObjectNode node = mapper.createObjectNode();
+
+		node.put("username", user.getUsername());
+		node.put("email", user.getEmail());
+		node.put("password", "supersecret");
+
+		input.set("input", node);
+		GraphQLResponse response = template.perform("/mutation/register.graphql", input);
+		assertTrue(response.isOk());
+		assertEquals("User already exists.", response.get("$.errors[0].message"));
+		assertEquals("E-mail already exists.", response.get("$.errors[0].extensions.exception.errors.email"));
+		assertEquals("Username already exists.", response.get("$.errors[0].extensions.exception.errors.username"));
+
+		verify(emailService, never()).sendRegistrationConfirmEmail(anyString(), anyString(), anyString());
+	}
 }

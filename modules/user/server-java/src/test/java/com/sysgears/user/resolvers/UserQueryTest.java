@@ -1,10 +1,9 @@
-package com.sysgears.user;
+package com.sysgears.user.resolvers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
 import com.graphql.spring.boot.test.GraphQLTestTemplate;
-import com.sysgears.Application;
 import com.sysgears.authentication.utils.SessionUtils;
 import com.sysgears.user.config.JWTPreAuthenticationToken;
 import com.sysgears.user.dto.UserPayload;

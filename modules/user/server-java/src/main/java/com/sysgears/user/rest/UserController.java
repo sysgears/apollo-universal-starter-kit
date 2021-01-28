@@ -34,14 +34,15 @@ public class UserController {
     @GetMapping("/confirm")
     public RedirectView confirmRegistration(@RequestParam String key) {
         Integer userId = jwtParser.getIdFromVerificationToken(key);
-        userService.findUserById(userId).thenApply(user -> {
+        return userService.findUserById(userId).thenApply(user -> {
                     if (user == null) throw new UserNotFoundException();
 
                     user.setIsActive(true);
-                    return userService.save(user);
+                    userService.save(user);
+
+                    return new RedirectView(confirmRegistrationRedirectUrl);
                 }
-        );
-        return new RedirectView(confirmRegistrationRedirectUrl);
+        ).join();
     }
 
     @GetMapping("/reset-password")

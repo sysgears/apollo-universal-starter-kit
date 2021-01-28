@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.Collections;
 import java.util.Map;
 
+@ResponseStatus(HttpStatus.NOT_FOUND)
 public class UserNotFoundException extends FieldErrorException {
     public UserNotFoundException() {
         super("No user found", Collections.emptyMap());

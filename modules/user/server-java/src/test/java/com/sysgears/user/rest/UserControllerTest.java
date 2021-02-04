@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -33,6 +35,8 @@ class UserControllerTest {
 	private UserService userService;
 	@Value("${app.redirect.confirm-registration}")
 	private String confirmRegistrationRedirectUrl;
+	@Value("${app.redirect.reset-password}")
+	private String resetPasswordRedirectUrl;
 
 	@Test
 	void confirmRegistration() throws Exception {
@@ -67,7 +71,29 @@ class UserControllerTest {
 	}
 
 	@Test
-	void initiateResetPassword() {
-		//todo implement
+	void initiateResetPassword() throws Exception {
+		User user = new User("username", "password", "user", false, "someone@example.com");
+		user.setId(33);
+		String token = jwtGenerator.generateVerificationToken(JwtUserIdentity.builder().id(user.getId()).build());
+		String expectedRedirectedUrl = resetPasswordRedirectUrl + Base64.getEncoder().encodeToString(token.getBytes(StandardCharsets.UTF_8));
+
+		when(userService.findUserById(user.getId())).thenReturn(CompletableFuture.completedFuture(user));
+
+		mockMvc.perform(get("/user/reset-password").param("key", token))
+				.andDo(print())
+				.andExpect(status().is3xxRedirection())
+				.andExpect(redirectedUrl(expectedRedirectedUrl));
+	}
+
+	@Test
+	void initiateResetPassword_no_user_found() throws Exception {
+		int invalidUserId = 1234;
+		String token = jwtGenerator.generateVerificationToken(JwtUserIdentity.builder().id(invalidUserId).build());
+
+		when(userService.findUserById(invalidUserId)).thenReturn(CompletableFuture.completedFuture(null));
+
+		mockMvc.perform(get("/user/reset-password").param("key", token))
+				.andDo(print())
+				.andExpect(status().isNotFound());
 	}
 }

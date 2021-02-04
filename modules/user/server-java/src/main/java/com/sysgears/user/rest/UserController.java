@@ -48,12 +48,12 @@ public class UserController {
     @GetMapping("/reset-password")
     public RedirectView initiateResetPassword(@RequestParam String key) {
         Integer userId = jwtParser.getIdFromVerificationToken(key);
-        userService.findUserById(userId).thenApply(user -> {
+        return userService.findUserById(userId).thenApply(user -> {
                     if (user == null) throw new UserNotFoundException();
-                    return user;
+
+                    String base64Key = Base64.getEncoder().encodeToString(key.getBytes(StandardCharsets.UTF_8));
+                    return new RedirectView(resetPasswordRedirectUrl + base64Key);
                 }
-        );
-        String base64Key = Base64.getEncoder().encodeToString(key.getBytes(StandardCharsets.UTF_8));
-        return new RedirectView(resetPasswordRedirectUrl + base64Key);
+        ).join();
     }
 }

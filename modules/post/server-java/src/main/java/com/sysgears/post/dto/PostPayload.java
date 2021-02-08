@@ -1,6 +1,8 @@
 package com.sysgears.post.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
@@ -8,13 +10,15 @@ import java.util.Collection;
 import java.util.List;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class PostPayload {
     @NonNull
-    private final Integer id;
+    private Integer id;
     @NonNull
-    private final String title;
+    private String title;
     @NonNull
-    private final String content;
+    private String content;
 
     private final List<CommentPayload> comments = new ArrayList<>();
 

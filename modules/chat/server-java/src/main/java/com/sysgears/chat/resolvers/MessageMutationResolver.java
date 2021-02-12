@@ -10,6 +10,8 @@ import com.sysgears.chat.subscription.Mutation;
 import com.sysgears.core.subscription.Publisher;
 import com.sysgears.upload.model.FileMetadata;
 import com.sysgears.upload.service.FileService;
+import com.sysgears.user.model.User;
+import com.sysgears.user.service.UserService;
 import graphql.kickstart.tools.GraphQLMutationResolver;
 import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
@@ -27,19 +29,24 @@ public class MessageMutationResolver implements GraphQLMutationResolver {
 	private final MessageService messageService;
 	private final FileService fileService;
 	private final Publisher<MessageUpdatedEvent> messagePublisher;
+	private final UserService userService;
 
 
 	public CompletableFuture<MessagePayload> addMessage(AddMessageInput input, DataFetchingEnvironment environment) {
 		return CompletableFuture.supplyAsync(() -> {
 			Message message = new Message();
-
+			if (input.getUserId() != null) {
+				User user = userService.findUserById(input.getUserId()).join();
+				message.setUser(user);
+			} else {
+				userService.getCurrentAuditor().ifPresent(message::setUser);
+			}
 			if (input.getQuotedId() != null) {
 				Message quotedMessage = messageService.findById(input.getQuotedId());
 				message.setQuoted(quotedMessage);
 			}
 
 			message.setText(input.getText());
-			message.setUserId(input.getUserId());
 			message.setUuid(UUID.fromString(input.getUuid()));
 
 			resolveAttachment(environment).ifPresent(attachment -> {
@@ -73,8 +80,12 @@ public class MessageMutationResolver implements GraphQLMutationResolver {
 		return CompletableFuture.supplyAsync(() -> {
 			final Message message = messageService.findById(input.getId());
 			message.setText(input.getText());
-			message.setUserId(input.getUserId());
-
+			if (input.getUserId() != null) {
+				User user = userService.findUserById(input.getUserId()).join();
+				message.setUser(user);
+			} else {
+				userService.getCurrentAuditor().ifPresent(message::setUser);
+			}
 			final MessagePayload updated = messageService.update(message);
 
 			messagePublisher.publish(new MessageUpdatedEvent(Mutation.UPDATED, updated));

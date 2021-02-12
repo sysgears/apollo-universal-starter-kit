@@ -1,6 +1,7 @@
 package com.sysgears.chat.model;
 
 import com.sysgears.upload.model.FileMetadata;
+import com.sysgears.user.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Fetch;
@@ -26,15 +27,14 @@ public class Message {
     @Column(name = "TEXT")
     private String text;
 
-    @Column(name = "USER_ID")
-    private Integer userId;
-
     @CreatedDate
     @Column(name = "CREATED_AT", updatable = false)
     private final Instant createdAt = Instant.now();
 
-    @Column(name = "USERNAME")
-    private String username;
+    @ManyToOne
+    @Fetch(FetchMode.JOIN)
+    @JoinColumn(name = "USER_ID")
+    private User user;
 
     @Column(name = "UUID")
     private UUID uuid;
@@ -45,6 +45,6 @@ public class Message {
 
     @OneToOne
     @Fetch(FetchMode.JOIN)
-    @JoinColumn(name = "attachment_id")
+    @JoinColumn(name = "ATTACHMENT_ID")
     private FileMetadata attachment;
 }

@@ -1,29 +1,35 @@
 package com.sysgears.chat.dto;
 
 import com.sysgears.chat.model.Message;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.lang.NonNull;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class MessagePayload {
     @NonNull
-    private final Integer id;
-    private final String text;
-    private final Integer userId;
-    private final String createdAt;
-    private final String username;
-    private final String uuid;
-    private final Integer quotedId;
-    private final String filename;
-    private final String path;
-    private final QuotedMessage quotedMessage;
+    private Integer id;
+    private String text;
+    private Integer userId;
+    private String createdAt;
+    private String username;
+    private String uuid;
+    private Integer quotedId;
+    private String filename;
+    private String path;
+    private QuotedMessage quotedMessage;
 
     public static MessagePayload from(Message message) {
         QuotedMessage quotedMessage = new QuotedMessage();
         if (message.getQuoted() != null) {
             quotedMessage.setId(message.getQuoted().getId());
             quotedMessage.setText(message.getQuoted().getText());
-            quotedMessage.setUsername(message.getQuoted().getUsername());
+            if (message.getQuoted().getUser() != null) {
+                quotedMessage.setUsername(message.getQuoted().getUser().getUsername());
+            }
             if (message.getQuoted().getAttachment() != null) {
                 quotedMessage.setFilename(message.getQuoted().getAttachment().getName());
                 quotedMessage.setPath(message.getQuoted().getAttachment().getPath());
@@ -32,9 +38,9 @@ public class MessagePayload {
         return new MessagePayload(
                 message.getId(),
                 message.getText(),
-                message.getUserId(),
+                message.getUser() != null ? message.getUser().getId() : null,
                 message.getCreatedAt().toString(),
-                message.getUsername(),
+                message.getUser() != null ? message.getUser().getUsername() : null,
                 message.getUuid().toString(),
                 quotedMessage.getId(),
                 message.getAttachment() != null ? message.getAttachment().getName() : null,

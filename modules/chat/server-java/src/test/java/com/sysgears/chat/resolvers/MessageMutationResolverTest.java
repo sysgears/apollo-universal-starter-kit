@@ -1,5 +1,6 @@
 package com.sysgears.chat.resolvers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.graphql.spring.boot.test.GraphQLResponse;
@@ -9,25 +10,21 @@ import com.sysgears.chat.model.Message;
 import com.sysgears.chat.service.MessageService;
 import com.sysgears.user.model.User;
 import com.sysgears.user.service.UserService;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.mock.web.MockPart;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
 
-import javax.servlet.http.Part;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -42,6 +39,8 @@ class MessageMutationResolverTest {
 	private GraphQLTestTemplate template;
 	@Autowired
 	private MessageService messageService;
+	@Autowired
+	private TestRestTemplate restTemplate;
 	@MockBean
 	private UserService userService;
 
@@ -274,5 +273,41 @@ class MessageMutationResolverTest {
 		GraphQLResponse response = template.perform("edit-message.graphql", input);
 		assertTrue(response.isOk());
 		assertEquals(String.format("Message with id %d not found", invalidMessageId), response.get("$.errors[0].message"));
+	}
+
+	@Test
+	void addMessage_with_attachment() throws Exception {
+		FileWriter writer = new FileWriter("filename.txt");
+		writer.write("some file content");
+		writer.close();
+		File file = new File("filename.txt");
+
+		LinkedMultiValueMap<String, Object> params = new LinkedMultiValueMap<>();
+		params.add("operations", "{\"query\":\"mutation addMessage($input: AddMessageInput!) { addMessage(input: $input) { id text userId createdAt username uuid quotedId filename path quotedMessage { id text username filename path }}}\",\"variables\":{ \"input\": {\"text\": \"rr\", \"uuid\": \"83f92165-f0c6-40c1-9764-6325e9548799\", \"attachment\": null}}}");
+		params.add("map", "{\"0\": [\"variables.input.attachment\"]}");
+		params.add("0", new FileSystemResource(file));
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+		ResponseEntity<String> response = restTemplate.exchange(
+				"/graphql",
+				HttpMethod.POST,
+				new HttpEntity<>(params, headers),
+				String.class);
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		JsonNode jsonNode = objectMapper.readTree(response.getBody());
+		MessagePayload messagePayload = objectMapper.readValue(jsonNode.findPath("addMessage").traverse(), MessagePayload.class);
+
+		assertNotNull(messagePayload.getId());
+		assertNotNull(messagePayload.getText());
+		assertFalse(messagePayload.getCreatedAt().isBlank());
+		assertEquals(file.getName(), messagePayload.getFilename());
+		assertEquals("files/" + file.getName(), messagePayload.getPath());
+
+		Files.deleteIfExists(file.toPath());
+		Files.deleteIfExists(new File(messagePayload.getPath()).toPath());
 	}
 }

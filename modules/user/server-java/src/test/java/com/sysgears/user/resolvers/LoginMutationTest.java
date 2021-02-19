@@ -166,7 +166,7 @@ public class LoginMutationTest {
 		GraphQLResponse response = template.perform("/mutation/forgot-password.graphql", input);
 
 		assertTrue(response.isOk());
-		assertEquals("No user found", response.get("$.errors[0].message"));
+		assertEquals("User does not exist.", response.get("$.errors[0].message"));
 		assertEquals("No user with specified email.", response.get("$.errors[0].extensions.exception.errors.email"));
 
 		verify(emailService, never()).sendResetPasswordEmail(anyString(), anyString());
@@ -217,7 +217,7 @@ public class LoginMutationTest {
 
 		GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
 		assertTrue(response.isOk());
-		assertEquals("No user found", response.get("$.errors[0].message"));
+		assertEquals("User does not exist.", response.get("$.errors[0].message"));
 
 		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());
 	}
@@ -241,7 +241,7 @@ public class LoginMutationTest {
 		GraphQLResponse response = template.perform("/mutation/reset-password.graphql", input);
 		assertTrue(response.isOk());
 		assertEquals("Failed reset password", response.get("$.errors[0].message"));
-		assertEquals("Must match the field 'password'", response.get("$.errors[0].extensions.exception.errors.passwordConfirmation"));
+		assertEquals("Passwords do not match.", response.get("$.errors[0].extensions.exception.errors.passwordConfirmation"));
 
 		verify(emailService, never()).sendPasswordUpdatedEmail(anyString());
 	}

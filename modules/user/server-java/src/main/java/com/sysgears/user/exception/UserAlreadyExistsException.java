@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class UserAlreadyExistsException extends FieldErrorException {
 
-    public UserAlreadyExistsException(Map<String, String> errors) {
-        super("User already exists.", errors);
+    public UserAlreadyExistsException(String message, Map<String, String> errors) {
+        super(message, errors);
     }
 }

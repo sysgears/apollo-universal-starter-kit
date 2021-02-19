@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class LoginFailedException extends FieldErrorException {
 
-    public LoginFailedException(Map<String, String> errors) {
-        super("Login failed.", errors);
+    public LoginFailedException(String message, Map<String, String> errors) {
+        super(message, errors);
     }
 }

@@ -1,11 +1,14 @@
 package com.sysgears.user.resolvers;
 
+import com.sysgears.authentication.utils.SessionUtils;
 import com.sysgears.core.subscription.Publisher;
+import com.sysgears.service.MessageResolver;
 import com.sysgears.user.dto.UserPayload;
 import com.sysgears.user.dto.input.AddUserInput;
 import com.sysgears.user.dto.input.EditUserInput;
 import com.sysgears.user.dto.input.ProfileInput;
 import com.sysgears.user.dto.input.auth.AuthInput;
+import com.sysgears.user.exception.UserDeletionException;
 import com.sysgears.user.exception.UserNotFoundException;
 import com.sysgears.user.model.User;
 import com.sysgears.user.model.UserAuth;
@@ -28,6 +31,7 @@ public class UserMutationResolver implements GraphQLMutationResolver {
     private final UserService userService;
     private final Publisher<UserUpdatedEvent> publisher;
     private final PasswordEncoder passwordEncoder;
+    private final MessageResolver messageResolver;
 
     public CompletableFuture<UserPayload> addUser(AddUserInput input) {
         return CompletableFuture.supplyAsync(()-> {
@@ -58,7 +62,7 @@ public class UserMutationResolver implements GraphQLMutationResolver {
     public CompletableFuture<UserPayload> editUser(EditUserInput input) {
         return userService.findUserById(input.getId())
                 .thenApplyAsync(user -> {
-                    if (user == null) throw new UserNotFoundException(input.getId());
+                    if (user == null) throw new UserNotFoundException(messageResolver.getLocalisedMessage("errors.userWithIdNotExists", input.getId()));
 
                     user.setUsername(input.getUsername());
                     user.setRole(input.getRole());
@@ -109,7 +113,14 @@ public class UserMutationResolver implements GraphQLMutationResolver {
 
     public CompletableFuture<UserPayload> deleteUser(int id) {
         return userService.findUserById(id).thenApplyAsync(user -> {
-            if (user == null) throw new UserNotFoundException(id);
+            if (user == null) throw new UserNotFoundException(messageResolver.getLocalisedMessage("errors.userWithIdNotExists", id));
+
+            User currentUser = (User) SessionUtils.SECURITY_CONTEXT.getAuthentication().getPrincipal();
+            if (currentUser == null || !currentUser.getRole().equals("admin")) {
+                throw new  UserDeletionException(messageResolver.getLocalisedMessage("errors.deleteUser.notEnoughPermission"));
+            } else if (currentUser.getId() == user.getId()){
+                throw new UserDeletionException(messageResolver.getLocalisedMessage("errors.deleteUser.cannotDeleteYourself"));
+            }
 
             userService.delete(user);
 

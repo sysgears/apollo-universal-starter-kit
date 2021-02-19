@@ -4,6 +4,7 @@ import com.sysgears.authentication.model.jwt.JwtUserIdentity;
 import com.sysgears.authentication.resolvers.jwt.JwtUserIdentityService;
 import com.sysgears.authentication.service.jwt.JwtParser;
 import com.sysgears.authentication.utils.SessionUtils;
+import com.sysgears.service.MessageResolver;
 import com.sysgears.user.dto.input.FilterUserInput;
 import com.sysgears.user.dto.input.OrderByUserInput;
 import com.sysgears.user.exception.UserNotFoundException;
@@ -32,82 +33,83 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService, AuditorAware<User>, JwtUserIdentityService {
 
-    private final UserRepository userRepository;
-    private final JwtParser jwtParser;
+	private final UserRepository userRepository;
+	private final JwtParser jwtParser;
+	private final MessageResolver messageResolver;
 
-    @Override
-    @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return findUserByUsernameOrEmail(username).handle((user, throwable) -> {
-            if (throwable != null) {
-                if (throwable.getCause() instanceof NoResultException) {
-                    throw new UsernameNotFoundException(String.format("User with username '%s' not found.", username));
-                }
-                log.error(String.format("Unexpected error happened when load user by username '%s'", username), throwable);
-            }
-            return user;
-        }).join();
-    }
+	@Override
+	@Transactional(readOnly = true)
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		return findUserByUsernameOrEmail(username).handle((user, throwable) -> {
+			if (throwable != null) {
+				if (throwable.getCause() instanceof NoResultException) {
+					throw new UsernameNotFoundException(messageResolver.getLocalisedMessage("errors.userWithUsernameNotExists", username));
+				}
+				log.error(String.format("Unexpected error happened when load user by username '%s'", username), throwable);
+			}
+			return user;
+		}).join();
+	}
 
-    @Transactional(readOnly = true)
-    public CompletableFuture<User> findUserByUsernameOrEmail(String usernameOrEmail) {
-        return userRepository.findByUsernameOrEmail(usernameOrEmail);
-    }
+	@Transactional(readOnly = true)
+	public CompletableFuture<User> findUserByUsernameOrEmail(String usernameOrEmail) {
+		return userRepository.findByUsernameOrEmail(usernameOrEmail);
+	}
 
-    @NonNull
-    @Override
-    public Optional<User> getCurrentAuditor() {
-        final Authentication authentication = SessionUtils.SECURITY_CONTEXT.getAuthentication();
+	@NonNull
+	@Override
+	public Optional<User> getCurrentAuditor() {
+		final Authentication authentication = SessionUtils.SECURITY_CONTEXT.getAuthentication();
 
-        if (authentication == null) {
-            // no user
-            return Optional.empty();
-        }
+		if (authentication == null) {
+			// no user
+			return Optional.empty();
+		}
 
-        if (authentication.getPrincipal() instanceof User) {
-            return Optional.of((User) SessionUtils.SECURITY_CONTEXT.getAuthentication().getPrincipal());
-        } else {
-            // anonymous user
-            return Optional.empty();
-        }
-    }
+		if (authentication.getPrincipal() instanceof User) {
+			return Optional.of((User) SessionUtils.SECURITY_CONTEXT.getAuthentication().getPrincipal());
+		} else {
+			// anonymous user
+			return Optional.empty();
+		}
+	}
 
-    @Transactional(readOnly = true)
-    public User loadUserByToken(String token) {
-        Integer userId = jwtParser.getIdFromAccessToken(token);
-        return userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-    }
+	@Transactional(readOnly = true)
+	public User loadUserByToken(String token) {
+		Integer userId = jwtParser.getIdFromAccessToken(token);
+		return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(messageResolver.getLocalisedMessage("errors.userNotExists")));
+	}
 
-    @Transactional(readOnly = true)
-    public CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
-        return userRepository.findByCriteria(orderBy, filter);
-    }
+	@Transactional(readOnly = true)
+	public CompletableFuture<List<User>> findByCriteria(Optional<OrderByUserInput> orderBy, Optional<FilterUserInput> filter) {
+		return userRepository.findByCriteria(orderBy, filter);
+	}
 
-    public User save(User user) {
-        return userRepository.save(user);
-    }
+	public User save(User user) {
+		return userRepository.save(user);
+	}
 
-    @Transactional(readOnly = true)
-    public CompletableFuture<User> findUserById(Integer id) {
-        return userRepository.findUserById(id);
-    }
+	@Transactional(readOnly = true)
+	public CompletableFuture<User> findUserById(Integer id) {
+		return userRepository.findUserById(id);
+	}
 
-    public void delete(User user) {
-        userRepository.delete(user);
-    }
+	public void delete(User user) {
+		userRepository.delete(user);
+	}
 
-    @Override
-    public Optional<JwtUserIdentity> findById(Integer userId) {
-        return userRepository.findById(userId).map(UserIdentityUtils::convert);
-    }
+	@Override
+	public Optional<JwtUserIdentity> findById(Integer userId) {
+		return userRepository.findById(userId).map(UserIdentityUtils::convert);
+	}
 
-    @Transactional(readOnly = true)
-    public Boolean existsByEmail(String email) {
-        return userRepository.existsByEmail(email);
-    }
+	@Transactional(readOnly = true)
+	public Boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
 
-    @Transactional(readOnly = true)
-    public Boolean existsByUsername(String username) {
-        return userRepository.existsByUsername(username);
-    }
+	@Transactional(readOnly = true)
+	public Boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
 }

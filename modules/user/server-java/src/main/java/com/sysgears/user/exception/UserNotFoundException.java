@@ -9,15 +9,12 @@ import java.util.Map;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
 public class UserNotFoundException extends FieldErrorException {
-    public UserNotFoundException() {
-        super("No user found", Collections.emptyMap());
+
+    public UserNotFoundException(String message) {
+        super(message, Collections.emptyMap());
     }
 
-    public UserNotFoundException(int id) {
-        super(String.format("User with id %d not found.", id), Collections.emptyMap());
-    }
-
-    public UserNotFoundException(Map<String, String> errors) {
-        super("No user found", errors);
+    public UserNotFoundException(String message, Map<String, String> errors) {
+        super(message, errors);
     }
 }

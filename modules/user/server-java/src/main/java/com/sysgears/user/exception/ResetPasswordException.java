@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class ResetPasswordException extends FieldErrorException {
 
-    public ResetPasswordException(Map<String, String> errors) {
-        super("Failed reset password", errors);
+    public ResetPasswordException(String message, Map<String, String> errors) {
+        super(message, errors);
     }
 }

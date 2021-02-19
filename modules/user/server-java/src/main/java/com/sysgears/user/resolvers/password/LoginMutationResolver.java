@@ -5,6 +5,7 @@ import com.sysgears.authentication.service.jwt.JwtGenerator;
 import com.sysgears.authentication.service.jwt.JwtParser;
 import com.sysgears.authentication.utils.SessionUtils;
 import com.sysgears.mailer.service.EmailService;
+import com.sysgears.service.MessageResolver;
 import com.sysgears.user.config.JWTPreAuthenticationToken;
 import com.sysgears.user.dto.AuthPayload;
 import com.sysgears.user.dto.UserPayload;
@@ -42,6 +43,7 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
     private final JwtGenerator jwtGenerator;
     private final JwtParser jwtParser;
     private final EmailService emailService;
+    private final MessageResolver messageResolver;
 
     @Transactional(readOnly = true)
     public CompletableFuture<AuthPayload> login(LoginUserInput loginUserInput) {
@@ -50,7 +52,10 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                     boolean matches = passwordEncoder.matches(loginUserInput.getPassword(), user.getPassword());
                     if (!matches) {
                         log.debug("Password is invalid");
-                        throw new LoginFailedException(Map.of("password", "Please enter a valid password."));
+                        throw new LoginFailedException(
+                                messageResolver.getLocalisedMessage("errors.login.failed"),
+                                Map.of("password", messageResolver.getLocalisedMessage("errors.login.invalidPassword"))
+                        );
                     }
 
                     Tokens tokens = jwtGenerator.generateTokens(UserIdentityUtils.convert(user));
@@ -61,7 +66,10 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                 .exceptionally(throwable -> {
                     if (throwable.getCause() instanceof NoResultException) {
                         log.warn("Specified email or username '{}' is invalid.", loginUserInput.getUsernameOrEmail());
-                        throw new LoginFailedException(Map.of("usernameOrEmail", "Please enter a valid username or e-mail."));
+                        throw new LoginFailedException(
+                                messageResolver.getLocalisedMessage("errors.login.failed"),
+                                Map.of("usernameOrEmail", messageResolver.getLocalisedMessage("errors.login.invalidUsernameOrEmail"))
+                        );
                     } else {
                         log.error("Unexpected error happens when find user with " + loginUserInput.getUsernameOrEmail(), throwable);
                         throw (CompletionException) throwable;
@@ -71,7 +79,10 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
 
     public CompletableFuture<String> forgotPassword(ForgotPasswordInput input) {
         if (!userService.existsByEmail(input.getEmail())) {
-            throw new UserNotFoundException(Map.of("email", "No user with specified email."));
+            throw new UserNotFoundException(
+                    messageResolver.getLocalisedMessage("errors.userNotExists"),
+                    Map.of("email", messageResolver.getLocalisedMessage("errors.forgotPassword.noUserWithEmail"))
+            );
         }
 
         return userService.findUserByUsernameOrEmail(input.getEmail()).thenApply(user -> {
@@ -91,10 +102,13 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
                 .thenCompose(userService::findUserById)
                 .thenCompose(user -> {
                     if (user == null) {
-                        throw new UserNotFoundException();
+                        throw new UserNotFoundException(messageResolver.getLocalisedMessage("errors.userNotExists"));
                     }
                     if (!input.getPassword().equals(input.getPasswordConfirmation())) {
-                        throw new ResetPasswordException(Map.of("passwordConfirmation", "Must match the field 'password'"));
+                        throw new ResetPasswordException(
+                                messageResolver.getLocalisedMessage("errors.resetPassword.failed"),
+                                Map.of("passwordConfirmation", messageResolver.getLocalisedMessage("errors.resetPassword.passwordsIsNotMatch"))
+                        );
                     }
 
                     user.setPassword(passwordEncoder.encode(input.getPassword()));
@@ -110,13 +124,16 @@ public class LoginMutationResolver implements GraphQLMutationResolver {
         return CompletableFuture.supplyAsync(() -> {
             Map<String, String> errors = new HashMap<>();
             if (userService.existsByEmail(input.getEmail())) {
-                errors.put("email", "E-mail already exists.");
+                errors.put("email", messageResolver.getLocalisedMessage("errors.register.emailIsExisted"));
             }
             if (userService.existsByUsername(input.getUsername())) {
-                errors.put("username", "Username already exists.");
+                errors.put("username", messageResolver.getLocalisedMessage("errors.register.usernameIsExisted"));
             }
             if (!errors.isEmpty()) {
-                throw new UserAlreadyExistsException(errors);
+                throw new UserAlreadyExistsException(
+                        messageResolver.getLocalisedMessage("errors.userAlreadyExists"),
+                        errors
+                );
             }
 
             User user = new User(

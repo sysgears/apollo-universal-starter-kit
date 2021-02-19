@@ -1,5 +1,5 @@
 rootProject.name = 'server-java'
-include ':app', ':core', ':counter', ':user', ':authentication', 'mailer', 'contact', 'upload', 'post', 'chat', 'reports'
+include ':app', ':core', ':counter', ':user', ':authentication', 'mailer', 'contact', 'upload', 'post', 'chat', 'reports', 'i18n'
 
 project(':core').projectDir = new File('../../modules/core/server-java')
 project(':counter').projectDir = new File('../../modules/counter/server-java')
@@ -11,3 +11,4 @@ project(':upload').projectDir = new File('../../modules/upload/server-java')
 project(':post').projectDir = new File('../../modules/post/server-java')
 project(':chat').projectDir = new File('../../modules/chat/server-java')
 project(':reports').projectDir = new File('../../modules/reports/server-java')
+project(':i18n').projectDir = new File('../../modules/i18n/server-java')

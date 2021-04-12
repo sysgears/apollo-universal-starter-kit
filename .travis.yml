@@ -8,4 +8,4 @@ os:
 script:
 - yarn test
 install:
-  - yarn install --immutable
+  - yarn install

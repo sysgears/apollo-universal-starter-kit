@@ -3,9 +3,9 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
-const getPluginUrl = plugin => `https://raw.githubusercontent.com/yarnpkg/berry/master/packages/plugin-${plugin}/bin/%40yarnpkg/plugin-${plugin}.js`
-
 const REQUESTED_VERSION = require('./package.json').pm.split('@')[1];
+const getPluginUrl = plugin => `https://raw.githubusercontent.com/yarnpkg/berry/@yarnpkg/cli/${REQUESTED_VERSION}/packages/plugin-${plugin}/bin/%40yarnpkg/plugin-${plugin}.js`
+
 const YARNRC_YML_PATH = path.join(__dirname, '.yarnrc.yml');
 const PLUGIN_LIST = !fs.existsSync(YARNRC_YML_PATH) ? [] : fs.readFileSync(YARNRC_YML_PATH, 'utf-8')
   .split('\n')

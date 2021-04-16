@@ -11,7 +11,7 @@ import './init';
  * @param i18n - i18next
  * @param resources - The resources to add
  */
-const addResourcesI18n = (i18n: I18N, resources: Array<{ ns: string; resources: Resource }>) => {
+export const addResourcesI18n = (i18n: I18N, resources: Array<{ ns: string; resources: Resource }>) => {
   for (const localization of resources) {
     for (const lang of Object.keys(localization.resources)) {
       const resource = (i18n.options.whitelist as string[]).filter((lng: string) => lng.includes(lang));

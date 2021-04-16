@@ -11,9 +11,11 @@ import { graphql, print, getOperationAST, DocumentNode, GraphQLSchema } from 'gr
 import { Provider } from 'react-redux';
 import { ApolloClient } from 'apollo-client';
 import { render, RenderResult } from '@testing-library/react';
+import i18next from 'i18next';
 
 import { createApolloClient } from '@gqlapp/core-common';
 import ClientModule from '@gqlapp/module-client-react';
+import { addResourcesI18n } from '@gqlapp/i18n-common-react';
 
 if (!process.env.JEST_WORKER_ID) {
   const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></html>');
@@ -32,6 +34,8 @@ const ref: { clientModules: ClientModule; typeDefs: DocumentNode[] } = { clientM
 export const initRenderer = (graphqlTypeDefs: DocumentNode[], clientModules: ClientModule) => {
   ref.clientModules = clientModules;
   ref.typeDefs = graphqlTypeDefs;
+
+  addResourcesI18n(i18next, clientModules.localizations);
 };
 
 class MockLink extends ApolloLink {

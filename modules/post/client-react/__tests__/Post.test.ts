@@ -71,7 +71,7 @@ describe('Posts and comments example UI works', () => {
       renderer.history.push('/posts');
     });
 
-    await waitForElement(() => dom.getByText('Posts'));
+    await waitForElement(() => dom.getByText('Post List'));
   });
 
   it('Posts page renders with data', () => {

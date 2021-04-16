@@ -137,7 +137,6 @@ class Post extends React.Component {
   };
 
   render() {
-    console.log('RERENDER -> Post.jsx');
     return <PostList {...this.props} />;
   }
 }

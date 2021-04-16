@@ -3657,6 +3657,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.12.5":
+  version: 7.13.10
+  resolution: "@babel/runtime@npm:7.13.10"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: bd016f13aa941a147aad60d7dbc49a1403717144146fc9d1d1a38660e0ca2d36740db6a540235e9c86de8e60e383abee3ef4e905094d96a7e9a4dbfe5788a37e
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.3.1, @babel/runtime@npm:^7.5.5":
   version: 7.5.5
   resolution: "@babel/runtime@npm:7.5.5"
@@ -9336,12 +9345,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-helmet@npm:^5.0.6":
-  version: 5.0.8
-  resolution: "@types/react-helmet@npm:5.0.8"
+"@types/react-helmet@npm:^6.0.0":
+  version: 6.1.1
+  resolution: "@types/react-helmet@npm:6.1.1"
   dependencies:
     "@types/react": "*"
-  checksum: bf8923a61a25f3ec47e676a8d9c4117071acea115a1be0a003f1462572155b088738372a47da5b08e58c4ff2da7c48eb4d6db25e3f4aee386bbbb7afaf481e94
+  checksum: f55e7da55d107ff1bfed6c0fa811a236be814ab770fb264d475b1538e4eaa23ad31c75d90a411845bba207d5c3c75ad0954578fd56383ba21438157e67ca2e17
   languageName: node
   linkType: hard
 
@@ -14992,7 +15001,7 @@ __metadata:
     "@types/node": ^13.7.6
     "@types/react": ^16.9.23
     "@types/react-dom": ^16.9.0
-    "@types/react-helmet": ^5.0.6
+    "@types/react-helmet": ^6.0.0
     "@types/react-native": ^0.55.7
     "@types/react-redux": ^7.1.2
     "@types/react-router-dom": ^4.3.4
@@ -15052,7 +15061,7 @@ __metadata:
     react-dom: 16.11.0
     react-dropzone: ^4.2.3
     react-ga: ^2.3.5
-    react-helmet: ^5.2.1
+    react-helmet: ^6.0.0
     react-i18next: ^10.12.2
     react-native: "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz"
     react-native-credit-card-input: ^0.4.1
@@ -15069,7 +15078,7 @@ __metadata:
     react-stripe-elements: ^1.2.1
     react-test-renderer: 16.11.0
     react-transition-group: ^2.3.0-beta.0
-    reactstrap: ^5.0.0-beta
+    reactstrap: ^8.9.0
     redux: ^4.0.1
     redux-devtools-extension: ^2.13.2
     request: ^2.83.0
@@ -19151,13 +19160,6 @@ __metadata:
     signal-exit: ^3.0.2
     strip-final-newline: ^2.0.0
   checksum: 53741fc72a7cc8ae286dac4ec6fa12353e3128548bcf3def39670de3a598bf5c3ce7440a7c36478462bda7d95345d03ef6ce5cbe4b36eda7d0a2a573bda9d8cc
-  languageName: node
-  linkType: hard
-
-"exenv@npm:^1.2.1":
-  version: 1.2.2
-  resolution: "exenv@npm:1.2.2"
-  checksum: 4e96b355a6b9b9547237288ca779dd673b2e698458b409e88b50df09feb7c85ef94c07354b6b87bc3ed0193a94009a6f7a3c71956da12f45911c0d0f5aa3caa0
   languageName: node
   linkType: hard
 
@@ -27170,13 +27172,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"lodash.isfunction@npm:^3.0.9":
-  version: 3.0.9
-  resolution: "lodash.isfunction@npm:3.0.9"
-  checksum: e88620922f5f104819496884779ca85bfc542efb2946df661ab3e2cd38da5c8375434c6adbedfc76dd3c2b04075d2ba8ec215cfdedf08ddd2e3c3467e8a26ccd
-  languageName: node
-  linkType: hard
-
 "lodash.isinteger@npm:^4.0.4":
   version: 4.0.4
   resolution: "lodash.isinteger@npm:4.0.4"
@@ -27382,13 +27377,6 @@ fsevents@^1.2.7:
   version: 4.3.2
   resolution: "lodash.times@npm:4.3.2"
   checksum: 57a31fab8750fe0a03e1b0ca042cb7f05c125b22a546f5156a4b642966c7ac49ea9ffee462beaffb93a47a4516cdb08b2c0fe280e37b7e1c14840ec94c9aa7ca
-  languageName: node
-  linkType: hard
-
-"lodash.tonumber@npm:^4.0.3":
-  version: 4.0.3
-  resolution: "lodash.tonumber@npm:4.0.3"
-  checksum: ac993b5d1cca7dd22dc7f2dce0b8c7d04665dccddba944240755aba50c4fa9fbbda42e6c5288e0be3a8979f63178ec7d36922cc5aee31555e96ef71d8f999feb
   languageName: node
   linkType: hard
 
@@ -32019,17 +32007,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"popper.js@npm:^1.12.9, popper.js@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "popper.js@npm:1.15.0"
-  checksum: 04d9a96f13fbce06c1daf231df1577ce6b2e04df1212ae0dae84dbbe72c2d789b2ceea4ef61acffd1177d935b9044dc22dee85e18b0ba830b92336ce52e0054a
-  languageName: node
-  linkType: hard
-
 "popper.js@npm:^1.14.1, popper.js@npm:^1.14.4, popper.js@npm:^1.14.7":
   version: 1.16.1
   resolution: "popper.js@npm:1.16.1"
   checksum: 1c1a826f757edb5b8c2049dfd7a9febf6ae1e9d0e51342fc715b49a0c1020fced250d26484619883651e097c5764bbcacd2f31496e3646027f079dd83e072681
+  languageName: node
+  linkType: hard
+
+"popper.js@npm:^1.15.0":
+  version: 1.15.0
+  resolution: "popper.js@npm:1.15.0"
+  checksum: 04d9a96f13fbce06c1daf231df1577ce6b2e04df1212ae0dae84dbbe72c2d789b2ceea4ef61acffd1177d935b9044dc22dee85e18b0ba830b92336ce52e0054a
   languageName: node
   linkType: hard
 
@@ -34225,10 +34213,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^2.0.1, react-fast-compare@npm:^2.0.2, react-fast-compare@npm:^2.0.4":
+"react-fast-compare@npm:^2.0.1, react-fast-compare@npm:^2.0.4":
   version: 2.0.4
   resolution: "react-fast-compare@npm:2.0.4"
   checksum: f0300c677e95198b5f993cbb8a983dab09586157dc678f9e2b5b29ff941b6677a8776fbbdc425ce102fad86937e36bb45cfcfd797f006270b97ccf287ebfb885
+  languageName: node
+  linkType: hard
+
+"react-fast-compare@npm:^3.1.1":
+  version: 3.2.0
+  resolution: "react-fast-compare@npm:3.2.0"
+  checksum: 2a7d75ce9fb5da1e3c01f74a5cd592f3369a8cc8d44e93654bf147ab221f430238e8be70677e896f2bfcb96a1cb7a47a8d05d84633de764a9d57d27005a4bb9e
   languageName: node
   linkType: hard
 
@@ -34274,17 +34269,17 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-helmet@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "react-helmet@npm:5.2.1"
+"react-helmet@npm:^6.0.0":
+  version: 6.1.0
+  resolution: "react-helmet@npm:6.1.0"
   dependencies:
     object-assign: ^4.1.1
-    prop-types: ^15.5.4
-    react-fast-compare: ^2.0.2
-    react-side-effect: ^1.1.0
+    prop-types: ^15.7.2
+    react-fast-compare: ^3.1.1
+    react-side-effect: ^2.1.0
   peerDependencies:
-    react: ">=15.0.0"
-  checksum: b20f4636ca8d46aaf754b23edabab7c8c7cf4dd95d82b311b23e6bbbe77ad5fac98f7d1ccf42949776c4ab23315978f9fee09b62c8e9db14cbcb80311b06e4f4
+    react: ">=16.3.0"
+  checksum: 1d2831d9c3b4f5c91f020076aeb6502437a4788077d0c438421e466eb9633d5dc2aacedf7b779a970b807d61cf87793c5ff76ee3190a185d71c90b5cfb367e96
   languageName: node
   linkType: hard
 
@@ -34787,19 +34782,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-popper@npm:^0.8.3":
-  version: 0.8.3
-  resolution: "react-popper@npm:0.8.3"
-  dependencies:
-    popper.js: ^1.12.9
-    prop-types: ^15.6.0
-  peerDependencies:
-    react: 0.14.x || ^15.0.0 || ^16.0.0
-    react-dom: 0.14.x || ^15.0.0 || ^16.0.0
-  checksum: 222a8379ecc1720d477b80e6430052914abf7d8679738d29281cf84b4eaff63504da143f2fd87129f5bab1b326812b1be07cb5b5310381533fb1ab5f2fc08357
-  languageName: node
-  linkType: hard
-
 "react-popper@npm:^1.3.6":
   version: 1.3.7
   resolution: "react-popper@npm:1.3.7"
@@ -34915,15 +34897,12 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-side-effect@npm:^1.1.0":
-  version: 1.1.5
-  resolution: "react-side-effect@npm:1.1.5"
-  dependencies:
-    exenv: ^1.2.1
-    shallowequal: ^1.0.1
+"react-side-effect@npm:^2.1.0":
+  version: 2.1.1
+  resolution: "react-side-effect@npm:2.1.1"
   peerDependencies:
-    react: ^0.13.0 || ^0.14.0 || ^15.0.0 || ^16.0.0
-  checksum: dba1a94212e401d6b27cf918197fc902d00da317112a0310a2a09b3790338b25d7aec3a1e40536424860cc94f44b84f5e71167642e220de934fc7c56c0723443
+    react: ^16.3.0 || ^17.0.0
+  checksum: 95386665f37072558dad2be4afad346848af9d73470cde0125d0450c06ab786244cf66217cc96346a702e60d09f35883160cbd5411f4745d3075d76dbdc394dd
   languageName: node
   linkType: hard
 
@@ -35018,7 +34997,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:^2.2.1, react-transition-group@npm:^2.3.0-beta.0":
+"react-transition-group@npm:^2.2.1, react-transition-group@npm:^2.3.0-beta.0, react-transition-group@npm:^2.3.1":
   version: 2.9.0
   resolution: "react-transition-group@npm:2.9.0"
   dependencies:
@@ -35125,21 +35104,19 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"reactstrap@npm:^5.0.0-beta":
-  version: 5.0.0
-  resolution: "reactstrap@npm:5.0.0"
+"reactstrap@npm:^8.9.0":
+  version: 8.9.0
+  resolution: "reactstrap@npm:8.9.0"
   dependencies:
+    "@babel/runtime": ^7.12.5
     classnames: ^2.2.3
-    lodash.isfunction: ^3.0.9
-    lodash.isobject: ^3.0.2
-    lodash.tonumber: ^4.0.3
     prop-types: ^15.5.8
-    react-popper: ^0.8.3
-    react-transition-group: ^2.2.1
+    react-popper: ^1.3.6
+    react-transition-group: ^2.3.1
   peerDependencies:
-    react: ^16.0.0
-    react-dom: ^16.0.0
-  checksum: 30b5c824a4febfac0c888a4cdd72d1f0502b65dfad1395c2b78903e1d9aee98c378f8f4fb6c4007fbd3e964ba4e2f024de6a29bd8d762f57bd712f191c6e2927
+    react: ">=16.3.0"
+    react-dom: ">=16.3.0"
+  checksum: b8f09e44e5bb6b55526fc21f79dcebfaf901471eaaf112eb910a3e67b9b1fc7d9b37fa5150f2154c78f0a6cf53a449106d972b25f565659373200498d27f7abe
   languageName: node
   linkType: hard
 
@@ -37082,7 +37059,7 @@ resolve@^1.17.0:
     react-cookie: ^2.2.0
     react-debounce-input: ^3.1.0
     react-dom: 16.11.0
-    react-helmet: ^5.2.1
+    react-helmet: ^6.0.0
     react-redux: ^7.1.0
     react-router: ^5.0.0
     react-stripe-elements: ^1.2.1

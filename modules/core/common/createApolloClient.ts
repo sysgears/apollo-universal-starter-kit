@@ -2,7 +2,7 @@ import fetch from 'isomorphic-unfetch';
 import { getOperationAST } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
-import { withClientState } from 'apollo-link-state';
+// import { withClientState } from 'apollo-link-state';
 import { WebSocketLink } from 'apollo-link-ws';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { LoggingLink } from 'apollo-logger';
@@ -116,11 +116,11 @@ const createApolloClient = ({
     );
   }
 
-  const linkState = withClientState({ ...clientResolvers, cache });
+  // const linkState = withClientState({ ...clientResolvers, cache });
 
   const allLinks = [
     ...(createLink ? createLink.map((create: any) => create(getApolloClient)) : []),
-    linkState,
+    // linkState,
     apiLink
   ];
 
@@ -153,7 +153,13 @@ const createApolloClient = ({
   const client = new ApolloClient(clientParams);
   if (cache.constructor.name !== 'OverrideCache') {
     // Restore Apollo Link State defaults only if we don't use `apollo-cache-router`
-    client.onResetStore((linkState as any).writeDefaults);
+    // client.onResetStore((linkState as any).writeDefaults);
+
+    localCache.writeData({
+      data: {
+        ...clientResolvers.defaults
+      }
+    });
   }
 
   if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {

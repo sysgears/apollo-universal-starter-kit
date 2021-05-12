@@ -40,7 +40,7 @@ export default () => ({
       const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
       const errors = await validateUserPassword(user, password, req.t);
       if (!isEmpty(errors)) throw new UserInputError('Failed valid user password', { errors });
-      const tokens = await access.grantAccess(user, req, user.passwordHash);
+      const tokens = await access.grantAccess(user, req, user.id + (user.passwordHash || ''));
       return { user, tokens };
     },
     async register(obj, { input }, { mailer, User, req }) {

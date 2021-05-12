@@ -1,10 +1,22 @@
-import { knex } from '@gqlapp/database-server-ts';
+import { Model } from 'objection';
 
-export default class ContactsDAO {
+export default class ContactsDAO extends Model {
+  static get jsonSchema() {
+    return {
+      type: 'object',
+
+      properties: {
+        id: { type: 'integer' },
+        name: { type: 'string' },
+        phone: { type: 'string' },
+        email: { type: 'string' }
+      }
+    };
+  }
+
+  public static tableName = 'report';
+
   public getContacts() {
-    return knex
-      .select('id', 'name', 'phone', 'email')
-      .from('report')
-      .orderBy('id', 'asc');
+    return ContactsDAO.query();
   }
 }

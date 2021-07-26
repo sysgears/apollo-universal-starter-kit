@@ -11,7 +11,7 @@ import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 
 const onSubmit = (post, editPost) => values => {
-  editPost(post.id, values.title, values.content);
+  editPost(post.id, values.title, values.content, values.pic);
 };
 
 const PostEditView = ({ loading, post, match, location, subscribeToMore, editPost, t }) => {

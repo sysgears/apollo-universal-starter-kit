@@ -17,142 +17,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@angular/animations@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/animations@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/core": 8.0.2
-  checksum: 8fcf41b187be1d36e27010576f105a8779419a61ba623a0324be7b69f080d78e9638825b55e1d99d2fa7dd11237c43eae25ae7246a37e93b647314fca004a29b
-  languageName: node
-  linkType: hard
-
-"@angular/cdk@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "@angular/cdk@npm:8.0.1"
-  dependencies:
-    parse5: ^5.0.0
-    tslib: ^1.7.1
-  peerDependencies:
-    "@angular/common": ^8.0.0 || ^9.0.0-0
-    "@angular/core": ^8.0.0 || ^9.0.0-0
-  dependenciesMeta:
-    parse5:
-      optional: true
-  checksum: 9d6aff1bbfba341fa41b0ce6e7b82d93977789db71b4ee9fa0774c4c179e541afb3e6ac207a2e8c7bebd151894ff0161ddb1a86b90aedfffbb77517998e50c12
-  languageName: node
-  linkType: hard
-
-"@angular/common@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/common@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/core": 8.0.2
-    rxjs: ^6.4.0
-  checksum: 0fb22751168274c6d14b88d79a43454e076cdf820461dd7f1231e44a3693bcfa3326fa8b3b232489789a37cf10a1e39c626b96b5e1ed24ba30df8a20013921e9
-  languageName: node
-  linkType: hard
-
-"@angular/compiler@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/compiler@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  checksum: caa9df93bd5648f767c536c860e8fc6f49aa3813e3b6314ddc6469b6bdafa433e37dd05fe338c0ddf6a32d566689699c8eafdd8049dab64d040096736501251f
-  languageName: node
-  linkType: hard
-
-"@angular/core@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/core@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    rxjs: ^6.4.0
-    zone.js: ~0.9.1
-  checksum: be7f972d3ece75a72429acaddc0ec999b7a980d04a9b6808f1877b84b6f6cb3bb7a74fd23bddb701661a44e3f46c16c5fd75a1330947cdba9768060e9a3838f4
-  languageName: node
-  linkType: hard
-
-"@angular/forms@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/forms@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": 8.0.2
-    "@angular/core": 8.0.2
-    "@angular/platform-browser": 8.0.2
-    rxjs: ^6.4.0
-  checksum: a0a5c08d2b646a4ee336b55c47fb4d7b4a9742a3709e20635d630b4e917c07ec1f4ffded97058bb0e5303fdf089eb7fa3b0e8e34cf9c199bbab2d44523e90c41
-  languageName: node
-  linkType: hard
-
-"@angular/material@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "@angular/material@npm:8.0.1"
-  dependencies:
-    tslib: ^1.7.1
-  peerDependencies:
-    "@angular/animations": ^8.0.0 || ^9.0.0-0
-    "@angular/cdk": 8.0.1
-    "@angular/common": ^8.0.0 || ^9.0.0-0
-    "@angular/core": ^8.0.0 || ^9.0.0-0
-    "@angular/forms": ^8.0.0 || ^9.0.0-0
-  checksum: 002d97db0b40675181189360d8042fb5e37e054dec15a432f3a4e9a090cc7a2cda1965baf0463fe59d739882f065cad746099cd41b324a84a492f60247045c28
-  languageName: node
-  linkType: hard
-
-"@angular/platform-browser-dynamic@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/platform-browser-dynamic@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": 8.0.2
-    "@angular/compiler": 8.0.2
-    "@angular/core": 8.0.2
-    "@angular/platform-browser": 8.0.2
-  checksum: 236ef58ab49ad355291af5b19a47579123007792a16394aea4806fb657c86b48fdddeb71f4375ef7c57f625e40834faece96e18fc6da191fbbf9e44eb3fee6e9
-  languageName: node
-  linkType: hard
-
-"@angular/platform-browser@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/platform-browser@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": 8.0.2
-    "@angular/core": 8.0.2
-  checksum: 9c06018b4e099b7d587f369feba9d259c60adfbf50df57c6c72af672325633e9f722261a35182c423dbfaa47bc1a502dea9ef782ec29045e4c1f7b3b2af4743c
-  languageName: node
-  linkType: hard
-
-"@angular/router@npm:^8.0.0":
-  version: 8.0.2
-  resolution: "@angular/router@npm:8.0.2"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": 8.0.2
-    "@angular/core": 8.0.2
-    "@angular/platform-browser": 8.0.2
-    rxjs: ^6.4.0
-  checksum: 87b594b9375b5ebb867cebd1c107a43c2349af4a2493760deee5f81902e59c8e8122e25c9faee372aa7ce298ddab79184be4882a654f7ea6e78dc22377ba590f
-  languageName: node
-  linkType: hard
-
-"@angularclass/hmr@npm:^2.1.3":
-  version: 2.1.3
-  resolution: "@angularclass/hmr@npm:2.1.3"
-  checksum: 4950427ab4ef44fd74a5377a5914c78a6a8a714ff87e05ca56477fd80d8d6f156586cf1df948174615cf3732b06ad0bb69075049a9b5e42b866777c9cc9a6c79
-  languageName: node
-  linkType: hard
-
 "@ant-design/colors@npm:^3.1.0":
   version: 3.1.0
   resolution: "@ant-design/colors@npm:3.1.0"
@@ -3657,6 +3521,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5":
+  version: 7.14.8
+  resolution: "@babel/runtime@npm:7.14.8"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: a30de0b81bd122610b7bf91fc857ce728feb759044e541a63aab6a612eb6f8b33a87704f3635e81e79c651c3f7a4c571f7f31a960064da93213cb327b6becbf6
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.12.5":
   version: 7.13.10
   resolution: "@babel/runtime@npm:7.13.10"
@@ -4860,6 +4733,31 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fluentui/react-component-event-listener@npm:~0.51.6":
+  version: 0.51.7
+  resolution: "@fluentui/react-component-event-listener@npm:0.51.7"
+  dependencies:
+    "@babel/runtime": ^7.10.4
+  peerDependencies:
+    react: ^16.8.0 || ^17
+    react-dom: ^16.8.0 || ^17
+  checksum: bd8c202d074bea6a616eba1f42e3245714a70b9ef1e9b492121033117dc2319ab8b8f0265eb68e861bfce6ac07c6c4885d853ce83e1f16d711f3febce5e8c701
+  languageName: node
+  linkType: hard
+
+"@fluentui/react-component-ref@npm:~0.51.6":
+  version: 0.51.7
+  resolution: "@fluentui/react-component-ref@npm:0.51.7"
+  dependencies:
+    "@babel/runtime": ^7.10.4
+    react-is: ^16.6.3
+  peerDependencies:
+    react: ^16.8.0 || ^17
+    react-dom: ^16.8.0 || ^17
+  checksum: ccd5c4812fc7459891749ed967b8370a1fb2efea8fbea2a56c9284bfb7a2c46ac4380533c87f62b8bf75a91d638c9f22caeb0a48b93d36dc3771b7edb5f58937
+  languageName: node
+  linkType: hard
+
 "@fortawesome/fontawesome-common-types@npm:^0.2.19":
   version: 0.2.19
   resolution: "@fortawesome/fontawesome-common-types@npm:0.2.19"
@@ -4963,12 +4861,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/core-client-angular@^0.1.0, @gqlapp/core-client-angular@workspace:modules/core/client-angular":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/core-client-angular@workspace:modules/core/client-angular"
-  languageName: unknown
-  linkType: soft
-
 "@gqlapp/core-client-react-native@workspace:modules/core/client-react-native":
   version: 0.0.0-use.local
   resolution: "@gqlapp/core-client-react-native@workspace:modules/core/client-react-native"
@@ -4984,22 +4876,6 @@ __metadata:
     "@gqlapp/core-common": ^0.1.0
     formik: ^1.5.8
     prop-types: ^15.6.0
-  languageName: unknown
-  linkType: soft
-
-"@gqlapp/core-client-vue@^0.1.0, @gqlapp/core-client-vue@workspace:modules/core/client-vue":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/core-client-vue@workspace:modules/core/client-vue"
-  dependencies:
-    "@gqlapp/core-common": ^0.1.0
-    "@gqlapp/module-client-vue": ^0.1.0
-    error-stack-parser: ^2.0.1
-    sourcemapped-stacktrace: ^1.1.8
-    vue: ^2.5.22
-    vue-apollo: ^3.0.0-beta.27
-    vue-router: ^3.0.2
-    vuex: ^3.0.1
-    vuex-router-sync: ^5.0.0
   languageName: unknown
   linkType: soft
 
@@ -5021,26 +4897,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/counter-client-angular@^0.1.0, @gqlapp/counter-client-angular@workspace:modules/counter/client-angular":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/counter-client-angular@workspace:modules/counter/client-angular"
-  languageName: unknown
-  linkType: soft
-
 "@gqlapp/counter-client-react@^0.1.0, @gqlapp/counter-client-react@workspace:modules/counter/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/counter-client-react@workspace:modules/counter/client-react"
   dependencies:
     "@gqlapp/counter-common": ^0.1.0
-  languageName: unknown
-  linkType: soft
-
-"@gqlapp/counter-client-vue@^0.1.0, @gqlapp/counter-client-vue@workspace:modules/counter/client-vue":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/counter-client-vue@workspace:modules/counter/client-vue"
-  dependencies:
-    "@gqlapp/counter-common": ^0.1.0
-    "@gqlapp/module-client-vue": ^0.1.0
   languageName: unknown
   linkType: soft
 
@@ -5110,12 +4971,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/look-client-angular@^0.1.0, @gqlapp/look-client-angular@workspace:modules/look/client-angular":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/look-client-angular@workspace:modules/look/client-angular"
-  languageName: unknown
-  linkType: soft
-
 "@gqlapp/look-client-react-native@^0.1.0, @gqlapp/look-client-react-native@workspace:modules/look/client-react-native":
   version: 0.0.0-use.local
   resolution: "@gqlapp/look-client-react-native@workspace:modules/look/client-react-native"
@@ -5128,21 +4983,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/look-client-vue@workspace:modules/look/client-vue":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/look-client-vue@workspace:modules/look/client-vue"
-  languageName: unknown
-  linkType: soft
-
 "@gqlapp/mailer-server-ts@workspace:modules/mailer/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/mailer-server-ts@workspace:modules/mailer/server-ts"
-  languageName: unknown
-  linkType: soft
-
-"@gqlapp/module-client-angular@^0.1.0, @gqlapp/module-client-angular@workspace:modules/module/client-angular":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/module-client-angular@workspace:modules/module/client-angular"
   languageName: unknown
   linkType: soft
 
@@ -5157,14 +5000,6 @@ __metadata:
 "@gqlapp/module-client-react@^0.1.0, @gqlapp/module-client-react@workspace:modules/module/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/module-client-react@workspace:modules/module/client-react"
-  dependencies:
-    "@gqlapp/module-common": ^0.1.0
-  languageName: unknown
-  linkType: soft
-
-"@gqlapp/module-client-vue@^0.1.0, @gqlapp/module-client-vue@workspace:modules/module/client-vue":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/module-client-vue@workspace:modules/module/client-vue"
   dependencies:
     "@gqlapp/module-common": ^0.1.0
   languageName: unknown
@@ -7371,16 +7206,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@ngrx/store@npm:^8.0.0":
-  version: 8.0.1
-  resolution: "@ngrx/store@npm:8.0.1"
-  peerDependencies:
-    "@angular/core": ^8.0.0
-    rxjs: ^6.4.0
-  checksum: 0c4930734ad89cb85fdfe066aa9bacb75786b91dc5e795ffe887e318af795f737f68390a94a5a33479e0034bb042eabd958bc3cf4f3e420d3b7510ee45f51b92
-  languageName: node
-  linkType: hard
-
 "@nodelib/fs.scandir@npm:2.1.3":
   version: 2.1.3
   resolution: "@nodelib/fs.scandir@npm:2.1.3"
@@ -7483,19 +7308,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@nuxt/opencollective@npm:^0.2.2":
-  version: 0.2.2
-  resolution: "@nuxt/opencollective@npm:0.2.2"
-  dependencies:
-    chalk: ^2.4.1
-    consola: ^2.3.0
-    node-fetch: ^2.3.0
-  bin:
-    opencollective: bin/opencollective.js
-  checksum: d8d12596d2be567196ed8f3d940220255f6766c3bddb63ddca799164cd421abb6f650adf9df85a91f5b614536901c5a1185a50a6319ee22a0f8de348b9248bd1
-  languageName: node
-  linkType: hard
-
 "@octokit/endpoint@npm:^5.1.0":
   version: 5.2.0
   resolution: "@octokit/endpoint@npm:5.2.0"
@@ -7593,6 +7405,13 @@ __metadata:
     webpack-plugin-serve:
       optional: true
   checksum: a8de8de516ec46f6fabd6d3c120b3b25887216be3035a47a39f926c8982c7a4d7191b847e27c2630db0b376c1f835470d54e249add8284c304921659c4e5c2ca
+  languageName: node
+  linkType: hard
+
+"@popperjs/core@npm:^2.6.0":
+  version: 2.9.2
+  resolution: "@popperjs/core@npm:2.9.2"
+  checksum: 6bb9db5dbb2ba9ec57e760eaef229539fd70e4d8c7fffc894d7487a4a4f3375b3b8be7be0df817ac15ef9b6c87605f58ec1450d988d7aebfb9b79b3fc42476fe
   languageName: node
   linkType: hard
 
@@ -7881,6 +7700,19 @@ __metadata:
     component-type: ^1.2.1
     join-component: ^1.1.0
   checksum: c083c70c5f0a42a2bc5b685f82830b968d01b5b8de2a9a1c362a3952c6bb33ffbdfcf8196c8ce110a5050f78ff9dcf395832eb55687843c80dc77dfe659b0803
+  languageName: node
+  linkType: hard
+
+"@semantic-ui-react/event-stack@npm:^3.1.2":
+  version: 3.1.2
+  resolution: "@semantic-ui-react/event-stack@npm:3.1.2"
+  dependencies:
+    exenv: ^1.2.2
+    prop-types: ^15.6.2
+  peerDependencies:
+    react: ^16.0.0 || ^17.0.0
+    react-dom: ^16.0.0 || ^17.0.0
+  checksum: 0687d47c97f0d9c4858380d077a2b4f009db02e58f15e3610315b1d545f3c31184a2b924e1ddfb67add8f68a97f040e5eee7cb2b9e9eae00dced65c1cd5b9f22
   languageName: node
   linkType: hard
 
@@ -9159,7 +8991,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:*, @types/lodash@npm:^4.14.112, @types/lodash@npm:^4.14.118, @types/lodash@npm:^4.14.92":
+"@types/lodash@npm:*, @types/lodash@npm:^4.14.112, @types/lodash@npm:^4.14.92":
   version: 4.14.134
   resolution: "@types/lodash@npm:4.14.134"
   checksum: 65687d504428276dcf6bc88947eec6c9495903da79a5191a9bd927f8ee3541d89c7f952270295d8a9ff236694a67399a39b69263cc0df01efb7cf79ef4efa6bb
@@ -9196,7 +9028,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>=6":
+"@types/node@npm:*":
   version: 12.0.10
   resolution: "@types/node@npm:12.0.10"
   checksum: 8834286eb712f74bcd15c3afeaafa9e487b069926c91870ced4e8bcc10aea5030a3dc5c8eb8e3ef4d73a2361ebceebb1240d365ebeb5906022544778b7f9d703
@@ -10207,16 +10039,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@wry/context@npm:^0.4.0":
-  version: 0.4.4
-  resolution: "@wry/context@npm:0.4.4"
-  dependencies:
-    "@types/node": ">=6"
-    tslib: ^1.9.3
-  checksum: 9e2b29d70dd2eb9503096f1f3460408cab168103d5f7db713cf6df30d9ce6ea28b967c8498a69464ea85c7fdc260b745427ba879e834194f98f905d77058a21d
-  languageName: node
-  linkType: hard
-
 "@wry/equality@npm:^0.1.2, @wry/equality@npm:^0.1.9":
   version: 0.1.9
   resolution: "@wry/equality@npm:0.1.9"
@@ -10657,15 +10479,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"angular2-template-loader@npm:^0.6.2":
-  version: 0.6.2
-  resolution: "angular2-template-loader@npm:0.6.2"
-  dependencies:
-    loader-utils: ^0.2.15
-  checksum: bbae665ba3c5e937735cf734794e62e7272263baa6be0edf76e83a2d5ed11e6eb00c3958d635ffdcf458fd1e953f5f240be154060455fc5743ca26b4e2599be6
-  languageName: node
-  linkType: hard
-
 "anser@npm:^1.4.9":
   version: 1.4.9
   resolution: "anser@npm:1.4.9"
@@ -10969,52 +10782,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-angular-link-http-common@npm:~1.8.0":
-  version: 1.8.0
-  resolution: "apollo-angular-link-http-common@npm:1.8.0"
-  dependencies:
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": ^6.0.0 || ^7.0.0 || ^8.0.0
-    "@angular/core": ^6.0.0 || ^7.0.0 || ^8.0.0
-    apollo-link: ^1.0.0
-    graphql: ">=0.11.0 <0.14.0 || ^14.0.0"
-  checksum: adb3830fec8ff33e4f2c2d04ebfa04b189a50e4a99c216bfc0e96f7f92cada195c7320afae7a766ea8edefce4438644fdb723387e102731de58a3ca8ab92858b
-  languageName: node
-  linkType: hard
-
-"apollo-angular-link-http@npm:^1.7.0":
-  version: 1.8.0
-  resolution: "apollo-angular-link-http@npm:1.8.0"
-  dependencies:
-    apollo-angular-link-http-common: ~1.8.0
-    extract-files: 5.0.1
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/common": ^6.0.0 || ^7.0.0 || ^8.0.0
-    "@angular/core": ^6.0.0 || ^7.0.0 || ^8.0.0
-    apollo-link: ^1.0.0
-    graphql: ">=0.11.0 <0.14.0 || ^14.0.0"
-  checksum: 4d806fd0a485060782c59107205daa64ec0ec61ee50fa55556d753a61f48bbf097d469f2acee1bad5ddca13fbfc12e8603a003264c0e3912d51c4af34f7844fa
-  languageName: node
-  linkType: hard
-
-"apollo-angular@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "apollo-angular@npm:1.6.0"
-  dependencies:
-    semver: ^6.0.0
-    tslib: ^1.9.0
-  peerDependencies:
-    "@angular/core": ^6.1.0 || ^7.0.0 || ^8.0.0
-    apollo-client: ^2.3.4
-    apollo-link: ^1.0.0
-    rxjs: ^6.0.0
-    zone.js: ~0.8.20 || ~0.9.0
-  checksum: 649423bd4774c1e38ac2dcfe84b2d7d72cf850c951d480cef475c3a9f0e44d38cded202a88ef9be3893e54a6fe820f38285c15ed7071232c383cd0a180bdc5e0
-  languageName: node
-  linkType: hard
-
 "apollo-cache-control@npm:0.8.1":
   version: 0.8.1
   resolution: "apollo-cache-control@npm:0.8.1"
@@ -11041,21 +10808,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-cache-inmemory@npm:^1.4.2, apollo-cache-inmemory@npm:^1.6.2":
-  version: 1.6.2
-  resolution: "apollo-cache-inmemory@npm:1.6.2"
-  dependencies:
-    apollo-cache: ^1.3.2
-    apollo-utilities: ^1.3.2
-    optimism: ^0.9.0
-    ts-invariant: ^0.4.0
-    tslib: ^1.9.3
-  peerDependencies:
-    graphql: 0.11.7 || ^0.12.0 || ^0.13.0 || ^14.0.0
-  checksum: 5c280a188d74237dd62e89c70c72731c3cd1c7827913b211c9e3c4fa9ffbaa01702aa9a326d1cee12e45981df90675ffb04760aaa6705acbc88a4841762bb923
-  languageName: node
-  linkType: hard
-
 "apollo-cache-router@npm:^1.1.6":
   version: 1.1.6
   resolution: "apollo-cache-router@npm:1.1.6"
@@ -11066,7 +10818,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-cache@npm:1.3.2, apollo-cache@npm:^1.1.25, apollo-cache@npm:^1.3.2":
+"apollo-cache@npm:1.3.2, apollo-cache@npm:^1.1.25":
   version: 1.3.2
   resolution: "apollo-cache@npm:1.3.2"
   dependencies:
@@ -11175,7 +10927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-link-context@npm:^1.0.17, apollo-link-context@npm:^1.0.7":
+"apollo-link-context@npm:^1.0.7":
   version: 1.0.18
   resolution: "apollo-link-context@npm:1.0.18"
   dependencies:
@@ -11210,7 +10962,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-link-state@npm:^0.4.1, apollo-link-state@npm:^0.4.2":
+"apollo-link-state@npm:^0.4.1":
   version: 0.4.2
   resolution: "apollo-link-state@npm:0.4.2"
   dependencies:
@@ -11222,7 +10974,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-link-ws@npm:^1.0.17, apollo-link-ws@npm:^1.0.3":
+"apollo-link-ws@npm:^1.0.3":
   version: 1.0.18
   resolution: "apollo-link-ws@npm:1.0.18"
   dependencies:
@@ -11476,6 +11228,8 @@ __metadata:
     raw-loader: ^0.5.1
     regenerator-runtime: ^0.13.2
     sass-loader: ^7.1.0
+    semantic-ui-css: ^2.4.1
+    semantic-ui-react: ^2.0.3
     shelljs: ^0.8.1
     source-list-map: ^2.0.0
     style-loader: ^1.0.2
@@ -11506,7 +11260,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"apollo-upload-client@npm:^10.0.0, apollo-upload-client@npm:^10.0.1":
+"apollo-upload-client@npm:^10.0.0":
   version: 10.0.1
   resolution: "apollo-upload-client@npm:10.0.1"
   dependencies:
@@ -12270,7 +12024,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-helper-vue-jsx-merge-props@npm:^2.0.2, babel-helper-vue-jsx-merge-props@npm:^2.0.3":
+"babel-helper-vue-jsx-merge-props@npm:^2.0.2":
   version: 2.0.3
   resolution: "babel-helper-vue-jsx-merge-props@npm:2.0.3"
   checksum: 8eaf8bf707b2a4274677ebde4b2c5139e718b1b171f07be16e0429c63a69a021a6ad5716e1e3d42c2fd002ff1d692347554329b7b9cafa5cc4c3150cc6850305
@@ -12482,14 +12236,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-jsx-event-modifiers@npm:^2.0.2, babel-plugin-jsx-event-modifiers@npm:^2.0.5":
+"babel-plugin-jsx-event-modifiers@npm:^2.0.2":
   version: 2.0.5
   resolution: "babel-plugin-jsx-event-modifiers@npm:2.0.5"
   checksum: 49bf43ac1d090443a15e5e9a1581b581c317c1bd51074d1899340ed5ff639764d5bab0a381794937702a8963827930cf37c02c9de8ac9dbd5f08d61fedd07df4
   languageName: node
   linkType: hard
 
-"babel-plugin-jsx-v-model@npm:^2.0.1, babel-plugin-jsx-v-model@npm:^2.0.3":
+"babel-plugin-jsx-v-model@npm:^2.0.1":
   version: 2.0.3
   resolution: "babel-plugin-jsx-v-model@npm:2.0.3"
   dependencies:
@@ -12831,7 +12585,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"babel-plugin-transform-vue-jsx@npm:^3.5.0, babel-plugin-transform-vue-jsx@npm:^3.7.0":
+"babel-plugin-transform-vue-jsx@npm:^3.5.0":
   version: 3.7.0
   resolution: "babel-plugin-transform-vue-jsx@npm:3.7.0"
   dependencies:
@@ -13382,20 +13136,6 @@ __metadata:
   version: 1.0.0
   resolution: "boolbase@npm:1.0.0"
   checksum: e4b53deb4f2b85c52be0e21a273f2045c7b6a6ea002b0e139c744cb6f95e9ec044439a52883b0d74dedd1ff3da55ed140cfdddfed7fb0cccbed373de5dce1bcf
-  languageName: node
-  linkType: hard
-
-"bootstrap-vue@npm:^2.0.0-rc.19":
-  version: 2.0.0-rc.24
-  resolution: "bootstrap-vue@npm:2.0.0-rc.24"
-  dependencies:
-    "@nuxt/opencollective": ^0.2.2
-    bootstrap: ^4.3.1
-    core-js: ">=2.6.5 <3.0.0"
-    popper.js: ^1.15.0
-    portal-vue: ^2.1.5
-    vue-functional-data-merge: ^3.1.0
-  checksum: 34dd8be1a382fe54ab827fd81230f8a25b91f106d58a13c57b5575ee412bc55af217676c0f33b914e08b3b3615b48c593a32f725f15b8b666c41716e7006d136
   languageName: node
   linkType: hard
 
@@ -14838,130 +14578,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"client-angular@workspace:packages/client-angular":
-  version: 0.0.0-use.local
-  resolution: "client-angular@workspace:packages/client-angular"
-  dependencies:
-    "@angular/animations": ^8.0.0
-    "@angular/cdk": ^8.0.0
-    "@angular/common": ^8.0.0
-    "@angular/compiler": ^8.0.0
-    "@angular/core": ^8.0.0
-    "@angular/forms": ^8.0.0
-    "@angular/material": ^8.0.0
-    "@angular/platform-browser": ^8.0.0
-    "@angular/platform-browser-dynamic": ^8.0.0
-    "@angular/router": ^8.0.0
-    "@angularclass/hmr": ^2.1.3
-    "@gqlapp/core-client-angular": ^0.1.0
-    "@gqlapp/counter-client-angular": ^0.1.0
-    "@gqlapp/counter-common": ^0.1.0
-    "@gqlapp/look-client-angular": ^0.1.0
-    "@gqlapp/module-client-angular": ^0.1.0
-    "@ngrx/store": ^8.0.0
-    "@types/chai": ^4.1.4
-    "@types/jest": ^24.0.13
-    "@types/lodash": ^4.14.118
-    "@types/webpack-env": ^1.13.6
-    angular2-template-loader: ^0.6.2
-    apollo-angular: ^1.6.0
-    apollo-angular-link-http: ^1.7.0
-    apollo-cache: ^1.3.2
-    apollo-cache-inmemory: ^1.6.2
-    apollo-cache-router: ^1.1.6
-    apollo-client: ^2.6.4
-    apollo-link: ^1.2.11
-    apollo-link-batch-http: ^1.2.11
-    apollo-link-context: ^1.0.17
-    apollo-link-state: ^0.4.2
-    apollo-link-ws: ^1.0.17
-    apollo-logger: ^0.3.3
-    apollo-upload-client: ^10.0.1
-    autoprefixer: ^8.3.0
-    chai: ^4.1.2
-    chai-http: ^4.0.0
-    cross-env: ^5.1.1
-    eslint: ^5.16.0
-    graphql: ^14.3.1
-    graphql-tools: ^4.0.4
-    jest: ^26.2.2
-    minilog: ^3.1.0
-    rimraf: ^2.6.2
-    rxjs: ^6.5.2
-    subscriptions-transport-ws: ^0.9.16
-    zone.js: ^0.9.1
-  languageName: unknown
-  linkType: soft
-
-"client-vue@workspace:packages/client-vue":
-  version: 0.0.0-use.local
-  resolution: "client-vue@workspace:packages/client-vue"
-  dependencies:
-    "@fortawesome/fontawesome-free": ^5.8.1
-    "@fortawesome/free-brands-svg-icons": ^5.8.1
-    "@gqlapp/core-client-vue": ^0.1.0
-    "@gqlapp/counter-client-vue": ^0.1.0
-    "@gqlapp/module-client-vue": ^0.1.0
-    "@testing-library/dom": ^6.1.0
-    "@types/chai": ^4.1.4
-    "@types/jest": ^24.0.13
-    "@types/jsdom": ^12.2.0
-    "@types/lodash": ^4.14.112
-    "@types/webpack-env": ^1.13.6
-    apollo-cache-inmemory: ^1.4.2
-    apollo-cache-router: ^1.1.6
-    apollo-client: ^2.6.4
-    apollo-link: ^1.0.6
-    apollo-link-batch-http: ^1.2.11
-    apollo-link-context: ^1.0.7
-    apollo-link-state: ^0.4.1
-    apollo-link-ws: ^1.0.3
-    apollo-logger: ^0.3.3
-    apollo-upload-client: ^10.0.0
-    apollo-utilities: ^1.0.3
-    autoprefixer: ^8.3.0
-    babel-helper-vue-jsx-merge-props: ^2.0.3
-    babel-plugin-jsx-event-modifiers: ^2.0.5
-    babel-plugin-jsx-v-model: ^2.0.3
-    babel-plugin-syntax-jsx: ^6.18.0
-    babel-plugin-transform-vue-jsx: ^3.7.0
-    babel-polyfill: ^6.26.0
-    babel-preset-vue: ^2.0.2
-    bootstrap: ^4.3.1
-    bootstrap-vue: ^2.0.0-rc.19
-    chai: ^4.1.2
-    chai-http: ^4.0.0
-    cross-env: ^5.1.1
-    error-stack-parser: ^2.0.1
-    eslint: ^5.16.0
-    extract-files: ^5.0.0
-    filesize: ^3.5.11
-    graphql: ^14.3.1
-    graphql-iso-date: ^3.5.0
-    graphql-tag: ^2.6.0
-    graphql-tools: ^4.0.4
-    history: ^4.7.2
-    i18next: ^11.2.3
-    immutability-helper: ^2.6.2
-    jest: ^26.2.2
-    jsdom: ^11.5.1
-    jwt-decode: ^2.2.0
-    lodash: ^4.17.4
-    minilog: ^3.1.0
-    mkdirp: ^0.5.1
-    prop-types: ^15.6.0
-    request: ^2.83.0
-    rimraf: ^2.6.2
-    sourcemapped-stacktrace: ^1.1.8
-    subscriptions-transport-ws: ^0.9.16
-    vue: ^2.5.22
-    vue-apollo: ^3.0.0-beta.27
-    vue-router: ^3.0.2
-    vuex: ^3.0.1
-    vuex-router-sync: ^5.0.0
-  languageName: unknown
-  linkType: soft
-
 "client@*, client@workspace:packages/client":
   version: 0.0.0-use.local
   resolution: "client@workspace:packages/client"
@@ -15237,6 +14853,13 @@ __metadata:
   version: 1.1.0
   resolution: "clsx@npm:1.1.0"
   checksum: 7a3478c7757fd031ddc6a12c5e65eb29559df6ae7c89a52a89d177af130834eb914b1b80318a806cae43b3063d0b9cf70c8cbfedc2f60160e299d3b14cbeb400
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "clsx@npm:1.1.1"
+  checksum: 5c34e1d5623e3dce0dbf22eedd4f3cc7cd0dee6b1b1ef3ad49d042c9d86372a1dc7788c2ca3213ec08e65ad0e91572ae7cb77183a478c9977bd5327e8f43ffe5
   languageName: node
   linkType: hard
 
@@ -15703,13 +15326,6 @@ __metadata:
   version: 2.15.0
   resolution: "consola@npm:2.15.0"
   checksum: c39fa1e75b96c4fa1c7c18206dc1a74541d663ac2e75fea3b7df4d2f2b9ed68397bc2a4b6f3f96a0cce07faaf0da8287b689d5f199979debcb61780c228f9687
-  languageName: node
-  linkType: hard
-
-"consola@npm:^2.3.0":
-  version: 2.9.0
-  resolution: "consola@npm:2.9.0"
-  checksum: 962e31c24667437c79a1d7b8a0dc561e2651cd8192a99304574497fbe71b5ae79c0649841346ea98b62f56f9d33f0260f00c71b4c7434e8817d962a033dbf90a
   languageName: node
   linkType: hard
 
@@ -16265,7 +15881,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js@npm:>=2.6.5 <3.0.0, core-js@npm:^2.2.2, core-js@npm:^2.4.0, core-js@npm:^2.4.1, core-js@npm:^2.5.0, core-js@npm:^2.5.7":
+"core-js@npm:^2.2.2, core-js@npm:^2.4.0, core-js@npm:^2.4.1, core-js@npm:^2.5.0, core-js@npm:^2.5.7":
   version: 2.6.9
   resolution: "core-js@npm:2.6.9"
   checksum: fb661f81ef74c7a7bcf7d9cbe0c8dd6262fbb6a21a42caefc8e4cd37f2cdd5b10271032a9331cf0a5c7ee45e590c004e1fafb5aaff425569ab0f12409b2c327b
@@ -19163,6 +18779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"exenv@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "exenv@npm:1.2.2"
+  checksum: 4e96b355a6b9b9547237288ca779dd673b2e698458b409e88b50df09feb7c85ef94c07354b6b87bc3ed0193a94009a6f7a3c71956da12f45911c0d0f5aa3caa0
+  languageName: node
+  linkType: hard
+
 "exeunt@npm:1.1.0":
   version: 1.1.0
   resolution: "exeunt@npm:1.1.0"
@@ -19944,7 +19567,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"extract-files@npm:5.0.1, extract-files@npm:^5.0.0, extract-files@npm:^5.0.1":
+"extract-files@npm:^5.0.0, extract-files@npm:^5.0.1":
   version: 5.0.1
   resolution: "extract-files@npm:5.0.1"
   checksum: ce8e7be81a0689067cc645ab9a3d99f529833de269601ae373a83243aa70d3faecad7ecd356fe4be284d4966d6e4b3612bebdd374f8066e66d51f410d3232457
@@ -25765,6 +25388,13 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
+"jquery@npm:x.*":
+  version: 3.6.0
+  resolution: "jquery@npm:3.6.0"
+  checksum: 45a63f8376a8918087c0277b2394dd382fcacff765c41ccbb5009a9336f8c971bf41c6a0519062edc1dff6333d96959c3a3ec55c95eb6c94d5372253d6cbf82f
+  languageName: node
+  linkType: hard
+
 "js-base64@npm:^2.1.8":
   version: 2.5.1
   resolution: "js-base64@npm:2.5.1"
@@ -26310,6 +25940,13 @@ fsevents@^1.2.7:
   version: 2.2.0
   resolution: "jwt-decode@npm:2.2.0"
   checksum: 15658696fed0f9f8742485a7303b2f49719417187343f1d29c50dfbac0a41296dab73bb7e77f04cf16a3fac17ab32a83bb31489441eaf7d52316ee4aaab982e7
+  languageName: node
+  linkType: hard
+
+"keyboard-key@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "keyboard-key@npm:1.1.0"
+  checksum: 57f53960472200a521b0845b48c3d56b76078aa161532bc24e2c9382ab154ce35ec0bbf26bb557b8582ae42e173da2f3b8d4125d8754e6e963887b8bdb6e97a1
   languageName: node
   linkType: hard
 
@@ -26906,7 +26543,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^0.2.15, loader-utils@npm:^0.2.16":
+"loader-utils@npm:^0.2.16":
   version: 0.2.17
   resolution: "loader-utils@npm:0.2.17"
   dependencies:
@@ -26980,6 +26617,13 @@ fsevents@^1.2.7:
   version: 4.17.15
   resolution: "lodash-es@npm:4.17.15"
   checksum: 166e80a824d4c7cb5b06acde56528a1bdcc5af782e8e262015e10fa5828f7421d0f2f150f9e3db7a68969131b08d041ef53aca1fd6adfc29bb678734d1646678
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.15":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: fb407355f7e6cd523a9383e76e6b455321f0f153a6c9625e21a8827d10c54c2a2341bd2ae8d034358b60e07325e1330c14c224ff582d04612a46a4f0479ff2f2
   languageName: node
   linkType: hard
 
@@ -30524,15 +30168,6 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"optimism@npm:^0.9.0":
-  version: 0.9.5
-  resolution: "optimism@npm:0.9.5"
-  dependencies:
-    "@wry/context": ^0.4.0
-  checksum: 95a0279c181e24f1834efab3fe4bc22879b92a287e56c28bd28682356d1adb5cf59a4f03de96794cf5ec512e47f353d98f957e17785badd7e2ed8338fcc70f9f
-  languageName: node
-  linkType: hard
-
 "optimist@npm:^0.6.1":
   version: 0.6.1
   resolution: "optimist@npm:0.6.1"
@@ -31331,7 +30966,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"parse5@npm:5.1.0, parse5@npm:^5.0.0":
+"parse5@npm:5.1.0":
   version: 5.1.0
   resolution: "parse5@npm:5.1.0"
   checksum: 2b2048e9a2d5932678293685f8bd25cc2841828a6d1020f4550b0e48d9e3de814b26c8b3aa58b6ff97434fa7e65b19ff265f5236acda92bbe1ecc264eda409f5
@@ -32011,22 +31646,6 @@ fsevents@^1.2.7:
   version: 1.16.1
   resolution: "popper.js@npm:1.16.1"
   checksum: 1c1a826f757edb5b8c2049dfd7a9febf6ae1e9d0e51342fc715b49a0c1020fced250d26484619883651e097c5764bbcacd2f31496e3646027f079dd83e072681
-  languageName: node
-  linkType: hard
-
-"popper.js@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "popper.js@npm:1.15.0"
-  checksum: 04d9a96f13fbce06c1daf231df1577ce6b2e04df1212ae0dae84dbbe72c2d789b2ceea4ef61acffd1177d935b9044dc22dee85e18b0ba830b92336ce52e0054a
-  languageName: node
-  linkType: hard
-
-"portal-vue@npm:^2.1.5":
-  version: 2.1.5
-  resolution: "portal-vue@npm:2.1.5"
-  peerDependencies:
-    vue: ^2.5.18
-  checksum: e0bb2738bc45fdc727a952e81a9c0c25efa08997eeae0856a475855166aa3306a9feceed6d6db985f95e2490b03b36a8f9337b813df69c1dc606ee74ff227d02
   languageName: node
   linkType: hard
 
@@ -34220,7 +33839,7 @@ fsevents@^1.2.7:
   languageName: node
   linkType: hard
 
-"react-fast-compare@npm:^3.1.1":
+"react-fast-compare@npm:^3.0.1, react-fast-compare@npm:^3.1.1":
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 2a7d75ce9fb5da1e3c01f74a5cd592f3369a8cc8d44e93654bf147ab221f430238e8be70677e896f2bfcb96a1cb7a47a8d05d84633de764a9d57d27005a4bb9e
@@ -34343,6 +33962,20 @@ fsevents@^1.2.7:
   version: 16.8.6
   resolution: "react-is@npm:16.8.6"
   checksum: c46454a109edd6633d8b97752d4d1117ecc952c3d290075eb4101987e85ae69db0657294346182414a4db3d5a9b97b1dc320961a60c67d725cf9ca1e30dc08f5
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^16.6.3":
+  version: 16.13.1
+  resolution: "react-is@npm:16.13.1"
+  checksum: 33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
+  languageName: node
+  linkType: hard
+
+"react-is@npm:^16.8.6 || ^17.0.0":
+  version: 17.0.2
+  resolution: "react-is@npm:17.0.2"
+  checksum: 2bdb6b93fbb1820b024b496042cce405c57e2f85e777c9aabd55f9b26d145408f9f74f5934676ffdc46f3dcff656d78413a6e43968e7b3f92eea35b3052e9053
   languageName: node
   linkType: hard
 
@@ -34796,6 +34429,19 @@ fsevents@^1.2.7:
   peerDependencies:
     react: 0.14.x || ^15.0.0 || ^16.0.0
   checksum: 54336243bf6971ae7db4b526ff3676a271d5d5e5d92dee925b4a673b02181e2623949a9fef035eddd953c70a81033258090988f1421636e7029734a71b83e9ad
+  languageName: node
+  linkType: hard
+
+"react-popper@npm:^2.2.4":
+  version: 2.2.5
+  resolution: "react-popper@npm:2.2.5"
+  dependencies:
+    react-fast-compare: ^3.0.1
+    warning: ^4.0.2
+  peerDependencies:
+    "@popperjs/core": ^2.0.0
+    react: ^16.8.0 || ^17
+  checksum: 199ff9ec23670eece1c5972d48d2c5e9c28938dd610c432979fdab631a38371f8a3a5fbb9dcaeec0cff9ce9fb58b3bc1965c525de14fdb78f5e9b35f0d90f335
   languageName: node
   linkType: hard
 
@@ -36419,7 +36065,7 @@ resolve@^1.17.0:
   languageName: node
   linkType: hard
 
-"rxjs@npm:^6.3.3, rxjs@npm:^6.4.0, rxjs@npm:^6.5.2":
+"rxjs@npm:^6.3.3, rxjs@npm:^6.4.0":
   version: 6.5.2
   resolution: "rxjs@npm:6.5.2"
   dependencies:
@@ -36690,6 +36336,39 @@ resolve@^1.17.0:
   dependencies:
     node-forge: 0.9.0
   checksum: 17b9f89295ea324b5bd26653144801b0481a00d54e2d152651fcdca322bd2ddde5af9aae7f25a08fadb4f61ab5943e108492d5bf1185829ca921e54e13569efb
+  languageName: node
+  linkType: hard
+
+"semantic-ui-css@npm:^2.4.1":
+  version: 2.4.1
+  resolution: "semantic-ui-css@npm:2.4.1"
+  dependencies:
+    jquery: x.*
+  checksum: 3586d34c8920980577ef0ab427b42b0623fd8d5fc0c56fc978ae61805b6e57cb52bd133c75aff73bd6719a6fca891f0ea6572ae261ecbc56b97ed3d47f5a84fe
+  languageName: node
+  linkType: hard
+
+"semantic-ui-react@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "semantic-ui-react@npm:2.0.3"
+  dependencies:
+    "@babel/runtime": ^7.10.5
+    "@fluentui/react-component-event-listener": ~0.51.6
+    "@fluentui/react-component-ref": ~0.51.6
+    "@popperjs/core": ^2.6.0
+    "@semantic-ui-react/event-stack": ^3.1.2
+    clsx: ^1.1.1
+    keyboard-key: ^1.1.0
+    lodash: ^4.17.19
+    lodash-es: ^4.17.15
+    prop-types: ^15.7.2
+    react-is: ^16.8.6 || ^17.0.0
+    react-popper: ^2.2.4
+    shallowequal: ^1.1.0
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0
+    react-dom: ^16.8.0 || ^17.0.0
+  checksum: f12bf89edc1cee29e7e06052d6469e3c54f7dbfa62d45609b6d48b3647a96003a479a12aa581444b9d032c69dfff57ae7ed34c4219d2b0b14a726d1b8e1cb356
   languageName: node
   linkType: hard
 
@@ -41167,28 +40846,6 @@ typescript@^3.8.3:
   languageName: node
   linkType: hard
 
-"vue-apollo@npm:^3.0.0-beta.27":
-  version: 3.0.0-rc.1
-  resolution: "vue-apollo@npm:3.0.0-rc.1"
-  dependencies:
-    chalk: ^2.4.2
-    serialize-javascript: ^1.7.0
-    throttle-debounce: ^2.1.0
-  peerDependencies:
-    apollo-client: ^2.0.0
-    apollo-link: ^1.0.0
-    graphql-tag: ^2.10.1
-  checksum: 40db59102175ba955161b62d6dd9c22df4440ee49d706ff248a2472ae411678d7da3b9fad700a226a0c3c8406c6493c7751d7097f9478cc87a2ed544c75fd4a6
-  languageName: node
-  linkType: hard
-
-"vue-functional-data-merge@npm:^3.1.0":
-  version: 3.1.0
-  resolution: "vue-functional-data-merge@npm:3.1.0"
-  checksum: 0140df1b0f7c563ad4decd41f3aaa7f1e14ad224aec8e91a057c4fd63d6edb886a63f300d9f6e9a8102c8327ed524092240425c970f9eaad46a5f8b802f73d10
-  languageName: node
-  linkType: hard
-
 "vue-hot-reload-api@npm:^2.3.0":
   version: 2.3.3
   resolution: "vue-hot-reload-api@npm:2.3.3"
@@ -41209,13 +40866,6 @@ typescript@^3.8.3:
     css-loader: "*"
     webpack: ^4.1.0 || ^5.0.0-0
   checksum: 122b9ffcad2b3fd018720edbf308943eff979ff090a18d4684d645e60d24e1567d7923d5a4778be4381c5012b4b0b3e0ed50f86e1db7d7e3a9dbe8d41d6b92aa
-  languageName: node
-  linkType: hard
-
-"vue-router@npm:^3.0.2":
-  version: 3.0.6
-  resolution: "vue-router@npm:3.0.6"
-  checksum: 2c72c3607a40547390f4177be11eca373d13d83bb12f5cfd591de43cdad865dd9fe30d3cea281cc3bcad325db34650ed42ef5831bacf389d4c32c668c8f23cc1
   languageName: node
   linkType: hard
 
@@ -41243,30 +40893,6 @@ typescript@^3.8.3:
   version: 1.9.1
   resolution: "vue-template-es2015-compiler@npm:1.9.1"
   checksum: 21d27d1c6afe10a47f17793e18afb7f321888d3ca728bfdb2a79ff49789ed9b40e98abcb68b5499f3da1bbb76a0f188b94aeb5ab0e879f46d6399ac5d4ae38c8
-  languageName: node
-  linkType: hard
-
-"vue@npm:^2.5.22":
-  version: 2.6.10
-  resolution: "vue@npm:2.6.10"
-  checksum: 976c291cddcd535dc00222c993836eef89b28f472ac6b42caeb91bd1b3a7f2f29ec1b397f59986ddf4d520f6afabab6cda9be3daccbbb1ad53daa7e90f96f187
-  languageName: node
-  linkType: hard
-
-"vuex-router-sync@npm:^5.0.0":
-  version: 5.0.0
-  resolution: "vuex-router-sync@npm:5.0.0"
-  peerDependencies:
-    vue-router: ^3.0.0
-    vuex: ^3.0.0
-  checksum: f868974a7ca474b43a28e992842f22a2ec792a9e35223329931b86fece7931057fcaddf682c24f5b3d48a2ce2d04623ee3c11b55fe055514288f22bdab3ebea9
-  languageName: node
-  linkType: hard
-
-"vuex@npm:^3.0.1":
-  version: 3.1.1
-  resolution: "vuex@npm:3.1.1"
-  checksum: 9dbdbb9387bd3b3c1595c9c0205bfeb39677fd8b41bf201451b6937285fb37d557306af24280eae17ab3f64370039348c8fab844a74b7e5ec89561de3d1e530b
   languageName: node
   linkType: hard
 
@@ -42957,12 +42583,5 @@ typescript@^3.8.3:
   version: 0.8.14
   resolution: "zen-observable@npm:0.8.14"
   checksum: 306fae87c6b7ef8e066bd9cff550d701a18164db7dc9fc8d70637dba7a120c5ad94022e84104d104c07a867d2c5a66ed72749703f8843b297c192fc1db9e05d5
-  languageName: node
-  linkType: hard
-
-"zone.js@npm:^0.9.1":
-  version: 0.9.1
-  resolution: "zone.js@npm:0.9.1"
-  checksum: 6be8c98c369ab3e4a04d44dac1974de94c1c7e0e1d8114be30280f1f1f69c24474c255c1d0dc4b931b0030c282bcd0917d048257529b688a50a6867497252b70
   languageName: node
   linkType: hard

@@ -2,4 +2,5 @@ fragment PostInfo on Post {
   id
   title
   content
+  pic
 }

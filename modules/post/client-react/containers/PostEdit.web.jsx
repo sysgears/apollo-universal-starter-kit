@@ -81,9 +81,9 @@ export default compose(
   }),
   graphql(EDIT_POST, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
-      editPost: async (id, title, content) => {
+      editPost: async (id, title, content, pic) => {
         await mutate({
-          variables: { input: { id, title: title.trim(), content: content.trim() } }
+          variables: { input: { id, title: title.trim(), content: content.trim(), pic: pic } }
         });
         if (history) {
           return history.push('/posts');

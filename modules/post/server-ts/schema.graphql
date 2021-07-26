@@ -3,6 +3,7 @@ type Post {
   id: Int!
   title: String!
   content: String!
+  pic: String
   comments: [Comment]
 }
 
@@ -57,12 +58,14 @@ extend type Mutation {
 input AddPostInput {
   title: String!
   content: String!
+  pic: String
 }
 
 # Input for editPost Mutation
 input EditPostInput {
   id: Int!
   title: String!
+  pic: String
   content: String!
 }
 

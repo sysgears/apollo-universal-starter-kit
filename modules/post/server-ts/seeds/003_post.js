@@ -7,7 +7,8 @@ export async function seed(knex, Promise) {
     [...Array(20).keys()].map(async ii => {
       const post = await returnId(knex('post')).insert({
         title: `Post title ${ii + 1}`,
-        content: `Post content ${ii + 1}`
+        content: `Post content ${ii + 1}`,
+        pic: `pic`
       });
 
       await Promise.all(

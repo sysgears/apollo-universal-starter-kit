@@ -4,6 +4,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 import { MenuItem } from '@gqlapp/look-client-react';
 import ClientModule from '@gqlapp/module-client-react';
 import loadable from '@loadable/component';
+import 'semantic-ui-css/semantic.min.css';
 
 import resources from './locales';
 import resolvers from './resolvers';

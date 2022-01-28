@@ -12,20 +12,7 @@
       "package": "com.sysgears.apollokit"
     },
     "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": [
-        "native.tsx",
-        "native.jsx",
-        "native.ts",
-        "native.js",
-        "jsx",
-        "js",
-        "json",
-        "ts",
-        "tsx",
-        "graphql",
-        "gql"
-      ]
+      "config": "metro.config.js"
     }
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import { translate } from '@gqlapp/i18n-client-react';
 import { Button, HeaderTitle, IconButton, primary } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';

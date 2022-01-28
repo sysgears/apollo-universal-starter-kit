@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import { translate } from '@gqlapp/i18n-client-react';
 import ClientModule from '@gqlapp/module-client-react-native';

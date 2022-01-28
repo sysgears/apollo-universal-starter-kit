@@ -17,7 +17,8 @@ module.exports = api => {
         ['@babel/plugin-proposal-decorators', { legacy: true }],
         ['@babel/plugin-proposal-class-properties', { loose: true }],
         '@babel/plugin-proposal-object-rest-spread',
-        ['styled-components', { ssr: true }]
+        ['styled-components', { ssr: true }],
+        'react-native-reanimated/plugin'
       ]
     };
   } else {
@@ -27,7 +28,8 @@ module.exports = api => {
       plugins: [
         'transform-inline-environment-variables',
         ['styled-components', { ssr: true }],
-        ['import', { libraryName: 'antd-mobile' }]
+        ['import', { libraryName: 'antd-mobile' }],
+        'react-native-reanimated/plugin'
       ],
       env: {
         production: {

@@ -20,9 +20,10 @@ export default class Main extends React.Component<MainProps> {
   public render() {
     const { hostname } = url.parse(__API_URL__);
     const { modules } = this.props;
+    const manifest = JSON.parse(this.props.exp.manifestString);
     const apiUrl =
-      this.props.exp.manifest.bundleUrl && hostname === 'localhost'
-        ? `${protocol}//${url.parse(this.props.exp.manifest.bundleUrl).hostname}:${port}${pathname}`
+      manifest.bundleUrl && hostname === 'localhost'
+        ? `${protocol}//${url.parse(manifest.bundleUrl).hostname}:${port}${pathname}`
         : __API_URL__;
     const store = createStore(
       Object.keys(modules.reducers).length > 0

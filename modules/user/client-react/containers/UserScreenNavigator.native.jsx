@@ -1,4 +1,5 @@
-import { createAppContainer, createDrawerNavigator } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import React from 'react';
 import PropTypes from 'prop-types';
 import { pickBy } from 'lodash';
@@ -75,10 +76,7 @@ const drawerNavigator = routeConfigs => {
     return WithRoutesComponent;
   };
 
-  return compose(
-    withUser,
-    withRoutes
-  )(UserScreenNavigator);
+  return compose(withUser, withRoutes)(UserScreenNavigator);
 };
 
 export default drawerNavigator;

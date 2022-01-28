@@ -1,5 +1,6 @@
 import React from 'react';
-import { createStackNavigator, NavigationScreenConfigProps } from 'react-navigation';
+import { NavigationScreenConfigProps } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import ClientModule from '@gqlapp/module-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';

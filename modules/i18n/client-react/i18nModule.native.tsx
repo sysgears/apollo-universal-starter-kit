@@ -1,5 +1,5 @@
 import React from 'react';
-import { default as i18next } from 'i18next';
+import i18next from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 
 import ClientModule from '@gqlapp/module-client-react-native';
@@ -17,19 +17,21 @@ const I18nProvider = ({ i18n, children }: any) => {
   );
 };
 
+const LanguagePickerScreen = (): any => null;
+
 const langPicker =
   settings.i18n.enabled && settings.i18n.langPickerRender
     ? new ClientModule({
         drawerItem: [
-          {
-            LangPicker: {
-              screen: (): any => null,
-              navigationOptions: {
-                drawerLabel: <LanguagePicker key={'picker'} i18n={i18next} />
-              },
-              skip: true
-            }
-          }
+          Drawer => (
+            <Drawer.Screen
+              name="Language Picker"
+              component={LanguagePickerScreen}
+              options={() => ({
+                drawerLabel: () => <LanguagePicker key={'picker'} i18n={i18next} />
+              })}
+            />
+          )
         ]
       })
     : undefined;

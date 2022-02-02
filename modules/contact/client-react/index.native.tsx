@@ -1,6 +1,4 @@
 import React from 'react';
-import { NavigationScreenConfigProps } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 
 import ClientModule from '@gqlapp/module-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -13,26 +11,20 @@ const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 
 export default new ClientModule({
   drawerItem: [
-    {
-      Contact: {
-        screen: createStackNavigator({
-          Contact: {
-            screen: Contact,
-            navigationOptions: ({ navigation }: NavigationScreenConfigProps) => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-              headerLeft: (
-                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              ),
-              headerStyle: { backgroundColor: '#fff' },
-              headerForceInset: {}
-            })
-          }
-        }),
-        navigationOptions: {
-          drawerLabel: <HeaderTitleWithI18n />
-        }
-      }
-    }
+    Drawer => (
+      <Drawer.Screen
+        name="Contact"
+        component={Contact}
+        options={({ navigation }) => ({
+          headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+          headerLeft: () => (
+            <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+          ),
+          headerStyle: { backgroundColor: '#fff' },
+          drawerLabel: () => <HeaderTitleWithI18n />
+        })}
+      />
+    )
   ],
   localization: [{ ns: 'contact', resources }]
 });

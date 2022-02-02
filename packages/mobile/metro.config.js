@@ -16,6 +16,18 @@ config.resolver.nodeModulesPaths = [
 ];
 
 config.transformer.babelTransformerPath = require.resolve('./custom-transformer');
-config.resolver.sourceExts = ['ts', 'tsx', 'js', 'jsx', 'json', 'graphql', 'gql'];
+config.resolver.sourceExts = [
+  'native.ts',
+  'native.tsx',
+  'native.js',
+  'native.jsx',
+  'ts',
+  'tsx',
+  'js',
+  'jsx',
+  'json',
+  'graphql',
+  'gql'
+];
 
 module.exports = config;

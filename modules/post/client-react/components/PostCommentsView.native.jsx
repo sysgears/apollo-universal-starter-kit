@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {
   StyleSheet,
   FlatList,
+  ScrollView,
   Text,
   View,
   Keyboard,
@@ -95,9 +96,9 @@ class PostCommentsView extends React.PureComponent {
           comment={comment}
         />
         {comments.length > 0 && (
-          <View style={styles.list} keyboardDismissMode="on-drag">
+          <ScrollView horizontal style={styles.list} keyboardDismissMode="on-drag">
             <FlatList data={comments} keyExtractor={this.keyExtractor} renderItem={renderItem} />
-          </View>
+          </ScrollView>
         )}
       </View>
     );

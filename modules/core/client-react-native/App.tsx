@@ -1,4 +1,5 @@
 import React from 'react';
+import { LogBox } from 'react-native';
 import { ApolloProvider } from 'react-apollo';
 import { createStore, combineReducers } from 'redux';
 import { Provider } from 'react-redux';
@@ -17,6 +18,10 @@ interface MainProps {
 }
 
 export default class Main extends React.Component<MainProps> {
+  public componentDidMount() {
+    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+  }
+
   public render() {
     const { hostname } = url.parse(__API_URL__);
     const { modules } = this.props;

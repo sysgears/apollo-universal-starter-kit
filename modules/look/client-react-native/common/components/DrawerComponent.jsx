@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { DrawerItems } from 'react-navigation';
+import { DrawerItems } from '@react-navigation/drawer';
 
 const styles = StyleSheet.create({
   container: {

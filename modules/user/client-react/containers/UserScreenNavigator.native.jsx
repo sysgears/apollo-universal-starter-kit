@@ -1,20 +1,29 @@
-import { createAppContainer } from 'react-navigation';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { pickBy } from 'lodash';
+import { View, Text } from 'react-native';
 
 import { compose } from '@gqlapp/core-common';
-import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
 import { withUser } from './Auth';
+
+const Drawer = createDrawerNavigator();
+
+const HomeScreen = () => {
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Text>Home Screen</Text>
+    </View>
+  );
+};
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
     currentUser: PropTypes.object,
     context: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
-    routeConfigs: PropTypes.object
+    routeConfigs: PropTypes.array
   };
 
   shouldComponentUpdate(nextProps) {
@@ -45,7 +54,7 @@ class UserScreenNavigator extends React.Component {
 
     const guestFilter = value => !value.userInfo || (value.userInfo && !value.userInfo.showOnLogin);
 
-    return pickBy(routeConfigs, currentUser && !currentUserLoading ? userFilter : guestFilter);
+    return routeConfigs.filter(currentUser && !currentUserLoading ? userFilter : guestFilter);
   };
 
   getInitialRoute = () => {
@@ -54,18 +63,22 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    const MainScreenNavigatorComponent = createAppContainer(
-      createDrawerNavigator(
-        { ...this.navItemsFilter() },
-        {
-          // eslint-disable-next-line
-        contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
-          initialRouteName: this.getInitialRoute()
-        }
-      )
+    // const MainScreenNavigatorComponent = createAppContainer(
+    //   createDrawerNavigator(
+    //     { ...this.navItemsFilter() },
+    //     {
+    //       // eslint-disable-next-line
+    //     contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
+    //       initialRouteName: this.getInitialRoute()
+    //     }
+    //   )
+    // );
+    // console.log(require('util').inspect(this.props, false, null));
+    return (
+      <NavigationContainer>
+        <Drawer.Navigator>{this.navItemsFilter().map(x => x.screen)}</Drawer.Navigator>
+      </NavigationContainer>
     );
-
-    return <MainScreenNavigatorComponent />;
   }
 }
 

@@ -14,7 +14,7 @@ import ClientModule from '@gqlapp/module-client-react-native';
 const post = require('@gqlapp/post-client-react').default;
 const upload = require('@gqlapp/upload-client-react').default;
 const pagination = require('@gqlapp/pagination-client-react').default;
-// const user = require('@gqlapp/user-client-react').default;
+const user = require('@gqlapp/user-client-react').default;
 
 const modules = new ClientModule(
   validation,
@@ -26,7 +26,7 @@ const modules = new ClientModule(
   pagination,
   // chat,
   // payments,
-  // user,
+  user,
   i18n,
   core,
   authentication

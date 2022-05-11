@@ -12,20 +12,22 @@ const HeaderTitleWithI18n = translate('upload')(HeaderTitle);
 export default new ClientModule({
   context: { upload: true },
   drawerItem: [
-    Drawer => (
-      <Drawer.Screen
-        name="Upload"
-        component={Upload}
-        options={({ navigation }) => ({
-          headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-          headerLeft: () => (
-            <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-          ),
-          headerStyle: { backgroundColor: '#fff' },
-          drawerLabel: () => <HeaderTitleWithI18n />
-        })}
-      />
-    )
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Upload"
+          component={Upload}
+          options={({ navigation }) => ({
+            headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: () => (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            headerStyle: { backgroundColor: '#fff' },
+            drawerLabel: () => <HeaderTitleWithI18n />
+          })}
+        />
+      )
+    }
   ],
   localization: [{ ns: 'upload', resources }],
   createNetLink

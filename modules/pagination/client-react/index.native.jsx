@@ -10,19 +10,21 @@ const HeaderTitleWithI18n = translate('pagination')(HeaderTitle);
 
 export default new ClientModule({
   drawerItem: [
-    Drawer => (
-      <Drawer.Screen
-        name="Pagination"
-        component={PaginationDemo}
-        options={({ navigation }) => ({
-          headerTitle: () => <HeaderTitleWithI18n style="subTitle" />,
-          headerLeft: () => (
-            <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-          ),
-          drawerLabel: () => <HeaderTitleWithI18n />
-        })}
-      />
-    )
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Pagination"
+          component={PaginationDemo}
+          options={({ navigation }) => ({
+            headerTitle: () => <HeaderTitleWithI18n style="subTitle" />,
+            headerLeft: () => (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            drawerLabel: () => <HeaderTitleWithI18n />
+          })}
+        />
+      )
+    }
   ],
   localization: [{ ns: 'pagination', resources }]
 });

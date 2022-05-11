@@ -187,7 +187,6 @@
     "whatwg-fetch": "^2.0.4"
   },
   "dependencies": {
-    "expo": "^38.0.0",
     "inquirer": "^6.2.2",
     "lodash": "^4.17.11",
     "opencollective": "^1.0.3"

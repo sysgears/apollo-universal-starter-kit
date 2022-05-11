@@ -12,20 +12,22 @@ const HeaderTitleWithI18n = translate('counter')(HeaderTitle);
 
 export default new ClientModule(counters, {
   drawerItem: [
-    Drawer => (
-      <Drawer.Screen
-        name="Counter"
-        component={Counter}
-        options={({ navigation }) => ({
-          headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-          headerLeft: () => (
-            <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-          ),
-          headerStyle: { backgroundColor: '#fff' },
-          drawerLabel: () => <HeaderTitleWithI18n i18nKey="title" />
-        })}
-      />
-    )
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Counter"
+          component={Counter}
+          options={({ navigation }) => ({
+            headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: () => (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            headerStyle: { backgroundColor: '#fff' },
+            drawerLabel: () => <HeaderTitleWithI18n i18nKey="title" />
+          })}
+        />
+      )
+    }
   ],
   localization: [{ ns: 'counter', resources }]
 });

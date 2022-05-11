@@ -1,6 +1,4 @@
 import React from 'react';
-import { NavigationScreenConfigProps } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
 
 import ClientModule from '@gqlapp/module-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -14,23 +12,19 @@ const HeaderTitleWithI18n = translate('chat')(HeaderTitle);
 export default new ClientModule({
   drawerItem: [
     {
-      Chat: {
-        screen: createStackNavigator({
-          Chat: {
-            screen: Chat,
-            navigationOptions: ({ navigation }: NavigationScreenConfigProps) => ({
-              headerTitle: <HeaderTitleWithI18n style="subTitle" />,
-              headerLeft: (
-                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              ),
-              headerForceInset: {}
-            })
-          }
-        }),
-        navigationOptions: {
-          drawerLabel: <HeaderTitleWithI18n />
-        }
-      }
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Chat"
+          component={Chat}
+          options={({ navigation }) => ({
+            headerTitle: () => <HeaderTitleWithI18n style="subTitle" />,
+            headerLeft: () => (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            drawerLabel: () => <HeaderTitleWithI18n />
+          })}
+        />
+      )
     }
   ],
   localization: [{ ns: 'chat', resources }]

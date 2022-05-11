@@ -109,15 +109,17 @@ const styles = StyleSheet.create({
 
 export default new ClientModule({
   drawerItem: [
-    Drawer => (
-      <Drawer.Screen
-        name="Post"
-        component={PostNavigator}
-        options={() => ({
-          drawerLabel: () => withI18N(HeaderTitle, { i18nKey: 'list.title' })
-        })}
-      />
-    )
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Post"
+          component={PostNavigator}
+          options={() => ({
+            drawerLabel: () => withI18N(HeaderTitle, { i18nKey: 'list.title' })
+          })}
+        />
+      )
+    }
   ],
   resolver: [resolvers],
   localization: [{ ns: 'post', resources }]

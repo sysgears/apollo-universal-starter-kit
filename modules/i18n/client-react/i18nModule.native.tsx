@@ -23,15 +23,17 @@ const langPicker =
   settings.i18n.enabled && settings.i18n.langPickerRender
     ? new ClientModule({
         drawerItem: [
-          Drawer => (
-            <Drawer.Screen
-              name="Language Picker"
-              component={LanguagePickerScreen}
-              options={() => ({
-                drawerLabel: () => <LanguagePicker key={'picker'} i18n={i18next} />
-              })}
-            />
-          )
+          {
+            screen: Drawer => (
+              <Drawer.Screen
+                name="Language Picker"
+                component={LanguagePickerScreen}
+                options={() => ({
+                  drawerLabel: () => <LanguagePicker key={'picker'} i18n={i18next} />
+                })}
+              />
+            )
+          }
         ]
       })
     : undefined;

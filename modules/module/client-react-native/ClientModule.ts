@@ -3,12 +3,28 @@ import React from 'react';
 import BaseModule, { BaseModuleShape } from '@gqlapp/module-client-react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
+export interface UserInfo {
+  showOnLogin?: boolean;
+  skip?: boolean;
+  role: string[];
+}
+
+export interface InputDrawerItem {
+  screen: (Drawer: ReturnType<typeof createDrawerNavigator>) => React.ReactElement<any>;
+  userInfo?: UserInfo;
+}
+
+export interface DrawerItem {
+  screen: React.ReactElement<any>;
+  userInfo?: UserInfo;
+}
+
 /**
  * React Native feature modules interface.
  */
 export interface ClientModuleShape extends BaseModuleShape {
   // Screen list for React Navigation Drawer
-  drawerItem?: Array<(Drawer: ReturnType<typeof createDrawerNavigator>) => React.ReactElement<any>>;
+  drawerItem?: InputDrawerItem[];
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -30,12 +46,11 @@ class ClientModule extends BaseModule {
   /**
    * @returns screen list for React Navigation Drawer
    */
-  public createDrawerItems(Drawer: ReturnType<typeof createDrawerNavigator>) {
-    return (this.drawerItem || [])
-      .map(x => x(Drawer))
-      .map((component: React.ReactElement<any>, idx: number, items: Array<React.ReactElement<any>>) =>
-        React.cloneElement(component, { key: component.key || idx + items.length })
-      );
+  public createDrawerItems(Drawer: ReturnType<typeof createDrawerNavigator>): DrawerItem[] {
+    return (this.drawerItem || []).map(({ screen, ...props }, idx, items) => ({
+      screen: React.cloneElement(screen(Drawer), { key: idx + items.length }),
+      ...props
+    }));
   }
 }
 

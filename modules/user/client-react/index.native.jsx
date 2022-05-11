@@ -47,6 +47,14 @@ const AuthScreen = translate('user')(({ t }) => (
   </AuthStack.Navigator>
 ));
 
+const ProfileStack = createStackNavigator();
+const ProfileScreen = translate('user')(({ t }) => (
+  <ProfileStack.Navigator>
+    <ProfileStack.Screen name="Profile" component={Profile} options={{ title: t('navLink.profile') }} />
+    <ProfileStack.Screen name="ProfileEdit" component={UserEdit} options={{ title: t('navLink.editProfile') }} />
+  </ProfileStack.Navigator>
+));
+
 class UsersListScreen extends React.Component {
   render() {
     return <Users navigation={this.props.navigation} />;
@@ -81,32 +89,6 @@ UserAddScreen.propTypes = {
   navigation: PropTypes.object
 };
 
-class ProfileScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Profile'
-  });
-  render() {
-    return <Profile navigation={this.props.navigation} />;
-  }
-}
-
-class ProfilerEditScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Edit profile'
-  });
-  render() {
-    return <UserEdit navigation={this.props.navigation} />;
-  }
-}
-
-ProfilerEditScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-ProfileScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
 const HeaderTitleWithI18n = translate('user')(HeaderTitle);
 
 export * from './containers/Auth';
@@ -127,7 +109,7 @@ export default new ClientModule({
     {
       screen: Drawer => (
         <Drawer.Screen
-          name="Auth"
+          name="AuthStack"
           component={AuthScreen}
           options={{
             drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.signIn" />,
@@ -152,38 +134,26 @@ export default new ClientModule({
       userInfo: {
         showOnLogin: true
       }
+    },
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="ProfileStack"
+          component={ProfileScreen}
+          options={{
+            drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.profile" />,
+            title: ''
+          }}
+        />
+      ),
+      userInfo: {
+        showOnLogin: true,
+        role: ['user', 'admin']
+      }
     }
   ],
   // drawerItem: [
   //   {
-  //     Profile: {
-  //       screen: createStackNavigator({
-  //         Profile: {
-  //           screen: Profile,
-  //           navigationOptions: ({ navigation }) => ({
-  //             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.profile" style="subTitle" />,
-  //             headerLeft: (
-  //               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-  //             ),
-  //             headerForceInset: {}
-  //           })
-  //         },
-  //         ProfileEdit: {
-  //           screen: ProfilerEditScreen,
-  //           navigationOptions: () => ({
-  //             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editProfile" style="subTitle" />,
-  //             headerForceInset: {}
-  //           })
-  //         }
-  //       }),
-  //       userInfo: {
-  //         showOnLogin: true,
-  //         role: ['user', 'admin']
-  //       },
-  //       navigationOptions: {
-  //         drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.profile" />
-  //       }
-  //     },
   //     Users: {
   //       screen: createStackNavigator({
   //         Users: {

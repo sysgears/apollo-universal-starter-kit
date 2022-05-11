@@ -7,15 +7,7 @@ import createTokens from './createTokens';
 
 export default () => ({
   Mutation: {
-    async refreshTokens(
-      obj,
-      { refreshToken: inputRefreshToken },
-      {
-        getIdentity,
-        getHash,
-        req: { t }
-      }
-    ) {
+    async refreshTokens(obj, { refreshToken: inputRefreshToken }, { getIdentity, getHash, req: { t } }) {
       const decodedToken = jwt.decode(inputRefreshToken);
       const isValidToken = decodedToken && decodedToken.id;
 

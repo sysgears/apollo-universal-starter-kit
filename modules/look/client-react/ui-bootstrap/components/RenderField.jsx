@@ -17,7 +17,7 @@ const RenderField = ({ input, name, label, type, meta: { touched, error }, child
         <Input aria-labelledby={labelId} {...input} placeholder={label || placeholder} type={type} invalid={!valid}>
           {children}
         </Input>
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+        {touched && error && <FormFeedback>{error}</FormFeedback>}
       </div>
     </FormGroup>
   );

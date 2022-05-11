@@ -12,7 +12,7 @@ const RenderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
     <FormGroup color={color} check>
       <Label check>
         <Input {...input} placeholder={label} type={type} /> {label}
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+        {touched && error && <FormFeedback>{error}</FormFeedback>}
       </Label>
     </FormGroup>
   );

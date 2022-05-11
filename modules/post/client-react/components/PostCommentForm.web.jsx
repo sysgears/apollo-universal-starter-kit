@@ -51,13 +51,7 @@ PostCommentForm.propTypes = {
 
 const PostCommentFormWithFormik = withFormik({
   mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
-  async handleSubmit(
-    values,
-    {
-      resetForm,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm({ content: '' });
   },

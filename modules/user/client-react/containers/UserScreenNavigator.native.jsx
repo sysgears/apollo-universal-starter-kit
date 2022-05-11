@@ -2,21 +2,12 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View, Text } from 'react-native';
 
 import { compose } from '@gqlapp/core-common';
 
 import { withUser } from './Auth';
 
 const Drawer = createDrawerNavigator();
-
-const HomeScreen = () => {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
-    </View>
-  );
-};
 
 class UserScreenNavigator extends React.Component {
   static propTypes = {
@@ -73,7 +64,6 @@ class UserScreenNavigator extends React.Component {
     //     }
     //   )
     // );
-    // console.log(require('util').inspect(this.props, false, null));
     return (
       <NavigationContainer>
         <Drawer.Navigator>{this.navItemsFilter().map(x => x.screen)}</Drawer.Navigator>

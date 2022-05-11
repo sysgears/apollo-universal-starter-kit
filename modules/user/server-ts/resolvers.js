@@ -36,14 +36,7 @@ export default pubsub => ({
 
       throw new Error(t('user:accessDenied'));
     }),
-    currentUser(
-      obj,
-      args,
-      {
-        User,
-        req: { identity }
-      }
-    ) {
+    currentUser(obj, args, { User, req: { identity } }) {
       if (identity) {
         return User.getUser(identity.id);
       } else {

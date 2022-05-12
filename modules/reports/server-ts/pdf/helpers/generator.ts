@@ -20,7 +20,10 @@ function createPDF(contacts: UserContact[], t: TranslationFunction) {
 
   pdf.addText(t('PdfReport:title'), 'header');
   pdf.addText(t('PdfReport:database'), 'subheader');
-  pdf.addTable(contacts, Object.keys(contacts[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
+  pdf.addTable(
+    contacts,
+    Object.keys(contacts[0]).map((_, i) => (i === 0 ? 'auto' : '*'))
+  );
   pdf.addText(t('PdfReport:orderedList'), 'subheader');
   pdf.addList([5, 4, 3, 2, 1], 'ol');
   pdf.addText(t('PdfReport:unorderedList'), 'subheader');

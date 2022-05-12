@@ -33,9 +33,10 @@ class ClientModule extends BaseModule {
    * @returns client-side React route components list
    */
   get routes() {
-    return (this.route || []).map(
-      (component: React.ReactElement<any>, idx: number, items: Array<React.ReactElement<any>>) =>
-        React.cloneElement(component, { key: component.key || idx + items.length })
+    return (
+      this.route || []
+    ).map((component: React.ReactElement<any>, idx: number, items: Array<React.ReactElement<any>>) =>
+      React.cloneElement(component, { key: component.key || idx + items.length })
     );
   }
 

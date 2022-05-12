@@ -20,6 +20,7 @@ interface MainProps {
 export default class Main extends React.Component<MainProps> {
   public componentDidMount() {
     LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
+    LogBox.ignoreLogs(['Animated.event now requires']);
   }
 
   public render() {

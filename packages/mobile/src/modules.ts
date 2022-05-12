@@ -2,7 +2,7 @@
 import core from '@gqlapp/core-client-react-native';
 import i18n from '@gqlapp/i18n-client-react';
 import counter from '@gqlapp/counter-client-react';
-// import chat from '@gqlapp/chat-client-react';
+import chat from '@gqlapp/chat-client-react';
 import contact from '@gqlapp/contact-client-react';
 import validation from '@gqlapp/validation-common-react';
 import defaultRouter from '@gqlapp/router-client-react-native';
@@ -24,7 +24,7 @@ const modules = new ClientModule(
   upload,
   contact,
   pagination,
-  // chat,
+  chat,
   // payments,
   user,
   i18n,

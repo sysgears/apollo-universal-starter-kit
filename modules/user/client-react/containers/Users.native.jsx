@@ -29,7 +29,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const isOpenFilter = !!this.props.navigation.getParam('isOpenFilter');
+    const isOpenFilter = !!this.props.route.params?.isOpenFilter;
     return (
       <View style={styles.container}>
         {isOpenFilter && (
@@ -46,7 +46,7 @@ class Users extends React.Component {
 }
 
 Users.propTypes = {
-  navigation: PropTypes.object,
+  route: PropTypes.object,
   usersUpdated: PropTypes.object,
   updateQuery: PropTypes.func,
   loading: PropTypes.bool

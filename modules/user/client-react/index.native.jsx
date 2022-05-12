@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { createStackNavigator } from '@react-navigation/stack';
 import { translate } from '@gqlapp/i18n-client-react';
-import { HeaderTitle } from '@gqlapp/look-client-react-native';
+import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
 
 import resolvers from './resolvers';
@@ -55,6 +55,32 @@ const ProfileScreen = translate('user')(({ t }) => (
   </ProfileStack.Navigator>
 ));
 
+const UsersStack = createStackNavigator();
+const UsersScreen = translate('user')(({ t }) => (
+  <UsersStack.Navigator>
+    <UsersStack.Screen
+      name="UserList"
+      component={Users}
+      options={({ navigation, route }) => ({
+        headerRight: () => (
+          <IconButton
+            iconName="filter"
+            iconSize={32}
+            iconColor="#0275d8"
+            onPress={() => {
+              const isOpenFilter = route.params?.isOpenFilter;
+              navigation.setParams({ isOpenFilter: !isOpenFilter });
+            }}
+          />
+        ),
+        title: t('navLink.users')
+      })}
+    />
+    <UsersStack.Screen name="UserEdit" component={UserEdit} options={{ title: t('navLink.editUser') }} />
+    <UsersStack.Screen name="UserAdd" component={UserAdd} options={{ title: t('navLink.editUser') }} />
+  </UsersStack.Navigator>
+));
+
 class UsersListScreen extends React.Component {
   render() {
     return <Users navigation={this.props.navigation} />;
@@ -62,30 +88,6 @@ class UsersListScreen extends React.Component {
 }
 
 UsersListScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-class UserEditScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Edit user'
-  });
-  render() {
-    return <UserEdit navigation={this.props.navigation} />;
-  }
-}
-UserEditScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-class UserAddScreen extends React.Component {
-  static navigationOptions = () => ({
-    title: 'Create user'
-  });
-  render() {
-    return <UserAdd navigation={this.props.navigation} />;
-  }
-}
-UserAddScreen.propTypes = {
   navigation: PropTypes.object
 };
 
@@ -150,58 +152,24 @@ export default new ClientModule({
         showOnLogin: true,
         role: ['user', 'admin']
       }
+    },
+    {
+      screen: Drawer => (
+        <Drawer.Screen
+          name="UsersStack"
+          component={UsersScreen}
+          options={{
+            drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.users" />,
+            title: ''
+          }}
+        />
+      ),
+      userInfo: {
+        showOnLogin: true,
+        role: 'admin'
+      }
     }
   ],
-  // drawerItem: [
-  //   {
-  //     Users: {
-  //       screen: createStackNavigator({
-  //         Users: {
-  //           screen: UsersListScreen,
-  //           navigationOptions: ({ navigation }) => ({
-  //             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.users" style="subTitle" />,
-  //             headerLeft: (
-  //               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-  //             ),
-  //             headerRight: (
-  //               <IconButton
-  //                 iconName="filter"
-  //                 iconSize={32}
-  //                 iconColor="#0275d8"
-  //                 onPress={() => {
-  //                   const isOpenFilter = navigation.getParam('isOpenFilter');
-  //                   navigation.setParams({ isOpenFilter: !isOpenFilter });
-  //                 }}
-  //               />
-  //             ),
-  //             headerForceInset: {}
-  //           })
-  //         },
-  //         UserEdit: {
-  //           screen: UserEditScreen,
-  //           navigationOptions: () => ({
-  //             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
-  //             headerForceInset: {}
-  //           })
-  //         },
-  //         UserAdd: {
-  //           screen: UserAddScreen,
-  //           navigationOptions: () => ({
-  //             headerTitle: <HeaderTitleWithI18n i18nKey="navLink.editUser" style="subTitle" />,
-  //             headerForceInset: {}
-  //           })
-  //         }
-  //       }),
-  //       userInfo: {
-  //         showOnLogin: true,
-  //         role: 'admin'
-  //       },
-  //       navigationOptions: {
-  //         drawerLabel: <HeaderTitleWithI18n i18nKey="navLink.users" />
-  //       }
-  //     },
-  //   }
-  // ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,

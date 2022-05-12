@@ -1,5 +1,4 @@
 import React from 'react';
-import { createStackNavigator } from 'react-navigation';
 import ClientModule from '@gqlapp/module-client-react-native';
 import { translate } from '@gqlapp/i18n-client-react';
 import { HeaderTitle, IconButton } from '@gqlapp/look-client-react-native';
@@ -14,24 +13,20 @@ export default new ClientModule({
   context: { upload: true },
   drawerItem: [
     {
-      Upload: {
-        screen: createStackNavigator({
-          Upload: {
-            screen: Upload,
-            navigationOptions: ({ navigation }) => ({
-              headerTitle: <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
-              headerLeft: (
-                <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-              ),
-              headerStyle: { backgroundColor: '#fff' },
-              headerForceInset: {}
-            })
-          }
-        }),
-        navigationOptions: {
-          drawerLabel: <HeaderTitleWithI18n />
-        }
-      }
+      screen: Drawer => (
+        <Drawer.Screen
+          name="Upload"
+          component={Upload}
+          options={({ navigation }) => ({
+            headerTitle: () => <HeaderTitleWithI18n i18nKey="title" style="subTitle" />,
+            headerLeft: () => (
+              <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
+            ),
+            headerStyle: { backgroundColor: '#fff' },
+            drawerLabel: () => <HeaderTitleWithI18n />
+          })}
+        />
+      )
     }
   ],
   localization: [{ ns: 'upload', resources }],

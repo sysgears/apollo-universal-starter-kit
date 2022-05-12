@@ -1,15 +1,30 @@
-import { NavigationRouteConfig } from 'react-navigation';
+import React from 'react';
 
 import BaseModule, { BaseModuleShape } from '@gqlapp/module-client-react';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
-import { merge } from 'lodash';
+export interface UserInfo {
+  showOnLogin?: boolean;
+  skip?: boolean;
+  role: string[];
+}
+
+export interface InputDrawerItem {
+  screen: (Drawer: ReturnType<typeof createDrawerNavigator>) => React.ReactElement<any>;
+  userInfo?: UserInfo;
+}
+
+export interface DrawerItem {
+  screen: React.ReactElement<any>;
+  userInfo?: UserInfo;
+}
 
 /**
  * React Native feature modules interface.
  */
 export interface ClientModuleShape extends BaseModuleShape {
-  // Item list for React Navigation drawer
-  drawerItem?: NavigationRouteConfig[];
+  // Screen list for React Navigation Drawer
+  drawerItem?: InputDrawerItem[];
 }
 
 interface ClientModule extends ClientModuleShape {}
@@ -29,10 +44,13 @@ class ClientModule extends BaseModule {
   }
 
   /**
-   * @returns item list for React Navigation drawer
+   * @returns screen list for React Navigation Drawer
    */
-  get drawerItems() {
-    return merge({}, ...(this.drawerItem || []));
+  public createDrawerItems(Drawer: ReturnType<typeof createDrawerNavigator>): DrawerItem[] {
+    return (this.drawerItem || []).map(({ screen, ...props }, idx, items) => ({
+      screen: React.cloneElement(screen(Drawer), { key: idx + items.length }),
+      ...props
+    }));
   }
 }
 

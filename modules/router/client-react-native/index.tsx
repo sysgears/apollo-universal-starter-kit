@@ -1,29 +1,20 @@
 import React from 'react';
-import { createDrawerNavigator, NavigationContainer } from 'react-navigation';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { NavigationContainer } from '@react-navigation/native';
 
 import ClientModule from '@gqlapp/module-client-react-native';
-import { DrawerComponent } from '@gqlapp/look-client-react-native';
 
-const ref: { navigator: NavigationContainer } = { navigator: null };
+const Drawer = createDrawerNavigator();
 
-const MainScreenNavigator = () => {
-  const Navigator = ref.navigator;
+const ref: { modules: ClientModule } = { modules: null };
 
-  return <Navigator />;
-};
+const Router = () => (
+  <NavigationContainer>
+    <Drawer.Navigator>{ref.modules.createDrawerItems(Drawer).map(x => x.screen)}</Drawer.Navigator>
+  </NavigationContainer>
+);
 
 export default new ClientModule({
-  router: <MainScreenNavigator />,
-  onAppCreate: [
-    async (modules: ClientModule) =>
-      (ref.navigator = createDrawerNavigator(
-        {
-          ...modules.drawerItems
-        },
-        {
-          // eslint-disable-next-line
-          contentComponent: props => <DrawerComponent {...props} drawerItems={modules.drawerItems} />
-        }
-      ))
-  ]
+  router: <Router />,
+  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)]
 });

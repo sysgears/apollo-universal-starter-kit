@@ -1,8 +1,8 @@
 import React from 'react';
 import Constants from 'expo-constants';
+import Camera from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
-import * as Permissions from 'expo-permissions';
-import * as ImagePicker from 'expo-image-picker';
+import { ImagePicker } from 'expo-image-picker';
 import { ReactNativeFile } from 'apollo-upload-client';
 import * as mime from 'react-native-mime-types';
 import url from 'url';
@@ -106,22 +106,17 @@ export default Component => {
       });
     };
 
-    checkPermission = async (type, skip) => {
+    checkPermission = async skip => {
       if (skip === Platform.OS) {
         return true;
       }
-      const { getAsync, askAsync } = Permissions;
-      const { status } = await getAsync(type);
-      if (status !== 'granted') {
-        const { status } = await askAsync(type);
-        return status === 'granted';
-      }
-      return true;
+      const { status } = await Camera.requestPermissionsAsync();
+      return status === 'granted';
     };
 
     pickImage = async ({ onSend }) => {
       const { t } = this.props;
-      if (await this.checkPermission(Permissions.CAMERA_ROLL, 'android')) {
+      if (await this.checkPermission('android')) {
         const { cancelled, uri } = await ImagePicker.launchImageLibraryAsync(settings.chat.image.imagePicker);
         if (!cancelled) {
           const { size } = await FileSystem.getInfoAsync(uri);

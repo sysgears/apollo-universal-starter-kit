@@ -1,4 +1,5 @@
-import { AppLoading, registerRootComponent } from 'expo';
+import { registerRootComponent } from 'expo';
+import AppLoading from 'expo-app-loading';
 import Constants from 'expo-constants';
 import * as Font from 'expo-font';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
@@ -37,7 +38,7 @@ export default async (modules: ClientModule) => {
 
     public render() {
       if (!this.state.isReady) {
-        return <AppLoading startAsync={null} onError={null} onFinish={null} />;
+        return <AppLoading />;
       }
 
       return React.createElement(

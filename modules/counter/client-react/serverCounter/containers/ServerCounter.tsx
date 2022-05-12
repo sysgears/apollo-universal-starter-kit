@@ -60,19 +60,15 @@ const ServerCounter = () => {
     });
   }
 
-  const {
-    error,
-    data: { serverCounter },
-    loading
-  } = useQuery(COUNTER_QUERY);
+  const query = useQuery(COUNTER_QUERY);
 
-  if (error) {
-    throw new Error(String(error));
+  if (query.error) {
+    throw new Error(String(query.error));
   }
 
   return (
-    <ServerCounterView counter={serverCounter} loading={loading}>
-      <IncreaseButtonContainer increaseAmount={1} counter={serverCounter} />
+    <ServerCounterView counter={query?.data?.serverCounter} loading={query.loading}>
+      <IncreaseButtonContainer increaseAmount={1} counter={query?.data?.serverCounter} />
     </ServerCounterView>
   );
 };

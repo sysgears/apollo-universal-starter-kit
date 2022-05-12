@@ -143,13 +143,7 @@ const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
 
-  handleSubmit(
-    values,
-    {
-      setErrors,
-      props: { onSubmit }
-    }
-  ) {
+  handleSubmit(values, { setErrors, props: { onSubmit } }) {
     onSubmit(values).catch(e => {
       if (isFormError(e)) {
         setErrors(e.errors);

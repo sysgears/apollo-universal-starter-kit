@@ -61,14 +61,7 @@ ForgotPasswordForm.propTypes = {
 const ForgotPasswordFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ email: '' }),
-  async handleSubmit(
-    values,
-    {
-      setErrors,
-      resetForm,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
     Keyboard.dismiss();
     await onSubmit(values)
       .then(() => {

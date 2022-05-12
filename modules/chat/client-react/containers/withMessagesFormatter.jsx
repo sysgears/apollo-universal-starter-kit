@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import * as uuidGenerator from 'uuid';
 
 export default Component => {
-  return props => {
+  function MessageFormatter(props) {
     const { messages } = props;
 
     if (messages) {
@@ -28,5 +29,9 @@ export default Component => {
     } else {
       return <Component {...props} />;
     }
+  }
+  MessageFormatter.propTypes = {
+    messages: PropTypes.object
   };
+  return MessageFormatter;
 };

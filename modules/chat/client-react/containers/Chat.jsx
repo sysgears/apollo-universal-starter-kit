@@ -11,7 +11,7 @@ import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
 import ModalNotify from '../components/ModalNotify';
 
-export default class extends React.Component {
+export default class Chat extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     t: PropTypes.func,

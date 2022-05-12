@@ -110,7 +110,6 @@
     "connect": "^3.6.5",
     "cross-env": "^5.1.1",
     "eslint": "^5.16.0",
-    "exp": "^57.2.1",
     "expo-react-native-adapter": "^3.0.1",
     "freeport-async": "^1.1.1",
     "image-size": "^0.6.2",

@@ -25,7 +25,6 @@
     "seed": "lerna run --scope=server seed --stream",
     "migrate": "lerna run --scope=server migrate",
     "rollback": "lerna run --scope=server rollback",
-    "exp": "yarn --cwd packages/mobile exp",
     "exp-publish": "lerna run --scope=mobile exp-publish --stream",
     "test": "yarn tests && yarn lint",
     "tests": "lerna run --parallel tests --stream",

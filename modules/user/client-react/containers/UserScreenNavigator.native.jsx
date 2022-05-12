@@ -54,19 +54,11 @@ class UserScreenNavigator extends React.Component {
   };
 
   render() {
-    // const MainScreenNavigatorComponent = createAppContainer(
-    //   createDrawerNavigator(
-    //     { ...this.navItemsFilter() },
-    //     {
-    //       // eslint-disable-next-line
-    //     contentComponent: props => <DrawerComponent {...props} drawerItems={this.props.routeConfigs} />,
-    //       initialRouteName: this.getInitialRoute()
-    //     }
-    //   )
-    // );
-    return (
+    return this.props.currentUserLoading ? null : (
       <NavigationContainer>
-        <Drawer.Navigator>{this.navItemsFilter().map(x => x.screen)}</Drawer.Navigator>
+        <Drawer.Navigator initialRouteName={this.getInitialRoute()}>
+          {this.navItemsFilter().map(x => x.screen)}
+        </Drawer.Navigator>
       </NavigationContainer>
     );
   }

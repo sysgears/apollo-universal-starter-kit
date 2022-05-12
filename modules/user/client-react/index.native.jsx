@@ -50,7 +50,7 @@ const AuthScreen = translate('user')(({ t }) => (
 const ProfileStack = createStackNavigator();
 const ProfileScreen = translate('user')(({ t }) => (
   <ProfileStack.Navigator>
-    <ProfileStack.Screen name="Profile" component={Profile} options={{ title: t('navLink.profile') }} />
+    <ProfileStack.Screen name="ProfileInfo" component={Profile} options={{ title: t('navLink.profile') }} />
     <ProfileStack.Screen name="ProfileEdit" component={UserEdit} options={{ title: t('navLink.editProfile') }} />
   </ProfileStack.Navigator>
 ));
@@ -140,7 +140,7 @@ export default new ClientModule({
     {
       screen: Drawer => (
         <Drawer.Screen
-          name="ProfileStack"
+          name="Profile"
           component={ProfileScreen}
           options={{
             drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.profile" />,

@@ -2462,29 +2462,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/config-plugins@npm:^4.0.14":
-  version: 4.1.4
-  resolution: "@expo/config-plugins@npm:4.1.4"
-  dependencies:
-    "@expo/config-types": ^45.0.0
-    "@expo/json-file": 8.2.36
-    "@expo/plist": 0.0.18
-    "@expo/sdk-runtime-versions": ^1.0.0
-    "@react-native/normalize-color": ^2.0.0
-    chalk: ^4.1.2
-    debug: ^4.3.1
-    find-up: ~5.0.0
-    getenv: ^1.0.0
-    glob: 7.1.6
-    resolve-from: ^5.0.0
-    semver: ^7.3.5
-    slash: ^3.0.0
-    xcode: ^3.0.1
-    xml2js: 0.4.23
-  checksum: 29eae8e6cc7df6290e4bd0b0d97c31bcae56c8b7d4487969359519e8c0a3e2499b2f1b5eaadb98db3bab0cb70ac9983612791c7b864abc0379269e902b056ad8
-  languageName: node
-  linkType: hard
-
 "@expo/config-types@npm:^40.0.0-beta.2":
   version: 40.0.0-beta.2
   resolution: "@expo/config-types@npm:40.0.0-beta.2"
@@ -2496,13 +2473,6 @@ __metadata:
   version: 43.0.1
   resolution: "@expo/config-types@npm:43.0.1"
   checksum: 6f326a0ea5931a4c8e827231d228ddc5b8045477c4081e1578fdf0883595ac820751f12b5652ef03e5f85a6bc208bd0beeb536e7fcce1ea31a29423152bb4f0c
-  languageName: node
-  linkType: hard
-
-"@expo/config-types@npm:^45.0.0":
-  version: 45.0.0
-  resolution: "@expo/config-types@npm:45.0.0"
-  checksum: 2b8a213405aabd8a5368e4bf801523b1510a6fbd7e0e7d85cd8d2eaa72b6e191ac4459bf783f08be8f7c12e7a3b3fcd3975eaafcd699d67ba0be99fc0c701ffb
   languageName: node
   linkType: hard
 
@@ -2739,17 +2709,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@expo/json-file@npm:8.2.36":
-  version: 8.2.36
-  resolution: "@expo/json-file@npm:8.2.36"
-  dependencies:
-    "@babel/code-frame": ~7.10.4
-    json5: ^1.0.1
-    write-file-atomic: ^2.3.0
-  checksum: ddcc8c6fe6415185cccbc23a1ffa3192b3f5367f30daeaea9a32500ada33db6380880c2b3fb7f543bdafe0e616b0e470750adc736457ad71a7aa87911102b245
-  languageName: node
-  linkType: hard
-
 "@expo/metro-config@npm:0.3.9":
   version: 0.3.9
   resolution: "@expo/metro-config@npm:0.3.9"
@@ -2981,17 +2940,6 @@ __metadata:
     base64-js: ^1.2.3
     xmlbuilder: ^14.0.0
   checksum: 9fbaf9d3ff183f0943b1bf180128cebf7d813137ac28c539168ffd877da0da8b11bb7183e375cdf7ad2333b840ee768a022a224ee65ad010271dc9bc6f8fa491
-  languageName: node
-  linkType: hard
-
-"@expo/plist@npm:0.0.18":
-  version: 0.0.18
-  resolution: "@expo/plist@npm:0.0.18"
-  dependencies:
-    "@xmldom/xmldom": ~0.7.0
-    base64-js: ^1.2.3
-    xmlbuilder: ^14.0.0
-  checksum: e0e7ff2cee292bad5306ca441a7fd43c22938f2071e33d02db148992a9c564129703b5aad3037e9988ed8ff246fd023411054c9f3b473150f7094ae7f0b3bbe1
   languageName: node
   linkType: hard
 
@@ -17248,16 +17196,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"expo-camera@npm:~12.2.0":
-  version: 12.2.0
-  resolution: "expo-camera@npm:12.2.0"
+"expo-camera@npm:~12.1.2":
+  version: 12.1.2
+  resolution: "expo-camera@npm:12.1.2"
   dependencies:
-    "@expo/config-plugins": ^4.0.14
+    "@expo/config-plugins": ^4.0.2
     "@koale/useworker": ^4.0.2
     invariant: ^2.2.4
   peerDependencies:
     expo: "*"
-  checksum: 449a0a2595d88ebd487213ba952a34c64fde46235812aab3f87b666a33efda01199d70ff56522c0c8d4499b7f5cb8423ad0dfcf8b80fc9884d3fc698c0cd95f4
+  checksum: 70fdc19241c46a1337057bf4ea48d4217a9134814b3f0e61e3977330bb696a26cc9003e995cdad00b85edc63e3819c7b45b8b067552faff2108464266b3af949
   languageName: node
   linkType: hard
 
@@ -26624,7 +26572,7 @@ __metadata:
     exp: ^57.2.1
     expo: ^44.0.0
     expo-app-loading: ^1.3.0
-    expo-camera: ~12.2.0
+    expo-camera: ~12.1.2
     expo-cli: ^5.0.3
     expo-constants: ~13.0.1
     expo-file-system: ~13.1.4

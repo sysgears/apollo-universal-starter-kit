@@ -100,11 +100,7 @@ Consult [deploying a Node.js app] for full details about creating your applicati
 5. Set your deployment configuration variables in [Heroku Dashboard].
 
 Click the name of your application in the list and then follow to the `Settings` tab. In Settings, click on the
-`Config Variables` link and add the following variable:
-
-| Variable        | Value |
-| --------------- | ----- |
-| YARN_PRODUCTION | false |
+`Config Variables` link and add the deployment variables below.
 
 **NOTE**: If you don't need the mobile app when deploying to Heroku, rename `heroku-postbuild` script in `packages/mobile/package.json` to something else, so that Heroku doesn't find and run it:
 
@@ -113,7 +109,6 @@ three variables in Heroku Dashboard:
 
 | Variable        | Value                      |
 | --------------- | -------------------------- |
-| YARN_PRODUCTION | false                      |
 | EXP_USERNAME    | your_expo_account_username |
 | EXP_PASSWORD    | your_expo_account_password |
 

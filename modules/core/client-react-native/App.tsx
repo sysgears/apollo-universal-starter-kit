@@ -19,8 +19,11 @@ interface MainProps {
 
 export default class Main extends React.Component<MainProps> {
   public componentDidMount() {
-    LogBox.ignoreLogs(['Animated: `useNativeDriver`']);
-    LogBox.ignoreLogs(['Animated.event now requires']);
+    LogBox.ignoreLogs([
+      'Animated: `useNativeDriver`',
+      'Animated.event now requires',
+      'ViewPropTypes will be removed from React Native'
+    ]);
   }
 
   public render() {

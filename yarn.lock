@@ -11906,7 +11906,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^2.0.2, chokidar@npm:^2.0.4, chokidar@npm:^2.1.8":
+"chokidar@npm:^2.0.4, chokidar@npm:^2.1.8":
   version: 2.1.8
   resolution: "chokidar@npm:2.1.8"
   dependencies:
@@ -11929,7 +11929,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chokidar@npm:^3.4.0":
+"chokidar@npm:^3.4.0, chokidar@npm:^3.4.1":
   version: 3.5.3
   resolution: "chokidar@npm:3.5.3"
   dependencies:
@@ -36862,14 +36862,29 @@ __metadata:
   languageName: node
   linkType: hard
 
-"watchpack@https://github.com/Globegitter/watchpack":
-  version: 1.6.0
-  resolution: "watchpack@https://github.com/Globegitter/watchpack.git#commit=d903e64a910ab068299f824b04a5e216a15672e9"
+"watchpack-chokidar2@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "watchpack-chokidar2@npm:2.0.1"
   dependencies:
-    chokidar: ^2.0.2
+    chokidar: ^2.1.8
+  checksum: 9b8d880ae2543dd4f26a69f6b7f881119494f6b772b7431027a06a5cf963e0ebc1cac91a3ef479365c358b693c65fa80a1f8297427fa11fd4c080c3d6408c372
+  languageName: node
+  linkType: hard
+
+"watchpack@npm:^1.6.1, watchpack@npm:^1.7.4":
+  version: 1.7.5
+  resolution: "watchpack@npm:1.7.5"
+  dependencies:
+    chokidar: ^3.4.1
     graceful-fs: ^4.1.2
     neo-async: ^2.5.0
-  checksum: 665edbdcf11cc6818c7fff9f67a2b439e7c9f3b1170b2fdb0a123edd54b81122e3cfa344d7d1f9fa47703bb5fbfaa80a36e7a41e44a21e27282d0ab89ee66944
+    watchpack-chokidar2: ^2.0.1
+  dependenciesMeta:
+    chokidar:
+      optional: true
+    watchpack-chokidar2:
+      optional: true
+  checksum: 53e3b112064f5de9edbb2a14973fb3901d9697b24cc70f8531a143eaace2353a273ca25c0ba21def8d3803cfedb8f6861ca1e49e9782257e40d5b5f8f5365c86
   languageName: node
   linkType: hard
 

@@ -194,7 +194,6 @@
   "resolutions": {
     "card-validator": "8.1.1",
     "hard-source-webpack-plugin": "https://github.com/sysgears/hard-source-webpack-plugin",
-    "watchpack": "https://github.com/Globegitter/watchpack",
     "@react-native-picker/picker": "1.16.8"
   }
 }

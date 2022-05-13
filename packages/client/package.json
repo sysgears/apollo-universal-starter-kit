@@ -152,11 +152,11 @@
     "webpack-cli": "^3.3.4"
   },
   "optionalDependencies": {
-    "@expo/vector-icons": "^10.0.6",
-    "@react-navigation/native": "^6.0.7",
-    "expo": "^44.0.0",
+    "@expo/vector-icons": "^13.0.0",
+    "@react-navigation/native": "^6.0.6",
+    "expo": "^45.0.0",
     "native-base": "^2.13.5",
-    "react-native": "0.64.3",
+    "react-native": "0.68.2",
     "react-native-credit-card-input": "^0.4.1",
     "react-native-elements": "^0.19.1",
     "react-native-gifted-chat": "^0.16.3",

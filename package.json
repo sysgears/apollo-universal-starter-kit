@@ -193,7 +193,7 @@
   },
   "resolutions": {
     "card-validator": "8.1.1",
-    "hard-source-webpack-plugin": "https://github.com/sysgears/hard-source-webpack-plugin",
-    "@react-native-picker/picker": "1.16.8"
+    "@react-native-picker/picker": "1.16.8",
+    "hard-source-webpack-plugin@0.13.1": "patch:hard-source-webpack-plugin@npm:0.13.1#.yarn/patches/hard-source-webpack-plugin-npm-0.13.1-5fa3f8bf90.patch"
   }
 }

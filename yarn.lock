@@ -19037,9 +19037,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hard-source-webpack-plugin@https://github.com/sysgears/hard-source-webpack-plugin":
+"hard-source-webpack-plugin@npm:^0.13.1":
   version: 0.13.1
-  resolution: "hard-source-webpack-plugin@https://github.com/sysgears/hard-source-webpack-plugin.git#commit=e447883a9ed3b069f2f75e191e0e3e7e37a23515"
+  resolution: "hard-source-webpack-plugin@npm:0.13.1"
   dependencies:
     chalk: ^2.4.1
     find-cache-dir: ^2.0.0
@@ -19056,7 +19056,7 @@ __metadata:
     write-json-file: ^2.3.0
   peerDependencies:
     webpack: "*"
-  checksum: a00e8a2d68c2ed86adf60100f1755ee7c63c89c8306cbdf861dc76883f1e042fd1b8aeadd0ed56b848d28908d3e30ff274a07a0409d9f5b93f40eac5babd1f6e
+  checksum: 213edab08cf933457e9fcd5780eca9a1fabdad869a594c4f3229d7e44a30eb128b6b156f15f1ceb88a08909c25ad1a22bcf63c784691cff62581c36ca275547d
   languageName: node
   linkType: hard
 

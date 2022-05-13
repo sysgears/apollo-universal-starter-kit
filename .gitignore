@@ -2,7 +2,8 @@
 /.history
 /.vscode
 /.cache
-/.yarn
+/.yarn/*
+!/.yarn/patches/
 .tmp
 node_modules
 build

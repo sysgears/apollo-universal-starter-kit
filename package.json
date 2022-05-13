@@ -5,7 +5,7 @@
     "ignored"
   ],
   "version": "1.0.0",
-  "pm": "yarn@3.2.0-rc.12",
+  "packageManager": "yarn@3.2.1",
   "scripts": {
     "build": "lerna run --scope='{server,client,mobile}' --parallel build --stream",
     "clean": "lerna run clean --stream",

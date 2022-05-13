@@ -11,7 +11,8 @@ module.exports = api => {
       ],
       plugins: [
         'babel-plugin-dynamic-import-node',
-        ['@babel/plugin-proposal-class-properties', { loose: true }],
+        ['@babel/plugin-proposal-class-properties'],
+        '@babel/plugin-proposal-optional-chaining',
         'babel-plugin-import-graphql'
       ]
     };
@@ -31,6 +32,7 @@ module.exports = api => {
         ['@babel/plugin-proposal-decorators', { legacy: true }],
         '@babel/plugin-proposal-class-properties',
         '@babel/plugin-proposal-object-rest-spread',
+        '@babel/plugin-proposal-optional-chaining',
         ['styled-components', { ssr: true }]
       ],
       env: {

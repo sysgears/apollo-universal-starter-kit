@@ -2065,6 +2065,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.14.5":
+  version: 7.17.9
+  resolution: "@babel/runtime@npm:7.17.9"
+  dependencies:
+    regenerator-runtime: ^0.13.4
+  checksum: 758ce8855a75408555ed9d196c82c86350257765095a5d3e05df35875d1b0cd42223c6f62356f000b1e1efe8e345d6312c60ae98e8727a2a49909a656f0fd805
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.0.0, @babel/template@npm:^7.16.7, @babel/template@npm:^7.3.3, @babel/template@npm:^7.4.0, @babel/template@npm:^7.8.6":
   version: 7.16.7
   resolution: "@babel/template@npm:7.16.7"
@@ -8986,6 +8995,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": ^7.0.0
     "@babel/plugin-proposal-decorators": ^7.0.0
     "@babel/plugin-proposal-object-rest-spread": ^7.0.0
+    "@babel/plugin-proposal-optional-chaining": ^7.0.0
     "@babel/plugin-syntax-dynamic-import": ^7.0.0
     "@babel/plugin-transform-destructuring": ^7.0.0
     "@babel/plugin-transform-for-of": ^7.0.0
@@ -9049,7 +9059,7 @@ __metadata:
     qrcode-terminal: ^0.12.0
     raw-loader: ^0.5.1
     regenerator-runtime: ^0.13.2
-    sass-loader: ^7.1.0
+    sass-loader: ^10.0.0
     shelljs: ^0.8.1
     source-list-map: ^2.0.0
     style-loader: ^1.0.2
@@ -12405,7 +12415,7 @@ __metadata:
     react-dropzone: ^4.2.3
     react-ga: ^2.3.5
     react-helmet: ^6.0.0
-    react-i18next: ^10.12.2
+    react-i18next: ^11.16.9
     react-native: 0.68.2
     react-native-credit-card-input: ^0.4.1
     react-native-elements: ^0.19.1
@@ -12836,7 +12846,7 @@ __metadata:
     jest: ^26.2.2
     lodash: ^4.17.4
     minilog: ^3.1.0
-    react-i18next: ^10.12.2
+    react-i18next: ^11.16.9
     redux: ^4.0.1
     redux-devtools-extension: ^2.13.2
     subscriptions-transport-ws: ^0.9.16
@@ -19426,7 +19436,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-escaper@npm:^2.0.0":
+"html-escaper@npm:^2.0.0, html-escaper@npm:^2.0.2":
   version: 2.0.2
   resolution: "html-escaper@npm:2.0.2"
   checksum: 208e8a12de1a6569edbb14544f4567e6ce8ecc30b9394fcaa4e7bb1e60c12a7c9a1ed27e31290817157e8626f3a4f29e76c8747030822eb84a6abb15c255f0a0
@@ -19482,12 +19492,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"html-parse-stringify2@npm:2.0.1":
-  version: 2.0.1
-  resolution: "html-parse-stringify2@npm:2.0.1"
+"html-parse-stringify@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "html-parse-stringify@npm:3.0.1"
   dependencies:
-    void-elements: ^2.0.1
-  checksum: aefd39391fca6b70641bae5c578d3384e941b6813c1c600f7a843a8f387a680feaa8a65a9129044413c89d57524b261ee5ea0b5a674e86392df421fc50bdf0d5
+    void-elements: 3.1.0
+  checksum: 159292753d48b84d216d61121054ae5a33466b3db5b446e2ffc093ac077a411a99ce6cbe0d18e55b87cf25fa3c5a86c4d8b130b9719ec9b66623259000c72c15
   languageName: node
   linkType: hard
 
@@ -22940,6 +22950,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"klona@npm:^2.0.4":
+  version: 2.0.5
+  resolution: "klona@npm:2.0.5"
+  checksum: 5b752c11ca8e2996612386699f52cc5aed802aa4116663d26239ac0b054fae25191dacb95587ecf1a167b039daa9fc3fa2da17dfd5d0821f3037de3821d9a9e5
+  languageName: node
+  linkType: hard
+
 "knex@npm:^0.14.2":
   version: 0.14.6
   resolution: "knex@npm:0.14.6"
@@ -23424,7 +23441,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loader-utils@npm:^1.0.1, loader-utils@npm:^1.0.2, loader-utils@npm:^1.1.0, loader-utils@npm:^1.2.3, loader-utils@npm:^1.4.0":
+"loader-utils@npm:^1.0.2, loader-utils@npm:^1.1.0, loader-utils@npm:^1.2.3, loader-utils@npm:^1.4.0":
   version: 1.4.0
   resolution: "loader-utils@npm:1.4.0"
   dependencies:
@@ -25458,7 +25475,7 @@ __metadata:
     react-addons-test-utils: ^16.0.0-alpha.3
     react-apollo: ^3.0.0
     react-debounce-input: ^3.1.0
-    react-i18next: ^10.12.2
+    react-i18next: ^11.16.9
     react-native: 0.68.2
     react-native-credit-card-input: ^0.4.1
     react-native-elements: ^0.19.1
@@ -25801,7 +25818,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1":
+"neo-async@npm:^2.5.0, neo-async@npm:^2.6.0, neo-async@npm:^2.6.1, neo-async@npm:^2.6.2":
   version: 2.6.2
   resolution: "neo-async@npm:2.6.2"
   checksum: c2f5a604a54a8ec5438a342e1f356dff4bc33ccccdb6dc668d94fe8e5eccfc9d2c2eea6064b0967a767ba63b33763f51ccf2cd2441b461a7322656c1f06b3f5d
@@ -30352,16 +30369,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^10.12.2":
-  version: 10.13.2
-  resolution: "react-i18next@npm:10.13.2"
+"react-i18next@npm:^11.16.9":
+  version: 11.16.9
+  resolution: "react-i18next@npm:11.16.9"
   dependencies:
-    "@babel/runtime": ^7.3.1
-    html-parse-stringify2: 2.0.1
+    "@babel/runtime": ^7.14.5
+    html-escaper: ^2.0.2
+    html-parse-stringify: ^3.0.1
   peerDependencies:
-    i18next: ">= 17.0.0"
+    i18next: ">= 19.0.0"
     react: ">= 16.8.0"
-  checksum: b20bd16d08cd87bf7a41fdb3111d39413b50aaa336bdc02a12fd335c95c81f2f854e64a1b5e81d23e879c0f2879cfbc4af0c03bfd49495ab50ea9950ef06424a
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: f2355fad3c992fdf83ab68ca412d1cc9da60edad6cfd9727296e83b34a490d4ee712a6beb903e58d935ef6006bcb4364078ba9841b4242ff71dab62d730635cc
   languageName: node
   linkType: hard
 
@@ -31093,15 +31116,6 @@ __metadata:
     loose-envify: ^1.1.0
     object-assign: ^4.1.1
   checksum: 07ae8959acf1596f0550685102fd6097d461a54a4fd46a50f88a0cd7daaa97fdd6415de1dcb4bfe0da6aa43221a6746ce380410fa848acc60f8ac41f6649c148
-  languageName: node
-  linkType: hard
-
-"react@npm:18.1.0":
-  version: 18.1.0
-  resolution: "react@npm:18.1.0"
-  dependencies:
-    loose-envify: ^1.1.0
-  checksum: 20592b045e82ce809c0fd76c63cb70a11a5e0905a569a08874043097fc1eab759e3a7681d36b3246464e97bab021c4a0d6490ee2fb79c55d176b94e8890ad93a
   languageName: node
   linkType: hard
 
@@ -32407,18 +32421,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sass-loader@npm:^7.1.0":
-  version: 7.3.1
-  resolution: "sass-loader@npm:7.3.1"
+"sass-loader@npm:^10.0.0":
+  version: 10.2.1
+  resolution: "sass-loader@npm:10.2.1"
   dependencies:
-    clone-deep: ^4.0.1
-    loader-utils: ^1.0.1
-    neo-async: ^2.5.0
-    pify: ^4.0.1
-    semver: ^6.3.0
+    klona: ^2.0.4
+    loader-utils: ^2.0.0
+    neo-async: ^2.6.2
+    schema-utils: ^3.0.0
+    semver: ^7.3.2
   peerDependencies:
-    webpack: ^3.0.0 || ^4.0.0
-  checksum: a29ac6a39b4bc047c8fdd54a803d25999df232ada851062c3c194c5f5eda3f773003e40e33676f5b8ca2a25575a5088b67352e9cf842c1b1f891a7a221639cab
+    fibers: ">= 3.1.0"
+    node-sass: ^4.0.0 || ^5.0.0 || ^6.0.0
+    sass: ^1.3.0
+    webpack: ^4.36.0 || ^5.0.0
+  peerDependenciesMeta:
+    fibers:
+      optional: true
+    node-sass:
+      optional: true
+    sass:
+      optional: true
+  checksum: 03286a3b46c6d1c606c7e382cf9fefc569e45758d7d6e813a20a5b00926336baa8a45e833a7a4e461b4092aac22f6859052437e7d7c0d6f726c71328f8c25173
   languageName: node
   linkType: hard
 
@@ -32900,7 +32924,7 @@ __metadata:
     performance-now: ^2.1.0
     pg: ^7.4.0
     prop-types: ^15.6.0
-    react: 18.1.0
+    react: 17.0.2
     react-addons-test-utils: ^16.0.0-alpha.3
     react-apollo: ^3.0.0
     react-art: 18.1.0
@@ -36617,10 +36641,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"void-elements@npm:^2.0.1":
-  version: 2.0.1
-  resolution: "void-elements@npm:2.0.1"
-  checksum: 23b4f35bbeabcaa5c87a9f638ae80862a9313dccbaa8973b0eada81dbe97488ae11baf4d8aa2846bc397d31456afdfd8d791bb44c542f83735e6d04af6996f4d
+"void-elements@npm:3.1.0":
+  version: 3.1.0
+  resolution: "void-elements@npm:3.1.0"
+  checksum: 0b8686f9f9aa44012e9bd5eabf287ae0cde409b9a2854c5a2335cb83920c957668ac5876e3f0d158dd424744ac411a7270e64128556b451ed3bec875ef18534d
   languageName: node
   linkType: hard
 

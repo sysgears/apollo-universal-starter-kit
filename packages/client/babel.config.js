@@ -8,11 +8,11 @@ module.exports = api => {
       plugins: [
         'babel-plugin-dynamic-import-node',
         '@babel/plugin-transform-destructuring',
-        ['@babel/plugin-transform-for-of', { loose: true }],
+        ['@babel/plugin-transform-for-of'],
         '@babel/plugin-transform-regenerator',
         '@babel/plugin-transform-runtime',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-proposal-class-properties', { loose: true }],
+        ['@babel/plugin-proposal-class-properties'],
         '@babel/plugin-proposal-object-rest-spread',
         ['styled-components', { ssr: true }]
       ]
@@ -25,11 +25,11 @@ module.exports = api => {
         '@babel/plugin-syntax-dynamic-import',
         '@loadable/babel-plugin',
         '@babel/plugin-transform-destructuring',
-        ['@babel/plugin-transform-for-of', { loose: true }],
+        ['@babel/plugin-transform-for-of'],
         '@babel/plugin-transform-regenerator',
         '@babel/plugin-transform-runtime',
         ['@babel/plugin-proposal-decorators', { legacy: true }],
-        ['@babel/plugin-proposal-class-properties', { loose: true }],
+        ['@babel/plugin-proposal-class-properties'],
         '@babel/plugin-proposal-object-rest-spread',
         ['styled-components', { ssr: true }]
       ],

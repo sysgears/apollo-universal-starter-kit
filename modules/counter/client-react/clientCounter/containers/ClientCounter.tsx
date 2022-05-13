@@ -1,9 +1,9 @@
 import React from 'react';
 import { useMutation, useQuery } from '@apollo/react-hooks';
 
+import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@gqlapp/counter-common';
 import IncreaseButton from '../components/IncreaseButton';
 import ClientCounterView from '../components/ClientCounterView';
-import { COUNTER_QUERY_CLIENT, ADD_COUNTER_CLIENT } from '@gqlapp/counter-common';
 
 interface ButtonProps {
   increaseAmount: number;
@@ -19,19 +19,16 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
 };
 
 const ClientCounter = () => {
-  const {
-    error,
-    data: { clientCounter },
-    loading
-  } = useQuery(COUNTER_QUERY_CLIENT);
+  const result = useQuery(COUNTER_QUERY_CLIENT);
+  const { error, data, loading } = result;
 
   if (error) {
     throw new Error(String(error));
   }
 
   return (
-    <ClientCounterView counter={clientCounter} loading={loading}>
-      <IncreaseButtonContainer increaseAmount={1} counter={clientCounter} />
+    <ClientCounterView counter={data?.clientCounter} loading={loading}>
+      <IncreaseButtonContainer increaseAmount={1} counter={data?.clientCounter} />
     </ClientCounterView>
   );
 };

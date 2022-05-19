@@ -11,7 +11,7 @@ interface SubscribersOnlyViewProps {
   t: TranslateFunction;
 }
 
-export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
+const SubscriberPageView = ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
   if (loading) {
     return <Text>{t('loading')}</Text>;
   }
@@ -30,10 +30,12 @@ const styles = StyleSheet.create({
   subscriberPageWrapper: {
     flex: 1,
     padding: 10,
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   title: {
     fontWeight: 'bold',
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
+
+export default SubscriberPageView;

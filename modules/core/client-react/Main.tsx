@@ -20,7 +20,7 @@ if (!__TEST__) {
 const ref: { modules: ClientModule; client: ApolloClient<any>; store: Store } = {
   modules: null,
   client: null,
-  store: null
+  store: null,
 };
 
 const history = createBrowserHistory();
@@ -32,7 +32,7 @@ export const onAppCreate = async (modules: ClientModule, entryModule: NodeModule
     createNetLink: ref.modules.createNetLink,
     createLink: ref.modules.createLink,
     connectionParams: ref.modules.connectionParams,
-    clientResolvers: ref.modules.resolvers
+    clientResolvers: ref.modules.resolvers,
   });
   if (entryModule.hot && entryModule.hot.data && entryModule.hot.data.store) {
     ref.store = entryModule.hot.data.store;
@@ -53,7 +53,7 @@ if (!__TEST__) {
   logPageView(window.location);
 }
 
-history.listen(location => logPageView(location));
+history.listen((location) => logPageView(location));
 
 export const onAppDispose = (_: any, data: any) => {
   data.store = ref.store;

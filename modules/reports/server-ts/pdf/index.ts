@@ -8,5 +8,5 @@ export default new ServerModule({
   schema: [schema],
   createResolversFunc: [resolvers],
   createContextFunc: [() => ({ Report: new Report() })],
-  localization: [{ ns: 'PdfReport', resources }]
+  localization: [{ ns: 'PdfReport', resources }],
 });

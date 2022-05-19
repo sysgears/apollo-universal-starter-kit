@@ -13,7 +13,7 @@ import {
   RenderSwitch,
   FormView,
   primary,
-  lookStyles
+  lookStyles,
 } from '@gqlapp/look-client-react-native';
 import { email, minLength, required, match, validate } from '@gqlapp/validation-common-react';
 import settings from '@gqlapp/config';
@@ -22,7 +22,7 @@ const userFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(settings.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)],
 };
 
 const handleRoleChange = (type, value, setFieldValue) => {
@@ -34,12 +34,12 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
   const options = [
     {
       value: 'user',
-      label: t('userEdit.form.field.role.user')
+      label: t('userEdit.form.field.role.user'),
     },
     {
       value: 'admin',
-      label: t('userEdit.form.field.role.admin')
-    }
+      label: t('userEdit.form.field.role.admin'),
+    },
   ];
 
   const { username, email, role, isActive, profile, auth, password, passwordConfirmation } = values;
@@ -71,7 +71,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
             dismissText={t('userEdit.select.dismissText')}
             placeholderTextColor={lookStyles.placeholderColor}
             selectedValue={role}
-            onChange={value => handleRoleChange('role', value, setFieldValue)}
+            onChange={(value) => handleRoleChange('role', value, setFieldValue)}
             cols={1}
             data={options}
           />
@@ -93,7 +93,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           placeholder={t('userEdit.form.field.firstName')}
           placeholderTextColor={lookStyles.placeholderColor}
           value={profile.firstName}
-          onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
+          onChange={(value) => setFieldValue('profile', { ...profile, firstName: value })}
         />
         <Field
           name="lastName"
@@ -101,7 +101,7 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
           placeholder={t('userEdit.form.field.lastName')}
           placeholderTextColor={lookStyles.placeholderColor}
           value={profile.lastName}
-          onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
+          onChange={(value) => setFieldValue('profile', { ...profile, lastName: value })}
         />
         {settings.auth.certificate.enabled && (
           <Field
@@ -110,7 +110,9 @@ const UserForm = ({ values, handleSubmit, setFieldValue, t, shouldDisplayRole, s
             placeholder={t('userEdit.form.field.serial')}
             placeholderTextColor={lookStyles.placeholderColor}
             value={auth && auth.certificate && auth.certificate.serial}
-            onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
+            onChange={(value) =>
+              setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })
+            }
           />
         )}
         <Field
@@ -156,30 +158,30 @@ UserForm.propTypes = {
   values: PropTypes.object,
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,
-  touched: PropTypes.object
+  touched: PropTypes.object,
 };
 
 const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => {
+  mapPropsToValues: (values) => {
     const { username, email, role, isActive, profile } = values.initialValues;
     return {
-      username: username,
-      email: email,
+      username,
+      email,
       role: role || 'user',
-      isActive: isActive,
+      isActive,
       password: '',
       passwordConfirmation: '',
       profile: {
         firstName: profile && profile.firstName,
-        lastName: profile && profile.lastName
+        lastName: profile && profile.lastName,
       },
       auth: {
-        ...values.initialValues.auth
-      }
+        ...values.initialValues.auth,
+      },
     };
   },
   handleSubmit(values, { setErrors, props: { onSubmit } }) {
-    onSubmit(values).catch(e => {
+    onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -188,20 +190,20 @@ const UserFormWithFormik = withFormik({
     });
   },
   displayName: 'SignUpForm ', // helps with React DevTools
-  validate: values => validate(values, userFormSchema)
+  validate: (values) => validate(values, userFormSchema),
 });
 
 const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 20,
     justifyContent: 'center',
-    flex: 1
+    flex: 1,
   },
   submit: lookStyles.submit,
   formView: {
     flex: 1,
-    alignSelf: 'stretch'
-  }
+    alignSelf: 'stretch',
+  },
 });
 
 export default translate('user')(UserFormWithFormik(UserForm));

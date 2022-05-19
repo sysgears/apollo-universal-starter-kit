@@ -20,7 +20,7 @@ IconButton.propTypes = {
   iconName: PropTypes.string,
   iconSize: PropTypes.number,
   iconColor: PropTypes.string,
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 };
 
 export default IconButton;

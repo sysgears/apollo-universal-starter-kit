@@ -4,7 +4,7 @@ import { Query } from 'react-apollo';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 
 export const withStripeSubscription = (Component: ComponentType) => {
-  return (props: any) => {
+  const StripeSubscription = (props: any) => {
     return (
       <Query query={SUBSCRIPTION_QUERY} fetchPolicy="network-only">
         {({ loading, data: { stripeSubscription } }: any) => (
@@ -13,4 +13,5 @@ export const withStripeSubscription = (Component: ComponentType) => {
       </Query>
     );
   };
+  return StripeSubscription;
 };

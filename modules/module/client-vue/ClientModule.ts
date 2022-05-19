@@ -1,3 +1,4 @@
+import { foldTo } from 'fractal-objects';
 import { RouteConfig } from 'vue-router';
 
 import BaseModule, { BaseModuleShape } from './BaseModule';
@@ -6,11 +7,12 @@ export interface ClientModuleShape extends BaseModuleShape {
   route?: RouteConfig[];
 }
 
-interface ClientModule extends ClientModuleShape {}
+class ClientModule extends BaseModule implements ClientModuleShape {
+  route?: RouteConfig[];
 
-class ClientModule extends BaseModule {
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   get routes(): RouteConfig[] {

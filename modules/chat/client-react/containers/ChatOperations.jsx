@@ -21,15 +21,15 @@ import EDIT_MESSAGE from '../graphql/EditMessage.graphql';
 
 const onAddMessage = (prev, node) => {
   // ignore if duplicate
-  if (prev.messages.edges.some(edge => node.id === edge.node.id)) {
+  if (prev.messages.edges.some((edge) => node.id === edge.node.id)) {
     return prev;
   }
 
-  const filteredEdges = prev.messages.edges.filter(edge => edge.node.id !== null);
+  const filteredEdges = prev.messages.edges.filter((edge) => edge.node.id !== null);
   const edge = {
     cursor: 0,
     node,
-    __typename: 'MessageEdges'
+    __typename: 'MessageEdges',
   };
 
   const increment = edge.node.id ? 1 : 0;
@@ -38,22 +38,22 @@ const onAddMessage = (prev, node) => {
   return update(prev, {
     messages: {
       totalCount: {
-        $set: prev.messages.totalCount + increment
+        $set: prev.messages.totalCount + increment,
       },
       edges: {
-        $set: updatedEdges
+        $set: updatedEdges,
       },
       pageInfo: {
         endCursor: {
-          $set: prev.messages.pageInfo.endCursor + increment
-        }
-      }
-    }
+          $set: prev.messages.pageInfo.endCursor + increment,
+        },
+      },
+    },
   });
 };
 
 const onDeleteMessage = (prev, id) => {
-  const index = prev.messages.edges.findIndex(x => x.node.id === id);
+  const index = prev.messages.edges.findIndex((x) => x.node.id === id);
 
   // ignore if not found
   if (index < 0) {
@@ -67,17 +67,17 @@ const onDeleteMessage = (prev, id) => {
   return update(prev, {
     messages: {
       totalCount: {
-        $set: prev.messages.totalCount - 1
+        $set: prev.messages.totalCount - 1,
       },
       edges: {
-        $set: updatedEdges
+        $set: updatedEdges,
       },
       pageInfo: {
         endCursor: {
-          $set: prev.messages.pageInfo.endCursor - 1
-        }
-      }
-    }
+          $set: prev.messages.pageInfo.endCursor - 1,
+        },
+      },
+    },
   });
 };
 
@@ -85,22 +85,22 @@ const onEditMessage = (prev, node) => {
   const newEdge = {
     cursor: node.id,
     node,
-    __typename: 'MessageEdges'
+    __typename: 'MessageEdges',
   };
 
   return update(prev, {
     messages: {
       edges: {
-        $set: prev.messages.edges.map(edge => (edge.node.id === node.id ? newEdge : edge))
-      }
-    }
+        $set: prev.messages.edges.map((edge) => (edge.node.id === node.id ? newEdge : edge)),
+      },
+    },
   });
 };
 
-const getMsgsFromCache = cache =>
+const getMsgsFromCache = (cache) =>
   cache.readQuery({
     query: MESSAGES_QUERY,
-    variables: { limit: settings.chat.limit, after: 0 }
+    variables: { limit: settings.chat.limit, after: 0 },
   });
 
 const writeMsgsToCache = (cache, messages) =>
@@ -110,9 +110,9 @@ const writeMsgsToCache = (cache, messages) =>
     data: {
       messages: {
         ...messages,
-        __typename: 'Messages'
-      }
-    }
+        __typename: 'Messages',
+      },
+    },
   });
 
 class ChatOperations extends React.Component {
@@ -121,7 +121,7 @@ class ChatOperations extends React.Component {
     messages: PropTypes.object,
     messagesUpdated: PropTypes.object,
     updateQuery: PropTypes.func,
-    loadData: PropTypes.func.isRequired
+    loadData: PropTypes.func.isRequired,
   };
 
   componentDidUpdate() {
@@ -133,7 +133,7 @@ class ChatOperations extends React.Component {
 
   updateMessagesState = (messagesUpdated, updateQuery) => {
     const { mutation, node } = messagesUpdated;
-    updateQuery(prev => {
+    updateQuery((prev) => {
       switch (mutation) {
         case 'CREATED':
           return onAddMessage(prev, node);
@@ -157,7 +157,7 @@ export default compose(
     options: () => {
       return {
         fetchPolicy: 'network-only',
-        variables: { limit: settings.chat.limit, after: 0 }
+        variables: { limit: settings.chat.limit, after: 0 },
       };
     },
     props: ({ data }) => {
@@ -165,14 +165,14 @@ export default compose(
       const loadData = (after, dataDelivery) => {
         return fetchMore({
           variables: {
-            after: after
+            after,
           },
           updateQuery: (
             previousResult,
             {
               fetchMoreResult: {
-                messages: { totalCount, edges, pageInfo }
-              }
+                messages: { totalCount, edges, pageInfo },
+              },
             }
           ) => {
             return {
@@ -182,14 +182,14 @@ export default compose(
                 totalCount,
                 edges: dataDelivery === 'add' ? [...edges, ...previousResult.messages.edges] : edges,
                 pageInfo,
-                __typename: 'Messages'
-              }
+                __typename: 'Messages',
+              },
             };
-          }
+          },
         });
       };
       return { error: error ? error.graphQLErrors[0].message : null, loading, messages, updateQuery, loadData };
-    }
+    },
   }),
   graphql(ADD_MESSAGE, {
     props: ({ mutate }) => ({
@@ -210,27 +210,27 @@ export default compose(
                 quotedId,
                 quotedMessage: {
                   __typename: 'QuotedMessage',
-                  ...quotedMessage
+                  ...quotedMessage,
                 },
                 filename: attachment ? attachment.name : null,
-                path: attachment ? attachment.uri : null
-              }
+                path: attachment ? attachment.uri : null,
+              },
             },
             update: (cache, { data: { addMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
               const { messages } = onAddMessage(prevMessages, addMessage);
               writeMsgsToCache(cache, messages);
-            }
+            },
           });
         } catch (e) {
           return { error: e.graphQLErrors[0].message };
         }
-      }
-    })
+      },
+    }),
   }),
   graphql(DELETE_MESSAGE, {
     props: ({ mutate }) => ({
-      deleteMessage: async id => {
+      deleteMessage: async (id) => {
         try {
           await mutate({
             variables: { id },
@@ -238,20 +238,20 @@ export default compose(
               __typename: 'Mutation',
               deleteMessage: {
                 id,
-                __typename: 'Message'
-              }
+                __typename: 'Message',
+              },
             },
             update: (cache, { data: { deleteMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
               const { messages } = onDeleteMessage(prevMessages, deleteMessage);
               writeMsgsToCache(cache, messages);
-            }
+            },
           });
         } catch (e) {
           return { error: e.graphQLErrors[0].message };
         }
-      }
-    })
+      },
+    }),
   }),
   graphql(EDIT_MESSAGE, {
     props: ({ mutate }) => ({
@@ -271,24 +271,24 @@ export default compose(
                 quotedId,
                 quotedMessage: {
                   __typename: 'QuotedMessage',
-                  ...quotedMessage
+                  ...quotedMessage,
                 },
                 filename: null,
                 path: null,
-                __typename: 'Message'
-              }
+                __typename: 'Message',
+              },
             },
             update: (cache, { data: { editMessage } }) => {
               const prevMessages = getMsgsFromCache(cache);
               const { messages } = onEditMessage(prevMessages, editMessage);
               writeMsgsToCache(cache, messages);
-            }
+            },
           });
         } catch (e) {
           return { error: e.graphQLErrors[0].message };
         }
-      }
-    })
+      },
+    }),
   }),
   translate('chat'),
   withUuid,

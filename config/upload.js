@@ -1,3 +1,3 @@
 export default {
-  uploadDir: 'public'
+  uploadDir: 'public',
 };

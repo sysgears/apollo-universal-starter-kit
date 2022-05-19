@@ -8,9 +8,9 @@ const CustomView = ({
     loadingImage,
     quotedId,
     quotedMessage,
-    user: { _id: currentId }
+    user: { _id: currentId },
   },
-  user: { _id: userId }
+  user: { _id: userId },
 }) => {
   if (allowImages && loadingImage) {
     return (
@@ -26,18 +26,17 @@ const CustomView = ({
       const imageBlock = image ? <Image style={styles.image} source={{ uri: image }} /> : null;
       return (
         <View style={styles.container}>
-          <Text style={[styles.username, color]}>{username ? username : 'Anonymous'}</Text>
+          <Text style={[styles.username, color]}>{username || 'Anonymous'}</Text>
           {imageBlock}
           <Text style={color}>{text}</Text>
         </View>
       );
-    } else {
-      return (
-        <View style={styles.container}>
-          <Text style={styles.status}>{'Deleted message'}</Text>
-        </View>
-      );
     }
+    return (
+      <View style={styles.container}>
+        <Text style={styles.status}>{'Deleted message'}</Text>
+      </View>
+    );
   }
   return <View />;
 };
@@ -46,7 +45,7 @@ CustomView.propTypes = {
   messages: PropTypes.array,
   currentMessage: PropTypes.object,
   user: PropTypes.object,
-  allowImages: PropTypes.bool
+  allowImages: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
     margin: 5,
     paddingBottom: 2,
     borderBottomWidth: 1,
-    borderBottomColor: '#00468A'
+    borderBottomColor: '#00468A',
   },
 
   uploading: {
@@ -62,31 +61,31 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: 150,
     height: 100,
-    margin: 3
+    margin: 3,
   },
 
   status: {
     color: '#333',
-    fontStyle: 'italic'
+    fontStyle: 'italic',
   },
 
   username: {
     paddingTop: 5,
-    fontWeight: '700'
+    fontWeight: '700',
   },
 
   image: {
     width: 120,
-    height: 50
+    height: 50,
   },
 
   colorText: {
-    color: '#000'
+    color: '#000',
   },
 
   ownColorText: {
-    color: '#fff'
-  }
+    color: '#fff',
+  },
 });
 
 export default CustomView;

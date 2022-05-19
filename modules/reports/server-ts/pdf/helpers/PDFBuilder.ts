@@ -1,18 +1,20 @@
 import PdfPrinter from 'pdfmake';
 import { Content, Style } from 'pdfmake/build/pdfmake';
-import fonts from './fonts/Roboto/';
+import fonts from './fonts/Roboto';
 import { UserContact } from '../../models/user-contact';
 
 export default class PDFBuilder {
   private printer = new PdfPrinter(fonts);
+
   private content: Content = [];
+
   private styles: { [name: string]: Style } = {};
 
   public addText(text: string, style?: string, alignment?: string) {
     this.content.push({
       text,
       style,
-      alignment
+      alignment,
     });
   }
 
@@ -24,14 +26,14 @@ export default class PDFBuilder {
     this.content.push({
       table: {
         widths: columnsWidth,
-        body: [Object.keys(data[0]), ...data.map(item => Object.values(item))]
-      }
+        body: [Object.keys(data[0]), ...data.map((item) => Object.values(item))],
+      },
     });
   }
 
-  public addList(data: Array<string | number>, type = 'ul') {
+  public addList(data: (string | number)[], type = 'ul') {
     this.content.push({
-      [type]: data
+      [type]: data,
     });
   }
 
@@ -39,14 +41,14 @@ export default class PDFBuilder {
     this.content.push({
       image,
       width,
-      height
+      height,
     });
   }
 
   public getDocument() {
     return this.printer.createPdfKitDocument({
       content: this.content,
-      styles: this.styles
+      styles: this.styles,
     });
   }
 }

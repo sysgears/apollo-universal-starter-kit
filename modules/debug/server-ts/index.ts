@@ -44,7 +44,7 @@ const printIfPossible = (uid: string) => {
   const { position } = times[uid];
 
   // Look of a query with a position one less than the current query
-  const previousTimeUid = Object.keys(times).find(key => times[key].position === position - 1);
+  const previousTimeUid = Object.keys(times).find((key) => times[key].position === position - 1);
 
   // If we didn't find it, it must have been printed already and we can safely print ourselves.
   if (!previousTimeUid) {
@@ -54,7 +54,7 @@ const printIfPossible = (uid: string) => {
 
 const printQueriesAfterGivenPosition = (position: number) => {
   // Look for the next query in the queue
-  const nextTimeUid = Object.keys(times).find(key => times[key].position === position + 1);
+  const nextTimeUid = Object.keys(times).find((key) => times[key].position === position + 1);
 
   // If we find one and it is marked as finished, we can go ahead and print it
   if (nextTimeUid && times[nextTimeUid].finished) {
@@ -76,15 +76,15 @@ if (__DEV__ && settings.app.logging.debugSQL) {
         startTime: now(),
         // I keep track of when a query is finished with a boolean instead of
         // presence of an end time. It makes the logic easier to read.
-        finished: false
+        finished: false,
       };
-      count = count + 1;
+      count += 1;
     })
     .on('query-response', (response: any, query: EventQuery) => {
       const uid = query.__knexQueryUid;
       times[uid].endTime = now();
       times[uid].finished = true;
-      const position = times[uid].position;
+      const { position } = times[uid];
 
       // Print the current query, if I'm able
       printIfPossible(uid);

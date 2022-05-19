@@ -8,8 +8,8 @@ const fonts = {
     normal,
     bold,
     italics,
-    bolditalics
-  }
+    bolditalics,
+  },
 };
 
 export default fonts;

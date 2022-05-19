@@ -12,18 +12,17 @@ import serialize from 'serialize-javascript';
 import { GraphQLSchema } from 'graphql';
 import { ChunkExtractor } from '@loadable/server';
 
-import { isApiExternal, apiUrl } from '@gqlapp/core-common';
+import { isApiExternal, apiUrl, createApolloClient, createReduxStore } from '@gqlapp/core-common';
 import ServerModule from '@gqlapp/module-server-ts';
 import ClientModule from '@gqlapp/module-client-react';
-import { createApolloClient, createReduxStore } from '@gqlapp/core-common';
 
 let assetMap: { [key: string]: string };
 
 interface HtmlProps {
   content: string;
   state: any;
-  headElements: Array<ReactElement<{}>>;
-  css: Array<ReactElement<{}>>;
+  headElements: ReactElement<any>[];
+  css: ReactElement<any>[];
   helmet: HelmetData;
 }
 
@@ -65,8 +64,8 @@ const Html = ({ content, state, css, headElements, helmet }: HtmlProps) => (
       <script
         dangerouslySetInnerHTML={{
           __html: `window.__APOLLO_STATE__=${serialize(state, {
-            isJSON: true
-          })};`
+            isJSON: true,
+          })};`,
         }}
         charSet="UTF-8"
       />
@@ -77,14 +76,14 @@ const Html = ({ content, state, css, headElements, helmet }: HtmlProps) => (
 const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modules: ServerModule) => {
   const schemaLink = new SchemaLink({
     schema,
-    context: { ...(await modules.createContext(req, res)), req, res }
+    context: { ...(await modules.createContext(req, res)), req, res },
   });
   const client = createApolloClient({
     apiUrl,
     createNetLink: !isApiExternal ? () => schemaLink : undefined,
     createLink: clientModules.createLink,
     clientResolvers: clientModules.resolvers,
-    connectionParams: null
+    connectionParams: null,
   });
   const store = createReduxStore(clientModules.reducers, {}, client);
   const context: any = {};
@@ -121,7 +120,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
     const extractor = new ChunkExtractor({
       statsFile: path.resolve(__FRONTEND_BUILD_DIR__, 'loadable-stats.json'),
       entrypoints: ['index'],
-      publicPath: !__DEV__ && __CDN_URL__ ? __CDN_URL__ : '/'
+      publicPath: !__DEV__ && __CDN_URL__ ? __CDN_URL__ : '/',
     });
     const sheet = new ServerStyleSheet();
     const JSX = extractor.collectChunks(sheet.collectStyles(App));
@@ -134,7 +133,7 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
       headElements: [...extractor.getScriptElements(), ...extractor.getLinkElements(), ...extractor.getStyleElements()],
       css: sheet.getStyleElement().map((el, idx) => (el ? React.cloneElement(el, { key: idx }) : el)),
       helmet,
-      state: { ...client.cache.extract() }
+      state: { ...client.cache.extract() },
     };
 
     res.send(`<!doctype html>\n${ReactDOMServer.renderToStaticMarkup(<Html {...htmlProps} />)}`);
@@ -142,20 +141,18 @@ const renderServerSide = async (req: any, res: any, schema: GraphQLSchema, modul
   }
 };
 
-export default (schema: GraphQLSchema, modules: ServerModule) => async (
-  req: any,
-  res: any,
-  next: (e?: Error) => void
-) => {
-  try {
-    if (req.path.indexOf('.') < 0 && __SSR__) {
-      return await renderServerSide(req, res, schema, modules);
-    } else if (req.path.indexOf('.') < 0 && !__SSR__ && req.method === 'GET' && !__DEV__) {
-      res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
-    } else {
-      next();
+export default (schema: GraphQLSchema, modules: ServerModule) =>
+  async (req: any, res: any, next: (e?: Error) => void) => {
+    try {
+      if (req.path.indexOf('.') < 0 && __SSR__) {
+        return await renderServerSide(req, res, schema, modules);
+      }
+      if (req.path.indexOf('.') < 0 && !__SSR__ && req.method === 'GET' && !__DEV__) {
+        res.sendFile(path.resolve(__FRONTEND_BUILD_DIR__, 'index.html'));
+      } else {
+        next();
+      }
+    } catch (e) {
+      next(e);
     }
-  } catch (e) {
-    next(e);
-  }
-};
+  };

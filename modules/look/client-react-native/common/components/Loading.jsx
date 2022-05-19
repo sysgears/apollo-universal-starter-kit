@@ -9,18 +9,18 @@ const Modal = ({ text }) => (
 );
 
 Modal.propTypes = {
-  text: PropTypes.string.isRequired
+  text: PropTypes.string.isRequired,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   text: {
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export default Modal;

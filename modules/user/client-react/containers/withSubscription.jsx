@@ -20,20 +20,20 @@ export const useUsersWithSubscription = (subscribeToMore, filter) => {
         prev,
         {
           subscriptionData: {
-            data: { usersUpdated: newData }
-          }
+            data: { usersUpdated: newData },
+          },
         }
       ) => {
         setUsersUpdated(newData);
-      }
+      },
     });
   };
 
   return usersUpdated;
 };
 
-export default Component => {
-  const UsersWithSubscription = props => {
+export default (Component) => {
+  const UsersWithSubscription = (props) => {
     const { filter } = props;
     return (
       <Subscription subscription={USERS_SUBSCRIPTION} variables={{ filter }}>
@@ -49,7 +49,7 @@ export default Component => {
   };
 
   UsersWithSubscription.propTypes = {
-    filter: PropTypes.object
+    filter: PropTypes.object,
   };
 
   return UsersWithSubscription;

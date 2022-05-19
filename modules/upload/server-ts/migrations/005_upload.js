@@ -1,5 +1,5 @@
 export async function up(knex) {
-  return knex.schema.createTable('upload', table => {
+  return knex.schema.createTable('upload', (table) => {
     table.increments();
     table.string('name').notNull();
     table.string('type').notNull();

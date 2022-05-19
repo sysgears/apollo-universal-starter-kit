@@ -30,7 +30,7 @@ export default () => ({
     }),
     stripeSubscriptionCard: withAuth(['stripe:view:self'], (obj: any, args: any, context: any) => {
       return context.StripeSubscription.getCreditCard(context.req.identity.id);
-    })
+    }),
   },
   Mutation: {
     addStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, { input }: CreditCard, context: any) => {
@@ -60,18 +60,18 @@ export default () => ({
           expiryMonth,
           expiryYear,
           last4,
-          brand
+          brand,
         });
 
         const newSubscriber = await stripe.subscriptions.create({
           customer: stripeCustomerId,
-          items: [{ plan: plan.id }]
+          items: [{ plan: plan.id }],
         });
 
         await StripeSubscription.editSubscription({
           userId: identity.id,
           active: true,
-          stripeSubscriptionId: newSubscriber.id
+          stripeSubscriptionId: newSubscriber.id,
         });
 
         return { active: true };
@@ -98,7 +98,7 @@ export default () => ({
           expiryMonth,
           expiryYear,
           last4,
-          brand
+          brand,
         });
 
         return true;
@@ -113,7 +113,7 @@ export default () => ({
     cancelStripeSubscription: withAuth(['stripe:update:self'], async (obj: any, args: any, context: any) => {
       const {
         stripeSubscription: { stripeSubscriptionId, stripeCustomerId, stripeSourceId },
-        StripeSubscription
+        StripeSubscription,
       } = context;
       const identity = context.req;
 
@@ -129,7 +129,7 @@ export default () => ({
           expiryMonth: null,
           expiryYear: null,
           last4: null,
-          brand: null
+          brand: null,
         });
 
         return { active: false };
@@ -140,7 +140,7 @@ export default () => ({
         }
         throw new Error(e.message);
       }
-    })
+    }),
   },
-  Subscription: {}
+  Subscription: {},
 });

@@ -1,5 +1,3 @@
-import { expect } from 'chai';
-
 import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
 import settings from '@gqlapp/config';
 
@@ -16,10 +14,10 @@ const mocks = {
         email: 'user@example.com',
         profile: null,
         auth: null,
-        __typename: 'User'
+        __typename: 'User',
       };
-    }
-  })
+    },
+  }),
 };
 
 const itIfEnabled = enabled && !!publicKey ? test : test.skip;
@@ -32,7 +30,7 @@ describe('Stripe subscription UI works', () => {
 
     await waitForElementRender(app.container, 'a[href="/subscriber-page"]');
     renderer.history.push('/add-subscription');
-    // tslint:disable:no-unused-expression
-    expect(updateContent(app.container)).to.not.be.empty;
+    // eslint-disable-next-line jest/no-standalone-expect
+    expect(updateContent(app.container)).toBeDefined();
   });
 });

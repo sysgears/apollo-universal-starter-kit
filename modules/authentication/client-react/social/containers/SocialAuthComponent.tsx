@@ -5,18 +5,19 @@ import { IconDefinition } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from '@gqlapp/look-client-react';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StyledButton = styled(({ backgroundColor, hoverColor, ...other }) => <Button {...other} />)`
   min-width: 320px;
   margin-top: 10px;
-  background-color: ${props => props.backgroundColor};
-  border-color: ${props => props.backgroundColor};
+  background-color: ${(props) => props.backgroundColor};
+  border-color: ${(props) => props.backgroundColor};
   display: flex;
   justify-content: flex-start;
   align-items: center;
 
   &:hover {
-    background-color: ${props => props.hoverColor};
-    border-color: ${props => props.hoverColor};
+    background-color: ${(props) => props.hoverColor};
+    border-color: ${(props) => props.hoverColor};
   }
 `;
 
@@ -96,7 +97,7 @@ interface IconProps {
 
 const Icon = styled(FontAwesomeIcon)`
   margin-top: 10px;
-  color: ${props => props.backgroundColor}
+  color: ${(props) => props.backgroundColor}
   font-size: 40px;
 `;
 

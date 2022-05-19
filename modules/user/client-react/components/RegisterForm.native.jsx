@@ -14,7 +14,7 @@ const registerFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(settings.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)],
 };
 
 const RegisterForm = ({ values, handleSubmit, t }) => {
@@ -72,14 +72,14 @@ RegisterForm.propTypes = {
   t: PropTypes.func,
   submitting: PropTypes.bool,
   error: PropTypes.string,
-  values: PropTypes.object
+  values: PropTypes.object,
 };
 
 const RegisterFormWithFormik = withFormik({
   mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
-  validate: values => validate(values, registerFormSchema),
+  validate: (values) => validate(values, registerFormSchema),
   async handleSubmit(values, { setErrors, props: { onSubmit } }) {
-    onSubmit(values).catch(e => {
+    onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -88,20 +88,20 @@ const RegisterFormWithFormik = withFormik({
     });
   },
   enableReinitialize: true,
-  displayName: 'SignUpForm' // helps with React DevTools
+  displayName: 'SignUpForm', // helps with React DevTools
 });
 
 const styles = StyleSheet.create({
   submit: lookStyles.submit,
   formView: {
     flex: 1,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   formContainer: {
     paddingHorizontal: 20,
     flex: 1,
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 export default translate('user')(RegisterFormWithFormik(RegisterForm));

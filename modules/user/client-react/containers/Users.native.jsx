@@ -13,7 +13,7 @@ import {
   withOrderByUpdating,
   withUsers,
   withUsersDeleting,
-  withUsersState
+  withUsersState,
 } from './UserOperations';
 
 class Users extends React.Component {
@@ -49,7 +49,7 @@ Users.propTypes = {
   route: PropTypes.object,
   usersUpdated: PropTypes.object,
   updateQuery: PropTypes.func,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -57,19 +57,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   filterContainer: {
     flex: 5,
     borderWidth: 1,
     borderColor: '#e3e3e3',
     marginBottom: 15,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   usersListContainer: {
     flex: 8,
-    marginTop: 15
-  }
+    marginTop: 15,
+  },
 });
 
 export default compose(

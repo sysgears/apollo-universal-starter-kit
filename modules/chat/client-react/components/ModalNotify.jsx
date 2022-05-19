@@ -14,14 +14,14 @@ const ModalNotify = ({ notify, callback }) => (
 
 ModalNotify.propTypes = {
   notify: PropTypes.string,
-  callback: PropTypes.func
+  callback: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   alertTextWrapper: {
     backgroundColor: '#fff',
-    padding: 10
-  }
+    padding: 10,
+  },
 });
 
 export default ModalNotify;

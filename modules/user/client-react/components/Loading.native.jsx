@@ -14,7 +14,7 @@ const Loading = ({ t }) => (
 );
 
 Loading.propTypes = {
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('user')(Loading);

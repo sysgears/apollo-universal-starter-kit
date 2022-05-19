@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
 
 describe('Page not found example UI works', () => {
@@ -11,6 +10,6 @@ describe('Page not found example UI works', () => {
     renderer.history.push('/non-existing-page');
     await waitForElementRender(app.container, 'a[href="/"]');
     content = updateContent(app.container);
-    expect(content.textContent).to.include('Page not found - 404');
+    expect(content.textContent).toContain('Page not found - 404');
   });
 });

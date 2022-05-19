@@ -21,7 +21,7 @@ const LogoutLink = withRouter(
     translate('user')(({ logout, history, t }) => (
       <a
         href="#"
-        onClick={e => {
+        onClick={(e) => {
           e.preventDefault();
           (async () => {
             await logout();
@@ -57,62 +57,62 @@ export default new ClientModule({
       path="/profile"
       role={['user', 'admin']}
       redirect="/login"
-      component={loadable(() => import('./containers/Profile').then(c => c.default))}
+      component={loadable(() => import('./containers/Profile').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/users"
       redirect="/profile"
       role="admin"
-      component={loadable(() => import('./containers/Users').then(c => c.default))}
+      component={loadable(() => import('./containers/Users').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/users/new"
       role={['admin']}
-      component={loadable(() => import('./containers/UserAdd').then(c => c.default))}
+      component={loadable(() => import('./containers/UserAdd').then((c) => c.default))}
     />,
     <AuthRoute
       path="/users/:id"
       redirect="/profile"
       role={['user', 'admin']}
-      component={loadable(() => import('./containers/UserEdit').then(c => c.default))}
+      component={loadable(() => import('./containers/UserEdit').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/register"
       redirectOnLoggedIn
       redirect="/profile"
-      component={loadable(() => import('./containers/Register').then(c => c.default))}
+      component={loadable(() => import('./containers/Register').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/login"
       redirectOnLoggedIn
       redirect="/"
-      component={loadable(() => import('./containers/Login').then(c => c.default))}
+      component={loadable(() => import('./containers/Login').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/forgot-password"
       redirectOnLoggedIn
       redirect="/profile"
-      component={loadable(() => import('./containers/ForgotPassword').then(c => c.default))}
+      component={loadable(() => import('./containers/ForgotPassword').then((c) => c.default))}
     />,
     <AuthRoute
       exact
       path="/reset-password/:token"
       redirectOnLoggedIn
       redirect="/profile"
-      component={loadable(() => import('./containers/ResetPassword').then(c => c.default))}
-    />
+      component={loadable(() => import('./containers/ResetPassword').then((c) => c.default))}
+    />,
   ],
   navItem: [
     <IfLoggedIn key="/users" role="admin">
       <MenuItem>
         <NavLinkUsersWithI18n />
       </MenuItem>
-    </IfLoggedIn>
+    </IfLoggedIn>,
   ],
   navItemRight: [
     <IfLoggedIn key="/profile">
@@ -131,11 +131,11 @@ export default new ClientModule({
       <MenuItem>
         <NavLinkLoginWithI18n />
       </MenuItem>
-    </IfNotLoggedIn>
+    </IfNotLoggedIn>,
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   dataRootComponent: [DataRootComponent],
   // eslint-disable-next-line react/display-name
-  rootComponentFactory: [req => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)]
+  rootComponentFactory: [(req) => (req ? <CookiesProvider cookies={req.universalCookies} /> : <CookiesProvider />)],
 });

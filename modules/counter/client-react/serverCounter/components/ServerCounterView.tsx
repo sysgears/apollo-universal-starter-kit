@@ -22,14 +22,13 @@ const ServerCounterView = ({ t, children, counter, loading }: ViewProps) => {
         <div className="text-center">{t('loading')}</div>
       </Section>
     );
-  } else {
-    return (
-      <Section>
-        <p>{t('text', { amount: counter.amount })}</p>
-        {children}
-      </Section>
-    );
   }
+  return (
+    <Section>
+      <p>{t('text', { amount: counter.amount })}</p>
+      {children}
+    </Section>
+  );
 };
 
 export default translate('serverCounter')(ServerCounterView);

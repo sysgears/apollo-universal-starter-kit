@@ -7,10 +7,8 @@ import { COUNTER_QUERY, ADD_COUNTER, COUNTER_SUBSCRIPTION } from '@gqlapp/counte
 
 @Component({
   selector: 'server-counter-button',
-  template: `
-    <btn color="primary" (click)="increaseCounter()">Click to increase counter</btn>
-  `,
-  styles: []
+  template: ` <btn color="primary" (click)="increaseCounter()">Click to increase counter</btn> `,
+  styles: [],
 })
 export class ServerCounterButtonComponent {
   constructor(private apollo: Apollo) {}
@@ -20,8 +18,8 @@ export class ServerCounterButtonComponent {
       .mutate({
         mutation: ADD_COUNTER,
         variables: {
-          amount: 1
-        }
+          amount: 1,
+        },
       })
       .subscribe();
   }
@@ -42,18 +40,19 @@ export class ServerCounterButtonComponent {
         margin-bottom: 30px;
         text-align: center;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class ServerCounterViewComponent {
   public counter: Observable<number>;
+
   public counterQuery: QueryRef<any>;
 
   constructor(private apollo: Apollo) {}
 
   public ngOnInit() {
     this.counterQuery = this.apollo.watchQuery<Query>({
-      query: COUNTER_QUERY
+      query: COUNTER_QUERY,
     });
 
     this.counter = this.counterQuery.valueChanges.pipe(map((result: any) => result.data.serverCounter.amount));
@@ -68,18 +67,18 @@ export class ServerCounterViewComponent {
 
         const {
           data: {
-            counterUpdated: { amount }
-          }
+            counterUpdated: { amount },
+          },
         } = subscriptionData;
 
         return {
           ...prev,
           serverCounter: {
             amount,
-            __typename: 'Counter'
-          }
+            __typename: 'Counter',
+          },
         };
-      }
+      },
     });
   }
 }

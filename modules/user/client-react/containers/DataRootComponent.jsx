@@ -33,10 +33,10 @@ class DataRootComponent extends React.Component {
         // access token and refresh token. In this case we need to trigger our JWT link
         // by sending network request
         const {
-          data: { currentUser }
+          data: { currentUser },
         } = await client.query({
           query: CURRENT_USER_QUERY,
-          fetchPolicy: 'network-only'
+          fetchPolicy: 'network-only',
         });
         if (currentUser) {
           // If we have received current user, then we had invalid Apollo Cache previously
@@ -56,7 +56,7 @@ class DataRootComponent extends React.Component {
 
 DataRootComponent.propTypes = {
   client: PropTypes.object,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default withApollo(DataRootComponent);

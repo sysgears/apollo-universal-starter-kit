@@ -10,11 +10,11 @@ import { reducer } from './reducers';
 @NgModule({
   imports: [CommonModule, LookModule],
   declarations: [NgRxCounterButtonComponent, NgRxCounterViewComponent],
-  exports: [NgRxCounterButtonComponent, NgRxCounterViewComponent]
+  exports: [NgRxCounterButtonComponent, NgRxCounterViewComponent],
 })
 class NgRxCounterModule {}
 
 export default new CounterModule({
   reducer: [{ counter: reducer }],
-  counterModule: [NgRxCounterModule]
+  counterModule: [NgRxCounterModule],
 });

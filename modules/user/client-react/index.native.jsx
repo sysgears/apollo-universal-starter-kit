@@ -27,21 +27,21 @@ const AuthScreen = translate('user')(({ t }) => (
       name="SignIn"
       component={Login}
       options={{
-        title: t('navLink.signIn')
+        title: t('navLink.signIn'),
       }}
     />
     <AuthStack.Screen
       name="ForgotPassword"
       component={ForgotPassword}
       options={{
-        title: t('navLink.forgotPassword')
+        title: t('navLink.forgotPassword'),
       }}
     />
     <AuthStack.Screen
       name="Register"
       component={Register}
       options={{
-        title: t('navLink.register')
+        title: t('navLink.register'),
       }}
     />
   </AuthStack.Navigator>
@@ -73,7 +73,7 @@ const UsersScreen = translate('user')(({ t }) => (
             }}
           />
         ),
-        title: t('navLink.users')
+        title: t('navLink.users'),
       })}
     />
     <UsersStack.Screen name="UserEdit" component={UserEdit} options={{ title: t('navLink.editUser') }} />
@@ -88,7 +88,7 @@ class UsersListScreen extends React.Component {
 }
 
 UsersListScreen.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
 };
 
 const HeaderTitleWithI18n = translate('user')(HeaderTitle);
@@ -109,70 +109,70 @@ const LogoutScreen = (): any => null;
 export default new ClientModule({
   drawerItem: [
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="AuthStack"
           component={AuthScreen}
           options={{
             drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.signIn" />,
-            title: ''
+            title: '',
           }}
         />
       ),
       userInfo: {
-        showOnLogin: false
-      }
+        showOnLogin: false,
+      },
     },
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="Logout"
           component={LogoutScreen}
           options={({ navigation }) => ({
-            drawerLabel: () => <Logout navigation={navigation} />
+            drawerLabel: () => <Logout navigation={navigation} />,
           })}
         />
       ),
       userInfo: {
-        showOnLogin: true
-      }
+        showOnLogin: true,
+      },
     },
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="Profile"
           component={ProfileScreen}
           options={{
             drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.profile" />,
-            title: ''
+            title: '',
           }}
         />
       ),
       userInfo: {
         showOnLogin: true,
-        role: ['user', 'admin']
-      }
+        role: ['user', 'admin'],
+      },
     },
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="UsersStack"
           component={UsersScreen}
           options={{
             drawerLabel: () => <HeaderTitleWithI18n i18nKey="navLink.users" />,
-            title: ''
+            title: '',
           }}
         />
       ),
       userInfo: {
         showOnLogin: true,
-        role: 'admin'
-      }
-    }
+        role: 'admin',
+      },
+    },
   ],
   resolver: [resolvers],
   localization: [{ ns: 'user', resources }],
   router: <MainScreenNavigator />,
   dataRootComponent: [DataRootComponent],
-  onAppCreate: [async modules => (ref.navigator = UserScreenNavigator(modules.createDrawerItems(Stack)))]
+  onAppCreate: [async (modules) => (ref.navigator = UserScreenNavigator(modules.createDrawerItems(Stack)))],
 });

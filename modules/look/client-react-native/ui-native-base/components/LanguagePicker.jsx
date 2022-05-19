@@ -11,7 +11,7 @@ export default class LanguagePicker extends React.Component {
     super(props);
     this.changeLang = this.changeLang.bind(this);
     this.state = {
-      currentLang: this.props.i18n.language
+      currentLang: this.props.i18n.language,
     };
   }
 
@@ -35,10 +35,10 @@ export default class LanguagePicker extends React.Component {
                 ? this.pickerRef.show()
                 : ActionSheet.show(
                     {
-                      options: langs.map(lang => lang.slice(0, 2).toUpperCase()),
-                      title: i18n.t('i18n:pickerTitle')
+                      options: langs.map((lang) => lang.slice(0, 2).toUpperCase()),
+                      title: i18n.t('i18n:pickerTitle'),
                     },
-                    langIndex => this.changeLang(langs[langIndex])
+                    (langIndex) => this.changeLang(langs[langIndex])
                   )
             }
           >
@@ -51,9 +51,9 @@ export default class LanguagePicker extends React.Component {
             <SimplePicker
               confirmText={i18n.t('i18n:btnConfirm')}
               cancelText={i18n.t('i18n:btnCancel')}
-              ref={el => (this.pickerRef = el)}
-              options={langs.map(lang => lang.slice(0, 2).toUpperCase())}
-              onSubmit={lang => this.changeLang(langs.filter(lng => lng.indexOf(lang) > -1)[0] || lang)}
+              ref={(el) => (this.pickerRef = el)}
+              options={langs.map((lang) => lang.slice(0, 2).toUpperCase())}
+              onSubmit={(lang) => this.changeLang(langs.filter((lng) => lng.indexOf(lang) > -1)[0] || lang)}
               buttonStyle={{ fontWeight: '700', color: '#0275d8', fontSize: 20 }}
             />
           )}
@@ -64,5 +64,5 @@ export default class LanguagePicker extends React.Component {
 }
 
 LanguagePicker.propTypes = {
-  i18n: PropTypes.object.isRequired
+  i18n: PropTypes.object.isRequired,
 };

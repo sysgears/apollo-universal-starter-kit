@@ -35,13 +35,13 @@ export default (entryModule: NodeModule, stores: ModuleTree<any>, routes: RouteC
     router,
     store,
     apolloProvider,
-    render: h => h(App)
+    render: (h) => h(App),
   });
   initWebpackHMR(entryModule, app);
 
   return {
     app,
     store,
-    router
+    router,
   };
 };

@@ -5,20 +5,20 @@ import Select from './Select';
 
 const FormItem = Form.Item;
 
-const RenderSelect = props => {
+const RenderSelect = (props) => {
   const {
     input,
     label,
     type,
     children,
-    meta: { touched, error }
+    meta: { touched, error },
   } = props;
   let validateStatus = '';
   if (touched && error) {
     validateStatus = 'error';
   }
 
-  const onChange = value => {
+  const onChange = (value) => {
     const { formik, name } = props;
     formik.handleChange({ target: { value, name } });
   };
@@ -41,7 +41,7 @@ RenderSelect.propTypes = {
   type: PropTypes.string,
   meta: PropTypes.object,
   name: PropTypes.string.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default RenderSelect;

@@ -9,7 +9,6 @@ describe('$Module$ UI works', () => {
   const content = updateContent(app.container);
 
   it('$Module$ page renders on mount', () => {
-    // tslint:disable:no-unused-expression
     expect(content).to.not.be.empty;
   });
 

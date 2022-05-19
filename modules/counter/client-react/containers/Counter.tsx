@@ -18,8 +18,8 @@ const Counter = ({ t }: CounterProps) => (
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('meta')}`
-        }
+          content: `${settings.app.name} - ${t('meta')}`,
+        },
       ]}
     />
     {counters.counterComponent.map((component: any, idx: number, items: any) =>

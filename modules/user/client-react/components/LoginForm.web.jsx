@@ -12,7 +12,7 @@ import settings from '@gqlapp/config';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
 };
 const { github, facebook, linkedin, google } = settings.auth.social;
 
@@ -67,8 +67,9 @@ const renderSocialButtons = (buttonsLength, t) => {
 };
 
 const LoginForm = ({ handleSubmit, submitting, errors, values, t }) => {
-  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
-    .length;
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(
+    (button) => button
+  ).length;
   return (
     <Form name="login" onSubmit={handleSubmit}>
       <Field
@@ -114,7 +115,7 @@ LoginForm.propTypes = {
   submitting: PropTypes.bool,
   errors: PropTypes.object,
   values: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const LoginFormWithFormik = withFormik({
@@ -122,7 +123,7 @@ const LoginFormWithFormik = withFormik({
   mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
 
   handleSubmit(values, { setErrors, props: { onSubmit } }) {
-    onSubmit(values).catch(e => {
+    onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -130,8 +131,8 @@ const LoginFormWithFormik = withFormik({
       }
     });
   },
-  validate: values => validate(values, loginFormSchema),
-  displayName: 'LoginForm' // helps with React DevTools
+  validate: (values) => validate(values, loginFormSchema),
+  displayName: 'LoginForm', // helps with React DevTools
 });
 
 export default translate('user')(LoginFormWithFormik(LoginForm));

@@ -15,7 +15,7 @@ interface UpdateCardViewProps {
   submitting: boolean;
 }
 
-export default (props: UpdateCardViewProps) => {
+const UpdateCreditCard = (props: UpdateCardViewProps) => {
   const { t } = props;
 
   return (
@@ -30,3 +30,5 @@ export default (props: UpdateCardViewProps) => {
     </Fragment>
   );
 };
+
+export default UpdateCreditCard;

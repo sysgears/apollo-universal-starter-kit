@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import core from '@gqlapp/core-client-react-native';
 import i18n from '@gqlapp/i18n-client-react';
 import counter from '@gqlapp/counter-client-react';

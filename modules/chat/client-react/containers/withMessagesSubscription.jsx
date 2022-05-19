@@ -4,16 +4,16 @@ import { Subscription } from 'react-apollo';
 
 import MESSAGES_SUBSCRIPTION from '../graphql/MessagesSubscription.graphql';
 
-export default Component => {
+export default (Component) => {
   return class WithMessagesSubscription extends React.Component {
     static propTypes = {
-      messages: PropTypes.object
+      messages: PropTypes.object,
     };
 
     render() {
       const { messages } = this.props;
       if (messages) {
-        const endCursor = messages.pageInfo.endCursor;
+        const { endCursor } = messages.pageInfo;
         return (
           <Subscription subscription={MESSAGES_SUBSCRIPTION} variables={{ endCursor }}>
             {({ data, loading }) => {
@@ -24,9 +24,8 @@ export default Component => {
             }}
           </Subscription>
         );
-      } else {
-        return <Component {...this.props} />;
       }
+      return <Component {...this.props} />;
     }
   };
 };

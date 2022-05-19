@@ -12,7 +12,7 @@ config.watchFolders = [workspaceRoot];
 // 2. Let Metro know where to resolve packages, and in what order
 config.resolver.nodeModulesPaths = [
   path.resolve(projectRoot, 'node_modules'),
-  path.resolve(workspaceRoot, 'node_modules')
+  path.resolve(workspaceRoot, 'node_modules'),
 ];
 
 config.transformer.babelTransformerPath = require.resolve('./custom-transformer');
@@ -27,7 +27,7 @@ config.resolver.sourceExts = [
   'jsx',
   'json',
   'graphql',
-  'gql'
+  'gql',
 ];
 
 module.exports = config;

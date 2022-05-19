@@ -14,7 +14,7 @@ import {
   danger,
   Modal,
   Button,
-  lookStyles
+  lookStyles,
 } from '@gqlapp/look-client-react-native';
 
 class UsersFilterView extends React.PureComponent {
@@ -28,7 +28,7 @@ class UsersFilterView extends React.PureComponent {
     orderBy: PropTypes.object,
     onOrderBy: PropTypes.func.isRequired,
     t: PropTypes.func,
-    filter: PropTypes.object
+    filter: PropTypes.object,
   };
 
   constructor(props) {
@@ -37,27 +37,25 @@ class UsersFilterView extends React.PureComponent {
       showModal: false,
       orderBy: {
         column: '',
-        order: ''
-      }
+        order: '',
+      },
     };
     this.onChangeTextDelayed = debounce(this.handleSearch, 500);
   }
 
-  renderOrderByArrow = name => {
+  renderOrderByArrow = (name) => {
     const { orderBy } = this.state;
 
     if (orderBy && orderBy.column === name) {
       if (orderBy.order === 'desc') {
         return <FontAwesome name="long-arrow-up" size={16} style={styles.iconStyle} />;
-      } else {
-        return <FontAwesome name="long-arrow-down" size={16} style={styles.iconStyle} />;
       }
-    } else {
-      return <FontAwesome name="arrows-v" size={16} style={styles.iconStyle} />;
+      return <FontAwesome name="long-arrow-down" size={16} style={styles.iconStyle} />;
     }
+    return <FontAwesome name="arrows-v" size={16} style={styles.iconStyle} />;
   };
 
-  orderBy = name => {
+  orderBy = (name) => {
     const { orderBy } = this.state;
 
     let order = 'asc';
@@ -68,8 +66,8 @@ class UsersFilterView extends React.PureComponent {
         return this.setState({
           orderBy: {
             column: '',
-            order: ''
-          }
+            order: '',
+          },
         });
       }
     }
@@ -95,20 +93,20 @@ class UsersFilterView extends React.PureComponent {
     const orderByParams = [
       {
         label: t('users.column.name'),
-        value: 'username'
+        value: 'username',
       },
       {
         label: t('users.column.email'),
-        value: 'email'
+        value: 'email',
       },
       {
         label: t('users.column.role'),
-        value: 'role'
+        value: 'role',
       },
       {
         label: t('users.column.active'),
-        value: 'isActive'
-      }
+        value: 'isActive',
+      },
     ];
     return (
       <View>
@@ -134,12 +132,12 @@ class UsersFilterView extends React.PureComponent {
     this.setState({ showModal: false });
   };
 
-  handleSearch = text => {
+  handleSearch = (text) => {
     const { onSearchTextChange } = this.props;
     onSearchTextChange(text);
   };
 
-  handleRole = value => {
+  handleRole = (value) => {
     const { onRoleChange } = this.props;
     onRoleChange(value);
   };
@@ -147,7 +145,7 @@ class UsersFilterView extends React.PureComponent {
   handleIsActive = () => {
     const {
       onIsActiveChange,
-      filter: { isActive }
+      filter: { isActive },
     } = this.props;
     onIsActiveChange(!isActive);
   };
@@ -155,12 +153,12 @@ class UsersFilterView extends React.PureComponent {
   render() {
     const {
       filter: { role, isActive },
-      t
+      t,
     } = this.props;
     const options = [
       { value: '', label: t('users.list.item.role.all') },
       { value: 'user', label: t('users.list.item.role.user') },
-      { value: 'admin', label: t('users.list.item.role.admin') }
+      { value: 'admin', label: t('users.list.item.role.admin') },
     ];
     return (
       <View style={styles.container}>
@@ -177,7 +175,7 @@ class UsersFilterView extends React.PureComponent {
               mode="dropdown"
               data={options}
               selectedValue={role}
-              onChange={value => this.handleRole(value)}
+              onChange={(value) => this.handleRole(value)}
               okText={t('users.select.okText')}
               dismissText={t('users.select.dismissText')}
               cols={1}
@@ -213,23 +211,23 @@ class UsersFilterView extends React.PureComponent {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   itemAction: lookStyles.itemAction,
   itemContainer: lookStyles.itemContainer,
   itemTitle: lookStyles.itemTitle,
   itemSelect: {
-    flex: 2
+    flex: 2,
   },
   iconStyle: {
-    color: '#000'
+    color: '#000',
   },
   buttonWrapper: {
-    marginTop: 10
+    marginTop: 10,
   },
   listWrapper: {
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 });
 
 export default translate('user')(UsersFilterView);

@@ -12,17 +12,17 @@ const registerUser = async ({ id, emails: [{ value }] }) => {
     username: value,
     email: value,
     password: id,
-    isActive: true
+    isActive: true,
   });
 };
 
-const createGoogleOAuth = async user => User.createGoogleOAuth(user);
+const createGoogleOAuth = async (user) => User.createGoogleOAuth(user);
 
 async function verifyCallback(accessToken, refreshToken, profile, cb) {
   const {
     id,
     displayName,
-    emails: [{ value }]
+    emails: [{ value }],
   } = profile;
 
   try {
@@ -37,8 +37,8 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
         id: createdUserId,
         profile: {
           firstName: profile.name.givenName,
-          lastName: profile.name.familyName
-        }
+          lastName: profile.name.familyName,
+        },
       });
 
       user = await User.getUser(createdUserId);
@@ -55,8 +55,8 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
 export const googleData = {
   google: {
     onAuthenticationSuccess,
-    verifyCallback
-  }
+    verifyCallback,
+  },
 };
 
 export default settings.auth.social.google.enabled && !__TEST__

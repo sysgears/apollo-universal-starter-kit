@@ -9,7 +9,7 @@ import { Table, Button } from '@gqlapp/look-client-react';
 const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
   const [errors, setErrors] = useState([]);
 
-  const handleDeleteUser = async id => {
+  const handleDeleteUser = async (id) => {
     const result = await deleteUser(id);
     if (result && result.errors) {
       setErrors(result.errors);
@@ -18,16 +18,14 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
     }
   };
 
-  const renderOrderByArrow = name => {
+  const renderOrderByArrow = (name) => {
     if (orderBy && orderBy.column === name) {
       if (orderBy.order === 'desc') {
         return <span className="badge badge-primary">&#8595;</span>;
-      } else {
-        return <span className="badge badge-primary">&#8593;</span>;
       }
-    } else {
-      return <span className="badge badge-secondary">&#8645;</span>;
+      return <span className="badge badge-primary">&#8593;</span>;
     }
+    return <span className="badge badge-secondary">&#8645;</span>;
   };
 
   const handleOrderBy = (e, name) => {
@@ -40,7 +38,7 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
       } else if (orderBy.order === 'desc') {
         return onOrderBy({
           column: '',
-          order: ''
+          order: '',
         });
       }
     }
@@ -51,7 +49,7 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
   const columns = [
     {
       title: (
-        <a onClick={e => handleOrderBy(e, 'username')} href="#">
+        <a onClick={(e) => handleOrderBy(e, 'username')} href="#">
           {t('users.column.name')} {renderOrderByArrow('username')}
         </a>
       ),
@@ -61,35 +59,35 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
         <Link className="user-link" to={`/users/${record.id}`}>
           {text}
         </Link>
-      )
+      ),
     },
     {
       title: (
-        <a onClick={e => handleOrderBy(e, 'email')} href="#">
+        <a onClick={(e) => handleOrderBy(e, 'email')} href="#">
           {t('users.column.email')} {renderOrderByArrow('email')}
         </a>
       ),
       dataIndex: 'email',
-      key: 'email'
+      key: 'email',
     },
     {
       title: (
-        <a onClick={e => handleOrderBy(e, 'role')} href="#">
+        <a onClick={(e) => handleOrderBy(e, 'role')} href="#">
           {t('users.column.role')} {renderOrderByArrow('role')}
         </a>
       ),
       dataIndex: 'role',
-      key: 'role'
+      key: 'role',
     },
     {
       title: (
-        <a onClick={e => handleOrderBy(e, 'isActive')} href="#">
+        <a onClick={(e) => handleOrderBy(e, 'isActive')} href="#">
           {t('users.column.active')} {renderOrderByArrow('isActive')}
         </a>
       ),
       dataIndex: 'isActive',
       key: 'isActive',
-      render: text => text.toString()
+      render: (text) => text.toString(),
     },
     {
       title: t('users.column.actions'),
@@ -98,8 +96,8 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
         <Button color="primary" size="sm" onClick={() => handleDeleteUser(record.id)}>
           {t('users.btn.delete')}
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   return (
@@ -109,7 +107,7 @@ const UsersView = ({ deleteUser, orderBy, onOrderBy, loading, users, t }) => {
       ) : (
         <>
           {errors &&
-            errors.map(error => (
+            errors.map((error) => (
               <div className="alert alert-danger" role="alert" key={error.field}>
                 {error.message}
               </div>
@@ -127,7 +125,7 @@ UsersView.propTypes = {
   orderBy: PropTypes.object,
   onOrderBy: PropTypes.func.isRequired,
   deleteUser: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('user')(UsersView);

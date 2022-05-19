@@ -2,7 +2,7 @@ import { createBatchResolver } from 'graphql-resolve-batch';
 import { PubSub } from 'graphql-subscriptions';
 import { TranslationFunction } from 'i18next';
 import ServerModule from '@gqlapp/module-server-ts';
-import { FileSystemStorage, UploadFileStream } from '@gqlapp/upload-server-ts';
+import { UploadFileStream } from '@gqlapp/upload-server-ts';
 import settings from '@gqlapp/config';
 
 import ChatDAO, { Message, Identifier } from './sql';
@@ -40,7 +40,7 @@ export const onAppCreate = async (modules: ServerModule) => (ref.modules = modul
 export default (pubsub: PubSub) => ({
   Query: {
     async messages(obj: any, { limit, after }: { limit: number; after: number }, { Chat }: ChatContext) {
-      const edgesArray: Array<{ cursor: number; node: Message }> = [];
+      const edgesArray: { cursor: number; node: Message }[] = [];
       const messages = await Chat.messagesPagination(limit, after);
 
       messages.map((message: Message, index: number) => {
@@ -56,25 +56,25 @@ export default (pubsub: PubSub) => ({
         edges: edgesArray.reverse(),
         pageInfo: {
           endCursor,
-          hasNextPage
-        }
+          hasNextPage,
+        },
       };
     },
     message(obj: any, { id }: Identifier, { Chat }: ChatContext) {
       return Chat.message(id);
-    }
+    },
   },
   Message: {
     quotedMessage: createBatchResolver((sources, args, context) => {
       return context.Chat.getQuatedMessages(sources.map(({ quotedId }) => quotedId));
-    })
+    }),
   },
   Mutation: {
     async addMessage(obj: any, { input }: AddMessageParams, { Chat, user, req }: ChatContext) {
       const { t } = req;
       const { attachment } = input;
       const userId = user ? user.id : null;
-      const fileSystemStorage: FileSystemStorage = ref.modules.appContext.fileSystemStorage;
+      const { fileSystemStorage } = ref.modules.appContext;
 
       if (!fileSystemStorage) {
         throw new Error(t('chat:messageNotAdded'));
@@ -90,7 +90,7 @@ export default (pubsub: PubSub) => ({
     },
     async deleteMessage(obj: any, { id }: Identifier, { Chat, req }: ChatContext) {
       const { t } = req;
-      const fileSystemStorage: FileSystemStorage = ref.modules.appContext.fileSystemStorage;
+      const { fileSystemStorage } = ref.modules.appContext;
       const message = await Chat.message(id);
       const attachment = await Chat.attachment(id);
       const isDeleted = await Chat.deleteMessage(id);
@@ -108,23 +108,22 @@ export default (pubsub: PubSub) => ({
         // publish for message list
         pubsub.publish(MESSAGES_SUBSCRIPTION, { messagesUpdated: { mutation: 'DELETED', id, node: message } });
         return { id: message.id };
-      } else {
-        return { id: null };
       }
+      return { id: null };
     },
     async editMessage(obj: any, { input }: EditMessageParams, { Chat }: ChatContext) {
       await Chat.editMessage(input);
       const message = await Chat.message(input.id);
       // publish for post list
       pubsub.publish(MESSAGES_SUBSCRIPTION, {
-        messagesUpdated: { mutation: 'UPDATED', id: message.id, node: message }
+        messagesUpdated: { mutation: 'UPDATED', id: message.id, node: message },
       });
       return message;
-    }
+    },
   },
   Subscription: {
     messagesUpdated: {
-      subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION)
-    }
-  }
+      subscribe: () => pubsub.asyncIterator(MESSAGES_SUBSCRIPTION),
+    },
+  },
 });

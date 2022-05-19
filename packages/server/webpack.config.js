@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const webpack = require('webpack');
 const path = require('path');
 
@@ -18,31 +17,31 @@ const config = {
   entry: {
     index: (process.env.NODE_ENV !== 'production' ? ['webpack/hot/poll?200'] : []).concat([
       'raf/polyfill',
-      './src/index.ts'
-    ])
+      './src/index.ts',
+    ]),
   },
   name: 'server',
   module: {
     rules: [
       {
         test: /\.(png|ico|jpg|gif|xml)$/,
-        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
+        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } },
       },
       {
         test: /\.woff(2)?(\?[0-9a-z]+)?$/,
-        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } }
+        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } },
       },
       {
         test: /\.(otf|ttf|eot|svg)(\?[0-9a-z]+)?$/,
-        use: { loader: 'file-loader', options: { name: '[hash].[ext]' } }
+        use: { loader: 'file-loader', options: { name: '[hash].[ext]' } },
       },
       {
         test: /\.css$/,
         use: [
           { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
-          { loader: 'postcss-loader', options: { sourceMap: true } }
-        ]
+          { loader: 'postcss-loader', options: { sourceMap: true } },
+        ],
       },
       {
         test: /\.scss$/,
@@ -50,8 +49,8 @@ const config = {
           { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
-          { loader: 'sass-loader', options: { sourceMap: true } }
-        ]
+          { loader: 'sass-loader', options: { sourceMap: true } },
+        ],
       },
       {
         test: /\.less$/,
@@ -59,8 +58,8 @@ const config = {
           { loader: 'isomorphic-style-loader' },
           { loader: 'css-loader', options: { sourceMap: true } },
           { loader: 'postcss-loader', options: { sourceMap: true } },
-          { loader: 'less-loader', options: { javascriptEnabled: true, sourceMap: true } }
-        ]
+          { loader: 'less-loader', options: { javascriptEnabled: true, sourceMap: true } },
+        ],
       },
       { test: /\.graphqls/, use: { loader: 'raw-loader' } },
       { test: /\.(graphql|gql)$/, use: [{ loader: 'graphql-tag/loader' }] },
@@ -68,12 +67,12 @@ const config = {
         test: /\.[tj]sx?$/,
         use: {
           loader: 'babel-loader',
-          options: { babelrc: true, rootMode: 'upward-optional' }
-        }
+          options: { babelrc: true, rootMode: 'upward-optional' },
+        },
       },
-      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } }
+      { test: /locales/, use: { loader: '@alienfast/i18next-loader' } },
     ],
-    unsafeCache: false
+    unsafeCache: false,
   },
   resolve: {
     symlinks: false,
@@ -90,8 +89,8 @@ const config = {
       '.jsx',
       '.ts',
       '.tsx',
-      '.json'
-    ]
+      '.json',
+    ],
   },
   watchOptions: { ignored: /build/ },
   output: {
@@ -99,7 +98,7 @@ const config = {
     filename: '[name].js',
     path: path.join(__dirname, 'build'),
     publicPath: '/',
-    sourceMapFilename: '[name].[chunkhash].js.map'
+    sourceMapFilename: '[name].[chunkhash].js.map',
   },
   devtool: process.env.NODE_ENV === 'production' ? '#nosources-source-map' : '#cheap-module-source-map',
   mode: process.env.NODE_ENV || 'development',
@@ -113,27 +112,27 @@ const config = {
     new webpack.DefinePlugin(
       Object.assign(
         ...Object.entries(buildConfig).map(([k, v]) => ({
-          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`
+          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`,
         }))
       )
     ),
     new HardSourceWebpackPlugin({
-      cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`)
-    })
+      cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`),
+    }),
   ]),
   target: 'node',
   externals: [
     nodeExternals(),
     nodeExternals({
       modulesDir: path.resolve(__dirname, '../../node_modules'),
-      whitelist: [modulenameRegex]
-    })
+      whitelist: [modulenameRegex],
+    }),
   ],
   optimization: {
     concatenateModules: false,
-    minimize: false
+    minimize: false,
   },
-  node: { __dirname: true, __filename: true }
+  node: { __dirname: true, __filename: true },
 };
 
 module.exports = config;

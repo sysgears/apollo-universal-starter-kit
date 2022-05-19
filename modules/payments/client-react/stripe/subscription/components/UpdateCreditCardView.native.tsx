@@ -12,7 +12,7 @@ interface UpdateCardViewProps {
   error: string | null;
 }
 
-export default (props: UpdateCardViewProps) => {
+const UpdateCreditCard = (props: UpdateCardViewProps) => {
   const { t } = props;
 
   return (
@@ -29,17 +29,19 @@ export default (props: UpdateCardViewProps) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
   },
   textWrapper: {
-    margin: 10
+    margin: 10,
   },
   infoText: {
     fontSize: 18,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   cardFormWrapper: {
     padding: 10,
-    margin: 10
-  }
+    margin: 10,
+  },
 });
+
+export default UpdateCreditCard;

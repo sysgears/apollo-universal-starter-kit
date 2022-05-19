@@ -13,7 +13,7 @@ const CardFooter = ({ content, ...props }) => {
 };
 
 CardFooter.propTypes = {
-  content: PropTypes.string
+  content: PropTypes.string,
 };
 
 export default CardFooter;

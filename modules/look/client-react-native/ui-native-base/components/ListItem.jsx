@@ -13,7 +13,7 @@ const ListItem = ({ children, onPress, onClick, ...props }) => {
 ListItem.propTypes = {
   children: PropTypes.node,
   onClick: PropTypes.func,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
 };
 
 export default ListItem;

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as uuidGenerator from 'uuid';
 
-export default Component => {
+export default (Component) => {
   function MessageFormatter(props) {
     const { messages } = props;
 
@@ -10,7 +10,7 @@ export default Component => {
       const formattedEdges = messages.edges
         .map(
           ({
-            node: { id, text, userId, username, createdAt, uuid, quotedId, image, path, filename, quotedMessage }
+            node: { id, text, userId, username, createdAt, uuid, quotedId, image, path, filename, quotedMessage },
           }) => ({
             _id: id || uuidGenerator.v4(),
             text,
@@ -21,17 +21,16 @@ export default Component => {
             filename,
             quotedMessage,
             image,
-            loadingImage: path && !image
+            loadingImage: path && !image,
           })
         )
         .reverse();
       return <Component {...props} messages={{ ...props.messages, edges: formattedEdges }} />;
-    } else {
-      return <Component {...props} />;
     }
+    return <Component {...props} />;
   }
   MessageFormatter.propTypes = {
-    messages: PropTypes.object
+    messages: PropTypes.object,
   };
   return MessageFormatter;
 };

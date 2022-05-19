@@ -9,7 +9,7 @@ const {
   computePackagePath,
   computeModulePackageName,
   removeSymlink,
-  runPrettier
+  runPrettier,
 } = require('../helpers/util');
 
 /**
@@ -36,7 +36,7 @@ function deleteModule({ logger, packageName, moduleName, old }) {
   }
 }
 
-////////// DELETE MODULE STEPS //////////
+/// /////// DELETE MODULE STEPS //////////
 
 /**
  * Removes templates from the module.
@@ -75,7 +75,7 @@ function removeFromModules({ logger, moduleName, packageName, modulePackageName,
   // Extract application modules
   const appModuleRegExp = /Module\(([^()]+)\)/g;
   const [, appModules] = appModuleRegExp.exec(indexContent) || ['', ''];
-  const appModulesWithoutDeleted = appModules.split(',').filter(appModule => appModule.trim() !== moduleName);
+  const appModulesWithoutDeleted = appModules.split(',').filter((appModule) => appModule.trim() !== moduleName);
 
   const contentWithoutDeletedModule = indexContent
     .toString()
@@ -97,7 +97,7 @@ function removeFromModules({ logger, moduleName, packageName, modulePackageName,
 function removeDependency({ moduleName, packageName, modulePackageName, old }) {
   // Get package content
   const packagePath = computePackagePath(packageName);
-  const packageContent = `` + fs.readFileSync(packagePath);
+  const packageContent = `${fs.readFileSync(packagePath)}`;
 
   // Extract dependencies
   const dependenciesRegExp = /"dependencies":\s\{([^()]+)\},\n\s+"devDependencies"/g;
@@ -106,7 +106,7 @@ function removeDependency({ moduleName, packageName, modulePackageName, old }) {
   // Remove package
   const dependenciesWithoutDeleted = dependencies
     .split(',')
-    .filter(pkg => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
+    .filter((pkg) => !pkg.includes(computeModulePackageName(moduleName, modulePackageName, old)));
 
   // Remove module from package list
   shell

@@ -6,5 +6,5 @@ import resources from './locales';
 export default new ServerModule({
   schema: [schema],
   createResolversFunc: [createResolvers],
-  localization: [{ ns: 'contact', resources }]
+  localization: [{ ns: 'contact', resources }],
 });

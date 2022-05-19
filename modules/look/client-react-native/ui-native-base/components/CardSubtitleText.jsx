@@ -17,7 +17,7 @@ const CardSubtitleText = ({ children, style, ...props }) => {
 
 CardSubtitleText.propTypes = {
   children: PropTypes.string,
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 };
 
 const styles = StyleSheet.create(SubtitleTextStyles);

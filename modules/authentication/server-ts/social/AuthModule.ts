@@ -1,11 +1,10 @@
+import { foldTo } from 'fractal-objects';
 import ServerModule, { ServerModuleShape } from '@gqlapp/module-server-ts';
 
-interface AuthModuleShape extends ServerModuleShape {}
-
-interface AuthModule extends AuthModuleShape {}
-class AuthModule extends ServerModule {
-  constructor(...modules: AuthModuleShape[]) {
+class AuthModule extends ServerModule implements ServerModuleShape {
+  constructor(...modules: ServerModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 }
 

@@ -5,5 +5,5 @@ import ServerCounter from './containers/ServerCounter';
 
 export default new CounterModule({
   localization: [{ ns: 'serverCounter', resources }],
-  counterComponent: [<ServerCounter />]
+  counterComponent: [<ServerCounter />],
 });

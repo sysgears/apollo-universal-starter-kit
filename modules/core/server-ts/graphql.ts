@@ -13,7 +13,7 @@ export default (schema: GraphQLSchema, modules: ServerModule) => {
     context: async ({ req, res }: { req: Request; res: Response }) => ({
       ...(await modules.createContext(req, res)),
       req,
-      res
+      res,
     }),
     formatError: (error: ApolloError) =>
       error.message === 'Not Authenticated!' ? new AuthenticationError(error.message) : error,
@@ -24,6 +24,6 @@ export default (schema: GraphQLSchema, modules: ServerModule) => {
     tracing: !!settings.engine.apiKey,
     cacheControl: !!settings.engine.apiKey,
     engine: settings.engine.apiKey ? { apiKey: settings.engine.apiKey } : false,
-    playground: false
+    playground: false,
   });
 };

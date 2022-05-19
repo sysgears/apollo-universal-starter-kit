@@ -33,8 +33,8 @@ export default () => ({
 
       return {
         accessToken,
-        refreshToken
+        refreshToken,
       };
-    }
-  }
+    },
+  },
 });

@@ -1,17 +1,20 @@
+import { foldTo } from 'fractal-objects';
 import { ApolloClient } from 'apollo-client';
 
 import ClientModule, { ClientModuleShape } from '@gqlapp/module-client-react';
 
 export interface AccessModuleShape extends ClientModuleShape {
-  login?: Array<(client: ApolloClient<any>) => Promise<void>>;
-  logout?: Array<(client: ApolloClient<any>) => Promise<void>>;
+  login?: ((client: ApolloClient<any>) => Promise<void>)[];
+  logout?: ((client: ApolloClient<any>) => Promise<void>)[];
 }
 
-interface AccessModule extends AccessModuleShape {}
+class AccessModule extends ClientModule implements AccessModuleShape {
+  login?: ((client: ApolloClient<any>) => Promise<void>)[];
+  logout?: ((client: ApolloClient<any>) => Promise<void>)[];
 
-class AccessModule extends ClientModule {
   constructor(...modules: AccessModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   public async doLogin(client: ApolloClient<any>) {

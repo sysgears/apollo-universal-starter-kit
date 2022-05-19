@@ -24,7 +24,7 @@ if (!process.env.JEST_WORKER_ID) {
   // Needed by Formik >= 1.x
   (global as any).HTMLButtonElement = dom.window.HTMLButtonElement;
   (global as any).navigator = dom.window.navigator;
-  process.on('uncaughtException', ex => {
+  process.on('uncaughtException', (ex) => {
     console.error('Uncaught error', ex.stack);
   });
 }
@@ -40,9 +40,13 @@ export const initRenderer = (graphqlTypeDefs: DocumentNode[], clientModules: Cli
 
 class MockLink extends ApolloLink {
   private schema: GraphQLSchema;
+
   private handlers: any[];
+
   private subscriptions: any;
+
   private subscriptionQueries: any;
+
   private subId: number;
 
   constructor(schema: GraphQLSchema) {
@@ -57,19 +61,19 @@ class MockLink extends ApolloLink {
   public request(request: Operation) {
     const operationAST = getOperationAST(request.query, request.operationName);
     if (!!operationAST && operationAST.operation === 'subscription') {
-      return new Observable(observer => {
+      return new Observable((observer) => {
         try {
           const subId = this.subId++;
           const queryStr = print(request.query);
           const key = JSON.stringify({
             query: queryStr,
-            variables: request.variables
+            variables: request.variables,
           });
           this.handlers[subId] = {
             handler: observer,
             key,
             query: queryStr,
-            variables: request.variables
+            variables: request.variables,
           };
           this.subscriptions[key] = this.subscriptions[key] || [];
           this.subscriptions[key].push(subId);
@@ -96,22 +100,21 @@ class MockLink extends ApolloLink {
           console.error(e);
         }
       });
-    } else {
-      return new Observable(observer => {
-        graphql(this.schema, print(request.query), {}, {}, request.variables, request.operationName)
-          .then(data => {
-            if (!observer.closed) {
-              observer.next(data);
-              observer.complete();
-            }
-          })
-          .catch(error => {
-            if (!observer.closed) {
-              observer.error(error);
-            }
-          });
-      });
     }
+    return new Observable((observer) => {
+      graphql(this.schema, print(request.query), {}, {}, request.variables, request.operationName)
+        .then((data) => {
+          if (!observer.closed) {
+            observer.next(data);
+            observer.complete();
+          }
+        })
+        .catch((error) => {
+          if (!observer.closed) {
+            observer.error(error);
+          }
+        });
+    });
   }
 
   public _getSubscriptions(query: DocumentNode, variables?: any) {
@@ -121,11 +124,11 @@ class MockLink extends ApolloLink {
     const queryStr = print(addTypenameToDocument(query));
     const key = JSON.stringify({
       query: queryStr,
-      variables: variables || {}
+      variables: variables || {},
     });
     const subscriptions = (!variables ? this.subscriptionQueries[queryStr] : this.subscriptions[key]) || [];
 
-    const handlers = this.handlers;
+    const { handlers } = this;
 
     return subscriptions.map((subId: number) => {
       const res = {
@@ -134,7 +137,7 @@ class MockLink extends ApolloLink {
         },
         error(errorValue: any) {
           return handlers[subId].handler.error(errorValue);
-        }
+        },
       };
       (res as any).variables = handlers[subId].variables;
       return res;
@@ -144,13 +147,16 @@ class MockLink extends ApolloLink {
 
 export class Renderer {
   private client: ApolloClient<any>;
+
   private store: Store;
+
   public history: MemoryHistory<any>;
+
   private mockLink: MockLink;
 
   constructor(graphqlMocks: any, reduxState?: any, resolvers?: any) {
     const schema = makeExecutableSchema({
-      typeDefs: ref.typeDefs
+      typeDefs: ref.typeDefs,
     });
     addMockFunctionsToSchema({ schema, mocks: graphqlMocks });
 
@@ -159,12 +165,12 @@ export class Renderer {
     const client = createApolloClient({
       createNetLink: () => schemaLink,
       createLink: ref.clientModules.createLink,
-      clientResolvers: resolvers || ref.clientModules.resolvers
+      clientResolvers: resolvers || ref.clientModules.resolvers,
     });
 
     const store = createStore(
       combineReducers({
-        ...ref.clientModules.reducers
+        ...ref.clientModules.reducers,
       }),
       reduxState || {}
     );

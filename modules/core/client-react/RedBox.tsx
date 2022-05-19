@@ -1,6 +1,5 @@
 import React from 'react';
-import ErrorStackParser from 'error-stack-parser';
-import { StackFrame } from 'error-stack-parser';
+import ErrorStackParser, { StackFrame } from 'error-stack-parser';
 import { mapStackTrace } from 'sourcemapped-stacktrace';
 
 import settings from '@gqlapp/config';
@@ -42,7 +41,7 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
     const { frame: frameStyle, file, linkToFile } = styles;
 
     return frames.map((frame: StackFrame, index: number) => {
-      const text: string = `at ${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
+      const text = `at ${frame.fileName}:${frame.lineNumber}:${frame.columnNumber}`;
       const url: string = format(
         settings.app.stackFragmentFormat,
         frame.fileName,
@@ -64,7 +63,7 @@ export default class RedBox extends React.Component<RedBoxProps, RedBoxState> {
   }
 
   public render() {
-    const error: Error = this.props.error;
+    const { error } = this.props;
     const { redbox, message, stack, frame } = styles;
     let frames: any;
 
@@ -113,24 +112,24 @@ const styles: any = {
     textAlign: 'left',
     fontSize: '16px',
     lineHeight: 1.2,
-    overflow: 'auto'
+    overflow: 'auto',
   },
   message: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   stack: {
     fontFamily: 'monospace',
-    marginTop: '2em'
+    marginTop: '2em',
   },
   frame: {
-    marginTop: '1em'
+    marginTop: '1em',
   },
   file: {
     fontSize: '0.8em',
-    color: 'rgba(255, 255, 255, 0.7)'
+    color: 'rgba(255, 255, 255, 0.7)',
   },
   linkToFile: {
     textDecoration: 'none',
-    color: 'rgba(255, 255, 255, 0.7)'
-  }
+    color: 'rgba(255, 255, 255, 0.7)',
+  },
 };

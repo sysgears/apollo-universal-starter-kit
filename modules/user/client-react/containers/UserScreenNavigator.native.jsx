@@ -14,7 +14,7 @@ class UserScreenNavigator extends React.Component {
     currentUser: PropTypes.object,
     context: PropTypes.object,
     currentUserLoading: PropTypes.bool.isRequired,
-    routeConfigs: PropTypes.array
+    routeConfigs: PropTypes.array,
   };
 
   shouldComponentUpdate(nextProps) {
@@ -37,13 +37,13 @@ class UserScreenNavigator extends React.Component {
   navItemsFilter = () => {
     const { currentUser, currentUserLoading, routeConfigs } = this.props;
 
-    const userFilter = value => {
+    const userFilter = (value) => {
       if (!value.userInfo) return true;
       const { showOnLogin, role } = value.userInfo;
       return showOnLogin && (!role || (Array.isArray(role) ? role : [role]).includes(currentUser.role));
     };
 
-    const guestFilter = value => !value.userInfo || (value.userInfo && !value.userInfo.showOnLogin);
+    const guestFilter = (value) => !value.userInfo || (value.userInfo && !value.userInfo.showOnLogin);
 
     return routeConfigs.filter(currentUser && !currentUserLoading ? userFilter : guestFilter);
   };
@@ -57,15 +57,15 @@ class UserScreenNavigator extends React.Component {
     return this.props.currentUserLoading ? null : (
       <NavigationContainer>
         <Drawer.Navigator initialRouteName={this.getInitialRoute()}>
-          {this.navItemsFilter().map(x => x.screen)}
+          {this.navItemsFilter().map((x) => x.screen)}
         </Drawer.Navigator>
       </NavigationContainer>
     );
   }
 }
 
-const drawerNavigator = routeConfigs => {
-  const withRoutes = Component => {
+const drawerNavigator = (routeConfigs) => {
+  const withRoutes = (Component) => {
     const ownProps = { routeConfigs };
     const WithRoutesComponent = ({ ...props }) => <Component {...props} {...ownProps} />;
     return WithRoutesComponent;

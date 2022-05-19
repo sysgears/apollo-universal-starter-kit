@@ -8,12 +8,12 @@ import grouping from './grouping';
 import joinBuilder from './joins';
 import filterBuilder from './filters';
 
-/*eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars */
 
 export default function selectAdapter(options) {
   // defaults and local options obj
   const opts = {
-    name: options.name || options.table + ' - selectAdapter',
+    name: options.name || `${options.table} - selectAdapter`,
     table: options.table,
     selects: options.selects || ['*'],
     idField: options.idField || 'id',
@@ -27,18 +27,18 @@ export default function selectAdapter(options) {
     count: options.count,
     countDistinct: options.countDistinct,
     onlyCount: options.onlyCount,
-    withCount: options.withCount
+    withCount: options.withCount,
   };
 
-  return async function(args, trx) {
+  return async function (args, trx) {
     try {
       // merge filters and joinClauses
       args.filters = [
         {
           prefilters: args.filters,
           postfiltersBool: args.mergeBool || 'and',
-          postfilters: opts.filters
-        }
+          postfilters: opts.filters,
+        },
       ];
       args.joins = opts.joins ? opts.joins.concat(args.joins) : args.joins;
       args.orderBys = opts.orderBys ? opts.orderBys.concat(args.orderBys) : args.orderBys;
@@ -56,7 +56,7 @@ export default function selectAdapter(options) {
       args.withCount = args.withCount ? args.withCount : opts.withCount;
 
       // local function
-      const makeBuilder = function(args, trx) {
+      const makeBuilder = function (args, trx) {
         let localBuilder = knex.select(...(args.selectOverride || opts.selects)).from(opts.table);
 
         // add join conditions
@@ -84,10 +84,10 @@ export default function selectAdapter(options) {
           console.log(`${opts.name} - SQL`, sql);
         }
 
-        let outerBuilderA = makeBuilder(args, trx).count(args.count);
+        const outerBuilderA = makeBuilder(args, trx).count(args.count);
 
         const countRes = await outerBuilderA;
-        const cnt = countRes[0]['count(`' + opts.idField + '`)'];
+        const cnt = countRes[0][`count(\`${opts.idField}\`)`];
         if (args.onlyCount) {
           return cnt;
         }
@@ -100,10 +100,10 @@ export default function selectAdapter(options) {
           console.log(`${opts.name} - SQL`, sql);
         }
 
-        let outerBuilderB = makeBuilder(args, trx).countDistinct(args.countDistinct);
+        const outerBuilderB = makeBuilder(args, trx).countDistinct(args.countDistinct);
 
         const countRes = await outerBuilderB;
-        const cnt = countRes[0]['count(`' + opts.idField + '`)'];
+        const cnt = countRes[0][`count(\`${opts.idField}\`)`];
         if (args.onlyCount) {
           return cnt;
         }

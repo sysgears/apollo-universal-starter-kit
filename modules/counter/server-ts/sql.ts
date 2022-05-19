@@ -8,14 +8,16 @@ export default class Counter extends Model {
 
       properties: {
         id: { type: 'integer' },
-        amount: { type: 'integer' }
-      }
+        amount: { type: 'integer' },
+      },
     };
   }
 
   // Table name is the only required property.
   public static tableName = 'counter';
+
   public id!: number;
+
   public amount!: number;
 
   public counterQuery() {

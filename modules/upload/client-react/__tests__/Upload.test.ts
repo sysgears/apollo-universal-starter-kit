@@ -17,6 +17,7 @@ describe('Upload UI works', () => {
     await waitForElement(() => dom.getByText('File name'));
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Should render on mount', async () => {
     await waitForElement(() => dom.getByText(RegExp('select files for upload')));
   });

@@ -22,7 +22,7 @@ export default class Main extends React.Component<MainProps> {
     LogBox.ignoreLogs([
       'Animated: `useNativeDriver`',
       'Animated.event now requires',
-      'ViewPropTypes will be removed from React Native'
+      'ViewPropTypes will be removed from React Native',
     ]);
   }
 
@@ -37,9 +37,9 @@ export default class Main extends React.Component<MainProps> {
     const store = createStore(
       Object.keys(modules.reducers).length > 0
         ? combineReducers({
-            ...modules.reducers
+            ...modules.reducers,
           })
-        : state => state,
+        : (state) => state,
       {} // initial state
     );
     const client = createApolloClient({
@@ -47,7 +47,7 @@ export default class Main extends React.Component<MainProps> {
       createNetLink: modules.createNetLink,
       createLink: modules.createLink,
       connectionParams: modules.connectionParams,
-      clientResolvers: modules.resolvers
+      clientResolvers: modules.resolvers,
     });
 
     if (!__TEST__ || settings.app.logging.level === 'debug') {

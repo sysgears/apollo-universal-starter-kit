@@ -20,18 +20,12 @@ interface SubscriptionProps {
 
 export default class StripeSubscriptionDAO {
   public async editSubscription({ userId, ...subscription }: SubscriptionProps) {
-    const subscriptionId = await knex('stripe_subscription')
-      .select('id')
-      .where({ user_id: userId })
-      .first();
+    const subscriptionId = await knex('stripe_subscription').select('id').where({ user_id: userId }).first();
 
     if (subscriptionId) {
-      return returnId(knex('stripe_subscription'))
-        .update(decamelizeKeys(subscription))
-        .where({ user_id: userId });
-    } else {
-      return returnId(knex('stripe_subscription')).insert(decamelizeKeys({ userId, ...subscription }));
+      return returnId(knex('stripe_subscription')).update(decamelizeKeys(subscription)).where({ user_id: userId });
     }
+    return returnId(knex('stripe_subscription')).insert(decamelizeKeys({ userId, ...subscription }));
   }
 
   public async getSubscription(userId: number): Promise<Subscription> {

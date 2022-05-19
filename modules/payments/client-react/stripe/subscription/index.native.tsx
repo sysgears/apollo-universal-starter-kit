@@ -24,7 +24,7 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
             <Stack.Navigator>
               <Stack.Screen
                 name="Subscription"
-                component={props => <SubscriptionAuthRouter {...props} component={SubscriberPage} />}
+                component={(props) => <SubscriptionAuthRouter {...props} component={SubscriberPage} />}
                 options={({ navigation }) => ({
                   headerTitle: () => <HeaderTitleWithI18n i18nKey="subscriberPage.title" style="subTitle" />,
                   headerLeft: () => (
@@ -35,12 +35,12 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
                       onPress={() => navigation.openDrawer()}
                     />
                   ),
-                  drawerLabel: () => <HeaderTitleWithI18n />
+                  drawerLabel: () => <HeaderTitleWithI18n />,
                 })}
               />
               <Stack.Screen
                 name="Update Credit Card"
-                component={props => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />}
+                component={(props) => <SubscriptionAuthRouter {...props} component={UpdateCreditCard} />}
                 options={({ navigation }) => ({
                   headerTitle: () => <HeaderTitleWithI18n i18nKey="update.title" style="subTitle" />,
                   // custom back button to User profile
@@ -52,7 +52,7 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
                       onPress={() => navigation.navigate('Profile')}
                     />
                   ),
-                  drawerLabel: () => <HeaderTitleWithI18n />
+                  drawerLabel: () => <HeaderTitleWithI18n />,
                 })}
               />
               <Stack.Screen
@@ -68,17 +68,17 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
                       onPress={() => navigation.openDrawer()}
                     />
                   ),
-                  drawerLabel: () => <HeaderTitleWithI18n />
+                  drawerLabel: () => <HeaderTitleWithI18n />,
                 })}
               />
             </Stack.Navigator>
           ),
           userInfo: {
             showOnLogin: true,
-            role: ['user']
-          }
-        }
+            role: ['user'],
+          },
+        },
       ],
-      localization: [{ ns: 'stripeSubscription', resources }]
+      localization: [{ ns: 'stripeSubscription', resources }],
     })
   : undefined;

@@ -15,8 +15,8 @@ const RegisterView = ({ t, onSubmit, isRegistered }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('reg.meta')}`
-        }
+          content: `${settings.app.name} - ${t('reg.meta')}`,
+        },
       ]}
     />
   );
@@ -48,7 +48,7 @@ const RegisterView = ({ t, onSubmit, isRegistered }) => {
 RegisterView.propTypes = {
   t: PropTypes.func,
   onSubmit: PropTypes.func,
-  isRegistered: PropTypes.bool
+  isRegistered: PropTypes.bool,
 };
 
 export default translate('user')(RegisterView);

@@ -13,7 +13,7 @@ export default new ClientModule({
   context: { upload: true },
   drawerItem: [
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="Upload"
           component={Upload}
@@ -23,12 +23,12 @@ export default new ClientModule({
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             ),
             headerStyle: { backgroundColor: '#fff' },
-            drawerLabel: () => <HeaderTitleWithI18n />
+            drawerLabel: () => <HeaderTitleWithI18n />,
           })}
         />
-      )
-    }
+      ),
+    },
   ],
   localization: [{ ns: 'upload', resources }],
-  createNetLink
+  createNetLink,
 });

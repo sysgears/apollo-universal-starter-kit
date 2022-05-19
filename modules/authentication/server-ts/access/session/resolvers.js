@@ -9,6 +9,6 @@ export default () => ({
       delete req.identity;
 
       req.session = writeSession(req, session);
-    }
-  }
+    },
+  },
 });

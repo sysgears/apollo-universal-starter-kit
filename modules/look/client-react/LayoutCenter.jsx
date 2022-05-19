@@ -22,7 +22,7 @@ const LayoutCenter = ({ children }) => {
 };
 
 LayoutCenter.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default LayoutCenter;

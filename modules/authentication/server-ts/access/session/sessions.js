@@ -3,12 +3,12 @@ import { log } from '@gqlapp/core-common';
 
 import { encryptSession, decryptSession } from './crypto';
 
-export const createSession = req => {
+export const createSession = (req) => {
   const session = writeSession(req, { csrfToken: crypto.randomBytes(16).toString('hex') });
   return session;
 };
 
-export const readSession = req => {
+export const readSession = (req) => {
   let session;
   if (__TEST__) {
     session = global.__TEST_SESSION__;
@@ -31,7 +31,7 @@ export const writeSession = (req, session) => {
     const cookieParams = {
       httpOnly: true,
       maxAge: 7 * 24 * 3600,
-      path: '/'
+      path: '/',
     };
     req.universalCookies.set('session', encryptSession(session), cookieParams);
     req.universalCookies.set('x-token', session.csrfToken, cookieParams);

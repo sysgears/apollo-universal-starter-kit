@@ -53,9 +53,9 @@ const SubscriptionFormWithFormik = withFormik<SubscriptionCardFormViewProps, any
       }
     });
   },
-  validate: values => validate(values, { name: [required] }),
+  validate: (values) => validate(values, { name: [required] }),
   displayName: 'StripeSubscriptionForm', // helps with React DevTools,
-  enableReinitialize: true
+  enableReinitialize: true,
 });
 
 export default injectStripe(SubscriptionFormWithFormik(SubscriptionCardFormView));

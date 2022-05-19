@@ -16,5 +16,5 @@ const MainRouter = () => {
 
 export default new ClientModule({
   router: <MainRouter />,
-  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)]
+  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)],
 });

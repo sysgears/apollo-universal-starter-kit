@@ -7,17 +7,17 @@
  *  - args (required, variable) see knex docs
  */
 export default function joinBuilder(queryBuilder, args) {
-  let { joins } = args;
+  const { joins } = args;
 
   // add group by
   if (joins) {
-    for (let clause of joins) {
+    for (const clause of joins) {
       if (clause) {
         if (clause.applyWhen && !clause.applyWhen(args)) {
           continue;
         }
-        let table = clause.table;
-        let joinArgs = clause.args;
+        const { table } = clause;
+        const joinArgs = clause.args;
         let join = clause.type;
         if (!join) {
           join = 'join';

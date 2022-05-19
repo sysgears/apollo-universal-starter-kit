@@ -9,7 +9,7 @@ const UsersFilterView = ({
   onSearchTextChange,
   onRoleChange,
   onIsActiveChange,
-  t
+  t,
 }) => (
   <Form layout="inline">
     <FormItem label={t('users.list.item.filter')}>
@@ -19,12 +19,12 @@ const UsersFilterView = ({
         placeholder={t('users.list.item.search')}
         element={Input}
         value={searchText}
-        onChange={e => onSearchTextChange(e.target.value)}
+        onChange={(e) => onSearchTextChange(e.target.value)}
       />
     </FormItem>
     &nbsp;
     <FormItem label={t('users.list.item.role.label')}>
-      <Select name="role" defaultValue={role} onChange={e => onRoleChange(e.target.value)}>
+      <Select name="role" defaultValue={role} onChange={(e) => onRoleChange(e.target.value)}>
         <Option key={1} value="">
           {t('users.list.item.role.all')}
         </Option>
@@ -51,7 +51,7 @@ UsersFilterView.propTypes = {
   onSearchTextChange: PropTypes.func.isRequired,
   onRoleChange: PropTypes.func.isRequired,
   onIsActiveChange: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('user')(UsersFilterView);

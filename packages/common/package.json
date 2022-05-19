@@ -3,9 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "eslint": "eslint --fix --ext js --ext jsx --ext json .",
-    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
-    "lint": "yarn eslint && yarn tslint"
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json ."
   },
   "dependencies": {
     "apollo-cache-inmemory": "1.4.2",
@@ -31,7 +29,7 @@
   "devDependencies": {
     "@types/i18next-browser-languagedetector": "^2.0.1",
     "chai": "^4.1.2",
-    "eslint": "^5.16.0",
+    "eslint": "^8.15.0",
     "jest": "^26.2.2"
   }
 }

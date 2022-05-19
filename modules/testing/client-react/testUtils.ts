@@ -8,7 +8,6 @@ const dom = new JSDOM('<!doctype html><html><body><div id="root"><div></body></h
 (global as any).HTMLButtonElement = dom.window.HTMLButtonElement;
 (global as any).navigator = dom.window.navigator;
 
-/* tslint:disable no-var-requires */
 const { prettyDOM } = require('@testing-library/dom');
 const { render, renderIntoDocument, wait, waitForElement, fireEvent, cleanup } = require('@testing-library/react');
 
@@ -72,5 +71,5 @@ export {
   click,
   change,
   submit,
-  blur
+  blur,
 };

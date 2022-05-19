@@ -16,7 +16,7 @@ const InputItem = ({ error, ...props }) => {
 };
 
 InputItem.propTypes = {
-  error: PropTypes.string
+  error: PropTypes.string,
 };
 
 const styles = StyleSheet.create(InputItemStyles);

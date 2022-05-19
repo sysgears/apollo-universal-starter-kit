@@ -1,4 +1,4 @@
-/*eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -13,7 +13,7 @@ import {
   List,
   ListItem,
   Loading,
-  primary
+  primary,
 } from '@gqlapp/look-client-react-native';
 
 const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
@@ -76,14 +76,14 @@ const UsersListView = ({ users, loading, navigation, deleteUser, t }) => {
 };
 
 UsersListView.propTypes = {
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   iconWrapper: {
     backgroundColor: 'transparent',
@@ -91,45 +91,45 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   buttonWrapper: {
     paddingHorizontal: 15,
-    marginBottom: 15
+    marginBottom: 15,
   },
   buttonContainer: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   listItem: {
     marginRight: 15,
-    paddingRight: 0
+    paddingRight: 0,
   },
   cardItem: {
-    flex: 9
+    flex: 9,
   },
   cardItemWrapper: {
     paddingTop: 5,
     paddingBottom: 5,
     flexDirection: 'column',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   notificationContainer: {
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   notificationText: {
     fontSize: 24,
-    fontWeight: '600'
-  }
+    fontWeight: '600',
+  },
 });
 
 UsersListView.propTypes = {
   users: PropTypes.array,
   navigation: PropTypes.object,
   deleteUser: PropTypes.func,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
 
 export default translate('user')(UsersListView);

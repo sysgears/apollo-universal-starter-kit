@@ -1,5 +1,5 @@
 export async function up(knex) {
-  return knex.schema.createTable('counter', table => {
+  return knex.schema.createTable('counter', (table) => {
     table.increments();
     table.integer('amount').notNull();
     table.timestamps(false, true);

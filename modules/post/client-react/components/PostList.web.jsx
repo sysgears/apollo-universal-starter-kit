@@ -23,7 +23,7 @@ const PostList = ({ loading, posts, t, loadData, deletePost }) => {
       title: t('list.column.title'),
       dataIndex: 'title',
       key: 'title',
-      render: (text, record) => <Link to={`/post/${record.id}`}>{text}</Link>
+      render: (text, record) => <Link to={`/post/${record.id}`}>{text}</Link>,
     },
     {
       title: t('list.column.actions'),
@@ -33,13 +33,13 @@ const PostList = ({ loading, posts, t, loadData, deletePost }) => {
         <Button color="primary" size="sm" onClick={() => deletePost(record.id)}>
           {t('post.btn.del')}
         </Button>
-      )
-    }
+      ),
+    },
   ];
 
   const handlePageChange = (pagination, pageNumber) => {
     const {
-      pageInfo: { endCursor }
+      pageInfo: { endCursor },
     } = posts;
     pagination === 'relay' ? loadData(endCursor + 1, 'add') : loadData((pageNumber - 1) * itemsNumber, 'replace');
   };
@@ -83,7 +83,7 @@ PostList.propTypes = {
   posts: PropTypes.object,
   deletePost: PropTypes.func.isRequired,
   loadData: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('post')(PostList);

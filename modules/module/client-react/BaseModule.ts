@@ -1,3 +1,4 @@
+import { foldTo } from 'fractal-objects';
 import React from 'react';
 import { merge } from 'lodash';
 import { ReducersMapObject } from 'redux';
@@ -23,12 +24,19 @@ export interface BaseModuleShape extends GraphQLModuleShape {
  */
 type RootComponentFactory = (req: Request) => React.ReactElement<any>;
 
-interface BaseModule extends BaseModuleShape {}
-
 /**
  * Base module ancestor for React and React Native feature modules.
  */
-class BaseModule extends GraphQLModule {
+class BaseModule extends GraphQLModule implements BaseModuleShape {
+  // Redux reducers list
+  reducer?: ReducersMapObject[];
+  // React element that does client-side routing, see `router` feature module
+  router?: React.ReactElement<any>;
+  // Root component factory list
+  rootComponentFactory?: RootComponentFactory[];
+  // Data root React elements list (data root elements wraps data fetching react subtree root)
+  dataRootComponent?: React.ComponentType[];
+
   /**
    * Constructs base module representation, that folds all the feature modules
    * into a single module represented by this instance.
@@ -37,6 +45,7 @@ class BaseModule extends GraphQLModule {
    */
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   /**

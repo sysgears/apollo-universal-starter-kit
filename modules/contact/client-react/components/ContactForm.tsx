@@ -1,10 +1,9 @@
 import React from 'react';
 import { withFormik, FormikProps } from 'formik';
-import { isFormError } from '@gqlapp/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { validate } from '@gqlapp/validation-common-react';
-import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
 import { Form, RenderField, Button, Alert } from '@gqlapp/look-client-react';
 import { ContactForm } from '../types';
@@ -19,7 +18,7 @@ const BaseContactForm = ({
   handleSubmit,
   t,
   status,
-  errors
+  errors,
 }: FormikProps<ContactForm> & ContactFormProps & { errors: { errorMsg: string } }) => (
   <Form name="contact" onSubmit={handleSubmit}>
     {status && status.sent && <Alert color="success">{t('successMsg')}</Alert>}
@@ -58,8 +57,8 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       setStatus({ sent: false });
     }
   },
-  validate: values => validate(values, contactFormSchema),
-  displayName: 'ContactUsForm' // helps with React DevTools
+  validate: (values) => validate(values, contactFormSchema),
+  displayName: 'ContactUsForm', // helps with React DevTools
 });
 
 export default ContactFormWithFormik(BaseContactForm);

@@ -1,10 +1,10 @@
-const root = __dirname + '/../../../../../..';
+const root = `${__dirname}/../../../../../..`;
 
 require('@babel/register')({
   root,
   cwd: root,
-  configFile: root + '/packages/server/babel.config.js',
-  extensions: ['.js', '.jsx', '.ts', '.tsx']
+  configFile: `${root}/packages/server/babel.config.js`,
+  extensions: ['.js', '.jsx', '.ts', '.tsx'],
 });
 require('dotenv/config');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -20,7 +20,7 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
    */
   const createProduct = async () => {
     const stripeProducts = await stripe.products.list({ limit: 100 });
-    let [stripeProduct] = stripeProducts.data.filter(stripeProduct => stripeProduct.name === product.name);
+    let [stripeProduct] = stripeProducts.data.filter((stripeProduct) => stripeProduct.name === product.name);
 
     if (!stripeProduct || (stripeProduct && stripeProduct.type !== product.type)) {
       stripeProduct = await stripe.products.create(product);
@@ -40,9 +40,9 @@ if (enabled && process.env.STRIPE_SECRET_KEY) {
    * @param product - Stripe product
    * @return {Promise<void>} - Stripe plan
    */
-  const createPlan = async product => {
+  const createPlan = async (product) => {
     const stripePlans = await stripe.plans.list({ limit: 100 });
-    let [stripePlan] = stripePlans.data.filter(stripePlan => stripePlan.id === plan.id);
+    let [stripePlan] = stripePlans.data.filter((stripePlan) => stripePlan.id === plan.id);
 
     if (stripePlan) {
       if (

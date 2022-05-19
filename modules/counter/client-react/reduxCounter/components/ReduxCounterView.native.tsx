@@ -19,12 +19,12 @@ export const ReduxCounterView = ({ text, children }: ViewProps) => (
 
 const styles = StyleSheet.create({
   element: {
-    paddingTop: 30
+    paddingTop: 30,
   },
   box: {
     textAlign: 'center',
-    marginBottom: 5
-  }
+    marginBottom: 5,
+  },
 });
 
 interface ButtonProps {

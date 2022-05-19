@@ -3,7 +3,7 @@ import { TouchableOpacity, StyleSheet } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
-const RenderCustomActions = props => {
+const RenderCustomActions = (props) => {
   const { pickImage } = props;
   return (
     <TouchableOpacity style={styles.container} onPress={() => pickImage(props)}>
@@ -13,7 +13,7 @@ const RenderCustomActions = props => {
 };
 
 RenderCustomActions.propTypes = {
-  pickImage: PropTypes.func
+  pickImage: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     width: 46,
     height: 46,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
 
   icon: {
-    color: '#000'
-  }
+    color: '#000',
+  },
 });
 
 export default RenderCustomActions;

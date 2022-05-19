@@ -7,35 +7,35 @@ import USERS_QUERY from '../graphql/UsersQuery.graphql';
 import DELETE_USER from '../graphql/DeleteUser.graphql';
 import UPDATE_FILTER from '../graphql/UpdateFilter.client.graphql';
 
-const withUsersState = Component =>
+const withUsersState = (Component) =>
   graphql(USERS_STATE_QUERY, {
     props({ data: { usersState } }) {
       return removeTypename(usersState);
-    }
+    },
   })(Component);
 
-const withUsers = Component =>
+const withUsers = (Component) =>
   graphql(USERS_QUERY, {
     options: ({ orderBy, filter }) => {
       return {
         fetchPolicy: 'network-only',
-        variables: { orderBy, filter }
+        variables: { orderBy, filter },
       };
     },
     props({ data: { loading, users, refetch, error, updateQuery, subscribeToMore } }) {
       return { loading, users, refetch, subscribeToMore, updateQuery, errors: error ? error.graphQLErrors : null };
-    }
+    },
   })(Component);
 
-const withUsersDeleting = Component =>
+const withUsersDeleting = (Component) =>
   graphql(DELETE_USER, {
     props: ({ mutate }) => ({
-      deleteUser: async id => {
+      deleteUser: async (id) => {
         try {
           const {
-            data: { deleteUser }
+            data: { deleteUser },
           } = await mutate({
-            variables: { id }
+            variables: { id },
           });
 
           if (deleteUser.errors) {
@@ -44,20 +44,20 @@ const withUsersDeleting = Component =>
         } catch (e) {
           log.error(e);
         }
-      }
-    })
+      },
+    }),
   })(Component);
 
-const withOrderByUpdating = Component =>
+const withOrderByUpdating = (Component) =>
   graphql(UPDATE_ORDER_BY, {
     props: ({ mutate }) => ({
-      onOrderBy: orderBy => {
+      onOrderBy: (orderBy) => {
         mutate({ variables: { orderBy } });
-      }
-    })
+      },
+    }),
   })(Component);
 
-const withFilterUpdating = Component =>
+const withFilterUpdating = (Component) =>
   graphql(UPDATE_FILTER, {
     props: ({ mutate }) => ({
       onSearchTextChange(searchText) {
@@ -68,13 +68,13 @@ const withFilterUpdating = Component =>
       },
       onIsActiveChange(isActive) {
         mutate({ variables: { filter: { isActive } } });
-      }
-    })
+      },
+    }),
   })(Component);
 
 const updateUsersState = (usersUpdated, updateQuery) => {
   const { mutation, node } = usersUpdated;
-  updateQuery(prev => {
+  updateQuery((prev) => {
     switch (mutation) {
       case 'CREATED':
         return addUser(prev, node);
@@ -90,27 +90,27 @@ const updateUsersState = (usersUpdated, updateQuery) => {
 
 function addUser(prev, node) {
   // check if it is duplicate
-  if (prev.users.some(user => user.id === node.id)) {
+  if (prev.users.some((user) => user.id === node.id)) {
     return prev;
   }
 
   return update(prev, {
     users: {
-      $set: [...prev.users, node]
-    }
+      $set: [...prev.users, node],
+    },
   });
 }
 
 function deleteUser(prev, id) {
-  const index = prev.users.findIndex(user => user.id === id);
+  const index = prev.users.findIndex((user) => user.id === id);
   // ignore if not found
   if (index < 0) {
     return prev;
   }
   return update(prev, {
     users: {
-      $splice: [[index, 1]]
-    }
+      $splice: [[index, 1]],
+    },
   });
 }
 

@@ -5,5 +5,5 @@ import CounterModule from '../CounterModule';
 
 export default new CounterModule({
   resolver: [resolvers],
-  counterComponent: [ClientCounter]
+  counterComponent: [ClientCounter],
 });

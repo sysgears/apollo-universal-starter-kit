@@ -17,7 +17,7 @@ class FieldAdapter extends Component {
     defaultValue: PropTypes.string,
     checked: PropTypes.bool,
     defaultChecked: PropTypes.bool,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 
   constructor(props) {
@@ -25,7 +25,7 @@ class FieldAdapter extends Component {
     this.props = props;
   }
 
-  onChange = e => {
+  onChange = (e) => {
     const { formik, onChange } = this.props;
 
     if (onChange) {
@@ -35,20 +35,18 @@ class FieldAdapter extends Component {
     }
   };
 
-  onBlur = e => {
+  onBlur = (e) => {
     const { formik, onBlur, name } = this.props;
     if (onBlur) {
       onBlur(e);
+    } else if (PLATFORM === 'mobile') {
+      formik.setFieldTouched(name, true);
     } else {
-      if (PLATFORM === 'mobile') {
-        formik.setFieldTouched(name, true);
-      } else {
-        formik.handleBlur(e);
-      }
+      formik.handleBlur(e);
     }
   };
 
-  onChangeText = value => {
+  onChangeText = (value) => {
     const { formik, onChangeText, onChange, name } = this.props;
     if (onChange && !onChangeText) {
       onChange(value);
@@ -66,7 +64,7 @@ class FieldAdapter extends Component {
     checked = checked || false;
     const meta = {
       touched: getPath(formik.touched, name),
-      error: getPath(formik.errors, name)
+      error: getPath(formik.errors, name),
     };
 
     const input = {
@@ -76,7 +74,7 @@ class FieldAdapter extends Component {
       checked,
       defaultValue,
       defaultChecked,
-      disabled
+      disabled,
     };
 
     const changeEventHandler = PLATFORM === 'mobile' ? 'onChangeText' : 'onChange';
@@ -85,7 +83,7 @@ class FieldAdapter extends Component {
     return React.createElement(component, {
       ...this.props,
       input,
-      meta
+      meta,
     });
   }
 }

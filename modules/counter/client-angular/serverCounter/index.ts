@@ -9,10 +9,10 @@ import { ServerCounterViewComponent, ServerCounterButtonComponent } from './comp
 @NgModule({
   imports: [CommonModule, LookModule],
   declarations: [ServerCounterButtonComponent, ServerCounterViewComponent],
-  exports: [ServerCounterButtonComponent, ServerCounterViewComponent]
+  exports: [ServerCounterButtonComponent, ServerCounterViewComponent],
 })
 class ServerCounterModule {}
 
 export default new CounterModule({
-  counterModule: [ServerCounterModule]
+  counterModule: [ServerCounterModule],
 });

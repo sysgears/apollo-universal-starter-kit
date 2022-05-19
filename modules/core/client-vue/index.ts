@@ -16,7 +16,7 @@ const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
     createNetLink,
     createLink,
     connectionParams,
-    clientResolvers: resolvers
+    clientResolvers: resolvers,
   });
 
   const { app } = createApp(entryModule, reducers, routes, client);
@@ -27,5 +27,5 @@ const onAppCreate = async (modules: ClientModule, entryModule: NodeModule) => {
 export { default as createApp } from './createApp';
 
 export default new ClientModule({
-  onAppCreate: [onAppCreate]
+  onAppCreate: [onAppCreate],
 });

@@ -26,7 +26,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
   constructor(props: UpdateCreditCardProps) {
     super(props);
     this.state = {
-      submitting: false
+      submitting: false,
     };
   }
 
@@ -45,7 +45,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
       history ? history.push('/profile') : navigation.navigate('Profile');
     } catch (e) {
       this.setState({
-        submitting: false
+        submitting: false,
       });
       if (isApolloError(e)) {
         if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
@@ -63,7 +63,7 @@ class UpdateCreditCard extends React.Component<UpdateCreditCardProps, { [key: st
     const { t } = this.props;
     return (
       <Mutation mutation={UPDATE_CREDIT_CARD} refetchQueries={[{ query: CREDIT_CARD_QUERY }]}>
-        {updateCard => {
+        {(updateCard) => {
           return (
             <Fragment>
               {__CLIENT__ && PLATFORM === 'web' ? (

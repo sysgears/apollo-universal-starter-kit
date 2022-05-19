@@ -20,8 +20,8 @@ const PaginationDemo = ({ t }) => {
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - ${t('meta')}`
-          }
+            content: `${settings.app.name} - ${t('meta')}`,
+          },
         ]}
       />
     );
@@ -35,7 +35,7 @@ const PaginationDemo = ({ t }) => {
     }
   };
 
-  const onPaginationTypeChange = e => {
+  const onPaginationTypeChange = (e) => {
     const paginationType = e.target.value;
     setPagination(paginationType);
     loadData(0, items.limit);
@@ -54,7 +54,7 @@ const PaginationDemo = ({ t }) => {
 };
 
 PaginationDemo.propTypes = {
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('pagination')(PaginationDemo);

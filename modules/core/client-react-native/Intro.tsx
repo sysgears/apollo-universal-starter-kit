@@ -6,18 +6,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   instructions: {
     color: '#333333',
     marginBottom: 5,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   welcome: {
     fontSize: 20,
     margin: 10,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 export default class Intro extends Component {

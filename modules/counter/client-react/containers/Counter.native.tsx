@@ -1,14 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
-import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { translate } from '@gqlapp/i18n-client-react';
 import counters from '../counters';
 
-interface CounterProps {
-  t: TranslateFunction;
-}
-
-const Counter = ({ t }: CounterProps) => (
+const Counter = () => (
   <View style={styles.container}>
     {counters.counterComponent.map((component: any, idx: number, items: any) =>
       React.cloneElement(component, { key: idx + items.length })
@@ -22,8 +18,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '#fff',
     justifyContent: 'center',
-    paddingHorizontal: 15
-  }
+    paddingHorizontal: 15,
+  },
 });
 
 export default translate('counter')(Counter);

@@ -20,8 +20,8 @@ export default new ClientModule({
   navItem: [
     <MenuItem key="/upload">
       <NavLinkWithI18n />
-    </MenuItem>
+    </MenuItem>,
   ],
   localization: [{ ns: 'upload', resources }],
-  createNetLink
+  createNetLink,
 });

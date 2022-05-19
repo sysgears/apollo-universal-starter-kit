@@ -12,16 +12,16 @@ const createNode = (id: number) => ({
   content: `Post content ${id}`,
   comments: [
     { id: id * 1000 + 1, content: 'Post comment 1', __typename: 'Comment' },
-    { id: id * 1000 + 2, content: 'Post comment 2', __typename: 'Comment' }
+    { id: id * 1000 + 2, content: 'Post comment 2', __typename: 'Comment' },
   ],
-  __typename: 'Post'
+  __typename: 'Post',
 });
 
 const mutations: any = {
   editPost: () => {},
   addComment: () => {},
   editComment: () => {},
-  onCommentSelect: () => {}
+  onCommentSelect: () => {},
 };
 
 const mocks = {
@@ -34,7 +34,7 @@ const mocks = {
         edges.push({
           cursor: i,
           node: createNode(i),
-          __typename: 'PostEdges'
+          __typename: 'PostEdges',
         });
       }
       return {
@@ -43,20 +43,20 @@ const mocks = {
         pageInfo: {
           endCursor: edges[edges.length - 1].cursor,
           hasNextPage: true,
-          __typename: 'PostPageInfo'
+          __typename: 'PostPageInfo',
         },
-        __typename: 'Posts'
+        __typename: 'Posts',
       };
     },
     post(obj: any, { id }: any) {
       return createNode(id);
-    }
+    },
   }),
   Mutation: () => ({
     deletePost: (obj: any, { id }: any) => createNode(id),
     deleteComment: (obj: any, { input }: any) => input,
-    ...mutations
-  })
+    ...mutations,
+  }),
 };
 
 describe('Posts and comments example UI works', () => {
@@ -106,9 +106,9 @@ describe('Posts and comments example UI works', () => {
           postsUpdated: {
             mutation: 'DELETED',
             node: createNode(2),
-            __typename: 'UpdatePostPayload'
-          }
-        }
+            __typename: 'UpdatePostPayload',
+          },
+        },
       });
     });
 
@@ -127,9 +127,9 @@ describe('Posts and comments example UI works', () => {
           postsUpdated: {
             mutation: 'CREATED',
             node: createNode(2),
-            __typename: 'UpdatePostPayload'
-          }
-        }
+            __typename: 'UpdatePostPayload',
+          },
+        },
       });
     });
 
@@ -189,11 +189,11 @@ describe('Posts and comments example UI works', () => {
               id: 3,
               title: 'Post title 203',
               content: 'Post content 204',
-              __typename: 'Post'
+              __typename: 'Post',
             },
-            __typename: 'UpdatePostPayload'
-          }
-        }
+            __typename: 'UpdatePostPayload',
+          },
+        },
       });
     });
 
@@ -270,11 +270,11 @@ describe('Posts and comments example UI works', () => {
             node: {
               id: 3003,
               content: 'Post comment 3',
-              __typename: 'Comment'
+              __typename: 'Comment',
             },
-            __typename: 'UpdateCommentPayload'
-          }
-        }
+            __typename: 'UpdateCommentPayload',
+          },
+        },
       });
     });
 
@@ -294,11 +294,11 @@ describe('Posts and comments example UI works', () => {
             node: {
               id: 3003,
               content: 'Post comment 3',
-              __typename: 'Comment'
+              __typename: 'Comment',
             },
-            __typename: 'UpdateCommentPayload'
-          }
-        }
+            __typename: 'UpdateCommentPayload',
+          },
+        },
       });
     });
 
@@ -325,7 +325,7 @@ describe('Posts and comments example UI works', () => {
     mutations.editComment = (obj: any, { input }: any) => (values = input);
 
     const editButtons = dom.getAllByText('Edit');
-    expect(dom.getByText('Post comment 2'));
+    expect(dom.getByText('Post comment 2')).toBeDefined();
     expect(editButtons).toHaveLength(2);
 
     act(() => {
@@ -343,6 +343,7 @@ describe('Posts and comments example UI works', () => {
     });
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Clicking back button takes to post list', async () => {
     const backButton = dom.getByText('Back');
     act(() => {

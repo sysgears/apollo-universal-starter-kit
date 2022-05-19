@@ -15,13 +15,13 @@ const PostCommentsView = ({
   onCommentSelect,
   deleteComment,
   addComment,
-  editComment
+  editComment,
 }) => {
   const columns = [
     {
       title: t('comment.column.content'),
       dataIndex: 'content',
-      key: 'content'
+      key: 'content',
     },
     {
       title: t('comment.column.actions'),
@@ -41,18 +41,18 @@ const PostCommentsView = ({
             {t('comment.btn.del')}
           </Button>
         </div>
-      )
-    }
+      ),
+    },
   ];
 
-  const handleDeleteComment = id => {
+  const handleDeleteComment = (id) => {
     if (comment.id === id) {
       onCommentSelect({ id: null, content: '' });
     }
     deleteComment(id);
   };
 
-  const onSubmit = () => values => {
+  const onSubmit = () => (values) => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -80,7 +80,7 @@ PostCommentsView.propTypes = {
   deleteComment: PropTypes.func.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
   onCommentSelect: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('post')(PostCommentsView);

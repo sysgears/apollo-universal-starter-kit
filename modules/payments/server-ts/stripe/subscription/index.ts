@@ -22,13 +22,13 @@ if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
   log.debug('Starting stripe-local proxy');
   stripeLocal({
     secretKey: process.env.STRIPE_SECRET_KEY,
-    webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}`
+    webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}`,
   });
 }
 
 const createContextFunc = async ({ req }: any) => ({
   StripeSubscription,
-  stripeSubscription: req && req.identity ? await StripeSubscription.getSubscription(req.identity.id) : null
+  stripeSubscription: req && req.identity ? await StripeSubscription.getSubscription(req.identity.id) : null,
 });
 
 const beforeware = (app: Express) => {
@@ -46,6 +46,6 @@ export default enabled
       createContextFunc: [createContextFunc],
       beforeware: [beforeware],
       middleware: [middleware],
-      localization: [{ ns: 'stripeSubscription', resources }]
+      localization: [{ ns: 'stripeSubscription', resources }],
     })
   : undefined;

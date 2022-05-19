@@ -18,8 +18,8 @@ const UserEditView = ({ loading, user, t, currentUser, onSubmit }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('userEdit.meta')}`
-        }
+          content: `${settings.app.name} - ${t('userEdit.meta')}`,
+        },
       ]}
     />
   );
@@ -52,7 +52,7 @@ UserEditView.propTypes = {
   user: PropTypes.object,
   currentUser: PropTypes.object,
   t: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
 };
 
 export default translate('user')(UserEditView);

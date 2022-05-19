@@ -1,11 +1,11 @@
-const root = __dirname + '/../../../..';
+const root = `${__dirname}/../../../..`;
 
 require('@babel/register')({
   root,
   cwd: root,
-  configFile: root + '/packages/server/babel.config.js',
+  configFile: `${root}/packages/server/babel.config.js`,
   extensions: ['.js', '.jsx', '.ts', '.tsx'],
-  cache: false
+  cache: false,
 });
 
 require.extensions['.scss'] = () => {};

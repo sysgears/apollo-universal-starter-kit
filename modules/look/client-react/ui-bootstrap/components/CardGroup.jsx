@@ -7,7 +7,7 @@ const CardGroup = ({ children, ...props }) => {
 };
 
 CardGroup.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default CardGroup;

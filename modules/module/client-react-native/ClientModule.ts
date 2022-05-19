@@ -1,6 +1,7 @@
+import { foldTo } from 'fractal-objects';
 import React from 'react';
 
-import BaseModule, { BaseModuleShape } from '@gqlapp/module-client-react';
+import { BaseModule, BaseModuleShape } from '@gqlapp/module-client-react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
 export interface UserInfo {
@@ -27,12 +28,13 @@ export interface ClientModuleShape extends BaseModuleShape {
   drawerItem?: InputDrawerItem[];
 }
 
-interface ClientModule extends ClientModuleShape {}
-
 /**
  * React Native feature module implementation.
  */
-class ClientModule extends BaseModule {
+class ClientModule extends BaseModule implements ClientModuleShape {
+  // Screen list for React Navigation Drawer
+  drawerItem?: InputDrawerItem[];
+
   /**
    * Constructs React Native client feature module representation, that folds all the feature modules
    * into a single module represented by this instance.
@@ -41,6 +43,7 @@ class ClientModule extends BaseModule {
    */
   constructor(...modules: ClientModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   /**
@@ -49,7 +52,7 @@ class ClientModule extends BaseModule {
   public createDrawerItems(Drawer: ReturnType<typeof createDrawerNavigator>): DrawerItem[] {
     return (this.drawerItem || []).map(({ screen, ...props }, idx, items) => ({
       screen: React.cloneElement(screen(Drawer), { key: idx + items.length }),
-      ...props
+      ...props,
     }));
   }
 }

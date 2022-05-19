@@ -8,7 +8,7 @@ export const isApiExternal = !!url.parse(__API_URL__).protocol;
 const clientApiUrl =
   !isApiExternal && PLATFORM === 'web'
     ? `${window.location.protocol}//${window.location.hostname}${
-        __DEV__ ? ':8080' : window.location.port ? ':' + window.location.port : ''
+        __DEV__ ? ':8080' : window.location.port ? `:${window.location.port}` : ''
       }${__API_URL__}`
     : __API_URL__;
 

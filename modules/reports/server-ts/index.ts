@@ -11,5 +11,5 @@ export default new ServerModule(pdf, excel, {
   schema: [schema],
   createResolversFunc: [createResolvers],
   createContextFunc: [() => ({ Contacts: new ContactsDAO() })],
-  localization: [{ ns: 'reports', resources }]
+  localization: [{ ns: 'reports', resources }],
 });

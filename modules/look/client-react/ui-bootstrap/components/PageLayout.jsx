@@ -43,7 +43,7 @@ class PageLayout extends React.Component {
 
 PageLayout.propTypes = {
   children: PropTypes.node,
-  navBar: PropTypes.bool
+  navBar: PropTypes.bool,
 };
 
 export default PageLayout;

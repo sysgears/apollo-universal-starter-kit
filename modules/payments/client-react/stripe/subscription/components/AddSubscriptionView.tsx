@@ -18,7 +18,7 @@ interface AddSubscriptionViewProps {
   onSubmit: (subscriptionInput: CreditCardInput, stripe: any) => void;
 }
 
-export default (props: AddSubscriptionViewProps) => {
+const AddSubscriptionView = (props: AddSubscriptionViewProps) => {
   const { t } = props;
 
   return (
@@ -44,7 +44,7 @@ export default (props: AddSubscriptionViewProps) => {
         </Col>
         <Col xs={12} md={8}>
           <hr />
-          {/* Displays testing credit cards when stripe test keys are used!!!*/}
+          {/* Displays testing credit cards when stripe test keys are used!!! */}
           {settings.stripe.subscription.publicKey.includes('test') && renderTestingCards(t)}
         </Col>
       </Row>
@@ -66,7 +66,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       type: 'visa',
       date: '02/22',
       csv: '242',
-      zip: '42424'
+      zip: '42424',
     },
     {
       id: 2,
@@ -74,7 +74,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       type: 'Mastercard',
       date: '02/22',
       csv: '242',
-      zip: '42424'
+      zip: '42424',
     },
     {
       id: 3,
@@ -82,8 +82,8 @@ const renderTestingCards = (t: TranslateFunction) => {
       type: 'American Express',
       date: '02/22',
       csv: '242',
-      zip: '42424'
-    }
+      zip: '42424',
+    },
   ];
 
   const columns = [
@@ -93,7 +93,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       key: 'type',
       render(text: string) {
         return <span>{text}</span>;
-      }
+      },
     },
     {
       title: 'number',
@@ -101,7 +101,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       key: 'number',
       render(text: string) {
         return <span>{text}</span>;
-      }
+      },
     },
     {
       title: 'date',
@@ -109,7 +109,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       key: 'date',
       render(text: string) {
         return <span>{text}</span>;
-      }
+      },
     },
     {
       title: 'csv',
@@ -117,7 +117,7 @@ const renderTestingCards = (t: TranslateFunction) => {
       key: 'csv',
       render(text: string) {
         return <span>{text}</span>;
-      }
+      },
     },
     {
       title: 'zip',
@@ -125,8 +125,8 @@ const renderTestingCards = (t: TranslateFunction) => {
       key: 'zip',
       render(text: string) {
         return <span>{text}</span>;
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -136,3 +136,5 @@ const renderTestingCards = (t: TranslateFunction) => {
     </div>
   );
 };
+
+export default AddSubscriptionView;

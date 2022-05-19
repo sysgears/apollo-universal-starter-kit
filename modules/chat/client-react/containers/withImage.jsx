@@ -16,22 +16,22 @@ import ModalNotify from '../components/ModalNotify';
 const { protocol, port, hostname } = url.parse(__API_URL__);
 const serverUrl = `${protocol}//${
   hostname === 'localhost' ? url.parse(Constants.manifest.bundleUrl).hostname : hostname
-}${port ? ':' + port : ''}`;
+}${port ? `:${port}` : ''}`;
 
-const imageDir = FileSystem.cacheDirectory + 'ImagePicker/';
+const imageDir = `${FileSystem.cacheDirectory}ImagePicker/`;
 
-export default Component => {
+export default (Component) => {
   return class MessageImage extends React.Component {
     static propTypes = {
       messages: PropTypes.object,
-      t: PropTypes.func
+      t: PropTypes.func,
     };
 
     state = {
       edges: [],
       endCursor: 0,
       allowImages: settings.chat.allowImages,
-      notify: null
+      notify: null,
     };
 
     static getDerivedStateFromProps({ messages }, { allowImages, edges: stateEdges, endCursor }) {
@@ -50,7 +50,7 @@ export default Component => {
           edges: edges.map(({ node, cursor }) => {
             const currentEdge = stateEdges.find(({ node: { id } }) => node.id === id || !id);
             return currentEdge ? { node: addImageToNode(node, currentEdge), cursor } : { node, cursor };
-          })
+          }),
         };
       }
       return null;
@@ -74,7 +74,7 @@ export default Component => {
       }
     };
 
-    downloadImages = async newMessages => {
+    downloadImages = async (newMessages) => {
       const { getInfoAsync, makeDirectoryAsync, readDirectoryAsync, downloadAsync } = FileSystem;
       const { isDirectory } = await getInfoAsync(imageDir);
       if (!isDirectory) await makeDirectoryAsync(imageDir);
@@ -83,14 +83,14 @@ export default Component => {
         Promise.all(
           [node, node.quotedMessage].map(({ filename, path }) => {
             if (filename && path && !files.includes(filename)) {
-              return downloadAsync(serverUrl + '/' + path, imageDir + filename);
+              return downloadAsync(`${serverUrl}/${path}`, imageDir + filename);
             }
           })
         ).then(() => this.addImagesToEdge(node.id));
       });
     };
 
-    addImagesToEdge = async id => {
+    addImagesToEdge = async (id) => {
       const { edges } = this.state;
       this.setState({
         endCursor: this.props.messages.pageInfo.endCursor,
@@ -99,14 +99,13 @@ export default Component => {
             const { quotedMessage: quoted, filename } = node;
             const quotedMessage = { ...quoted, image: quoted.filename ? `${imageDir}${quoted.filename}` : null };
             return { cursor, node: { ...node, quotedMessage, image: filename ? `${imageDir}${filename}` : null } };
-          } else {
-            return { node, cursor };
           }
-        })
+          return { node, cursor };
+        }),
       });
     };
 
-    checkPermission = async skip => {
+    checkPermission = async (skip) => {
       if (skip === Platform.OS) {
         return true;
       }
@@ -148,7 +147,7 @@ export default Component => {
       const newProps = {
         allowImages,
         messages: edges.length ? { ...messages, edges } : messages,
-        pickImage: this.pickImage
+        pickImage: this.pickImage,
       };
 
       return (

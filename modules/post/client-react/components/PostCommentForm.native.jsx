@@ -8,7 +8,7 @@ import { required, validate } from '@gqlapp/validation-common-react';
 import { FormView, RenderField, Button, primary, lookStyles } from '@gqlapp/look-client-react-native';
 
 const commentFormSchema = {
-  content: [required]
+  content: [required],
 };
 
 const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
@@ -39,18 +39,18 @@ PostCommentForm.propTypes = {
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   values: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
-  validate: values => validate(values, commentFormSchema),
+  mapPropsToValues: (props) => ({ content: props.comment && props.comment.content }),
+  validate: (values) => validate(values, commentFormSchema),
   handleSubmit: async (values, { resetForm, props: { onSubmit } }) => {
     await onSubmit(values);
     resetForm();
   },
   displayName: 'CommentForm', // helps with React DevTools
-  enableReinitialize: true
+  enableReinitialize: true,
 });
 
 export default translate('post')(PostCommentFormWithFormik(PostCommentForm));

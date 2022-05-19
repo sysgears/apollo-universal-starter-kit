@@ -23,7 +23,7 @@ export default class AddSubscriptionView extends React.Component<AddSubscription
 
     return (
       <View style={styles.container}>
-        <ScrollView style={styles.container} ref={ref => (this.scrollViewRef = ref)}>
+        <ScrollView style={styles.container} ref={(ref) => (this.scrollViewRef = ref)}>
           <View style={styles.textWrapper}>
             <Text style={styles.infoText}>{t('add.description')}</Text>
           </View>
@@ -55,17 +55,17 @@ export default class AddSubscriptionView extends React.Component<AddSubscription
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   textWrapper: {
-    margin: 10
+    margin: 10,
   },
   infoText: {
     fontSize: 18,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   cardFormWrapper: {
     padding: 10,
-    margin: 10
-  }
+    margin: 10,
+  },
 });

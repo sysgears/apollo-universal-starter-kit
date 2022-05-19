@@ -10,7 +10,7 @@ export default () => ({
   Query: {
     files(obj: any, args: any, { Upload }: any) {
       return Upload.files();
-    }
+    },
   },
   Mutation: {
     async uploadFiles(obj: any, { files }: UploadFileStreams, { Upload, req }: any) {
@@ -19,7 +19,7 @@ export default () => ({
       try {
         // load files to fs
         const uploadedFiles = await Promise.all(
-          files.map(async uploadPromise => fileSystemStorage.save(await uploadPromise, settings.upload.uploadDir))
+          files.map(async (uploadPromise) => fileSystemStorage.save(await uploadPromise, settings.upload.uploadDir))
         );
 
         // save files data into DB
@@ -29,7 +29,7 @@ export default () => ({
         throw new Error(t('upload:fileNotLoaded'));
       }
     },
-    async removeFile(obj: {}, { id }: { id: number }, { Upload, req }: any) {
+    async removeFile(_: any, { id }: { id: number }, { Upload, req }: any) {
       const file = await Upload.file(id);
       const { t } = req;
 
@@ -45,7 +45,7 @@ export default () => ({
       }
 
       return true;
-    }
+    },
   },
-  Subscription: {}
+  Subscription: {},
 });

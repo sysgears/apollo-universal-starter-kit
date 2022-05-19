@@ -5,10 +5,10 @@ const RenderSwitchStyles = {
     paddingLeft: 15,
     height: 40,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   itemTitle,
-  itemAction
+  itemAction,
 };
 
 export default RenderSwitchStyles;

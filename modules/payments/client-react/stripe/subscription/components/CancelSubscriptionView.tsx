@@ -9,7 +9,7 @@ interface CancelSubscriptionViewProps {
   t: TranslateFunction;
 }
 
-export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) => {
+const CancelSubscriptionView = ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) => {
   return (
     <CardGroup>
       <CardTitle>{t('cancel.title')}</CardTitle>
@@ -22,3 +22,5 @@ export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) 
     </CardGroup>
   );
 };
+
+export default CancelSubscriptionView;

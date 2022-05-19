@@ -15,7 +15,6 @@ let server: Server;
 let apollo: ApolloClient<any>;
 
 export const setup = async () => {
-  // tslint:disable-next-line
   await populateTestDb();
 
   server = await serverPromise;

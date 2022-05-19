@@ -25,5 +25,5 @@ const beforeware = (app: Express) => {
 };
 
 export default new ServerModule(commonI18n, {
-  beforeware: [beforeware]
+  beforeware: [beforeware],
 });

@@ -12,10 +12,10 @@ import UserAddView from '../components/UserAddView';
 import ADD_USER from '../graphql/AddUser.graphql';
 import UserFormatter from '../helpers/UserFormatter';
 
-const UserAdd = props => {
+const UserAdd = (props) => {
   const { addUser, t, history, navigation } = props;
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     let userValues = pick(values, ['username', 'email', 'role', 'isActive', 'password']);
 
     userValues['profile'] = pick(values.profile, ['firstName', 'lastName']);
@@ -47,19 +47,19 @@ UserAdd.propTypes = {
   addUser: PropTypes.func.isRequired,
   t: PropTypes.func.isRequired,
   navigation: PropTypes.object,
-  history: PropTypes.object
+  history: PropTypes.object,
 };
 
 export default compose(
   translate('user'),
   graphql(ADD_USER, {
     props: ({ mutate }) => ({
-      addUser: async input => {
+      addUser: async (input) => {
         const { data: addUser } = await mutate({
-          variables: { input }
+          variables: { input },
         });
         return addUser;
-      }
-    })
+      },
+    }),
   })
 )(UserAdd);

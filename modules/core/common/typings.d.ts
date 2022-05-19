@@ -1,7 +1,7 @@
-declare var __TEST__: boolean;
-declare var __SSR__: boolean;
-declare var __SERVER__: boolean;
-declare var __SERVER_PORT__: number;
-declare var __API_URL__: string;
+declare let __TEST__: boolean;
+declare let __SSR__: boolean;
+declare let __SERVER__: boolean;
+declare let __SERVER_PORT__: number;
+declare let __API_URL__: string;
 
 declare module 'minilog';

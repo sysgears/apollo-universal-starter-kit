@@ -7,11 +7,11 @@ module.exports = {
   transform: {
     '\\.(gql|graphql)$': 'jest-transform-graphql',
     'locales[\\/]index.[jt]s': '<rootDir>/jest-transform-i18next',
-    '.*': 'babel-jest'
+    '.*': 'babel-jest',
   },
   modulePathIgnorePatterns: ['<rootDir>/modules/chat'],
   moduleNameMapper: {
-    '^.+\\.(css|less|scss)$': 'babel-jest'
+    '^.+\\.(css|less|scss)$': 'babel-jest',
   },
   globals: {
     __CLIENT__: true,
@@ -19,6 +19,6 @@ module.exports = {
     __DEV__: true,
     __TEST__: true,
     __SSR__: false,
-    __API_URL__: '/graphql'
-  }
+    __API_URL__: '/graphql',
+  },
 };

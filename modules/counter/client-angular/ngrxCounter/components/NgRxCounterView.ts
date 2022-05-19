@@ -4,10 +4,8 @@ import { CounterIncrement } from '../reducers';
 
 @Component({
   selector: 'ngrx-counter-button',
-  template: `
-    <btn id="ngrx-button" (click)="increaseCounter()">Click to increase ngrxCount</btn>
-  `,
-  styles: []
+  template: ` <btn id="ngrx-button" (click)="increaseCounter()">Click to increase ngrxCount</btn> `,
+  styles: [],
 })
 export class NgRxCounterButtonComponent {
   constructor(private store: Store<{ counter: number }>) {}
@@ -31,13 +29,13 @@ export class NgRxCounterButtonComponent {
         margin-bottom: 30px;
         text-align: center;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class NgRxCounterViewComponent {
   public counter: any;
 
   constructor(private store: Store<{ counter: number }>) {
-    this.store.pipe(select('counter')).subscribe(result => (this.counter = result.ngrxCount));
+    this.store.pipe(select('counter')).subscribe((result) => (this.counter = result.ngrxCount));
   }
 }

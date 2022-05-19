@@ -10,12 +10,12 @@ import ForgotPasswordView from '../components/ForgotPasswordView';
 
 import FORGOT_PASSWORD from '../graphql/ForgotPassword.graphql';
 
-const ForgotPassword = props => {
+const ForgotPassword = (props) => {
   const { forgotPassword, t } = props;
 
   const [sent, setSent] = useState(false);
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     setSent(true);
     try {
       await forgotPassword(values);
@@ -29,7 +29,7 @@ const ForgotPassword = props => {
 
 ForgotPassword.propTypes = {
   forgotPassword: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const ForgotPasswordWithApollo = compose(
@@ -38,14 +38,14 @@ const ForgotPasswordWithApollo = compose(
     props: ({ mutate }) => ({
       forgotPassword: async ({ email }) => {
         const {
-          data: { forgotPassword }
+          data: { forgotPassword },
         } = await mutate({
-          variables: { input: { email } }
+          variables: { input: { email } },
         });
 
         return forgotPassword;
-      }
-    })
+      },
+    }),
   })
 )(ForgotPassword);
 

@@ -1,4 +1,4 @@
-export type Errors = Array<{ field: string; message: string }> | { [key: string]: any };
+export type Errors = { field: string; message: string }[] | { [key: string]: any };
 
 export class FieldError {
   public errors: { [key: string]: any };
@@ -23,9 +23,9 @@ export class FieldError {
   }
 
   public getErrors() {
-    return Object.keys(this.errors).map(field => ({
+    return Object.keys(this.errors).map((field) => ({
       field,
-      message: this.errors[field]
+      message: this.errors[field],
     }));
   }
 

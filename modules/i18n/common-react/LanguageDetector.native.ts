@@ -11,7 +11,7 @@ const LanguageDetector = {
   init: () => {},
   cacheUserLanguage: async (lng: string) => {
     SecureStore.setItemAsync('i18nextLng', lng);
-  }
+  },
 };
 
 export default LanguageDetector;

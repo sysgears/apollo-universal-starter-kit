@@ -14,18 +14,18 @@ export interface ModuleShape {
 }
 
 /**
- *  This way we add all the methods declared in `ModuleShape` into `Module` class
- *  and have `Module` implementing `ModuleShape` interface.
- */
-interface Module extends ModuleShape {}
-
-/**
  * This class implements `ModuleShape` interface.
  *
  * It is a very minimalistic feature module implementation, that
  * has only `createApp` function.
  */
-class Module {
+class Module implements ModuleShape {
+  /**
+   * A hook called on the very start of the application,
+   * right after all the feature modules are imported.
+   */
+  public onAppCreate?: Array<(modules: Module, entryModule: NodeModule) => Promise<any>>;
+
   /**
    * Constructs feature module representation, that folds all the feature modules
    * into a single module represented by this instance.

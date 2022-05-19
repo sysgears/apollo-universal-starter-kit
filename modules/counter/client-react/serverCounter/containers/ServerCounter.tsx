@@ -21,11 +21,11 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
         data: {
           serverCounter: {
             amount: newAmount,
-            __typename: 'Counter'
-          }
-        }
+            __typename: 'Counter',
+          },
+        },
       });
-    }
+    },
   });
 
   const onClickHandler = (): any =>
@@ -35,9 +35,9 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
         __typename: 'Mutation',
         addServerCounter: {
           __typename: 'Counter',
-          amount: counter.amount + 1
-        }
-      }
+          amount: counter.amount + 1,
+        },
+      },
     });
 
   return <IncreaseButton onClick={onClickHandler} />;
@@ -54,9 +54,9 @@ const ServerCounter = () => {
       data: {
         serverCounter: {
           amount: messageData.counterUpdated.amount,
-          __typename: 'Counter'
-        }
-      }
+          __typename: 'Counter',
+        },
+      },
     });
   }
 

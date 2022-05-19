@@ -10,7 +10,7 @@ interface ButtonProps {
   counter: any;
 }
 
-const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
+const IncreaseButtonContainer = ({ increaseAmount }: ButtonProps) => {
   const [increaseCounter] = useMutation(ADD_COUNTER_CLIENT);
 
   const onClickHandler = (): any => increaseCounter({ variables: { amount: increaseAmount } });

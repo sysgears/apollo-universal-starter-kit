@@ -14,7 +14,7 @@ if (__DEV__ && __SERVER__ && !__TEST__) {
   const consoleLog = global.console.log;
   global.console.log = (...args: any[]) => {
     if (args.length === 1 && typeof args[0] === 'string' && args[0].match(/^\[(HMR|WDS)\]/)) {
-      consoleLog('backend ' + args[0]);
+      consoleLog(`backend ${args[0]}`);
     } else {
       consoleLog.apply(global.console, args);
     }

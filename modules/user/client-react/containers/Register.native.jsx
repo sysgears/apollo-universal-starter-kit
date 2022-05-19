@@ -12,10 +12,10 @@ import REGISTER from '../graphql/Register.graphql';
 
 class Register extends React.Component {
   state = {
-    isRegistered: false
+    isRegistered: false,
   };
 
-  onSubmit = async values => {
+  onSubmit = async (values) => {
     const { t, register, navigation } = this.props;
 
     try {
@@ -35,7 +35,7 @@ class Register extends React.Component {
   };
 
   toggleModal = () => {
-    this.setState(prevState => ({ isRegistered: !prevState.isRegistered }));
+    this.setState((prevState) => ({ isRegistered: !prevState.isRegistered }));
   };
 
   render() {
@@ -49,7 +49,7 @@ class Register extends React.Component {
 Register.propTypes = {
   register: PropTypes.func,
   t: PropTypes.func,
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
 };
 
 const RegisterWithApollo = compose(
@@ -59,11 +59,11 @@ const RegisterWithApollo = compose(
     props: ({ mutate }) => ({
       register: async ({ username, email, password }) => {
         const {
-          data: { register }
+          data: { register },
         } = await mutate({ variables: { input: { username, email, password } } });
         return register;
-      }
-    })
+      },
+    }),
   })
 )(Register);
 export default RegisterWithApollo;

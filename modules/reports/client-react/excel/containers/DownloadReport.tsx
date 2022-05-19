@@ -18,7 +18,7 @@ const DownloadReport = ({ t, client }: DownloadReportProps) => {
   const donwload = async () => {
     setIsLoading(true);
     const { data } = await client.query({
-      query
+      query,
     });
     const url = getObjectURLFromArray(data.excel);
     downloadFile(url, 'Report.xlsx');

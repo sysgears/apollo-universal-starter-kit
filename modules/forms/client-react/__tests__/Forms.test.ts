@@ -1,6 +1,5 @@
 import { ApolloError } from 'apollo-client';
 import { GraphQLError } from 'graphql';
-import { expect } from 'chai';
 
 import { FormError } from '../FormError';
 
@@ -23,12 +22,12 @@ describe('Class FormError works', () => {
           '    at Generator.invoke [as _invoke] (~/apollo-universal-starter-kit/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js:288:22)',
           '    at Generator.prototype.(anonymous function) [as next] (~/apollo-universal-starter-kit/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js:114:21)',
           '    at asyncGeneratorStep (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)',
-          '    at _next (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:25:9)'
-        ]
+          '    at _next (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:25:9)',
+        ],
       },
       locations: [{ line: 2, column: 3 }],
       message: 'Failed valid user password',
-      path: ['login']
+      path: ['login'],
     }
   );
   const emailGraphQLError = new GraphQLError(
@@ -49,12 +48,12 @@ describe('Class FormError works', () => {
           '    at Generator.invoke [as _invoke] (~/apollo-universal-starter-kit/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js:288:22)',
           '    at Generator.prototype.(anonymous function) [as next] (~/apollo-universal-starter-kit/node_modules/@babel/runtime/node_modules/regenerator-runtime/runtime.js:114:21)',
           '    at asyncGeneratorStep (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:3:24)',
-          '    at _next (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:25:9)'
-        ]
+          '    at _next (~/apollo-universal-starter-kit/node_modules/@babel/runtime/helpers/asyncToGenerator.js:25:9)',
+        ],
       },
       locations: [{ line: 2, column: 3 }],
       message: 'Failed reset email',
-      path: ['register']
+      path: ['register'],
     }
   );
 
@@ -62,12 +61,12 @@ describe('Class FormError works', () => {
 
   const apolloErrorWithGraphQLError = new ApolloError({
     graphQLErrors: [passwordGraphQLError],
-    errorMessage: 'GraphQL error: Failed password'
+    errorMessage: 'GraphQL error: Failed password',
   });
 
   const apolloErrorWithGraphQLErrors = new ApolloError({
     graphQLErrors: [passwordGraphQLError, emailGraphQLError],
-    errorMessage: 'GraphQL error: Failed password and email'
+    errorMessage: 'GraphQL error: Failed password and email',
   });
 
   const clientError = new Error('Test client Error');
@@ -75,17 +74,20 @@ describe('Class FormError works', () => {
   const messageForAlertForm = 'Test message';
 
   it('Class FormError works with networkError', () => {
-    expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).to.throw();
+    expect(() => new FormError(messageForAlertForm, apolloErrorWithNetworkError)).toThrow();
   });
   it('Class FormError works with one graphQLError', () => {
-    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLError).errors;
-    expect(errors).to.have.all.keys('usernameOrEmail', 'errorMsg');
+    const { errors } = new FormError(messageForAlertForm, apolloErrorWithGraphQLError);
+    expect(errors).toHaveProperty('usernameOrEmail');
+    expect(errors).toHaveProperty('errorMsg');
   });
   it('Class FormError works with two graphQLErrors', () => {
-    const errors = new FormError(messageForAlertForm, apolloErrorWithGraphQLErrors).errors;
-    expect(errors).to.have.all.keys('usernameOrEmail', 'email', 'errorMsg');
+    const { errors } = new FormError(messageForAlertForm, apolloErrorWithGraphQLErrors);
+    expect(errors).toHaveProperty('usernameOrEmail');
+    expect(errors).toHaveProperty('email');
+    expect(errors).toHaveProperty('errorMsg');
   });
   it('Class FormError works with client error', () => {
-    expect(() => new FormError(messageForAlertForm, clientError)).to.throw();
+    expect(() => new FormError(messageForAlertForm, clientError)).toThrow();
   });
 });

@@ -14,8 +14,8 @@ const LoginView = ({ onSubmit, t, isRegistered, hideModal }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('login.meta')}`
-        }
+          content: `${settings.app.name} - ${t('login.meta')}`,
+        },
       ]}
     />
   );
@@ -63,7 +63,7 @@ LoginView.propTypes = {
   onSubmit: PropTypes.func.isRequired,
   t: PropTypes.func,
   isRegistered: PropTypes.bool,
-  hideModal: PropTypes.func
+  hideModal: PropTypes.func,
 };
 
 export default LoginView;

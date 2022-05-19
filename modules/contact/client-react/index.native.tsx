@@ -12,7 +12,7 @@ const HeaderTitleWithI18n = translate('contact')(HeaderTitle);
 export default new ClientModule({
   drawerItem: [
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="Contact"
           component={Contact}
@@ -22,11 +22,11 @@ export default new ClientModule({
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             ),
             headerStyle: { backgroundColor: '#fff' },
-            drawerLabel: () => <HeaderTitleWithI18n />
+            drawerLabel: () => <HeaderTitleWithI18n />,
           })}
         />
-      )
-    }
+      ),
+    },
   ],
-  localization: [{ ns: 'contact', resources }]
+  localization: [{ ns: 'contact', resources }],
 });

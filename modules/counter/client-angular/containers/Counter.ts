@@ -8,6 +8,6 @@ import { Component } from '@angular/core';
       <ngrx-counter></ngrx-counter>
       <server-counter></server-counter>
     </div>
-  `
+  `,
 })
 export class CounterComponent {}

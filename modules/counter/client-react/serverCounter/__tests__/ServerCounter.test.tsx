@@ -14,14 +14,14 @@ const COUNTER_SUBSCRIPTION_VALUE = 17;
 const mocks = {
   Counter: () => ({
     amount: COUNTER_APOLLO_VALUE,
-    __typename: 'Counter'
+    __typename: 'Counter',
   }),
   Mutation: () => ({
     addServerCounter: (obj: any, { amount }: any) => ({
       amount: INC_COUNTER_VALUE + amount,
-      __typename: 'Counter'
-    })
-  })
+      __typename: 'Counter',
+    }),
+  }),
 };
 
 describe('Server counter example UI works', () => {
@@ -29,6 +29,7 @@ describe('Server counter example UI works', () => {
 
   let dom: RenderResult;
 
+  // eslint-disable-next-line jest/expect-expect
   it('Counter section renders without data', async () => {
     act(() => {
       dom = render(renderer.withApollo(<ServerCounter />));
@@ -36,10 +37,12 @@ describe('Server counter example UI works', () => {
     await waitForElement(() => dom.getByText('loading'));
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Counter section renders with queries data', async () => {
     await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_APOLLO_VALUE}.`)));
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Section shows GraphQL response when it arrives after button click', async () => {
     const graphQLButton = dom.getByText('Increase server counter');
 
@@ -54,14 +57,15 @@ describe('Server counter example UI works', () => {
     expect(renderer.getSubscriptions(COUNTER_SUBSCRIPTION)).toHaveLength(1);
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Updates counter on data from subscription', async () => {
     const subscription = renderer.getSubscriptions(COUNTER_SUBSCRIPTION)[0];
 
     act(() => {
       subscription.next({
         data: {
-          counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' }
-        }
+          counterUpdated: { amount: COUNTER_SUBSCRIPTION_VALUE, __typename: 'Counter' },
+        },
       });
     });
 

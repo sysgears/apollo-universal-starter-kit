@@ -4,7 +4,7 @@ export default (pubsub: any) => ({
   Query: {
     serverCounter(obj: any, args: any, context: any) {
       return context.Counter.counterQuery();
-    }
+    },
   },
   Mutation: {
     async addServerCounter(obj: any, { amount }: any, context: any) {
@@ -12,15 +12,15 @@ export default (pubsub: any) => ({
       const counter = await context.Counter.counterQuery();
 
       pubsub.publish(COUNTER_SUBSCRIPTION, {
-        counterUpdated: { amount: counter.amount }
+        counterUpdated: { amount: counter.amount },
       });
 
       return counter;
-    }
+    },
   },
   Subscription: {
     counterUpdated: {
-      subscribe: () => pubsub.asyncIterator(COUNTER_SUBSCRIPTION)
-    }
-  }
+      subscribe: () => pubsub.asyncIterator(COUNTER_SUBSCRIPTION),
+    },
+  },
 });

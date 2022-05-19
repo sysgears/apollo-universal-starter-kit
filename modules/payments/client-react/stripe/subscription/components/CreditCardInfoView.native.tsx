@@ -53,11 +53,11 @@ const CreditCardInfoView = ({ loading, t, creditCard }: CardInfoViewProps) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   buttonWrapper: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
 
 export default CreditCardInfoView;

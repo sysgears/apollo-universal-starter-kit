@@ -2,15 +2,15 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import settings from '@gqlapp/config';
 
-const generateEdgesArray = quantity => {
+const generateEdgesArray = (quantity) => {
   const arr = [];
   for (let i = 1; i <= quantity; i++) {
-    arr.push({ cursor: i, node: { id: i, title: 'Item ' + i } });
+    arr.push({ cursor: i, node: { id: i, title: `Item ${i}` } });
   }
   return arr;
 };
 
-const itemsNumber = settings.pagination.web.itemsNumber;
+const { itemsNumber } = settings.pagination.web;
 const allEdges = generateEdgesArray(47);
 
 export const useDataProvider = () => {
@@ -25,17 +25,17 @@ export const useDataProvider = () => {
       setItems({
         totalCount: allEdges.length,
         pageInfo: {
-          endCursor: endCursor,
-          hasNextPage: hasNextPage
+          endCursor,
+          hasNextPage,
         },
-        edges: edges,
-        offset: offset,
-        limit: itemsNumber
+        edges,
+        offset,
+        limit: itemsNumber,
       });
     },
     [items]
   );
-  const useMountEffect = fn => useEffect(fn, []);
+  const useMountEffect = (fn) => useEffect(fn, [fn]);
   useMountEffect(() => {
     loadData(0, 'replace');
   });
@@ -64,13 +64,13 @@ export default function withDataProvider(WrappedComponent) {
         items: {
           totalCount: allEdges.length,
           pageInfo: {
-            endCursor: endCursor,
-            hasNextPage: hasNextPage
+            endCursor,
+            hasNextPage,
           },
-          edges: edges,
-          offset: offset,
-          limit: itemsNumber
-        }
+          edges,
+          offset,
+          limit: itemsNumber,
+        },
       });
     };
 

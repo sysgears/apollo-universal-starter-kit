@@ -7,5 +7,5 @@ const beforeware = (app: Express) => {
 };
 
 export default new ServerModule({
-  beforeware: [beforeware]
+  beforeware: [beforeware],
 });

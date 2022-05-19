@@ -13,7 +13,7 @@ const FormView = ({ children, style, ...props }) => {
 
 FormView.propTypes = {
   children: PropTypes.node,
-  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object])
+  style: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 };
 
 const styles = StyleSheet.create(FormViewStyles);

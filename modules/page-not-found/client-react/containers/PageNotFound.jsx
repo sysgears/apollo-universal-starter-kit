@@ -22,8 +22,8 @@ const PageNotFound = ({ staticContext = {}, t }) => {
           meta={[
             {
               name: 'description',
-              content: `${settings.app.name} - ${t('meta')}`
-            }
+              content: `${settings.app.name} - ${t('meta')}`,
+            },
           ]}
         />
         <h2>{t('content')} - 404</h2>
@@ -39,7 +39,7 @@ const PageNotFound = ({ staticContext = {}, t }) => {
 
 PageNotFound.propTypes = {
   staticContext: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default translate('notFound')(PageNotFound);

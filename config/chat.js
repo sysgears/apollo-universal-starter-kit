@@ -11,14 +11,14 @@ export default {
     showAvatarForEveryMessage: true,
     renderAvatarOnTop: false,
     inverted: true,
-    keyboardShouldPersistTaps: 'never'
+    keyboardShouldPersistTaps: 'never',
   },
   image: {
     maxSize: 1048576,
     imagePicker: {
       allowsEditing: true,
       base64: false,
-      quality: 0.75
-    }
-  }
+      quality: 0.75,
+    },
+  },
 };

@@ -10,11 +10,11 @@ import FILES_QUERY from '../graphql/FilesQuery.graphql';
 import UPLOAD_FILES from '../graphql/UploadFiles.graphql';
 import REMOVE_FILE from '../graphql/RemoveFile.graphql';
 
-const Upload = props => {
+const Upload = (props) => {
   const { uploadFiles, removeFile } = props;
   const [error, setError] = useState(null);
 
-  const handleUploadFiles = async files => {
+  const handleUploadFiles = async (files) => {
     try {
       await uploadFiles(files);
     } catch (e) {
@@ -22,7 +22,7 @@ const Upload = props => {
     }
   };
 
-  const handleRemoveFile = async id => {
+  const handleRemoveFile = async (id) => {
     try {
       await removeFile(id);
     } catch (e) {
@@ -37,61 +37,61 @@ const Upload = props => {
 
 Upload.propTypes = {
   uploadFiles: PropTypes.func,
-  removeFile: PropTypes.func
+  removeFile: PropTypes.func,
 };
 
 export default compose(
   graphql(FILES_QUERY, {
     options: () => {
       return {
-        fetchPolicy: 'cache-and-network'
+        fetchPolicy: 'cache-and-network',
       };
     },
     props({ data: { loading, error, files } }) {
       if (error) throw new Error(error);
 
       return { loading, files };
-    }
+    },
   }),
   graphql(UPLOAD_FILES, {
     props: ({ mutate }) => ({
-      uploadFiles: async files => {
+      uploadFiles: async (files) => {
         const {
-          data: { uploadFiles }
+          data: { uploadFiles },
         } = await mutate({
           variables: { files },
-          refetchQueries: [{ query: FILES_QUERY }]
+          refetchQueries: [{ query: FILES_QUERY }],
         });
         return uploadFiles;
-      }
-    })
+      },
+    }),
   }),
   graphql(REMOVE_FILE, {
     props: ({ mutate }) => ({
-      removeFile: async id => {
+      removeFile: async (id) => {
         const {
-          data: { removeFile }
+          data: { removeFile },
         } = await mutate({
           variables: { id },
           optimisticResponse: {
             __typename: 'Mutation',
             removeFile: {
               removeFile: true,
-              __typename: 'File'
-            }
+              __typename: 'File',
+            },
           },
-          update: store => {
+          update: (store) => {
             const cachedFiles = store.readQuery({ query: FILES_QUERY });
 
             store.writeQuery({
               query: FILES_QUERY,
-              data: { files: cachedFiles.files.filter(file => file.id !== id) }
+              data: { files: cachedFiles.files.filter((file) => file.id !== id) },
             });
-          }
+          },
         });
         return removeFile;
-      }
-    })
+      },
+    }),
   }),
   translate('upload')
 )(Upload);

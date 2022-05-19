@@ -20,7 +20,7 @@ const createApp = async (modules: ClientModule) => {
     createNetLink: modules.createNetLink,
     createLink: modules.createLink,
     connectionParams: modules.connectionParams,
-    clientResolvers: modules.resolvers
+    clientResolvers: modules.resolvers,
   });
 
   @NgModule({
@@ -33,9 +33,9 @@ const createApp = async (modules: ClientModule) => {
       HttpLinkModule,
       RouterModule.forRoot(modules.routes),
       StoreModule.forRoot(modules.reducers, { metaReducers }),
-      ...modules.modules
+      ...modules.modules,
     ],
-    providers: []
+    providers: [],
   })
   class MainModule {
     constructor(public appRef: ApplicationRef, apollo: Apollo, private appStore: Store<any>) {
@@ -60,8 +60,8 @@ const createApp = async (modules: ClientModule) => {
     }
 
     public hmrOnDestroy(store: any) {
-      store.disposeOldHosts = createNewHosts(this.appRef.components.map(cmp => cmp.location.nativeElement));
-      this.appStore.pipe(take(1)).subscribe(state => (store.state = state));
+      store.disposeOldHosts = createNewHosts(this.appRef.components.map((cmp) => cmp.location.nativeElement));
+      this.appStore.pipe(take(1)).subscribe((state) => (store.state = state));
       // save input values
       store.restoreInputValues = createInputTransfer();
       // remove styles
@@ -90,5 +90,5 @@ const createApp = async (modules: ClientModule) => {
 };
 
 export default new ClientModule({
-  onAppCreate: [createApp]
+  onAppCreate: [createApp],
 });

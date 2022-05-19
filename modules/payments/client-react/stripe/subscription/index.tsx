@@ -11,7 +11,7 @@ import resources from './locales';
 
 const { AuthRoute, IfLoggedIn } = require('@gqlapp/user-client-react');
 
-const SubscriptionAuthRouter = loadable(() => import('./containers/Auth').then(c => c.default));
+const SubscriptionAuthRouter = loadable(() => import('./containers/Auth').then((c) => c.default));
 
 const NavLinkWithI18n = translate('stripeSubscription')(({ t }: { t: TranslateFunction }) => (
   <NavLink to="/subscriber-page" className="nav-link" activeClassName="active">
@@ -26,7 +26,7 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
           exact
           role="user"
           path="/add-subscription"
-          component={loadable(() => import('./containers/AddSubscription').then(c => c.default))}
+          component={loadable(() => import('./containers/AddSubscription').then((c) => c.default))}
         />,
         <AuthRoute
           exact
@@ -35,7 +35,7 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
           component={(props: any) => (
             <SubscriptionAuthRouter
               {...props}
-              component={loadable(() => import('./containers/SubscriberPage').then(c => c.default))}
+              component={loadable(() => import('./containers/SubscriberPage').then((c) => c.default))}
             />
           )}
         />,
@@ -46,18 +46,18 @@ export default settings.stripe.subscription.enabled && settings.stripe.subscript
           component={(props: any) => (
             <SubscriptionAuthRouter
               {...props}
-              component={loadable(() => import('./containers/UpdateCreditCard').then(c => c.default))}
+              component={loadable(() => import('./containers/UpdateCreditCard').then((c) => c.default))}
             />
           )}
-        />
+        />,
       ],
       navItem: [
         <IfLoggedIn role="user">
           <MenuItem key="/subscriber-page">
             <NavLinkWithI18n />
           </MenuItem>
-        </IfLoggedIn>
+        </IfLoggedIn>,
       ],
-      localization: [{ ns: 'stripeSubscription', resources }]
+      localization: [{ ns: 'stripeSubscription', resources }],
     })
   : undefined;

@@ -14,7 +14,7 @@ const Module = require('module');
 const modulesDir = path.isAbsolute(__dirname) ? path.join(__dirname, '../..') : path.resolve('../../modules');
 const virtualDirs = {
   [path.resolve('/module-migrations')]: glob.sync(path.join(modulesDir, '**/migrations')),
-  [path.resolve('/module-seeds')]: glob.sync(path.join(modulesDir, '**/seeds'))
+  [path.resolve('/module-seeds')]: glob.sync(path.join(modulesDir, '**/seeds')),
 };
 const virtualFiles = {};
 
@@ -23,10 +23,9 @@ Module._resolveFilename = function fakeResolve(request, parent) {
   const normRequest = request.replace(/\\/g, '/');
   if (virtualFiles[normRequest]) {
     return virtualFiles[normRequest];
-  } else {
-    const result = realResolve(request, parent);
-    return result;
   }
+  const result = realResolve(request, parent);
+  return result;
 };
 
 for (const virtualDir of Object.keys(virtualDirs)) {
@@ -40,7 +39,7 @@ for (const virtualDir of Object.keys(virtualDirs)) {
 }
 
 const origReaddir = fs.readdir;
-fs.readdir = function() {
+fs.readdir = function () {
   const path = arguments[0];
   if (virtualDirs[path]) {
     let files = [];
@@ -56,15 +55,15 @@ const envSettings = {
   [process.env.NODE_ENV || 'development']: {
     ...settings.db,
     seeds: {
-      directory: '/module-seeds' // fake dir created virtually by tools/knex
+      directory: '/module-seeds', // fake dir created virtually by tools/knex
     },
     migrations: {
-      directory: '/module-migrations' // fake dir created virtually by tools/knex
+      directory: '/module-migrations', // fake dir created virtually by tools/knex
     },
-    useNullAsDefault: true
-  }
+    useNullAsDefault: true,
+  },
 };
 
-export const development = envSettings.development;
-export const production = envSettings.production;
-export const test = envSettings.test;
+export const { development } = envSettings;
+export const { production } = envSettings;
+export const { test } = envSettings;

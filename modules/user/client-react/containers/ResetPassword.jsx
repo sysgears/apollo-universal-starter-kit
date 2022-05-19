@@ -10,10 +10,10 @@ import ResetPasswordView from '../components/ResetPasswordView';
 
 import RESET_PASSWORD from '../graphql/ResetPassword.graphql';
 
-const ResetPassword = props => {
+const ResetPassword = (props) => {
   const { t, resetPassword, history, match } = props;
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     try {
       await resetPassword({ ...values, token: match.params.token });
     } catch (e) {
@@ -29,7 +29,7 @@ ResetPassword.propTypes = {
   resetPassword: PropTypes.func,
   t: PropTypes.func,
   history: PropTypes.object,
-  match: PropTypes.object
+  match: PropTypes.object,
 };
 
 const ResetPasswordWithApollo = compose(
@@ -39,14 +39,14 @@ const ResetPasswordWithApollo = compose(
     props: ({ mutate }) => ({
       resetPassword: async ({ password, passwordConfirmation, token }) => {
         const {
-          data: { resetPassword }
+          data: { resetPassword },
         } = await mutate({
-          variables: { input: { password, passwordConfirmation, token } }
+          variables: { input: { password, passwordConfirmation, token } },
         });
 
         return resetPassword;
-      }
-    })
+      },
+    }),
   })
 )(ResetPassword);
 

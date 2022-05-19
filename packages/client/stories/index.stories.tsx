@@ -15,12 +15,13 @@ import config from '@gqlapp/config';
 
 // Trigger locale change using  storybook-addon-locale's event emitter
 const channel = addons.getChannel();
-channel.on(LOCALE_EVENT_NAME, l => {
+channel.on(LOCALE_EVENT_NAME, (l) => {
   i18next.changeLanguage(`${l.locale}`); // fully qualified i18n names apparently needed
 });
 
 // Standard storybook Welcome and buttons, but with knobs enabled for text label button.
 const { Welcome, Button } = require('@storybook/react/demo');
+
 storiesOf('Welcome', module).add('to Storybook', () => <Welcome showApp={linkTo('Button')} />);
 storiesOf('Button', module)
   .addDecorator(withKnobs)
@@ -42,13 +43,13 @@ const clientCounterModule = new ClientModule(i18n, clientCounter);
 const CounterComponent: React.FC = () => clientCounterModule.counterComponent;
 const client = createApolloClient({
   createLink: clientCounterModule.createLink,
-  clientResolvers: clientCounterModule.resolvers
+  clientResolvers: clientCounterModule.resolvers,
 });
 storiesOf('Client Counters', module)
   .addParameters({
     locales: config.i18n.langList,
     defaultLocale: config.i18n.langList[0],
-    enableLocaleLockButton: false
+    enableLocaleLockButton: false,
   })
   .add('Apollo Link', () => (
     <ApolloProvider client={client}>

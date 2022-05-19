@@ -1,3 +1,5 @@
 describe('Stripe subscription API', () => {
-  it('should work', () => {});
+  it('should work', () => {
+    expect(1).toEqual(1);
+  });
 });

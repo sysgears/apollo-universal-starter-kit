@@ -27,14 +27,14 @@ const Report = ({ t }: ReportProps) => {
     <Query query={ReportQuery}>
       {({ loading, data }: any) => {
         if (loading) {
-          return t('loading');
+          return <div>{t('loading')}</div>;
         }
 
         const report = data.report.map((item: Report) => removeTypename(item));
         const columns = Object.keys(report[0]).map((name: string) => ({
           title: name,
           key: name,
-          dataIndex: name
+          dataIndex: name,
         }));
         return (
           <>

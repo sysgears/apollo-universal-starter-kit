@@ -1,8 +1,6 @@
-import { expect } from 'chai';
-
 import { getApollo } from '@gqlapp/testing-server-ts';
 
-import CONTACT from '../../client-react/graphql/Contact.graphql';
+import CONTACT from '@gqlapp/contact-client-react/graphql/Contact.graphql';
 
 describe('Contact API works', () => {
   let apollo: any;
@@ -12,6 +10,7 @@ describe('Contact API works', () => {
   });
 
   it('Should return validation errors', async () => {
+    let graphqlErrors;
     try {
       await apollo.mutate({
         mutation: CONTACT,
@@ -19,12 +18,13 @@ describe('Contact API works', () => {
           input: {
             content: 'Short',
             email: 'InvalidEmail@2.d',
-            name: 'N'
-          }
-        }
+            name: 'N',
+          },
+        },
       });
     } catch (e) {
-      expect(e.graphQLErrors).to.be.an('Array');
+      graphqlErrors = e.graphQLErrors;
     }
+    expect(graphqlErrors).toBeInstanceOf('Array');
   });
 });

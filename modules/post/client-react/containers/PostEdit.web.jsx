@@ -19,30 +19,31 @@ const subscribeToPostEdit = (subscribeToMore, postId, history, navigation) =>
       {
         subscriptionData: {
           data: {
-            postUpdated: { mutation }
-          }
-        }
+            postUpdated: { mutation },
+          },
+        },
       }
     ) => {
       if (mutation === 'DELETED') {
         if (history) {
           return history.push('/posts');
-        } else if (navigation) {
+        }
+        if (navigation) {
           return navigation.goBack();
         }
       }
       return prev;
-    }
+    },
   });
 
-const PostEdit = props => {
+const PostEdit = (props) => {
   useEffect(() => {
     if (props.post) {
       const {
         subscribeToMore,
         post: { id },
         history,
-        navigation
+        navigation,
       } = props;
       const subscribe = subscribeToPostEdit(subscribeToMore, id, history, navigation);
       return () => subscribe();
@@ -57,12 +58,12 @@ PostEdit.propTypes = {
   post: PropTypes.object,
   subscribeToMore: PropTypes.func.isRequired,
   history: PropTypes.object,
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
 };
 
 export default compose(
   graphql(POST_QUERY, {
-    options: props => {
+    options: (props) => {
       let id = 0;
       if (props.match) {
         id = props.match.params.id;
@@ -71,19 +72,19 @@ export default compose(
       }
 
       return {
-        variables: { id: Number(id) }
+        variables: { id: Number(id) },
       };
     },
     props({ data: { loading, error, post, subscribeToMore } }) {
       if (error) throw new Error(error);
       return { loading, post, subscribeToMore };
-    }
+    },
   }),
   graphql(EDIT_POST, {
     props: ({ ownProps: { history, navigation }, mutate }) => ({
       editPost: async (id, title, content) => {
         await mutate({
-          variables: { input: { id, title: title.trim(), content: content.trim() } }
+          variables: { input: { id, title: title.trim(), content: content.trim() } },
         });
         if (history) {
           return history.push('/posts');
@@ -91,7 +92,7 @@ export default compose(
         if (navigation) {
           return navigation.navigate('PostList');
         }
-      }
-    })
+      },
+    }),
   })
 )(PostEdit);

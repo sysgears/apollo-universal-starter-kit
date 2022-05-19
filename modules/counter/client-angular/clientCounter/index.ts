@@ -9,11 +9,11 @@ import { ClientCounterButtonComponent, ClientCounterViewComponent } from './comp
 @NgModule({
   imports: [CommonModule, LookModule],
   declarations: [ClientCounterButtonComponent, ClientCounterViewComponent],
-  exports: [ClientCounterButtonComponent, ClientCounterViewComponent]
+  exports: [ClientCounterButtonComponent, ClientCounterViewComponent],
 })
 class ClientCounterModule {}
 
 export default new CounterModule({
   resolver: [resolvers],
-  counterModule: [ClientCounterModule]
+  counterModule: [ClientCounterModule],
 });

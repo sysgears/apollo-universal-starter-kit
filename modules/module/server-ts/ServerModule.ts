@@ -1,3 +1,5 @@
+import { foldTo } from 'fractal-objects';
+
 import { merge } from 'lodash';
 import { DocumentNode } from 'graphql';
 import { PubSub } from 'graphql-subscriptions';
@@ -67,14 +69,23 @@ export interface ServerModuleShape extends CommonModuleShape {
   middleware?: MiddlewareFunc[];
 }
 
-interface ServerModule extends ServerModuleShape {}
-
 /**
  * A class that represents server-side feature module
  *
  * An instance of this class is exported by each Node backend feature module
  */
-class ServerModule extends CommonModule {
+class ServerModule extends CommonModule implements ServerModuleShape {
+  // A GraphQL schema list of a module
+  schema?: DocumentNode[];
+  // A list of functions to create GraphQL resolvers
+  createResolversFunc?: CreateResolversFunc[];
+  // A list of functions to create GraphQL context
+  createContextFunc?: CreateContextFunc[];
+  // A list of functions to register high-priority middlewares (happens before registering normal priority ones)
+  beforeware?: MiddlewareFunc[];
+  // A list of functions to register normal-priority middlewares
+  middleware?: MiddlewareFunc[];
+
   /**
    * Constructs backend Node feature module representation, that folds all the feature modules
    * into a single module represented by this instance.
@@ -83,6 +94,7 @@ class ServerModule extends CommonModule {
    */
   constructor(...modules: ServerModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   /**
@@ -108,7 +120,7 @@ class ServerModule extends CommonModule {
     connectionParams?: ConnectionParamsOptions,
     webSocket?: WebSocket
   ) {
-    const appContext = this.appContext;
+    const { appContext } = this;
     let graphqlContext = {};
 
     for (const createContextFunc of this.createContextFunc || []) {
@@ -128,7 +140,7 @@ class ServerModule extends CommonModule {
    * @returns GraphQL resolvers
    */
   public createResolvers(pubsub: PubSub) {
-    return merge({}, ...(this.createResolversFunc.map(createResolvers => createResolvers(pubsub)) || []));
+    return merge({}, ...(this.createResolversFunc || []).map((createResolvers) => createResolvers(pubsub)));
   }
 }
 

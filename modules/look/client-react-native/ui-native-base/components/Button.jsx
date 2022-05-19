@@ -12,7 +12,7 @@ class Button extends React.Component {
       [type]: true,
       [size]: true,
       block: true,
-      onPress: onPress || onClick
+      onPress: onPress || onClick,
     };
 
     return (
@@ -33,7 +33,7 @@ Button.propTypes = {
   type: PropTypes.string,
   size: PropTypes.string,
   onPress: PropTypes.func,
-  onClick: PropTypes.func
+  onClick: PropTypes.func,
 };
 
 export default Button;

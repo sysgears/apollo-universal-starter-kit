@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Table as RSTable } from 'reactstrap';
 
-const renderHead = columns => {
+const renderHead = (columns) => {
   return columns.map(({ title, dataIndex, renderHeader, key }) => {
     return (
       <th key={key} className={`w-${columns.length === 2 ? 100 : 100 / columns.length}`}>
@@ -13,7 +13,7 @@ const renderHead = columns => {
 };
 
 const renderBody = (columns, dataSource) => {
-  return dataSource.map(entry => {
+  return dataSource.map((entry) => {
     return <tr key={entry.id}>{renderData(columns, entry)}</tr>;
   });
 };
@@ -37,7 +37,7 @@ const Table = ({ dataSource, columns, ...props }) => {
 
 Table.propTypes = {
   dataSource: PropTypes.array,
-  columns: PropTypes.array
+  columns: PropTypes.array,
 };
 
 export default Table;

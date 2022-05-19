@@ -4,7 +4,7 @@ import { Menu } from 'antd';
 
 class MenuItem extends React.Component {
   static propTypes = {
-    children: PropTypes.node
+    children: PropTypes.node,
   };
 
   render() {

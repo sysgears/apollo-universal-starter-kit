@@ -9,13 +9,13 @@ function createPDF(contacts: UserContact[], t: TranslationFunction) {
   pdf.addStyle('header', {
     fontSize: 18,
     bold: true,
-    margin: [0, 0, 0, 10]
+    margin: [0, 0, 0, 10],
   });
 
   pdf.addStyle('subheader', {
     fontSize: 16,
     bold: true,
-    margin: [0, 10, 0, 5]
+    margin: [0, 10, 0, 5],
   });
 
   pdf.addText(t('PdfReport:title'), 'header');
@@ -42,7 +42,7 @@ export default function generator(contacts: UserContact[], t: TranslationFunctio
     chunks.push(chunk);
   });
 
-  const buffer = new Promise(res => {
+  const buffer = new Promise((res) => {
     doc.on('end', () => {
       res(Buffer.concat(chunks));
     });

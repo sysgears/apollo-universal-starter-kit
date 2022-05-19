@@ -11,15 +11,15 @@ const ResetPasswordView = ({ onSubmit }) => (
 );
 
 ResetPasswordView.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'stretch',
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 export default ResetPasswordView;

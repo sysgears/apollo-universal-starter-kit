@@ -18,13 +18,13 @@ export class FormError {
                 result: GraphQLError,
                 {
                   extensions: {
-                    exception: { errors }
-                  }
+                    exception: { errors },
+                  },
                 }: GraphQLError
               ) => ({ ...result, ...errors }),
               {}
             ),
-            errorMsg
+            errorMsg,
           };
         }
       } else {

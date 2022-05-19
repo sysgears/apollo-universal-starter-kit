@@ -8,7 +8,7 @@ class PaginationDemoView extends React.Component {
   render() {
     const { items, handlePageChange, renderItem, pagination, t } = this.props;
 
-    const renderHeader = t => {
+    const renderHeader = (t) => {
       return <Text style={styles.title}>{t}</Text>;
     };
 
@@ -29,7 +29,7 @@ class PaginationDemoView extends React.Component {
           <FlatList
             data={items.edges}
             style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
+            keyExtractor={(item) => `${item.node.id}`}
             renderItem={renderItem}
             ListHeaderComponent={renderHeader(titleTexti18n)}
           />
@@ -50,7 +50,7 @@ class PaginationDemoView extends React.Component {
           <FlatList
             data={items.edges}
             style={styles.list}
-            keyExtractor={item => `${item.node.id}`}
+            keyExtractor={(item) => `${item.node.id}`}
             renderItem={renderItem}
             ListHeaderComponent={renderHeader(titleTexti18n)}
           />
@@ -67,9 +67,9 @@ class PaginationDemoView extends React.Component {
       <View style={styles.container}>
         <FlatList
           data={items.edges}
-          ref={ref => (this.listRef = ref)}
+          ref={(ref) => (this.listRef = ref)}
           style={styles.list}
-          keyExtractor={item => `${item.node.id}`}
+          keyExtractor={(item) => `${item.node.id}`}
           renderItem={renderItem}
           ListHeaderComponent={renderHeader(titleTexti18n)}
           onEndReachedThreshold={0.5}
@@ -85,12 +85,12 @@ PaginationDemoView.propTypes = {
   items: PropTypes.object,
   handlePageChange: PropTypes.func,
   renderItem: PropTypes.func,
-  pagination: PropTypes.string
+  pagination: PropTypes.string,
 };
 
 const styles = StyleSheet.create({
   list: {
-    marginTop: 5
+    marginTop: 5,
   },
   title: {
     marginTop: 5,
@@ -100,19 +100,19 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
     borderTopColor: '#000',
-    borderTopWidth: 0.3
+    borderTopWidth: 0.3,
   },
   pagination: {
     flex: 0.15,
-    marginTop: 5
+    marginTop: 5,
   },
   container: {
     flex: 1,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   listContainer: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 export default translate('pagination')(PaginationDemoView);

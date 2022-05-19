@@ -5,7 +5,7 @@ import { Menu, Dropdown, Icon } from 'antd';
 export default class LanguagePicker extends React.Component {
   getMenuItems = () => (
     <Menu onClick={({ key }) => this.props.i18n.changeLanguage(key)}>
-      {Object.keys(this.props.i18n.store.data).map(lang => (
+      {Object.keys(this.props.i18n.store.data).map((lang) => (
         <Menu.Item key={lang}>{lang.slice(0, 2).toUpperCase()}</Menu.Item>
       ))}
     </Menu>
@@ -30,5 +30,5 @@ export default class LanguagePicker extends React.Component {
 }
 
 LanguagePicker.propTypes = {
-  i18n: PropTypes.object.isRequired
+  i18n: PropTypes.object.isRequired,
 };

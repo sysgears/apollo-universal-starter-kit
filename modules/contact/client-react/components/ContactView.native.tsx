@@ -7,7 +7,7 @@ import { ContactForm as IContactForm } from '../types';
 
 interface ContactViewProps {
   t: TranslateFunction;
-  onSubmit: (values: IContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+  onSubmit: (values: IContactForm) => Promise<{ errors: { field: string; message: string }[] }>;
 }
 
 const ContactView = (props: ContactViewProps) => (
@@ -18,8 +18,8 @@ const ContactView = (props: ContactViewProps) => (
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 export default ContactView;

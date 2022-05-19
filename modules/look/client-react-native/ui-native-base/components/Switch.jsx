@@ -11,7 +11,7 @@ Switch.propTypes = {
   value: PropTypes.bool,
   color: PropTypes.string,
   onValueChange: PropTypes.func,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
 };
 
 export default Switch;

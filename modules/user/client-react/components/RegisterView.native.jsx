@@ -10,7 +10,7 @@ class RegisterView extends React.PureComponent {
     onSubmit: PropTypes.func,
     isRegistered: PropTypes.bool,
     hideModal: PropTypes.func,
-    t: PropTypes.func
+    t: PropTypes.func,
   };
 
   renderModal = () => {
@@ -40,28 +40,28 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'center',
     alignItems: 'stretch',
-    flex: 1
+    flex: 1,
   },
   modalWrapper: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'stretch',
-    margin: 20
+    margin: 20,
   },
   modalTitle: {
     fontSize: 18,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   modalBody: {
     fontSize: 16,
-    marginBottom: 20
+    marginBottom: 20,
   },
   button: {
     flex: 1,
-    paddingTop: 10
-  }
+    paddingTop: 10,
+  },
 });
 
 export default RegisterView;

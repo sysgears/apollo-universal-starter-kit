@@ -7,5 +7,5 @@ import ReduxCounter from './containers/ReduxCounter';
 export default new CounterModule({
   reducer: [{ counter: reducers }],
   localization: [{ ns: 'reduxCounter', resources }],
-  counterComponent: [<ReduxCounter />]
+  counterComponent: [<ReduxCounter />],
 });

@@ -26,12 +26,12 @@ export default () => ({
           from: input.email,
           to: process.env.EMAIL_SENDER || process.env.EMAIL_USER,
           subject: 'New email through contact us page',
-          html: `<p>${input.name} is sending the following message.</p><p>${input.content}</p>`
+          html: `<p>${input.name} is sending the following message.</p><p>${input.content}</p>`,
         });
       } catch (e) {
         log.error(e);
         throw new Error(t('contact:sendError'));
       }
-    }
-  }
+    },
+  },
 });

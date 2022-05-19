@@ -1,10 +1,10 @@
-const root = __dirname + '/..';
+const root = `${__dirname}/..`;
 
 require('@babel/register')({
   root,
   cwd: root,
-  configFile: root + '/tools/babel.config.js',
-  extensions: ['.js', '.jsx', '.ts', '.tsx']
+  configFile: `${root}/tools/babel.config.js`,
+  extensions: ['.js', '.jsx', '.ts', '.tsx'],
 });
 
 const prog = require('caporal');

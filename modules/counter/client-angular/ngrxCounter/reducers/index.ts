@@ -13,7 +13,7 @@ export interface CounterState {
 }
 
 const defaultState: CounterState = {
-  ngrxCount: 1
+  ngrxCount: 1,
 };
 
 export function reducer(state = defaultState, action: CounterActions) {

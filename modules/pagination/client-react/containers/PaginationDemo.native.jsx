@@ -11,12 +11,12 @@ class PaginationDemo extends React.Component {
   static propTypes = {
     t: PropTypes.func,
     items: PropTypes.object,
-    loadData: PropTypes.func
+    loadData: PropTypes.func,
   };
 
   state = { pagination: 'standard' };
 
-  onPaginationTypeChange = itemValue => {
+  onPaginationTypeChange = (itemValue) => {
     const { loadData, items } = this.props;
     this.setState({ pagination: itemValue }, loadData(0, items.limit));
   };
@@ -32,8 +32,8 @@ class PaginationDemo extends React.Component {
 
   renderItem = ({
     item: {
-      node: { title }
-    }
+      node: { title },
+    },
   }) => {
     return (
       <TouchableOpacity style={styles.postWrapper}>
@@ -48,7 +48,7 @@ class PaginationDemo extends React.Component {
     const options = [
       { value: 'standard', label: t('list.title.standard') },
       { value: 'relay', label: t('list.title.relay') },
-      { value: 'scroll', label: t('list.title.scroll') }
+      { value: 'scroll', label: t('list.title.scroll') },
     ];
     return (
       <View style={styles.container}>
@@ -84,10 +84,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    paddingHorizontal: 7
+    paddingHorizontal: 7,
   },
   text: {
-    fontSize: 16
+    fontSize: 16,
   },
   postWrapper: {
     flex: 1,
@@ -97,16 +97,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
-    height: 48
+    height: 48,
   },
   itemContainer: {
-    flex: 0.1
+    flex: 0.1,
   },
   itemAction: lookStyles.itemAction,
   itemTitle: lookStyles.itemTitle,
   itemSelect: {
-    flex: 25
-  }
+    flex: 25,
+  },
 });
 
 const PaginationDemoWithData = withDataProvider(PaginationDemo);

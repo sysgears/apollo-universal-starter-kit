@@ -8,8 +8,8 @@ const db = {
     database: process.env.DB_DATABASE,
     ssl: process.env.DB_SSL,
     multipleStatements: true,
-    charset: 'utf8'
-  }
+    charset: 'utf8',
+  },
 };
 
 const path = require('path');
@@ -21,19 +21,19 @@ if (process.env.NODE_ENV === 'test') {
 if (db.client === 'sqlite3') {
   db.connection = {
     development: {
-      filename: path.resolve('./dev-db.sqlite3')
+      filename: path.resolve('./dev-db.sqlite3'),
     },
     production: {
-      filename: path.resolve('./prod-db.sqlite3')
+      filename: path.resolve('./prod-db.sqlite3'),
     },
     test: {
-      filename: ':memory:'
-    }
+      filename: ':memory:',
+    },
   }[process.env.NODE_ENV || 'development'];
   db.pool = {
     afterCreate: (conn, cb) => {
       conn.run('PRAGMA foreign_keys = ON', cb);
-    }
+    },
   };
 }
 

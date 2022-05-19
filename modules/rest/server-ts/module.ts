@@ -10,5 +10,5 @@ const middleware = (app: Express) => createRestAPI(app, createSchema(ref.modules
 
 export default new ServerModule({
   onAppCreate: [async (modules: ServerModule) => (ref.modules = modules)],
-  middleware: [middleware]
+  middleware: [middleware],
 });

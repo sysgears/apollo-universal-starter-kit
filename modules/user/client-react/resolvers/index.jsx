@@ -11,16 +11,16 @@ const defaults = {
     orderBy: {
       column: '',
       order: '',
-      __typename: TYPE_USERS_STATE_ORDER_BY
+      __typename: TYPE_USERS_STATE_ORDER_BY,
     },
     filter: {
       searchText: '',
       role: '',
       isActive: true,
-      __typename: TYPE_USERS_STATE_FILTER
+      __typename: TYPE_USERS_STATE_FILTER,
     },
-    __typename: TYPE_USERS_STATE
-  }
+    __typename: TYPE_USERS_STATE,
+  },
 };
 
 const resolvers = {
@@ -29,14 +29,14 @@ const resolvers = {
       const { usersState } = cache.readQuery({ query: USERS_STATE_QUERY });
 
       const newUsersState = update(usersState, {
-        orderBy: { $merge: orderBy }
+        orderBy: { $merge: orderBy },
       });
 
       cache.writeData({
         data: {
           usersState: newUsersState,
-          __type: TYPE_USERS_STATE
-        }
+          __type: TYPE_USERS_STATE,
+        },
       });
 
       return null;
@@ -45,22 +45,22 @@ const resolvers = {
       const { usersState } = cache.readQuery({ query: USERS_STATE_QUERY });
 
       const newUsersState = update(usersState, {
-        filter: { $merge: filter }
+        filter: { $merge: filter },
       });
 
       cache.writeData({
         data: {
           usersState: newUsersState,
-          __type: TYPE_USERS_STATE
-        }
+          __type: TYPE_USERS_STATE,
+        },
       });
 
       return null;
-    }
-  }
+    },
+  },
 };
 
 export default {
   defaults,
-  resolvers
+  resolvers,
 };

@@ -4,14 +4,14 @@ import { UserContact } from '../../models/user-contact';
 const wb = new xl.Workbook();
 const options = {
   sheetFormat: {
-    defaultColWidth: 25
-  }
+    defaultColWidth: 25,
+  },
 };
 const style = wb.createStyle({
   font: {
     color: '#000000',
-    size: 12
-  }
+    size: 12,
+  },
 });
 
 export default function generateBufferExcel(contacts: UserContact[]) {

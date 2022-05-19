@@ -12,7 +12,7 @@ const HeaderTitleWithI18n = translate('chat')(HeaderTitle);
 export default new ClientModule({
   drawerItem: [
     {
-      screen: Drawer => (
+      screen: (Drawer) => (
         <Drawer.Screen
           name="Chat"
           component={Chat}
@@ -21,11 +21,11 @@ export default new ClientModule({
             headerLeft: () => (
               <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
             ),
-            drawerLabel: () => <HeaderTitleWithI18n />
+            drawerLabel: () => <HeaderTitleWithI18n />,
           })}
         />
-      )
-    }
+      ),
+    },
   ],
-  localization: [{ ns: 'chat', resources }]
+  localization: [{ ns: 'chat', resources }],
 });

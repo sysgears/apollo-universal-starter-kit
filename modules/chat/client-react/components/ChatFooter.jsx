@@ -21,39 +21,39 @@ const ChatFooter = ({ text, username, undoQuote }) => (
 ChatFooter.propTypes = {
   username: PropTypes.string,
   text: PropTypes.string,
-  undoQuote: PropTypes.func
+  undoQuote: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   container: {
     height: 50,
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
 
   leftLine: {
     height: 50,
     width: 5,
-    backgroundColor: 'red'
+    backgroundColor: 'red',
   },
 
   username: {
     color: 'red',
     paddingLeft: 10,
-    paddingTop: 5
+    paddingTop: 5,
   },
 
   text: {
     color: 'gray',
     paddingLeft: 10,
-    paddingTop: 5
+    paddingTop: 5,
   },
 
   closeButton: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'flex-end',
-    paddingRight: 10
-  }
+    paddingRight: 10,
+  },
 });
 
 export default ChatFooter;

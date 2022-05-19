@@ -1,7 +1,6 @@
 import { registerRootComponent } from 'expo';
 import * as SplashScreen from 'expo-splash-screen';
 import Constants from 'expo-constants';
-import * as Font from 'expo-font';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import React from 'react';
 import { View } from 'react-native';
@@ -39,24 +38,6 @@ export default async (modules: ClientModule) => {
       this.setState({ isReady: true });
     }
 
-    public render() {
-      if (!this.state.isReady) {
-        return null;
-      } else {
-        return React.createElement(
-          View,
-          {
-            style: {
-              flex: 1,
-              marginTop: Constants.statusBarHeight
-            }
-          },
-          React.createElement(App, { ...this.props, modules }),
-          React.createElement(View)
-        );
-      }
-    }
-
     public _activate() {
       if (process.env.NODE_ENV === 'development') {
         activateKeepAwake();
@@ -67,6 +48,23 @@ export default async (modules: ClientModule) => {
       if (process.env.NODE_ENV === 'development') {
         deactivateKeepAwake();
       }
+    }
+
+    public render() {
+      if (!this.state.isReady) {
+        return null;
+      }
+      return React.createElement(
+        View,
+        {
+          style: {
+            flex: 1,
+            marginTop: Constants.statusBarHeight,
+          },
+        },
+        React.createElement(App, { ...this.props, modules }),
+        React.createElement(View)
+      );
     }
   }
 

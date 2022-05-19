@@ -2,7 +2,7 @@ export default () => ({
   UserAuth: {
     linkedin(obj) {
       return obj;
-    }
+    },
   },
   LinkedInAuth: {
     lnId(obj) {
@@ -10,6 +10,6 @@ export default () => ({
     },
     displayName(obj) {
       return obj.lnDisplayName;
-    }
-  }
+    },
+  },
 });

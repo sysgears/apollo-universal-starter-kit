@@ -12,7 +12,7 @@ const createAuthRedirectUrl = (authUrl: string): string => {
   const expoHostname = hostname === 'localhost' ? `localhost` : `${url.parse(Constants.linkingUrl).hostname}.nip.io`;
   const urlHostname = __DEV__ ? expoHostname : hostname;
 
-  return `${protocol}//${urlHostname}${port ? ':' + port : ''}${authUrl}?expoUrl=${encodeURIComponent(
+  return `${protocol}//${urlHostname}${port ? `:${port}` : ''}${authUrl}?expoUrl=${encodeURIComponent(
     Constants.linkingUrl
   )}`;
 };
@@ -96,25 +96,25 @@ const SocialAuthComponent = (props: ComponentProps) => {
 
 const styles = StyleSheet.create({
   icon: {
-    color: '#3769ae'
+    color: '#3769ae',
   },
   buttonIcon: {
     color: '#fff',
-    marginLeft: 10
+    marginLeft: 10,
   },
   iconWrapper: {
     alignItems: 'center',
-    marginTop: 10
+    marginTop: 10,
   },
   linkText: {
     color: '#0056b3',
     fontSize: 16,
-    fontWeight: '600'
+    fontWeight: '600',
   },
   link: {
     justifyContent: 'center',
     alignItems: 'center',
-    margin: 10
+    margin: 10,
   },
   buttonContainer: {
     height: 45,
@@ -122,30 +122,30 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#3769ae',
     borderRadius: 4,
-    marginBottom: 15
+    marginBottom: 15,
   },
   separator: {
     height: 30,
     width: 1.5,
     marginLeft: 10,
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   btnIconContainer: {
     flex: 2,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   btnTextContainer: {
     flex: 5,
     justifyContent: 'center',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   btnText: {
     color: '#fff',
     fontSize: 16,
-    fontWeight: '400'
-  }
+    fontWeight: '400',
+  },
 });
 
 export default SocialAuthComponent;

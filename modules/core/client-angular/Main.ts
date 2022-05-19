@@ -19,7 +19,7 @@ function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-const metaReducers: Array<MetaReducer<any, any>> = [stateSetter];
+const metaReducers: MetaReducer<any, any>[] = [stateSetter];
 
 if (module.hot) {
   module.hot.dispose(() => {
@@ -29,7 +29,7 @@ if (module.hot) {
 
 @Component({
   selector: 'body div:first-child',
-  template: '<router-outlet></router-outlet>'
+  template: '<router-outlet></router-outlet>',
 })
 class MainComponent implements OnInit {
   constructor(
@@ -44,18 +44,18 @@ class MainComponent implements OnInit {
   public ngOnInit(): void {
     this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter((event) => event instanceof NavigationEnd),
         map(() => this.activatedRoute),
-        map(route => {
+        map((route) => {
           while (route.firstChild) {
             route = route.firstChild;
           }
           return route;
         }),
-        filter(route => route.outlet === 'primary'),
-        mergeMap(route => route.data)
+        filter((route) => route.outlet === 'primary'),
+        mergeMap((route) => route.data)
       )
-      .subscribe(event => {
+      .subscribe((event) => {
         this.titleService.setTitle(event.title);
         this.meta.updateTag({ name: 'description', content: event.meta });
       });

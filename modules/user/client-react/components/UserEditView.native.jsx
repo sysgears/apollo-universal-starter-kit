@@ -13,7 +13,7 @@ class UserEditView extends React.PureComponent {
     user: PropTypes.object,
     currentUser: PropTypes.object,
     t: PropTypes.func,
-    onSubmit: PropTypes.func
+    onSubmit: PropTypes.func,
   };
 
   render() {
@@ -21,27 +21,26 @@ class UserEditView extends React.PureComponent {
 
     if (loading && !user) {
       return <Loading text={t('userEdit.loadMsg')} />;
-    } else {
-      const isNotSelf = !user || (user && user.id !== currentUser.id);
-      return (
-        <View style={styles.container}>
-          <UserForm
-            onSubmit={this.props.onSubmit}
-            shouldDisplayRole={isNotSelf}
-            shouldDisplayActive={isNotSelf}
-            initialValues={user || {}}
-          />
-        </View>
-      );
     }
+    const isNotSelf = !user || (user && user.id !== currentUser.id);
+    return (
+      <View style={styles.container}>
+        <UserForm
+          onSubmit={this.props.onSubmit}
+          shouldDisplayRole={isNotSelf}
+          shouldDisplayActive={isNotSelf}
+          initialValues={user || {}}
+        />
+      </View>
+    );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center'
-  }
+    justifyContent: 'center',
+  },
 });
 
 export default withLoadedUser(translate('user')(UserEditView));

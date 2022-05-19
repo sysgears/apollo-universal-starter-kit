@@ -13,7 +13,7 @@ interface SubscribersOnlyViewProps {
   t: TranslateFunction;
 }
 
-export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
+const SubscriberPageView = ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
   if (loading) {
     return <p>{t('loading')}</p>;
   }
@@ -30,3 +30,5 @@ export default ({ loading, subscriberNumber, t }: SubscribersOnlyViewProps) => {
     </Fragment>
   );
 };
+
+export default SubscriberPageView;

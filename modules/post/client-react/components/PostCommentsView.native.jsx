@@ -9,7 +9,7 @@ import {
   Keyboard,
   TouchableOpacity,
   Platform,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from 'react-native';
 import { FontAwesome } from '@expo/vector-icons';
 import { translate } from '@gqlapp/i18n-client-react';
@@ -27,19 +27,19 @@ class PostCommentsView extends React.PureComponent {
     deleteComment: PropTypes.func.isRequired,
     subscribeToMore: PropTypes.func.isRequired,
     onCommentSelect: PropTypes.func.isRequired,
-    t: PropTypes.func
+    t: PropTypes.func,
   };
 
-  keyExtractor = item => `${item.id}`;
+  keyExtractor = (item) => `${item.id}`;
 
   renderItemIOS = ({ item: { id, content } }) => {
     const { comment, deleteComment, onCommentSelect, t } = this.props;
     return (
       <SwipeAction
-        onPress={() => onCommentSelect({ id: id, content: content })}
+        onPress={() => onCommentSelect({ id, content })}
         right={{
           text: t('comment.btn.del'),
-          onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id)
+          onPress: () => this.onCommentDelete(comment, deleteComment, onCommentSelect, id),
         }}
       >
         {content}
@@ -50,7 +50,7 @@ class PostCommentsView extends React.PureComponent {
   renderItemAndroid = ({ item: { id, content } }) => {
     const { deleteComment, onCommentSelect, comment } = this.props;
     return (
-      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id: id, content: content })}>
+      <TouchableWithoutFeedback onPress={() => onCommentSelect({ id, content })}>
         <View style={styles.postWrapper}>
           <Text style={styles.text}>{content}</Text>
           <TouchableOpacity
@@ -72,7 +72,7 @@ class PostCommentsView extends React.PureComponent {
     deleteComment(id);
   };
 
-  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => values => {
+  onSubmit = (comment, postId, addComment, editComment, onCommentSelect) => (values) => {
     if (comment.id === null) {
       addComment(values.content, postId);
     } else {
@@ -111,20 +111,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   title: {
     fontSize: 20,
     fontWeight: '600',
     textAlign: 'center',
-    margin: 10
+    margin: 10,
   },
   list: {
     paddingTop: 10,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   text: {
-    fontSize: 18
+    fontSize: 18,
   },
   iconWrapper: {
     backgroundColor: 'transparent',
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     height: 50,
     alignItems: 'center',
     justifyContent: 'center',
-    flexDirection: 'row'
+    flexDirection: 'row',
   },
   postWrapper: {
     flex: 1,
@@ -142,6 +142,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomWidth: 0.3,
     height: 50,
-    paddingLeft: 7
-  }
+    paddingLeft: 7,
+  },
 });

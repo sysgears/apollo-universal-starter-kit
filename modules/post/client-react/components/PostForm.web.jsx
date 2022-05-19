@@ -8,7 +8,7 @@ import { Form, RenderField, Button } from '@gqlapp/look-client-react';
 
 const postFormSchema = {
   title: [required],
-  content: [required]
+  content: [required],
 };
 
 const PostForm = ({ values, handleSubmit, submitting, t }) => {
@@ -35,20 +35,20 @@ PostForm.propTypes = {
   submitting: PropTypes.bool,
   values: PropTypes.object,
   post: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const PostFormWithFormik = withFormik({
-  mapPropsToValues: props => ({
+  mapPropsToValues: (props) => ({
     title: props.post && props.post.title,
-    content: props.post && props.post.content
+    content: props.post && props.post.content,
   }),
-  validate: values => validate(values, postFormSchema),
+  validate: (values) => validate(values, postFormSchema),
   handleSubmit(values, { props: { onSubmit } }) {
     onSubmit(values);
   },
   enableReinitialize: true,
-  displayName: 'PostForm' // helps with React DevTools
+  displayName: 'PostForm', // helps with React DevTools
 });
 
 export default translate('post')(PostFormWithFormik(PostForm));

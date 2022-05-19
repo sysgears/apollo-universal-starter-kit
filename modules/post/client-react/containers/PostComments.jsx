@@ -17,22 +17,22 @@ import COMMENT_QUERY_CLIENT from '../graphql/CommentQuery.client.graphql';
 
 const onAddComment = (prev, node) => {
   // ignore if duplicate
-  if (prev.post.comments.some(comment => comment.id === node.id)) {
+  if (prev.post.comments.some((comment) => comment.id === node.id)) {
     return prev;
   }
 
-  const filteredComments = prev.post.comments.filter(comment => comment.id);
+  const filteredComments = prev.post.comments.filter((comment) => comment.id);
   return update(prev, {
     post: {
       comments: {
-        $set: [...filteredComments, node]
-      }
-    }
+        $set: [...filteredComments, node],
+      },
+    },
   });
 };
 
 const onDeleteComment = (prev, id) => {
-  const index = prev.post.comments.findIndex(x => x.id === id);
+  const index = prev.post.comments.findIndex((x) => x.id === id);
 
   // ignore if not found
   if (index < 0) {
@@ -42,9 +42,9 @@ const onDeleteComment = (prev, id) => {
   return update(prev, {
     post: {
       comments: {
-        $splice: [[index, 1]]
-      }
-    }
+        $splice: [[index, 1]],
+      },
+    },
   });
 };
 
@@ -52,22 +52,22 @@ const getPostFromCache = (cache, postId) =>
   cache.readQuery({
     query: POST_QUERY,
     variables: {
-      id: postId
-    }
+      id: postId,
+    },
   });
 
 const writePostToCache = (cache, post, postId) =>
   cache.writeQuery({
     query: POST_QUERY,
     variables: {
-      id: postId
+      id: postId,
     },
     data: {
       post: {
         ...post,
-        __typename: 'Post'
-      }
-    }
+        __typename: 'Post',
+      },
+    },
   });
 
 class PostComments extends React.Component {
@@ -76,7 +76,7 @@ class PostComments extends React.Component {
     comments: PropTypes.array.isRequired,
     comment: PropTypes.object.isRequired,
     onCommentSelect: PropTypes.func.isRequired,
-    subscribeToMore: PropTypes.func.isRequired
+    subscribeToMore: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -89,7 +89,7 @@ class PostComments extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    let prevPostId = prevProps.postId || null;
+    const prevPostId = prevProps.postId || null;
     // Check if props have changed and, if necessary, stop the subscription
     if (this.subscription && this.props.postId !== prevPostId) {
       this.subscription();
@@ -114,7 +114,7 @@ class PostComments extends React.Component {
     }
   }
 
-  subscribeToCommentList = postId => {
+  subscribeToCommentList = (postId) => {
     const { subscribeToMore } = this.props;
 
     this.subscription = subscribeToMore({
@@ -125,9 +125,9 @@ class PostComments extends React.Component {
         {
           subscriptionData: {
             data: {
-              commentUpdated: { mutation, id, node }
-            }
-          }
+              commentUpdated: { mutation, id, node },
+            },
+          },
         }
       ) => {
         let newResult = prev;
@@ -139,7 +139,7 @@ class PostComments extends React.Component {
         }
 
         return newResult;
-      }
+      },
     });
   };
 
@@ -159,8 +159,8 @@ const PostCommentsWithApollo = compose(
             addComment: {
               __typename: 'Comment',
               id: null,
-              content: content
-            }
+              content,
+            },
           },
           update: (cache, { data: { addComment } }) => {
             const prevPost = getPostFromCache(cache, postId);
@@ -169,9 +169,9 @@ const PostCommentsWithApollo = compose(
               const { post } = onAddComment(prevPost, addComment);
               writePostToCache(cache, post, postId);
             }
-          }
-        })
-    })
+          },
+        }),
+    }),
   }),
   graphql(EDIT_COMMENT, {
     props: ({ mutate, ownProps: { postId } }) => ({
@@ -182,24 +182,24 @@ const PostCommentsWithApollo = compose(
             __typename: 'Mutation',
             editComment: {
               __typename: 'Comment',
-              id: id,
-              content: content
-            }
-          }
-        })
-    })
+              id,
+              content,
+            },
+          },
+        }),
+    }),
   }),
   graphql(DELETE_COMMENT, {
     props: ({ mutate, ownProps: { postId } }) => ({
-      deleteComment: id =>
+      deleteComment: (id) =>
         mutate({
           variables: { input: { id, postId } },
           optimisticResponse: {
             __typename: 'Mutation',
             deleteComment: {
               __typename: 'Comment',
-              id: id
-            }
+              id,
+            },
           },
           update: (cache, { data: { deleteComment } }) => {
             const prevPost = getPostFromCache(cache, postId);
@@ -208,19 +208,19 @@ const PostCommentsWithApollo = compose(
               const { post } = onDeleteComment(prevPost, deleteComment.id);
               writePostToCache(cache, post, postId);
             }
-          }
-        })
-    })
+          },
+        }),
+    }),
   }),
   graphql(ADD_COMMENT_CLIENT, {
     props: ({ mutate }) => ({
-      onCommentSelect: comment => {
-        mutate({ variables: { comment: comment } });
-      }
-    })
+      onCommentSelect: (comment) => {
+        mutate({ variables: { comment } });
+      },
+    }),
   }),
   graphql(COMMENT_QUERY_CLIENT, {
-    props: ({ data: { comment } }) => ({ comment })
+    props: ({ data: { comment } }) => ({ comment }),
   })
 )(PostComments);
 

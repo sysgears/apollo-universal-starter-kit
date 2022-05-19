@@ -8,9 +8,9 @@ const social = {
   ...linkedinData,
   ...facebookData,
   ...googleData,
-  ...githubData
+  ...githubData,
 };
 
 export default new AuthModule(facebook, github, google, linkedin, {
-  appContext: { social }
+  appContext: { social },
 });

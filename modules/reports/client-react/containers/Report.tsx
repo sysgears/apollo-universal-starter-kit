@@ -18,8 +18,8 @@ const Report = ({ t }: ReportProps) => (
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('meta')}`
-        }
+          content: `${settings.app.name} - ${t('meta')}`,
+        },
       ]}
     />
     {reports.reportComponent.map((component: any, idx: number, items: any) =>

@@ -5,7 +5,7 @@ import { translate } from '@gqlapp/i18n-client-react';
 
 import PostForm from './PostForm';
 
-const onSubmit = addPost => values => {
+const onSubmit = (addPost) => (values) => {
   addPost(values.title, values.content);
 };
 
@@ -20,15 +20,15 @@ const PostAddView = ({ addPost }) => {
 };
 
 PostAddView.propTypes = {
-  addPost: PropTypes.func.isRequired
+  addPost: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 });
 
 export default translate('post')(PostAddView);

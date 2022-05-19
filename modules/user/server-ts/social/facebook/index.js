@@ -7,13 +7,13 @@ import { onAuthenticationSuccess, registerUser } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
 
-const createFacebookAuth = async user => User.createFacebookAuth(user);
+const createFacebookAuth = async (user) => User.createFacebookAuth(user);
 
 async function verifyCallback(accessToken, refreshToken, profile, cb) {
   const {
     id,
     displayName,
-    emails: [{ value }]
+    emails: [{ value }],
   } = profile;
 
   try {
@@ -36,8 +36,8 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
 export const facebookData = {
   facebook: {
     onAuthenticationSuccess,
-    verifyCallback
-  }
+    verifyCallback,
+  },
 };
 
 export default settings.auth.social.facebook.enabled && !__TEST__

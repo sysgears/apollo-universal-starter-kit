@@ -5,11 +5,11 @@
  * (table is optional)
  */
 export default function grouping(queryBuilder, args) {
-  let { groupBys } = args;
+  const { groupBys } = args;
 
   // add group by
   if (groupBys) {
-    for (let groupBy of groupBys) {
+    for (const groupBy of groupBys) {
       if (!groupBy) {
         continue;
       }
@@ -17,9 +17,9 @@ export default function grouping(queryBuilder, args) {
         continue;
       }
       if (groupBy && groupBy.column) {
-        let column = groupBy.column;
+        let { column } = groupBy;
         if (groupBy.table) {
-          column = groupBy.table + '.' + column;
+          column = `${groupBy.table}.${column}`;
         }
 
         queryBuilder.groupBy(column);

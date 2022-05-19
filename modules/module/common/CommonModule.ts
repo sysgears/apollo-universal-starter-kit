@@ -1,3 +1,4 @@
+import { foldTo } from 'fractal-objects';
 import { Resource } from 'i18next';
 
 import Module, { ModuleShape } from './Module';
@@ -7,17 +8,20 @@ import Module, { ModuleShape } from './Module';
  */
 export interface CommonModuleShape extends ModuleShape {
   // Localizations for `i18next` library
-  localization?: Array<{ ns: string; resources: Resource }>;
+  localization?: { ns: string; resources: Resource }[];
   // Feature modules shared context
   appContext?: { [key: string]: any };
 }
 
-interface CommonModule extends CommonModuleShape {}
-
 /**
  * Common ancestor for client and server feature modules.
  */
-class CommonModule extends Module {
+class CommonModule extends Module implements CommonModuleShape {
+  // Localizations for `i18next` library
+  localization?: { ns: string; resources: Resource }[];
+  // Feature modules shared context
+  appContext?: { [key: string]: any };
+
   /**
    * A constructor of common module, that folds all the feature modules
    * into a single module represented by this instance.
@@ -26,6 +30,7 @@ class CommonModule extends Module {
    */
   constructor(...modules: CommonModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   /**

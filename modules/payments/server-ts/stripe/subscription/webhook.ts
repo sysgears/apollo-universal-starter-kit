@@ -7,6 +7,7 @@ import settings from '@gqlapp/config';
 import StripeSubscriptionDAO from './sql';
 
 const { User } = require('@gqlapp/user-server-ts');
+
 const StripeSubscription = new StripeSubscriptionDAO();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -24,7 +25,7 @@ const sendEmailToUser = async (userId: number, subject: string, html: string) =>
     from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
     to: email,
     subject,
-    html
+    html,
   });
 };
 
@@ -51,7 +52,7 @@ const deleteSubscription = async (stripeEvent: any, websiteUrl: string, t: Trans
       expiryMonth: null,
       expiryYear: null,
       last4: null,
-      brand: null
+      brand: null,
     });
 
     await sendEmailToUser(

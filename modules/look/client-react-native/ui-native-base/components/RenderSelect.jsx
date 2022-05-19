@@ -4,12 +4,13 @@ import { Platform, StyleSheet, View, Text } from 'react-native';
 import Select from './Select';
 import RenderSelectStyles from '../styles/RenderSelect';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const RenderSelect = ({ style, label, ...props }) => {
   const selectProps = {
     iconName: 'caret-down',
     icon: true,
     iconSize: 20,
-    ...props
+    ...props,
   };
   return (
     <View style={styles.container}>
@@ -34,7 +35,7 @@ const RenderSelect = ({ style, label, ...props }) => {
 
 RenderSelect.propTypes = {
   style: PropTypes.number,
-  label: PropTypes.string
+  label: PropTypes.string,
 };
 
 const styles = StyleSheet.create(RenderSelectStyles);

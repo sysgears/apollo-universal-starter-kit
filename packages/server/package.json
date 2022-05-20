@@ -117,7 +117,7 @@
     "react-cookie": "^2.2.0",
     "react-debounce-input": "^3.1.0",
     "react-dom": "18.1.0",
-    "react-helmet": "^6.0.0",
+    "react-helmet": "^6.1.0",
     "react-redux": "^7.1.0",
     "react-router": "^5.0.0",
     "react-stripe-elements": "^1.2.1",

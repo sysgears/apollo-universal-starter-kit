@@ -35,7 +35,8 @@ export const useDataProvider = () => {
     },
     [items]
   );
-  const useMountEffect = (fn) => useEffect(fn, [fn]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const useMountEffect = (fn) => useEffect(fn, []);
   useMountEffect(() => {
     loadData(0, 'replace');
   });

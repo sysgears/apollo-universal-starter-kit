@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { PageLayout } from '@gqlapp/look-client-react';
@@ -6,7 +6,7 @@ import { PageLayout } from '@gqlapp/look-client-react';
 import { withStripeSubscription } from './withStripeSubscription';
 
 interface SubscriptionAuthRouterProps {
-  component: ComponentType;
+  component: React.ComponentFactory<any, any>;
   loading: boolean;
   stripeSubscription: {
     active: boolean;

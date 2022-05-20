@@ -6961,7 +6961,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-helmet@npm:^6.0.0":
+"@types/react-helmet@npm:^6.1.0":
   version: 6.1.5
   resolution: "@types/react-helmet@npm:6.1.5"
   dependencies:
@@ -12169,7 +12169,7 @@ __metadata:
     "@types/node": ^13.7.6
     "@types/react": ^16.9.23
     "@types/react-dom": ^16.9.0
-    "@types/react-helmet": ^6.0.0
+    "@types/react-helmet": ^6.1.0
     "@types/react-native": ^0.55.7
     "@types/react-redux": ^7.1.2
     "@types/react-router-dom": ^4.3.4
@@ -12229,7 +12229,7 @@ __metadata:
     react-dom: 16.11.0
     react-dropzone: ^4.2.3
     react-ga: ^2.3.5
-    react-helmet: ^6.0.0
+    react-helmet: ^6.1.0
     react-i18next: ^11.16.9
     react-native: 0.68.2
     react-native-credit-card-input: ^0.4.1
@@ -30032,7 +30032,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-helmet@npm:^6.0.0":
+"react-helmet@npm:^6.1.0":
   version: 6.1.0
   resolution: "react-helmet@npm:6.1.0"
   dependencies:
@@ -32612,7 +32612,7 @@ __metadata:
     react-cookie: ^2.2.0
     react-debounce-input: ^3.1.0
     react-dom: 18.1.0
-    react-helmet: ^6.0.0
+    react-helmet: ^6.1.0
     react-redux: ^7.1.0
     react-router: ^5.0.0
     react-stripe-elements: ^1.2.1

@@ -2,10 +2,9 @@ const webpack = require('webpack');
 const path = require('path');
 const waitOn = require('wait-on');
 
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
 const MiniCSSExtractPlugin = require('mini-css-extract-plugin');
-const ManifestPlugin = require('webpack-manifest-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
@@ -48,15 +47,15 @@ const config = {
       { test: /\.mjs$/, include: /node_modules/, type: 'javascript/auto' },
       {
         test: /\.(png|ico|jpg|gif|xml)$/,
-        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } },
+        use: { loader: 'url-loader', options: { name: '[fullhash].[ext]', limit: 100000 } },
       },
       {
         test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: { loader: 'url-loader', options: { name: '[hash].[ext]', limit: 100000 } },
+        use: { loader: 'url-loader', options: { name: '[fullhash].[ext]', limit: 100000 } },
       },
       {
         test: /\.(otf|ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-        use: { loader: 'file-loader', options: { name: '[hash].[ext]' } },
+        use: { loader: 'file-loader', options: { name: '[fullhash].[ext]' } },
       },
       {
         test: /\.css$/,
@@ -119,18 +118,16 @@ const config = {
   watchOptions: { ignored: /build/ },
   output: {
     pathinfo: false,
-    filename: '[name].[hash].js',
+    filename: '[name].[fullhash].js',
     chunkFilename: '[name].[chunkhash].js',
     path: path.join(__dirname, 'build'),
     publicPath: '/',
   },
-  devtool: process.env.NODE_ENV === 'production' ? '#nosources-source-map' : '#cheap-module-source-map',
+  devtool: process.env.NODE_ENV === 'production' ? 'nosources-source-map' : 'cheap-module-source-map',
   mode: process.env.NODE_ENV || 'development',
   performance: { hints: false },
   plugins: (process.env.NODE_ENV !== 'production'
-    ? [new webpack.HotModuleReplacementPlugin()].concat(
-        typeof STORYBOOK_MODE === 'undefined' ? [new WaitOnWebpackPlugin('tcp:localhost:8080')] : []
-      )
+    ? [].concat(typeof STORYBOOK_MODE === 'undefined' ? [new WaitOnWebpackPlugin('tcp:localhost:8080')] : [])
     : [
         new MiniCSSExtractPlugin({
           chunkFilename: '[name].[id].[chunkhash].css',
@@ -139,27 +136,21 @@ const config = {
       ]
   )
     .concat([
-      new CleanWebpackPlugin('build'),
+      new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['build'] }),
       new webpack.DefinePlugin(
         Object.assign(
           ...Object.entries(buildConfig).map(([k, v]) => ({
-            [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`,
+            [k]: typeof v !== 'string' ? v : `"${v.replace(/\\/g, '\\\\')}"`,
           }))
         )
       ),
-      new ManifestPlugin({ fileName: 'assets.json' }),
-      new HardSourceWebpackPlugin({
-        cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`),
-      }),
-      new HardSourceWebpackPlugin.ExcludeModulePlugin([
-        {
-          test: /mini-css-extract-plugin[\\/]dist[\\/]loader/,
-        },
-      ]),
+      new WebpackManifestPlugin({ fileName: 'assets.json' }),
       new LoadablePlugin(),
     ])
     .concat(
-      buildConfig.__SSR__ ? [] : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true })]
+      buildConfig.__SSR__
+        ? []
+        : [new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true, cache: false })]
     ),
   optimization: {
     splitChunks: {
@@ -168,31 +159,27 @@ const config = {
     runtimeChunk: true,
     concatenateModules: false,
   },
-  node: { __dirname: true, __filename: true, fs: 'empty', net: 'empty', tls: 'empty' },
+  node: { __dirname: true, __filename: true },
   devServer: {
-    host: '0.0.0.0',
     hot: true,
-    public: `localhost:${webpackPort}`,
-    publicPath: '/',
     headers: { 'Access-Control-Allow-Origin': '*' },
     open: true,
-    quiet: false,
-    noInfo: true,
     historyApiFallback: true,
     port: webpackPort,
-    writeToDisk: (pathname) => /(assets.json|loadable-stats.json)$/.test(pathname),
+    devMiddleware: {
+      publicPath: '/',
+      writeToDisk: (pathname) => /(assets.json|loadable-stats.json)$/.test(pathname),
+    },
     ...(buildConfig.__SSR__
       ? {
           proxy: {
             '!(/sockjs-node/**/*|/*.hot-update.{json,js})': {
               target: 'http://localhost:8080',
               logLevel: 'info',
-              ws: true,
             },
           },
         }
       : {}),
-    disableHostCheck: true,
   },
 };
 

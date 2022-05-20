@@ -1,8 +1,7 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const HardSourceWebpackPlugin = require('hard-source-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 const NodeHmrPlugin = require('node-hmr-plugin');
 
@@ -100,32 +99,29 @@ const config = {
     publicPath: '/',
     sourceMapFilename: '[name].[chunkhash].js.map',
   },
-  devtool: process.env.NODE_ENV === 'production' ? '#nosources-source-map' : '#cheap-module-source-map',
+  devtool: process.env.NODE_ENV === 'production' ? 'nosources-source-map' : 'cheap-module-source-map',
   mode: process.env.NODE_ENV || 'development',
   performance: { hints: false },
   plugins: (process.env.NODE_ENV !== 'production'
     ? [new webpack.HotModuleReplacementPlugin(), new NodeHmrPlugin({ cmd: '{app}', restartOnExitCodes: [250] })]
     : []
   ).concat([
-    new CleanWebpackPlugin('build'),
+    new CleanWebpackPlugin({ cleanOnceBeforeBuildPatterns: ['build'] }),
     new webpack.BannerPlugin({ banner: 'require("source-map-support").install();', raw: true, entryOnly: true }),
     new webpack.DefinePlugin(
       Object.assign(
         ...Object.entries(buildConfig).map(([k, v]) => ({
-          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`,
+          [k]: typeof v !== 'string' ? v : `"${v.replace(/\\/g, '\\\\')}"`,
         }))
       )
     ),
-    new HardSourceWebpackPlugin({
-      cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`),
-    }),
   ]),
   target: 'node',
   externals: [
     nodeExternals(),
     nodeExternals({
       modulesDir: path.resolve(__dirname, '../../node_modules'),
-      whitelist: [modulenameRegex],
+      allowlist: [modulenameRegex],
     }),
   ],
   optimization: {

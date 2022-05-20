@@ -1,7 +1,8 @@
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import { createUploadLink } from 'apollo-upload-client';
-import { extractFiles } from 'extract-files';
+
+const { extractFiles } = require('extract-files');
 
 export default (uri) =>
   ApolloLink.split(

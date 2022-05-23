@@ -15,27 +15,29 @@ const db = {
 // eslint-disable-next-line no-undef
 const path = require('path');
 
-if (process.env.NODE_ENV === 'test') {
-  db.client = 'sqlite3';
-}
+if (path.resolve) {
+  if (process.env.NODE_ENV === 'test') {
+    db.client = 'sqlite3';
+  }
 
-if (db.client === 'sqlite3') {
-  db.connection = {
-    development: {
-      filename: path.resolve('./dev-db.sqlite3'),
-    },
-    production: {
-      filename: path.resolve('./prod-db.sqlite3'),
-    },
-    test: {
-      filename: ':memory:',
-    },
-  }[process.env.NODE_ENV || 'development'];
-  db.pool = {
-    afterCreate: (conn, cb) => {
-      conn.run('PRAGMA foreign_keys = ON', cb);
-    },
-  };
+  if (db.client === 'sqlite3') {
+    db.connection = {
+      development: {
+        filename: path.resolve('./dev-db.sqlite3'),
+      },
+      production: {
+        filename: path.resolve('./prod-db.sqlite3'),
+      },
+      test: {
+        filename: ':memory:',
+      },
+    }[process.env.NODE_ENV || 'development'];
+    db.pool = {
+      afterCreate: (conn, cb) => {
+        conn.run('PRAGMA foreign_keys = ON', cb);
+      },
+    };
+  }
 }
 
 export default db;

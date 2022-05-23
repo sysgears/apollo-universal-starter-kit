@@ -12546,7 +12546,6 @@ __metadata:
     subscriptions-transport-ws: ^0.9.16
     use-react-router: ^1.0.7
     uuid: ^3.3.2
-    webpack: ^5.72.1
   dependenciesMeta:
     "@expo/vector-icons":
       optional: true
@@ -33112,7 +33111,6 @@ __metadata:
     swagger-ui-express: ^4.0.2
     universal-cookie-express: ^2.2.0
     uuid: ^3.2.1
-    webpack: ^5.72.1
     ws: ^5.1.1
   languageName: unknown
   linkType: soft

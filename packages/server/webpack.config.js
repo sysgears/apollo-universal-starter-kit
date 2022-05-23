@@ -74,7 +74,7 @@ const config = {
     unsafeCache: false,
   },
   resolve: {
-    symlinks: false,
+    symlinks: true,
     cacheWithContext: false,
     unsafeCache: false,
     extensions: [

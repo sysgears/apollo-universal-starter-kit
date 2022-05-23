@@ -31,7 +31,7 @@
     "tests:watch": "lerna run --parallel tests:watch --stream",
     "lint": "yarn eslint",
     "eslint": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json .",
-    "heroku-postbuild": "lerna run --parallel heroku-postbuild --stream",
+    "heroku-postbuild": "yarn workspaces foreach -pv run heroku-postbuild",
     "precommit": "lint-staged",
     "postinstall": "opencollective postinstall"
   },

@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src",
   "scripts": {
-    "build": "cross-env NODE_ENV=production webpack",
+    "build": "NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",
     "tests": "jest",
     "tests:watch": "jest --watch",
@@ -145,7 +145,8 @@
     "react-test-renderer": "16.11.0",
     "request": "^2.83.0",
     "rimraf": "^2.6.2",
-    "storybook-addon-locale": "^0.3.0"
+    "storybook-addon-locale": "^0.3.0",
+    "webpack": "^5.72.1"
   },
   "optionalDependencies": {
     "@expo/vector-icons": "^13.0.0",

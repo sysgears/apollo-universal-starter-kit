@@ -114,6 +114,10 @@ const config = {
       '.tsx',
       '.json',
     ],
+    fallback: {
+      fs: false,
+      path: false,
+    },
   },
   watchOptions: { ignored: /build/ },
   output: {

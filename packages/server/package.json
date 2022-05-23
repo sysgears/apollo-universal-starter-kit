@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "main": "src",
   "scripts": {
-    "build": "NODE_ENV=production run -T webpack",
+    "build": "NODE_ENV=production webpack",
     "clean": "rimraf build .tmp",
     "start": "node --harmony build",
     "test": "yarn tests && yarn lint",
@@ -171,6 +171,7 @@
     "request": "^2.83.0",
     "resolve-url-loader": "^2.2.1",
     "rimraf": "^2.6.2",
+    "webpack": "^5.72.1",
     "ws": "^5.1.1"
   }
 }

@@ -126,7 +126,7 @@ const config = {
     unsafeCache: false,
   },
   resolve: {
-    symlinks: false,
+    symlinks: true,
     cacheWithContext: false,
     unsafeCache: false,
     extensions: [
@@ -180,12 +180,12 @@ const config = {
     new webpack.DefinePlugin(
       Object.assign(
         ...Object.entries(buildConfig).map(([k, v]) => ({
-          [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`,
+          [k]: typeof v !== 'string' ? v : `"${v.replace(/\\/g, '\\\\')}"`,
         }))
       )
     ),
     new ManifestPlugin({ fileName: 'assets.json' }),
-    new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true }),
+    new HtmlWebpackPlugin({ template: './html-plugin-template.ejs', inject: true, cache: false }),
     new HardSourceWebpackPlugin({
       cacheDirectory: path.join(__dirname, `../../node_modules/.cache/hard-source-${path.basename(__dirname)}`),
     }),

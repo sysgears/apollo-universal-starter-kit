@@ -13,10 +13,7 @@ export default class Upload {
   }
 
   public file(id: number) {
-    return knex('upload')
-      .select('*')
-      .where({ id })
-      .first();
+    return knex('upload').select('*').where({ id }).first();
   }
 
   public saveFiles(files: [File]) {
@@ -24,8 +21,6 @@ export default class Upload {
   }
 
   public deleteFile(id: number) {
-    return knex('upload')
-      .where({ id })
-      .del();
+    return knex('upload').where({ id }).del();
   }
 }

@@ -13,10 +13,10 @@ import LoginView from '../components/LoginView';
 
 import LOGIN from '../graphql/Login.graphql';
 
-const Login = props => {
+const Login = (props) => {
   const { t, login, client, history, location } = props;
   const {
-    location: { search }
+    location: { search },
   } = props.history;
 
   const [isRegistered, setIsRegistered] = useState(false);
@@ -34,7 +34,7 @@ const Login = props => {
     history.push({ search: '' });
   };
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     try {
       await login(values);
     } catch (e) {
@@ -59,7 +59,7 @@ Login.propTypes = {
   t: PropTypes.func,
   client: PropTypes.object,
   history: PropTypes.object,
-  location: PropTypes.object
+  location: PropTypes.object,
 };
 
 const LoginWithApollo = compose(
@@ -69,13 +69,13 @@ const LoginWithApollo = compose(
     props: ({ mutate }) => ({
       login: async ({ usernameOrEmail, password }) => {
         const {
-          data: { login }
+          data: { login },
         } = await mutate({
-          variables: { input: { usernameOrEmail, password } }
+          variables: { input: { usernameOrEmail, password } },
         });
         return login;
-      }
-    })
+      },
+    }),
   })
 )(Login);
 

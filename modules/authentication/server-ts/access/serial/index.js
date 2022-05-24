@@ -23,7 +23,7 @@ const createContextFunc = async ({ req, appContext }) => {
 export default new AccessModule(
   settings.auth.serial.enabled
     ? {
-        createContextFunc: [createContextFunc]
+        createContextFunc: [createContextFunc],
       }
     : {}
 );

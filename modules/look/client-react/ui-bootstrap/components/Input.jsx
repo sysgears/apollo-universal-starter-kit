@@ -7,7 +7,7 @@ const Input = ({ children, ...props }) => {
 };
 
 Input.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Input;

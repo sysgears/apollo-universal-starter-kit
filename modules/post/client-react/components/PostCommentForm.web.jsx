@@ -7,7 +7,7 @@ import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { required, validate } from '@gqlapp/validation-common-react';
 
 const commentFormSchema = {
-  content: [required]
+  content: [required],
 };
 
 const PostCommentForm = ({ values, handleSubmit, comment, t }) => {
@@ -46,24 +46,18 @@ PostCommentForm.propTypes = {
   values: PropTypes.object,
   content: PropTypes.string,
   changeContent: PropTypes.func,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const PostCommentFormWithFormik = withFormik({
-  mapPropsToValues: props => ({ content: props.comment && props.comment.content }),
-  async handleSubmit(
-    values,
-    {
-      resetForm,
-      props: { onSubmit }
-    }
-  ) {
+  mapPropsToValues: (props) => ({ content: props.comment && props.comment.content }),
+  async handleSubmit(values, { resetForm, props: { onSubmit } }) {
     await onSubmit(values);
     resetForm({ content: '' });
   },
-  validate: values => validate(values, commentFormSchema),
+  validate: (values) => validate(values, commentFormSchema),
   displayName: 'CommentForm', // helps with React DevTools,
-  enableReinitialize: true
+  enableReinitialize: true,
 });
 
 export default translate('post')(PostCommentFormWithFormik(PostCommentForm));

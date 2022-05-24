@@ -26,7 +26,7 @@ Button.propTypes = {
   children: PropTypes.node,
   color: PropTypes.string,
   type: PropTypes.string,
-  size: PropTypes.string
+  size: PropTypes.string,
 };
 
 export default Button;

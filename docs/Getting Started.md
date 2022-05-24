@@ -182,7 +182,7 @@ keyboard.
 * On the **Hardware** menu, click **Erase all content and settings**.
 * Restart the application.
 
-[lerna]: https://lernajs.io/
+[lerna]: https://lerna.js.io/
 [http://localhost:3000/]: http://localhost:3000/
 [your android]: https://play.google.com/store/apps/details?id=host.exp.exponent
 [ios device]: https://itunes.apple.com/app/expo-client/id982107779?mt=8

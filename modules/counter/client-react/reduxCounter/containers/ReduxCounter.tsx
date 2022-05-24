@@ -1,8 +1,8 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
+import { ReduxCounterButton, ReduxCounterView } from '../components/ReduxCounterView';
 
 interface CounterProps {
   t: TranslateFunction;
@@ -18,7 +18,7 @@ const ReduxCounter = ({ t }: CounterProps) => {
     return () =>
       dispatch({
         type: 'COUNTER_INCREMENT',
-        value: Number(incrementAmount)
+        value: Number(incrementAmount),
       });
   };
 

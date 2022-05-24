@@ -15,8 +15,8 @@ const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile
         meta={[
           {
             name: 'description',
-            content: `${settings.app.name} - ${t('meta')}`
-          }
+            content: `${settings.app.name} - ${t('meta')}`,
+          },
         ]}
       />
     );
@@ -33,7 +33,7 @@ const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile
             {text} ({filesize(record.size)})
           </a>
         );
-      }
+      },
     },
     {
       title: t('table.column.actions'),
@@ -45,8 +45,8 @@ const UploadView = ({ files, error, loading, handleUploadFiles, handleRemoveFile
             {t('table.btnDel')}
           </Button>
         );
-      }
-    }
+      },
+    },
   ];
 
   return (
@@ -76,7 +76,7 @@ UploadView.propTypes = {
   loading: PropTypes.bool,
   handleUploadFiles: PropTypes.func.isRequired,
   handleRemoveFile: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default UploadView;

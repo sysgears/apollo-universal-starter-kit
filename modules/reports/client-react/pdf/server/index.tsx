@@ -6,5 +6,5 @@ import ReportModule from '../../ReportModule';
 
 export default new ReportModule({
   localization: [{ ns: 'PdfReport', resources }],
-  reportComponent: [<DownloadReport />]
+  reportComponent: [<DownloadReport />],
 });

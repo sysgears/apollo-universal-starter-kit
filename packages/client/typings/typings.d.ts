@@ -1,9 +1,9 @@
-declare var __TEST__: boolean;
-declare var __SERVER__: boolean;
-declare var __CLIENT__: boolean;
-declare var __SSR__: boolean;
-declare var __API_URL__: string;
-declare var __WEBSITE_URL__: string;
+declare let __TEST__: boolean;
+declare let __SERVER__: boolean;
+declare let __CLIENT__: boolean;
+declare let __SSR__: boolean;
+declare let __API_URL__: string;
+declare let __WEBSITE_URL__: string;
 
 interface Window {
   __APOLLO_STATE__?: any;
@@ -18,7 +18,7 @@ declare module 'minilog';
 // Fix VS Code auto-import issue with console:
 // https://stackoverflow.com/questions/53279182/vscode-imports-import-console-requireconsole-automatically
 declare module 'console' {
-  export = typeof import("console");
+  export = typeof import('console');
 }
 
 declare module '@fortawesome/react-fontawesome' {
@@ -27,5 +27,5 @@ declare module '@fortawesome/react-fontawesome' {
 
   type IconProps = React.DOMAttributes<SVGSVGElement> & ReactFontawesome.Props;
 
-  export function FontAwesomeIcon(props: IconProps): JSX.Element
+  export function FontAwesomeIcon(props: IconProps): JSX.Element;
 }

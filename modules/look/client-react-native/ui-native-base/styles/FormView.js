@@ -1,8 +1,8 @@
 const FormViewStyles = {
   scroll: {
     paddingBottom: 10,
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 };
 
 export default FormViewStyles;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import { withNavigation } from 'react-navigation';
+import { useNavigation } from '@react-navigation/native';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
 import { CardItem, CardText, CardSubtitleText, CardLabel, Button, primary } from '@gqlapp/look-client-react-native';
 
@@ -23,32 +23,41 @@ const renderCardItem = (title: string, value: string) => (
   </CardItem>
 );
 
-const CreditCardInfoView = ({ loading, t, creditCard, navigation }: CardInfoViewProps) => (
-  <View style={styles.container}>
-    {!loading && creditCard && creditCard.expiryMonth && creditCard.expiryYear && creditCard.last4 && creditCard.brand && (
-      <View>
-        <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
-        {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
-        {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
-        <View>
-          <View style={styles.buttonWrapper}>
-            <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
-              {t('update.btn')}
-            </Button>
+const CreditCardInfoView = ({ loading, t, creditCard }: CardInfoViewProps) => {
+  const navigation = useNavigation();
+
+  return (
+    <View style={styles.container}>
+      {!loading &&
+        creditCard &&
+        creditCard.expiryMonth &&
+        creditCard.expiryYear &&
+        creditCard.last4 &&
+        creditCard.brand && (
+          <View>
+            <CardSubtitleText style={styles.container}>{t('creditCard.title')}</CardSubtitleText>
+            {renderCardItem(`${t('creditCard.text.card')}: `, `${creditCard.brand} ************${creditCard.last4}`)}
+            {renderCardItem(`${t('creditCard.text.expires')}: `, `${creditCard.expiryMonth}/${creditCard.expiryYear}`)}
+            <View>
+              <View style={styles.buttonWrapper}>
+                <Button color={primary} onPress={() => navigation.push('UpdateCreditCard')}>
+                  {t('update.btn')}
+                </Button>
+              </View>
+            </View>
           </View>
-        </View>
-      </View>
-    )}
-  </View>
-);
+        )}
+    </View>
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   buttonWrapper: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
 
-export default withNavigation(CreditCardInfoView);
+export default CreditCardInfoView;

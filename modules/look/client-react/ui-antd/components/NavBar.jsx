@@ -9,16 +9,16 @@ import MenuItem from './MenuItem';
 
 const ref = { modules: null };
 
-export const onAppCreate = async modules => (ref.modules = modules);
+export const onAppCreate = async (modules) => (ref.modules = modules);
 
 class NavBar extends React.Component {
   state = {
-    current: '/'
+    current: '/',
   };
 
-  handleClick = e => {
+  handleClick = (e) => {
     this.setState({
-      current: e.key
+      current: e.key,
     });
   };
 
@@ -63,7 +63,7 @@ class NavBar extends React.Component {
 }
 
 NavBar.propTypes = {
-  location: PropTypes.object.isRequired
+  location: PropTypes.object.isRequired,
 };
 
 export default withRouter(NavBar);

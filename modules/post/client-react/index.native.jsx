@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Platform, StyleSheet, Text, View } from 'react-native';
-import { createStackNavigator } from 'react-navigation';
+import { createStackNavigator } from '@react-navigation/stack';
 import { translate } from '@gqlapp/i18n-client-react';
-import { Button, HeaderTitle, IconButton, primary } from '@gqlapp/look-client-react-native';
+import { Button, HeaderTitle, primary } from '@gqlapp/look-client-react-native';
 import ClientModule from '@gqlapp/module-client-react-native';
 
 import Post from './containers/Post';
@@ -29,27 +29,7 @@ const PostListHeaderRight = ({ navigation, t }) => {
 };
 PostListHeaderRight.propTypes = {
   navigation: PropTypes.object,
-  t: PropTypes.func
-};
-
-class PostListScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
-    headerRight: withI18N(PostListHeaderRight, { navigation }),
-    headerLeft: (
-      <IconButton iconName="menu" iconSize={32} iconColor="#0275d8" onPress={() => navigation.openDrawer()} />
-    ),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
-
-  render() {
-    return <Post navigation={this.props.navigation} />;
-  }
-}
-
-PostListScreen.propTypes = {
-  navigation: PropTypes.object
+  t: PropTypes.func,
 };
 
 const PostEditTitle = ({ t }) => (
@@ -59,7 +39,7 @@ const PostEditTitle = ({ t }) => (
 );
 PostEditTitle.propTypes = {
   navigation: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const PostAddTitle = ({ t }) => (
@@ -69,80 +49,78 @@ const PostAddTitle = ({ t }) => (
 );
 PostAddTitle.propTypes = {
   navigation: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
-class PostEditScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(PostEditTitle, { navigation }),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
+const Stack = createStackNavigator();
 
-  render() {
-    return <PostEdit navigation={this.props.navigation} />;
-  }
-}
-PostEditScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-class PostAddScreen extends React.Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: withI18N(PostAddTitle, { navigation }),
-    headerStyle: styles.header,
-    headerForceInset: {}
-  });
-
-  render() {
-    return <PostAdd navigation={this.props.navigation} />;
-  }
-}
-
-PostAddScreen.propTypes = {
-  navigation: PropTypes.object
-};
-
-const PostNavigator = createStackNavigator({
-  PostList: { screen: PostListScreen },
-  PostEdit: { screen: PostEditScreen },
-  PostAdd: { screen: PostAddScreen }
-});
+const PostNavigator = () => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="PostList"
+      component={Post}
+      options={({ navigation }) => ({
+        headerTitle: () => withI18N(HeaderTitle, { style: 'subTitle', i18nKey: 'list.subTitle' }),
+        headerRight: () => withI18N(PostListHeaderRight, { navigation }),
+        headerStyle: styles.header,
+      })}
+    />
+    <Stack.Screen
+      name="PostEdit"
+      component={PostEdit}
+      options={({ navigation }) => ({
+        headerTitle: () => withI18N(PostEditTitle, { navigation }),
+        headerStyle: styles.header,
+      })}
+    />
+    <Stack.Screen
+      name="PostAdd"
+      component={PostAdd}
+      options={({ navigation }) => ({
+        headerTitle: () => withI18N(PostAddTitle, { navigation }),
+        headerStyle: styles.header,
+      })}
+    />
+  </Stack.Navigator>
+);
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: '#fff'
+    backgroundColor: '#fff',
   },
   subTitle: {
     fontSize: Platform.OS === 'ios' ? 17 : 20,
     fontWeight: Platform.OS === 'ios' ? '700' : '500',
     color: 'rgba(0, 0, 0, .9)',
     textAlign: Platform.OS === 'ios' ? 'center' : 'left',
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   addButtonContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 10
+    padding: 10,
   },
   addButton: {
     height: 32,
-    width: 60
-  }
+    width: 60,
+  },
 });
 
 export default new ClientModule({
   drawerItem: [
     {
-      Post: {
-        screen: PostNavigator,
-        navigationOptions: {
-          drawerLabel: withI18N(HeaderTitle, { i18nKey: 'list.title' })
-        }
-      }
-    }
+      screen: (Drawer) => (
+        <Drawer.Screen
+          name="Post"
+          component={PostNavigator}
+          options={() => ({
+            drawerLabel: () => withI18N(HeaderTitle, { i18nKey: 'list.title' }),
+          })}
+        />
+      ),
+    },
   ],
   resolver: [resolvers],
-  localization: [{ ns: 'post', resources }]
+  localization: [{ ns: 'post', resources }],
 });

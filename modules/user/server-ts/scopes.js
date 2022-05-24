@@ -1,4 +1,4 @@
 export default {
   admin: ['user:*'],
-  user: ['user:view:self', 'user:update:self', 'stripe:*']
+  user: ['user:view:self', 'user:update:self', 'stripe:*'],
 };

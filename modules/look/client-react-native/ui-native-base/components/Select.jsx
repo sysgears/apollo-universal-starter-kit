@@ -65,7 +65,7 @@ Select.propTypes = {
   iconColor: PropTypes.string,
   iconSize: PropTypes.number,
   style: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-  itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number])
+  itemStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
 };
 
 const styles = StyleSheet.create(SelectStyles);

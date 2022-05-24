@@ -1,5 +1,5 @@
 import fetch from 'isomorphic-unfetch';
-import { getOperationAST } from 'graphql';
+import { getOperationAST, DocumentNode } from 'graphql';
 import { BatchHttpLink } from 'apollo-link-batch-http';
 import { ApolloLink } from 'apollo-link';
 import { withClientState } from 'apollo-link-state';
@@ -10,7 +10,6 @@ import { SubscriptionClient, ConnectionParamsOptions } from 'subscriptions-trans
 import ApolloClient from 'apollo-client';
 import ApolloCacheRouter from 'apollo-cache-router';
 import { getMainDefinition, hasDirectives } from 'apollo-utilities';
-import { DocumentNode } from 'graphql';
 import { IResolvers } from 'graphql-tools';
 
 import settings from '@gqlapp/config';
@@ -19,7 +18,7 @@ import log from './log';
 
 interface CreateApolloClientOptions {
   apiUrl?: string;
-  createLink?: Array<(getApolloClient: () => ApolloClient<any>) => ApolloLink>;
+  createLink?: ((getApolloClient: () => ApolloClient<any>) => ApolloLink)[];
   createNetLink?: (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
   connectionParams?: ConnectionParamsOptions[];
   clientResolvers?: { defaults: { [key: string]: any }; resolvers: IResolvers };
@@ -30,29 +29,25 @@ const createApolloClient = ({
   createNetLink,
   createLink,
   connectionParams,
-  clientResolvers
+  clientResolvers,
 }: CreateApolloClientOptions): ApolloClient<any> => {
   const netCache = new InMemoryCache();
   const localCache = new InMemoryCache();
   const cache = ApolloCacheRouter.override(
-    ApolloCacheRouter.route(
-      [netCache, localCache],
-      (document: DocumentNode): InMemoryCache => {
-        const operationName = (getOperationAST as any)(document).name;
-        if (hasDirectives(['client'], document) || (operationName && operationName.value === 'GeneratedClientQuery')) {
-          // Pass all @client queries and @client defaults to localCache
-          return localCache;
-        } else {
-          // Pass all the other queries to netCache);
-          return netCache;
-        }
+    ApolloCacheRouter.route([netCache, localCache], (document: DocumentNode): InMemoryCache => {
+      const operationName = (getOperationAST as any)(document).name;
+      if (hasDirectives(['client'], document) || (operationName && operationName.value === 'GeneratedClientQuery')) {
+        // Pass all @client queries and @client defaults to localCache
+        return localCache;
       }
-    ),
+      // Pass all the other queries to netCache);
+      return netCache;
+    }),
     {
       reset: () => {
         // On apolloClient.resetStore() reset only netCache and keep localCache intact
         return netCache.reset();
-      }
+      },
     }
   );
 
@@ -63,7 +58,7 @@ const createApolloClient = ({
     : new BatchHttpLink({
         uri: apiUrl,
         credentials: 'include',
-        fetch
+        fetch,
       });
 
   let apiLink = queryLink;
@@ -84,7 +79,7 @@ const createApolloClient = ({
       wsUri,
       {
         reconnect: true,
-        connectionParams: finalConnectionParams
+        connectionParams: finalConnectionParams,
       },
       webSocketImpl
     );
@@ -94,8 +89,8 @@ const createApolloClient = ({
         applyMiddleware(operationOptions, next) {
           Object.assign(operationOptions, finalConnectionParams);
           next();
-        }
-      }
+        },
+      },
     ]);
 
     wsClient.onDisconnected(() => {
@@ -121,7 +116,7 @@ const createApolloClient = ({
   const allLinks = [
     ...(createLink ? createLink.map((create: any) => create(getApolloClient)) : []),
     linkState,
-    apiLink
+    apiLink,
   ];
 
   if (settings.app.logging.apolloLogging && (!__TEST__ || typeof window !== 'undefined')) {
@@ -131,7 +126,7 @@ const createApolloClient = ({
   const clientParams: any = {
     link: ApolloLink.from(allLinks),
     cache,
-    resolvers: (clientResolvers || ({} as any)).resolvers
+    resolvers: (clientResolvers || ({} as any)).resolvers,
   };
   if (__SSR__ && !__TEST__) {
     if (typeof window !== 'undefined' && window.__APOLLO_STATE__) {
@@ -145,8 +140,8 @@ const createApolloClient = ({
   if (__TEST__) {
     clientParams.defaultOptions = {
       query: {
-        fetchPolicy: 'no-cache'
-      }
+        fetchPolicy: 'no-cache',
+      },
     };
   }
 

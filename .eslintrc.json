@@ -1,0 +1,76 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true,
+      "modules": true
+    }
+  },
+  "plugins": [
+    "@typescript-eslint",
+    "prettier",
+    "jest",
+    "react",
+    "react-hooks",
+    "json"
+  ],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:jest/recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "rules": {
+    "@typescript-eslint/no-explicit-any": 0,
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-empty-function": "off",
+    "no-use-before-define": 0,
+    "no-restricted-exports": 0,
+    "arrow-body-style": 0,
+    "dot-notation": 0,
+    "no-console": 0,
+    "max-classes-per-file": "off",
+    "react/jsx-key": 0,
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "semi": 2,
+    "react/sort-comp": 1,
+    "prettier/prettier": [
+      "error",
+      {
+        "printWidth": 120,
+        "singleQuote": true
+      }
+    ]
+  },
+  "env": {
+    "jest": true,
+    "node": true,
+    "browser": true,
+    "es6": true
+  },
+  "globals": {
+    "fetch": true,
+    "window": true,
+    "document": true,
+    "__CDN_URL__": true,
+    "__DEV__": true,
+    "__TEST__": true,
+    "__CLIENT__": true,
+    "__SERVER__": true,
+    "__SSR__": true,
+    "__PERSIST_GQL__": true,
+    "__API_URL__": true,
+    "__WEBSITE_URL__": true,
+    "__FRONTEND_BUILD_DIR__": true,
+    "__STRIPE_PUBLIC_KEY__": true
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  }
+}

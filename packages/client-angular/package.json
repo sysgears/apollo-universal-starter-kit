@@ -8,9 +8,7 @@
     "clean": "rimraf build .tmp",
     "tests": "echo",
     "test": "yarn tests && yarn lint",
-    "eslint": "eslint --fix --ext js --ext jsx --ext json src",
-    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
-    "lint": "yarn eslint && yarn tslint",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json src",
     "watch": "webpack-dev-server"
   },
   "repository": {
@@ -62,27 +60,28 @@
     "apollo-link-ws": "^1.0.17",
     "apollo-logger": "^0.3.3",
     "apollo-upload-client": "^10.0.1",
-    "graphql": "^14.3.1",
+    "graphql": "^15.0.0",
     "minilog": "^3.1.0",
     "rxjs": "^6.5.2",
     "subscriptions-transport-ws": "^0.9.16",
     "zone.js": "^0.9.1"
   },
+  "peerDependencies": {
+    "core-js": "*"
+  },
   "devDependencies": {
-    "@types/jest": "^24.0.13",
     "@types/chai": "^4.1.4",
+    "@types/jest": "^24.0.13",
     "@types/lodash": "^4.14.118",
     "@types/webpack-env": "^1.13.6",
     "angular2-template-loader": "^0.6.2",
-    "autoprefixer": "^8.3.0",
     "chai": "^4.1.2",
     "chai-http": "^4.0.0",
     "cross-env": "^5.1.1",
+    "eslint": "^8.15.0",
     "graphql-tools": "^4.0.4",
+    "jest": "^26.2.2",
     "rimraf": "^2.6.2"
-  },
-  "peerDependencies": {
-    "eslint": "*"
   },
   "browserslist": {
     "development": [

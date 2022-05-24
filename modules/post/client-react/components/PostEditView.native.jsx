@@ -8,54 +8,49 @@ import { Loading } from '@gqlapp/look-client-react-native';
 import PostForm from './PostForm';
 import PostComments from '../containers/PostComments';
 
-const onSubmit = (post, editPost) => values => {
+const onSubmit = (post, editPost) => (values) => {
   editPost(post.id, values.title, values.content);
   Keyboard.dismiss();
 };
 
-const PostEditView = ({ loading, post, navigation, subscribeToMore, editPost, t }) => {
+const PostEditView = ({ loading, post, route, subscribeToMore, editPost, t }) => {
   let postObj = post;
   // if new post was just added read it from router
-  if (!postObj && navigation.state) {
-    postObj = navigation.state.params.post;
+  if (!postObj && route.params) {
+    postObj = route.params.post;
   }
 
   if (loading && !postObj) {
     return <Loading text={t('post.loadMsg')} />;
-  } else {
-    return (
-      <View style={styles.container}>
-        <ScrollView keyboardDismissMode="none" keyboardShouldPersistTaps="always">
-          <PostForm onSubmit={onSubmit(postObj, editPost)} post={post} />
-          {postObj && (
-            <PostComments
-              postId={navigation.state.params.id}
-              comments={postObj.comments}
-              subscribeToMore={subscribeToMore}
-            />
-          )}
-          <KeyboardSpacer />
-        </ScrollView>
-      </View>
-    );
   }
+  return (
+    <View style={styles.container}>
+      <ScrollView keyboardDismissMode="none" keyboardShouldPersistTaps="always">
+        <PostForm onSubmit={onSubmit(postObj, editPost)} post={post} />
+        {postObj && (
+          <PostComments postId={route.params.id} comments={postObj.comments} subscribeToMore={subscribeToMore} />
+        )}
+        <KeyboardSpacer />
+      </ScrollView>
+    </View>
+  );
 };
 
 PostEditView.propTypes = {
   loading: PropTypes.bool.isRequired,
   post: PropTypes.object,
   editPost: PropTypes.func.isRequired,
-  navigation: PropTypes.object.isRequired,
+  route: PropTypes.object.isRequired,
   subscribeToMore: PropTypes.func.isRequired,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: '#fff'
-  }
+    backgroundColor: '#fff',
+  },
 });
 
 export default translate('post')(PostEditView);

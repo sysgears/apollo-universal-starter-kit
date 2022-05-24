@@ -24,7 +24,7 @@ RenderField.propTypes = {
   label: PropTypes.string,
   placeholder: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 };
 
 export default RenderField;

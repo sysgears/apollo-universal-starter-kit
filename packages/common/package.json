@@ -3,9 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "scripts": {
-    "eslint": "eslint --fix --ext js --ext jsx --ext json .",
-    "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
-    "lint": "yarn eslint && yarn tslint"
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json ."
   },
   "dependencies": {
     "apollo-cache-inmemory": "1.4.2",
@@ -18,21 +16,20 @@
     "apollo-logger": "^0.3.3",
     "apollo-utilities": "^1.0.11",
     "connected-react-router": "^6.5.2",
-    "graphql": "^14.3.1",
+    "graphql": "^15.0.0",
     "i18next": "^11.2.3",
     "i18next-browser-languagedetector": "^2.1.0",
     "lodash": "^4.17.4",
     "minilog": "^3.1.0",
-    "react-i18next": "^10.12.2",
+    "react-i18next": "^11.16.9",
     "redux": "^4.0.1",
     "redux-devtools-extension": "^2.13.2",
     "subscriptions-transport-ws": "^0.9.16"
   },
   "devDependencies": {
     "@types/i18next-browser-languagedetector": "^2.0.1",
-    "chai": "^4.1.2"
-  },
-  "peerDependencies": {
-    "eslint": "*"
+    "chai": "^4.1.2",
+    "eslint": "^8.15.0",
+    "jest": "^26.2.2"
   }
 }

@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 
-import CreditCardInfo from '../containers/CreditCardInfo';
-import CancelSubscription from '../containers/CancelSubscription';
 import { CardGroup, CardText, CardTitle } from '@gqlapp/look-client-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
+import CreditCardInfo from '../containers/CreditCardInfo';
+import CancelSubscription from '../containers/CancelSubscription';
 
 interface SubscriptionProfileViewProps {
   loading: boolean;
@@ -13,7 +13,7 @@ interface SubscriptionProfileViewProps {
   t: TranslateFunction;
 }
 
-export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps) => {
+const SubscriptionProfileView = ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps) => {
   if (loading) {
     return <p>{t('loading')}</p>;
   }
@@ -36,3 +36,5 @@ export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps
     </div>
   );
 };
+
+export default SubscriptionProfileView;

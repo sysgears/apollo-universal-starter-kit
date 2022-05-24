@@ -17,10 +17,10 @@ import {
   withUsers,
   withUsersDeleting,
   withUsersState,
-  updateUsersState
+  updateUsersState,
 } from './UserOperations';
 
-const Users = props => {
+const Users = (props) => {
   const { t, updateQuery, subscribeToMore } = props;
   const filter = { isActive: true };
   const usersUpdated = useUsersWithSubscription(subscribeToMore, filter);
@@ -37,8 +37,8 @@ const Users = props => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('users.meta')}`
-        }
+          content: `${settings.app.name} - ${t('users.meta')}`,
+        },
       ]}
     />
   );
@@ -63,7 +63,7 @@ Users.propTypes = {
   updateQuery: PropTypes.func,
   t: PropTypes.func,
   subscribeToMore: PropTypes.func,
-  filter: PropTypes.object
+  filter: PropTypes.object,
 };
 
 export default compose(

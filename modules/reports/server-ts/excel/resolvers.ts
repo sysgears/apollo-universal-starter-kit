@@ -6,6 +6,6 @@ export default () => ({
     async excel(obj: any, arg: any, { Contacts }: { Contacts: ContactsDAO }) {
       const contacts = await Contacts.getContacts();
       return generateExcel(contacts);
-    }
-  }
+    },
+  },
 });

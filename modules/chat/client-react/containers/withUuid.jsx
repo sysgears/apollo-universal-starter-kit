@@ -3,14 +3,14 @@ import uuid from 'uuid';
 
 import { clientStorage } from '@gqlapp/core-common';
 
-export default Component => {
+export default (Component) => {
   return class WithUuid extends React.Component {
     state = {
-      uuid: null
+      uuid: null,
     };
 
     componentDidMount() {
-      clientStorage.getItem('uuid').then(res => {
+      clientStorage.getItem('uuid').then((res) => {
         this.setState({ uuid: res || uuid.v4() });
         if (!res) clientStorage.setItem('uuid', this.state.uuid);
       });

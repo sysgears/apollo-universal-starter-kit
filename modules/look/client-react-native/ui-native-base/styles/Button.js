@@ -1,8 +1,8 @@
 const ButtonStyles = {
   btnText: {
     flex: 1,
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 };
 
 export default ButtonStyles;

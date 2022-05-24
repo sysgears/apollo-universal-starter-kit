@@ -1,7 +1,8 @@
-import fs from 'fs';
-import * as inquirer from 'inquirer';
-import { deleteStackDir } from '../helpers/util';
-import { STACK_MAP, BASE_PATH } from '../config';
+const fs = require('fs');
+const inquirer = require('inquirer');
+
+const { deleteStackDir } = require('../helpers/util');
+const { STACK_MAP, BASE_PATH } = require('../config');
 
 /**
  * Generates a list of technologies for the library 'inquirer'
@@ -11,11 +12,11 @@ const chooseTemplate = async () => {
   // getting a list of existing technologies
   const existingStackList = fs
     .readdirSync(`${BASE_PATH}/packages`)
-    .filter(stack => Object.keys(STACK_MAP).includes(stack));
+    .filter((stack) => Object.keys(STACK_MAP).includes(stack));
 
   // creating a list of options with existing technologies for 'inquirer'
-  const choices = existingStackList.map(stack => ({
-    name: STACK_MAP[stack].title
+  const choices = existingStackList.map((stack) => ({
+    name: STACK_MAP[stack].title,
   }));
 
   // creating options for 'inquirer'
@@ -25,8 +26,8 @@ const chooseTemplate = async () => {
       message: 'Choose your technology stack or stacks',
       name: 'stackList',
       choices,
-      validate: answer => (answer.length < 1 ? 'You must choose at least one stack.' : true)
-    }
+      validate: (answer) => (answer.length < 1 ? 'You must choose at least one stack.' : true),
+    },
   ];
 
   // getting a list of selected technologies using 'inquirer'

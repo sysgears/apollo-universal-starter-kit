@@ -18,13 +18,13 @@ export default new ClientModule({
     <Route
       exact
       path="/pagination"
-      component={loadable(() => import('./containers/PaginationDemo').then(c => c.default))}
-    />
+      component={loadable(() => import('./containers/PaginationDemo').then((c) => c.default))}
+    />,
   ],
   navItem: [
     <MenuItem key="/pagination">
       <NavLinkWithI18n />
-    </MenuItem>
+    </MenuItem>,
   ],
-  localization: [{ ns: 'pagination', resources }]
+  localization: [{ ns: 'pagination', resources }],
 });

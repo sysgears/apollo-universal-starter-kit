@@ -121,17 +121,7 @@ on how many changes you've made).
 
 ### `yarn lint`
 
-Runs the `eslint` and `tslint` scripts to perform checks for errors in `.js`, `.jsx`, `.ts`, and `.tsx` files.
-
-### `yarn eslint`
-
-Runs the static code checks using [ESLint] for JavaScript (the `.js` and `.jsx` files) to find any errors made by
-developers. The errors are automatically fixed if possible.
-
-### `yarn tslint`
-
-Runs the static code checks using [TSLint] for TypeScript (the `.ts` and `.tsx` files) to find any errors made by
-developers. The errors are automatically fixed if possible.
+Runs the [ESLint] to perform checks for errors in `.js`, `.jsx`, `.ts`, and `.tsx` files.
 
 ### `yarn heroku-postbuild`
 
@@ -162,5 +152,4 @@ lines where issues were found) will be shown in the console.
 [metro bundler]: https://facebook.github.io/metro/
 [expo cli documentation]: https://docs.expo.io/versions/latest/workflow/expo-cli
 [esLint]: https://eslint.org/
-[tslint]: https://palantir.github.io/tslint/
 [lint-staged]: https://www.npmjs.com/package/lint-staged

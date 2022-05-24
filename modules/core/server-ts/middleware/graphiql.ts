@@ -9,12 +9,12 @@ function graphiqlExpress(options: GraphiQL.GraphiQLData | ExpressGraphQLOptionsF
   const graphiqlHandler = (req: express.Request, res: express.Response, next: any) => {
     const query = req.url && url.parse(req.url, true).query;
     GraphiQL.resolveGraphiQLString(query, options, req).then(
-      graphiqlString => {
+      (graphiqlString) => {
         res.setHeader('Content-Type', 'text/html');
         res.write(graphiqlString);
         res.end();
       },
-      error => next(error)
+      (error) => next(error)
     );
   };
 
@@ -23,14 +23,13 @@ function graphiqlExpress(options: GraphiQL.GraphiQLData | ExpressGraphQLOptionsF
 
 export default graphiqlExpress((req: express.Request) => {
   const { protocol, hostname } = url.parse(req.get('Referer') || `http://localhost`);
-  const subscriptionsUrl = (!isApiExternal
-    ? `${protocol}//${hostname}:${serverPort}${__API_URL__}`
-    : __API_URL__
+  const subscriptionsUrl = (
+    !isApiExternal ? `${protocol}//${hostname}:${serverPort}${__API_URL__}` : __API_URL__
   ).replace(/^http/, 'ws');
 
   return {
     endpointURL: '/graphql',
     subscriptionsEndpoint: subscriptionsUrl,
-    query: '{\n' + '  serverCounter {\n' + '    amount\n' + '  }\n' + '}'
+    query: '{\n' + '  serverCounter {\n' + '    amount\n' + '  }\n' + '}',
   };
 });

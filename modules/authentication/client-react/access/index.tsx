@@ -26,12 +26,13 @@ interface PageReloaderProps {
 }
 
 class PageReloader extends React.Component<PageReloaderProps> {
-  public state = {
-    key: 1
-  };
   constructor(props: PageReloaderProps) {
     super(props);
   }
+
+  public state = {
+    key: 1,
+  };
 
   public reloadPage() {
     this.setState({ key: this.state.key + 1 });
@@ -53,5 +54,5 @@ export { default as LOGOUT } from './session/graphql/Logout.graphql';
 export default new AccessModule(jwt, session, {
   dataRootComponent: [AuthPageReloader],
   login: [login],
-  logout: [logout]
+  logout: [logout],
 });

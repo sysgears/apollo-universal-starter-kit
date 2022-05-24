@@ -7,5 +7,5 @@ import pubsub from './pubsub';
 export const createSchema = (modules: ServerModule) =>
   makeExecutableSchema({
     typeDefs: [rootSchemaDef].concat(modules.schema),
-    resolvers: modules.createResolvers(pubsub)
+    resolvers: modules.createResolvers(pubsub),
   });

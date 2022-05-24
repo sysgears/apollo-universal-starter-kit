@@ -12,7 +12,7 @@ const LogoutView = ({ logout, t }) => {
   return (
     <View
       style={{
-        flex: 1
+        flex: 1,
       }}
     >
       <HeaderTitle
@@ -30,10 +30,7 @@ LogoutView.propTypes = {
   logout: PropTypes.func.isRequired,
   error: PropTypes.string,
   navigation: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
-export default compose(
-  translate('user'),
-  withLogout
-)(LogoutView);
+export default compose(translate('user'), withLogout)(LogoutView);

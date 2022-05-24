@@ -1,5 +1,5 @@
 export default function filterBuilder(queryBuilder, args) {
-  let { filters } = args;
+  const { filters } = args;
   // add filter conditions
   if (filters) {
     if (args.debug && args.debug.filters) {
@@ -7,7 +7,7 @@ export default function filterBuilder(queryBuilder, args) {
     }
 
     let first = true;
-    for (let filter of filters) {
+    for (const filter of filters) {
       if (!filter) {
         continue;
       }
@@ -24,28 +24,26 @@ export default function filterBuilder(queryBuilder, args) {
 
       // Pre Filters Recursion
       if (filter.prefilters) {
-        let argsClone = Object.assign({}, args);
+        const argsClone = { ...args };
         argsClone.filters = filter.prefilters;
         if (first) {
           first = false;
-          queryBuilder.where(function() {
+          queryBuilder.where(function () {
+            filterBuilder(this, argsClone);
+          });
+        } else if (filter.prefiltersBool === 'and') {
+          queryBuilder.andWhere(function () {
+            filterBuilder(this, argsClone);
+          });
+        } else if (filter.prefilterBool === 'or') {
+          queryBuilder.orWhere(function () {
             filterBuilder(this, argsClone);
           });
         } else {
-          if (filter.prefiltersBool === 'and') {
-            queryBuilder.andWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          } else if (filter.prefilterBool === 'or') {
-            queryBuilder.orWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          } else {
-            // Default to OR
-            queryBuilder.orWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          }
+          // Default to OR
+          queryBuilder.orWhere(function () {
+            filterBuilder(this, argsClone);
+          });
         }
       }
 
@@ -53,7 +51,7 @@ export default function filterBuilder(queryBuilder, args) {
       if (filter.field) {
         let column = filter.field;
         if (filter.table) {
-          column = filter.table + '.' + column;
+          column = `${filter.table}.${column}`;
         }
 
         let compare = '=';
@@ -78,42 +76,38 @@ export default function filterBuilder(queryBuilder, args) {
         if (first) {
           first = false;
           queryBuilder.where(column, compare, value);
+        } else if (filter.bool === 'and') {
+          queryBuilder.andWhere(column, compare, value);
+        } else if (filter.bool === 'or') {
+          queryBuilder.orWhere(column, compare, value);
         } else {
-          if (filter.bool === 'and') {
-            queryBuilder.andWhere(column, compare, value);
-          } else if (filter.bool === 'or') {
-            queryBuilder.orWhere(column, compare, value);
-          } else {
-            // Default to OR
-            queryBuilder.orWhere(column, compare, value);
-          }
+          // Default to OR
+          queryBuilder.orWhere(column, compare, value);
         }
       }
 
       // Post Filters Recursion
       if (filter.postfilters) {
-        let argsClone = Object.assign({}, args);
+        const argsClone = { ...args };
         argsClone.filters = filter.postfilters;
         if (first) {
           first = false;
-          queryBuilder.where(function() {
+          queryBuilder.where(function () {
+            filterBuilder(this, argsClone);
+          });
+        } else if (filter.postfiltersBool === 'and') {
+          queryBuilder.andWhere(function () {
+            filterBuilder(this, argsClone);
+          });
+        } else if (filter.postfiltersBool === 'or') {
+          queryBuilder.orWhere(function () {
             filterBuilder(this, argsClone);
           });
         } else {
-          if (filter.postfiltersBool === 'and') {
-            queryBuilder.andWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          } else if (filter.postfiltersBool === 'or') {
-            queryBuilder.orWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          } else {
-            // Default to OR
-            queryBuilder.orWhere(function() {
-              filterBuilder(this, argsClone);
-            });
-          }
+          // Default to OR
+          queryBuilder.orWhere(function () {
+            filterBuilder(this, argsClone);
+          });
         }
       }
     }

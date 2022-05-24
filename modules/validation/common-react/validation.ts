@@ -1,4 +1,3 @@
-/* tslint:disable: variable-name */
 import i18n from 'i18next';
 
 /**
@@ -94,7 +93,7 @@ export const phoneNumber = (value: any) =>
  * Schema interface for the validate function.
  */
 export interface Schema {
-  [key: string]: Array<(value: any, values: { [key: string]: any }) => string | undefined> | Schema;
+  [key: string]: ((value: any, values: { [key: string]: any }) => string | undefined)[] | Schema;
 }
 
 /**
@@ -112,12 +111,12 @@ export const validate = (object: { [key: string]: any }, schema: Schema) => {
     collector: { [key: string]: string }
   ) => {
     Object.keys(innerSchema)
-      .filter(v => innerSchema.hasOwnProperty(v))
-      .forEach(v => {
+      .filter((v) => Object.prototype.hasOwnProperty.call(innerSchema, v))
+      .forEach((v) => {
         const s = innerSchema[v];
 
         if (Array.isArray(s)) {
-          s.forEach(validator => {
+          s.forEach((validator) => {
             const result = validator(values[v], values);
             if (result) {
               collector[v] = result;

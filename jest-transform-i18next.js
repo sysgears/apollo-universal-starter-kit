@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 module.exports = {
-  process: function() {
+  process() {
     const pathname = arguments[1];
     const dir = path.dirname(pathname);
     const locales = fs.readdirSync(dir);
@@ -18,7 +18,7 @@ module.exports = {
       }
     }
     return {
-      code: `module.exports = ${JSON.stringify(result)};`
+      code: `module.exports = ${JSON.stringify(result)};`,
     };
-  }
+  },
 };

@@ -7,7 +7,7 @@ import ForgotPasswordForm from './ForgotPasswordForm';
 class ForgotPasswordView extends React.PureComponent {
   static propTypes = {
     onSubmit: PropTypes.func,
-    sent: PropTypes.bool
+    sent: PropTypes.bool,
   };
 
   render() {
@@ -24,8 +24,8 @@ const styles = StyleSheet.create({
   forgotPassContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'stretch'
-  }
+    alignItems: 'stretch',
+  },
 });
 
 export default ForgotPasswordView;

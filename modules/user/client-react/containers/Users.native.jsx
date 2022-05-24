@@ -13,7 +13,7 @@ import {
   withOrderByUpdating,
   withUsers,
   withUsersDeleting,
-  withUsersState
+  withUsersState,
 } from './UserOperations';
 
 class Users extends React.Component {
@@ -29,7 +29,7 @@ class Users extends React.Component {
   }
 
   render() {
-    const isOpenFilter = !!this.props.navigation.getParam('isOpenFilter');
+    const isOpenFilter = !!this.props.route.params?.isOpenFilter;
     return (
       <View style={styles.container}>
         {isOpenFilter && (
@@ -46,10 +46,10 @@ class Users extends React.Component {
 }
 
 Users.propTypes = {
-  navigation: PropTypes.object,
+  route: PropTypes.object,
   usersUpdated: PropTypes.object,
   updateQuery: PropTypes.func,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
 };
 
 const styles = StyleSheet.create({
@@ -57,19 +57,19 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'stretch',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   filterContainer: {
     flex: 5,
     borderWidth: 1,
     borderColor: '#e3e3e3',
     marginBottom: 15,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   usersListContainer: {
     flex: 8,
-    marginTop: 15
-  }
+    marginTop: 15,
+  },
 });
 
 export default compose(

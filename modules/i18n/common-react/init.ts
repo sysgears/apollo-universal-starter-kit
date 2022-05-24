@@ -13,8 +13,8 @@ const I18N_CONFIG: i18n.InitOptions = {
   whitelist: settings.i18n.langList,
   preload: settings.i18n.langList,
   detection: {
-    lookupCookie: settings.i18n.cookie
-  }
+    lookupCookie: settings.i18n.cookie,
+  },
 };
 
 if (['mobile', 'web'].indexOf(PLATFORM) >= 0) {
@@ -22,10 +22,10 @@ if (['mobile', 'web'].indexOf(PLATFORM) >= 0) {
     (I18N_CONFIG.detection as any).caches = __SSR__ ? ['cookie'] : ['sessionStorage'];
   }
   I18N_CONFIG.interpolation = {
-    escapeValue: false // not needed for React!!
+    escapeValue: false, // not needed for React!!
   };
   I18N_CONFIG.react = {
-    wait: false
+    wait: false,
   };
 }
 

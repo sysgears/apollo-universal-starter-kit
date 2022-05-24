@@ -12,21 +12,21 @@ HeaderTitle.propTypes = {
   t: PropTypes.func,
   children: PropTypes.node,
   i18nKey: PropTypes.string,
-  style: PropTypes.any
+  style: PropTypes.any,
 };
 
 const styles = StyleSheet.create({
   menuTitle: {
     padding: 16,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
   },
   subTitle: {
     fontSize: Platform.OS === 'ios' ? 17 : 20,
     fontWeight: Platform.OS === 'ios' ? '700' : '500',
     color: 'rgba(0, 0, 0, .9)',
     textAlign: Platform.OS === 'ios' ? 'center' : 'left',
-    marginHorizontal: 16
-  }
+    marginHorizontal: 16,
+  },
 });
 
 export default HeaderTitle;

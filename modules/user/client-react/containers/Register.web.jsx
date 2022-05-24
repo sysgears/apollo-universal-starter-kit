@@ -10,12 +10,12 @@ import settings from '@gqlapp/config';
 import RegisterView from '../components/RegisterView';
 import REGISTER from '../graphql/Register.graphql';
 
-const Register = props => {
+const Register = (props) => {
   const { t, register, history } = props;
 
   const [isRegistered, setIsRegistered] = useState(false);
 
-  const onSubmit = async values => {
+  const onSubmit = async (values) => {
     try {
       await register(values);
       if (!settings.auth.password.requireEmailConfirmation) {
@@ -35,7 +35,7 @@ Register.propTypes = {
   register: PropTypes.func,
   history: PropTypes.object,
   t: PropTypes.func,
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
 };
 
 const RegisterWithApollo = compose(
@@ -45,11 +45,11 @@ const RegisterWithApollo = compose(
     props: ({ mutate }) => ({
       register: async ({ username, email, password }) => {
         const {
-          data: { register }
+          data: { register },
         } = await mutate({ variables: { input: { username, email, password } } });
         return register;
-      }
-    })
+      },
+    }),
   })
 )(Register);
 export default RegisterWithApollo;

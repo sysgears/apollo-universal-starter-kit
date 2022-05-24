@@ -9,7 +9,7 @@ const FormItem = ({ children, ...props }) => {
 };
 
 FormItem.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default FormItem;

@@ -2,7 +2,7 @@ export default () => ({
   UserAuth: {
     facebook(obj) {
       return obj;
-    }
+    },
   },
   FacebookAuth: {
     fbId(obj) {
@@ -10,6 +10,6 @@ export default () => ({
     },
     displayName(obj) {
       return obj.fbDisplayName;
-    }
-  }
+    },
+  },
 });

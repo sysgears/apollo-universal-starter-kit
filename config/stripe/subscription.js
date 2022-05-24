@@ -5,7 +5,7 @@ export default {
   // Default Stripe product object
   product: {
     name: 'Magic number',
-    type: 'service'
+    type: 'service',
   },
   // Default Stripe plan object
   plan: {
@@ -13,6 +13,6 @@ export default {
     nickname: 'Basic Plan',
     amount: 1000,
     interval: 'month',
-    currency: 'usd'
-  }
+    currency: 'usd',
+  },
 };

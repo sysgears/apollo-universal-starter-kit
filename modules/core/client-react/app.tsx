@@ -15,7 +15,7 @@ const renderApp = ({ key }: { key: number }) => renderFunc(<Main rootTag={root} 
 
 const initWebpackHMR = (modules: ClientModule, entryModule: NodeModule) => {
   if (entryModule.hot) {
-    entryModule.hot.dispose(data => onAppDispose(modules, data));
+    entryModule.hot.dispose((data) => onAppDispose(modules, data));
     if (__CLIENT__) {
       entryModule.hot.accept();
     }

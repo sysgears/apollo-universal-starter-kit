@@ -16,7 +16,7 @@ const RenderSwitch = ({ label, ...props }) => {
 };
 
 RenderSwitch.propTypes = {
-  label: PropTypes.string
+  label: PropTypes.string,
 };
 
 const styles = StyleSheet.create(RenderSwitchStyles);

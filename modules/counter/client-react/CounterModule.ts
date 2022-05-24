@@ -1,15 +1,17 @@
+import { foldTo } from 'fractal-objects';
 import React from 'react';
 import ClientModule, { ClientModuleShape } from '@gqlapp/module-client-react';
 
 export interface CounterModuleShape extends ClientModuleShape {
-  counterComponent?: Array<React.ReactElement<any>>;
+  counterComponent?: React.ReactElement<any>[];
 }
 
-interface CounterModule extends CounterModuleShape {}
+class CounterModule extends ClientModule implements CounterModuleShape {
+  counterComponent?: React.ReactElement<any>[];
 
-class CounterModule extends ClientModule {
   constructor(...modules: CounterModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 }
 

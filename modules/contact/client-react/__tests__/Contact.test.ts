@@ -95,6 +95,7 @@ describe('Contact UI works', () => {
     });
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Form is not submitted with not valid data', async () => {
     fireEvent.change(nameInput, { target: { value: '' } });
     fireEvent.change(emailInput, { target: { value: 'admin' } });
@@ -105,6 +106,7 @@ describe('Contact UI works', () => {
     await waitForElement(() => dom.getByText('Invalid email address'));
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Form is submitted with valid data', async () => {
     fireEvent.change(nameInput, { target: { value: 'admin' } });
     fireEvent.change(emailInput, { target: { value: 'admin@example.com' } });

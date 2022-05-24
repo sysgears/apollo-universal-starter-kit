@@ -14,7 +14,7 @@ interface CardInfoViewProps {
   t: TranslateFunction;
 }
 
-export default ({ loading, t, creditCard }: CardInfoViewProps) => {
+const CreditCardView = ({ loading, t, creditCard }: CardInfoViewProps) => {
   return (
     <div>
       {!loading &&
@@ -42,3 +42,5 @@ export default ({ loading, t, creditCard }: CardInfoViewProps) => {
     </div>
   );
 };
+
+export default CreditCardView;

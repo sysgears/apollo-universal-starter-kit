@@ -11,7 +11,7 @@ import CustomView from '../components/CustomView';
 import RenderCustomActions from '../components/RenderCustomActions';
 import ModalNotify from '../components/ModalNotify';
 
-export default class extends React.Component {
+export default class Chat extends React.Component {
   static propTypes = {
     loading: PropTypes.bool.isRequired,
     t: PropTypes.func,
@@ -24,7 +24,7 @@ export default class extends React.Component {
     currentUser: PropTypes.object,
     uuid: PropTypes.string,
     pickImage: PropTypes.func,
-    allowImages: PropTypes.bool
+    allowImages: PropTypes.bool,
   };
 
   constructor(props) {
@@ -39,37 +39,38 @@ export default class extends React.Component {
     messageInfo: null,
     isQuoted: false,
     quotedMessage: null,
-    notify: null
+    notify: null,
   };
 
   static getDerivedStateFromProps({ error }) {
     return error ? { notify: error } : null;
   }
 
-  setMessageState = text => {
+  setMessageState = (text) => {
     this.setState({ message: text });
   };
 
   onSend = (messages = []) => {
     const { isEdit, messageInfo, message, quotedMessage } = this.state;
     const { addMessage, editMessage, uuid } = this.props;
-    const quotedId = quotedMessage && quotedMessage.hasOwnProperty('id') ? quotedMessage.id : null;
+    const quotedId =
+      quotedMessage && Object.prototype.hasOwnProperty.call(quotedMessage, 'id') ? quotedMessage.id : null;
     const defQuote = { filename: null, path: null, text: null, username: null, id: quotedId };
 
     if (isEdit) {
       editMessage({
         ...messageInfo,
         text: message,
-        quotedMessage: quotedMessage ? quotedMessage : defQuote,
-        uuid
-      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+        quotedMessage: quotedMessage || defQuote,
+        uuid,
+      }).then((res) => this.setState({ notify: res && res.error ? res.error : null }));
       this.setState({ isEdit: false });
     } else {
       const {
         text = null,
         attachment,
         user: { _id: userId, name: username },
-        _id: id
+        _id: id,
       } = messages[0];
 
       addMessage({
@@ -79,9 +80,9 @@ export default class extends React.Component {
         id,
         uuid,
         quotedId,
-        quotedMessage: quotedMessage ? quotedMessage : defQuote,
-        attachment
-      }).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+        quotedMessage: quotedMessage || defQuote,
+        attachment,
+      }).then((res) => this.setState({ notify: res && res.error ? res.error : null }));
 
       this.setState({ isQuoted: false, quotedMessage: null });
     }
@@ -96,7 +97,7 @@ export default class extends React.Component {
       options.push(t('msg.btn.edit'), t('msg.btn.delete'));
     }
 
-    actionSheet().showActionSheetWithOptions({ options }, buttonIndex => {
+    actionSheet().showActionSheetWithOptions({ options }, (buttonIndex) => {
       switch (buttonIndex) {
         case 0:
           Clipboard.setString(text);
@@ -111,7 +112,7 @@ export default class extends React.Component {
           break;
 
         case 3:
-          deleteMessage(messageId).then(res => this.setState({ notify: res && res.error ? res.error : null }));
+          deleteMessage(messageId).then((res) => this.setState({ notify: res && res.error ? res.error : null }));
           break;
       }
     });
@@ -138,17 +139,17 @@ export default class extends React.Component {
     this.setState({ isQuoted: false, quotedMessage: null });
   };
 
-  renderCustomView = chatProps => {
+  renderCustomView = (chatProps) => {
     const { allowImages } = this.props;
     return <CustomView {...chatProps} allowImages={allowImages} />;
   };
 
-  renderSend = chatProps => {
+  renderSend = (chatProps) => {
     const { t } = this.props;
     return <Send {...chatProps} label={t('input.btn')} />;
   };
 
-  renderCustomActions = chatProps => {
+  renderCustomActions = (chatProps) => {
     const { allowImages } = this.props;
     if (allowImages) {
       return <RenderCustomActions {...chatProps} pickImage={this.props.pickImage} />;
@@ -158,9 +159,9 @@ export default class extends React.Component {
   onLoadEarlier = () => {
     const {
       messages: {
-        pageInfo: { endCursor }
+        pageInfo: { endCursor },
       },
-      loadData
+      loadData,
     } = this.props;
 
     if (this.allowDataLoad) {
@@ -188,15 +189,15 @@ export default class extends React.Component {
 
     this.allowDataLoad = true;
     const edges = messages ? messages.edges : [];
-    const { id = uuid, username = null } = currentUser ? currentUser : {};
+    const { id = uuid, username = null } = currentUser || {};
     return (
       <View style={{ flex: 1 }}>
         {this.renderModal()}
         <GiftedChat
           {...settings.chat.giftedChat}
-          ref={gc => (this.gc = gc)}
+          ref={(gc) => (this.gc = gc)}
           text={message}
-          onInputTextChanged={text => this.setMessageState(text)}
+          onInputTextChanged={(text) => this.setMessageState(text)}
           placeholder={t('input.text')}
           messages={edges}
           renderSend={this.renderSend}

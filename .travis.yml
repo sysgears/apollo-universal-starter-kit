@@ -1,9 +1,11 @@
 language: node_js
 node_js:
-- '10'
+- '15'
 cache: false
 dist: bionic
 os:
 - linux
 script:
 - yarn test
+install:
+  - yarn install --immutable

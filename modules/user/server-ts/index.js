@@ -18,24 +18,24 @@ const getIdentity = (id, serial = '') => {
   return User.getUser(id);
 };
 
-const getHash = async id => (await User.getUserWithPassword(id)).passwordHash || '';
+const getHash = async (id) => (await User.getUserWithPassword(id)).passwordHash || '';
 
 const createContextFunc = ({ req }) => ({
   User,
   auth: {
     isAuthenticated: req && req.identity,
-    scope: req && req.identity && req.identity.role ? scopes[req.identity.role] : null
+    scope: req && req.identity && req.identity.role ? scopes[req.identity.role] : null,
   },
   getIdentity,
-  getHash
+  getHash,
 });
 
 const appContext = {
   getIdentity,
-  getHash
+  getHash,
 };
 
-const middleware = app => {
+const middleware = (app) => {
   if (settings.auth.password.requireEmailConfirmation) {
     app.get('/confirmation/:token', confirmMiddleware);
   }
@@ -47,5 +47,5 @@ export default new ServerModule(social, password, {
   createResolversFunc: [resolvers],
   createContextFunc: [createContextFunc],
   middleware: [middleware],
-  localization: [{ ns: 'user', resources }]
+  localization: [{ ns: 'user', resources }],
 });

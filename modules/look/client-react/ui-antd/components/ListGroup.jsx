@@ -6,7 +6,7 @@ const ListGroup = ({ children, ...props }) => {
 };
 
 ListGroup.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default ListGroup;

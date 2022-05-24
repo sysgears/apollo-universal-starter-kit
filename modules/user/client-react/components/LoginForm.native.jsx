@@ -13,7 +13,7 @@ import settings from '@gqlapp/config';
 
 const loginFormSchema = {
   usernameOrEmail: [required, minLength(3)],
-  password: [required, minLength(settings.auth.password.minLength)]
+  password: [required, minLength(settings.auth.password.minLength)],
 };
 const { github, facebook, linkedin, google } = settings.auth.social;
 
@@ -36,8 +36,9 @@ const renderSocialButtons = (buttonsLength, t) => {
 };
 
 const LoginForm = ({ handleSubmit, valid, values, navigation, t }) => {
-  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(button => button)
-    .length;
+  const buttonsLength = [facebook.enabled, linkedin.enabled, google.enabled, github.enabled].filter(
+    (button) => button
+  ).length;
   return (
     <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
       <View style={styles.formContainer}>
@@ -98,36 +99,36 @@ LoginForm.propTypes = {
   valid: PropTypes.bool,
   values: PropTypes.object,
   navigation: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
   formContainer: {
-    flex: 1
+    flex: 1,
   },
   formView: {
     flex: 1,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
   form: {
     justifyContent: 'center',
     paddingHorizontal: 20,
-    flex: 9
+    flex: 9,
   },
   submit: lookStyles.submit,
   buttonsGroup: {
     flex: 1,
-    paddingTop: 10
+    paddingTop: 10,
   },
   buttonWrapper: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end'
+    alignItems: 'flex-end',
   },
   text: {
     fontSize: 14,
-    color: '#bcb8b8'
+    color: '#bcb8b8',
   },
   signUpText: {
     fontSize: 16,
@@ -135,22 +136,16 @@ const styles = StyleSheet.create({
     color: '#8e908c',
     fontWeight: '600',
     textDecorationLine: 'underline',
-    textAlign: 'center'
-  }
+    textAlign: 'center',
+  },
 });
 
 const LoginFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ usernameOrEmail: '', password: '' }),
 
-  handleSubmit(
-    values,
-    {
-      setErrors,
-      props: { onSubmit }
-    }
-  ) {
-    onSubmit(values).catch(e => {
+  handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -158,8 +153,8 @@ const LoginFormWithFormik = withFormik({
       }
     });
   },
-  validate: values => validate(values, loginFormSchema),
-  displayName: 'LoginForm' // helps with React DevTools
+  validate: (values) => validate(values, loginFormSchema),
+  displayName: 'LoginForm', // helps with React DevTools
 });
 
 export default translate('user')(LoginFormWithFormik(LoginForm));

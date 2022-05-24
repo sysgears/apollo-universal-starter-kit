@@ -10,7 +10,7 @@ import settings from '@gqlapp/config';
 
 const resetPasswordFormSchema = {
   password: [required, minLength(settings.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)],
 };
 
 const ResetPasswordForm = ({ values, handleSubmit, errors, t }) => (
@@ -42,23 +42,16 @@ ResetPasswordForm.propTypes = {
   onSubmit: PropTypes.func,
   submitting: PropTypes.bool,
   errors: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const ResetPasswordFormWithFormik = withFormik({
   enableReinitialize: true,
   mapPropsToValues: () => ({ password: '', passwordConfirmation: '' }),
-  async handleSubmit(
-    values,
-    {
-      setErrors,
-      resetForm,
-      props: { onSubmit }
-    }
-  ) {
+  async handleSubmit(values, { setErrors, resetForm, props: { onSubmit } }) {
     await onSubmit(values)
       .then(() => resetForm())
-      .catch(e => {
+      .catch((e) => {
         if (isFormError(e)) {
           setErrors(e.errors);
         } else {
@@ -66,8 +59,8 @@ const ResetPasswordFormWithFormik = withFormik({
         }
       });
   },
-  validate: values => validate(values, resetPasswordFormSchema),
-  displayName: 'LoginForm' // helps with React DevTools
+  validate: (values) => validate(values, resetPasswordFormSchema),
+  displayName: 'LoginForm', // helps with React DevTools
 });
 
 export default translate('user')(ResetPasswordFormWithFormik(ResetPasswordForm));

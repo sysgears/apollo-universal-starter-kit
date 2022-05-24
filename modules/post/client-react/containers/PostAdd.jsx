@@ -19,27 +19,28 @@ class PostAdd extends React.Component {
 export default graphql(ADD_POST, {
   props: ({ ownProps: { history, navigation }, mutate }) => ({
     addPost: async (title, content) => {
-      let postData = await mutate({
+      const postData = await mutate({
         variables: { input: { title: title.trim(), content: content.trim() } },
         optimisticResponse: {
           __typename: 'Mutation',
           addPost: {
             __typename: 'Post',
             id: null,
-            title: title,
-            content: content,
-            comments: []
-          }
-        }
+            title,
+            content,
+            comments: [],
+          },
+        },
       });
 
       if (history) {
-        return history.push('/post/' + postData.data.addPost.id, {
-          post: postData.data.addPost
+        return history.push(`/post/${postData.data.addPost.id}`, {
+          post: postData.data.addPost,
         });
-      } else if (navigation) {
+      }
+      if (navigation) {
         return navigation.navigate('PostEdit', { id: postData.data.addPost.id });
       }
-    }
-  })
+    },
+  }),
 })(PostAdd);

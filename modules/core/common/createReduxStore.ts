@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension/developmentOnly';
 export const getStoreReducer = (history: any, reducers: any) =>
   combineReducers({
     router: connectRouter(history),
-    ...reducers
+    ...reducers,
   });
 
 const createReduxStore = (

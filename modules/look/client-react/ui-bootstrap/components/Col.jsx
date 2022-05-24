@@ -7,7 +7,7 @@ const Col = ({ children, ...props }) => {
 };
 
 Col.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Col;

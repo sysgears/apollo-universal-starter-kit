@@ -1,4 +1,4 @@
-/*eslint-disable no-unused-vars*/
+/* eslint-disable no-unused-vars */
 import { pick, isEmpty } from 'lodash';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
@@ -13,14 +13,14 @@ import settings from '@gqlapp/config';
 const USERS_SUBSCRIPTION = 'users_subscription';
 const {
   auth: { secret, certificate, password },
-  app
+  app,
 } = settings;
 
-const createPasswordHash = password => {
+const createPasswordHash = (password) => {
   return bcrypt.hash(password, 12) || false;
 };
 
-export default pubsub => ({
+export default (pubsub) => ({
   Query: {
     users: withAuth(['user:view:all'], (obj, { orderBy, filter }, { User }) => {
       return User.getUsers(orderBy, filter);
@@ -36,20 +36,12 @@ export default pubsub => ({
 
       throw new Error(t('user:accessDenied'));
     }),
-    currentUser(
-      obj,
-      args,
-      {
-        User,
-        req: { identity }
-      }
-    ) {
+    currentUser(obj, args, { User, req: { identity } }) {
       if (identity) {
         return User.getUser(identity.id);
-      } else {
-        return null;
       }
-    }
+      return null;
+    },
   },
   User: {
     profile(obj) {
@@ -57,7 +49,7 @@ export default pubsub => ({
     },
     auth(obj) {
       return obj;
-    }
+    },
   },
   UserProfile: {
     firstName(obj) {
@@ -69,17 +61,16 @@ export default pubsub => ({
     fullName(obj) {
       if (obj.firstName && obj.lastName) {
         return `${obj.firstName} ${obj.lastName}`;
-      } else {
-        return null;
       }
-    }
+      return null;
+    },
   },
   Mutation: {
     addUser: withAuth(
       (obj, { input }, { req: { identity } }) => {
         return identity.id !== input.id ? ['user:create'] : ['user:create:self'];
       },
-      async (obj, { input }, { User, req: { universalCookies, t }, mailer, req }) => {
+      async (obj, { input }, { User, req: { t }, mailer }) => {
         const errors = {};
 
         const userExists = await User.getUserByUsername(input.username);
@@ -131,7 +122,7 @@ export default pubsub => ({
                 <p>Welcome to ${app.name}. Please click the following link to confirm your email:</p>
                 <p><a href="${url}">${url}</a></p>
                 <p>Below are your login information</p>
-                <p>Your email is: ${user.email}</p>`
+                <p>Your email is: ${user.email}</p>`,
               });
               log.info(`Sent registration confirmation email to: ${user.email}`);
             });
@@ -140,8 +131,8 @@ export default pubsub => ({
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'CREATED',
-              node: user
-            }
+              node: user,
+            },
           });
           return { user };
         } catch (e) {
@@ -194,7 +185,7 @@ export default pubsub => ({
               subject: 'Your Password Has Been Updated',
               html: `<p>Your account password has been updated.</p>
                      <p>To view or edit your account settings, please visit the “Profile” page at</p>
-                     <p><a href="${url}">${url}</a></p>`
+                     <p><a href="${url}">${url}</a></p>`,
             });
             log.info(`Sent password has been updated to: ${input.email}`);
           }
@@ -207,19 +198,15 @@ export default pubsub => ({
           await User.editAuthCertificate(input);
         }
 
-        try {
-          const user = await User.getUser(input.id);
-          pubsub.publish(USERS_SUBSCRIPTION, {
-            usersUpdated: {
-              mutation: 'UPDATED',
-              node: user
-            }
-          });
+        const user = await User.getUser(input.id);
+        pubsub.publish(USERS_SUBSCRIPTION, {
+          usersUpdated: {
+            mutation: 'UPDATED',
+            node: user,
+          },
+        });
 
-          return { user };
-        } catch (e) {
-          throw e;
-        }
+        return { user };
       }
     ),
     deleteUser: withAuth(
@@ -245,15 +232,14 @@ export default pubsub => ({
           pubsub.publish(USERS_SUBSCRIPTION, {
             usersUpdated: {
               mutation: 'DELETED',
-              node: user
-            }
+              node: user,
+            },
           });
           return { user };
-        } else {
-          throw new Error(t('user:userCouldNotDeleted'));
         }
+        throw new Error(t('user:userCouldNotDeleted'));
       }
-    )
+    ),
   },
   Subscription: {
     usersUpdated: {
@@ -262,7 +248,7 @@ export default pubsub => ({
         (payload, variables) => {
           const { mutation, node } = payload.usersUpdated;
           const {
-            filter: { isActive, role, searchText }
+            filter: { isActive, role, searchText },
           } = variables;
 
           const checkByFilter =
@@ -281,7 +267,7 @@ export default pubsub => ({
               return !checkByFilter;
           }
         }
-      )
-    }
-  }
+      ),
+    },
+  },
 });

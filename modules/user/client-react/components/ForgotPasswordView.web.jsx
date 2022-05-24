@@ -14,8 +14,8 @@ const ForgotPasswordView = ({ onSubmit, t, sent }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('forgotPass.meta')}`
-        }
+          content: `${settings.app.name} - ${t('forgotPass.meta')}`,
+        },
       ]}
     />
   );
@@ -35,7 +35,7 @@ ForgotPasswordView.propTypes = {
   onSubmit: PropTypes.func,
   forgotPassword: PropTypes.func,
   sent: PropTypes.bool,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 export default ForgotPasswordView;

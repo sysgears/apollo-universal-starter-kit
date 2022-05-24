@@ -7,13 +7,13 @@ export default class LanguagePicker extends React.Component {
     super(props);
     this.toggle = this.toggle.bind(this);
     this.state = {
-      dropdownOpen: false
+      dropdownOpen: false,
     };
   }
 
   toggle() {
     this.setState({
-      dropdownOpen: !this.state.dropdownOpen
+      dropdownOpen: !this.state.dropdownOpen,
     });
   }
 
@@ -26,7 +26,7 @@ export default class LanguagePicker extends React.Component {
           <Dropdown size="sm" isOpen={this.state.dropdownOpen} toggle={this.toggle}>
             <DropdownToggle caret>{i18n.language.slice(0, 2).toUpperCase()}</DropdownToggle>
             <DropdownMenu>
-              {languages.map(lang => (
+              {languages.map((lang) => (
                 <DropdownItem key={lang} onClick={() => i18n.changeLanguage(lang)}>
                   {lang.slice(0, 2).toUpperCase()}
                 </DropdownItem>
@@ -40,5 +40,5 @@ export default class LanguagePicker extends React.Component {
 }
 
 LanguagePicker.propTypes = {
-  i18n: PropTypes.object.isRequired
+  i18n: PropTypes.object.isRequired,
 };

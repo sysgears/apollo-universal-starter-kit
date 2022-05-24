@@ -6,7 +6,7 @@ const Option = ({ children, ...props }) => {
 };
 
 Option.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Option;

@@ -2,18 +2,17 @@ import React from 'react';
 import { FormikProps, withFormik } from 'formik';
 import { Keyboard, View, StyleSheet, Text } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
-import { isFormError } from '@gqlapp/forms-client-react';
+import { isFormError, FieldAdapter as Field } from '@gqlapp/forms-client-react';
 import { contactFormSchema } from '@gqlapp/contact-common';
 import { validate } from '@gqlapp/validation-common-react';
 import { TranslateFunction } from '@gqlapp/i18n-client-react';
-import { FieldAdapter as Field } from '@gqlapp/forms-client-react';
 
 import { RenderField, FormView, Button, Modal, danger, success, lookStyles } from '@gqlapp/look-client-react-native';
 import { ContactForm } from '../types';
 
 interface ContactFormProps {
   t: TranslateFunction;
-  onSubmit: (values: ContactForm) => Promise<{ errors: Array<{ field: string; message: string }> }>;
+  onSubmit: (values: ContactForm) => Promise<{ errors: { field: string; message: string }[] }>;
 }
 
 const ContactFormComponent = ({
@@ -22,7 +21,7 @@ const ContactFormComponent = ({
   t,
   errors,
   status,
-  setStatus
+  setStatus,
 }: FormikProps<ContactForm> & ContactFormProps & { errors: { serverError: string } }) => (
   <FormView contentContainerStyle={{ flexGrow: 1 }} style={styles.formView}>
     <Modal isVisible={status && status.showModal} onBackdropPress={setStatus}>
@@ -73,23 +72,23 @@ const styles = StyleSheet.create({
   formContainer: {
     paddingHorizontal: 15,
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   modal: {
     backgroundColor: 'white',
     display: 'flex',
     justifyContent: 'center',
-    padding: 15
+    padding: 15,
   },
   modalText: {
     textAlign: 'center',
-    paddingBottom: 15
+    paddingBottom: 15,
   },
   formView: {
     flex: 1,
-    alignSelf: 'stretch'
+    alignSelf: 'stretch',
   },
-  submit: lookStyles.submit
+  submit: lookStyles.submit,
 });
 
 const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
@@ -109,8 +108,8 @@ const ContactFormWithFormik = withFormik<ContactFormProps, ContactForm>({
       setStatus({ sent: false });
     }
   },
-  validate: values => validate(values, contactFormSchema),
-  displayName: 'ContactUsForm' // helps with React DevTools
+  validate: (values) => validate(values, contactFormSchema),
+  displayName: 'ContactUsForm', // helps with React DevTools
 });
 
 export default ContactFormWithFormik(ContactFormComponent);

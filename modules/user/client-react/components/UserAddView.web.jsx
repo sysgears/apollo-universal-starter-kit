@@ -16,8 +16,8 @@ const UserAddView = ({ t, onSubmit }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('userEdit.meta')}`
-        }
+          content: `${settings.app.name} - ${t('userEdit.meta')}`,
+        },
       ]}
     />
   );
@@ -36,7 +36,7 @@ const UserAddView = ({ t, onSubmit }) => {
 
 UserAddView.propTypes = {
   t: PropTypes.func,
-  onSubmit: PropTypes.func
+  onSubmit: PropTypes.func,
 };
 
 export default translate('user')(UserAddView);

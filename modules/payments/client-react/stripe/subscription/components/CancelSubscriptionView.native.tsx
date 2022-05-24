@@ -11,7 +11,7 @@ interface CancelSubscriptionViewProps {
   t: TranslateFunction;
 }
 
-export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) => {
+const CancelSubscriptionView = ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.buttonWrapper}>
@@ -35,23 +35,23 @@ export default ({ t, onClick, error, submitting }: CancelSubscriptionViewProps) 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   alertTextWrapper: {
     flex: 20,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   alertIconWrapper: {
     padding: 5,
     flex: 4,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   alertText: {
     color: '#c22',
     fontSize: 16,
-    fontWeight: '400'
+    fontWeight: '400',
   },
   alertWrapper: {
     backgroundColor: '#ecb7b7',
@@ -61,9 +61,11 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     borderRadius: 5,
     paddingVertical: 5,
-    marginTop: 10
+    marginTop: 10,
   },
   buttonWrapper: {
-    padding: 10
-  }
+    padding: 10,
+  },
 });
+
+export default CancelSubscriptionView;

@@ -1,7 +1,7 @@
 const SelectStyles = {
   androidPickerWrapper: {
-    flex: 1
-  }
+    flex: 1,
+  },
 };
 
 export default SelectStyles;

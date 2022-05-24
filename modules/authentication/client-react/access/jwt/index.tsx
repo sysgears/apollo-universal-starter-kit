@@ -18,7 +18,7 @@ const setJWTContext = async (operation: Operation) => {
 
   operation.setContext((context: Record<string, any>) => ({
     ...context,
-    headers
+    headers,
   }));
 };
 
@@ -39,12 +39,12 @@ const removeTokens = async () => {
 
 const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
   new ApolloLink((operation, forward) => {
-    return new Observable(observer => {
+    return new Observable((observer) => {
       const apolloClient = getApolloClient();
 
       let sub: ZenObservable.Subscription;
       let retrySub: ZenObservable.Subscription;
-      const queue: Array<Promise<void>> = [];
+      const queue: Promise<void>[] = [];
       (async () => {
         if (
           !settings.auth.session.enabled &&
@@ -59,16 +59,16 @@ const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
         await setJWTContext(operation);
         try {
           sub = forward(operation).subscribe({
-            next: result => {
+            next: (result) => {
               const promise = (async () => {
                 if (operation.operationName === 'login') {
                   if (!!result.data && result.data.login.tokens) {
                     const {
                       data: {
                         login: {
-                          tokens: { accessToken, refreshToken }
-                        }
-                      }
+                          tokens: { accessToken, refreshToken },
+                        },
+                      },
                     } = result;
                     await saveTokens({ accessToken, refreshToken });
                   } else {
@@ -84,7 +84,7 @@ const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
                 });
               }
             },
-            error: networkError => {
+            error: (networkError) => {
               (async () => {
                 if (
                   networkError.response &&
@@ -94,7 +94,7 @@ const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
                   try {
                     const { data } = await apolloClient.mutate({
                       mutation: REFRESH_TOKENS_MUTATION,
-                      variables: { refreshToken: await getItem('refreshToken') }
+                      variables: { refreshToken: await getItem('refreshToken') },
                     });
 
                     if (data && data.refreshTokens) {
@@ -121,7 +121,7 @@ const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
                 queue.length = 0;
                 observer.complete();
               });
-            }
+            },
           });
         } catch (e) {
           observer.error(e);
@@ -141,7 +141,7 @@ const JWTLink = (getApolloClient: () => ApolloClient<any>) =>
 
 export default settings.auth.jwt.enabled
   ? new AccessModule({
-      createLink: __CLIENT__ ? [getApolloClient => JWTLink(getApolloClient)] : [],
-      logout: [removeTokens]
+      createLink: __CLIENT__ ? [(getApolloClient) => JWTLink(getApolloClient)] : [],
+      logout: [removeTokens],
     })
   : undefined;

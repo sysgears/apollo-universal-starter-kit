@@ -183,7 +183,6 @@ Just as JavaScript, TypeScript is also compiled to ES5 code.
 [babel]: https://babeljs.io/
 [dataloader]: https://github.com/facebook/dataloader
 [eslint]: https://eslint.org/
-[tslint]: https://palantir.github.io/tslint/
 [react]: https://reactjs.org/
 [react native]: https://facebook.github.io/react-native/
 [jsx]: https://reactjs.org/docs/jsx-in-depth.html

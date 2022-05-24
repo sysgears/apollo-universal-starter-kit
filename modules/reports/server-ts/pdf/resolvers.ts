@@ -13,6 +13,6 @@ export default () => ({
       const contacts = await Contacts.getContacts();
       const { t } = req;
       return generator(contacts, t);
-    }
-  }
+    },
+  },
 });

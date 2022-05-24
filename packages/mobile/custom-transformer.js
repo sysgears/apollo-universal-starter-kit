@@ -1,11 +1,10 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const crypto = require('crypto');
 const gqlLoader = require('graphql-tag/loader');
 const metroTransformer = require('metro-react-native-babel-transformer');
 const jestTransformI18next = require('../../jest-transform-i18next');
 
 const gqlTransform = gqlLoader.bind({
-  cacheable: () => null
+  cacheable: () => null,
 });
 
 const transform = ({ src, filename, options }) => {
@@ -19,7 +18,7 @@ const transform = ({ src, filename, options }) => {
   const babelCompileResult = metroTransformer.transform({
     src: result,
     filename,
-    options
+    options,
   });
 
   return babelCompileResult;
@@ -29,12 +28,12 @@ const cacheKeyParts = [
   process.env.API_URL,
   process.env.WEBSITE_URL,
   process.env.STRIPE_PUBLIC_KEY,
-  metroTransformer.getCacheKey()
+  metroTransformer.getCacheKey(),
 ];
 
 function getCacheKey() {
   const key = crypto.createHash('md5');
-  cacheKeyParts.forEach(part => key.update(String(part)));
+  cacheKeyParts.forEach((part) => key.update(String(part)));
   return key.digest('hex');
 }
 

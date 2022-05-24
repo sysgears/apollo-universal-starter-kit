@@ -12,7 +12,7 @@ const Col = ({ children, xs, md, ...props }) => {
 Col.propTypes = {
   children: PropTypes.node,
   xs: PropTypes.number,
-  md: PropTypes.number
+  md: PropTypes.number,
 };
 
 export default Col;

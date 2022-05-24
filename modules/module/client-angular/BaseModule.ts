@@ -1,17 +1,19 @@
+import { foldTo } from 'fractal-objects';
 import { merge } from 'lodash';
 import { ActionReducerMap } from '@ngrx/store';
 
-import { GraphQLModule, GraphQLModuleShape } from '@gqlapp/module-common';
+import CommonModule, { GraphQLModuleShape } from '@gqlapp/module-common';
 
 export interface BaseModuleShape extends GraphQLModuleShape {
-  reducer?: Array<ActionReducerMap<any, any>>;
+  reducer?: ActionReducerMap<any, any>[];
 }
 
-interface BaseModule extends BaseModuleShape {}
+class BaseModule extends CommonModule implements BaseModuleShape {
+  reducer?: ActionReducerMap<any, any>[];
 
-class BaseModule extends GraphQLModule {
   constructor(...modules: BaseModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   get reducers() {

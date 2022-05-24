@@ -1,6 +1,3 @@
-// General imports
-import { expect } from 'chai';
-
 // Components and helpers
 import { Renderer, updateContent, waitForElementRender } from '@gqlapp/testing-client-react';
 
@@ -15,10 +12,10 @@ const mocks = {
         email: 'user@example.com',
         profile: null,
         auth: null,
-        __typename: 'User'
+        __typename: 'User',
       } as any;
-    }
-  })
+    },
+  }),
 };
 
 describe('User UI works', () => {
@@ -31,7 +28,6 @@ describe('User UI works', () => {
     renderer.history.push('/profile');
     await waitForElementRender(app.container, 'a[href="/profile"]');
     content = updateContent(app.container);
-    // tslint:disable-next-line:no-unused-expression
-    expect(content).to.not.be.empty;
+    expect(content).toBeDefined();
   });
 });

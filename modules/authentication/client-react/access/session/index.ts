@@ -12,6 +12,6 @@ const logout = async (client: ApolloClient<any>) => {
 
 export default settings.auth.session.enabled
   ? new AccessModule({
-      logout: [logout]
+      logout: [logout],
     })
   : undefined;

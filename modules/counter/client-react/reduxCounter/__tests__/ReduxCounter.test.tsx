@@ -12,6 +12,7 @@ describe('Redux counter example UI works', () => {
 
   let dom: RenderResult;
 
+  // eslint-disable-next-line jest/expect-expect
   it('Counter section renders with state data', async () => {
     act(() => {
       dom = render(renderer.withApollo(<ReduxCounter />));
@@ -19,6 +20,7 @@ describe('Redux counter example UI works', () => {
     await waitForElement(() => dom.getByText(RegExp(`The current counter value is ${COUNTER_REDUX_VALUE}.`)));
   });
 
+  // eslint-disable-next-line jest/expect-expect
   it('Clicking on increase counter button shows optimistic response', async () => {
     const reduxButton = dom.getByText('Increase Redux counter');
 

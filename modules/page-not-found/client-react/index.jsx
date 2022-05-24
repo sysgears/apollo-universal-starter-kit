@@ -6,6 +6,6 @@ import loadable from '@loadable/component';
 import resources from './locales';
 
 export default new ClientModule({
-  route: [<Route component={loadable(() => import('./containers/PageNotFound').then(c => c.default))} />],
-  localization: [{ ns: 'notFound', resources }]
+  route: [<Route component={loadable(() => import('./containers/PageNotFound').then((c) => c.default))} />],
+  localization: [{ ns: 'notFound', resources }],
 });

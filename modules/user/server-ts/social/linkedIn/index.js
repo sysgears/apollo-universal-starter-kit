@@ -7,13 +7,13 @@ import { onAuthenticationSuccess, registerUser } from '../shared';
 import User from '../../sql';
 import resolvers from './resolvers';
 
-const createLinkedInAuth = async user => User.createLinkedInAuth(user);
+const createLinkedInAuth = async (user) => User.createLinkedInAuth(user);
 
 async function verifyCallback(accessToken, refreshToken, profile, cb) {
   const {
     id,
     displayName,
-    emails: [{ value }]
+    emails: [{ value }],
   } = profile;
 
   try {
@@ -36,8 +36,8 @@ async function verifyCallback(accessToken, refreshToken, profile, cb) {
 export const linkedinData = {
   linkedin: {
     onAuthenticationSuccess,
-    verifyCallback
-  }
+    verifyCallback,
+  },
 };
 
 export default settings.auth.social.linkedin.enabled && !__TEST__

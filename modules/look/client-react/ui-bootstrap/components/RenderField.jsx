@@ -8,7 +8,7 @@ const RenderField = ({ input, name, label, type, meta: { touched, error }, child
     valid = false;
   }
 
-  const labelId = name + '-label';
+  const labelId = `${name}-label`;
 
   return (
     <FormGroup>
@@ -17,7 +17,7 @@ const RenderField = ({ input, name, label, type, meta: { touched, error }, child
         <Input aria-labelledby={labelId} {...input} placeholder={label || placeholder} type={type} invalid={!valid}>
           {children}
         </Input>
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+        {touched && error && <FormFeedback>{error}</FormFeedback>}
       </div>
     </FormGroup>
   );
@@ -30,7 +30,7 @@ RenderField.propTypes = {
   type: PropTypes.string,
   meta: PropTypes.object,
   placeholder: PropTypes.string,
-  children: PropTypes.array
+  children: PropTypes.array,
 };
 
 export default RenderField;

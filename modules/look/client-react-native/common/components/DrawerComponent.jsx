@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SafeAreaView, ScrollView, StyleSheet } from 'react-native';
-import { DrawerItems } from 'react-navigation';
+import { DrawerItems } from '@react-navigation/drawer';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 20
-  }
+    paddingTop: 20,
+  },
 });
 
-const DrawerComponent = props => {
-  const skippedItems = Object.keys(props.drawerItems).filter(name => props.drawerItems[name].skip);
+const DrawerComponent = (props) => {
+  const skippedItems = Object.keys(props.drawerItems).filter((name) => props.drawerItems[name].skip);
   return (
     <ScrollView style={styles.container}>
       <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
@@ -30,7 +30,7 @@ const DrawerComponent = props => {
 
 DrawerComponent.propTypes = {
   onItemPress: PropTypes.func,
-  drawerItems: PropTypes.object
+  drawerItems: PropTypes.object,
 };
 
 export default DrawerComponent;

@@ -1,8 +1,8 @@
-declare var __SERVER_PORT__: number;
-declare var __CDN_URL__: string;
-declare var __API_URL__: string;
-declare var __FRONTEND_BUILD_DIR__: string;
-declare var __SSR__: boolean;
+declare let __SERVER_PORT__: number;
+declare let __CDN_URL__: string;
+declare let __API_URL__: string;
+declare let __FRONTEND_BUILD_DIR__: string;
+declare let __SSR__: boolean;
 
 declare namespace NodeJS {
   interface Global {
@@ -11,7 +11,7 @@ declare namespace NodeJS {
   }
 }
 
-declare var global: Global;
+declare let global: Global;
 
 // packages without types
 declare module 'stripe-local';

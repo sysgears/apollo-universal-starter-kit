@@ -17,17 +17,15 @@ const getCurrentIdentity = async ({ req, getIdentity }) => {
   }
 };
 
-const attachSession = req => {
+const attachSession = (req) => {
   if (req) {
     req.session = readSession(req);
     if (!req.session) {
       req.session = createSession(req);
-    } else {
-      if (!isApiExternal && req.path === __API_URL__) {
-        if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
-          req.session = createSession(req);
-          throw new Error(req.t('auth:invalidCsrf'));
-        }
+    } else if (!isApiExternal && req.path === __API_URL__) {
+      if (req.universalCookies.get('x-token') !== req.session.csrfToken) {
+        req.session = createSession(req);
+        throw new Error(req.t('auth:invalidCsrf'));
       }
     }
   }
@@ -49,7 +47,7 @@ export default new AccessModule(
         grant: [grant],
         schema: [schema],
         createResolversFunc: [resolvers],
-        createContextFunc: [createContextFunc]
+        createContextFunc: [createContextFunc],
       }
     : {}
 );

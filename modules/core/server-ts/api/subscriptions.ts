@@ -16,7 +16,7 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
         try {
           return {
             ...(await modules.createContext(null, null, connectionParams, webSocket)),
-            wsCtx: ctx
+            wsCtx: ctx,
           };
         } catch (e) {
           log.error(e);
@@ -29,11 +29,11 @@ const addSubscriptions = (httpServer: Server, schema: GraphQLSchema, modules: Se
         } catch (e) {
           log.error(e);
         }
-      }
+      },
     },
     {
       server: httpServer,
-      path: '/graphql'
+      path: '/graphql',
     }
   );
 };

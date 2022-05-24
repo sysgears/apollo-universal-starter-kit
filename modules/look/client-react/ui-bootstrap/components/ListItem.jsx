@@ -7,7 +7,7 @@ const ListItem = ({ children, ...props }) => {
 };
 
 ListItem.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default ListItem;

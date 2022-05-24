@@ -2,7 +2,7 @@ export default () => ({
   UserAuth: {
     google(obj) {
       return obj;
-    }
+    },
   },
   GoogleAuth: {
     googleId(obj) {
@@ -10,6 +10,6 @@ export default () => ({
     },
     displayName(obj) {
       return obj.googleDisplayName;
-    }
-  }
+    },
+  },
 });

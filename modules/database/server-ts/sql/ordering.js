@@ -1,9 +1,9 @@
 export default function ordering(queryBuilder, args) {
-  let { orderBys } = args;
+  const { orderBys } = args;
 
   // add order by
   if (orderBys) {
-    for (let orderBy of orderBys) {
+    for (const orderBy of orderBys) {
       // checks to short circuit
       if (!orderBy) {
         continue;
@@ -14,9 +14,9 @@ export default function ordering(queryBuilder, args) {
 
       // let's get orderly
       if (orderBy && orderBy.column) {
-        let column = orderBy.column;
+        let { column } = orderBy;
         if (orderBy.table) {
-          column = orderBy.table + '.' + column;
+          column = `${orderBy.table}.${column}`;
         }
 
         let order = 'asc';

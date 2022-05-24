@@ -9,18 +9,21 @@ function createPDF(contacts: UserContact[], t: TranslationFunction) {
   pdf.addStyle('header', {
     fontSize: 18,
     bold: true,
-    margin: [0, 0, 0, 10]
+    margin: [0, 0, 0, 10],
   });
 
   pdf.addStyle('subheader', {
     fontSize: 16,
     bold: true,
-    margin: [0, 10, 0, 5]
+    margin: [0, 10, 0, 5],
   });
 
   pdf.addText(t('PdfReport:title'), 'header');
   pdf.addText(t('PdfReport:database'), 'subheader');
-  pdf.addTable(contacts, Object.keys(contacts[0]).map((_, i) => (i === 0 ? 'auto' : '*')));
+  pdf.addTable(
+    contacts,
+    Object.keys(contacts[0]).map((_, i) => (i === 0 ? 'auto' : '*'))
+  );
   pdf.addText(t('PdfReport:orderedList'), 'subheader');
   pdf.addList([5, 4, 3, 2, 1], 'ol');
   pdf.addText(t('PdfReport:unorderedList'), 'subheader');
@@ -39,7 +42,7 @@ export default function generator(contacts: UserContact[], t: TranslationFunctio
     chunks.push(chunk);
   });
 
-  const buffer = new Promise(res => {
+  const buffer = new Promise((res) => {
     doc.on('end', () => {
       res(Buffer.concat(chunks));
     });

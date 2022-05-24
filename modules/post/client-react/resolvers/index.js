@@ -7,25 +7,25 @@ const defaults = {
   comment: {
     id: null,
     content: '',
-    __typename: TYPE_NAME_COMMENT
+    __typename: TYPE_NAME_COMMENT,
   },
-  __typename: TYPE_NAME
+  __typename: TYPE_NAME,
 };
 
 const resolvers = {
   Query: {
     commentState: (_, args, { cache }) => {
       const {
-        comment: { comment }
+        comment: { comment },
       } = cache.readQuery({ query: COMMENT_QUERY_CLIENT });
       return {
         comment: {
           ...comment,
-          __typename: TYPE_NAME_COMMENT
+          __typename: TYPE_NAME_COMMENT,
         },
-        __typename: TYPE_NAME
+        __typename: TYPE_NAME,
       };
-    }
+    },
   },
   Mutation: {
     onCommentSelect: async (_, { comment }, { cache }) => {
@@ -33,18 +33,18 @@ const resolvers = {
         data: {
           comment: {
             ...comment,
-            __typename: TYPE_NAME_COMMENT
+            __typename: TYPE_NAME_COMMENT,
           },
-          __typename: TYPE_NAME
-        }
+          __typename: TYPE_NAME,
+        },
       });
 
       return null;
-    }
-  }
+    },
+  },
 };
 
 export default {
   defaults,
-  resolvers
+  resolvers,
 };

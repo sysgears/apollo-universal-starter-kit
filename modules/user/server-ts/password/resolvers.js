@@ -9,7 +9,7 @@ import settings from '@gqlapp/config';
 
 import User from '../sql';
 
-const createPasswordHash = password => bcrypt.hash(password, 12) || false;
+const createPasswordHash = (password) => bcrypt.hash(password, 12) || false;
 
 const validateUserPassword = async (user, password, t) => {
   if (!user) {
@@ -30,13 +30,7 @@ const validateUserPassword = async (user, password, t) => {
 
 export default () => ({
   Mutation: {
-    async login(
-      obj,
-      {
-        input: { usernameOrEmail, password }
-      },
-      { req }
-    ) {
+    async login(obj, { input: { usernameOrEmail, password } }, { req }) {
       const user = await User.getUserByUsernameOrEmail(usernameOrEmail);
       const errors = await validateUserPassword(user, password, req.t);
       if (!isEmpty(errors)) throw new UserInputError('Failed valid user password', { errors });
@@ -79,7 +73,7 @@ export default () => ({
               <p>Welcome to ${settings.app.name}. Please click the following link to confirm your email:</p>
               <p><a href="${url}">${url}</a></p>
               <p>Below are your login information</p>
-              <p>Your email is: ${user.email}</p>`
+              <p>Your email is: ${user.email}</p>`,
           });
           log.info(`Sent registration confirmation email to: ${user.email}`);
         });
@@ -104,7 +98,7 @@ export default () => ({
                 from: `${settings.app.name} <${process.env.EMAIL_SENDER || process.env.EMAIL_USER}>`,
                 to: user.email,
                 subject: 'Reset Password',
-                html: `Please click this link to reset your password: <a href="${url}">${url}</a>`
+                html: `Please click this link to reset your password: <a href="${url}">${url}</a>`,
               });
               log.info(`Sent link to reset email to: ${user.email}`);
             }
@@ -114,15 +108,7 @@ export default () => ({
         // don't throw error so you can't discover users this way
       }
     },
-    async resetPassword(
-      obj,
-      { input },
-      {
-        req: { t },
-        User,
-        mailer
-      }
-    ) {
+    async resetPassword(obj, { input }, { req: { t }, User, mailer }) {
       const errors = {};
       const reset = pick(input, ['password', 'passwordConfirmation', 'token']);
       if (reset.password !== reset.passwordConfirmation) {
@@ -148,11 +134,11 @@ export default () => ({
             subject: 'Your Password Has Been Updated',
             html: `<p>As you requested, your account password has been updated.</p>
                    <p>To view or edit your account settings, please visit the “Profile” page at</p>
-                   <p><a href="${url}">${url}</a></p>`
+                   <p><a href="${url}">${url}</a></p>`,
           });
           log.info(`Sent password has been updated to: ${user.email}`);
         }
       }
-    }
-  }
+    },
+  },
 });

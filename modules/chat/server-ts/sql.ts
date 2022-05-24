@@ -1,4 +1,3 @@
-/*tslint:disable:variable-name*/
 import { knex, orderedFor, returnId } from '@gqlapp/database-server-ts';
 import { UploadedFile } from '@gqlapp/upload-server-ts';
 
@@ -41,7 +40,7 @@ export default class ChatDAO {
       )
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.user_id')
-      .leftJoin('attachment as a', function() {
+      .leftJoin('attachment as a', function () {
         this.on('a.message_id', '=', 'm.id');
       })
       .where('m.id', '=', id)
@@ -52,7 +51,7 @@ export default class ChatDAO {
     const res = await knex
       .select('m.id', 'm.text', 'm.user_id as userId', 'u.username', 'a.name as filename', 'a.path')
       .from('message as m')
-      .leftJoin('attachment as a', function() {
+      .leftJoin('attachment as a', function () {
         this.on('a.message_id', '=', 'm.id');
       })
       .leftJoin('user as u', 'u.id', 'm.user_id')
@@ -84,7 +83,7 @@ export default class ChatDAO {
       )
       .from('message as m')
       .leftJoin('user as u', 'u.id', 'm.user_id')
-      .leftJoin('attachment as a', function() {
+      .leftJoin('attachment as a', function () {
         this.on('a.message_id', '=', 'm.id');
       })
       .orderBy('m.id', 'desc')
@@ -93,9 +92,7 @@ export default class ChatDAO {
   }
 
   public getTotal() {
-    return knex('message')
-      .countDistinct('id as count')
-      .first();
+    return knex('message').countDistinct('id as count').first();
   }
 
   public addMessage({ text, userId: user_id, uuid, quotedId: quoted_id }: AddMessageParams) {
@@ -103,11 +100,11 @@ export default class ChatDAO {
   }
 
   public addMessageWithAttachment({ text, userId: user_id, uuid, quotedId: quoted_id, attachment }: AddMessageParams) {
-    return knex.transaction(trx => {
+    return knex.transaction((trx) => {
       knex('message')
         .transacting(trx)
         .insert({ text, user_id, uuid, quoted_id })
-        .then(resp => {
+        .then((resp) => {
           const id = resp[0];
           return knex('attachment')
             .transacting(trx)
@@ -120,17 +117,13 @@ export default class ChatDAO {
   }
 
   public deleteMessage(id: number) {
-    return knex('message')
-      .where('id', '=', id)
-      .del();
+    return knex('message').where('id', '=', id).del();
   }
 
   public editMessage({ id, text, userId: user_id }: { text: string; userId: number } & Identifier) {
-    return knex('message')
-      .where('id', '=', id)
-      .update({
-        text,
-        user_id
-      });
+    return knex('message').where('id', '=', id).update({
+      text,
+      user_id,
+    });
   }
 }

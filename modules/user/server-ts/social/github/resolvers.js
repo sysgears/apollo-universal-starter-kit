@@ -2,7 +2,7 @@ export default () => ({
   UserAuth: {
     github(obj) {
       return obj;
-    }
+    },
   },
   GithubAuth: {
     ghId(obj) {
@@ -10,6 +10,6 @@ export default () => ({
     },
     displayName(obj) {
       return obj.ghDisplayName;
-    }
-  }
+    },
+  },
 });

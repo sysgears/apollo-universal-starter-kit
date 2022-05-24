@@ -6,7 +6,7 @@ const CardText = ({ children, ...props }) => {
 };
 
 CardText.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default CardText;

@@ -26,7 +26,7 @@ const Contact = (props: ContctProps): any => {
       {(mutate: MutationFn) => {
         const sendContact = async (values: ContactForm) => {
           const {
-            data: { contact }
+            data: { contact },
           } = (await mutate({ variables: { input: values } })) as FetchResult;
           return contact;
         };

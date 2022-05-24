@@ -17,7 +17,7 @@ const Form = ({ children, layout = 'horizontal', ...props }) => {
 Form.propTypes = {
   children: PropTypes.node,
   layout: PropTypes.string,
-  type: PropTypes.string
+  type: PropTypes.string,
 };
 
 export default Form;

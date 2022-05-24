@@ -4,5 +4,5 @@ import reducers from './reducers';
 
 export default new CounterModule({
   reducer: [{ counter: reducers }],
-  counterComponent: [VuexCounter]
+  counterComponent: [VuexCounter],
 });

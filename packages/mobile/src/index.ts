@@ -1,7 +1,6 @@
 try {
   Object.assign(global, require('../build.config'));
 
-  // tslint:disable-next-line
   const modules = require('./modules').default;
   (async () => {
     await modules.createApp(module);

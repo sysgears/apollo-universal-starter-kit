@@ -17,7 +17,7 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
     super(props);
     this.state = {
       submitting: false,
-      error: null
+      error: null,
     };
   }
 
@@ -30,7 +30,7 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
       await cancelSubscription();
 
       this.setState({
-        submitting: false
+        submitting: false,
       });
     } catch (e) {
       this.setState({ submitting: false, error: this.props.t('serverError') });
@@ -50,7 +50,7 @@ class CancelSubscription extends React.Component<CancelSubscriptionProps, { [key
         }}
         refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
       >
-        {cancelSubscription => {
+        {(cancelSubscription) => {
           return (
             <CancelSubscriptionView
               submitting={this.state.submitting}

@@ -14,8 +14,8 @@ const ResetPasswordView = ({ t, onSubmit }) => {
       meta={[
         {
           name: 'description',
-          content: `${settings.app.name} - ${t('resetPass.meta')}`
-        }
+          content: `${settings.app.name} - ${t('resetPass.meta')}`,
+        },
       ]}
     />
   );
@@ -31,7 +31,7 @@ const ResetPasswordView = ({ t, onSubmit }) => {
 
 ResetPasswordView.propTypes = {
   t: PropTypes.func,
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
 };
 
 export default ResetPasswordView;

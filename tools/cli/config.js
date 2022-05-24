@@ -9,28 +9,28 @@ const STACK_MAP = {
   client: {
     title: 'react & react native',
     name: 'react',
-    subdirs: ['client', 'client-react', 'client-react-native', 'mobile']
+    subdirs: ['client', 'client-react', 'client-react-native', 'mobile'],
   },
   'client-vue': {
     title: 'vue',
     name: 'vue',
-    subdirs: ['client-vue']
+    subdirs: ['client-vue'],
   },
   'client-angular': {
     title: 'angular',
     name: 'angular',
-    subdirs: ['client-angular']
+    subdirs: ['client-angular'],
   },
   'server-scala': {
     title: 'scala',
     name: 'scala',
-    subdirs: ['server-scala']
+    subdirs: ['server-scala'],
   },
   server: {
     title: 'node',
     name: 'node',
-    subdirs: ['server-ts', 'server']
-  }
+    subdirs: ['server-ts', 'server'],
+  },
 };
 
 module.exports = {
@@ -38,5 +38,5 @@ module.exports = {
   TEMPLATES_DIR,
   MODULE_TEMPLATES,
   MODULE_TEMPLATES_OLD,
-  STACK_MAP
+  STACK_MAP,
 };

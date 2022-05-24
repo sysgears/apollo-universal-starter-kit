@@ -1,6 +1,6 @@
-import { AppLoading, registerRootComponent } from 'expo';
+import { registerRootComponent } from 'expo';
+import * as SplashScreen from 'expo-splash-screen';
 import Constants from 'expo-constants';
-import * as Font from 'expo-font';
 import { activateKeepAwake, deactivateKeepAwake } from 'expo-keep-awake';
 import React from 'react';
 import { View } from 'react-native';
@@ -26,31 +26,16 @@ export default async (modules: ClientModule) => {
     }
 
     public async componentDidMount() {
-      await Font.loadAsync({
-        Roboto: require('../../../node_modules/native-base/Fonts/Roboto.ttf'),
-        Roboto_medium: require('../../../node_modules/native-base/Fonts/Roboto_medium.ttf'),
-        Ionicons: require('../../../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf')
-      });
+      await SplashScreen.preventAutoHideAsync();
 
+      // await Font.loadAsync({
+      //   Roboto: require('../../../node_modules/native-base/Fonts/Roboto.ttf'),
+      //   Roboto_medium: require('../../../node_modules/native-base/Fonts/Roboto_medium.ttf'),
+      //   Ionicons: require('../../../node_modules/@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/Ionicons.ttf')
+      // });
+
+      await SplashScreen.hideAsync();
       this.setState({ isReady: true });
-    }
-
-    public render() {
-      if (!this.state.isReady) {
-        return <AppLoading startAsync={null} onError={null} onFinish={null} />;
-      }
-
-      return React.createElement(
-        View,
-        {
-          style: {
-            flex: 1,
-            marginTop: Constants.statusBarHeight
-          }
-        },
-        React.createElement(App, { ...this.props, modules }),
-        React.createElement(View)
-      );
     }
 
     public _activate() {
@@ -63,6 +48,23 @@ export default async (modules: ClientModule) => {
       if (process.env.NODE_ENV === 'development') {
         deactivateKeepAwake();
       }
+    }
+
+    public render() {
+      if (!this.state.isReady) {
+        return null;
+      }
+      return React.createElement(
+        View,
+        {
+          style: {
+            flex: 1,
+            marginTop: Constants.statusBarHeight,
+          },
+        },
+        React.createElement(App, { ...this.props, modules }),
+        React.createElement(View)
+      );
     }
   }
 

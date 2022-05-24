@@ -7,7 +7,7 @@ const Table = ({ ...props }) => {
 };
 
 Table.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Table;

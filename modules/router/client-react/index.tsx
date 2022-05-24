@@ -1,12 +1,20 @@
 import React from 'react';
-import { Switch } from 'react-router-dom';
+import { Router, Switch } from 'react-router-dom';
+import { createMemoryHistory } from 'history';
 import ClientModule from '@gqlapp/module-client-react';
 
 const ref: { modules: ClientModule } = { modules: null };
 
-const Router = () => <Switch>{ref.modules.routes}</Switch>;
+const MainRouter = () => {
+  const history = createMemoryHistory();
+  return (
+    <Router history={history}>
+      <Switch>{ref.modules.routes}</Switch>
+    </Router>
+  );
+};
 
 export default new ClientModule({
-  router: <Router />,
-  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)]
+  router: <MainRouter />,
+  onAppCreate: [async (modules: ClientModule) => (ref.modules = modules)],
 });

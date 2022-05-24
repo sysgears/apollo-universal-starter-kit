@@ -39,10 +39,10 @@ export const traceMethodCalls = (obj: any) => {
       const origProperty = target[property];
       return (...args: any[]) => {
         const result = origProperty.apply(target, args);
-        log.debug(`${String(property)}${JSON.stringify(args) + ' -> ' + JSON.stringify(result)}`);
+        log.debug(`${String(property)}${`${JSON.stringify(args)} -> ${JSON.stringify(result)}`}`);
         return result;
       };
-    }
+    },
   });
 };
 
@@ -52,11 +52,11 @@ export const traceMethodCalls = (obj: any) => {
 const getPlatform = () => {
   if (typeof document !== 'undefined') {
     return 'web';
-  } else if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
-    return 'mobile';
-  } else {
-    return 'server';
   }
+  if (typeof navigator !== 'undefined' && navigator.product === 'ReactNative') {
+    return 'mobile';
+  }
+  return 'server';
 };
 
 /**

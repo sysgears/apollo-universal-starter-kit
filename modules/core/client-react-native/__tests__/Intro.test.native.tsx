@@ -1,7 +1,7 @@
 import React from 'react';
-import Intro from '../Intro';
-
 import renderer from 'react-test-renderer';
+
+import Intro from '../Intro';
 
 it('renders without crashing', () => {
   const rendered = renderer.create(<Intro />).toJSON();

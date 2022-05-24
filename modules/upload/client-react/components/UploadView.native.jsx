@@ -13,7 +13,7 @@ const UploadView = ({ t }) => {
 };
 
 UploadView.propTypes = {
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -21,16 +21,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   element: {
-    paddingTop: 30
+    paddingTop: 30,
   },
   box: {
     textAlign: 'center',
     marginLeft: 15,
-    marginRight: 15
-  }
+    marginRight: 15,
+  },
 });
 
 export default UploadView;

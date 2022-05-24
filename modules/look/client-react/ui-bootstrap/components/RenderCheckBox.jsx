@@ -12,7 +12,7 @@ const RenderCheckBox = ({ input, label, type, meta: { touched, error } }) => {
     <FormGroup color={color} check>
       <Label check>
         <Input {...input} placeholder={label} type={type} /> {label}
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+        {touched && error && <FormFeedback>{error}</FormFeedback>}
       </Label>
     </FormGroup>
   );
@@ -22,7 +22,7 @@ RenderCheckBox.propTypes = {
   input: PropTypes.object,
   label: PropTypes.string,
   type: PropTypes.string,
-  meta: PropTypes.object
+  meta: PropTypes.object,
 };
 
 export default RenderCheckBox;

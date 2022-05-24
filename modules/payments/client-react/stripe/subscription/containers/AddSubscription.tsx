@@ -9,6 +9,7 @@ import { PLATFORM } from '@gqlapp/core-common';
 import { FormError } from '@gqlapp/forms-client-react';
 import settings from '@gqlapp/config';
 
+import { ApolloCache } from 'apollo-cache';
 import { createCreditCardToken } from './stripeOperations';
 import { CreditCardInput } from '../types';
 import AddSubscriptionView from '../components/AddSubscriptionView';
@@ -16,7 +17,6 @@ import AddSubscriptionView from '../components/AddSubscriptionView';
 import ADD_SUBSCRIPTION from '../graphql/AddSubscription.graphql';
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
-import { ApolloCache } from 'apollo-cache';
 
 interface AddSubscriptionProps {
   t: TranslateFunction;
@@ -71,7 +71,7 @@ const AddSubscription = ({ t, history, navigation }: AddSubscriptionProps) => {
         {(addSubscription: any) => {
           return (
             <Fragment>
-              {/* Stripe elements should render only for web*/}
+              {/* Stripe elements should render only for web */}
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
                   <AddSubscriptionView submitting={submitting} onSubmit={onSubmit(addSubscription)} t={t} />

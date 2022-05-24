@@ -11,19 +11,19 @@ import settings from '@gqlapp/config';
 
 const userFormSchema = {
   username: [required, minLength(3)],
-  email: [required, email]
+  email: [required, email],
 };
 
 const createUserFormSchema = {
   ...userFormSchema,
   password: [required, minLength(settings.auth.password.minLength)],
-  passwordConfirmation: [required, match('password'), minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [required, match('password'), minLength(settings.auth.password.minLength)],
 };
 
 const updateUserFormSchema = {
   ...userFormSchema,
   password: minLength(settings.auth.password.minLength),
-  passwordConfirmation: [match('password'), minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [match('password'), minLength(settings.auth.password.minLength)],
 };
 
 const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDisplayRole, shouldDisplayActive }) => {
@@ -66,7 +66,7 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
         type="text"
         label={t('userEdit.form.field.firstName')}
         value={profile.firstName}
-        onChange={value => setFieldValue('profile', { ...profile, firstName: value })}
+        onChange={(value) => setFieldValue('profile', { ...profile, firstName: value })}
       />
       <Field
         name="lastName"
@@ -74,7 +74,7 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
         type="text"
         label={t('userEdit.form.field.lastName')}
         value={profile.lastName}
-        onChange={value => setFieldValue('profile', { ...profile, lastName: value })}
+        onChange={(value) => setFieldValue('profile', { ...profile, lastName: value })}
       />
       {settings.auth.certificate.enabled && (
         <Field
@@ -83,7 +83,7 @@ const UserForm = ({ values, handleSubmit, errors, setFieldValue, t, shouldDispla
           type="text"
           label={t('userEdit.form.field.serial')}
           value={auth && auth.certificate && auth.certificate.serial}
-          onChange={value => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
+          onChange={(value) => setFieldValue('auth', { ...auth, certificate: { ...auth.certificate, serial: value } })}
         />
       )}
       <Field
@@ -121,36 +121,30 @@ UserForm.propTypes = {
   errors: PropTypes.object,
   initialValues: PropTypes.object.isRequired,
   touched: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const UserFormWithFormik = withFormik({
-  mapPropsToValues: values => {
+  mapPropsToValues: (values) => {
     const { username, email, role, isActive, profile } = values.initialValues;
     return {
-      username: username,
-      email: email,
+      username,
+      email,
       role: role || 'user',
-      isActive: isActive,
+      isActive,
       password: '',
       passwordConfirmation: '',
       profile: {
         firstName: profile && profile.firstName,
-        lastName: profile && profile.lastName
+        lastName: profile && profile.lastName,
       },
       auth: {
-        ...values.initialValues.auth
-      }
+        ...values.initialValues.auth,
+      },
     };
   },
-  async handleSubmit(
-    values,
-    {
-      setErrors,
-      props: { onSubmit }
-    }
-  ) {
-    await onSubmit(values).catch(e => {
+  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    await onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -160,7 +154,7 @@ const UserFormWithFormik = withFormik({
   },
   displayName: 'SignUpForm ', // helps with React DevTools
   validate: (values, props) =>
-    validate(values, isEmpty(props.initialValues) ? createUserFormSchema : updateUserFormSchema)
+    validate(values, isEmpty(props.initialValues) ? createUserFormSchema : updateUserFormSchema),
 });
 
 export default translate('user')(UserFormWithFormik(UserForm));

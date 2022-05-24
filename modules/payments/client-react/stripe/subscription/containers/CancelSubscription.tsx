@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Mutation } from 'react-apollo';
 import { translate, TranslateFunction } from '@gqlapp/i18n-client-react';
 
+import { ApolloCache } from 'apollo-cache';
 import CancelSubscriptionView from '../components/CancelSubscriptionView';
 
 import SUBSCRIPTION_QUERY from '../graphql/SubscriptionQuery.graphql';
 import CREDIT_CARD_QUERY from '../graphql/CreditCardQuery.graphql';
 import CANCEL_SUBSCRIPTION from '../graphql/CancelSubscription.graphql';
-import { ApolloCache } from 'apollo-cache';
 
 interface CancelSubscriptionProps {
   t: TranslateFunction;

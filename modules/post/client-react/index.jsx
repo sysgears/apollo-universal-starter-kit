@@ -16,15 +16,15 @@ const NavLinkWithI18n = translate()(({ t }) => (
 
 export default new ClientModule({
   route: [
-    <Route exact path="/posts" component={loadable(() => import('./containers/Post').then(c => c.default))} />,
-    <Route exact path="/post/new" component={loadable(() => import('./containers/PostAdd').then(c => c.default))} />,
-    <Route path="/post/:id" component={loadable(() => import('./containers/PostEdit').then(c => c.default))} />
+    <Route exact path="/posts" component={loadable(() => import('./containers/Post').then((c) => c.default))} />,
+    <Route exact path="/post/new" component={loadable(() => import('./containers/PostAdd').then((c) => c.default))} />,
+    <Route path="/post/:id" component={loadable(() => import('./containers/PostEdit').then((c) => c.default))} />,
   ],
   navItem: [
     <MenuItem key="/posts">
       <NavLinkWithI18n />
-    </MenuItem>
+    </MenuItem>,
   ],
   resolver: [resolvers],
-  localization: [{ ns: 'post', resources }]
+  localization: [{ ns: 'post', resources }],
 });

@@ -21,11 +21,11 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
         data: {
           serverCounter: {
             amount: newAmount,
-            __typename: 'Counter'
-          }
-        }
+            __typename: 'Counter',
+          },
+        },
       });
-    }
+    },
   });
 
   const onClickHandler = (): any =>
@@ -35,9 +35,9 @@ const IncreaseButtonContainer = ({ increaseAmount, counter }: ButtonProps) => {
         __typename: 'Mutation',
         addServerCounter: {
           __typename: 'Counter',
-          amount: counter.amount + 1
-        }
-      }
+          amount: counter.amount + 1,
+        },
+      },
     });
 
   return <IncreaseButton onClick={onClickHandler} />;
@@ -54,25 +54,21 @@ const ServerCounter = () => {
       data: {
         serverCounter: {
           amount: messageData.counterUpdated.amount,
-          __typename: 'Counter'
-        }
-      }
+          __typename: 'Counter',
+        },
+      },
     });
   }
 
-  const {
-    error,
-    data: { serverCounter },
-    loading
-  } = useQuery(COUNTER_QUERY);
+  const query = useQuery(COUNTER_QUERY);
 
-  if (error) {
-    throw new Error(String(error));
+  if (query.error) {
+    throw new Error(String(query.error));
   }
 
   return (
-    <ServerCounterView counter={serverCounter} loading={loading}>
-      <IncreaseButtonContainer increaseAmount={1} counter={serverCounter} />
+    <ServerCounterView counter={query?.data?.serverCounter} loading={query.loading}>
+      <IncreaseButtonContainer increaseAmount={1} counter={query?.data?.serverCounter} />
     </ServerCounterView>
   );
 };

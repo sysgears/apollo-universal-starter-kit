@@ -20,30 +20,30 @@ const LayoutCenter = ({ children }) => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   layout: {
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   column: {
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   content: {
-    flexGrow: 3
+    flexGrow: 3,
   },
   offset: {
-    flexGrow: 3
-  }
+    flexGrow: 3,
+  },
 });
 
 LayoutCenter.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default LayoutCenter;

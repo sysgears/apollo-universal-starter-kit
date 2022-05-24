@@ -12,7 +12,7 @@ const registerFormSchema = {
   username: [required, minLength(3)],
   email: [required, email],
   password: [required, minLength(settings.auth.password.minLength)],
-  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)]
+  passwordConfirmation: [match('password'), required, minLength(settings.auth.password.minLength)],
 };
 
 const RegisterForm = ({ values, handleSubmit, submitting, errors, t }) => {
@@ -55,20 +55,14 @@ RegisterForm.propTypes = {
   submitting: PropTypes.bool,
   errors: PropTypes.object,
   values: PropTypes.object,
-  t: PropTypes.func
+  t: PropTypes.func,
 };
 
 const RegisterFormWithFormik = withFormik({
   mapPropsToValues: () => ({ username: '', email: '', password: '', passwordConfirmation: '' }),
-  validate: values => validate(values, registerFormSchema),
-  async handleSubmit(
-    values,
-    {
-      setErrors,
-      props: { onSubmit }
-    }
-  ) {
-    onSubmit(values).catch(e => {
+  validate: (values) => validate(values, registerFormSchema),
+  async handleSubmit(values, { setErrors, props: { onSubmit } }) {
+    onSubmit(values).catch((e) => {
       if (isFormError(e)) {
         setErrors(e.errors);
       } else {
@@ -77,7 +71,7 @@ const RegisterFormWithFormik = withFormik({
     });
   },
   enableReinitialize: true,
-  displayName: 'SignUpForm' // helps with React DevTools
+  displayName: 'SignUpForm', // helps with React DevTools
 });
 
 export default translate('user')(RegisterFormWithFormik(RegisterForm));

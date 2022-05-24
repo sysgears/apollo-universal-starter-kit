@@ -18,7 +18,7 @@ const FormItem = ({ children, label, ...props }) => {
 
 FormItem.propTypes = {
   children: PropTypes.node,
-  label: PropTypes.string
+  label: PropTypes.string,
 };
 
 export default FormItem;

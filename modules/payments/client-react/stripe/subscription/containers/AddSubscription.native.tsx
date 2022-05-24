@@ -27,7 +27,7 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
   constructor(props: AddSubscriptionProps) {
     super(props);
     this.state = {
-      submitting: false
+      submitting: false,
     };
   }
 
@@ -43,12 +43,12 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
       await addSubscription({ variables: { input: preparedCreditCard } });
 
       this.setState({
-        submitting: false
+        submitting: false,
       });
       history ? history.push('/subscriber-page') : navigation.goBack();
     } catch (e) {
       this.setState({
-        submitting: false
+        submitting: false,
       });
       if (isApolloError(e)) {
         if (e.graphQLErrors[0].extensions.code === 'resource_missing') {
@@ -76,10 +76,10 @@ class AddSubscription extends React.Component<AddSubscriptionProps, { [key: stri
         }}
         refetchQueries={[{ query: CREDIT_CARD_QUERY }]}
       >
-        {addSubscription => {
+        {(addSubscription) => {
           return (
             <Fragment>
-              {/* Stripe elements should render only for web*/}
+              {/* Stripe elements should render only for web */}
               {__CLIENT__ && PLATFORM === 'web' ? (
                 <StripeProvider apiKey={settings.stripe.subscription.publicKey}>
                   <AddSubscriptionView submitting={submitting} onSubmit={this.onSubmit(addSubscription)} t={t} />

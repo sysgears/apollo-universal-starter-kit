@@ -38,5 +38,5 @@ const onAppCreate = async ({ appContext }) => {
 
 export default new AuthModule({
   middleware: [middleware],
-  onAppCreate: [onAppCreate]
+  onAppCreate: [onAppCreate],
 });

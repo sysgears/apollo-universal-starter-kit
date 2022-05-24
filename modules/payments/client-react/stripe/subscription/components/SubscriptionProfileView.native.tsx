@@ -14,7 +14,7 @@ interface SubscriptionProfileViewProps {
   t: TranslateFunction;
 }
 
-export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps) => {
+const SubscriptionProfileView = ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps) => {
   if (loading) {
     return <Text>{t('loading')}</Text>;
   }
@@ -38,11 +38,13 @@ export default ({ t, loading, stripeSubscription }: SubscriptionProfileViewProps
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
   },
   title: {
     flex: 1,
     fontWeight: 'bold',
-    fontSize: 20
-  }
+    fontSize: 20,
+  },
 });
+
+export default SubscriptionProfileView;

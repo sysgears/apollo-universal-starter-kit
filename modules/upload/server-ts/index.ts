@@ -16,10 +16,10 @@ export * from './FileSystemStorage';
 export default new ServerModule({
   schema: [schema],
   appContext: {
-    fileSystemStorage
+    fileSystemStorage,
   },
   createResolversFunc: [createResolvers],
   createContextFunc: [() => ({ Upload: new Upload() })],
   middleware: [middleware],
-  localization: [{ ns: 'upload', resources }]
+  localization: [{ ns: 'upload', resources }],
 });

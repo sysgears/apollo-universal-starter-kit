@@ -14,7 +14,7 @@ const stripCircular = (circularData: any, seen: any[] | null) => {
   seen = seen || [];
   seen.push(circularData);
 
-  Object.getOwnPropertyNames(circularData).forEach(key => {
+  Object.getOwnPropertyNames(circularData).forEach((key) => {
     if (!circularData[key] || (typeof circularData[key] !== 'object' && !Array.isArray(circularData[key]))) {
       notCircularData[key] = circularData[key];
     } else if (seen.indexOf(circularData[key]) < 0) {
@@ -33,7 +33,7 @@ const stripCircular = (circularData: any, seen: any[] | null) => {
  *
  * Important: should have 4 params, even if they are not used
  */
-function errorMiddleware(e: Error, req: any, res: any, next: () => void) {
+function errorMiddleware(e: Error, req: any, res: any) {
   if (!isApiExternal && req.path === __API_URL__) {
     const stack = e.stack.toString().replace(/[\n]/g, '\\n');
     res.status(200).send(`[{"data": {}, "errors":[{"message": "${stack}"}]}]`);

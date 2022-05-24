@@ -7,7 +7,7 @@ export async function onAuthenticationSuccess(req, res) {
   const tokens = await access.grantAccess(user, req, user.passwordHash);
 
   if (redirectUrl) {
-    res.redirect(redirectUrl + (tokens ? '?data=' + JSON.stringify({ tokens }) : ''));
+    res.redirect(redirectUrl + (tokens ? `?data=${JSON.stringify({ tokens })}` : ''));
   } else {
     res.redirect('/profile');
   }
@@ -18,6 +18,6 @@ export const registerUser = async ({ id, username, displayName, emails: [{ value
     username: username || displayName,
     email: value,
     password: id,
-    isActive: true
+    isActive: true,
   });
 };

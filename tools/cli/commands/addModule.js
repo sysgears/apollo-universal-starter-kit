@@ -11,7 +11,7 @@ const {
   computePackagePath,
   computeModulePackageName,
   addSymlink,
-  runPrettier
+  runPrettier,
 } = require('../helpers/util');
 
 /**
@@ -33,7 +33,7 @@ function addModule({ logger, packageName, moduleName, old }) {
   logger.info(chalk.green(`✔ New module ${moduleName} for package ${packageName} successfully created!`));
 }
 
-////////// ADD MODULE STEPS //////////
+/// /////// ADD MODULE STEPS //////////
 
 /**
  * Moves templates to newly created module.
@@ -67,9 +67,11 @@ function mergeWithModules({ logger, moduleName, modulePackageName, packageName, 
 
   try {
     // Retrieve the content of the modules.ts
-    indexContent =
-      `import ${moduleName} from '${computeModulePackageName(moduleName, modulePackageName, old)}';\n` +
-      fs.readFileSync(modulesEntry);
+    indexContent = `import ${moduleName} from '${computeModulePackageName(
+      moduleName,
+      modulePackageName,
+      old
+    )}';\n${fs.readFileSync(modulesEntry)}`;
   } catch (e) {
     logger.error(chalk.red(`Failed to read ${modulesEntry} file`));
     process.exit();

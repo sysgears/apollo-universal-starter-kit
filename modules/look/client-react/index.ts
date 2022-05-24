@@ -2,6 +2,7 @@ import ClientModule from '@gqlapp/module-client-react';
 
 import { onAppCreate } from './look';
 import resources from './locales';
+
 export * from './look';
 
 export { default as LayoutCenter } from './LayoutCenter';

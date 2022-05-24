@@ -15,7 +15,7 @@ const RenderField = ({ input, label, type, children, meta: { touched, error } })
         <Input {...input} type={type}>
           {children}
         </Input>
-        {touched && (error && <FormFeedback>{error}</FormFeedback>)}
+        {touched && error && <FormFeedback>{error}</FormFeedback>}
       </div>
     </FormGroup>
   );
@@ -26,7 +26,7 @@ RenderField.propTypes = {
   label: PropTypes.string,
   type: PropTypes.string,
   meta: PropTypes.object,
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default RenderField;

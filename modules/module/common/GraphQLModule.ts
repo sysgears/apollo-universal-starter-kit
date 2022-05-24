@@ -1,3 +1,5 @@
+import { foldTo } from 'fractal-objects';
+
 import { merge } from 'lodash';
 import { ApolloLink } from 'apollo-link';
 import { ApolloClient } from 'apollo-client';
@@ -14,7 +16,7 @@ import CommonModule, { CommonModuleShape } from './CommonModule';
  *
  * @returns Apollo Link instance
  */
-type CreateApolloLink = (getApolloClient: () => ApolloClient<any>) => ApolloLink;
+export type CreateApolloLink = (getApolloClient: () => ApolloClient<any>) => ApolloLink;
 
 /**
  * A function to create Apollo GraphQL link which is used for network communication.
@@ -25,12 +27,12 @@ type CreateApolloLink = (getApolloClient: () => ApolloClient<any>) => ApolloLink
  *
  * @returns Apollo Link instance
  */
-type CreateNetLink = (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
+export type CreateNetLink = (apiUrl: string, getApolloClient: () => ApolloClient<any>) => ApolloLink;
 
 /**
  * Apollo Link State default state and client resolvers
  */
-interface ApolloLinkStateParams {
+export interface ApolloLinkStateParams {
   // Default state
   defaults: { [key: string]: any };
   // Client-side resolvers
@@ -51,12 +53,19 @@ export interface GraphQLModuleShape extends CommonModuleShape {
   resolver?: ApolloLinkStateParams[];
 }
 
-interface GraphQLModule extends GraphQLModuleShape {}
-
 /**
  * Common GraphQL client-side modules ancestor for feature modules of a GraphQL application.
  */
-class GraphQLModule extends CommonModule {
+class GraphQLModule extends CommonModule implements GraphQLModuleShape {
+  // Array of functions to create non-network Apollo Link
+  createLink?: CreateApolloLink[];
+  // A singleton to create network link
+  createNetLink?: CreateNetLink;
+  // `subscription-transport-ws` WebSocket connection options
+  connectionParam?: ConnectionParamsOptions[];
+  // Apollo Link State default state and client resolvers
+  resolver?: ApolloLinkStateParams[];
+
   /**
    * Constructs GraphQL feature module representation, that folds all the feature modules
    * into a single module represented by this instance.
@@ -65,6 +74,7 @@ class GraphQLModule extends CommonModule {
    */
   constructor(...modules: GraphQLModuleShape[]) {
     super(...modules);
+    foldTo(this, modules);
   }
 
   /**

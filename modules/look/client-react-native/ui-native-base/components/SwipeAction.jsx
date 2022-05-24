@@ -22,7 +22,7 @@ const SwipeAction = ({ children, onPress, right, ...props }) => {
 SwipeAction.propTypes = {
   children: PropTypes.node,
   right: PropTypes.object,
-  onPress: PropTypes.func
+  onPress: PropTypes.func,
 };
 
 const styles = StyleSheet.create({
@@ -30,13 +30,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
     paddingRight: 10,
-    height: 50
+    height: 50,
   },
   text: {
     backgroundColor: 'white',
     padding: 10,
-    height: 50
-  }
+    height: 50,
+  },
 });
 
 export default SwipeAction;

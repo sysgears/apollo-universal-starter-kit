@@ -16,8 +16,8 @@ const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModul
       schema,
       info: {
         title: settings.app.name,
-        version: '0.0.0'
-      }
+        version: '0.0.0',
+      },
     });
 
     // need to parse json bodies for sofa (maybe others, content negotiation middleware anywhere?)
@@ -28,9 +28,9 @@ const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModul
       settings.rest.basePath,
       sofa({
         schema,
-        onRoute: info => {
+        onRoute: (info) => {
           openApi.addRoute(info, {
-            basePath: settings.rest.basePath
+            basePath: settings.rest.basePath,
           });
         },
         // construct the context, this shows up as the context parameter to resolvers
@@ -39,9 +39,9 @@ const createRestAPI = (app: Express, schema: GraphQLSchema, modules: ServerModul
           return {
             req,
             res,
-            ...ctx
+            ...ctx,
           };
-        }
+        },
       })
     );
 

@@ -14,7 +14,7 @@ const grant = async (identity, req, hash = '') => {
 
   return {
     accessToken,
-    refreshToken
+    refreshToken,
   };
 };
 
@@ -44,7 +44,7 @@ export default new AccessModule(
         grant: [grant],
         schema: [schema],
         createResolversFunc: [resolvers],
-        createContextFunc: [createContextFunc]
+        createContextFunc: [createContextFunc],
       }
     : {}
 );

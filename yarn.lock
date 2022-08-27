@@ -3694,17 +3694,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@koale/useworker@npm:^4.0.2":
-  version: 4.0.2
-  resolution: "@koale/useworker@npm:4.0.2"
-  dependencies:
-    dequal: ^1.0.0
-  peerDependencies:
-    react: ^16.8.0
-  checksum: 2b55f88fcaffdbcdb0bea0b576f1badd62faba76a4c6120ffe0e23e5f112d840b0be19dd791c0f0c162e1f2a24e9c2dfbd5d37870fe182d1e9b3b1ee72a4f0c4
-  languageName: node
-  linkType: hard
-
 "@leichtgewicht/ip-codec@npm:^2.0.1":
   version: 2.0.4
   resolution: "@leichtgewicht/ip-codec@npm:2.0.4"
@@ -14829,13 +14818,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dequal@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "dequal@npm:1.0.1"
-  checksum: 3d2727637546257edbb1e98c49267726b37499213533eefdd6d23bf1596cf5bb9a716947aa6ed7bfe3ef2cf5c0958a0422da7b554553b82ea19eaa2d3e92848f
-  languageName: node
-  linkType: hard
-
 "des.js@npm:^1.0.0":
   version: 1.0.1
   resolution: "des.js@npm:1.0.1"
@@ -16572,19 +16554,6 @@ __metadata:
     path-browserify: ^1.0.0
     url-parse: ^1.5.9
   checksum: 9d28e7ffb54292250a0a3ce8c054c8bfdbba22b195588167f0b695a9a573c605f2cd90169886db7343a8f389fd7bc22b38f67fd1a9206b1a72ec4803152619b6
-  languageName: node
-  linkType: hard
-
-"expo-camera@npm:~12.2.0":
-  version: 12.2.0
-  resolution: "expo-camera@npm:12.2.0"
-  dependencies:
-    "@expo/config-plugins": ^4.0.14
-    "@koale/useworker": ^4.0.2
-    invariant: ^2.2.4
-  peerDependencies:
-    expo: "*"
-  checksum: 449a0a2595d88ebd487213ba952a34c64fde46235812aab3f87b666a33efda01199d70ff56522c0c8d4499b7f5cb8423ad0dfcf8b80fc9884d3fc698c0cd95f4
   languageName: node
   linkType: hard
 
@@ -25510,7 +25479,6 @@ __metadata:
     cross-env: ^5.1.1
     eslint: ^8.15.0
     expo: ^45.0.0
-    expo-camera: ~12.2.0
     expo-cli: ^5.4.3
     expo-constants: ~13.1.1
     expo-file-system: ~14.0.0

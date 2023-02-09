@@ -231,6 +231,7 @@ function deleteFromFileWithExports(pathToFileWithExports, exportName) {
   }
 }
 
+
 function updateFileWithExports({ pathToFileWithExports, exportName, importString }) {
   const exportGraphqlContainer = `\nexport default {\n  ${exportName}\n};\n`;
   if (fs.existsSync(pathToFileWithExports)) {

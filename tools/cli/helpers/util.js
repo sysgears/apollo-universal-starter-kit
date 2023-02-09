@@ -221,16 +221,6 @@ function getPathsSubdir(path) {
  *
  * @param stackDirList - List of directories for unused stacks
  */
-function deleteStackDir(stackDirList) {
-  const route = moveToDirectory('modules');
-  const subdirList = getPathsSubdir(route);
-  stackDirList.forEach((stack) => {
-    deleteDir(`${BASE_PATH}/packages/${stack}`);
-    subdirList.forEach((dir) => {
-      deleteDir(`${dir}/${stack}`);
-    });
-  });
-}
 
 function deleteFromFileWithExports(pathToFileWithExports, exportName) {
   if (fs.existsSync(pathToFileWithExports)) {
@@ -278,7 +268,6 @@ module.exports = {
   moveToDirectory,
   deleteDir,
   getPathsSubdir,
-  deleteStackDir,
   updateFileWithExports,
   deleteFromFileWithExports
 };

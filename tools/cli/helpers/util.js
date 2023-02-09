@@ -232,6 +232,35 @@ function deleteStackDir(stackDirList) {
   });
 }
 
+function deleteFromFileWithExports(pathToFileWithExports, exportName) {
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedElementData = fs.readFileSync(pathToFileWithExports);
+    const reg = `(\\n\\s\\s${exportName}(.|)|import ${exportName}.+;\\n+(?!ex))`;
+    const generatedElement = generatedElementData.toString().replace(new RegExp(reg, 'g'), '');
+    fs.writeFileSync(pathToFileWithExports, generatedElement);
+  }
+}
+
+function updateFileWithExports({ pathToFileWithExports, exportName, importString }) {
+  const exportGraphqlContainer = `\nexport default {\n  ${exportName}\n};\n`;
+  if (fs.existsSync(pathToFileWithExports)) {
+    const generatedContainerData = fs.readFileSync(pathToFileWithExports);
+    const generatedContainer = generatedContainerData.toString().trim();
+    if (generatedContainer.length > 1) {
+      const index = generatedContainer.lastIndexOf("';");
+      const computedIndex = index >= 0 ? index + 3 : false;
+      if (computedIndex) {
+        let computedGeneratedContainer =
+          generatedContainer.slice(0, computedIndex) +
+          importString +
+          generatedContainer.slice(computedIndex, generatedContainer.length);
+          computedGeneratedContainer = computedGeneratedContainer.replace(/(,|)\s};/g, `,\n  ${exportName}\n};`);
+        return fs.writeFileSync(pathToFileWithExports, computedGeneratedContainer);
+      }
+    }
+  }
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -250,4 +279,6 @@ module.exports = {
   deleteDir,
   getPathsSubdir,
   deleteStackDir,
+  updateFileWithExports,
+  deleteFromFileWithExports
 };

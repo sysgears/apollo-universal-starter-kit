@@ -24,10 +24,17 @@ function deleteModule({ logger, packageName, moduleName, old }) {
   const modulePackageName = getModulePackageName(packageName, old);
   const modulePath = computeModulePath(modulePackageName, old, moduleName);
   const params = { logger, moduleName, modulePath, packageName, modulePackageName, old };
+  const options = {
+    pathToFileWithExports: `${startPath}/packages/${location}/src/modules/common/${generatedContainerFile}`,
+    exportName: graphqlQuery,
+    importString: `import ${graphqlQuery} from '../${module}/containers/${graphqlQuery}';\n`
+  };
+  updateFileWithExports(options);
 
   if (fs.existsSync(modulePath)) {
     deleteTemplates(params);
     removeFromModules(params);
+    removeFromModules(options.importString);
     if (!old) removeDependency(params);
 
     logger.info(chalk.green(`✔ Module ${moduleName} for package ${packageName} successfully deleted!`));

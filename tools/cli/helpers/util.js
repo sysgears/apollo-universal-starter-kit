@@ -257,6 +257,34 @@ function deleteStackDir(stackDirList) {
   });
 }
 
+function generateField(value, update = false) {
+  let result = '';
+  const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+  if (hasTypeOf(Boolean)) {
+    result += 'Boolean';
+  } else if (hasTypeOf(DomainSchema.ID)) {
+    result += 'ID';
+  } else if (hasTypeOf(DomainSchema.Int)) {
+    result += 'Int';
+  } else if (hasTypeOf(DomainSchema.Float)) {
+    result += 'Float';
+  } else if (hasTypeOf(String)) {
+    result += 'String';
+  } else if (hasTypeOf(Date)) {
+    result += 'Date';
+  } else if (hasTypeOf(DomainSchema.DateTime)) {
+    result += 'DateTime';
+  } else if (hasTypeOf(DomainSchema.Time)) {
+    result += 'Time';
+  }
+
+  if (!update && !value.optional) {
+    result += '!';
+  }
+
+  return result;
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -276,4 +304,5 @@ module.exports = {
   getPathsSubdir,
   deleteStackDir,
   generateCommonGraphqlFile,  
+  generateField,
 };

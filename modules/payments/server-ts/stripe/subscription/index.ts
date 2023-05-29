@@ -1,6 +1,5 @@
 import { json } from 'body-parser';
 import { Express } from 'express';
-import stripeLocal from 'stripe-local';
 
 import ServerModule from '@gqlapp/module-server-ts';
 import { log } from '@gqlapp/core-common';
@@ -14,17 +13,6 @@ import resources from './locales';
 
 const StripeSubscription = new StripeSubscriptionDAO();
 const { webhookUrl, enabled } = settings.stripe.subscription;
-
-/**
- * Requests Stripe events and sends them to our webhook in development mode.
- */
-if (__DEV__ && enabled && process.env.STRIPE_SECRET_KEY) {
-  log.debug('Starting stripe-local proxy');
-  stripeLocal({
-    secretKey: process.env.STRIPE_SECRET_KEY,
-    webhookUrl: `http://localhost:${__SERVER_PORT__}${webhookUrl}`,
-  });
-}
 
 const createContextFunc = async ({ req }: any) => ({
   StripeSubscription,

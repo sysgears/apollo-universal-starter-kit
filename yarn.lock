@@ -9796,15 +9796,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"axios@npm:0.13.1":
-  version: 0.13.1
-  resolution: "axios@npm:0.13.1"
-  dependencies:
-    follow-redirects: 0.0.7
-  checksum: a512b0beb00ce5940810d746e8057ecb3978919d62d24cb8dcf2400cfb5a5c610e346c649d72984777cd3b4deaf099354ab879ca1a1a75d2b1a436648467b44d
-  languageName: node
-  linkType: hard
-
 "axios@npm:0.21.1":
   version: 0.21.1
   resolution: "axios@npm:0.21.1"
@@ -10782,13 +10773,6 @@ __metadata:
     inherits: ^2.0.4
     readable-stream: ^3.4.0
   checksum: 02847e1d2cb089c9dc6958add42e3cdeaf07d13f575973963335ac0fdece563a50ac770ac4c8fa06492d2dd276f6cc3b7f08c7cd9c7a7ad0f8d388b2a28def5f
-  languageName: node
-  linkType: hard
-
-"bluebird@npm:^2.10.2":
-  version: 2.11.0
-  resolution: "bluebird@npm:2.11.0"
-  checksum: d0c55c4c5f56522ee53e1762908c73ad97e403ce24d80ae99af3bf8902764530df0f7c88f35a1de809aa4b62d474c17f6bd83c8bc4f8cb539c50fddec1896c20
   languageName: node
   linkType: hard
 
@@ -17623,16 +17607,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"follow-redirects@npm:0.0.7":
-  version: 0.0.7
-  resolution: "follow-redirects@npm:0.0.7"
-  dependencies:
-    debug: ^2.2.0
-    stream-consume: ^0.1.0
-  checksum: e3d3423c0f093c48d2d65f0cf82e72f4fb627f5d16c2fff525ed049c10984e9f8edb3c11096cebce05a21287a5de1cd080a543b2315e28a4168ed5ac33772261
-  languageName: node
-  linkType: hard
-
 "follow-redirects@npm:^1.0.0, follow-redirects@npm:^1.10.0, follow-redirects@npm:^1.14.7":
   version: 1.15.0
   resolution: "follow-redirects@npm:1.15.0"
@@ -24009,7 +23983,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.11.1, lodash@npm:^4.13.1, lodash@npm:^4.16.5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0, lodash@npm:~4.17.10":
+"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.13.1, lodash@npm:^4.16.5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0, lodash@npm:~4.17.10":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -29326,13 +29300,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^2.4.2":
-  version: 2.4.2
-  resolution: "qs@npm:2.4.2"
-  checksum: 50228c5c2129766e04f8aec41c70e3e1d235484ac8e83352d6ac723d58e91642082abc0172122dc27e13e8c6a28a8d3b9fc499fe120c48dc764ddf27f498fb51
-  languageName: node
-  linkType: hard
-
 "qs@npm:~6.5.1, qs@npm:~6.5.2":
   version: 6.5.3
   resolution: "qs@npm:6.5.3"
@@ -33106,7 +33073,6 @@ __metadata:
     sourcemapped-stacktrace: ^1.1.8
     sqlite3: ^4.0.0
     stripe: ^5.4.0
-    stripe-local: ^0.1.1
     subscriptions-transport-ws: ^0.9.16
     swagger-ui-express: ^4.0.2
     universal-cookie-express: ^2.2.0
@@ -34148,13 +34114,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stream-consume@npm:^0.1.0":
-  version: 0.1.1
-  resolution: "stream-consume@npm:0.1.1"
-  checksum: bb646ba6e43b9653e5afbcc2f12ecdb8a0706665d6a81df83ab3913a591a60011e90ff440c138a310f7536ae576b8b536b9b0808a7bce3cd2fc9681f1cafd73c
-  languageName: node
-  linkType: hard
-
 "stream-each@npm:^1.1.0":
   version: 1.2.3
   resolution: "stream-each@npm:1.2.3"
@@ -34498,30 +34457,6 @@ __metadata:
   version: 2.0.1
   resolution: "strip-json-comments@npm:2.0.1"
   checksum: b509231cbdee45064ff4f9fd73609e2bcc4e84a4d508e9dd0f31f70356473fde18abfb5838c17d56fb236f5a06b102ef115438de0600b749e818a35fbbc48c43
-  languageName: node
-  linkType: hard
-
-"stripe-local@npm:^0.1.1":
-  version: 0.1.2
-  resolution: "stripe-local@npm:0.1.2"
-  dependencies:
-    axios: 0.13.1
-    minimist: 1.2.0
-    stripe: 4.9.0
-  bin:
-    stripe-local: bin/stripe-local
-  checksum: e15f72533926849c2e42ae30612c39bcde1005076e8d1f850a1e8467d1395747f3ba5f772aa74c048655b33fd273cc1a266eb1c6e091ea60ad1041416492dc3f
-  languageName: node
-  linkType: hard
-
-"stripe@npm:4.9.0":
-  version: 4.9.0
-  resolution: "stripe@npm:4.9.0"
-  dependencies:
-    bluebird: ^2.10.2
-    lodash: ^4.11.1
-    qs: ^2.4.2
-  checksum: a59a5891d57408d98d9ac1207db9a486f909bde268a8ae0cc2609e61a721a1613266e45c10ada1d5fcc4d1350b60f07da4068c087a51f3f2d12fcb3fda5f555b
   languageName: node
   linkType: hard
 

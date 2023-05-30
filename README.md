@@ -14,7 +14,7 @@
 ## Official Website
 
 Visit [apollokit.org] to learn about Apollo Universal Starter Kit. You can also test a [demo application] deployed on
-Heroku.
+Render.
 
 ## Description
 
@@ -126,7 +126,7 @@ Here's a demo of Apollo Universal Starter Kit in action:
 
 ![screencast](https://user-images.githubusercontent.com/1259926/27387579-c6799ada-56a1-11e7-93fc-d08e9970640d.gif)
 
-You can try out the latest version of Apollo Universal Starter Kit [deployed on Heroku]. If you want to see the mobile
+You can try out the latest version of Apollo Universal Starter Kit [deployed on Render]. If you want to see the mobile
 React Native application in action, check out [this demo on Expo.io].
 
 ## Branches
@@ -341,9 +341,9 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [ant design]: https://ant.design
 [nativebase]: https://nativebase.io
 [apollokit.org]: https://apollokit.org
-[demo application]: https://apollo-universal-starter-kit.herokuapp.com
+[demo application]: https://ausk.onrender.com
 [react native gifted chat]: https://github.com/FaridSafi/react-native-gifted-chat
-[deployed on heroku]: https://apollo-universal-starter-kit.herokuapp.com
+[deployed on render]: https://ausk.onrender.com
 [this demo on Expo.io]: https://expo.io/@sysgears/apollo-universal-starter-kit
 [stable]: https://github.com/sysgears/apollo-universal-starter-kit/tree/stable
 [master]: https://github.com/sysgears/apollo-universal-starter-kit/tree/master

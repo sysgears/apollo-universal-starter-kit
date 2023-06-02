@@ -25,3 +25,4 @@ jobs:
         rm -rf ../ausk.old
         nohup yarn start &
         EOF
+        echo 'Finished!'

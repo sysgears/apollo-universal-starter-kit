@@ -15,14 +15,14 @@ jobs:
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -p 8222 -H ausk.sysgears.com > ~/.ssh/known_hosts
         ssh node@ausk.sysgears.com -p 8222 << EOF
-        rm -rf ausk.old
-        mv apollo-universal-starter-kit ausk.old
-        git clone --depth 1 https://github.com/sysgears/apollo-universal-starter-kit
-        cd apollo-universal-starter-kit
+        DIR=$(mktemp -u ausk.XXXXXXXX)
+        git clone --depth 1 https://github.com/sysgears/apollo-universal-starter-kit $DIR
+        cd $DIR
         yarn
         yarn heroku-postbuild
         killall node
-        rm -rf ../ausk.old
         nohup yarn start &
+        cd ..
+        ls ausk.* | grep -v $DIR | xargs rm -rf
         EOF
         echo 'Finished!'

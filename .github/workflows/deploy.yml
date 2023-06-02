@@ -13,7 +13,7 @@ jobs:
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        ssh-keyscan -H ausk.sysgears.com -p 8222 > ~/.ssh/known_hosts
+        ssh-keyscan -p 8222 -H ausk.sysgears.com > ~/.ssh/known_hosts
         ssh node@ausk.sysgears.com -p 8222 << EOF
         rm -rf ausk.old
         mv apollo-universal-starter-kit ausk.old

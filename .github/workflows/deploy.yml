@@ -14,7 +14,7 @@ jobs:
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -p 8222 -H ausk.sysgears.com > ~/.ssh/known_hosts
-        ssh node@ausk.sysgears.com -p 8222 << EOF
+        ssh node@ausk.sysgears.com -p 8222 '
         DIR=$(mktemp -u ausk.XXXXXXXX)
         git clone --depth 1 https://github.com/sysgears/apollo-universal-starter-kit $DIR
         cd $DIR
@@ -24,5 +24,4 @@ jobs:
         nohup yarn start &
         cd ..
         ls ausk.* | grep -v $DIR | xargs rm -rf
-        EOF
-        echo 'Finished!'
+        '

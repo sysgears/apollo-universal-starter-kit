@@ -1,0 +1,26 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+
+jobs:
+  deploy:
+    steps:
+    - name: Deploy
+      run: |
+        install -m 600 -D /dev/null ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        ssh-keyscan -H ausk.sysgears.com > ~/.ssh/known_hosts
+        ssh node@ausk.sysgears.com -p 8222 << EOF
+        rm -rf ausk.old
+        mv apollo-universal-starter-kit ausk.old
+        git clone --depth 1 https://github.com/sysgears/apollo-universal-starter-kit
+        cd apollo-universal-starter-kit
+        yarn
+        yarn heroku-postbuild
+        killall node
+        rm -rf ../ausk.old
+        nohup yarn start &
+        EOF

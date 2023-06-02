@@ -341,9 +341,9 @@ Copyright &copy; 2016-2019 [SysGears (Cyprus) Limited]. This source code is lice
 [ant design]: https://ant.design
 [nativebase]: https://nativebase.io
 [apollokit.org]: https://apollokit.org
-[demo application]: https://ausk.onrender.com
+[demo application]: https://ausk.sysgears.com
 [react native gifted chat]: https://github.com/FaridSafi/react-native-gifted-chat
-[deployed on render]: https://ausk.onrender.com
+[deployed on render]: https://ausk.sysgears.com
 [this demo on Expo.io]: https://expo.io/@sysgears/apollo-universal-starter-kit
 [stable]: https://github.com/sysgears/apollo-universal-starter-kit/tree/stable
 [master]: https://github.com/sysgears/apollo-universal-starter-kit/tree/master

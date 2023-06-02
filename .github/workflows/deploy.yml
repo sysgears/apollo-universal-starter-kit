@@ -22,7 +22,7 @@ jobs:
         yarn
         yarn heroku-postbuild
         killall node
-        nohup yarn start &
+        nohup yarn start > nohup.out 2> nohup.err < /dev/null &
         cd ..
         ls ausk.* | grep -v $DIR | xargs rm -rf
         '

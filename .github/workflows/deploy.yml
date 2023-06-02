@@ -9,11 +9,13 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy
+    - name: Prepare keys
       run: |
         install -m 600 -D /dev/null ~/.ssh/id_rsa
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         ssh-keyscan -H ausk.sysgears.com > ~/.ssh/known_hosts
+    - name: Deploy
+      run: |
         ssh node@ausk.sysgears.com -p 8222 << EOF
         rm -rf ausk.old
         mv apollo-universal-starter-kit ausk.old

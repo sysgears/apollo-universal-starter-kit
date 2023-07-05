@@ -33,7 +33,7 @@
     "eslint": "eslint --fix --ext .js,.jsx,.ts,.tsx,.json .",
     "heroku-postbuild": "yarn workspaces foreach -pv run heroku-postbuild",
     "precommit": "lint-staged",
-    "postinstall": "opencollective postinstall"
+    "postinstall": "opencollective"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json}": [
@@ -109,7 +109,7 @@
     "@typescript-eslint/eslint-plugin": "^5.23.0",
     "@typescript-eslint/parser": "^5.23.0",
     "@webpack-cli/serve": "^1.6.1",
-    "autoprefixer": "10.4.5",
+    "autoprefixer": "9.8.6",
     "babel-core": "^7.0.0-0",
     "babel-jest": "^24.8.0",
     "babel-loader": "^8.0.6",
@@ -183,6 +183,7 @@
   "resolutions": {
     "card-validator": "8.1.1",
     "@react-native-picker/picker": "1.16.8",
-    "extract-files": "6.0.0"
+    "extract-files": "6.0.0",
+    "file-loader/loader-utils": "2.0.4"
   }
 }

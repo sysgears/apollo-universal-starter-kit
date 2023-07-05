@@ -44,7 +44,13 @@ const config = {
   name: 'web',
   module: {
     rules: [
-      { test: /\.mjs$/, include: /node_modules/, type: 'javascript/auto' },
+      {
+        test: /\.m?js$/,
+        include: /node_modules/,
+        resolve: {
+          fullySpecified: false,
+        },
+      },
       {
         test: /\.(png|ico|jpg|gif|xml)$/,
         use: { loader: 'url-loader', options: { name: '[fullhash].[ext]', limit: 100000 } },

@@ -292,7 +292,7 @@ automatically when you upload a file to the server.
 
 ## User Authentication
 
-You can configure authentication for your Apollo Universal Starter Kit-based application in the `config/user.js` file.
+You can configure authentication for your Apollo Universal Starter Kit-based application in the `config/auth.js` file.
 
 ### `secret`
 
@@ -390,7 +390,7 @@ Configures your application for using Secure Sockets Layer (SSL).
 | devSerial             | String  | Sets the SSL certificate serial number number. Defaults to `00` |
 | enabled               | Boolean | Enables the use of SSL certificate. Defaults to `false`         |
 
-**NOTE**: the `CERTIFICATE_DEVSERIAL` constant is initialized to `00` in the `config/user.js` file.
+**NOTE**: the `CERTIFICATE_DEVSERIAL` constant is initialized to `00` in the `config/auth.js` file.
 
 Usage example:
 

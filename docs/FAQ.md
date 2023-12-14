@@ -67,7 +67,7 @@ Reference: [#525](https://github.com/sysgears/apollo-universal-starter-kit/issue
 
 ## How do I enable Facebook and Google OAuth?
 
-You can enable the social login functionality in the `config/user.js` file:
+You can enable the social login functionality in the `config/auth.js` file:
 
 ```javascript
 export default {

@@ -122,6 +122,31 @@ function computeRootModulesPath(moduleName) {
  * @param old - The flag that describes if the command invoked for a new structure or not
  * @returns {string} - Return the computed path
  */
+
+
+function generateCommonGraphqlFile(module, commonGraphqlPath, moduleGraphqlContainer) {
+  const importGraphqlContainer = `import ${moduleGraphqlContainer} from '../../../${module}/containers/${moduleGraphqlContainer}';\n`;
+  const exportGraphqlContainer = `\nexport default {\n  ${moduleGraphqlContainer}\n};\n`;
+
+  if (fs.existsSync(commonGraphqlPath)) {
+    const commonGraphqlData = fs.readFileSync(commonGraphqlPath);
+    const commonGraphql = commonGraphqlData.toString().trim();
+    if (commonGraphql.length > 1) {
+      const index = commonGraphql.lastIndexOf("';");
+      const computedIndex = index >= 0 ? index + 3 : false;
+      if (computedIndex) {
+        let computedCommonGraphql =
+          commonGraphql.slice(0, computedIndex) +
+          importGraphqlContainer +
+          commonGraphql.slice(computedIndex, commonGraphql.length);
+        computedCommonGraphql = computedCommonGraphql.replace(/(,|)\s};/g, `,\n  ${moduleGraphqlContainer}\n};`);
+        return fs.writeFileSync(commonGraphqlPath, computedCommonGraphql);
+      }
+    }
+  }
+  return fs.writeFileSync(commonGraphqlPath, importGraphqlContainer + exportGraphqlContainer);
+}
+
 function computeModulePackageName(moduleName, packageName, old) {
   return old ? `./${moduleName}` : `@gqlapp/${decamelize(moduleName, { separator: '-' })}-${packageName}`;
 }
@@ -232,6 +257,34 @@ function deleteStackDir(stackDirList) {
   });
 }
 
+function generateField(value, update = false) {
+  let result = '';
+  const hasTypeOf = targetType => value.type === targetType || value.type.prototype instanceof targetType;
+  if (hasTypeOf(Boolean)) {
+    result += 'Boolean';
+  } else if (hasTypeOf(DomainSchema.ID)) {
+    result += 'ID';
+  } else if (hasTypeOf(DomainSchema.Int)) {
+    result += 'Int';
+  } else if (hasTypeOf(DomainSchema.Float)) {
+    result += 'Float';
+  } else if (hasTypeOf(String)) {
+    result += 'String';
+  } else if (hasTypeOf(Date)) {
+    result += 'Date';
+  } else if (hasTypeOf(DomainSchema.DateTime)) {
+    result += 'DateTime';
+  } else if (hasTypeOf(DomainSchema.Time)) {
+    result += 'Time';
+  }
+
+  if (!update && !value.optional) {
+    result += '!';
+  }
+
+  return result;
+}
+
 module.exports = {
   getModulePackageName,
   getTemplatesPath,
@@ -250,4 +303,6 @@ module.exports = {
   deleteDir,
   getPathsSubdir,
   deleteStackDir,
+  generateCommonGraphqlFile,  
+  generateField,
 };

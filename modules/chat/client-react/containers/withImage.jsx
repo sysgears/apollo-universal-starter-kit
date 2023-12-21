@@ -1,6 +1,5 @@
 import React from 'react';
 import Constants from 'expo-constants';
-import Camera from 'expo-camera';
 import * as FileSystem from 'expo-file-system';
 import { ImagePicker } from 'expo-image-picker';
 import { ReactNativeFile } from 'apollo-upload-client';
@@ -109,7 +108,7 @@ export default (Component) => {
       if (skip === Platform.OS) {
         return true;
       }
-      const { status } = await Camera.requestPermissionsAsync();
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
       return status === 'granted';
     };
 

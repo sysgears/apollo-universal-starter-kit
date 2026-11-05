@@ -2796,13 +2796,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@gqlapp/authentication-client-react@workspace:modules/authentication/client-react":
+"@gqlapp/authentication-client-react@^0.1.0, @gqlapp/authentication-client-react@workspace:modules/authentication/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/authentication-client-react@workspace:modules/authentication/client-react"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/authentication-server-ts@workspace:modules/authentication/server-ts":
+"@gqlapp/authentication-server-ts@^0.1.0, @gqlapp/authentication-server-ts@workspace:modules/authentication/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/authentication-server-ts@workspace:modules/authentication/server-ts"
   languageName: unknown
@@ -2816,13 +2816,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/chat-server-ts@workspace:modules/chat/server-ts":
+"@gqlapp/chat-server-ts@^0.1.0, @gqlapp/chat-server-ts@workspace:modules/chat/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/chat-server-ts@workspace:modules/chat/server-ts"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/config@workspace:config":
+"@gqlapp/config@^0.1.0, @gqlapp/config@workspace:config":
   version: 0.0.0-use.local
   resolution: "@gqlapp/config@workspace:config"
   dependencies:
@@ -2836,19 +2836,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/contact-common@workspace:modules/contact/common":
+"@gqlapp/contact-common@^0.1.0, @gqlapp/contact-common@workspace:modules/contact/common":
   version: 0.0.0-use.local
   resolution: "@gqlapp/contact-common@workspace:modules/contact/common"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/contact-server-ts@workspace:modules/contact/server-ts":
+"@gqlapp/contact-server-ts@^0.1.0, @gqlapp/contact-server-ts@workspace:modules/contact/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/contact-server-ts@workspace:modules/contact/server-ts"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/cookies-server-ts@workspace:modules/cookies/server-ts":
+"@gqlapp/cookies-server-ts@^0.1.0, @gqlapp/cookies-server-ts@workspace:modules/cookies/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/cookies-server-ts@workspace:modules/cookies/server-ts"
   languageName: unknown
@@ -2902,7 +2902,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/core-server-ts@workspace:modules/core/server-ts":
+"@gqlapp/core-server-ts@^0.1.0, @gqlapp/core-server-ts@workspace:modules/core/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/core-server-ts@workspace:modules/core/server-ts"
   dependencies:
@@ -2941,7 +2941,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/counter-server-ts@workspace:modules/counter/server-ts":
+"@gqlapp/counter-server-ts@^0.1.0, @gqlapp/counter-server-ts@workspace:modules/counter/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/counter-server-ts@workspace:modules/counter/server-ts"
   languageName: unknown
@@ -2956,13 +2956,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/debug-server-ts@workspace:modules/debug/server-ts":
+"@gqlapp/debug-server-ts@^0.1.0, @gqlapp/debug-server-ts@workspace:modules/debug/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/debug-server-ts@workspace:modules/debug/server-ts"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/favicon-common@workspace:modules/favicon/common":
+"@gqlapp/favicon-common@^0.1.0, @gqlapp/favicon-common@workspace:modules/favicon/common":
   version: 0.0.0-use.local
   resolution: "@gqlapp/favicon-common@workspace:modules/favicon/common"
   languageName: unknown
@@ -2974,7 +2974,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/graphql-types-server-ts@workspace:modules/graphql-types/server-ts":
+"@gqlapp/graphql-types-server-ts@^0.1.0, @gqlapp/graphql-types-server-ts@workspace:modules/graphql-types/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/graphql-types-server-ts@workspace:modules/graphql-types/server-ts"
   languageName: unknown
@@ -2995,7 +2995,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/i18n-server-ts@workspace:modules/i18n/server-ts":
+"@gqlapp/i18n-server-ts@^0.1.0, @gqlapp/i18n-server-ts@workspace:modules/i18n/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/i18n-server-ts@workspace:modules/i18n/server-ts"
   languageName: unknown
@@ -3025,7 +3025,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/mailer-server-ts@workspace:modules/mailer/server-ts":
+"@gqlapp/mailer-server-ts@^0.1.0, @gqlapp/mailer-server-ts@workspace:modules/mailer/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/mailer-server-ts@workspace:modules/mailer/server-ts"
   languageName: unknown
@@ -3077,13 +3077,13 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/page-not-found-client-react@workspace:modules/page-not-found/client-react":
+"@gqlapp/page-not-found-client-react@^0.1.0, @gqlapp/page-not-found-client-react@workspace:modules/page-not-found/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/page-not-found-client-react@workspace:modules/page-not-found/client-react"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/pagination-client-react@workspace:modules/pagination/client-react":
+"@gqlapp/pagination-client-react@^0.1.0, @gqlapp/pagination-client-react@workspace:modules/pagination/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/pagination-client-react@workspace:modules/pagination/client-react"
   languageName: unknown
@@ -3095,19 +3095,19 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/payments-server-ts@workspace:modules/payments/server-ts":
+"@gqlapp/payments-server-ts@^0.1.0, @gqlapp/payments-server-ts@workspace:modules/payments/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/payments-server-ts@workspace:modules/payments/server-ts"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/post-client-react@workspace:modules/post/client-react":
+"@gqlapp/post-client-react@^0.1.0, @gqlapp/post-client-react@workspace:modules/post/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/post-client-react@workspace:modules/post/client-react"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/post-server-ts@workspace:modules/post/server-ts":
+"@gqlapp/post-server-ts@^0.1.0, @gqlapp/post-server-ts@workspace:modules/post/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/post-server-ts@workspace:modules/post/server-ts"
   languageName: unknown
@@ -3119,17 +3119,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/reports-server-ts@workspace:modules/reports/server-ts":
+"@gqlapp/reports-server-ts@^0.1.0, @gqlapp/reports-server-ts@workspace:modules/reports/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/reports-server-ts@workspace:modules/reports/server-ts"
-  languageName: unknown
-  linkType: soft
-
-"@gqlapp/rest-server-ts@workspace:modules/rest/server-ts":
-  version: 0.0.0-use.local
-  resolution: "@gqlapp/rest-server-ts@workspace:modules/rest/server-ts"
-  dependencies:
-    "@types/swagger-ui-express": ^3.0.0
   languageName: unknown
   linkType: soft
 
@@ -3139,7 +3131,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/router-client-react@workspace:modules/router/client-react":
+"@gqlapp/router-client-react@^0.1.0, @gqlapp/router-client-react@workspace:modules/router/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/router-client-react@workspace:modules/router/client-react"
   languageName: unknown
@@ -3159,25 +3151,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@gqlapp/upload-client-react@workspace:modules/upload/client-react":
+"@gqlapp/upload-client-react@^0.1.0, @gqlapp/upload-client-react@workspace:modules/upload/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/upload-client-react@workspace:modules/upload/client-react"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/upload-server-ts@workspace:modules/upload/server-ts":
+"@gqlapp/upload-server-ts@^0.1.0, @gqlapp/upload-server-ts@workspace:modules/upload/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/upload-server-ts@workspace:modules/upload/server-ts"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/user-client-react@workspace:modules/user/client-react":
+"@gqlapp/user-client-react@^0.1.0, @gqlapp/user-client-react@workspace:modules/user/client-react":
   version: 0.0.0-use.local
   resolution: "@gqlapp/user-client-react@workspace:modules/user/client-react"
   languageName: unknown
   linkType: soft
 
-"@gqlapp/user-server-ts@workspace:modules/user/server-ts":
+"@gqlapp/user-server-ts@^0.1.0, @gqlapp/user-server-ts@workspace:modules/user/server-ts":
   version: 0.0.0-use.local
   resolution: "@gqlapp/user-server-ts@workspace:modules/user/server-ts"
   languageName: unknown
@@ -3213,24 +3205,6 @@ __metadata:
   dependencies:
     "@hapi/hoek": ^9.0.0
   checksum: b16b06d9357947149e032bdf10151eb71aea8057c79c4046bf32393cb89d0d0f7ca501c40c0f7534a5ceca078de0700d2257ac855c15e59fe4e00bba2f25c86f
-  languageName: node
-  linkType: hard
-
-"@hofstadter-io/sofa-api@npm:^0.3.1":
-  version: 0.3.1
-  resolution: "@hofstadter-io/sofa-api@npm:0.3.1"
-  dependencies:
-    change-case: 3.0.2
-    graphql-subscriptions: 1.0.0
-    iterall: 1.2.2
-    request: 2.88.0
-    request-promise-native: 1.0.5
-    uuid: 3.3.2
-    yamljs: 0.3.0
-  peerDependencies:
-    express: ^4.0.0
-    graphql: ^0.13.2 || ^14.0.0
-  checksum: b20151ac86243097dd872a744020072a7d70708aa3867020ddbc94dcc591d9da5782a3d7a8001be6616a2c9cf19a9afcc445b17896a96c35dcb92e32cff331be
   languageName: node
   linkType: hard
 
@@ -9146,7 +9120,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.23.0
     "@typescript-eslint/parser": ^5.23.0
     "@webpack-cli/serve": ^1.6.1
-    autoprefixer: 10.4.5
+    autoprefixer: 9.8.6
     babel-core: ^7.0.0-0
     babel-jest: ^24.8.0
     babel-loader: ^8.0.6
@@ -9745,21 +9719,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autoprefixer@npm:10.4.5":
-  version: 10.4.5
-  resolution: "autoprefixer@npm:10.4.5"
+"autoprefixer@npm:9.8.6":
+  version: 9.8.6
+  resolution: "autoprefixer@npm:9.8.6"
   dependencies:
-    browserslist: ^4.20.2
-    caniuse-lite: ^1.0.30001332
-    fraction.js: ^4.2.0
+    browserslist: ^4.12.0
+    caniuse-lite: ^1.0.30001109
+    colorette: ^1.2.1
     normalize-range: ^0.1.2
-    picocolors: ^1.0.0
-    postcss-value-parser: ^4.2.0
-  peerDependencies:
-    postcss: ^8.1.0
+    num2fraction: ^1.2.2
+    postcss: ^7.0.32
+    postcss-value-parser: ^4.1.0
   bin:
     autoprefixer: bin/autoprefixer
-  checksum: 8b8f0e9184929597a83d1ea0e11ac7dc0e86c60e6ef1a1afe299d27a33609629d2fc08c322911c7c615d0aeede69593dbcbc79353e56d9421f0d18027ca0aa8f
+  checksum: cf4451009a00d5b0d3f85e9716ff01bf822e230913403cafa20a66a9c02fe39fe758d2d5e62dab2611e7253858437a43405bba63defa6b895f1377fa60a3d307
   languageName: node
   linkType: hard
 
@@ -11632,16 +11605,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"camel-case@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "camel-case@npm:3.0.0"
-  dependencies:
-    no-case: ^2.2.0
-    upper-case: ^1.1.1
-  checksum: 491c6bbf986b9d8355e12cca6beb719b44c2fe96e8526c09958a1b4e0dbb081a82ea59c13b5a6ccf9158ce5979cbe56a8a10d7322bfeed2d84725c6b89d8f934
-  languageName: node
-  linkType: hard
-
 "camel-case@npm:^4.1.1, camel-case@npm:^4.1.2":
   version: 4.1.2
   resolution: "camel-case@npm:4.1.2"
@@ -11905,32 +11868,6 @@ __metadata:
     ansi-styles: ^4.1.0
     supports-color: ^7.1.0
   checksum: 4a3fef5cc34975c898ffe77141450f679721df9dde00f6c304353fa9c8b571929123b26a0e4617bde5018977eb655b31970c297b91b63ee83bb82aeb04666880
-  languageName: node
-  linkType: hard
-
-"change-case@npm:3.0.2":
-  version: 3.0.2
-  resolution: "change-case@npm:3.0.2"
-  dependencies:
-    camel-case: ^3.0.0
-    constant-case: ^2.0.0
-    dot-case: ^2.1.0
-    header-case: ^1.0.0
-    is-lower-case: ^1.1.0
-    is-upper-case: ^1.1.0
-    lower-case: ^1.1.1
-    lower-case-first: ^1.0.0
-    no-case: ^2.3.2
-    param-case: ^2.1.0
-    pascal-case: ^2.0.0
-    path-case: ^2.1.0
-    sentence-case: ^2.1.0
-    snake-case: ^2.1.0
-    swap-case: ^1.1.0
-    title-case: ^2.1.0
-    upper-case: ^1.1.1
-    upper-case-first: ^1.1.0
-  checksum: c9c8aca5ce5e543e046a18ab47bf31201db253e5e851f5a01592420a53d8f71084d4487aa184359c5d0075ea93466c626ee0c7ba14390ed211464c27b6caa479
   languageName: node
   linkType: hard
 
@@ -12426,16 +12363,25 @@ __metadata:
     "@fortawesome/fontawesome-svg-core": ^1.2.17
     "@fortawesome/free-brands-svg-icons": ^5.8.1
     "@fortawesome/react-fontawesome": ^0.1.4
+    "@gqlapp/authentication-client-react": ^0.1.0
     "@gqlapp/chat-client-react": ^0.1.0
     "@gqlapp/contact-client-react": ^0.1.0
+    "@gqlapp/contact-common": ^0.1.0
     "@gqlapp/core-client-react": ^0.1.0
     "@gqlapp/counter-client-react": ^0.1.0
+    "@gqlapp/favicon-common": ^0.1.0
     "@gqlapp/forms-client-react": ^0.1.0
     "@gqlapp/i18n-client-react": ^0.1.0
     "@gqlapp/i18n-common-react": ^0.1.0
     "@gqlapp/module-client-react": ^0.1.0
+    "@gqlapp/page-not-found-client-react": ^0.1.0
+    "@gqlapp/pagination-client-react": ^0.1.0
     "@gqlapp/payments-client-react": ^0.1.0
+    "@gqlapp/post-client-react": ^0.1.0
     "@gqlapp/reports-client-react": ^0.1.0
+    "@gqlapp/router-client-react": ^0.1.0
+    "@gqlapp/upload-client-react": ^0.1.0
+    "@gqlapp/user-client-react": ^0.1.0
     "@gqlapp/validation-common-react": ^0.1.0
     "@loadable/component": ^5.10.1
     "@react-navigation/native": ^6.0.6
@@ -12804,7 +12750,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"colorette@npm:^1.0.7":
+"colorette@npm:^1.0.7, colorette@npm:^1.2.1":
   version: 1.4.0
   resolution: "colorette@npm:1.4.0"
   checksum: 4955c8f7daafca8ae7081d672e4bd89d553bd5782b5846d5a7e05effe93c2f15f7e9c0cb46f341b59f579a39fcf436241ff79594899d75d5f3460c03d607fe9e
@@ -13182,16 +13128,6 @@ __metadata:
   version: 1.1.0
   resolution: "console-control-strings@npm:1.1.0"
   checksum: 7ab51d30b52d461412cd467721bb82afe695da78fff8f29fe6f6b9cbaac9a2328e27a22a966014df9532100f6dd85370460be8130b9c677891ba36d96a343f50
-  languageName: node
-  linkType: hard
-
-"constant-case@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "constant-case@npm:2.0.0"
-  dependencies:
-    snake-case: ^2.1.0
-    upper-case: ^1.1.1
-  checksum: 795142a64dd61da267e937502a1ce060abdbc42d4f68367d08f1de34fc06a1db240ac09658275122f8e171448b19a4645b023ee8229803def1a11559e80b6132
   languageName: node
   linkType: hard
 
@@ -15231,15 +15167,6 @@ __metadata:
     domelementtype: ^2.2.0
     domhandler: ^4.2.0
   checksum: d58e2ae01922f0dd55894e61d18119924d88091837887bf1438f2327f32c65eb76426bd9384f81e7d6dcfb048e0f83c19b222ad7101176ad68cdc9c695b563db
-  languageName: node
-  linkType: hard
-
-"dot-case@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "dot-case@npm:2.1.1"
-  dependencies:
-    no-case: ^2.2.0
-  checksum: 6859ba3bfe3106388c05eba9bec709856bbc9917d2c081aed5d268a2afc73b03bc062ea19925e29bdd482f6a8c032ae7a7d73f75c12d4159978e809b9418f7ef
   languageName: node
   linkType: hard
 
@@ -17848,13 +17775,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fraction.js@npm:^4.2.0":
-  version: 4.2.0
-  resolution: "fraction.js@npm:4.2.0"
-  checksum: b16c0a6a7f045b3416c1afbb174b7afca73bd7eb0c62598a0c734a8b1f888cb375684174daf170abfba314da9f366b7d6445e396359d5fae640883bdb2ed18cb
-  languageName: node
-  linkType: hard
-
 "fragment-cache@npm:^0.2.1":
   version: 0.2.1
   resolution: "fragment-cache@npm:0.2.1"
@@ -18560,7 +18480,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.0.5, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
+"glob@npm:^7.0.0, glob@npm:^7.0.3, glob@npm:^7.1.1, glob@npm:^7.1.2, glob@npm:^7.1.3, glob@npm:^7.1.4, glob@npm:^7.1.6, glob@npm:^7.2.0":
   version: 7.2.3
   resolution: "glob@npm:7.2.3"
   dependencies:
@@ -18869,17 +18789,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-subscriptions@npm:1.0.0":
-  version: 1.0.0
-  resolution: "graphql-subscriptions@npm:1.0.0"
-  dependencies:
-    iterall: ^1.2.1
-  peerDependencies:
-    graphql: ^0.10.5 || ^0.11.3 || ^0.12.0 || ^0.13.0 || ^14.0.0
-  checksum: 28905f5d35e2562936e9456c96d546a5c00eec7eb755f673606195b04b51d3356f782e778e062b733e53a775dacb83db638e5769cdc067809c63448832a21e45
-  languageName: node
-  linkType: hard
-
 "graphql-subscriptions@npm:^1.0.0, graphql-subscriptions@npm:^1.1.0":
   version: 1.2.1
   resolution: "graphql-subscriptions@npm:1.2.1"
@@ -19018,7 +18927,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"har-validator@npm:~5.1.0, har-validator@npm:~5.1.3":
+"har-validator@npm:~5.1.3":
   version: 5.1.5
   resolution: "har-validator@npm:5.1.5"
   dependencies:
@@ -19221,16 +19130,6 @@ __metadata:
   bin:
     he: bin/he
   checksum: a27d478befe3c8192f006cdd0639a66798979dfa6e2125c6ac582a19a5ebfec62ad83e8382e6036170d873f46e4536a7e795bf8b95bf7c247f4cc0825ccc8c17
-  languageName: node
-  linkType: hard
-
-"header-case@npm:^1.0.0":
-  version: 1.0.1
-  resolution: "header-case@npm:1.0.1"
-  dependencies:
-    no-case: ^2.2.0
-    upper-case: ^1.1.3
-  checksum: 973b81b3fba82140cf8cdc819edb32edd5959ff61ff42128c5f54e56f7454bb8f61c0197180c38cde84a4be1dddbc780e1413d5e1602c96caf0195d863e6bd03
   languageName: node
   linkType: hard
 
@@ -20879,15 +20778,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-lower-case@npm:^1.1.0":
-  version: 1.1.3
-  resolution: "is-lower-case@npm:1.1.3"
-  dependencies:
-    lower-case: ^1.1.0
-  checksum: af174cfdd50e4ab997bd4aeaf96d5b1841490a721c62a9ab07b14dfb63885134065683d5027f53e2f76180ff972a3c9a0155815e715c37815757a6bd67d4459e
-  languageName: node
-  linkType: hard
-
 "is-map@npm:^2.0.1, is-map@npm:^2.0.2":
   version: 2.0.2
   resolution: "is-map@npm:2.0.2"
@@ -21253,15 +21143,6 @@ __metadata:
   version: 0.1.0
   resolution: "is-unicode-supported@npm:0.1.0"
   checksum: 00cbe3455c3756be68d2542c416cab888aebd5012781d6819749fefb15162ff23e38501fe681b3d751c73e8ff561ac09a5293eba6f58fdf0178462ce6dcb3453
-  languageName: node
-  linkType: hard
-
-"is-upper-case@npm:^1.1.0":
-  version: 1.1.2
-  resolution: "is-upper-case@npm:1.1.2"
-  dependencies:
-    upper-case: ^1.1.0
-  checksum: 81b8defdee0e0de7310446ac717422c586c4d013c2a517c5fcf8b119349aa2798be56fa213169b0de3936cb00e796a383683c2504d221596ae09a0eb282a5b25
   languageName: node
   linkType: hard
 
@@ -23479,6 +23360,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"loader-utils@npm:2.0.4":
+  version: 2.0.4
+  resolution: "loader-utils@npm:2.0.4"
+  dependencies:
+    big.js: ^5.2.2
+    emojis-list: ^3.0.0
+    json5: ^2.1.2
+  checksum: d5654a77f9d339ec2a03d88221a5a695f337bf71eb8dea031b3223420bb818964ba8ed0069145c19b095f6c8b8fd386e602a3fc7ca987042bd8bb1dcc90d7100
+  languageName: node
+  linkType: hard
+
 "loader-utils@npm:^0.2.15":
   version: 0.2.17
   resolution: "loader-utils@npm:0.2.17"
@@ -23836,9 +23728,9 @@ __metadata:
   linkType: hard
 
 "lodash.omit@npm:^4.5.0":
-  version: 4.5.0
-  resolution: "lodash.omit@npm:4.5.0"
-  checksum: 3808b9b6faae35177174b6ab327f1177e29c91f1e98dcbccf13a72a6767bba337306449d537a4e0d8a33d2673f10d39bc732e30c4b803274ea0c1168ea60e549
+  version: 4.18.0
+  resolution: "lodash.omit@npm:4.18.0"
+  checksum: 5b250068694494087e1e25f921d3e101a450935dc90a9e48fd9a25e3b1b8d4dd98c13fe0009c93ff355f4720ccaff26e6533697629f7c63c568fe4ae674413d4
   languageName: node
   linkType: hard
 
@@ -23959,7 +23851,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.13.1, lodash@npm:^4.16.5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0":
+"lodash@npm:>=3.5 <5, lodash@npm:^4.0.1, lodash@npm:^4.16.5, lodash@npm:^4.17.11, lodash@npm:^4.17.12, lodash@npm:^4.17.13, lodash@npm:^4.17.14, lodash@npm:^4.17.15, lodash@npm:^4.17.19, lodash@npm:^4.17.20, lodash@npm:^4.17.21, lodash@npm:^4.17.4, lodash@npm:^4.17.5, lodash@npm:^4.2.1, lodash@npm:^4.3.0, lodash@npm:^4.7.0":
   version: 4.17.21
   resolution: "lodash@npm:4.17.21"
   checksum: d8cbea072bb08655bb4c989da418994b073a608dffa608b09ac04b43a791b12aeae7cd7ad919aa4c925f33b48490b5cfe6c1f71d827956071dae2e7bb3a6b74c
@@ -24066,22 +23958,6 @@ __metadata:
   dependencies:
     get-func-name: ^2.0.0
   checksum: a48a97f7be1fe0ec28dc53fce366e44b9440b5781b7175727f397c3096b379986dc1d08c5e2b0bc50f34ba2e6836684a6b222e9bc26765c1e97368df80afe459
-  languageName: node
-  linkType: hard
-
-"lower-case-first@npm:^1.0.0":
-  version: 1.0.2
-  resolution: "lower-case-first@npm:1.0.2"
-  dependencies:
-    lower-case: ^1.1.2
-  checksum: e0689a82df329db44e28b0dd53ccace09a8a4918fc86aa6c08b091ec31bc5f3496a0b07cf7e81be065335bea996f7aa0fbe0163a3e6f019b0480a5f20a79e871
-  languageName: node
-  linkType: hard
-
-"lower-case@npm:^1.1.0, lower-case@npm:^1.1.1, lower-case@npm:^1.1.2":
-  version: 1.1.4
-  resolution: "lower-case@npm:1.1.4"
-  checksum: 2153ae5490d655a63addc8e7d2f848c6c94803b342ed2d177f75e8073e9fbb50a733d1432c82e1cb8425fa6eae14b2877bf5bbdcb93ab93bb982fb5c3962c57b
   languageName: node
   linkType: hard
 
@@ -25834,15 +25710,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"no-case@npm:^2.2.0, no-case@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "no-case@npm:2.3.2"
-  dependencies:
-    lower-case: ^1.1.1
-  checksum: 63f306e83c18efa0bb37f1c23a25baf4ccf5ebaec70b482fa04d4c5bf8bbb8bcc9a8fbcd818af828ab69f2b602153daf81ec26e448b2bda2d704b8d0c7eec8fa
-  languageName: node
-  linkType: hard
-
 "no-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "no-case@npm:3.0.4"
@@ -27320,15 +27187,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"param-case@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "param-case@npm:2.1.1"
-  dependencies:
-    no-case: ^2.2.0
-  checksum: 8ea1b8472fd51d5f50b28d1d754899713805d05f2241e9b8c4acafa2c500b3f47457a3b4932ab75220f14d2c69180bb7338b78a45576e2b4d90da1e6f0285833
-  languageName: node
-  linkType: hard
-
 "param-case@npm:^3.0.3, param-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "param-case@npm:3.0.4"
@@ -27506,16 +27364,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pascal-case@npm:^2.0.0":
-  version: 2.0.1
-  resolution: "pascal-case@npm:2.0.1"
-  dependencies:
-    camel-case: ^3.0.0
-    upper-case-first: ^1.1.0
-  checksum: 84420c1ceeee36eebe7a6975926f50500563f2c664160b952ff78774af85696d06d52a0fbfeb28c063ee37da6c83665d2518a4fefc9c66996226cabb04a1319e
-  languageName: node
-  linkType: hard
-
 "pascal-case@npm:^3.1.2":
   version: 3.1.2
   resolution: "pascal-case@npm:3.1.2"
@@ -27660,15 +27508,6 @@ __metadata:
   version: 1.0.1
   resolution: "path-browserify@npm:1.0.1"
   checksum: 8b8c3fd5c66bd340272180590ae4ff139769e9ab79522e2eb82e3d571a89b8117c04147f65ad066dccfb42fcad902e5b7d794b3d35e0fd840491a8ddbedf8c66
-  languageName: node
-  linkType: hard
-
-"path-case@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "path-case@npm:2.1.1"
-  dependencies:
-    no-case: ^2.2.0
-  checksum: ea74c24b55cbc2a9d766415e79f53d48a4227cecd0259a00dc4392df6195f68055de164f90c27a3b2056c1977a28a99b2916b66bade0cbf6cf18a8045e76c922
   languageName: node
   linkType: hard
 
@@ -29092,7 +28931,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"psl@npm:^1.1.24, psl@npm:^1.1.28, psl@npm:^1.1.33":
+"psl@npm:^1.1.28, psl@npm:^1.1.33":
   version: 1.8.0
   resolution: "psl@npm:1.8.0"
   checksum: b5f1956f7530860e1918e7238291689fdc3cab9c2c0cdbc47cde21addcc7f62495d794692cc1e43e54728d273f78037e8e73ac43009509a1a7f823341f4039c8
@@ -29158,7 +28997,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"punycode@npm:^1.2.4, punycode@npm:^1.4.1":
+"punycode@npm:^1.2.4":
   version: 1.4.1
   resolution: "punycode@npm:1.4.1"
   checksum: 354b743320518aef36f77013be6e15da4db24c2b4f62c5f1eb0529a6ed02fbaf1cb52925785f6ab85a962f2b590d9cd5ad730b70da72b5f180e2556b8bd3ca08
@@ -31732,17 +31571,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"request-promise-core@npm:1.1.1":
-  version: 1.1.1
-  resolution: "request-promise-core@npm:1.1.1"
-  dependencies:
-    lodash: ^4.13.1
-  peerDependencies:
-    request: ^2.34
-  checksum: 2810343cf57cbea6d05b771860a2afe66b55305234f8b33ccdf927193fbf793b9815dd51e38981f10931374dbb9528b66a296ee3369534574a3c662753a42e89
-  languageName: node
-  linkType: hard
-
 "request-promise-core@npm:1.1.4":
   version: 1.1.4
   resolution: "request-promise-core@npm:1.1.4"
@@ -31751,19 +31579,6 @@ __metadata:
   peerDependencies:
     request: ^2.34
   checksum: 103eb9043450b9312c005ed859c2150825a555b72e4c0a83841f6793d368eddeacde425f8688effa215eb3eb14ff8c486a3c3e80f6246e9c195628db2bf9020e
-  languageName: node
-  linkType: hard
-
-"request-promise-native@npm:1.0.5":
-  version: 1.0.5
-  resolution: "request-promise-native@npm:1.0.5"
-  dependencies:
-    request-promise-core: 1.1.1
-    stealthy-require: ^1.1.0
-    tough-cookie: ">=2.3.3"
-  peerDependencies:
-    request: ^2.34
-  checksum: 62cf2d4cbd062a036243b6f1f02b5fac6c5ffb97baa15e2efa60439b3397e7730e359510d2c88155d318f1835fedf134d8f366e2aabf3654a24b721e09a2e162
   languageName: node
   linkType: hard
 
@@ -31777,34 +31592,6 @@ __metadata:
   peerDependencies:
     request: ^2.34
   checksum: e4edae38675c3492a370fd7a44718df3cc8357993373156a66cb329fcde7480a2652591279cd48ba52326ea529ee99805da37119ad91563a901d3fba0ab5be92
-  languageName: node
-  linkType: hard
-
-"request@npm:2.88.0":
-  version: 2.88.0
-  resolution: "request@npm:2.88.0"
-  dependencies:
-    aws-sign2: ~0.7.0
-    aws4: ^1.8.0
-    caseless: ~0.12.0
-    combined-stream: ~1.0.6
-    extend: ~3.0.2
-    forever-agent: ~0.6.1
-    form-data: ~2.3.2
-    har-validator: ~5.1.0
-    http-signature: ~1.2.0
-    is-typedarray: ~1.0.0
-    isstream: ~0.1.2
-    json-stringify-safe: ~5.0.1
-    mime-types: ~2.1.19
-    oauth-sign: ~0.9.0
-    performance-now: ^2.1.0
-    qs: ~6.5.2
-    safe-buffer: ^5.1.2
-    tough-cookie: ~2.4.3
-    tunnel-agent: ^0.6.0
-    uuid: ^3.3.2
-  checksum: 90369e22e14bcc393ae1f59e06f9b3eaf929d2b55036380b340776c0e196e5702516d8ae954ab0778a32a4c76cda70ab102b056f0d4160bb61ee90e114a83000
   languageName: node
   linkType: hard
 
@@ -32745,16 +32532,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sentence-case@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "sentence-case@npm:2.1.1"
-  dependencies:
-    no-case: ^2.2.0
-    upper-case-first: ^1.1.2
-  checksum: 3572fe33dd5df4156bc2e5f46a8f7642906234c448484016d5fbb8c7214bdd1f5f01d1791a7b2b1a4f5a99e6e43141d22aa097c0fdcfe41214fd56a85f1ee7f6
-  languageName: node
-  linkType: hard
-
 "seq-queue@npm:^0.0.5":
   version: 0.0.5
   resolution: "seq-queue@npm:0.0.5"
@@ -32861,11 +32638,26 @@ __metadata:
   dependencies:
     "@babel/preset-env": ^7.0.0
     "@babel/register": ^7.0.0
+    "@gqlapp/authentication-server-ts": ^0.1.0
+    "@gqlapp/chat-server-ts": ^0.1.0
+    "@gqlapp/config": ^0.1.0
+    "@gqlapp/contact-server-ts": ^0.1.0
+    "@gqlapp/cookies-server-ts": ^0.1.0
     "@gqlapp/core-common": ^0.1.0
+    "@gqlapp/core-server-ts": ^0.1.0
+    "@gqlapp/counter-server-ts": ^0.1.0
     "@gqlapp/database-server-ts": ^0.1.0
+    "@gqlapp/debug-server-ts": ^0.1.0
+    "@gqlapp/graphql-types-server-ts": ^0.1.0
+    "@gqlapp/i18n-server-ts": ^0.1.0
+    "@gqlapp/mailer-server-ts": ^0.1.0
     "@gqlapp/module-server-ts": ^0.1.0
+    "@gqlapp/payments-server-ts": ^0.1.0
+    "@gqlapp/post-server-ts": ^0.1.0
+    "@gqlapp/reports-server-ts": ^0.1.0
     "@gqlapp/testing-server-ts": ^0.1.0
-    "@hofstadter-io/sofa-api": ^0.3.1
+    "@gqlapp/upload-server-ts": ^0.1.0
+    "@gqlapp/user-server-ts": ^0.1.0
     "@loadable/component": ^5.10.1
     "@loadable/server": ^5.9.0
     "@types/chai": ^4.1.4
@@ -33312,15 +33104,6 @@ __metadata:
   version: 4.2.0
   resolution: "smart-buffer@npm:4.2.0"
   checksum: a16775323e1404dd43fabafe7460be13a471e021637bc7889468eb45ce6a6b207261f454e4e530a19500cc962c4cc5348583520843b363f4193cee5c00e1e539
-  languageName: node
-  linkType: hard
-
-"snake-case@npm:^2.1.0":
-  version: 2.1.0
-  resolution: "snake-case@npm:2.1.0"
-  dependencies:
-    no-case: ^2.2.0
-  checksum: fd8b21537263d4e64cadd62da0cb5fd96c95f8685ee8e290c912b79950385dbb9eccf7216a913d96db5efc4ade426badae5e3e35b69ea1f10cbb0b4898a38236
   languageName: node
   linkType: hard
 
@@ -33949,7 +33732,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stealthy-require@npm:^1.1.0, stealthy-require@npm:^1.1.1":
+"stealthy-require@npm:^1.1.1":
   version: 1.1.1
   resolution: "stealthy-require@npm:1.1.1"
   checksum: 714b61e152ba03a5e098b5364cc3076d8036edabc2892143fe3c64291194a401b74f071fadebba94551fb013a02f3bcad56a8be29a67b3c644ac78ffda921f80
@@ -34741,16 +34524,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"swap-case@npm:^1.1.0":
-  version: 1.1.2
-  resolution: "swap-case@npm:1.1.2"
-  dependencies:
-    lower-case: ^1.1.1
-    upper-case: ^1.1.1
-  checksum: 0fb57c2427cec53c85cab0dd85f243b8b84b68e039eb550c50e01340cfa43a62e5276e04d088e9066b89073f781b258eeb97bf2c22d6232e005feeca2a11d6bc
-  languageName: node
-  linkType: hard
-
 "symbol-observable@npm:^1.0.2, symbol-observable@npm:^1.0.4, symbol-observable@npm:^1.1.0":
   version: 1.2.0
   resolution: "symbol-observable@npm:1.2.0"
@@ -35253,16 +35026,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"title-case@npm:^2.1.0":
-  version: 2.1.1
-  resolution: "title-case@npm:2.1.1"
-  dependencies:
-    no-case: ^2.2.0
-    upper-case: ^1.0.3
-  checksum: 7b4e51036af10d99c48fac9eee8c6f59f92c1c6cc56fc1f790c7727f5eb139c7ebf7a22381626855ce74b6534f36041e91922469dbe086e67d0d71e7e8e40fc3
-  languageName: node
-  linkType: hard
-
 "tmp@npm:^0.0.29":
   version: 0.0.29
   resolution: "tmp@npm:0.0.29"
@@ -35381,17 +35144,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:>=2.3.3, tough-cookie@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "tough-cookie@npm:4.0.0"
-  dependencies:
-    psl: ^1.1.33
-    punycode: ^2.1.1
-    universalify: ^0.1.2
-  checksum: 8ecd1f1ff1fa1d2c04f5e8533ae61d9b43062279aa62d7daf52a16fd99643fa569ae38464b6ae3f3fe1aa2184cee1539ff2066120eb95b9ac9684e8047b0ea3c
-  languageName: node
-  linkType: hard
-
 "tough-cookie@npm:^2.3.3, tough-cookie@npm:^2.3.4, tough-cookie@npm:~2.5.0":
   version: 2.5.0
   resolution: "tough-cookie@npm:2.5.0"
@@ -35402,13 +35154,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tough-cookie@npm:~2.4.3":
-  version: 2.4.3
-  resolution: "tough-cookie@npm:2.4.3"
+"tough-cookie@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "tough-cookie@npm:4.0.0"
   dependencies:
-    psl: ^1.1.24
-    punycode: ^1.4.1
-  checksum: 35fb214ea89533bee66917faf563dddbe494d69a0b4f2ace7c27dcf5fe8c6b3c9484e8731654d35c56c3645c896c660b488e2509b6896f29c7af1e30fc11463b
+    psl: ^1.1.33
+    punycode: ^2.1.1
+    universalify: ^0.1.2
+  checksum: 8ecd1f1ff1fa1d2c04f5e8533ae61d9b43062279aa62d7daf52a16fd99643fa569ae38464b6ae3f3fe1aa2184cee1539ff2066120eb95b9ac9684e8047b0ea3c
   languageName: node
   linkType: hard
 
@@ -36150,22 +35903,6 @@ __metadata:
     semver-diff: ^2.0.0
     xdg-basedir: ^3.0.0
   checksum: f6b82e655f115b67e829a9f10fe75d2c3afae84a51941478791bfa49023e2c35386790deb8f53d7149fa7e323d6cec1ab9580d92c84e99c7aca3f00e1cfe5efe
-  languageName: node
-  linkType: hard
-
-"upper-case-first@npm:^1.1.0, upper-case-first@npm:^1.1.2":
-  version: 1.1.2
-  resolution: "upper-case-first@npm:1.1.2"
-  dependencies:
-    upper-case: ^1.1.1
-  checksum: db3aff30538ed53c35b91a68faf46119d35ceb8800fec373ad781cbfc487f10ccd4d60609e4188e85d20ea3ec9db9a2392fa6372c334f1d1107cbde0bcb5edfe
-  languageName: node
-  linkType: hard
-
-"upper-case@npm:^1.0.3, upper-case@npm:^1.1.0, upper-case@npm:^1.1.1, upper-case@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "upper-case@npm:1.1.3"
-  checksum: 3e4d3a90519915bb591db84d72610392518806d8287b8f7541d87642d30388f42b2def1ed2f687e5792ee025e8f7e17d3a0dcbd5b3b59e306ceb1f3b8121ef54
   languageName: node
   linkType: hard
 
@@ -37908,19 +37645,6 @@ __metadata:
   version: 1.10.2
   resolution: "yaml@npm:1.10.2"
   checksum: 5c28b9eb7adc46544f28d9a8d20c5b3cb1215a886609a2fd41f51628d8aaa5878ccd628b755dbcd29f6bb4921bd04ffbc6dcc370689bb96e594e2f9813d2605f
-  languageName: node
-  linkType: hard
-
-"yamljs@npm:0.3.0":
-  version: 0.3.0
-  resolution: "yamljs@npm:0.3.0"
-  dependencies:
-    argparse: ^1.0.7
-    glob: ^7.0.5
-  bin:
-    json2yaml: ./bin/json2yaml
-    yaml2json: ./bin/yaml2json
-  checksum: 61bea60327c9326fc05ddc53983e0e28d019f191499e8e0bf631fa2cd233935bbce89199d852574bcc90f436a5c040e458e882aed5a143ba9e9d85621444bbc9
   languageName: node
   linkType: hard
 
